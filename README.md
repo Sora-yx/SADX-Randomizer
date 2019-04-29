@@ -1,13 +1,14 @@
-#SADX Randomizer
+SADX Randomizer
+==============
 
 Sonic Adventure DX Randomizer is a mod for the PC Disc version and Steam version (with BetterSADX) of Sonic Adventure DX. This mod load random characters into random stages in a random order with some custom layout to make them beatable.
 
-##Download
+Download
 --------
 
 Download the latest release from the [releases page](link)
 
-#Installation
+Installation
 ------------
 
 1) Make sure you have the SADX Mod Loader downloaded and installed from [this link](http://info.sonicretro.org/SADX_Mod_Loader).
