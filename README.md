@@ -6,7 +6,7 @@ Sonic Adventure DX Randomizer is a mod for the PC Disc version and Steam version
 Download
 --------
 
-Download the latest release from the [releases page](link)
+Download the latest release from the [releases page](https://github.com/Sora-yx/SADX-Randomizer/releases)
 
 Installation
 ------------
