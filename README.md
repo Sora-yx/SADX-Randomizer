@@ -1,4 +1,5 @@
 SADX Randomizer
+==============
 
 Sonic Adventure DX Randomizer is a mod for the PC Disc version and Steam version (with BetterSADX) of Sonic Adventure DX. This mod load random characters into random stages in a random order with some custom layout to make them beatable.
 
