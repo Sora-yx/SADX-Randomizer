@@ -62,8 +62,9 @@ extern "C"
 		}
 
 		//*** Adventure Mode Rand ***
-
-		DataPointer(byte, Emblem, 0x974AE0);
+		DataPointer(unsigned char, LevelList, 0x3B2C5F8);
+		DataPointer(char, SelectedMenu, 0x3B2A2FA);
+		DataPointer(char, Emblem, 0x974AE0);
 
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
