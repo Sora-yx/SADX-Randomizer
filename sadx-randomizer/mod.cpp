@@ -1,15 +1,10 @@
-#include "SADXModLoader.h"
-#include "SADXStructs.h"
-#include "SADXVariables.h"
-#include "SADXEnums.h"
-#include "SADXFunctions.h"
-#include "Trampoline.h"
-#include "stdafx.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <vector>
 #include <algorithm>
 #include <time.h>
+#include "SADXModLoader.h"
 #include "IniFile.hpp"
+#include "stdafx.h"
 
 static int Seed = 0;
 static bool RNGCharacters = true;

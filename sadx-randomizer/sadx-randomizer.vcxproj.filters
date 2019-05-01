@@ -18,24 +18,9 @@
     <ClCompile Include="mod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IniFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextConv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IniFile.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextConv.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

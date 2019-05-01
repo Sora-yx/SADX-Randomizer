@@ -137,15 +137,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="IniFile.cpp" />
     <ClCompile Include="mod.cpp" />
-    <ClCompile Include="TextConv.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IniFile.hpp" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TextConv.hpp" />
-    <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
