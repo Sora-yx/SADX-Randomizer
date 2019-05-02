@@ -1,7 +1,11 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
-     Creating library D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.lib and object D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.exp
+﻿  RandomHelpers.cpp
+C:\Users\Raytwo\Documents\Git\SADX-Randomizer\sadx-randomizer\RandomHelpers.cpp(14): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Users\Raytwo\Documents\Git\SADX-Randomizer\sadx-randomizer\RandomHelpers.cpp(23): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
+  mod.cpp
+     Creating library C:\Users\Raytwo\Documents\Git\SADX-Randomizer\Release\sadx-randomizer.lib and object C:\Users\Raytwo\Documents\Git\SADX-Randomizer\Release\sadx-randomizer.exp
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 635 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 637 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  sadx-randomizer.vcxproj -> D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.dll
+  sadx-randomizer.vcxproj -> C:\Users\Raytwo\Documents\Git\SADX-Randomizer\Release\sadx-randomizer.dll

@@ -1,46 +1,41 @@
 #include <cstdio>
-#include <vector>
 #include <algorithm>
 #include <time.h>
-#include "SADXModLoader.h"
-#include "IniFile.hpp"
 #include "stdafx.h"
+#include "SADXModLoader.h"
+#include "RandomHelpers.h"
+#include "IniFile.hpp"
 
-static int Seed = 0;
-static bool RNGCharacters = true;
-static bool RNGStages = true;
-static bool Upgrade = true;
-static bool Accel = true;
-
+bool RNGCharacters = true;
+bool RNGStages = true;
+bool Upgrade = true;
 
 extern "C"
 {
-	//Set up 2 arrays, one for the stage list and an other for the characters, this is to avoid randing a stage which is impossible to beat or a wrong character who can crash the game.
-	time_t t;
+	//Set up 2 arrays, one for the stage list and an other for the characters, this is to avoid randomizing a stage which is impossible to beat or a character who can crash the game.
+	int character[6] = { 0, 2, 3, 5, 6, 7 };
 	int level[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 21, 22, 23, 38 };
 	int HSact[2] = { 0, 2 };
 	int act[2] = { 0, 1 };
-	int character[6] = { 0, 2, 3, 5, 6, 7 };
 
+	time_t t;
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
+		unsigned int seed = 0;
 
 		//Ini Configuration
-
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
-		Seed = config->getInt("Randomizer", "Seed", 0);
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		Upgrade = config->getBool("Randomizer", "upgrade", true);
+		seed = config->getInt("Randomizer", "Seed", 0);
 		delete config;
 
-
-		if (Seed)
-			srand((unsigned)Seed);
+		if (seed)
+			srand(seed);
 		else
 			srand((unsigned)time(&t));
-		
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -68,8 +63,8 @@ extern "C"
 
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
-			if (Emblem == 10) //Starts the Credits once the player gets 10 Emblems.
-			{
+			// Starts the Credits once the player gets 10 Emblems. 
+			if (Emblem == 10) {
 				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
@@ -82,53 +77,25 @@ extern "C"
 				CurrentCharacter = 0;
 				Load_SEGALOGO_E();
 			}
-
-			else
-			{
-				if (RNGCharacters == true)
-				{
-					do {
-						CurrentCharacter = character[rand() % 6];
-					} while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
-				}
-
-				if (RNGStages == true)
-				{
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					}
-
-					while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
-				}
+			else {
+				randomizeCharacter();
+				randomizeStages();
 			}
 
 		}
 
-		//Trial MODE RNG
-		//Check if the player is on Menu / Loading (21).
-
+		/*
+		TRIAL MODE
+		Checks if the player is on the Menu
+		*/
 		if (GameState == 21 && (SelectedMenu == 1 && (LevelList == 14 || LevelList == 238 || LevelList == 238 || LevelList == 212 || LevelList == 138)))
 		{
-			if (RNGCharacters == true)
-			{
-				do {
-					CurrentCharacter = character[rand() % 6];
-				} while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
-
-			}
-
-			if (RNGStages == true)
-				do {
-					CurrentLevel = level[rand() % 18];
-					CurrentAct = 0;
-				}
-
-			while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
+			randomizeCharacter();
+			randomizeStages();
 		}
-
 		else
 		{
+			// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
 			PhysicsArray[Characters_Amy].MaxAccel = 5;
 			PhysicsArray[Characters_Big].MaxAccel = 5;
 			PhysicsArray[Characters_Gamma].MaxAccel = 5;
@@ -166,11 +133,8 @@ extern "C"
 				else
 					LoadSoundList(67);
 			}
-
 			break;
-
 		}
-
 	}
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
