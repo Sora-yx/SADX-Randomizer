@@ -12,7 +12,7 @@ Installation
 ------------
 
 1) Make sure you have the SADX Mod Loader downloaded and installed from [this link](http://info.sonicretro.org/SADX_Mod_Loader).
-- If you are using the Steam version, do not use that link, you must install better sadx, this will also install the mod manager.
+- If you are using the Steam version, do not use that link, you must install better sadx from [this link](https://steamcommunity.com/sharedfiles/filedetails/?id=299808681), this will also install the mod manager.
 2) Make sure to extract the Mod Loader's contents into your main SADX folder.
  - Once all Mod Loader's files and folders are there, run ModManager and click on 'Install Loader'
 3) You should now have a "mods" folder in your SADX folder!
