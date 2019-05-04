@@ -34,14 +34,18 @@ extern "C"
 	}
 
 	bool isStageAllowedForCharacter(short characterID, char stageID) {
+		// Get the stage list for the character we are requesting
 		TrialLevelList levelList = TrialLevels[characterID];
 
+		// Go through the list of stages
 		for (int i = 0; i < levelList.Count; i++)
 		{
+			// If the stage we're currently checking is the same as the one we received as argument, return true
 			if (levelList.Levels[i].Level == stageID)
 				return true;
 		}
 
+		// If nothing matches, returns false
 		return false;
 	}
 }
