@@ -24,11 +24,16 @@ extern "C"
 			do {
 				CurrentLevel = level[rand() % 18];
 				CurrentAct = 0;
+
+				if (Regular) // If regular stages are banned
+					if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel)) // If the randomize stage is supposed to be playable by this character
+						continue; // Restart the loop to try and get a level that isn't
+
 			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
 		}
 	}
 
-	bool isStageAllowedForCharacter(Characters characterID, int stageID) {
+	bool isStageAllowedForCharacter(short characterID, char stageID) {
 		TrialLevelList levelList = TrialLevels[characterID];
 
 		for (int i = 0; i < levelList.Count; i++)

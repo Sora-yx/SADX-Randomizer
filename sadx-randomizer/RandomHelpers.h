@@ -6,4 +6,4 @@ extern bool Regular;
 
 extern "C" void randomizeCharacter();
 extern "C" void randomizeStages();
-extern "C" bool isStageAllowedForCharacter(Characters characterID, int stageID);
+extern "C" bool isStageAllowedForCharacter(short characterID, char stageID);
