@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "SADXVariables.h"
+#include "SADXEnums.h"
 #include "RandomHelpers.h"
 #include "Utils.h"
 
@@ -25,5 +26,17 @@ extern "C"
 				CurrentAct = 0;
 			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
 		}
+	}
+
+	bool isStageAllowedForCharacter(Characters characterID, int stageID) {
+		TrialLevelList levelList = TrialLevels[characterID];
+
+		for (int i = 0; i < levelList.Count; i++)
+		{
+			if (levelList.Levels[i].Level == stageID)
+				return true;
+		}
+
+		return false;
 	}
 }

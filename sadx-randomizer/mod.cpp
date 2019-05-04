@@ -9,7 +9,7 @@
 bool RNGCharacters = true;
 bool RNGStages = true;
 bool Upgrade = true;
-bool Regular = true;
+extern bool Regular = true;
 
 extern "C"
 {
