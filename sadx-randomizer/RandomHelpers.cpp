@@ -11,7 +11,7 @@ extern "C"
 		if (RNGCharacters == true) {
 			do {
 				CurrentCharacter = character[rand() % 6];
-			} while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
+			} while (CurrentCharacter == Characters_Gamma && (CurrentLevel == 3 || CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18  || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
 		}
 	}
 
@@ -20,7 +20,7 @@ extern "C"
 			do {
 				CurrentLevel = level[rand() % 18];
 				CurrentAct = 0;
-			} while (CurrentCharacter == 6 && (CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 3 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
+			} while (CurrentCharacter == Characters_Gamma && (CurrentLevel == 3 || CurrentLevel == 15 | CurrentLevel == 16 || CurrentLevel == 18 || CurrentLevel == 20 || CurrentLevel == 21 || CurrentLevel == 23));
 		}
 	}
 }

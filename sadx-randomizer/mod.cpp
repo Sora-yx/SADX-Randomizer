@@ -9,6 +9,7 @@
 bool RNGCharacters = true;
 bool RNGStages = true;
 bool Upgrade = true;
+bool Regular = true;
 
 extern "C"
 {
@@ -30,6 +31,7 @@ extern "C"
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		Upgrade = config->getBool("Randomizer", "upgrade", true);
 		seed = config->getInt("Randomizer", "Seed", 0);
+		Regular = config->getBool("Randomizer", "Regular", true);
 		delete config;
 
 		if (seed)
@@ -40,7 +42,34 @@ extern "C"
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+		DataPointer(char, Gamma_FinalEggFieldExitOpen, 0x3B18997);
+		DataPointer(char, Gamma_FinalEggFieldOpen, 0x3B1899E);
+		DataPointer(char, Gamma_TrainOpen, 0x3B1899F);
+		DataPointer(char, Amy_FinalEggFieldOpen, 0x3B18958);
+		DataPointer(char, Amy_FinalEggOpen, 0x3B18959);
+		DataPointer(char, Knuckles_HotelOpen, 0x3B18909);
+		DataPointer(char, Knuckles_HotelToCasinoOpen, 0x3B1890A);
+		DataPointer(char, Knuckles_StationToCasinoOpen, 0x3B18911);
 
+		Gamma_FinalEggFieldExitOpen = 1;
+		Gamma_FinalEggFieldOpen = 1;
+		Gamma_TrainOpen = 1;
+		Amy_FinalEggFieldOpen = 1;
+		Amy_FinalEggOpen = 1;
+		Knuckles_HotelOpen = 1;
+		Knuckles_HotelToCasinoOpen = 1;
+		Knuckles_StationToCasinoOpen = 1;
+
+		//Fix Knuckles Lost World act 2 song.
+
+		switch (CurrentLevel)
+		{
+		case LevelIDs_LostWorld:
+			if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
+			{
+				CurrentSong = 64;
+			}
+		}
 
 		if (Upgrade == true)
 		{
@@ -49,11 +78,14 @@ extern "C"
 			EventFlagArray[EventFlags_Sonic_AncientLight] = true;
 			EventFlagArray[EventFlags_Tails_JetAnklet] = true;
 			EventFlagArray[EventFlags_Tails_RhythmBadge] = true;
+			EventFlagArray[EventFlags_Amy_WarriorFeather] = true;
 			EventFlagArray[EventFlags_Amy_LongHammer] = true;
-			EventFlagArray[EventFlags_Gamma_JetBooster] = true;
 			EventFlagArray[EventFlags_Knuckles_ShovelClaw] = true;
 			EventFlagArray[EventFlags_Knuckles_FightingGloves] = true;
 			EventFlagArray[EventFlags_Big_LifeRing] = true;
+			EventFlagArray[EventFlags_Big_PowerRod] = true;
+			EventFlagArray[EventFlags_Gamma_JetBooster] = true;
+			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
 		//*** Adventure Mode Rand ***
@@ -61,7 +93,7 @@ extern "C"
 		DataPointer(char, SelectedMenu, 0x3B2A2FA);
 		DataPointer(char, Emblem, 0x974AE0);
 
-		if (GameState == 21 && (GameMode == 5 || GameMode == 4 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
+		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
 			// Starts the Credits once the player gets 10 Emblems. 
 			if (Emblem == 10) {
@@ -81,14 +113,13 @@ extern "C"
 				randomizeCharacter();
 				randomizeStages();
 			}
-
 		}
 
 		/*
 		TRIAL MODE
 		Checks if the player is on the Menu
 		*/
-		if (GameState == 21 && (SelectedMenu == 1 && (LevelList == 14 || LevelList == 238 || LevelList == 238 || LevelList == 212 || LevelList == 138)))
+		if (GameState == 21 && (SelectedMenu == 1 && (LevelList == 14 || LevelList == 238 || LevelList == 212 || LevelList == 138)))
 		{
 			randomizeCharacter();
 			randomizeStages();

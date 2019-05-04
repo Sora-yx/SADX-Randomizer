@@ -1,0 +1,67 @@
+DataPointer(int, Tails_AngelIslandOpen, 0x3B188DD);
+	DataPointer(int, Tails_JungleOpen, 0x3B188E0);
+	DataPointer(int, Tails_EggCarrierPlatformActive, 0x3B188D6);
+
+	
+	DataPointer(int, Knuckles_EggCarrierPlatformActive, 0x3B18913);
+	DataPointer(int, Knuckles_AngelIslandOpen, 0x3B18919);
+	DataPointer(int, Knuckles_JungleOpen, 0x3B1891C);
+	DataPointer(int, Knuckles_TrainOpen, 0x3B18923);
+
+	DataPointer(int, Amy_EggCarrierPlatformActive, 0x3B18951);
+	DataPointer(int, Amy_JungleOpen, 0x3B18957);
+	DataPointer(int, Amy_TrainOpen, 0x3B1895B);
+
+
+
+	DataPointer(int, Big_EggCarrierMonorailActive, 0x3B189CF);
+	DataPointer(int, Big_AngelIslandOpen, 0x3B189D4);
+	DataPointer(int, Big_TrainOpen, 0x3B189DA4);
+
+
+
+
+	//Activate flags in case the player get stuck in the hub.
+
+	EventFlagArray[EventFlags_Sonic_HotelOpen] = true;
+	EventFlagArray[EventFlags_Sonic_HotelToCasinoOpen] = true;
+	EventFlagArray[EventFlags_Sonic_JungleOpen] = true;
+	EventFlagArray[EventFlags_Sonic_EggCarrierOpen] = true;
+	EventFlagArray[EventFlags_Sonic_TrainOpen] = true;
+	EventFlagArray[EventFlags_Sonic_StationOpen] = true;
+	EventFlagArray[EventFlags_Sonic_StationToCasinoOpen] = true;
+	EventFlagArray[EventFlags_Sonic_AngelIslandOpen] = true;
+	EventFlagArray[EventFlags_Sonic_FinalEggFieldOpen] = true;
+	EventFlagArray[EventFlags_Sonic_TwinkleParkOpen] = true;
+	EventFlagArray[EventFlags_Sonic_IceCapOpen] = true;
+
+	EventFlagArray[EventFlags_Tails_HotelOpen] = true;
+	EventFlagArray[EventFlags_Tails_WindyValleyOpen] = true;
+	EventFlagArray[EventFlags_Tails_TrainOpen] = true;
+	EventFlagArray[EventFlags_Tails_StationOpen] = true;
+	Tails_AngelIslandOpen = 1;
+	Tails_JungleOpen = 1;
+	Tails_EggCarrierPlatformActive = 1;
+
+	Knuckles_HotelOpen = 1;
+	Knuckles_HotelToCasinoOpen = 1;
+	Knuckles_StationToCasinoOpen = 1;
+	Knuckles_EggCarrierPlatformActive = 1;
+	Knuckles_AngelIslandOpen = 1;
+	Knuckles_JungleOpen = 1;
+	Knuckles_TrainOpen = 1;
+
+	Amy_EggCarrierPlatformActive = 1;
+	Amy_JungleOpen = 1;
+	Amy_TrainOpen = 1;
+	Amy_FinalEggFieldOpen = 1;
+	Amy_FinalEggOpen = 1;
+	EventFlagArray[EventFlags_Amy_EggCarrierSunk] = true;
+
+	Big_EggCarrierMonorailActive = 1;
+	Big_AngelIslandOpen = 1;
+	Big_TrainOpen = 1;
+
+	Gamma_FinalEggFieldExitOpen = 1;
+	Gamma_FinalEggFieldOpen = 1;
+	Gamma_TrainOpen = 1;
