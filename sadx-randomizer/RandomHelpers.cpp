@@ -29,7 +29,7 @@ extern "C"
 
 			// If the character can access this stage in normal conditions, randomize another stage
 			if(Regular)
-				if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel))
+				if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel, CurrentAct))
 					randomizeStages();
 		}
 	}
