@@ -9,7 +9,7 @@
 bool RNGCharacters = true;
 bool RNGStages = true;
 bool Upgrade = true;
-extern bool Regular = true;
+bool Regular = false;
 
 extern "C"
 {
@@ -31,7 +31,7 @@ extern "C"
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		Upgrade = config->getBool("Randomizer", "upgrade", true);
 		seed = config->getInt("Randomizer", "Seed", 0);
-		Regular = config->getBool("Randomizer", "Regular", true);
+		Regular = config->getBool("Randomizer", "Regular", false);
 		delete config;
 
 		if (seed)

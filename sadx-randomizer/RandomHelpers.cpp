@@ -8,48 +8,84 @@ extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Regular;
 
+
 extern "C"
 {
-	int bannedLevelsGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
+	//Initialize Banned stage impossible to beat
+	int bannedLevelsGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
+	int bannedLevelsBig[2] = { 8, 22 };
+	int bannedLevelsAmy[1] = { 38 };
+
+	//Initiliaze banned regular stage if option is activated
+	int bannedRegularSonic[12] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 22 };
+	int bannedRegularTails[3] = { 4, 6, 21 };
+	int bannedRegularKnuckles[1] = { 16 };
+	int bannedRegularAmy[3] = { 12, 23, 38 };
+	int bannedRegularBig[3] = { 8, 12, 22 };
+	int bannedRegularGamma[9] = { 1, 3, 15, 16, 18, 20, 21, 23, 38 };
+
 
 	void randomizeCharacter() {
 		if (RNGCharacters == true) {
 			do {
 				CurrentCharacter = character[rand() % 6];
-			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
+			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2 || CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1)));
 		}
 	}
 
 	void randomizeStages() {
 		if (RNGStages == true) {
-			do {
-				CurrentLevel = level[rand() % 18];
-				CurrentAct = 0;
-			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
+			if (Regular)
+			{
+				switch (CurrentCharacter)
+				{
+				case Characters_Sonic:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularSonic, CurrentLevel, 12));
+					break;
+				case Characters_Tails:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularTails, CurrentLevel, 3));
+					break;
+				case Characters_Knuckles:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1));
+					break;
+				case Characters_Amy:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularAmy, CurrentLevel, 3));
+					break;
+				case Characters_Big:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularBig, CurrentLevel, 3));
+					break;
+				case Characters_Gamma:
+					do {
+						CurrentLevel = level[rand() % 18];
+						CurrentAct = 0;
+					} while (isValueInArray(bannedRegularGamma, CurrentLevel, 9));
+					break;
+				}
+			}
+			else
+			{
+				do {
+					CurrentLevel = level[rand() % 18];
+					CurrentAct = 0;
+				} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2 || CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1)));
 
-			// If the character can access this stage in normal conditions, randomize another stage
-			/*
-			if(Regular)
-				if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel, CurrentAct))
-					randomizeStages();
-					*/
-		}
-	}
 
-	bool isStageAllowedForCharacter(short characterID, char stageID, char actNumber) {
-		// Get the stage list for the character we are requesting
-		TrialLevelListEntry *levelList = TrialLevels[characterID].Levels;
-
-		// Go through the list of stages
-		for (int i = 0; i < TrialLevels[characterID].Count; i++)
-		{
-			// If the stage we're currently checking is the same as the one we received as argument, return true
-			if (levelList[i].Level == stageID && levelList[i].Act == actNumber) {
-				return true;
 			}
 		}
-
-		// If nothing matches, returns false
-		return false;
 	}
 }
