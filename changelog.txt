@@ -1,0 +1,38 @@
+v1.1
+
+General:
+- You can no longer be randomly teleported to the Hedgehog Hammer, no more infinite loop, yes!
+- A lot of crashes have been fixed.
+- Added an option to disable the regular stages. When enabled, you'll never get character/stage combination that are normally possible.
+- Kill plane are now functional, which means you will die if you fall in the void. No more falling into the darkness forever, no more cheating either huhu.
+- Adjustment for a lot of stages.
+- Sky Deck act 1 is now a little bit longer with Amy and Big, the first rocket won't send you very far away.
+
+New Level / combination:
+- Sonic's Final Egg as Gamma and Amy has been added.
+- Amy's Final Egg as Sonic has been added.
+- Sonic's Windy Valley as Gamma has been added.
+
+Characters fix:
+
+Gamma:
+- Gamma can now beat Amy's Hot Shelter, he was tired of having no object in the Act 2 so he finally decided to add everything, what a good robot.
+- Taking Final Egg's elevator at the end of the act 2 will no longer softlock Gamma. 
+- Casinopolis Pinball as Gamma has been removed to avoid softlock. Reminder, You don't need to get 400 rings, you can just take the rocket and get the capsule on top.
+- Added the Laser Blaster upgrade.
+
+Big:
+- Egg Viper as Big has been removed, Big prefers fish in the end.
+- Windy Valley act 2's last spring has been fixed, you can now finish Windy Valley as Big, woah epic.
+- Emerald Coast is now a little bit longer with Big, rockets won't send you as far as they used to.
+- Lost World act 2's last spring has been fixed, you can now finish Lost World as Big, yeah!
+- Added the Power Rod upgrade, because epic skin.
+
+Amy:
+- Ice Cap with Amy should be a little bit easier.
+- Added the Warrior Feather upgrade.
+
+Knuckles:
+- Fixed a bug that prevented you from finishing a Knuckles stage. Fun is now allowed again.
+- Sky Deck act 3 has been added.
+- Lost World act 2 has been fixed.
