@@ -6,6 +6,7 @@
 
 extern bool RNGCharacters;
 extern bool RNGStages;
+extern bool Regular;
 
 extern "C"
 {
@@ -24,25 +25,26 @@ extern "C"
 			do {
 				CurrentLevel = level[rand() % 18];
 				CurrentAct = 0;
-
-				if (Regular) // If regular stages are banned
-					if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel)) // If the randomize stage is supposed to be playable by this character
-						continue; // Restart the loop to try and get a level that isn't
-
 			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
+
+			// If the character can access this stage in normal conditions, randomize another stage
+			if(Regular)
+				if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel))
+					randomizeStages();
 		}
 	}
 
-	bool isStageAllowedForCharacter(short characterID, char stageID) {
+	bool isStageAllowedForCharacter(short characterID, char stageID, char actNumber) {
 		// Get the stage list for the character we are requesting
-		TrialLevelList levelList = TrialLevels[characterID];
+		TrialLevelListEntry *levelList = TrialLevels[characterID].Levels;
 
 		// Go through the list of stages
-		for (int i = 0; i < levelList.Count; i++)
+		for (int i = 0; i < TrialLevels[characterID].Count; i++)
 		{
 			// If the stage we're currently checking is the same as the one we received as argument, return true
-			if (levelList.Levels[i].Level == stageID)
+			if (levelList[i].Level == stageID && levelList[i].Act == actNumber) {
 				return true;
+			}
 		}
 
 		// If nothing matches, returns false

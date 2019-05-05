@@ -1,9 +1,4 @@
 ﻿  RandomHelpers.cpp
-D:\Documents\git\SADX-Randomizer\sadx-randomizer\RandomHelpers.cpp(29): warning C4244: 'argument': conversion from 'short' to 'char', possible loss of data
-     Creating library D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.lib and object D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.exp
-  Generating code
-  0 of 639 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  sadx-randomizer.vcxproj -> D:\Documents\git\SADX-Randomizer\Release\sadx-randomizer.dll
+D:\Documents\git\SADX-Randomizer\sadx-randomizer\RandomHelpers.cpp(33): error C2660: 'isStageAllowedForCharacter': function does not take 2 arguments
+  D:\Documents\git\SADX-Randomizer\sadx-randomizer\RandomHelpers.h(8): note: see declaration of 'isStageAllowedForCharacter'
+  mod.cpp
