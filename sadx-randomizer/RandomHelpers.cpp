@@ -18,7 +18,7 @@ extern "C"
 
 	//Initiliaze banned regular stage if option is activated
 	int bannedRegularSonic[12] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 22 };
-	int bannedRegularTails[3] = { 4, 6, 21 };
+	int bannedRegularTails[4] = { 4, 6, 20, 21 };
 	int bannedRegularKnuckles[1] = { 16 };
 	int bannedRegularAmy[3] = { 12, 23, 38 };
 	int bannedRegularBig[3] = { 8, 12, 22 };
@@ -49,7 +49,7 @@ extern "C"
 					do {
 						CurrentLevel = level[rand() % 18];
 						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularTails, CurrentLevel, 3));
+					} while (isValueInArray(bannedRegularTails, CurrentLevel, 4));
 					break;
 				case Characters_Knuckles:
 					do {
