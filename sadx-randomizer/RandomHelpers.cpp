@@ -28,9 +28,11 @@ extern "C"
 			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7));
 
 			// If the character can access this stage in normal conditions, randomize another stage
+			/*
 			if(Regular)
 				if (isStageAllowedForCharacter(CurrentCharacter, CurrentLevel, CurrentAct))
 					randomizeStages();
+					*/
 		}
 	}
 
