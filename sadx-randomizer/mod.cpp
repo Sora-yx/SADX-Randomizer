@@ -60,7 +60,14 @@ extern "C"
 		Knuckles_HotelToCasinoOpen = 1;
 		Knuckles_StationToCasinoOpen = 1;
 
+
+		DataArray(EntityData2*, EntityData2Ptrs, 0x3B36DD0, 8);
+
+		FunctionPointer(int, sub_42FB00, (), 0x42FB00);
+		ObjectMaster* obj;
+
 		//Fix Knuckles Lost World act 2 song.
+
 
 		switch (CurrentLevel)
 		{
@@ -69,7 +76,17 @@ extern "C"
 			{
 				CurrentSong = 64;
 			}
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CurrentCharacter == Characters_Sonic && CurrentAct == 2)
+			{
+				ObjectMaster* o2 = nullptr;
+				LoadObject(LoadObj_Data1, 6, EmeraldRadarHud_Load_Load);
+			}
+			break;
 		}
+
+		
 
 		if (Upgrade == true)
 		{
@@ -96,7 +113,7 @@ extern "C"
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
 			// Starts the Credits once the player gets 10 Emblems. 
-			if (Emblem == 10) {
+			if (Emblem == 3) {
 				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
@@ -136,9 +153,10 @@ extern "C"
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-		//fix Casinopolis SFX while using wrong characters
+		
 		switch (CurrentLevel)
 		{
+			//fix Casinopolis SFX while using wrong characters
 		case LevelIDs_Casinopolis:
 			if (CurrentCharacter == Characters_Amy)
 			{
@@ -158,11 +176,11 @@ extern "C"
 			}
 			if (CurrentCharacter == Characters_Big)
 			{
-				LoadSoundList(48);
+				LoadSoundList(47);
 				if (VoiceLanguage)
-					LoadSoundList(68);
+					LoadSoundList(66);
 				else
-					LoadSoundList(67);
+					LoadSoundList(65);
 			}
 			break;
 		}

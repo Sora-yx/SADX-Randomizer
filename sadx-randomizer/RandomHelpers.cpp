@@ -29,7 +29,7 @@ extern "C"
 		if (RNGCharacters == true) {
 			do {
 				CurrentCharacter = character[rand() % 6];
-			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 3 || CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1)));
+			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1))));
 		}
 	}
 
@@ -82,7 +82,7 @@ extern "C"
 				do {
 					CurrentLevel = level[rand() % 18];
 					CurrentAct = 0;
-				} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2 || CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1)));
+				} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1))));
 
 
 			}
