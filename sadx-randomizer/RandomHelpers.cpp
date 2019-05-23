@@ -3,6 +3,11 @@
 #include "SADXEnums.h"
 #include "RandomHelpers.h"
 #include "Utils.h"
+#include "MemAccess.h"
+#include "SADXFunctions.h"
+#include "MemAccess.h"
+
+
 
 extern bool RNGCharacters;
 extern bool RNGStages;
@@ -11,81 +16,123 @@ extern bool Regular;
 
 extern "C"
 {
+	//Set up 2 arrays, one for the stage list and an other for the characters, this is to avoid randomizing a stage which is impossible to beat or a character who can crash the game.
+	int character[6] = { 0, 2, 3, 5, 6, 7 };
+	int level[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 21, 22, 23, 38 };
+	int door[5] = { 0, 1, 2, 3, 4 };
+	int metalsonicrng[2] = { 0, 1 };
+
 	//Initialize Banned stage impossible to beat
 	int bannedLevelsGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
 	int bannedLevelsBig[3] = { 8, 22, 38 };
 	int bannedLevelsAmy[1] = { 38 };
+	int bannedLevelsTails[1] = { 5 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[12] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 22 };
-	int bannedRegularTails[4] = { 4, 20, 21, 38 };
+	int bannedRegularSonic[11] = { 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 22 };
+	int bannedRegularTails[5] = { 4, 5, 20, 21, 38 };
 	int bannedRegularKnuckles[1] = { 16 };
 	int bannedRegularAmy[3] = { 12, 23, 38 };
-	int bannedRegularBig[4] = { 8, 12, 22, 38 };
-	int bannedRegularGamma[9] = { 1, 3, 15, 16, 18, 20, 21, 23, 38 };
+	int bannedRegularBig[3] = { 8, 22, 38 };
+	int bannedRegularGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
 
 
-	void randomizeCharacter() {
-		if (RNGCharacters == true) {
-			do {
-				CurrentCharacter = character[rand() % 6];
-			} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1))));
+	DataPointer(char, Emblem, 0x974AE0);
+
+	void randomstage(char stage, char act) {
+		// Starts the Credits once the player gets 10 Emblems. 
+		if (Emblem == 10 || Emblem == 15 || Emblem == 20 || Emblem == 23 || Emblem == 27 || Emblem == 32 || Emblem == 33)
+		{
+			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
+			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
+			EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
+			EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
+			EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
+			EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
+			GameMode = GameModes_StartCredits;
+			GameState = 21;
+			Credits_State = 1;
+			CurrentCharacter = 0;
+			Load_SEGALOGO_E();
 		}
-	}
 
-	void randomizeStages() {
-		if (RNGStages == true) {
-			if (Regular)
-			{
-				switch (CurrentCharacter)
+		else
+		{
+			//set up final egg door rng
+			DataPointer(char, RNGDoor, 0x3C7457C);
+			RNGDoor = door[rand() % 5];
+
+			if (RNGCharacters == true)
+				CurrentCharacter = character[rand() % 6];
+
+			if (RNGStages == true) {
+				if (Regular == true)
 				{
-				case Characters_Sonic:
+					switch (CurrentCharacter)
+					{
+					case Characters_Sonic:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							MetalSonicFlag = metalsonicrng[rand() % 2];
+							GameState = 17;
+						} while (isValueInArray(bannedRegularSonic, CurrentLevel, 11));
+						break;
+					case Characters_Tails:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							GameState = 17;
+						} while (isValueInArray(bannedRegularTails, CurrentLevel, 5));
+						break;
+					case Characters_Knuckles:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							GameState = 17;
+						} while (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1));
+						break;
+					case Characters_Amy:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							GameState = 17;
+						} while (isValueInArray(bannedRegularAmy, CurrentLevel, 3));
+						break;
+					case Characters_Big:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							GameState = 17;
+						} while (isValueInArray(bannedRegularBig, CurrentLevel, 3));
+						break;
+					case Characters_Gamma:
+						do {
+							CurrentLevel = level[rand() % 18];
+							CurrentAct = 0;
+							GameState = 17;
+						} while (isValueInArray(bannedRegularGamma, CurrentLevel, 8));
+						break;
+					}
+				}
+				else
+				{
 					do {
 						CurrentLevel = level[rand() % 18];
+						GameState = 17;
 						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularSonic, CurrentLevel, 12));
-					break;
-				case Characters_Tails:
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularTails, CurrentLevel, 4));
-					break;
-				case Characters_Knuckles:
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1));
-					break;
-				case Characters_Amy:
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularAmy, CurrentLevel, 3));
-					break;
-				case Characters_Big:
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularBig, CurrentLevel, 4));
-					break;
-				case Characters_Gamma:
-					do {
-						CurrentLevel = level[rand() % 18];
-						CurrentAct = 0;
-					} while (isValueInArray(bannedRegularGamma, CurrentLevel, 9));
-					break;
+					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 3))));
 				}
 			}
 			else
 			{
-				do {
-					CurrentLevel = level[rand() % 18];
-					CurrentAct = 0;
-				} while (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1))));
-
-
+				if (RNGStages == false && Regular == true) 
+				{ }
 			}
+			
+
+			
+
 		}
 	}
 }
