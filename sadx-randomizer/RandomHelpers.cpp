@@ -29,7 +29,7 @@ extern "C"
 	int bannedLevelsTails[1] = { 5 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[11] = { 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 22 };
+	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
 	int bannedRegularTails[5] = { 4, 5, 20, 21, 38 };
 	int bannedRegularKnuckles[1] = { 16 };
 	int bannedRegularAmy[3] = { 12, 23, 38 };
@@ -76,47 +76,60 @@ extern "C"
 							CurrentAct = 0;
 							MetalSonicFlag = metalsonicrng[rand() % 2];
 							GameState = 17;
-						} while (isValueInArray(bannedRegularSonic, CurrentLevel, 11));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
 						break;
 					case Characters_Tails:
 						do {
 							CurrentLevel = level[rand() % 18];
 							CurrentAct = 0;
+							MetalSonicFlag = 0;
 							GameState = 17;
-						} while (isValueInArray(bannedRegularTails, CurrentLevel, 5));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 5)));
 						break;
 					case Characters_Knuckles:
 						do {
 							CurrentLevel = level[rand() % 18];
 							CurrentAct = 0;
+							MetalSonicFlag = 0;
 							GameState = 17;
-						} while (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1)));
 						break;
 					case Characters_Amy:
 						do {
 							CurrentLevel = level[rand() % 18];
 							CurrentAct = 0;
+							MetalSonicFlag = 0;
 							GameState = 17;
-						} while (isValueInArray(bannedRegularAmy, CurrentLevel, 3));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 3)));
 						break;
 					case Characters_Big:
 						do {
 							CurrentLevel = level[rand() % 18];
 							CurrentAct = 0;
+							MetalSonicFlag = 0;
 							GameState = 17;
-						} while (isValueInArray(bannedRegularBig, CurrentLevel, 3));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 3)));
 						break;
 					case Characters_Gamma:
 						do {
 							CurrentLevel = level[rand() % 18];
 							CurrentAct = 0;
+							MetalSonicFlag = 0;
 							GameState = 17;
-						} while (isValueInArray(bannedRegularGamma, CurrentLevel, 8));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 8)));
 						break;
 					}
 				}
 				else
 				{
+					switch (CurrentCharacter)
+					{
+					case Characters_Sonic:
+						MetalSonicFlag = metalsonicrng[rand() % 2];
+						break;
+					defaut:
+						MetalSonicFlag = 0;
+					}
 					do {
 						CurrentLevel = level[rand() % 18];
 						GameState = 17;
