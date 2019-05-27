@@ -6,6 +6,11 @@ bool RNGStages = true;
 bool Upgrade = true;
 bool Regular = false;
 
+StartPosition FixStartPositions[]{
+	{ LevelIDs_RedMountain, 0, { SonicStartArray[11].Position }, 0 },
+	{ LevelIDs_RedMountain, 1, { SonicStartArray[12].Position }, 0 }
+};
+
 extern "C"
 {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
@@ -39,7 +44,22 @@ extern "C"
 			WriteCall((void*)0x42ca8c, randomstage); //hook when selecting a character in adventure mode.
 			WriteCall((void*)0x41342a, randomstage); //hook CurrentAdventureData (If hook is disabled, you will get randomly teleported to Gamma's upgrade room for some reason.)
 			WriteCall((void*)0x413522, randomstage); //hook CurrentAdventureData Boss soft reset (Same as before, happen if you soft reset during a boss fight.)
+			WriteJump(StartLevelCutscene, StartLevelCutscene_); //Remove level cutscenes
 		}
+
+		//Allow act swap for all characters
+		WriteData<5>((void*)0x601595, 0x90); //Red Mountain
+		WriteData<5>((void*)0x5C058B, 0x90); //Casinopolis
+
+		helperFunctions.RegisterStartPosition(Characters_Tails, FixStartPositions[0]);
+		helperFunctions.RegisterStartPosition(Characters_Gamma, FixStartPositions[0]);
+		helperFunctions.RegisterStartPosition(Characters_Amy, FixStartPositions[0]);
+		helperFunctions.RegisterStartPosition(Characters_Big, FixStartPositions[0]);
+
+		helperFunctions.RegisterStartPosition(Characters_Tails, FixStartPositions[1]);
+		helperFunctions.RegisterStartPosition(Characters_Knuckles, FixStartPositions[1]);
+		helperFunctions.RegisterStartPosition(Characters_Amy, FixStartPositions[1]);
+		helperFunctions.RegisterStartPosition(Characters_Big, FixStartPositions[1]);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -238,6 +258,12 @@ extern "C"
 				else
 					LoadSoundList(65);
 			}
+			break;
+		case LevelIDs_RedMountain:
+			if (CurrentAct == 0)
+				CurrentSong = MusicIDs_redmntn1;
+			else
+				CurrentSong = MusicIDs_redmntn2;
 			break;
 		case LevelIDs_LostWorld:
 			//Fix Knuckles Lost World act 2 song

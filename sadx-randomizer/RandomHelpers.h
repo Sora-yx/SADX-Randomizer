@@ -16,6 +16,7 @@ void nextcutscene(char stage, char act);
 void quitstage();
 void credits();
 void acts();
+void StartLevelCutscene_(__int16 a1);
 bool isStageAllowedForCharacter(short characterID, char stageID, char actNumber);
 
 DataPointer(char, Emblem, 0x974AE0);

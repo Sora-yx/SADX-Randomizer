@@ -32,6 +32,10 @@ int bannedRegularAmy[3] = { 12, 23, 38 };
 int bannedRegularBig[3] = { 8, 22, 38 };
 int bannedRegularGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
 
+void StartLevelCutscene_(__int16 a1) {
+	CutsceneMode = 0;
+}
+
 void randomstage(char stage, char act) {
 	if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 	{
