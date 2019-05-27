@@ -1,12 +1,5 @@
-#include <cstdio>
-#include <algorithm>
-#include <time.h>
 #include "stdafx.h"
-#include "SADXModLoader.h"
 #include "RandomHelpers.h"
-#include "IniFile.hpp"
-#include "SADXFunctions.h"
-#include "MemAccess.h"
 
 bool RNGCharacters = true;
 bool RNGStages = true;
@@ -15,13 +8,10 @@ bool Regular = false;
 
 extern "C"
 {
-
-	time_t t;
-
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
-
-		unsigned int seed = 0;
+		time_t t;
+		unsigned int seed;
 
 		//Ini Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
@@ -54,7 +44,6 @@ extern "C"
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
 		if (Upgrade == true)
 		{
 			EventFlagArray[EventFlags_Sonic_LightShoes] = true;
@@ -72,17 +61,7 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
-		
-
 		//When loading: check if Credits need to start and call random act if possible.
-
-		DataPointer(char, Emblem, 0x974AE0);
-		DataPointer(unsigned char, LevelList, 0x3B2C5F8);
-		DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
-		int actrng[2] = { 0, 1 };
-		int actHS[2] = { 0, 2 };
-		int actIC[2] = { 0, 3 };
-
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
 			if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
@@ -138,12 +117,12 @@ extern "C"
 					EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
 					break;
 				}
-					GameMode = GameModes_StartCredits;
-					GameState = 21;
-					Credits_State = 1;
-					Load_SEGALOGO_E();
-			}
 
+				GameMode = GameModes_StartCredits;
+				GameState = 21;
+				Credits_State = 1;
+				Load_SEGALOGO_E();
+			}
 			else
 			{
 				switch (CurrentLevel)
@@ -224,18 +203,13 @@ extern "C"
 		}
 
 		// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
-		{
-			PhysicsArray[Characters_Amy].MaxAccel = 5;
-			PhysicsArray[Characters_Big].MaxAccel = 5;
-			PhysicsArray[Characters_Gamma].MaxAccel = 5;
-			return;
-		}
-
+		PhysicsArray[Characters_Amy].MaxAccel = 5;
+		PhysicsArray[Characters_Big].MaxAccel = 5;
+		PhysicsArray[Characters_Gamma].MaxAccel = 5;
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-		
 		//fix Casinopolis SFX when using wrong characters
 		switch (CurrentLevel)
 		{
@@ -265,30 +239,21 @@ extern "C"
 					LoadSoundList(65);
 			}
 			break;
+		case LevelIDs_LostWorld:
+			//Fix Knuckles Lost World act 2 song
+			if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
+			{
+				CurrentSong = 64;
+			}
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentCharacter == Characters_Big && CurrentAct == 1)
+			{
+				PlayMusic(MusicIDs_HotShelterRedBarrageArea);
+			}
+			break;
 		}
-
-		//Fix Knuckles Lost World act 2 song
-			switch (CurrentLevel)
-			{
-			case LevelIDs_LostWorld:
-				if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
-				{
-					CurrentSong = 64;
-				}
-				break;
-			}
-
-			switch (CurrentLevel)
-			{
-			case LevelIDs_HotShelter:
-				if (CurrentCharacter == Characters_Big && CurrentAct == 1)
-				{
-					PlayMusic(MusicIDs_HotShelterRedBarrageArea);
-				}
-				break;
-			}
 	}
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
-
 }
