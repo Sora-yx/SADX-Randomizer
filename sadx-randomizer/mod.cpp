@@ -39,14 +39,16 @@ extern "C"
 
 		if (RNGStages == true || RNGCharacters == true)
 		{
+			WriteCall((void*)0x416bd4, quitstage); //hook pause quit
+			WriteCall((void*)0x41509b, randomstage);  //Hook "SetNextLevel" Used after some specific boss fight? Seems like it fixs egg viper crash.
 			WriteCall((void*)0x7b0b0e, randomstage); //hook "Set next level"
-			//WriteCall((void*)0x416bf8, randomstage); //hook "Set next level cutscene version"
+			WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" When used, Big Red Mountain and WV are fixed.
 			WriteCall((void*)0x41709d, randomstage); //hook "Go to next level"
 			WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
 			WriteCall((void*)0x417b47, randomstage); //hook when entering to an action stage in the hub world. MIGHT BE AN ISSUE
 			WriteCall((void*)0x42ca8c, randomstage); //hook when selecting a character in adventure mode.
-			WriteCall((void*)0x41342a, randomstage); //hook CurrentAdventureData
-			WriteCall((void*)0x413522, randomstage); //hook CurrentAdventureData Boss soft reset
+			WriteCall((void*)0x41342a, randomstage); //hook CurrentAdventureData (If hook is disabled, you will get randomly teleported to Gamma's upgrade room for some reason.)
+			WriteCall((void*)0x413522, randomstage); //hook CurrentAdventureData Boss soft reset (Same as before, happen if you soft reset during a boss fight.)
 		}
 	}
 
@@ -70,21 +72,22 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
+		
 
-
-		//When loading: check if Credits need to start and call Act random if possible.
+		//When loading: check if Credits need to start and call random act if possible.
 
 		DataPointer(char, Emblem, 0x974AE0);
 		DataPointer(unsigned char, LevelList, 0x3B2C5F8);
 		DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
 		int actrng[2] = { 0, 1 };
 		int actHS[2] = { 0, 2 };
+		int actIC[2] = { 0, 3 };
 
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
 			if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 			{
-				// Check if credits need to happen, if not, start the RNG.
+				// Check if credits need to happen, if not, start the RNG to get Metal Sonic and a random act.
 				switch (SelectedCharacter)
 				{
 				case 0:
@@ -146,7 +149,7 @@ extern "C"
 				switch (CurrentLevel)
 				{
 				case LevelIDs_EmeraldCoast:
-					if (CurrentCharacter == Characters_Sonic)
+					if (CurrentCharacter == Characters_Sonic || MetalSonicFlag == 1)
 					{
 						CurrentAct = 2;
 						NextAct = 2;
@@ -164,6 +167,24 @@ extern "C"
 							CurrentAct = actHS[rand() % 2];
 						}
 					}
+					break;
+				case LevelIDs_IceCap:
+					if (CurrentCharacter == Characters_Sonic)
+					{
+						NextAct = 3;
+						CurrentAct = 3;
+					}
+					else
+						if (CurrentCharacter == Characters_Big)
+						{
+							NextAct = 0;
+							CurrentAct = 0;
+						}
+						else
+						{
+							NextAct = actIC[rand() % 2];
+							CurrentAct = actIC[rand() % 2];
+						}
 					break;
 				case LevelIDs_HotShelter:
 					NextAct = actHS[rand() % 2];
@@ -195,6 +216,12 @@ extern "C"
 			}
 		}
 
+		if (GameMode == 4 || GameMode == 5)
+		{
+			HudShowTimer;
+			HudDisplayRingTimeLife;
+			HudDisplayScoreOrTimer;
+		}
 
 		// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
 		{
@@ -247,6 +274,16 @@ extern "C"
 				if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
 				{
 					CurrentSong = 64;
+				}
+				break;
+			}
+
+			switch (CurrentLevel)
+			{
+			case LevelIDs_HotShelter:
+				if (CurrentCharacter == Characters_Big && CurrentAct == 1)
+				{
+					PlayMusic(MusicIDs_HotShelterRedBarrageArea);
 				}
 				break;
 			}

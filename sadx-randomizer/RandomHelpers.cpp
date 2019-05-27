@@ -13,7 +13,6 @@ extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Regular;
 
-
 extern "C"
 {
 	//Set up 2 arrays, one for the stage list and an other for the characters, this is to avoid randomizing a stage which is impossible to beat or a character who can crash the game.
@@ -23,6 +22,7 @@ extern "C"
 	int metalsonicrng[2] = { 0, 1 };
 	int actrng[2] = { 0, 1 };
 	int actHS[2] = { 0, 2 };
+	int actIC[2] = { 0, 3 };
 
 	//Initialize Banned stage impossible to beat
 	int bannedLevelsGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
@@ -32,13 +32,14 @@ extern "C"
 	int bannedLevelsTails[1] = { 5 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
+	int bannedRegularSonic[9] = { 2, 3, 5, 6, 7, 9, 15, 20, 22 };
 	int bannedRegularTails[6] = { 4, 5, 6, 20, 21, 38 };
 	int bannedRegularKnuckles[2] = { 16, 38 };
 	int bannedRegularAmy[3] = { 12, 23, 38 };
 	int bannedRegularBig[3] = { 8, 22, 38 };
 	int bannedRegularGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
 
+	
 	DataPointer(char, Emblem, 0x974AE0);
 	DataPointer(unsigned char, LevelList, 0x3B2C5F8);
 	DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
@@ -48,7 +49,7 @@ extern "C"
 
 	void randomstage(char stage, char act) {
 
-		if (Emblem == 3 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
+		if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 		{
 			// Check if credits need to happen, if not, start the RNG.
 			switch (SelectedCharacter)
@@ -112,6 +113,7 @@ extern "C"
 			//set up final egg door rng
 			DataPointer(char, RNGDoor, 0x3C7457C);
 			RNGDoor = door[rand() % 5];
+			
 
 			if (RNGCharacters == true)
 				CurrentCharacter = character[rand() % 6];
@@ -126,7 +128,7 @@ extern "C"
 							CurrentAct = 0;
 							MetalSonicFlag = metalsonicrng[rand() % 2];
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 9)));
 						break;
 					case Characters_Tails:
 						do {
@@ -185,8 +187,21 @@ extern "C"
 			else
 			{
 				if (RNGStages == false && Regular == true)
-				{ }
+				{
+					return;
+				}
 			}
 		}
 	}
+	void nextcutscene(char stage, char act) {
+		CutsceneMode = 3;
+		void randomstage(char stage, char act);
+		return;
+	}
+
+	void quitstage() {
+		GameState = 20;
+		return;
+	}
+
 }
