@@ -22,7 +22,6 @@ int bannedLevelsGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
 int bannedLevelsBig[3] = { 8, 22, 38 };
 int bannedLevelsKnuckles[1] = { 38 };
 int bannedLevelsAmy[1] = { 38 };
-int bannedLevelsTails[1] = { 5 };
 
 //Initiliaze banned regular stage if option is activated
 int bannedRegularSonic[9] = { 2, 3, 5, 6, 7, 9, 15, 20, 22 };
