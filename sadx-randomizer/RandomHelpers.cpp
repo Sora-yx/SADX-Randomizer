@@ -15,43 +15,42 @@ extern bool Regular;
 
 extern "C"
 {
-	//Set up 2 arrays, one for the stage list and an other for the characters, this is to avoid randomizing a stage which is impossible to beat or a character who can crash the game.
+	//Set up several arrays, the "level" one doesn't include some specific stages impossible to beat.
 	int character[6] = { 0, 2, 3, 5, 6, 7 };
 	int level[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 21, 22, 23, 38 };
-	int door[5] = { 0, 1, 2, 3, 4 };
-	int metalsonicrng[2] = { 0, 1 };
-	int actrng[2] = { 0, 1 };
-	int actHS[2] = { 0, 2 };
-	int actIC[2] = { 0, 3 };
+	int door[5] = { 0, 1, 2, 3, 4 }; //set up the 5 doors RNG at Final Egg.
+	int metalsonicrng[2] = { 0, 1 }; //Used to randomize Metal Sonic.
 
-	//Initialize Banned stage impossible to beat
-	int bannedLevelsGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
-	int bannedLevelsBig[3] = { 8, 22, 38 };
-	int bannedLevelsKnuckles[1] = { 38 };
-	int bannedLevelsAmy[1] = { 38 };
-	int bannedLevelsTails[1] = { 5 };
+	//Initialize Ban few stage impossible to beat, depending on the character.
+	int bannedLevelsGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
+	int bannedLevelsBig[2] = { 8, 22 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[9] = { 2, 3, 5, 6, 7, 9, 15, 20, 22 };
-	int bannedRegularTails[6] = { 4, 5, 6, 20, 21, 38 };
-	int bannedRegularKnuckles[2] = { 16, 38 };
-	int bannedRegularAmy[3] = { 12, 23, 38 };
-	int bannedRegularBig[3] = { 8, 22, 38 };
-	int bannedRegularGamma[8] = { 3, 15, 16, 18, 20, 21, 23, 38 };
+	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
+	int bannedRegularTails[5] = { 4, 6, 20, 21, 38 };
+	int bannedRegularKnuckles[1] = { 16 };
+	int bannedRegularAmy[2] = { 12, 23 };
+	int bannedRegularBig[2] = { 8, 22 };
+	int bannedRegularGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
 
-	
-	DataPointer(char, Emblem, 0x974AE0);
-	DataPointer(unsigned char, LevelList, 0x3B2C5F8);
-	DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
+	//Function Credits
+	void showcredits() {
+		GameMode = GameModes_StartCredits;
+		GameState = 21;
+		Credits_State = 1;
+		Load_SEGALOGO_E();
+	}
 
 
-
-
+	//function Randomize stage and characters
 	void randomstage(char stage, char act) {
+
+		LastLevel = CurrentLevel;
+		LastAct = CurrentAct;
 
 		if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 		{
-			// Check if credits need to happen, if not, start the RNG.
+			//void showcredits();
 			switch (SelectedCharacter)
 			{
 			case 0:
@@ -103,23 +102,23 @@ extern "C"
 				break;
 			}
 
-				GameMode = GameModes_StartCredits;
-				GameState = 21;
-				Credits_State = 1;
-				Load_SEGALOGO_E();
+			GameMode = GameModes_StartCredits;
+			GameState = 21;
+			Credits_State = 1;
+			Load_SEGALOGO_E();
 		}
+
 		else
 		{
 			//set up final egg door rng
-			DataPointer(char, RNGDoor, 0x3C7457C);
 			RNGDoor = door[rand() % 5];
-			
+
 
 			if (RNGCharacters == true)
 				CurrentCharacter = character[rand() % 6];
 
 			if (RNGStages == true) {
-				if (Regular == true)
+				if (Regular == true) //if the player activated the "banned regular stage option", check and ban the regular combination.
 				{
 					switch (CurrentCharacter)
 					{
@@ -128,46 +127,46 @@ extern "C"
 							CurrentAct = 0;
 							MetalSonicFlag = metalsonicrng[rand() % 2];
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 9)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
 						break;
 					case Characters_Tails:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 6)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 5)));
 						break;
 					case Characters_Knuckles:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 2)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1)));
 						break;
 					case Characters_Amy:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 3)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 2)));
 						break;
 					case Characters_Big:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 3)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 2)));
 						break;
 					case Characters_Gamma:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 8)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 7)));
 						break;
 					}
 				}
-				else
+				else //if the play didn't active the regular option
 				{
 					switch (CurrentCharacter)
 					{
@@ -181,27 +180,32 @@ extern "C"
 					do {
 						CurrentAct = 0;
 						CurrentLevel = level[rand() % 18];
-					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 3) || (CurrentCharacter == Characters_Amy && isValueInArray(bannedLevelsAmy, CurrentLevel, 1) || (CurrentCharacter == Characters_Knuckles && isValueInArray(bannedLevelsKnuckles, CurrentLevel, 1))))));
+					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
+		
 				}
 			}
 			else
 			{
-				if (RNGStages == false && Regular == true)
+				if (RNGStages == false && Regular == true) //It's technically useless, but I need to make some test later.
 				{
 					return;
 				}
 			}
 		}
 	}
-	void nextcutscene(char stage, char act) {
-		CutsceneMode = 3;
-		void randomstage(char stage, char act);
-		return;
-	}
-
-	void quitstage() {
-		GameState = 20;
-		return;
-	}
-
 }
+
+//cancel the reset position at 0 after quitting a stage.
+void CancelResetPosition() {
+	NextLevel = LastLevel;
+	NextAct = LastAct;
+}
+
+// Force the game to return to the title screen when you quit.
+void quitstage() {
+	PauseQuitThing();
+	GameState = 0x14;
+	return;
+}
+
+

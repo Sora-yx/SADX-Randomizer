@@ -39,22 +39,34 @@ extern "C"
 
 		if (RNGStages == true || RNGCharacters == true)
 		{
-			WriteCall((void*)0x416bd4, quitstage); //hook pause quit
-			WriteCall((void*)0x41509b, randomstage);  //Hook "SetNextLevel" Used after some specific boss fight? Seems like it fixs egg viper crash.
-			WriteCall((void*)0x7b0b0e, randomstage); //hook "Set next level"
-			WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" When used, Big Red Mountain and WV are fixed.
+
+			//Allow act swap for all characters
+			WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
+
+			//Force the game to let you play Tails at Red Mountain and Emerald Coast act 2.
+			WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
+			WriteData<5>((void*)0x4f6afa, 0x90); //hook GetCurrentCharacterID when you enter at Emerald Coast act 2.
+
+			//WriteCall((void*)0x41509b, randomstage);  //Hook "SetNextLevel" Used after some specific boss fight?
+			//WriteCall((void*)0x7b0b0e, randomstage); //hook "Set next level"
+
+			//Force the game to let you quit.
+			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+			WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" used to fix pause when you quit.
+
+			//WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
 			WriteCall((void*)0x41709d, randomstage); //hook "Go to next level"
-			WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
-			WriteCall((void*)0x417b47, randomstage); //hook when entering to an action stage in the hub world. MIGHT BE AN ISSUE
+			WriteCall((void*)0x417b47, randomstage); //hook when entering to an action stage in the hub world.
 			WriteCall((void*)0x42ca8c, randomstage); //hook when selecting a character in adventure mode.
 			WriteCall((void*)0x41342a, randomstage); //hook CurrentAdventureData (If hook is disabled, you will get randomly teleported to Gamma's upgrade room for some reason.)
 			WriteCall((void*)0x413522, randomstage); //hook CurrentAdventureData Boss soft reset (Same as before, happen if you soft reset during a boss fight.)
+
+			//WriteJump(StartLevelCutscene, StartLevelCutscene_); //Remove level cutscenes for Tails but also stop the game when result screen happens.
 		}
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
 		if (Upgrade == true)
 		{
 			EventFlagArray[EventFlags_Sonic_LightShoes] = true;
@@ -72,22 +84,40 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
+
 		
 
-		//When loading: check if Credits need to start and call random act if possible.
-
-		DataPointer(char, Emblem, 0x974AE0);
-		DataPointer(unsigned char, LevelList, 0x3B2C5F8);
-		DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
 		int actrng[2] = { 0, 1 };
 		int actHS[2] = { 0, 2 };
-		int actIC[2] = { 0, 3 };
+
+
+		//force the game to display the in-game timer and fix metal sonic life icon issue.
+		if (GameMode == 5 || GameMode == 4)
+		{
+			HudDisplayRingTimeLife_Check();
+			HudDisplayScoreOrTimer();
+			if (CurrentCharacter != Characters_Sonic)
+			{
+				MetalSonicFlag = 0;
+			}
+		}
+
+
+		if (GameMode == GameModes_Adventure_ActionStg)
+		{
+			//fix Egg Viper, Casino, Sky Deck, Red Mountain and Windy Valley Crash, definitely not the best solution, but I didn't find anything better yet.
+			if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_WindyValley)
+			{
+				GameMode = GameModes_Adventure_Field;
+			}
+		}
+
+		//When loading: check if Credits need to start and call random act if possible.
 
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
 		{
 			if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 			{
-				// Check if credits need to happen, if not, start the RNG to get Metal Sonic and a random act.
 				switch (SelectedCharacter)
 				{
 				case 0:
@@ -138,12 +168,12 @@ extern "C"
 					EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
 					break;
 				}
-					GameMode = GameModes_StartCredits;
-					GameState = 21;
-					Credits_State = 1;
-					Load_SEGALOGO_E();
-			}
 
+				GameMode = GameModes_StartCredits;
+				GameState = 21;
+				Credits_State = 1;
+				Load_SEGALOGO_E();
+			}
 			else
 			{
 				switch (CurrentLevel)
@@ -168,24 +198,6 @@ extern "C"
 						}
 					}
 					break;
-				case LevelIDs_IceCap:
-					if (CurrentCharacter == Characters_Sonic)
-					{
-						NextAct = 3;
-						CurrentAct = 3;
-					}
-					else
-						if (CurrentCharacter == Characters_Big)
-						{
-							NextAct = 0;
-							CurrentAct = 0;
-						}
-						else
-						{
-							NextAct = actIC[rand() % 2];
-							CurrentAct = actIC[rand() % 2];
-						}
-					break;
 				case LevelIDs_HotShelter:
 					NextAct = actHS[rand() % 2];
 					CurrentAct = actHS[rand() % 2];
@@ -201,27 +213,10 @@ extern "C"
 						CurrentAct = actrng[rand() % 2];
 					}
 					break;
-				case LevelIDs_RedMountain:
-					if (CurrentCharacter == Characters_Sonic)
-					{
-						CurrentAct = 0;
-					}
-					else
-					{
-						NextAct = actrng[rand() % 2];
-						CurrentAct = actrng[rand() % 2];
-					}
-					break;
 				}
 			}
 		}
 
-		if (GameMode == 4 || GameMode == 5)
-		{
-			HudShowTimer;
-			HudDisplayRingTimeLife;
-			HudDisplayScoreOrTimer;
-		}
 
 		// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
 		{
@@ -231,11 +226,11 @@ extern "C"
 			return;
 		}
 
-	}
 
+	}
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-		
+
 		//fix Casinopolis SFX when using wrong characters
 		switch (CurrentLevel)
 		{
@@ -268,25 +263,42 @@ extern "C"
 		}
 
 		//Fix Knuckles Lost World act 2 song
-			switch (CurrentLevel)
+		switch (CurrentLevel)
+		{
+		case LevelIDs_LostWorld:
+			if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
 			{
-			case LevelIDs_LostWorld:
-				if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
-				{
-					CurrentSong = 64;
-				}
-				break;
+				CurrentSong = 64;
 			}
+			break;
+		}
 
-			switch (CurrentLevel)
+		//fix Big Hot Shelter act 2 song.
+		switch (CurrentLevel)
+		{
+		case LevelIDs_HotShelter:
+			if (CurrentCharacter == Characters_Big && CurrentAct == 1 && CurrentSong != 75)
 			{
-			case LevelIDs_HotShelter:
-				if (CurrentCharacter == Characters_Big && CurrentAct == 1)
-				{
-					PlayMusic(MusicIDs_HotShelterRedBarrageArea);
-				}
-				break;
+				PlayMusic(MusicIDs_HotShelterRedBarrageArea);
 			}
+			break;
+		}
+
+		//fix Tails RM act 1 and 2 song.
+		switch (CurrentLevel)
+		{
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Tails && CurrentAct == 0)
+			{
+				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
+			}
+			else
+				if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong != 75)
+				{
+					PlayMusic(MusicIDs_RedMountainRedHotSkull);
+				}
+			break;
+		}
 	}
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };

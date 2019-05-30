@@ -1,13 +1,12 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
-  RandomHelpers.cpp
+  mod.cpp
 c:\program files (x86)\microsoft sdks\windows\v7.1a\include\sal_supp.h(57): warning C4005: '__useHeader': macro redefinition
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2866): note: see previous definition of '__useHeader'
 c:\program files (x86)\microsoft sdks\windows\v7.1a\include\specstrings_supp.h(77): warning C4005: '__on_failure': macro redefinition
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2876): note: see previous definition of '__on_failure'
-d:\github\sadx-randomizer\sadx-randomizer\randomhelpers.cpp(176): warning C4102: 'defaut': unreferenced label
      Creating library D:\GitHub\sadx-randomizer\Release\sadx-randomizer.lib and object D:\GitHub\sadx-randomizer\Release\sadx-randomizer.exp
   Generating code
-  0 of 626 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 625 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
