@@ -7,8 +7,6 @@
 #include "SADXFunctions.h"
 #include "MemAccess.h"
 
-
-
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Regular;
@@ -24,22 +22,16 @@ extern "C"
 	//Initialize Ban few stage impossible to beat, depending on the character.
 	int bannedLevelsGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
 	int bannedLevelsBig[2] = { 8, 22 };
+	int bannedLevelsKnuckles[2] = { 5, 6 };
 
 	//Initiliaze banned regular stage if option is activated
 	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
 	int bannedRegularTails[5] = { 4, 6, 20, 21, 38 };
-	int bannedRegularKnuckles[1] = { 16 };
+	int bannedRegularKnuckles[3] = { 5, 6, 16 };
 	int bannedRegularAmy[2] = { 12, 23 };
 	int bannedRegularBig[2] = { 8, 22 };
 	int bannedRegularGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
 
-	//Function Credits
-	void showcredits() {
-		GameMode = GameModes_StartCredits;
-		GameState = 21;
-		Credits_State = 1;
-		Load_SEGALOGO_E();
-	}
 
 
 	//function Randomize stage and characters
@@ -113,7 +105,6 @@ extern "C"
 			//set up final egg door rng
 			RNGDoor = door[rand() % 5];
 
-
 			if (RNGCharacters == true)
 				CurrentCharacter = character[rand() % 6];
 
@@ -141,7 +132,7 @@ extern "C"
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 3)));
 						break;
 					case Characters_Amy:
 						do {
@@ -166,7 +157,7 @@ extern "C"
 						break;
 					}
 				}
-				else //if the play didn't active the regular option
+				else //if the player didn't activate the regular option
 				{
 					switch (CurrentCharacter)
 					{
@@ -180,7 +171,7 @@ extern "C"
 					do {
 						CurrentAct = 0;
 						CurrentLevel = level[rand() % 18];
-					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
+					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Knuckles && isValueInArray(bannedLevelsKnuckles, CurrentLevel, 2)))));
 		
 				}
 			}
@@ -204,8 +195,18 @@ void CancelResetPosition() {
 // Force the game to return to the title screen when you quit.
 void quitstage() {
 	PauseQuitThing();
+	CurrentCharacter = 0;
 	GameState = 0x14;
 	return;
 }
 
+//Set Gamma's Timer to 6 min instead of 3.
+void SetGammaTimer(char param_1, char param_2) {
+	param_1 = 6;
+	param_2 = 0;
+	TimeFrames = 0;
+	TimeMinutes = param_1;
+	TimeSeconds = param_2;
+	return;
+}
 

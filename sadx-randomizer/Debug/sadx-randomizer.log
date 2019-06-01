@@ -1,2 +1,7 @@
-﻿     Creating library D:\Documents\git\SADX-Randomizer\Debug\sadx-randomizer.lib and object D:\Documents\git\SADX-Randomizer\Debug\sadx-randomizer.exp
-  sadx-randomizer.vcxproj -> D:\Documents\git\SADX-Randomizer\Debug\sadx-randomizer.dll
+﻿  mod.cpp
+  RandomHelpers.cpp
+D:\GitHub\sadx-randomizer\sadx-randomizer\RandomHelpers.cpp(168): warning C4102: 'defaut': unreferenced label
+  Utils.cpp
+  Generating Code...
+     Creating library D:\GitHub\sadx-randomizer\Debug\sadx-randomizer.lib and object D:\GitHub\sadx-randomizer\Debug\sadx-randomizer.exp
+  sadx-randomizer.vcxproj -> D:\GitHub\sadx-randomizer\Debug\sadx-randomizer.dll
