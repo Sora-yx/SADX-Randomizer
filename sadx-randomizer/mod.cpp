@@ -37,6 +37,7 @@ extern "C"
 		else
 			srand((unsigned)time(&t));
 
+
 		//Allow act swap for all characters
 		WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
 
@@ -51,13 +52,19 @@ extern "C"
 		//WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
 		//WriteData<6>((void*)0x4764CC, 0x90u); // make tikal hints work when not knuckles
 
+		//Force the game to let you quit.
+		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+		//WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" used to fix pause when you quit.
+
+		//Hook several Knuckles killplane check, which can show a black screen instead of the stage.
+		WriteData<5>((void*)0x478937, 0x90); 
+		WriteData<5>((void*)0x478AFC, 0x90);
+		WriteData<5>((void*)0x47B395, 0x90);
+		WriteData<5>((void*)0x47B423, 0x90);
+
 
 		if (RNGStages == true || RNGCharacters == true)
 		{
-			//Force the game to let you quit.
-			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-			WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" used to fix pause when you quit.
-
 			//Hook all SetLevelandAct to make them random.
 			WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
 			WriteCall((void*)0x41709d, randomstage); //hook "Go to next level"
@@ -88,39 +95,56 @@ extern "C"
 		}
 
 
-		//force the game to display the in-game timer properly
+
+		
 		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
 		{
+			//force the game to display the in-game timer properly.
 			HudDisplayRingTimeLife_Check();
 			HudDisplayScoreOrTimer();
-			//fix Egg Viper, Casino, Sky Deck, Red Mountain and Windy Valley Crash, definitely not the best solution, but I didn't find anything better yet.
-			if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_WindyValley)
+
+			if (GameState == 16 && PauseSelection == 3)
 			{
-				GameMode = GameModes_Adventure_Field;
+				//force GameMode to "adventure field" if the player select quit option, this is to return to the title screen properly.
+					GameMode = GameModes_Adventure_Field;
 			}
 
-			// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
-			{
-				PhysicsArray[Characters_Amy].MaxAccel = 5;
-				PhysicsArray[Characters_Big].MaxAccel = 5;
-				PhysicsArray[Characters_Gamma].MaxAccel = 5;
-			}
-			
-			//force the game to let you win as Tails in Speed Highway Act 3.
-			if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
-			{
-				SetTailsRaceVictory();
-			}
 			else
 			{
-				//fix Metal Sonic life icon.
-				if (CurrentCharacter != Characters_Sonic)
+				//fix Egg Viper, Casino, Sky Deck, Red Mountain and Windy Valley Crash, definitely not the best solution, but I didn't find anything better yet.
+				if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Casinopolis || (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1) || (CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2)  || CurrentLevel == LevelIDs_SandHill || (CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2) || (CurrentLevel == LevelIDs_FinalEgg))
 				{
-					MetalSonicFlag = 0;
+					GameMode = GameModes_Adventure_Field;
+				}
+				else
+				{
+					if (GameState == 15)
+					{
+						GameMode = GameModes_Adventure_ActionStg;
+					}
+				}
+				// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
+				{
+					PhysicsArray[Characters_Amy].MaxAccel = 5;
+					PhysicsArray[Characters_Big].MaxAccel = 5;
+					PhysicsArray[Characters_Gamma].MaxAccel = 5;
+				}
+
+				//force the game to let you win as Tails in Speed Highway Act 3.
+				if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
+				{
+					SetTailsRaceVictory();
+				}
+				else
+				{
+					//fix Metal Sonic life icon.
+					if (CurrentCharacter != Characters_Sonic)
+					{
+						MetalSonicFlag = 0;
+					}
 				}
 			}
-		
-					
+
 		}
 
 		//Set up act rng.
@@ -214,8 +238,22 @@ extern "C"
 					}
 					break;
 				case LevelIDs_HotShelter:
-					NextAct = actHS[rand() % 2];
-					CurrentAct = actHS[rand() % 2];
+					if (CurrentCharacter == Characters_Gamma)
+					{
+						CurrentAct = 0;
+						NextAct = 0;
+					}
+					else
+						if (CurrentCharacter == Characters_Amy)
+						{
+							NextAct = 3;
+							CurrentAct = 3;
+						}
+						else
+					{
+						NextAct = actHS[rand() % 2];
+						CurrentAct = actHS[rand() % 2];
+					}
 					break;
 				case LevelIDs_SpeedHighway:
 					if (CurrentCharacter == Characters_Sonic)
@@ -264,18 +302,11 @@ extern "C"
 					LoadSoundList(65);
 			}
 			break;
-			//Fix Knuckles Lost World act 2 son
+			//Fix Knuckles Lost World act 2 song
 		case LevelIDs_LostWorld:
 			if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
 			{
 				CurrentSong = 64;
-			}
-			break;
-			//fix Big Hot Shelter act 2 song.
-		case LevelIDs_HotShelter:
-			if (CurrentCharacter == Characters_Big && CurrentAct == 1 && CurrentSong != 75)
-			{
-				PlayMusic(MusicIDs_HotShelterRedBarrageArea);
 			}
 			break;
 			//fix Tails RM act 1 and 2 song.
@@ -293,7 +324,6 @@ extern "C"
 			}
 		}
 		
-
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
 
 }

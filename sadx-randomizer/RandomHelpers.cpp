@@ -22,13 +22,12 @@ extern "C"
 	//Initialize Ban few stage impossible to beat, depending on the character.
 	int bannedLevelsGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
 	int bannedLevelsBig[2] = { 8, 22 };
-	int bannedLevelsKnuckles[2] = { 5, 6 };
 
 	//Initiliaze banned regular stage if option is activated
 	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
 	int bannedRegularTails[5] = { 4, 6, 20, 21, 38 };
-	int bannedRegularKnuckles[3] = { 5, 6, 16 };
-	int bannedRegularAmy[2] = { 12, 23 };
+	int bannedRegularKnuckles[1] = { 16 };
+	int bannedRegularAmy[1] = { 23 };
 	int bannedRegularBig[2] = { 8, 22 };
 	int bannedRegularGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
 
@@ -42,7 +41,6 @@ extern "C"
 
 		if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 		{
-			//void showcredits();
 			switch (SelectedCharacter)
 			{
 			case 0:
@@ -115,9 +113,10 @@ extern "C"
 					{
 					case Characters_Sonic:
 						do {
-							CurrentAct = 0;
-							MetalSonicFlag = metalsonicrng[rand() % 2];
-							CurrentLevel = level[rand() % 18];
+								CurrentAct = 0;
+								MetalSonicFlag = metalsonicrng[rand() % 2];
+								CurrentLevel = level[rand() % 18];
+			
 						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
 						break;
 					case Characters_Tails:
@@ -132,14 +131,14 @@ extern "C"
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 3)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1)));
 						break;
 					case Characters_Amy:
 						do {
 							CurrentAct = 0;
 							MetalSonicFlag = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 2)));
+						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 1)));
 						break;
 					case Characters_Big:
 						do {
@@ -150,9 +149,10 @@ extern "C"
 						break;
 					case Characters_Gamma:
 						do {
-							CurrentAct = 0;
-							MetalSonicFlag = 0;
-							CurrentLevel = level[rand() % 18];
+								CurrentAct = 0;
+								MetalSonicFlag = 0;
+								CurrentLevel = level[rand() % 18];
+						
 						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 7)));
 						break;
 					}
@@ -171,7 +171,7 @@ extern "C"
 					do {
 						CurrentAct = 0;
 						CurrentLevel = level[rand() % 18];
-					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2) || (CurrentCharacter == Characters_Knuckles && isValueInArray(bannedLevelsKnuckles, CurrentLevel, 2)))));
+					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
 		
 				}
 			}
@@ -190,15 +190,9 @@ extern "C"
 void CancelResetPosition() {
 	NextLevel = LastLevel;
 	NextAct = LastAct;
+	GameMode = GameModes_Adventure_Field;
 }
 
-// Force the game to return to the title screen when you quit.
-void quitstage() {
-	PauseQuitThing();
-	CurrentCharacter = 0;
-	GameState = 0x14;
-	return;
-}
 
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer(char param_1, char param_2) {
@@ -209,4 +203,5 @@ void SetGammaTimer(char param_1, char param_2) {
 	TimeSeconds = param_2;
 	return;
 }
+
 
