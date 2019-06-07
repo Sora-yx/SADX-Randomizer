@@ -1,3 +1,45 @@
+v1.2
+
+General:
+- The way how the randomizer works has been changed, this should fix random hub world teleportation.
+- Random acts are now available! You can now randomly get Big's Emerald Coast, Hot Shelter Gamma version and Speed Highway Act 2.
+- It should now be impossible to get the same level twice in a row.
+- Getting a Game Over should no longer change the RNG.
+- You can now do an all stories! Credits will start after 10, 16, 22, 26, 31, 37 and 39 Emblems.
+- The title screen "randomizer" logo has been updated.
+- The titlecard while a stage load has been updated.
+- Made Stability Improvements.
+- Some levels layout improvements.
+
+New Character / Stage combination:
+- Metal Sonic has been added as a playable character, if the randomizer select Sonic, you now have a chance to get Metal Sonic instead.
+- Amy's Hot Shelter as Big has been added.
+- Sonic's Emerald Coast as Gamma has been added.
+- Big's Emerald Coast as Sonic has been added.
+- Tails's Speed Highway as Sonic has been added.
+- Speed Highway Act 2 and 3 as a Random Act has been added.
+- Gamma's Hot Shelter as a Random Act has been added.
+- Emerald Coast Act 2 has been added for Tails.
+- Red Mountain has been added for Tails.
+- Red Mountain Act 2 has been added for every characters.
+- Ice Cap Act 3 has been added for Tails, Knuckles and Amy.
+- Sonic's Twinkle Park Act 2 has been added for every characters.
+
+Character change:
+- Gamma's Time limit has been increased by 3 min, which means you will now have 6 min to finish a stage.
+
+Bug fixes:
+Tails
+- Fixed a bug that was giving you Sand Hill and Egg Hornet despite the "disable regular level" option was enabled.
+Knuckles
+- Fixed a bug that was showing a black screen when playing Sky Deck, Hot Shelter and Red Mountain.
+Big
+- Ice Cap and Egg Viper as Big have been banned. (for real this time.)
+Others:
+- The game will no longer crash if you let the demo play.
+- Final Egg's doors are now random again.
+- The in-game timer should now display properly.
+
 v1.1
 
 General:
