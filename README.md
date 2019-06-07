@@ -17,6 +17,7 @@ Installation
 1) Make sure you have the latest version of SADX Mod Manager downloaded and installed from [this link](http://mm.reimuhakurei.net/sadxmods/SADXModLoader.7z)
 
 - If you are using the Steam version:
+
 You must install better sadx from [this link](https://steamcommunity.com/sharedfiles/filedetails/?id=299808681), this will also install the mod manager.
 
 2) Make sure to extract the Mod Loader's contents into your main SADX folder.
