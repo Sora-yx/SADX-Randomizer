@@ -1,7 +1,7 @@
 v1.2
 
 General:
-- The way how the randomizer works has been changed, this should fix random hub world teleportation.
+- The way the randomizer works has been changed, this should fix random hub world teleportation.
 - Random acts are now available! You can now randomly get Big's Emerald Coast, Hot Shelter Gamma version and Speed Highway Act 2.
 - It should now be impossible to get the same level twice in a row.
 - Getting a Game Over should no longer change the RNG.
