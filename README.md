@@ -26,6 +26,11 @@ Installation
 6) If you want to race with a friend, make sure both of you are using the same "seed" in the settings, also make sure the seed used is different than "0". (0 makes the rng always different, when using another number makes it consistent.)
 7) Clic on Save and play!
 
+How to use
+------------
+
+Start the game, create a new savefile and select Sonic, then enjoy the show! A story ends once you get a specific number of emblems, depending on the character selected. For example, you will need 10 emblems as Sonic, because he has 10 stages. 5 for Tails, because he has 5 stages etc. Also, don't pay attention about the % counter of a story, as it is completely inaccurate, only emblems matter, really.
+
 Enjoy!
 
 Special Thanks
@@ -34,4 +39,3 @@ Special Thanks
 Big thanks to Raytwo for the help with the code in general. Since I'm very new to programming, this project couldn't be a thing without him.
 
 Also thanks to Prahaha and Kell for the various tips.
-
