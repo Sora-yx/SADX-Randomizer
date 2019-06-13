@@ -13,8 +13,10 @@ Download the latest release from the [releases page](https://github.com/Sora-yx/
 Installation
 ------------
 
-1) Make sure you have the latest version of SADX Mod Manager downloaded and installed from [this link](http://info.sonicretro.org/SADX_Mod_Loader).
-- If you are using the Steam version, do not use that link, you must install better sadx from [this link](https://steamcommunity.com/sharedfiles/filedetails/?id=299808681), this will also install the mod manager.
+1) If you are using the PC Disc version: Make sure you have the latest version of SADX Mod Manager downloaded and installed from [this link](http://mm.reimuhakurei.net/sadxmods/SADXModLoader.7z).
+
+- If you are using the Steam version: You must install better sadx from [this link](https://steamcommunity.com/sharedfiles/filedetails/?id=299808681), this will also install the mod manager.
+
 2) Make sure to extract the Mod Loader's contents into your main SADX folder.
  - Once all Mod Loader's files and folders are there, run ModManager and click on 'Install Loader'
 3) You should now have a "mods" folder in your SADX folder!
@@ -24,6 +26,11 @@ Installation
 6) If you want to race with a friend, make sure both of you are using the same "seed" in the settings, also make sure the seed used is different than "0". (0 makes the rng always different, when using another number makes it consistent.)
 7) Clic on Save and play!
 
+How to use
+------------
+
+Start the game, create a new savefile and select Sonic, then enjoy the show! A story ends once you get a specific number of emblems, depending on the character selected. For example, you will need 10 emblems as Sonic, because he has 10 stages. 5 for Tails, because he has 5 stages etc. Also, don't pay attention about the % counter of a story, as it is completely inaccurate, only emblems matter, really.
+
 Enjoy!
 
 Special Thanks
@@ -32,4 +39,3 @@ Special Thanks
 Big thanks to Raytwo for the help with the code in general. Since I'm very new to programming, this project couldn't be a thing without him.
 
 Also thanks to Prahaha and Kell for the various tips.
-
