@@ -40,6 +40,7 @@ extern "C"
 
 		//Allow act swap for all characters
 		WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
+		//WriteData<5>((void*)0x610063, 0x90); //Hook GetCurrentCharacterID when you enter at Speed Highway act 2.
 
 		//Force the game to let you play Tails at Red Mountain and Emerald Coast act 2.
 		WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
@@ -47,23 +48,25 @@ extern "C"
 
 		WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash while using a wrong character.
 
-		WriteCall((void*)0x414872, SetGammaTimer);
+		//WriteData<5>((void*)0x61cf95, 0x00); //Fix Twinkle Park transition (if VAR5)
+		//WriteData<5>((void*)0x61cf8d, 5); //Fix Twinkle Park transition  (getcurrentidcharacter)
+
+		WriteCall((void*)0x414872, SetGammaTimer); //increase gamma's time limit by 3 minutes.
+		WriteCall((void*)0x415556, DisableTimeStuff); //test fix metalsonic emblem
 
 		//WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
 		//WriteData<6>((void*)0x4764CC, 0x90u); // make tikal hints work when not knuckles
 
-		//Force the game to let you quit.
-		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-		//WriteCall((void*)0x416bf8, quitstage); //hook "Set next level cutscene version" used to fix pause when you quit.
 
-		//Hook several Knuckles killplane check, which can show a black screen instead of the stage.
+		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+
+		//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) if disabled, you will get a black screen with Knuckles.
 		WriteData<5>((void*)0x478937, 0x90); 
 		WriteData<5>((void*)0x478AFC, 0x90);
 		WriteData<5>((void*)0x47B395, 0x90);
 		WriteData<5>((void*)0x47B423, 0x90);
 
-
-		if (RNGStages == true || RNGCharacters == true)
+		if (RNGStages == true)
 		{
 			//Hook all SetLevelandAct to make them random.
 			WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
@@ -94,11 +97,10 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
-
-
 		
 		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
 		{
+
 			//force the game to display the in-game timer properly.
 			HudDisplayRingTimeLife_Check();
 			HudDisplayScoreOrTimer();
@@ -112,7 +114,7 @@ extern "C"
 			else
 			{
 				//fix Egg Viper, Casino, Sky Deck, Red Mountain and Windy Valley Crash, definitely not the best solution, but I didn't find anything better yet.
-				if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Casinopolis || (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1) || (CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2)  || CurrentLevel == LevelIDs_SandHill || (CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2) || (CurrentLevel == LevelIDs_FinalEgg))
+				if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Chaos4 || CurrentLevel == LevelIDs_Casinopolis || (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1) || (CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2)  || CurrentLevel == LevelIDs_SandHill || (CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2) || (CurrentLevel == LevelIDs_FinalEgg))
 				{
 					GameMode = GameModes_Adventure_Field;
 				}
@@ -128,6 +130,15 @@ extern "C"
 					PhysicsArray[Characters_Amy].MaxAccel = 5;
 					PhysicsArray[Characters_Big].MaxAccel = 5;
 					PhysicsArray[Characters_Gamma].MaxAccel = 5;
+					BigWeight = 2000; //display 2000g as Big.
+					BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
+
+
+					if (CurrentLevel == LevelIDs_SandHill)
+					{
+						Score = 12000;
+					}
+
 				}
 
 				//force the game to let you win as Tails in Speed Highway Act 3.
@@ -224,7 +235,6 @@ extern "C"
 						NextAct = 2;
 					}
 					else
-					{
 						if (CurrentCharacter == Characters_Big)
 						{
 							CurrentAct = 0;
@@ -232,10 +242,10 @@ extern "C"
 						}
 						else
 						{
+
 							NextAct = actHS[rand() % 2];
 							CurrentAct = actHS[rand() % 2];
 						}
-					}
 					break;
 				case LevelIDs_HotShelter:
 					if (CurrentCharacter == Characters_Gamma)
@@ -246,14 +256,14 @@ extern "C"
 					else
 						if (CurrentCharacter == Characters_Amy)
 						{
-							NextAct = 3;
-							CurrentAct = 3;
+							NextAct = 2;
+							CurrentAct = 2;
 						}
 						else
-					{
-						NextAct = actHS[rand() % 2];
-						CurrentAct = actHS[rand() % 2];
-					}
+						{
+							NextAct = actHS[rand() % 2];
+							CurrentAct = actHS[rand() % 2];
+						}
 					break;
 				case LevelIDs_SpeedHighway:
 					if (CurrentCharacter == Characters_Sonic)
@@ -264,6 +274,16 @@ extern "C"
 					{
 						NextAct = actrng[rand() % 2];
 						CurrentAct = actrng[rand() % 2];
+					}
+					break;
+				case LevelIDs_Casinopolis:
+					if (CurrentCharacter == Characters_Sonic)
+					{
+						CurrentAct = 1;
+					}
+					else
+					{
+						CurrentAct = 0;
 					}
 					break;
 				}
@@ -310,20 +330,20 @@ extern "C"
 			}
 			break;
 			//fix Tails RM act 1 and 2 song.
-			case LevelIDs_RedMountain:
-				if (CurrentCharacter == Characters_Tails && CurrentAct == 0)
-				{
-					PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
-				}
-				else
-					if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong != 75)
-					{
-						PlayMusic(MusicIDs_RedMountainRedHotSkull);
-					}
-				break;
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Tails && CurrentAct == 0)
+			{
+				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
 			}
+			else
+				if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong != 75)
+				{
+					PlayMusic(MusicIDs_RedMountainRedHotSkull);
+				}
+			break;
 		}
-		
+	}
+
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
 
 }

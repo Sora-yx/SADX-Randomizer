@@ -20,17 +20,16 @@ extern "C"
 	int metalsonicrng[2] = { 0, 1 }; //Used to randomize Metal Sonic.
 
 	//Initialize Ban few stage impossible to beat, depending on the character.
-	int bannedLevelsGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
+	int bannedLevelsGamma[8] = { 3, 15, 16, 17, 18, 20, 21, 23 };
 	int bannedLevelsBig[2] = { 8, 22 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 9, 15, 20, 22 };
-	int bannedRegularTails[5] = { 4, 6, 20, 21, 38 };
-	int bannedRegularKnuckles[1] = { 16 };
+	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 15, 17, 20, 22 };
+	int bannedRegularTails[5] = { 6, 17, 20, 21, 38 };
+	int bannedRegularKnuckles[2] = { 16, 17 };
 	int bannedRegularAmy[1] = { 23 };
 	int bannedRegularBig[2] = { 8, 22 };
-	int bannedRegularGamma[7] = { 3, 15, 16, 18, 20, 21, 23 };
-
+	int bannedRegularGamma[8] = { 3, 15, 16, 17, 18, 20, 21, 23 };
 
 
 	//function Randomize stage and characters
@@ -107,101 +106,114 @@ extern "C"
 				CurrentCharacter = character[rand() % 6];
 
 			if (RNGStages == true) {
-				if (Regular == true) //if the player activated the "banned regular stage option", check and ban the regular combination.
+				if (GameMode != 8)
 				{
-					switch (CurrentCharacter)
+					if (Regular == true) //if the player activated the "banned regular stage option", check and ban the regular combination.
 					{
-					case Characters_Sonic:
-						do {
+						switch (CurrentCharacter)
+						{
+						case Characters_Sonic:
+							do {
 								CurrentAct = 0;
 								MetalSonicFlag = metalsonicrng[rand() % 2];
 								CurrentLevel = level[rand() % 18];
-			
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
-						break;
-					case Characters_Tails:
-						do {
-							CurrentAct = 0;
-							MetalSonicFlag = 0;
-							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 5)));
-						break;
-					case Characters_Knuckles:
-						do {
-							CurrentAct = 0;
-							MetalSonicFlag = 0;
-							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 1)));
-						break;
-					case Characters_Amy:
-						do {
-							CurrentAct = 0;
-							MetalSonicFlag = 0;
-							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 1)));
-						break;
-					case Characters_Big:
-						do {
-							CurrentAct = 0;
-							MetalSonicFlag = 0;
-							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 2)));
-						break;
-					case Characters_Gamma:
-						do {
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
+							break;
+						case Characters_Tails:
+							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-						
-						} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 7)));
-						break;
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 5)));
+							break;
+						case Characters_Knuckles:
+							do {
+								CurrentAct = 0;
+								MetalSonicFlag = 0;
+								CurrentLevel = level[rand() % 18];
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 2)));
+							break;
+						case Characters_Amy:
+							do {
+								CurrentAct = 0;
+								MetalSonicFlag = 0;
+								CurrentLevel = level[rand() % 18];
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 1)));
+							break;
+						case Characters_Big:
+							do {
+								CurrentAct = 0;
+								MetalSonicFlag = 0;
+								CurrentLevel = level[rand() % 18];
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 2)));
+							break;
+						case Characters_Gamma:
+							do {
+								CurrentAct = 0;
+								MetalSonicFlag = 0;
+								CurrentLevel = level[rand() % 18];
+
+							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 8)));
+							break;
+						}
 					}
-				}
-				else //if the player didn't activate the regular option
-				{
-					switch (CurrentCharacter)
+					else //if the player didn't activate the regular option
 					{
-					case Characters_Sonic:
-						MetalSonicFlag = metalsonicrng[rand() % 2];
-						break;
-					defaut:
-						MetalSonicFlag = 0;
-						break;
+						switch (CurrentCharacter)
+						{
+						case Characters_Sonic:
+							MetalSonicFlag = metalsonicrng[rand() % 2];
+							break;
+						defaut:
+							MetalSonicFlag = 0;
+							break;
+						}
+						do {
+							CurrentAct = 0;
+							CurrentLevel = level[rand() % 18];
+						} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
+
 					}
-					do {
-						CurrentAct = 0;
-						CurrentLevel = level[rand() % 18];
-					} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 7) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
-		
 				}
-			}
-			else
-			{
-				if (RNGStages == false && Regular == true) //It's technically useless, but I need to make some test later.
+				else
 				{
-					return;
+					if (RNGStages == false && Regular == true) //It's technically useless, but I need to make some test later.
+					{
+						return;
+					}
 				}
 			}
 		}
 	}
+
+
+
+	//cancel the reset position at 0 after quitting a stage.
+	void CancelResetPosition() {
+		NextLevel = LastLevel;
+		NextAct = LastAct;
+		GameMode = GameModes_Adventure_Field;
+	}
+
+
+	//Set Gamma's Timer to 6 min instead of 3.
+	void SetGammaTimer(char param_1, char param_2) {
+		param_1 = 6;
+		param_2 = 0;
+		TimeFrames = 0;
+		TimeMinutes = param_1;
+		TimeSeconds = param_2;
+		return;
+	}
+
+
+	void DisableTimeStuff() {
+		TimeThing = 0;
+		MetalSonicFlag = 0;
+		return;
+	}
+
 }
 
-//cancel the reset position at 0 after quitting a stage.
-void CancelResetPosition() {
-	NextLevel = LastLevel;
-	NextAct = LastAct;
-	GameMode = GameModes_Adventure_Field;
-}
 
-
-//Set Gamma's Timer to 6 min instead of 3.
-void SetGammaTimer(char param_1, char param_2) {
-	param_1 = 6;
-	param_2 = 0;
-	TimeFrames = 0;
-	TimeMinutes = param_1;
-	TimeSeconds = param_2;
-	return;
-}
-
-
+		
