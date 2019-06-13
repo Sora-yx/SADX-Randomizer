@@ -1,3 +1,20 @@
+V1.2.1
+
+General:
+- You can now collect Emblem as Metal Sonic. (You will see Sonic during result screen, this is normal.)
+- You will now always get an Emblem as Big for Mission B and A. (Weight is forced at 2000g.)
+
+New Character / Stage combination:
+- Tails's Casinopolis as Sonic has been added.
+
+Bug fixes:
+
+Tails
+- Egg Hornet's area as Tails should now have rings.
+
+Amy
+- Fixed a bug that was teleporting Amy to a black hole in Hot Shelter.
+
 v1.2
 
 General:
