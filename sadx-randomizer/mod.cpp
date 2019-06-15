@@ -164,7 +164,7 @@ extern "C"
 
 		//When loading: check if Credits need to start and call random act if possible.
 
-		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 243)))
+		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 111 || LevelList == 243 || LevelList == 225)))
 		{
 			if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
 			{
@@ -242,7 +242,6 @@ extern "C"
 						}
 						else
 						{
-
 							NextAct = actHS[rand() % 2];
 							CurrentAct = actHS[rand() % 2];
 						}
@@ -254,7 +253,12 @@ extern "C"
 					}
 					else
 					{
-						CurrentAct = 0;
+						if (CurrentCharacter == Characters_Amy)
+						{
+							CurrentAct = 0;
+						}
+						else
+						CurrentAct = actHS[rand() % 2];
 					}
 					break;
 				case LevelIDs_HotShelter:
@@ -292,54 +296,57 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnControl()
 	{
 
-		switch (CurrentLevel)
+		if (GameMode == 4 || GameMode == 5)
 		{
-			//fix Casinopolis SFX when using wrong characters
-		case LevelIDs_Casinopolis:
-			if (CurrentCharacter == Characters_Amy)
+			switch (CurrentLevel)
 			{
-				LoadSoundList(46);
-				if (VoiceLanguage)
-					LoadSoundList(64);
-				else
-					LoadSoundList(63);
-			}
-			if (CurrentCharacter == Characters_Gamma)
-			{
-				LoadSoundList(48);
-				if (VoiceLanguage)
-					LoadSoundList(68);
-				else
-					LoadSoundList(67);
-			}
-			if (CurrentCharacter == Characters_Big)
-			{
-				LoadSoundList(47);
-				if (VoiceLanguage)
-					LoadSoundList(66);
-				else
-					LoadSoundList(65);
-			}
-			break;
-			//Fix Knuckles Lost World act 2 song
-		case LevelIDs_LostWorld:
-			if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
-			{
-				CurrentSong = 64;
-			}
-			break;
-			//fix Tails RM act 1 and 2 song.
-		case LevelIDs_RedMountain:
-			if (CurrentCharacter == Characters_Tails && CurrentAct == 0)
-			{
-				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
-			}
-			else
-				if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong == MusicIDs_RedMountainRedHotSkull)
+				//fix Casinopolis SFX when using wrong characters
+			case LevelIDs_Casinopolis:
+				if (CurrentCharacter == Characters_Amy)
 				{
-					PlayMusic(MusicIDs_RedMountainRedHotSkull);
+					LoadSoundList(46);
+					if (VoiceLanguage)
+						LoadSoundList(64);
+					else
+						LoadSoundList(63);
 				}
-			break;
+				if (CurrentCharacter == Characters_Gamma)
+				{
+					LoadSoundList(48);
+					if (VoiceLanguage)
+						LoadSoundList(68);
+					else
+						LoadSoundList(67);
+				}
+				if (CurrentCharacter == Characters_Big)
+				{
+					LoadSoundList(47);
+					if (VoiceLanguage)
+						LoadSoundList(66);
+					else
+						LoadSoundList(65);
+				}
+				break;
+				//Fix Knuckles Lost World act 2 song
+			case LevelIDs_LostWorld:
+				if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
+				{
+					CurrentSong = 64;
+				}
+				break;
+				//fix Tails RM act 1 and 2 song.
+			case LevelIDs_RedMountain:
+				if (CurrentCharacter == Characters_Tails && CurrentAct == 0)
+				{
+					PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
+				}
+				else
+					if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && GameMode == 4 || GameMode == 5)
+					{
+						PlayMusic(MusicIDs_RedMountainRedHotSkull);
+					}
+				break;
+			}
 		}
 	}
 

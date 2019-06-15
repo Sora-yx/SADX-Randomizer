@@ -118,10 +118,20 @@ extern "C"
 						{
 						case Characters_Sonic:
 							do {
-								CurrentAct = 0;
-								MetalSonicFlag = metalsonicrng[rand() % 2];
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularSonic, CurrentLevel, 9))));
+								MetalSonicFlag = metalsonicrng[rand() % 2];
+								if (CurrentLevel == LevelIDs_TwinklePark || CurrentLevel == LevelIDs_Casinopolis)
+								{
+									CurrentAct = 1;
+								}
+								else
+									if (CurrentLevel == LevelIDs_EmeraldCoast)
+									{
+										CurrentAct = 2;
+									}
+									else
+									CurrentAct = 0;
+								} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularSonic, CurrentLevel, 9))));
 							break;
 						case Characters_Tails:
 							do {
@@ -139,9 +149,14 @@ extern "C"
 							break;
 						case Characters_Amy:
 							do {
-								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
+								if (CurrentLevel == LevelIDs_HotShelter)
+								{
+									CurrentAct = 2;
+								}
+								else
+									CurrentAct = 0;
 							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularAmy, CurrentLevel, 1))));
 							break;
 						case Characters_Big:
@@ -166,6 +181,17 @@ extern "C"
 						{
 						case Characters_Sonic:
 							MetalSonicFlag = metalsonicrng[rand() % 2];
+							if (CurrentLevel == LevelIDs_TwinklePark || CurrentLevel == LevelIDs_Casinopolis)
+							{
+								CurrentAct = 1;
+							}
+							else
+								if (CurrentLevel == LevelIDs_EmeraldCoast)
+								{
+									CurrentAct = 2;
+								}
+								else
+									CurrentAct = 0;
 							break;
 						defaut:
 							MetalSonicFlag = 0;

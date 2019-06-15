@@ -23,6 +23,7 @@ extern "C" void randomAct();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(Chaos6Thing, 0x55a19c);
+VoidFunc(TwinklePark_NextActAmy, 0x61d1ad);
 
 
 DataPointer(char, BossHP, 0x3C58150);
