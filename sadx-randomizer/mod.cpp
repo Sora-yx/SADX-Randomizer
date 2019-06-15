@@ -22,7 +22,6 @@ extern "C"
 	{
 
 		unsigned int seed = 0;
-
 		//Ini Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
@@ -40,7 +39,8 @@ extern "C"
 
 		//Allow act swap for all characters
 		WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
-		//WriteData<5>((void*)0x610063, 0x90); //Hook GetCurrentCharacterID when you enter at Speed Highway act 2.
+		WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
+
 
 		//Force the game to let you play Tails at Red Mountain and Emerald Coast act 2.
 		WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
@@ -48,8 +48,7 @@ extern "C"
 
 		WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash while using a wrong character.
 
-		//WriteData<5>((void*)0x61cf95, 0x00); //Fix Twinkle Park transition (if VAR5)
-		//WriteData<5>((void*)0x61cf8d, 5); //Fix Twinkle Park transition  (getcurrentidcharacter)
+		WriteData<1>((void*)0x61cf97, 0x00); //Set the Twinkle Park Amy act condition to 0. (if VAR5)
 
 		WriteCall((void*)0x414872, SetGammaTimer); //increase gamma's time limit by 3 minutes.
 		WriteCall((void*)0x415556, DisableTimeStuff); //test fix metalsonic emblem
@@ -58,7 +57,7 @@ extern "C"
 		//WriteData<6>((void*)0x4764CC, 0x90u); // make tikal hints work when not knuckles
 
 
-		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+		
 
 		//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) if disabled, you will get a black screen with Knuckles.
 		WriteData<5>((void*)0x478937, 0x90); 
@@ -75,6 +74,8 @@ extern "C"
 			WriteCall((void*)0x42ca8c, randomstage); //hook when selecting a character in adventure mode.
 			WriteCall((void*)0x41342a, randomstage); //hook CurrentAdventureData (If hook is disabled, you will get randomly teleported to Gamma's upgrade room for some reason.)
 			WriteCall((void*)0x413522, randomstage); //hook CurrentAdventureData Boss soft reset (Same as before, happen if you soft reset during a boss fight.)
+
+			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		}
 	}
 
@@ -97,7 +98,6 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
-		
 		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
 		{
 
@@ -247,6 +247,16 @@ extern "C"
 							CurrentAct = actHS[rand() % 2];
 						}
 					break;
+				case LevelIDs_TwinklePark:
+					if (CurrentCharacter == Characters_Sonic)
+					{
+						CurrentAct = 1;
+					}
+					else
+					{
+						CurrentAct = 0;
+					}
+					break;
 				case LevelIDs_HotShelter:
 					if (CurrentCharacter == Characters_Gamma)
 					{
@@ -264,17 +274,6 @@ extern "C"
 							NextAct = actHS[rand() % 2];
 							CurrentAct = actHS[rand() % 2];
 						}
-					break;
-				case LevelIDs_SpeedHighway:
-					if (CurrentCharacter == Characters_Sonic)
-					{
-						CurrentAct = 0;
-					}
-					else
-					{
-						NextAct = actrng[rand() % 2];
-						CurrentAct = actrng[rand() % 2];
-					}
 					break;
 				case LevelIDs_Casinopolis:
 					if (CurrentCharacter == Characters_Sonic)
@@ -336,7 +335,7 @@ extern "C"
 				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
 			}
 			else
-				if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong != 75)
+				if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong == MusicIDs_RedMountainRedHotSkull)
 				{
 					PlayMusic(MusicIDs_RedMountainRedHotSkull);
 				}

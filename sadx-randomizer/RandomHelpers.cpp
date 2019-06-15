@@ -15,6 +15,7 @@ extern "C"
 {
 	//Set up several arrays, the "level" one doesn't include some specific stages impossible to beat.
 	int character[6] = { 0, 2, 3, 5, 6, 7 };
+	int CharacterCopy = -1; //Used to avoid getting the same character twice in a row.
 	int level[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 21, 22, 23, 38 };
 	int door[5] = { 0, 1, 2, 3, 4 }; //set up the 5 doors RNG at Final Egg.
 	int metalsonicrng[2] = { 0, 1 }; //Used to randomize Metal Sonic.
@@ -24,7 +25,7 @@ extern "C"
 	int bannedLevelsBig[2] = { 8, 22 };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[10] = { 2, 3, 5, 6, 7, 8, 15, 17, 20, 22 };
+	int bannedRegularSonic[9] = { 2, 5, 6, 7, 8, 15, 17, 20, 22 };
 	int bannedRegularTails[5] = { 6, 17, 20, 21, 38 };
 	int bannedRegularKnuckles[2] = { 16, 17 };
 	int bannedRegularAmy[1] = { 23 };
@@ -103,7 +104,10 @@ extern "C"
 			RNGDoor = door[rand() % 5];
 
 			if (RNGCharacters == true)
-				CurrentCharacter = character[rand() % 6];
+				do {
+					CurrentCharacter = character[rand() % 6];
+				} while (CurrentCharacter == CharacterCopy);
+				
 
 			if (RNGStages == true) {
 				if (GameMode != 8)
@@ -117,43 +121,42 @@ extern "C"
 								CurrentAct = 0;
 								MetalSonicFlag = metalsonicrng[rand() % 2];
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularSonic, CurrentLevel, 10)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularSonic, CurrentLevel, 9))));
 							break;
 						case Characters_Tails:
 							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularTails, CurrentLevel, 5)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularTails, CurrentLevel, 5))));
 							break;
 						case Characters_Knuckles:
 							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 2)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularKnuckles, CurrentLevel, 2))));
 							break;
 						case Characters_Amy:
 							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularAmy, CurrentLevel, 1)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularAmy, CurrentLevel, 1))));
 							break;
 						case Characters_Big:
 							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularBig, CurrentLevel, 2)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularBig, CurrentLevel, 2))));
 							break;
 						case Characters_Gamma:
 							do {
 								CurrentAct = 0;
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 18];
-
-							} while (CurrentLevel == LevelCopy || (isValueInArray(bannedRegularGamma, CurrentLevel, 8)));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularGamma, CurrentLevel, 8))));
 							break;
 						}
 					}
@@ -171,7 +174,7 @@ extern "C"
 						do {
 							CurrentAct = 0;
 							CurrentLevel = level[rand() % 18];
-						} while (CurrentLevel == LevelCopy || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2))));
+						} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2)))));
 
 					}
 				}
@@ -209,6 +212,7 @@ extern "C"
 
 	void DisableTimeStuff() {
 		TimeThing = 0;
+		CharacterCopy = CurrentCharacter;
 		MetalSonicFlag = 0;
 		return;
 	}
