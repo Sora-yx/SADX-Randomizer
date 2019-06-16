@@ -235,7 +235,7 @@ extern "C"
 		return;
 	}
 
-
+	//Avoid getting the same character twice in a row and "fix" metal sonic emblems.
 	void DisableTimeStuff() {
 		TimeThing = 0;
 		CharacterCopy = CurrentCharacter;

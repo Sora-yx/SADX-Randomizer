@@ -98,7 +98,7 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
-		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
+		if (GameMode == 5 || GameMode == 4)
 		{
 
 			//force the game to display the in-game timer properly.
@@ -108,13 +108,12 @@ extern "C"
 			if (GameState == 16 && PauseSelection == 3)
 			{
 				//force GameMode to "adventure field" if the player select quit option, this is to return to the title screen properly.
-					GameMode = GameModes_Adventure_Field;
+				GameMode = GameModes_Adventure_Field;
 			}
 
 			else
 			{
-				//fix Egg Viper, Casino, Sky Deck, Red Mountain and Windy Valley Crash, definitely not the best solution, but I didn't find anything better yet.
-				if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Chaos4 || CurrentLevel == LevelIDs_Casinopolis || (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1) || (CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2)  || CurrentLevel == LevelIDs_SandHill || (CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2) || (CurrentLevel == LevelIDs_FinalEgg))
+				if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Chaos4 || CurrentLevel == LevelIDs_Casinopolis || (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1) || (CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2) || CurrentLevel == LevelIDs_SandHill || (CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2) || (CurrentLevel == LevelIDs_FinalEgg))
 				{
 					GameMode = GameModes_Adventure_Field;
 				}
@@ -125,37 +124,39 @@ extern "C"
 						GameMode = GameModes_Adventure_ActionStg;
 					}
 				}
-				// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
-				{
-					PhysicsArray[Characters_Amy].MaxAccel = 5;
-					PhysicsArray[Characters_Big].MaxAccel = 5;
-					PhysicsArray[Characters_Gamma].MaxAccel = 5;
-					BigWeight = 2000; //display 2000g as Big.
-					BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
+			}
+		}
+
+		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
+		{
+			// Increase their MaxAccel to 5 so they can complete stages they are not meant to.
+
+			PhysicsArray[Characters_Amy].MaxAccel = 5;
+			PhysicsArray[Characters_Big].MaxAccel = 5;
+			PhysicsArray[Characters_Gamma].MaxAccel = 5;
+			BigWeight = 2000; //display 2000g as Big.
+			BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
 
 
-					if (CurrentLevel == LevelIDs_SandHill)
-					{
-						Score = 12000;
-					}
-
-				}
-
-				//force the game to let you win as Tails in Speed Highway Act 3.
-				if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
-				{
-					SetTailsRaceVictory();
-				}
-				else
-				{
-					//fix Metal Sonic life icon.
-					if (CurrentCharacter != Characters_Sonic)
-					{
-						MetalSonicFlag = 0;
-					}
-				}
+			if (CurrentLevel == LevelIDs_SandHill)
+			{
+				Score = 12000;
 			}
 
+
+			//force the game to let you win as Tails in Speed Highway Act 3.
+			if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
+			{
+				SetTailsRaceVictory();
+			}
+			else
+			{
+				//fix Metal Sonic life icon.
+				if (CurrentCharacter != Characters_Sonic)
+				{
+					MetalSonicFlag = 0;
+				}
+			}
 		}
 
 		//Set up act rng.
@@ -296,7 +297,7 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnControl()
 	{
 
-		if (GameMode == 4 || GameMode == 5)
+		if (GameMode == 4 || GameMode == 5 || GameMode == 9)
 		{
 			switch (CurrentLevel)
 			{
@@ -341,7 +342,7 @@ extern "C"
 					PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
 				}
 				else
-					if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && GameMode == 4 || GameMode == 5)
+					if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong !=  0x4b && CurrentSong != 0x55 && CurrentSong != 0x5d)
 					{
 						PlayMusic(MusicIDs_RedMountainRedHotSkull);
 					}
