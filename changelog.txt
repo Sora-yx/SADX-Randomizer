@@ -1,3 +1,28 @@
+V1.2.2
+
+General:
+
+    It should now be impossible to get a boss fight twice in a row.
+    It should now be impossible to get the same character twice in a row.
+    Level layouts improvement.
+
+New Character / Stage combination:
+
+    Amy's Twinkle Park act 2 and 3 as Sonic has been added.
+    Amy's Twinkle Park act 3 has been added as a random act for every character.
+    Speed Highway now contains act 2 and 3.
+
+Bug fixes:
+
+Sonic
+
+    It should now be impossible to get Emerald Coast act 1 if "disable regular stages option" is activated.
+
+Tails
+
+    You can now finish Speed Highway normally, fun is allowed again.
+
+
 V1.2.1
 
 General:
