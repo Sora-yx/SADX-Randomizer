@@ -57,8 +57,6 @@ extern "C"
 		//WriteData<6>((void*)0x4764CC, 0x90u); // make tikal hints work when not knuckles
 
 
-		
-
 		//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) if disabled, you will get a black screen with Knuckles.
 		WriteData<5>((void*)0x478937, 0x90); 
 		WriteData<5>((void*)0x478AFC, 0x90);
@@ -160,73 +158,12 @@ extern "C"
 		}
 
 		//Set up act rng.
-		int actrng[2] = { 0, 1 };
 		int actHS[2] = { 0, 2 };
 
 		//When loading: check if Credits need to start and call random act if possible.
 
 		if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 111 || LevelList == 243 || LevelList == 225)))
 		{
-			if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
-			{
-				switch (SelectedCharacter)
-				{
-				case 0:
-					EventFlagArray[EventFlags_SonicAdventureComplete] = true;
-					EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-					break;
-				case 1:
-					EventFlagArray[EventFlags_TailsAdventureComplete] = true;
-					EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-					break;
-				case 2:
-					EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
-					EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-					break;
-				case 3:
-					EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_AmyAdventureComplete] = true;
-					EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-					break;
-				case 4:
-					EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_BigAdventureComplete] = true;
-					EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-					break;
-				case 5:
-					EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-					EventFlagArray[EventFlags_GammaAdventureComplete] = true;
-					EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
-					break;
-				case 6:
-					EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
-					break;
-				}
-
-				GameMode = GameModes_StartCredits;
-				GameState = 21;
-				Credits_State = 1;
-				Load_SEGALOGO_E();
-			}
-			else
-			{
 				switch (CurrentLevel)
 				{
 				case LevelIDs_EmeraldCoast:
@@ -291,7 +228,7 @@ extern "C"
 					}
 					break;
 				}
-			}
+
 		}
 	}
 	__declspec(dllexport) void __cdecl OnControl()

@@ -32,58 +32,32 @@ extern "C"
 	int bannedRegularBig[2] = { 8, 22 };
 	int bannedRegularGamma[8] = { 3, 15, 16, 17, 18, 20, 21, 23 };
 
-
-	//function Randomize stage and characters
-	void randomstage(char stage, char act) {
-
-		LastLevel = CurrentLevel;
-		LastAct = CurrentAct;
-
-		if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
-		{
+	//function Credits
+	void startcredits() {
+		
 			switch (SelectedCharacter)
 			{
 			case 0:
 				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 				break;
 			case 1:
 				EventFlagArray[EventFlags_TailsAdventureComplete] = true;
 				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 				break;
 			case 2:
-				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
 				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 				break;
 			case 3:
-				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_AmyAdventureComplete] = true;
 				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 				break;
 			case 4:
-				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_BigAdventureComplete] = true;
 				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 				break;
 			case 5:
-				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
 				EventFlagArray[EventFlags_GammaAdventureComplete] = true;
 				EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
 				break;
@@ -96,12 +70,23 @@ extern "C"
 			GameState = 21;
 			Credits_State = 1;
 			Load_SEGALOGO_E();
-		}
+	}
+	
 
+
+	//function Randomize stage and characters
+	void randomstage(char stage, char act) {
+
+		LastLevel = CurrentLevel;
+		LastAct = CurrentAct;
+		//set up final egg door rng
+		RNGDoor = door[rand() % 5];
+		if (Emblem == 3 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
+		{
+			startcredits();
+		}
 		else
 		{
-			//set up final egg door rng
-			RNGDoor = door[rand() % 5];
 
 			if (RNGCharacters == true)
 				do {
@@ -119,7 +104,7 @@ extern "C"
 						case Characters_Sonic:
 							do {
 								CurrentLevel = level[rand() % 18];
-								MetalSonicFlag = metalsonicrng[rand() % 2];
+								MetalSonicFlag = rand() % 2;
 								if (CurrentLevel == LevelIDs_TwinklePark || CurrentLevel == LevelIDs_Casinopolis)
 								{
 									CurrentAct = 1;
@@ -180,7 +165,7 @@ extern "C"
 						switch (CurrentCharacter)
 						{
 						case Characters_Sonic:
-							MetalSonicFlag = metalsonicrng[rand() % 2];
+							MetalSonicFlag = rand() % 2;
 							if (CurrentLevel == LevelIDs_TwinklePark || CurrentLevel == LevelIDs_Casinopolis)
 							{
 								CurrentAct = 1;
@@ -213,9 +198,8 @@ extern "C"
 				}
 			}
 		}
+
 	}
-
-
 
 	//cancel the reset position at 0 after quitting a stage.
 	void CancelResetPosition() {

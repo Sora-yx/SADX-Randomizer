@@ -11,15 +11,12 @@ extern char param_1;
 extern char param_2;
 
 extern "C" void randomstage(char stage, char act);
-extern "C" void quitstage();
-extern "C" bool isStageAllowedForCharacter(short characterID, char stageID, char actNumber);
+extern "C" void startcredits();
 
 extern "C" void SetGammaTimer(char param_1, char param_2);
 extern "C" void DisableTimeStuff();
 
 extern "C" void CancelResetPosition();
-
-extern "C" void randomAct();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(Chaos6Thing, 0x55a19c);

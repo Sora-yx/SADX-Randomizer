@@ -4,7 +4,7 @@ c:\program files (x86)\microsoft sdks\windows\v7.1a\include\sal_supp.h(57): warn
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2866): note: see previous definition of '__useHeader'
 c:\program files (x86)\microsoft sdks\windows\v7.1a\include\specstrings_supp.h(77): warning C4005: '__on_failure': macro redefinition
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2876): note: see previous definition of '__on_failure'
-d:\github\sadx-randomizer\sadx-randomizer\randomhelpers.cpp(196): warning C4102: 'defaut': unreferenced label
+d:\github\sadx-randomizer\sadx-randomizer\randomhelpers.cpp(181): warning C4102: 'defaut': unreferenced label
   mod.cpp
 c:\program files (x86)\microsoft sdks\windows\v7.1a\include\sal_supp.h(57): warning C4005: '__useHeader': macro redefinition
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2866): note: see previous definition of '__useHeader'
@@ -12,8 +12,8 @@ c:\program files (x86)\microsoft sdks\windows\v7.1a\include\specstrings_supp.h(7
   c:\program files (x86)\microsoft visual studio\2019\professional\vc\tools\msvc\14.16.27023\include\sal.h(2876): note: see previous definition of '__on_failure'
      Creating library D:\GitHub\sadx-randomizer\Release\sadx-randomizer.lib and object D:\GitHub\sadx-randomizer\Release\sadx-randomizer.exp
   Generating code
-  3 of 634 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
+  4 of 635 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   sadx-randomizer.vcxproj -> D:\GitHub\sadx-randomizer\Release\sadx-randomizer.dll
