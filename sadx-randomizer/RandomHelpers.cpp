@@ -24,16 +24,16 @@ extern "C"
 	int level[20] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 38 };
 
 	//Initialize Ban few stage impossible to beat, depending on the character.
-	int bannedLevelsGamma[9] = { 3, 15, 16, 16, 17, 19, 20, 21, 23 };
-	int bannedLevelsBig[3] = { 8, 19, 22 };
+	int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
+	int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 	//Initiliaze banned regular stage if option is activated
 	int bannedRegularSonic[11] = { LevelIDs_WindyValley, LevelIDs_RedMountain, LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
 	int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
 	int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
 	int bannedRegularAmy[1] = { LevelIDs_Zero };
-	int bannedRegularBig[3] = { LevelIDs_IceCap, LevelIDs_PerfectChaos, LevelIDs_EggViper };
-	int bannedRegularGamma[9] = { LevelIDs_TwinklePark, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
+	int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
+	int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 
 	int bannedMusic[24] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x37, 0x38, 0x44, 0x45, 0x46, 0x47, 0x4B, 0x54, 0x55, 0x57, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70 };
 
@@ -61,7 +61,7 @@ extern "C"
 				}
 			break;
 		case LevelIDs_TwinklePark:
-			if (CurrentCharacter == Characters_Sonic)
+			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Gamma)
 			{
 				CurrentAct = 1;
 			}
@@ -77,6 +77,17 @@ extern "C"
 				}
 			}
 			break;
+		case LevelIDs_IceCap:
+			if (CurrentCharacter == Characters_Big)
+			{
+				CurrentAct = 1;
+			}
+			else
+			{
+				CurrentAct = 0;
+			}
+			break;
+
 		case LevelIDs_Casinopolis:
 			if (CurrentCharacter == Characters_Sonic)
 			{
@@ -85,7 +96,7 @@ extern "C"
 			else
 				if (CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma)
 				{
-				CurrentAct = rand() % 2;
+					CurrentAct = rand() % 2;
 				}
 				else
 				{
@@ -114,6 +125,7 @@ extern "C"
 		LastLevel = CurrentLevel;
 		LastAct = CurrentAct;
 		RNGDoor = rand() % 4;
+		MetalSonicFlag = 0;
 
 		//randomize characters
 		if (RNGCharacters == true)
@@ -141,7 +153,7 @@ extern "C"
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 20];
 								randomacts();
-							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularTails, CurrentLevel, 5))));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularTails, CurrentLevel, 4))));
 							break;
 						case Characters_Knuckles:
 							do {
@@ -162,14 +174,14 @@ extern "C"
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 20];
 								randomacts();
-							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularBig, CurrentLevel, 3))));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularBig, CurrentLevel, 2))));
 							break;
 						case Characters_Gamma:
 							do {
 								MetalSonicFlag = 0;
 								CurrentLevel = level[rand() % 20];
 								randomacts();
-							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularGamma, CurrentLevel, 9))));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularGamma, CurrentLevel, 8))));
 							break;
 						}
 					}
@@ -179,26 +191,18 @@ extern "C"
 							switch (CurrentCharacter)
 							{
 							case Characters_Sonic:
-								SonicRand = rand() % 2; 
-								MetalSonicFlag = rand() % 2; 
+								SonicRand = rand() % 2;
+								MetalSonicFlag = rand() % 2;
 								break;
 							}
 							CurrentLevel = level[rand() % 20];
 							randomacts();
-						} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 9) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 3)))));
+						} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (CurrentCharacter == Characters_Gamma && isValueInArray(bannedLevelsGamma, CurrentLevel, 8) || (CurrentCharacter == Characters_Big && isValueInArray(bannedLevelsBig, CurrentLevel, 2)))));
 
-					}
-				}
-				else
-				{
-					if (RNGStages == false && Regular == true)
-					{
-						return;
 					}
 				}
 			}
 	}
-
 
 	//Credits
 	void credits() {
@@ -243,16 +247,16 @@ extern "C"
 	void CancelResetPosition() {
 		NextLevel = LastLevel;
 		NextAct = LastAct;
+		SonicRand = 0;
 		GameMode = GameModes_Adventure_Field;
 	}
 
 	//Set Gamma's Timer to 6 min instead of 3.
 	void SetGammaTimer(char param_1, char param_2) {
-		param_1 = 6;
-		param_2 = 0;
+
+		TimeMinutes = 6;
+		TimeSeconds = 0;
 		TimeFrames = 0;
-		TimeMinutes = param_1;
-		TimeSeconds = param_2;
 		return;
 	}
 
@@ -271,6 +275,7 @@ extern "C"
 				LastSong = CurrentSong;
 			} while (isValueInArray(bannedMusic, CurrentSong, 24));
 		}
+		return;
 	}
 
 	//While load result: Avoid getting the same character twice in a row and "fix" metal sonic emblems, there is probably a better way to do this.
@@ -289,7 +294,6 @@ extern "C"
 		{
 			if (CurrentCharacter == Characters_Sonic)
 			{
-				ForcePlayerAction(0, 0x13);
 				Tails_CheckRaceResult();
 				return;
 			}
@@ -317,6 +321,7 @@ extern "C"
 			DeleteObject_(_this);
 			return;
 		}
+
 	}
 	static void SuperSonicManager_Load()
 	{
@@ -335,56 +340,67 @@ extern "C"
 
 		SuperSonicFlag = 0;
 		TransfoCount = 0;
-		
+
 		//Banned SuperSonic Levels
-		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_SkyDeck|| CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill)
+		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		{
+			SonicRand = 0;
+			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
 			return;
+
 		}
 		else
 		{
-			if (MetalSonicFlag == 0)
+			if (MetalSonicFlag == 1 && SonicRand == 1)
 			{
-				if (SonicRand == 1 && CurrentCharacter == 0)
+				SonicRand = 0;
+				return;
+			}
+			else
+			{
+				if (MetalSonicFlag == 0)
 				{
-					static Uint8 last_action[8] = {};
-					Rings = 100;
-					static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
-					for (int i = 0; i < 8; i++)
+					if (SonicRand == 1 && CurrentCharacter == 0)
 					{
-						EntityData1* data1 = EntityData1Ptrs[i];
-						CharObj2* data2 = CharObj2Ptrs[i];
-
-						if (data1 == nullptr || data1->CharID != Characters_Sonic)
+						static Uint8 last_action[8] = {};
+						Rings = 100;
+						static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
+						for (int i = 0; i < 8; i++)
 						{
-							continue;
-						}
+							EntityData1* data1 = EntityData1Ptrs[i];
+							CharObj2* data2 = CharObj2Ptrs[i];
 
-						bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-						bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
-
-						//Super Sonic Transformation
-
-						if (!transformation)
-						{	
-							data1->Status &= ~Status_LightDash;
-							ForcePlayerAction(i, 46);
-							LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-							data2->Upgrades |= Upgrades_SuperSonic;
-							PlayVoice(396);
-							PlayMusic(MusicIDs_ThemeOfSuperSonic);
-
-							if (!TransfoCount++)
+							if (data1 == nullptr || data1->CharID != Characters_Sonic)
 							{
-								SuperSonicManager_Load();
+								continue;
 							}
+
+							bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
+							bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
+
+							//Super Sonic Transformation
+
+							if (!transformation)
+							{
+								data1->Status &= ~Status_LightDash;
+								ForcePlayerAction(i, 46);
+								LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+								data2->Upgrades |= Upgrades_SuperSonic;
+								PlayVoice(396);
+								PlayMusic(MusicIDs_ThemeOfSuperSonic);
+
+								if (!TransfoCount++)
+								{
+									SuperSonicManager_Load();
+								}
+							}
+							else
+							{
+								last_action[i] = data1->Action;
+							}
+							SuperSonicFlag = TransfoCount > 0;
+							return;
 						}
-						else
-						{
-							last_action[i] = data1->Action;
-						}
-						SuperSonicFlag = TransfoCount > 0;
-						return;
 					}
 				}
 			}
@@ -408,7 +424,7 @@ extern "C"
 			}
 		}
 	}
-	
+
 	void HotShelterSecretSwitch() {
 
 		if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
@@ -416,6 +432,48 @@ extern "C"
 			SomethingAboutHotShelterSwitch = 1;
 		}
 
+	}
+
+
+	//fix infinite gamma bounce on Egg Viper.
+
+	void FixGammaBounce() {
+
+		if (CurrentCharacter == Characters_Gamma)
+		{
+			return;
+		}
+		else
+		{
+			EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
+		}
+
+	}
+
+	void LoadZero() {
+
+		if (CurrentLevel == LevelIDs_HotShelter)
+		{
+			PressedSwitches_Reset();
+		}
+		else
+		{
+			if (CurrentLevel == LevelIDs_FinalEgg)
+			{
+				camerahax_b();
+			}
+			else
+			{
+				if (CurrentLevel == LevelIDs_TwinklePark)
+				{
+					SetCameraControlEnabled(1);
+				}
+			}
+		}
+
+		static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
+		LoadPVM("EGGROB", &EGGROB_TEXLIST);
+		CheckLoadZero();
 	}
 
 }

@@ -50,10 +50,21 @@ extern "C"
 		//if the player check the randomize music option.
 		if (RNGMusic)
 		{
-			WriteCall((void*)0x42569d, RandomMusic); //hook music played in the game.
-			WriteCall((void*)0x425816, RandomMusic); //hook music act 2 Hot Shelter 
+			WriteCall((void*)0x425699, RandomMusic); //hook PlayMusic (Stages...)
+			WriteCall((void*)0x51b94a, RandomMusic); //hook playmusic (Hub World part 1)
+			WriteCall((void*)0x62ec81, RandomMusic); //hook playmusic (Hub World, bosses part 2) 
+
 			WriteCall((void*)0x441dd8, RandomMusic); //hook speed shoes sound
 			WriteCall((void*)0x4d6daf, RandomMusic); //hook invincibility music
+
+			WriteCall((void*)0x59a4ba, RandomMusic); //hook hot shelter music.
+			WriteCall((void*)0x59a215, RandomMusic); //hook hot shelter music part 2.
+			WriteCall((void*)0x59a258, RandomMusic); //hook hot shelter music part 3
+			WriteCall((void*)0x59a239, RandomMusic); //hook hot shelter music part 4
+			WriteCall((void*)0x59a107, RandomMusic); //hook hot shelter music part 5
+			WriteCall((void*)0x59a157, RandomMusic); //hook hot shelter music part 6
+			WriteCall((void*)0x59a177, RandomMusic); //hook hot shelter music part 7
+			WriteCall((void*)0x59a197, RandomMusic); //hook hot shelter music part 8
 		}
 
 		//Allow act swap for all characters
@@ -62,12 +73,15 @@ extern "C"
 
 		//Force the game to let you play Tails at Red Mountain and Emerald Coast act 2.
 		WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
+		WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
 		WriteData<5>((void*)0x4f6afa, 0x90); //hook GetCurrentCharacterID when you enter at Emerald Coast act 2.
 
 		WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash while using a wrong character.
 		WriteData<1>((void*)0x61cf97, 0x00); //Set the Twinkle Park Amy act condition to 0. (if VAR5)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase gamma's time limit by 3 minutes.
-		WriteCall((void*)0x415556, DisableTimeStuff); //fix metalsonic emblem
+		WriteCall((void*)0x584430, FixGammaBounce); //Fix Gamma bounce on Egg Viper Fight.
+		WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
+
 		WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 		//Speed Highway race
@@ -83,21 +97,13 @@ extern "C"
 		WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
 
 		//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) if disabled, you will get a black screen with Knuckles.
-		WriteData<5>((void*)0x478937, 0x90); 
+		WriteData<5>((void*)0x478937, 0x90);
 		WriteData<5>((void*)0x478AFC, 0x90);
 		WriteData<5>((void*)0x47B395, 0x90);
 		WriteData<5>((void*)0x47B423, 0x90);
 
-		//Knuckles RNG Stuff
-		WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
-		WriteData<6>((void*)0x4764CC, 0x90u); // make tikal hints work when not knuckles
-		WriteData<1>((void*)0x4153e3, 0x74); //Force the game to call Knuckles Rng when not Knuckles. (From jnz to JZ.)
-		WriteData<1>((void*)0x47585a, 0x75); //Force the game to call Knuckles Rng when not Knuckles part 2. (From JZ to JNZ)
-
-		WriteData<1>((void*)0x4766d8, 0x00); //display emerald piece when not knuckles part 1
-		WriteData<1>((void*)0x4a3071, 0x00); //display emerald piece when not knuckles part 2
-		//WriteData<1>((void*)0x477d9d, 0x00); //display emerald piece when not knuckles part 3 (CRASH THE GAME for some reason)
-		WriteData<1>((void*)0x476668, 0x00); //allow Sonic to see the piece of the master emerald.
+		WriteCall((void*)0x60ff84, EmeraldRadarHud_Draw);
+		WriteCall((void*)0x4c0e24, KnucklesRadar);
 
 		// Super Sonic Stuff
 		WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
@@ -109,16 +115,22 @@ extern "C"
 		WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight. (from JNZ 75 to JZ 74)
 
 		//Make Big Hot Shelter stuff (secret door etc.) work when using Amy.
-		WriteData<1>((void*)0x5aaf12, 0x05); 
+		WriteData<1>((void*)0x5aaf12, 0x05);
 		WriteData<1>((void*)0x59a3bb, 0x05);
 		WriteData<1>((void*)0x59a123, 0x05);
 
+		//Zero Stuff
+		WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
+		WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
+		WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
+		WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 
 		if (RNGStages == true)
 		{
 			//Hook all SetLevelandAct to make them random.
 
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
+			WriteCall((void*)0x415556, DisableTimeStuff); //fix metalsonic emblem and crash.
 
 			WriteCall((void*)0x50659a, randomstage); //hook trial mod / hedgehog hammer / sub game
 			WriteCall((void*)0x41709d, randomstage); //hook "Go to next level"
@@ -150,22 +162,33 @@ extern "C"
 			EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 		}
 
-		if (GameMode == 5 || GameMode == 4)
+		if (RNGStages == true)
 		{
-			//force the game to display the in-game timer properly.
-			HudDisplayRingTimeLife_Check();
-			HudDisplayScoreOrTimer();
-			
-			//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
-			if (GameState == 16)
+			if (GameMode == 5 || GameMode == 4)
 			{
-				if (PauseSelection == 3)
+				//force the game to display the in-game timer properly.
+				HudDisplayRingTimeLife_Check();
+				HudDisplayScoreOrTimer();
+
+				//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
+				if (GameState == 16)
 				{
-					GameMode = GameModes_Adventure_Field;
+					if (PauseSelection == 3)
+					{
+						GameMode = GameModes_Adventure_Field;
+					}
+					else
+					{
+						GameMode = GameModes_Adventure_ActionStg;
+					}
 				}
-				else
+
+				if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 111 || LevelList == 243 || LevelList == 225)))
 				{
-					GameMode = GameModes_Adventure_ActionStg;
+					if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
+					{
+						credits();
+					}
 				}
 			}
 		}
@@ -176,10 +199,12 @@ extern "C"
 			BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
 
 			// Increase their MaxAccel so they can complete stages they are not meant to.
-			if (CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+			if (CurrentLevel == 38)
 			{
 				PhysicsArray[Characters_Amy].MaxAccel = 8;
 				PhysicsArray[Characters_Big].MaxAccel = 8;
+				SetCameraControlEnabled(1);
+
 			}
 			else
 			{
@@ -197,20 +222,12 @@ extern "C"
 				if (CurrentCharacter != Characters_Sonic)
 				{
 					MetalSonicFlag = 0;
-				}
-			}
-
-			if (GameState == 21 && (GameMode == 5 || GameMode == 4 || GameMode == 17 && (LevelList == 0 || LevelList == 97 || LevelList == 111 || LevelList == 243 || LevelList == 225)))
-			{
-				if (Emblem == 10 || Emblem == 16 || Emblem == 22 || Emblem == 26 || Emblem == 31 || Emblem == 37 || Emblem == 39)
-				{
-					credits();
+					SonicRand = 0;
 				}
 			}
 		}
-
 	}
-	
+
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
@@ -247,30 +264,6 @@ extern "C"
 						LoadSoundList(65);
 				}
 				break;
-				//Fix Knuckles Lost World act 2 song
-				if (RNGMusic == false)
-				{
-			case LevelIDs_LostWorld:
-				if (CurrentCharacter == Characters_Knuckles && CurrentAct == 1)
-				{
-					CurrentSong = 64;
-				}
-				break;
-				//fix Tails RM act 1 and 2 song.
-			case LevelIDs_RedMountain:
-				if (CurrentCharacter == Characters_Tails && CurrentAct == 0 && CurrentSong != 0x4b && CurrentSong != 0x55 && CurrentSong != 0x5d)
-				{
-					Music_Enabled = 1;
-					PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
-				}
-				else
-					if (CurrentCharacter == Characters_Tails && CurrentAct == 1 && CurrentSong != 0x4b && CurrentSong != 0x55 && CurrentSong != 0x5d)
-					{
-						Music_Enabled = 1;
-						PlayMusic(MusicIDs_RedMountainRedHotSkull);
-					}
-				break;
-				}
 			case LevelIDs_HotShelter:
 				if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
 				{
@@ -279,7 +272,7 @@ extern "C"
 
 			}
 		}
-	
+
 	}
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
