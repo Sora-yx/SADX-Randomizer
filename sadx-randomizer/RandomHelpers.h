@@ -32,7 +32,6 @@ extern "C" void credits();
 extern "C" void HotShelterSecretSwitch();
 extern "C" void FixGammaBounce();
 
-extern"C" void KnucklesRadar();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);

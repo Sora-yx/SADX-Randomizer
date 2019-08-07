@@ -102,9 +102,6 @@ extern "C"
 		WriteData<5>((void*)0x47B395, 0x90);
 		WriteData<5>((void*)0x47B423, 0x90);
 
-		WriteCall((void*)0x60ff84, EmeraldRadarHud_Draw);
-		WriteCall((void*)0x4c0e24, KnucklesRadar);
-
 		// Super Sonic Stuff
 		WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 		WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
@@ -199,12 +196,11 @@ extern "C"
 			BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
 
 			// Increase their MaxAccel so they can complete stages they are not meant to.
-			if (CurrentLevel == 38)
+			if (CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 			{
 				PhysicsArray[Characters_Amy].MaxAccel = 8;
 				PhysicsArray[Characters_Big].MaxAccel = 8;
 				SetCameraControlEnabled(1);
-
 			}
 			else
 			{

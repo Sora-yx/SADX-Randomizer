@@ -124,7 +124,7 @@ extern "C"
 
 		LastLevel = CurrentLevel;
 		LastAct = CurrentAct;
-		RNGDoor = rand() % 4;
+		RNGDoor = rand() % 5;
 		MetalSonicFlag = 0;
 
 		//randomize characters
@@ -278,7 +278,7 @@ extern "C"
 		return;
 	}
 
-	//While load result: Avoid getting the same character twice in a row and "fix" metal sonic emblems, there is probably a better way to do this.
+	//While load result: Avoid getting the same character twice in a row, "fix" metal sonic emblems and game crash. (There is probably a better way to do this.)
 	void DisableTimeStuff() {
 
 		if (GameMode != 9)
@@ -288,7 +288,7 @@ extern "C"
 		TimeThing = 0;
 		CharacterCopy = CurrentCharacter;
 		MetalSonicFlag = 0;
-		SonicRand == 0;
+		SonicRand = 0;
 
 		if (CurrentLevel == 4 && CurrentAct == 0)
 		{
@@ -363,7 +363,7 @@ extern "C"
 					if (SonicRand == 1 && CurrentCharacter == 0)
 					{
 						static Uint8 last_action[8] = {};
-						Rings = 100;
+						Rings = 1;
 						static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
 						for (int i = 0; i < 8; i++)
 						{
