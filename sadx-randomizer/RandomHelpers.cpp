@@ -12,7 +12,15 @@
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Regular;
+extern int ban;
 
+extern bool Sonic;
+extern bool Tails;
+extern bool Knuckles;
+extern bool Amy;
+extern bool Big;
+extern bool Gamma;
+extern bool banCharacter[8];
 
 extern "C"
 {
@@ -22,6 +30,8 @@ extern "C"
 	int SonicRand = 0;
 	int TransfoCount = 0;
 	int level[20] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 38 };
+	
+
 
 	//Initialize Ban few stage impossible to beat, depending on the character.
 	int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
@@ -131,7 +141,7 @@ extern "C"
 		if (RNGCharacters == true)
 			do {
 				CurrentCharacter = character[rand() % 6];
-			} while (CurrentCharacter == CharacterCopy);
+			} while (CurrentCharacter == CharacterCopy && ban == 0 || banCharacter[CurrentCharacter]);
 
 			if (RNGStages == true) {
 				if (GameMode != 8)
@@ -332,6 +342,7 @@ extern "C"
 	//Super Sonic Random transformation, used when a stage start.
 	void SuperSonicStuff() {
 
+
 		TimeThing = 1;
 		if (GameMode != 9)
 		{
@@ -474,6 +485,12 @@ extern "C"
 		static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
 		LoadPVM("EGGROB", &EGGROB_TEXLIST);
 		CheckLoadZero();
+	}
+
+	void BigWeightHook() {
+
+		BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
+		BigWeight = 2000; //display 2000g for Big
 	}
 
 }

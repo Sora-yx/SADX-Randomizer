@@ -15,6 +15,8 @@ extern int SonicRand;
 
 extern "C" void randomstage(char stage, char act);
 extern "C" void randomacts();
+extern "C" void BigWeightHook();
+
 
 extern "C" void SetGammaTimer(char param_1, char param_2);
 extern "C" void DisableTimeStuff();

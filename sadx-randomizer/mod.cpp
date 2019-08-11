@@ -15,6 +15,19 @@ bool Regular = false;
 bool RNGVoices = false;
 bool RNGMusic = false;
 
+bool BigStuff = true;
+bool AmySpeed = true;
+bool BigSpeed = true;
+
+bool Sonic = false;
+bool Tails = false;
+bool Knuckles = false;
+bool Amy = false;
+bool Gamma = false;
+bool Big = false;
+int ban = 0;
+
+bool banCharacter[8];
 
 extern "C"
 {
@@ -24,22 +37,42 @@ extern "C"
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 
-		unsigned int seed = 0;
+		int seed = 0;
+		
+
 		//Ini file Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
-		Upgrade = config->getBool("Randomizer", "upgrade", true);
+		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		seed = config->getInt("Randomizer", "Seed", 0);
 		Regular = config->getBool("Randomizer", "Regular", false);
 		RNGVoices = config->getBool("Randomizer", "RNGVoices", false);
 		RNGMusic = config->getBool("Randomizer", "RNGMusic", false);
+
+		AmySpeed = config->getBool("CharactersStuff", "AmySpeed", true);
+		BigSpeed = config->getBool("CharactersStuff", "BigSpeed", true);
+		BigStuff = config->getBool("CharactersStuff", "BigStuff", true);
+
+		banCharacter[0] = config->getBool("Roster", "Sonic", false);
+		banCharacter[2] = config->getBool("Roster", "Tails", false);
+		banCharacter[3] = config->getBool("Roster", "Knuckles", false);
+		banCharacter[5] = config->getBool("Roster", "Amy", false);
+		banCharacter[7] = config->getBool("Roster", "Big", false);
+		banCharacter[6] = config->getBool("Roster", "Gamma", false);
 		delete config;
 
 		if (seed)
 			srand(seed);
 		else
 			srand((unsigned)time(&t));
+		
+		if (banCharacter[0] || banCharacter[2] || banCharacter[3] || banCharacter[5] || banCharacter[7] || banCharacter[6])
+		{
+			ban = +1;
+		}
+
+
 
 		//if the player check the randomize voices option.
 		if (RNGVoices)
@@ -122,6 +155,12 @@ extern "C"
 		WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
 		WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 
+		if (BigStuff)
+		{
+			WriteCall((void*)0x470127, BigWeightHook);
+		}
+
+
 		if (RNGStages == true)
 		{
 			//Hook all SetLevelandAct to make them random.
@@ -163,10 +202,7 @@ extern "C"
 		{
 			if (GameMode == 5 || GameMode == 4)
 			{
-				//force the game to display the in-game timer properly.
-				HudDisplayRingTimeLife_Check();
-				HudDisplayScoreOrTimer();
-
+			
 				//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
 				if (GameState == 16)
 				{
@@ -192,38 +228,45 @@ extern "C"
 
 		if (GameMode == 5 || GameMode == 4 || GameMode == 9)
 		{
-			BigWeight = 2000; //display 2000g as Big.
-			BigWeightRecord = 2000; //set the record as 2000 so you will always get the emblem for mission B and A as Big.
+			//force the game to display the in-game timer properly.
+			HudDisplayRingTimeLife_Check();
+			HudDisplayScoreOrTimer();
 
+			//fix Metal Sonic life icon.
+		if (CurrentCharacter != Characters_Sonic || CurrentLevel == LevelIDs_PerfectChaos)
+		{
+			MetalSonicFlag = 0;
+			SonicRand = 0;
+		}
 			// Increase their MaxAccel so they can complete stages they are not meant to.
-			if (CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-			{
-				PhysicsArray[Characters_Amy].MaxAccel = 8;
-				PhysicsArray[Characters_Big].MaxAccel = 8;
-				SetCameraControlEnabled(1);
-			}
-			else
-			{
-				PhysicsArray[Characters_Amy].MaxAccel = 5;
-				PhysicsArray[Characters_Big].MaxAccel = 5;
-			}
+		
+				if (CurrentLevel == 38)
+				{
+					PhysicsArray[Characters_Amy].MaxAccel = 8;
+					PhysicsArray[Characters_Big].MaxAccel = 8;
+					SetCameraControlEnabled(1);
+
+				}
+				else
+				{
+					if (AmySpeed)
+					{
+						PhysicsArray[Characters_Amy].MaxAccel = 5;
+					}
+					if (BigSpeed)
+					{
+						PhysicsArray[Characters_Big].MaxAccel = 5;
+					}
+				}
+
 			//force the game to let you win as Tails in Speed Highway Act 3.
 			if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
 			{
 				SetTailsRaceVictory();
 			}
-			else
-			{
-				//fix Metal Sonic life icon.
-				if (CurrentCharacter != Characters_Sonic)
-				{
-					MetalSonicFlag = 0;
-					SonicRand = 0;
-				}
-			}
+
 		}
 	}
-
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
