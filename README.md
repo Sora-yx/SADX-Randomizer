@@ -38,4 +38,4 @@ Special Thanks
 
 Big thanks to Raytwo for the help with the code in general. Since I'm very new to programming, this project couldn't be a thing without him.
 
-Also thanks to Prahaha and Kell for the various tips.
+Also thanks to Prahaha, MainMemory and Kell for the various tips.
