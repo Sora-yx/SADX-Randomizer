@@ -1,3 +1,39 @@
+V1.3
+
+General:
+- You can now randomize music and voices! Select the mod in SADX ModManager and click on 'Configure...' then check the option for more fun!
+- Level layouts improvement, as usual.
+- 100% aesthetic, but Amy's bird now spawns in every stage.
+- Zero will now spawn with every character.
+- You can now disable a character from the roster, time to do a Big solo run boys! (Because of technical limitation, you will get the same character twice (or more) in a row if you disable any character.)
+- You can now change the camera in Sand Hill.
+- Added an option to manage Amy and Big acceleration.
+- Added an option to set 2000G as a weight record.
+
+New Character / Stage combination:
+- Super Sonic has been added as a playable character, if the Randomizer select Sonic, you now have a chance to get Super Sonic instead.
+- Chaos 6 fight has been added for every character.
+- Perfect Chaos fight has been added for Sonic, Tails Knuckles and Amy. 
+- Tails's Casinopolis has been added for every character.
+- Big's Hot Shelter has been added for Amy.
+- Sonic's Ice Cap Act 2 and 3 as Big has been added.
+- Sonic's Sky Deck as Tails has been added.
+- Sonic's Twinkle Park Act 2 as Gamma has been added.
+- Sonic will now race Eggman in Tails's Speed Highway.
+
+Bug fixes:
+
+- All the stages should now have functional kill planes. (Make sure your Sadx Mod Manager is up to date.)
+- Restarting will no longer send you at the very beginning of a stage (about damn time, yeah yeah I know.)
+- Gamma will no longer infinite hover on Egg Viper fight, that was cheating after all.
+- Hot Shelter act 2 music should now play correctly as Big.
+
+Planned in the future :
+- Splits for speedrunner are still considered, but I have to completely rework how the Randomizer work, so this will take time.
+- This is definitely a "maybe", but random acts might be added if I find a way to. Basically, you will get randomly teleported to another act of a different stage instead of the correct one. For example: From Speed Highway act 1 to Red Mountain act 2)
+- Random Physics might be a thing.
+- And more! As always, feel free to dm me on Twitter or Discord if you want to give me a specific feedback, or if you have any suggestion.
+
 V1.2.2
 
 General:
