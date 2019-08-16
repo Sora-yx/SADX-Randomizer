@@ -25,6 +25,8 @@ bool Knuckles = false;
 bool Amy = false;
 bool Gamma = false;
 bool Big = false;
+bool MetalSonic = false;
+bool SuperSonic = false;
 int ban = 0;
 
 bool banCharacter[8];
@@ -60,6 +62,8 @@ extern "C"
 		banCharacter[5] = config->getBool("Roster", "Amy", false);
 		banCharacter[7] = config->getBool("Roster", "Big", false);
 		banCharacter[6] = config->getBool("Roster", "Gamma", false);
+		MetalSonic = config->getBool("Roster", "MetalSonic", false);
+		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 		delete config;
 
 		if (seed)
@@ -119,6 +123,12 @@ extern "C"
 
 		//Speed Highway race
 		WriteCall((void*)0x415965, LoadEggmanAI); //Load EggmanAI as Sonic and prevent Tails to race.
+
+		//Red Mountain
+		WriteData<1>((void*)0x6027c5, 0x00); //Fix Red Mountain Lava as Sonic (Gamma layout.)
+		WriteData<1>((void*)0x60405e, 0x00); //Allow Sonic to destroy the rocks in RM. (Gamma layout.)
+		WriteData<1>((void*)0x606bba, 0x00); //Fix the rock bridge as Gamma.
+		WriteData<1>((void*)0x602548, 0x74); //Fix Red Mountain Lava as Sonic part 2
 
 		//Chaos 6 stuff
 		WriteData<1>((void*)0x5598f0, 0x00); //makes the bomb spawns for every character. (if ivar == 0)

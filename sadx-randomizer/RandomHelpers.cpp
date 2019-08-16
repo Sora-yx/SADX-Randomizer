@@ -20,6 +20,8 @@ extern bool Knuckles;
 extern bool Amy;
 extern bool Big;
 extern bool Gamma;
+extern bool MetalSonic;
+extern bool SuperSonic;
 extern bool banCharacter[8];
 
 extern "C"
@@ -30,15 +32,13 @@ extern "C"
 	int SonicRand = 0;
 	int TransfoCount = 0;
 	int level[20] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 38 };
-	
-
 
 	//Initialize Ban few stage impossible to beat, depending on the character.
 	int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 	int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 	//Initiliaze banned regular stage if option is activated
-	int bannedRegularSonic[11] = { LevelIDs_WindyValley, LevelIDs_RedMountain, LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
+	int bannedRegularSonic[9] = { LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
 	int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
 	int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
 	int bannedRegularAmy[1] = { LevelIDs_Zero };
@@ -56,7 +56,7 @@ extern "C"
 		switch (CurrentLevel)
 		{
 		case LevelIDs_EmeraldCoast:
-			if (CurrentCharacter == Characters_Sonic || MetalSonicFlag == 1)
+			if (CurrentCharacter == Characters_Sonic)
 			{
 				CurrentAct = 2;
 			}
@@ -87,6 +87,16 @@ extern "C"
 				}
 			}
 			break;
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				CurrentAct = 1;
+			}
+			else
+			{
+				CurrentAct = 0;
+			}
+			break;
 		case LevelIDs_IceCap:
 			if (CurrentCharacter == Characters_Big)
 			{
@@ -104,14 +114,9 @@ extern "C"
 				CurrentAct = 1;
 			}
 			else
-				if (CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma)
-				{
-					CurrentAct = rand() % 2;
-				}
-				else
-				{
-					CurrentAct = 0;
-				}
+			{
+				CurrentAct = rand() % 2;
+			}
 			break;
 		case LevelIDs_HotShelter:
 			if (CurrentCharacter == Characters_Gamma)
@@ -152,11 +157,17 @@ extern "C"
 						{
 						case Characters_Sonic:
 							do {
-								SonicRand = rand() % 2;
-								MetalSonicFlag = rand() % 2;
+								if (SuperSonic != true)
+								{
+									SonicRand = rand() % 2;
+								}
+								if (MetalSonic != true)
+								{
+									MetalSonicFlag = rand() % 2;
+								}
 								CurrentLevel = level[rand() % 20];
 								randomacts();
-							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularSonic, CurrentLevel, 11))));
+							} while (CurrentLevel == LevelCopy || (CurrentLevel > 14 && LevelCopy > 14 || (isValueInArray(bannedRegularSonic, CurrentLevel, 9))));
 							break;
 						case Characters_Tails:
 							do {
@@ -201,8 +212,14 @@ extern "C"
 							switch (CurrentCharacter)
 							{
 							case Characters_Sonic:
-								SonicRand = rand() % 2;
-								MetalSonicFlag = rand() % 2;
+								if (SuperSonic != true)
+								{
+									SonicRand = rand() % 2;
+								}
+								if (MetalSonic != true)
+								{
+									MetalSonicFlag = rand() % 2;
+								}
 								break;
 							}
 							CurrentLevel = level[rand() % 20];
