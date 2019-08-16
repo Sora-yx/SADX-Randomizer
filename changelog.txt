@@ -1,3 +1,49 @@
+V1.3.1
+
+General:
+- You can now disable Metal Sonic or Super Sonic from the roster. (Note: if you disable Sonic, you won't get Metal Sonic or Super Sonic either.)
+- Levels layout improvement.
+
+New Character / Stage combination:
+- Gamma's Red Mountain as Sonic has been added.
+- Gamma's Windy Valley as Sonic has been added.
+
+Bug fixes:
+
+- Red Mountain as Gamma should now display the lava correctly.
+- Rock bridge at Red Mountain should now fall.
+- Big and Gamma should now be able to normally access to Tails's Casinopolis.
+
+V1.3
+
+General:
+- You can now randomize music and voices! Select the mod in SADX ModManager and click on 'Configure...' then check the option for more fun!
+- Level layouts improvement, as usual.
+- 100% aesthetic, but Amy's bird now spawns in every stage.
+- Zero will now spawn with every character.
+- You can now disable a character from the roster, time to do a Big solo run boys! (Because of technical limitation, you will get the same character twice (or more) in a row if you disable any character.)
+- You can now change the camera in Sand Hill.
+- Added an option to manage Amy and Big acceleration.
+- Added an option to set 2000G as a weight record.
+
+New Character / Stage combination:
+- Super Sonic has been added as a playable character, if the Randomizer select Sonic, you now have a chance to get Super Sonic instead.
+- Chaos 6 fight has been added for every character.
+- Perfect Chaos fight has been added for Sonic, Tails Knuckles and Amy. 
+- Tails's Casinopolis has been added for every character.
+- Big's Hot Shelter has been added for Amy.
+- Sonic's Ice Cap Act 2 and 3 as Big has been added.
+- Sonic's Sky Deck as Tails has been added.
+- Sonic's Twinkle Park Act 2 as Gamma has been added.
+- Sonic will now race Eggman in Tails's Speed Highway.
+
+Bug fixes:
+
+- All the stages should now have functional kill planes. (Make sure your Sadx Mod Manager is up to date.)
+- Restarting will no longer send you at the very beginning of a stage (about damn time, yeah yeah I know.)
+- Gamma will no longer infinite hover on Egg Viper fight, that was cheating after all.
+- Hot Shelter act 2 music should now play correctly as Big.
+
 V1.2.2
 
 General:
