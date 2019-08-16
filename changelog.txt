@@ -1,3 +1,19 @@
+V1.3.1
+
+General:
+- You can now disable Metal Sonic or Super Sonic from the roster. (Note: if you disable Sonic, you won't get Metal Sonic or Super Sonic either.)
+- Levels layout improvement.
+
+New Character / Stage combination:
+- Gamma's Red Mountain as Sonic has been added.
+- Gamma's Windy Valley as Sonic has been added.
+
+Bug fixes:
+
+- Red Mountain as Gamma should now display the lava correctly.
+- Rock bridge at Red Mountain should now fall.
+- Big and Gamma should now be able to normally access to Tails's Casinopolis.
+
 V1.3
 
 General:
