@@ -9,16 +9,29 @@ int TransfoCount = 0;
 bool loaded;
 int TikalRand = 0;
 int EggmanRand = 0;
+bool isRandDone = false;
 
 extern int CurrentAI;
 extern bool CreditCheck;
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
-
-
+extern bool isAIAllowed;
 
 
 //Characters Settings, Load, Eggman and Tikal stuff.
+
+const int loc_414914 = 0x414914;
+__declspec(naked) void ChangeStartPosCharLoading()
+{
+	__asm
+	{
+		mov eax, [CurrentCharacter]
+		movzx eax, word ptr[eax]
+		cmp eax, 7
+		jmp loc_414914
+	}
+}
+
 
 //Fix Tikal and Eggman act switch.
 const void* const sub_7B4450Ptr = (void*)0x7B4450;
@@ -40,6 +53,8 @@ void __cdecl Eggman_Display(ObjectMaster* obj)
 
 
 FunctionPointer(int, sub_42FB00, (), 0x42FB00);
+void CheckRace();
+void LoadEggmanAI();
 
 //Hook Load Character
 void LoadCharacter_r()
@@ -58,18 +73,36 @@ void LoadCharacter_r()
 	}
 	else
 	{
+		if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && isRandDone == false)
+		{
+			TikalRand = rand() % 2;
+			EggmanRand = rand() % 2;
+			isRandDone = true;
+		}
+		else
+		{
+			TikalRand = 0;
+			EggmanRand = 0;
+			isRandDone = false;
+		}
+
+
+		CheckRace();
+
 			switch (CurrentCharacter)
 			{
 			case Characters_Knuckles:
-				TikalRand = rand() % 2;
-				if (TikalRand == 1)
+				if (TikalRand == 1 && CurrentAI != 4 && isRandDone == true)
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
 				else
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Knuckles
 				break;
+			case Characters_Amy:
+				CheckLoadBird();
+				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
+				break;
 			case Characters_Sonic:
-				EggmanRand = rand() % 2;
-				if (EggmanRand == 1)
+				if (EggmanRand == 1 && SonicRand == 0 && CurrentAI != 1 && isRandDone == true)
 				{
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[1]); //Load Eggman
 					obj->DisplaySub = Eggman_Display;
@@ -95,6 +128,8 @@ void LoadCharacter_r()
 			EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
 			EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
 			MovePlayerToStartPoint(obj->Data1);
+
+			LoadEggmanAI(); //load eggman if Speed highway
 			return;
 		
 	}
@@ -138,7 +173,7 @@ extern int CustomLayout;
 HelperFunctions extern help;
 
 //Super Sonic Random transformation, used when the timer for a stage start. Also used to call some specific function and fixes.
-void LoadEggmanAI();
+
 
 void SuperSonicStuff() {
 
@@ -147,6 +182,7 @@ void SuperSonicStuff() {
 	if (CurrentCharacter != Characters_Sonic && CustomLayout == 0)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
+		SonicRand = 0;
 	}
 
 
@@ -324,8 +360,9 @@ void SwapMetalSonic(EntityData1* entity1, EntityData2* entity2, CharObj2* obj2) 
 void AllUpgrades() {
 
 	CharSel_LoadThing();
-	CreditCheck == false;
+	CreditCheck = false;
 	Credits_CanSkip = 1;
+
 
 	if (Upgrade == true)
 	{
@@ -413,8 +450,18 @@ void FixCharacterSFX() {
 void FixVictoryTailsVoice() {
 
 	if (CurrentCharacter == Characters_Tails)
-		Load_DelayedSound_SFX(0x5b2);
+		ResultVoiceFix();
 	else
 		return;
+}
+
+int GetCharacter0ID() //player 1 ID
+{
+	return GetCharacterID(0);
+}
+
+int GetCharacter1ID() //AI ID
+{
+	return GetCharacterID(1);
 }
 

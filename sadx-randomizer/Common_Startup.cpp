@@ -18,11 +18,23 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 
 	helperFunctions.ReplaceFile("system\\ENDBG_SONIC_0.PVM", "system\\textures\\ENDBG_RANDOMIZER_0.pvmx"); //background credits
 
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4000.wma", "system\\voices\\ReadyAnyTimeSonic.wma"); //Introduce Sonic Switch
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4001.wma", "system\\voices\\AlSetTails.wma"); //Introduce Tails Switch
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4002.wma", "system\\voices\\ReadyAnyTimeAmy.wma"); //Introduce Tails Switch
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4000.wma", "system\\voices\\SonicHereWeGo.wma"); //Introduce Sonic Switch
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4001.wma", "system\\voices\\TailsLeaveItToMe.wma"); //Introduce Tails Switch
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4002.wma", "system\\voices\\KnuxGotIt.wma"); //Introduce Knux Switch
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4003.wma", "system\\voices\\AmyHereWeGo.wma"); //Introduce Amy Switch
+
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4010.wma", "system\\voices\\BigVictory.wma"); //Add Big Victory Stage voice
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4011.wma", "system\\voices\\BigWouhou.wma"); //Add Big Victory Boss / other voice
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4012.wma", "system\\voices\\EggmanYosh.wma"); //Add Eggman Victory voice
+
+	
+	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
+	//ResizeTextureList(&CON_REGULAR_TEXLIST, 75);
+	
 
 }
+
+
 
 
 

@@ -24,13 +24,14 @@ extern int split;
 extern int CustomFlag;
 extern int TotalCount;
 extern bool isAIAllowed;
+extern bool isRandDone;
 int CurrentAI = 0;
 extern bool Race;
 extern int AICopy;
 
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[8] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Knuckles, Characters_Tikal, Characters_Amy, Characters_Gamma, Characters_Big };
+int AIArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Knuckles, Characters_Tikal, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
@@ -369,9 +370,24 @@ void CancelResetPosition() {
 	SonicRand = 0;
 	CustomLayout = 0;
 	AICopy = 0;
+	isRandDone = false;
 	Race = false;
 	GameMode = GameModes_Adventure_Field;
 }
+
+
+//Fix Trial Mode 
+void SetLevelAndAct_R() {
+
+	if (GameMode == GameModes_Menu)
+	{
+		if (LevelList == 14 || LevelList == 238)
+			testRefactor(NextLevel, NextAct);
+		else
+			return;
+	}
+}
+
 
 
 //randomize voices

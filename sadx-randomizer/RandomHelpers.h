@@ -23,8 +23,10 @@ struct RandomizedEntry
 
 void LoadCharacter_r();
 void ChangeStartPosCharLoading();
+void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
+
 extern int level[21];
-extern int AIArray[8];
+extern int AIArray[6];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
@@ -105,7 +107,7 @@ void TwinkleCircuitResult();
 
 void FixEggViperCutscene();
 void EggViperVoice();
-void CheckRace();
+
 void LoadEggmanAI();
 void FixRollerCoaster();
 
@@ -152,5 +154,6 @@ DataPointer(int, dword_3B2A304, 0x3B2A304);
 void CreditFlag();
 
 void DisableTime_Zero();
+void AISwitch();
 
-
+void SetLevelAndAct_R(); //fix trial mod 

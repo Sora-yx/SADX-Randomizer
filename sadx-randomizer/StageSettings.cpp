@@ -16,6 +16,7 @@ extern int CustomLayout;
 bool Race = false;
 extern bool isAIAllowed;
 extern bool isAIActive;
+extern bool isRandDone;
 extern int CurrentAI;
 
 //While load result: Avoid getting the same character twice in a row, "fix" game crash. (There is probably a better way to do this.)
@@ -25,14 +26,13 @@ void DisableTimeStuff() {
 	if (GameMode != 9 && RNGStages == true)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash
-
 	}
 
 	TimeThing = 0;
 	SonicRand = 0;
-
-	if (Credits_CanSkip != 1)
-		Credits_CanSkip = 1;
+	isRandDone = false;
+	ResultVoiceFix();
+	Credits_CanSkip = 1;
 
 	AddCustomFlag(); //credits check
 
@@ -50,6 +50,7 @@ void DisableTimeStuff() {
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
+
 			ForcePlayerAction(1, 19); //Force AI to Victory pose
 			dword_3B2A304 = 0;
 			
@@ -90,7 +91,6 @@ void DisableTimeStuff() {
 	Race = false;
 	return;
 }
-
 
 
 
@@ -190,6 +190,7 @@ void TwinkleCircuitResult() {
 	GameState = 0x11;
 }
 
+
 //Eggman AI Speed Highway
 void LoadEggmanAI() {
 
@@ -218,6 +219,7 @@ void CheckRace() {
 
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
 	{
+		RaceWinnerPlayer = 1;
 		Race = false;
 		return;
 	}
@@ -320,14 +322,5 @@ void SHAct2Position() {
 	
 }
 
-void LoadEggman_AI_R() {
 
-	SetFrameRateMode(1, 1);
-	if (CurrentLevel == 4)
-	{
-		LoadEggmanAI(); //load eggman if Speed highway
-	}
-	return;
-
-}
 

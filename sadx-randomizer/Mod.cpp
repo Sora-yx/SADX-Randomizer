@@ -17,11 +17,14 @@ int SonicCD;
 bool Missions = true;
 bool Any = true;
 extern int CustomLayout;
+extern bool CreditCheck;
 
+//Character settings
 bool Weight = true;
 bool AmySpeed = true;
 bool BigSpeed = true;
 
+//banned character roster
 bool Sonic = false;
 bool Tails = false;
 bool Knuckles = false;
@@ -30,12 +33,17 @@ bool Gamma = false;
 bool Big = false;
 bool MetalSonic = false;
 bool SuperSonic = false;
+bool Eggman = false;
+bool Tikal = false;
 int ban = 0;
+
 int split = 0;
 int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 bool banCharacter[8];
 bool isloaded = false;
 bool isAIAllowed = true;
+
+int SwapDelay = 50;
 
 int CustomFlag = 0; //Used for progression story and credits
 
@@ -45,8 +53,9 @@ extern int CurrentAI;
 extern bool isAIActive;
 extern CollisionInfo* oldcol;
 extern bool Race;
+int SeedCopy = 0;
 time_t t;
-CollisionInfo* oldcol = nullptr;
+
 
 
 
@@ -83,6 +92,8 @@ extern "C" {
 		banCharacter[6] = config->getBool("Roster", "Gamma", false);
 		MetalSonic = config->getBool("Roster", "MetalSonic", false);
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
+		Eggman = config->getBool("Roster", "Eggman", false);
+		Tikal = config->getBool("Roster", "Tikal", false);
 
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 
@@ -91,11 +102,15 @@ extern "C" {
 		if (seed)
 		{
 			srand(seed);
-			WarningSeed = 1;
+			WarningSeed = 300;
+			
 		}
 		else
 			srand((unsigned)time(&t));
 
+		SeedCopy = seed;
+		
+			
 
 
 		if (banCharacter[0] || banCharacter[2] || banCharacter[3] || banCharacter[5] || banCharacter[7] || banCharacter[6])
@@ -107,7 +122,7 @@ extern "C" {
 		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
 		if (DCMod || SADXFE)
 		{
-			DCModWarningTimer = 500;
+			DCModWarningTimer = 400;
 		}
 
 		if (helperFunctions.Version < 7)
@@ -170,6 +185,23 @@ extern "C" {
 		WriteJump((void*)0x41490D, ChangeStartPosCharLoading); //Fix Eggman Tikal transition crash
 		WriteJump(LoadCharacter, LoadCharacter_r); //Hook Load Character to allow Tikal and Eggman.
 
+		WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
+		WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
+		WriteCall((void*)0x4D682F, GetCharacter0ID); // ''
+		WriteCall((void*)0x4D69AF, GetCharacter0ID); // ''
+		WriteCall((void*)0x425E62, GetCharacter0ID); // fix life icon
+
+		WriteCall((void*)0x4D677C, GetCharacter0ID); // fix item boxes for Gamma
+		WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
+		WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
+		WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
+
+		WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
+		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
+		WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
+
+
+
 
 		//if Random Voice option
 		if (RNGVoices)
@@ -204,7 +236,9 @@ extern "C" {
 			WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 		}
 
-		WriteData<6>((void*)0x48ADA5, 0x90u);
+		//WriteData<6>((void*)0x48ADA5, 0x90u); //don't load Amy Bird
+		//WriteCall((void*)0x04c6820, GetCharacter0ID);
+		
 
 		WriteCall((void*)0x5114eb, AllUpgrades);
 
@@ -214,6 +248,8 @@ extern "C" {
 		}
 
 
+		
+		WriteCall((void*)0x4159b8, LoadTails_AI_R); //Load AI 
 
 		if (isAIAllowed)
 		{
@@ -224,8 +260,10 @@ extern "C" {
 			WriteCall((void*)0x47ec62, CheckTailsAI_R);
 			WriteCall((void*)0x47ec62, CheckTailsAI_R);
 
-			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in Sonic_Main as we use a custom one.
-			WriteCall((void*)0x4159b8, LoadTails_AI_R); //Load AI with any character. Called during loading.
+			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
+		
+			//AI fixes
+			WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
 
 			//AI SFX Fixes (there is probably a nicer way to do this, but I have no clue how)
 
@@ -246,11 +284,18 @@ extern "C" {
 			WriteCall((void*)0x497a0a, FixAISFXGamma4);
 			WriteCall((void*)0x47fcca, FixAISFXGamma5);
 
+		//fix victory voice result (ai swap)
+
+			WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
+			WriteData<5>((void*)0x414264, 0x90); //Remove Sonic Boss Voice;
+			WriteData<5>((void*)0x41560d, 0x90); //remove knux play voice
+			WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
+			WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
+			WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
+
+
 		}
-		else
-		{
-			WriteCall((void*)0x4159b8, LoadEggman_AI_R); //Eggman Race SH
-		}
+
 
 
 
@@ -358,6 +403,7 @@ extern "C" {
 		WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 			//Amy Stuff
+		WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 		WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 		WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
 
@@ -371,7 +417,6 @@ extern "C" {
 		WriteCall((void*)0x4615b3, FixVictoryTailsVoice); //same 
 		WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
 
-		WriteCall((void*)0x415965, CheckRace); //check if we are racing.
 		WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
 
 		/*Custom Layout / Missions*/
@@ -404,7 +449,10 @@ extern "C" {
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
 
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
-			WriteData<5>((void*)0x50659a, 0x90); //Remove one "SetLevelAndAct" as it's called twice when you select a character for some reason...
+
+
+			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Fix Trial Mode
+	
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
 			WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
@@ -414,7 +462,7 @@ extern "C" {
 			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
 			WriteCall((void*)0x413522, testRefactor);
 
-			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Twinkle Circuit Stuff
+			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Swap Twinkle Circuit message result with a transition to the next level
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 
 		}
@@ -517,22 +565,22 @@ extern "C" {
 
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
-			SetDebugFontSize(10.0f * (float)VerticalResolution / 480.0f);
+			SetDebugFontSize(11.4f * (float)VerticalResolution / 477.0f);
 			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
-			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod or SADX FE,");
-			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer mod is loaded after these mods,");
-			DisplayDebugString(NJM_LOCATION(2, 4), "It should be at the bottom of your mod list.");
+			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
+			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER these mods,");
+			DisplayDebugString(NJM_LOCATION(2, 4), "It should be at the BOTTOM of your mod list.");
 			DCModWarningTimer--;
 		}
 
-		//Display Diffent Seed Warning for speedrunners
-		if (!DCModWarningTimer && Story != 0 && WarningSeed == 1 && GameMode == GameModes_Menu)
+		
+
+		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
-			SetDebugFontSize(10.0f * (float)VerticalResolution / 480.0f);
-			DisplayDebugString(NJM_LOCATION(2, 1), "Warning");
-			DisplayDebugString(NJM_LOCATION(2, 2), "Seed used is different than 0");
-			DisplayDebugString(NJM_LOCATION(2, 3), "Be careful if you plan to submit your run on speedrun.com.");
+			SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "CURRENT SEED: %d", SeedCopy);
 		}
+
 
 		if (CurrentLevel != 38 || CurrentLevel != 8)
 		{
@@ -587,7 +635,7 @@ extern "C" {
 			FreeMemory(oldcol);
 			oldcol = nullptr;
 		}
-
+		
 
 		if (GameMode == 5 && GameState == 15 || GameMode == 4 && GameState == 15 || GameMode == 9 && GameState == 15)
 		{
@@ -595,18 +643,27 @@ extern "C" {
 			HudDisplayScoreOrTimer();
 			HudDisplayRingTimeLife_Check();
 
+			if (SwapDelay != 50)
+				SwapDelay++;
+
+
 			//Debugging
 			if (ControllerPointers[0]->PressedButtons & Buttons_Z && ControllerPointers[0]->PressedButtons & Buttons_X)
 			{
 
+				RaceWinnerPlayer = 1;
 				LoadLevelResults();
 			}
 
-			if (ControllerPointers[0]->PressedButtons & Buttons_Z)
+			//AI Swap
+			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 50 && ControlEnabled == 1)
 			{
-
-				//	AISwitch();
+				
+				SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
+				DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Call AI switch");
+				AISwitch();
 			}
+
 
 
 

@@ -193,14 +193,7 @@ void WindyValleyAct4() {
 
 	if (CurrentAct != 2)
 	{
-		/*if (Mission)
-		{
-			CustomLayout = rand() % 5;
-		}
-		else*/
-		{
-			CustomLayout = rand() % 2;
-		}
+		CustomLayout = rand() % 2;
 
 		switch (CustomLayout)
 		{
@@ -258,23 +251,32 @@ void WindyValleyAct5() {
 	}
 	else
 	{
+		if (CurrentLevel == 2 && CurrentAct == 1)
+		{
+			LoadSetFile(2, "0202"); //load Sonic layout
+			return;
+		}
+		else
+		{
 
-		LoadSetFile(2, "0206"); //load (Metal) Sonic race 
-		Race = true;
-		CurrentAct = 2;
-		if (CurrentCharacter == Characters_Knuckles)
-		{
-			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+			LoadSetFile(2, "0206"); //load (Metal) Sonic race 
+			Race = true;
+			CurrentAct = 2;
+			if (CurrentCharacter == Characters_Knuckles)
+			{
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+			}
+			if (CurrentCharacter == Characters_Amy)
+			{
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+			}
+			if (CurrentCharacter == Characters_Gamma)
+			{
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+			}
+			MetalSonicRace_Init();
 		}
-		if (CurrentCharacter == Characters_Amy)
-		{
-			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-		}
-		if (CurrentCharacter == Characters_Gamma)
-		{
-			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
-		}
-		MetalSonicRace_Init();
+		
 	}
 }
 
