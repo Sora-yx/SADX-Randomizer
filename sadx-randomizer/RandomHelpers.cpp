@@ -28,6 +28,8 @@ extern bool isRandDone;
 int CurrentAI = 0;
 extern bool Race;
 extern int AICopy;
+extern int EggmanRand;
+extern int TikalRand;
 
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
@@ -65,96 +67,60 @@ short randomacts(RandomizedEntry entry) {
 	{
 	case LevelIDs_EmeraldCoast:
 		if (entry.character == Characters_Sonic)
-		{
 			return 2;
-		}
 		else
 			if (entry.character == Characters_Big)
-			{
 				return 0;
-			}
 			else
-			{
 				return actHS[rand() % 2];
-			}
 		break;
 	case LevelIDs_WindyValley:
 		if (entry.character == Characters_Sonic || entry.character == Characters_Big || entry.character == Characters_Tails)
-		{
 			return 0;
-		}
 		else
-		{
 			return actHS[rand() % 2];
-		}
 		break;
 	case LevelIDs_TwinklePark:
 		if (entry.character == Characters_Sonic || entry.character == Characters_Gamma)
-		{
 			return 1;
-		}
 		else
 		{
 			if (entry.character == Characters_Amy)
-			{
 				return 0;
-			}
 			else
-			{
 				return actHS[rand() % 2];
-			}
 		}
 		break;
 	case LevelIDs_RedMountain:
 		if (entry.character == Characters_Gamma)
-		{
 			return 0;
-		}
 		if (entry.character == Characters_Sonic)
-		{
 			return 1;
-		}
 		else
-		{
 			return rand() % 2;
-		}
 		break;
 	case LevelIDs_IceCap:
 		if (entry.character == Characters_Big)
-		{
 			return 1;
-		}
 		else
-		{
 			return 0;
-		}
 		break;
 	case LevelIDs_Casinopolis:
 		if (entry.character == Characters_Sonic)
-		{
 			return 1;
-		}
 		else
 		{
 			if (entry.character == Characters_Tails)
-			{
 				return 0;
-			}
 			else
-			{
 				return rand() % 2;
-			}
 		}
 		break;
 	case LevelIDs_HotShelter:
 		if (entry.character == Characters_Gamma)
-		{
 			return 0;
-		}
 		else
-		{
 			return actHS[rand() % 2];
-		}
 		break;
 	case LevelIDs_TwinkleCircuit:
 		do {
@@ -271,9 +237,8 @@ void testRefactor(char stage, char act) {
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
 	{
 		if (RNGCharacters)
-		{
 			CurrentCharacter = randomizedSets[levelCount].character;
-		}
+		
 		LastLevel = CurrentLevel;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
@@ -318,10 +283,7 @@ void GoToNextLevel_hook(char stage, char act) {
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
 	{
 		if (RNGCharacters)
-		{
 			CurrentCharacter = randomizedSets[levelCount].character;
-		}
-
 
 		LastLevel = CurrentLevel;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
@@ -368,6 +330,8 @@ void CancelResetPosition() {
 	NextLevel = LastLevel;
 	NextAct = LastAct;
 	SonicRand = 0;
+	TikalRand = 0;
+	EggmanRand = 0;
 	CustomLayout = 0;
 	AICopy = 0;
 	isRandDone = false;
@@ -416,16 +380,20 @@ void TwinkleCircuitMusic() {
 		TwinkleCircuitRNG = rand() % 2;
 
 		if (TwinkleCircuitRNG == 0)
-		{
 			WriteData<1>((char*)0x004DAB4E, 0x57);
-		}
-		else
-		{
-			WriteData<1>((char*)0x004DAB4E, 0x19);
-		}
+			else
+				WriteData<1>((char*)0x004DAB4E, 0x19);
 
 	}
 
 
 }
 
+int RageQuit = 0;
+
+void GetStats() {
+
+	RageQuit++;
+	EndLevelStuff();
+
+}

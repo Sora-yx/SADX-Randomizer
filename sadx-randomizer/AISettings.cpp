@@ -19,6 +19,8 @@ int CharaSwap = 0;
 extern int SwapDelay;
 extern int TikalRand;
 extern int EggmanRand;
+int AICount;
+
 
 //This is where all the AI is managed: Rand, loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
 
@@ -108,6 +110,8 @@ int CheckTailsAI_R(void) {
 			return 0;
 		}
 
+
+
 	}
 
 	//Header
@@ -149,7 +153,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 					if (CurrentCharacter == Characters_Sonic)
 						CurrentAI = Characters_Tails; //don't rand and just call tails AI 
 
-			} while (CurrentCharacter == CurrentAI);
+			} while (CurrentCharacter == CurrentAI || (CurrentLevel == LevelIDs_TwinklePark && (CurrentAI == Characters_Eggman || CurrentAI == Characters_Tikal)));
 		}
 			
 		
@@ -317,7 +321,6 @@ void FixAISFXGamma5() {
 
 
 
-
 //Result Voice FIX
 void ResultVoiceFix() {
 
@@ -369,12 +372,7 @@ void ResultVoiceFix() {
 
 }
 
-CollisionInfo* oldcol = nullptr;
-
 FunctionPointer(void, sub_43FA90, (EntityData1* a1, CharObj2** a2, CharObj2* a3), 0x43FA90);
-
-
-
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 {
 	for (int i = 0; i < 8; i++)
@@ -385,19 +383,36 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 
 
 
+CollisionInfo* oldcol = nullptr;
+
+
 void AISwitch() {
 
-	if (SonicRand == 0 && isAIActive) //don't allow the swap if metal sonic or super sonic.
+		if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
 		//initialize swap, taking actual character and ai information
 
-		if (CurrentCharacter <= 5 && CurrentAI <= 5 && CurrentLevel != 15)
+		if (CurrentCharacter <= 5 && CurrentAI <= 5)
 		{
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
+			AICount++; //credits stat
 
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
+
+			if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
+			{
+				switch (obj->Data1->Action)
+				{
+				case 45:
+					return;
+					break;
+				case 48:
+					return;
+					break;
+				}
+			}
 			obj->DeleteSub(obj);
 			short powerups = obj2->Powerups;
 			short jumptime = obj2->JumpTime;
@@ -410,10 +425,15 @@ void AISwitch() {
 			obj->MainSub = charfuncs[CharaSwap];
 			obj->Data1->CharID = (char)CharaSwap;
 
+			//Play voice switch
 			switch (obj->Data1->CharID)
 			{
 			case Characters_Sonic:
-				PlayVoice(4000);
+				if (MetalSonicFlag == 0)
+					PlayVoice(4000);
+				break;
+			case Characters_Eggman:
+				PlayVoice(4005);
 				break;
 			case Characters_Tails:
 				PlayVoice(4001);
@@ -477,7 +497,7 @@ void AISwitch() {
 			AI2->Speed = speed;
 			AI2->ObjectHeld = heldobj;
 
-			SwapDelay = 0;
+			SwapDelay = 0; 
 
 
 		}
@@ -486,8 +506,6 @@ void AISwitch() {
 }
 
 	
-
-
 
 //Load AI
 

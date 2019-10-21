@@ -6,6 +6,7 @@
 
 HelperFunctions extern help;
 
+
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data

@@ -18,7 +18,6 @@ void MetalSonicRace_Init()
 {
 	//help.ReplaceFile("system\\WINDY_BACK3.pvm", "system\\textures\\final-rush-bg.pvmx"); //swap WV background by final rush one
 
-
 	if (SonicCD == 0)
 	{
 		CDSong = rand() % 3;

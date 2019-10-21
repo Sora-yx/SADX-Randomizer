@@ -6,7 +6,7 @@
 
 int SonicRand = 0;
 int TransfoCount = 0;
-bool loaded;
+bool BounceLoaded;
 int TikalRand = 0;
 int EggmanRand = 0;
 bool isRandDone = false;
@@ -16,6 +16,7 @@ extern bool CreditCheck;
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
 extern bool isAIAllowed;
+bool BounceActive = false;
 
 
 //Characters Settings, Load, Eggman and Tikal stuff.
@@ -79,13 +80,6 @@ void LoadCharacter_r()
 			EggmanRand = rand() % 2;
 			isRandDone = true;
 		}
-		else
-		{
-			TikalRand = 0;
-			EggmanRand = 0;
-			isRandDone = false;
-		}
-
 
 		CheckRace();
 
@@ -174,10 +168,10 @@ HelperFunctions extern help;
 
 //Super Sonic Random transformation, used when the timer for a stage start. Also used to call some specific function and fixes.
 
-
 void SuperSonicStuff() {
 
 	TimeThing = 1; //activate the timer of the stage.
+
 
 	if (CurrentCharacter != Characters_Sonic && CustomLayout == 0)
 	{
@@ -321,38 +315,10 @@ void FixGammaHitBounce() {
 }
 
 
-//doesn't work if I put it on characters.h for some reason................... 
-
 void BigWeightHook() {
 
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 2000; //display 2000g for Big
-}
-
-// Metal Sonic Race stuff
-
-void SwapSonicTextures(NJS_TEXLIST* sonictex) {
-
-		if (MetalSonicFlag == 1) {
-			LoadPVM("METALSONIC", &METALSONIC_TEXLIST); //called every frame but effectively loads texture only once, don't worry.
-			njSetTexture(&METALSONIC_TEXLIST);
-		}
-		else {
-			njSetTexture(sonictex);
-		}
-}
-
-void SwapMetalSonic(EntityData1* entity1, EntityData2* entity2, CharObj2* obj2) {
-
-		if (entity1->CharIndex == 1) {
-			MetalSonicFlag = 1;
-		}
-		else {
-			MetalSonicFlag = 0;
-		}
-
-		Sonic_Act1(entity1, entity2, obj2);
-
 }
 
 

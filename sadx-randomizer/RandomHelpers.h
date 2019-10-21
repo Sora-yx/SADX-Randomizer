@@ -124,6 +124,8 @@ VoidFunc(EndLevelStuff, 0x4179bc);
 
 ObjectFunc(Result_Score, 0x4141f0);
 
+VoidFunc(ScreenTextureVer, 0x432ea0);
+
 VoidFunc(SetupZero, 0x4b3eb0);
 VoidFunc(CheckLoadZero, 0x486a40);
 
@@ -139,11 +141,21 @@ DataPointer(char, FirstHotShelterSwitch, 0x3c72a40);
 
 DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
+
+DataPointer(char, TitleCardStuff, 0x3c53abc);
+DataPointer(char, TitleCardStuff2, 0x3c53abd);
+DataPointer(char, GetLevelType, 0x3c53abf);
+DataPointer(char, dword_03b28114, 0x3b28114);
+
+DataPointer(char, DWORD_03c53ac4, 0x3c53ac4);
+
+
 void LoadTails_AI_R();
 
 
 int IsFastSonicAI_R(void);
 int CheckTailsAI_R(void);
+int DisplayTitleCard_R(void);
 
 //int FunnyTest(void);
 
@@ -157,3 +169,4 @@ void DisableTime_Zero();
 void AISwitch();
 
 void SetLevelAndAct_R(); //fix trial mod 
+void GetStats(); //get stats for credits

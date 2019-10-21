@@ -190,9 +190,8 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void WindyValleyAct4() { 
 
-
-	if (CurrentAct != 2)
-	{
+	if (!Race & CurrentAct != 2)
+	{ 
 		CustomLayout = rand() % 2;
 
 		switch (CustomLayout)
@@ -239,7 +238,7 @@ void WindyValleyAct4() {
 }
 
 void WindyValleyAct5() {
-	if (CurrentAct == 0)
+	if (CurrentAct == 0 && !Race)
 	{
 		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Sonic)
 		{
@@ -251,14 +250,13 @@ void WindyValleyAct5() {
 	}
 	else
 	{
-		if (CurrentLevel == 2 && CurrentAct == 1)
+		if (CurrentLevel == 2 && !Race)
 		{
 			LoadSetFile(2, "0202"); //load Sonic layout
 			return;
 		}
 		else
 		{
-
 			LoadSetFile(2, "0206"); //load (Metal) Sonic race 
 			Race = true;
 			CurrentAct = 2;

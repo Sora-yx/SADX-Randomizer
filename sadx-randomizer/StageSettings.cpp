@@ -18,6 +18,8 @@ extern bool isAIAllowed;
 extern bool isAIActive;
 extern bool isRandDone;
 extern int CurrentAI;
+extern int EggmanRand;
+extern int TikalRand;
 
 //While load result: Avoid getting the same character twice in a row, "fix" game crash. (There is probably a better way to do this.)
 void DisableTimeStuff() {
@@ -31,6 +33,8 @@ void DisableTimeStuff() {
 	TimeThing = 0;
 	SonicRand = 0;
 	isRandDone = false;
+	EggmanRand = 0;
+	TikalRand = 0;
 	ResultVoiceFix();
 	Credits_CanSkip = 1;
 
@@ -150,35 +154,29 @@ void LoadZero() {
 
 
 	if (CurrentLevel == LevelIDs_HotShelter)
-	{
 		PressedSwitches_Reset();
-	}
-	else
-	{
-		if (CurrentLevel == LevelIDs_FinalEgg)
+	
+
+	if (CurrentLevel == LevelIDs_FinalEgg)
 		{
 			camerahax_b();
 			RNGDoor = rand() % 5;
 		}
-		else
-		{
-			if (CurrentLevel == LevelIDs_TwinklePark)
-			{
-				SetCameraControlEnabled(1);
 
-			}
-		}
-	}
+	if (CurrentLevel == LevelIDs_TwinklePark)
+		SetCameraControlEnabled(1);
+
 	if (CurrentCharacter == Characters_Amy)
-	{
 		return;
-	}
-	else
-	{
+
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout == 0) //don't load Zero if Sonic Layout
+		return;
+
+
 		static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
 		LoadPVM("EGGROB", &EGGROB_TEXLIST);
 		CheckLoadZero();
-	}
+	
 }
 
 
@@ -195,9 +193,7 @@ void TwinkleCircuitResult() {
 void LoadEggmanAI() {
 
 	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-	{
 		return;
-	}
 
 	if (CurrentLevel == 4 && CurrentAct == 0)
 	{
@@ -257,16 +253,11 @@ int IsFastSonicAI_R(void) {
 		{
 		case LevelIDs_WindyValley:
 			if (CustomLayout == 4 && CurrentAct == 2)
-			{
 				return FastSonicAI = 1;
-
-			}
 			break;
 		case LevelIDs_SkyDeck:
 			if (CustomLayout == 3 && CurrentAct == 0)
-			{
 				return FastSonicAI = 1;
-			}
 			break;
 
 		default:
@@ -282,18 +273,14 @@ int IsFastSonicAI_R(void) {
 void CheckRings() {
 
 	if (GameMode == 4 && Rings == 100 && CustomLayout != 0)
-	{
 		LoadLevelResults();
-	}
 
 }
 
 void CheckChao() {
 
 	if (GameMode == 4 && Rings == 100)
-	{
 		LoadLevelResults();
-	}
 
 }
 
@@ -312,13 +299,9 @@ void FixRollerCoaster() {
 void SHAct2Position() {
 
 	if (CurrentCharacter != Characters_Sonic)
-	{
 		PositionPlayer(0, 10, -10000, 10);
-	}
 	else
-	{
 		ForcePlayerAction(0, 0x2b);
-	}
 	
 }
 

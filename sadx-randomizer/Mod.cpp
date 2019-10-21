@@ -5,6 +5,8 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 
+
+//global Randomizer settings
 int Story;
 
 bool RNGCharacters = true;
@@ -57,8 +59,6 @@ int SeedCopy = 0;
 time_t t;
 
 
-
-
 extern "C" {
 
 
@@ -103,14 +103,12 @@ extern "C" {
 		{
 			srand(seed);
 			WarningSeed = 300;
-			
 		}
 		else
 			srand((unsigned)time(&t));
 
 		SeedCopy = seed;
 		
-			
 
 
 		if (banCharacter[0] || banCharacter[2] || banCharacter[3] || banCharacter[5] || banCharacter[7] || banCharacter[6])
@@ -118,12 +116,17 @@ extern "C" {
 			ban = +1;
 		}
 
+		//get current mod information
+
 		HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
 		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
-		if (DCMod || SADXFE)
-		{
-			DCModWarningTimer = 400;
-		}
+		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
+
+		if (DCMod && !DCLight)
+			return; //don't display the DC Warning if Lantern Engine is missing.
+		else
+			if (DCMod || SADXFE)
+				DCModWarningTimer = 350;
 
 		if (helperFunctions.Version < 7)
 		{
@@ -133,12 +136,6 @@ extern "C" {
 			return;
 		}
 
-		HMODULE BetterTails = GetModuleHandle(L"Better-Tails-AI");
-		if (BetterTails)
-		{
-			MessageBoxA(WindowHandle, "Error, Better Tails is incompatible with Randomizer as it is already included, please disable Better Tails.", "Randomizer", MB_ICONERROR);
-			return;
-		}
 
 		//Activate all the edited stages to make them beatable.
 
@@ -236,9 +233,6 @@ extern "C" {
 			WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 		}
 
-		//WriteData<6>((void*)0x48ADA5, 0x90u); //don't load Amy Bird
-		//WriteCall((void*)0x04c6820, GetCharacter0ID);
-		
 
 		WriteCall((void*)0x5114eb, AllUpgrades);
 
@@ -301,146 +295,6 @@ extern "C" {
 
 		//WriteCall((void*)0x4166f6, MissionObject); //I need to make it
 		//WriteCall((void*)0x41674e, MissionObject); //I need to make it 
-
-		/*
-		//Randomizer Fixes
-		*/
-
-		//Stages Fixes
-
-
-			//EC
-		WriteData<5>((void*)0x4f6afa, 0x90); //hook GetCurrentCharacterID when you enter at Emerald Coast act 2.
-
-			//Twinkle Park
-		WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
-		WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
-		WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
-		WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
-		WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
-
-			//Speed Highway
-		WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
-		WriteCall((void*)0x610272, SHAct2Position); //teleport player during SH act 2.
-
-				//Red Mountain
-		WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
-		WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge part 1
-		WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
-		WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
-
-			//Allow Tails at Red Mountain and Emerald Coast act 2.
-		WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
-		WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
-
-			//Hot Shelter Stuff
-		WriteCall((void*)0x4c5797, HotShelterHandle);
-		WriteData<1>((void*)0x4c5756, 0x00);
-		WriteData<1>((void*)0x4c57a2, 0x74);
-
-		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result.
-
-					//Miscelleanous
-		WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
-		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
-		WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
-
-			//Zero Stuff
-		WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
-		WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
-		WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
-		WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
-
-
-		/*
-		//Bosses Fixes
-		*/
-		WriteCall((void*)0x584430, FixGammaBounce); //Fix infinite Gamma bounce on Egg Viper Fight.
-		WriteCall((void*)0x580bed, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight. 
-		WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol 
-
-		WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (fix crash)
-		WriteCall((void*)0x4230a0, EggViperVoice); //Load Different Eggman Voice, depending on the character. (LoadCamFile hook)
-
-		WriteCall((void*)0x5872ed, DisableTime_Zero); //Prevent character from hiting Zero again once it's defeated.
-
-		//Chaos 4 Stuff
-		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
-
-		//WriteData<6>((void*)0x5525fe, 0x91AEF8);
-		//WriteCall((void*)0x5525fe, FunnyTest);
-		WriteData<1>((void*)0x5525fe, 0xd8);
-
-		WriteData<1>((void*)0x552500, 0xF8); //Reduce HP even more.
-		WriteData<1>((void*)0x552501, 0xAE);
-		WriteData<1>((void*)0x552502, 0x91);
-
-		//Chaos 6 stuff
-		WriteData<1>((void*)0x5598f0, 0x00); //makes the bomb spawns for every character. (if ivar == 0)
-		WriteData<1>((void*)0x5598f1, 0x0075); //makes the bomb spawns for every character part 2. (convert JZ to JNZ this is important.)
-		WriteData<1>((void*)0x55a189, 0x0075); //Force Chaos to act like if you were playing Sonic or Knuckles. (attack, pattern etc.)
-		WriteData<5>((void*)0x559d3a, 0x90); //Display Chaos 6 life gauge while using a wrong character and fix camera issue.
-
-			//E101 Stuff
-		WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
-
-
-
-		/*
-		//Characters Fixes
-		*/
-
-		//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
-		WriteData<5>((void*)0x478937, 0x90);
-		WriteData<5>((void*)0x478AFC, 0x90);
-		WriteData<5>((void*)0x47B395, 0x90);
-		WriteData<5>((void*)0x47B423, 0x90);
-
-		//Super Sonic Stuff
-		WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
-		WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
-		WriteCall((void*)0x4167da, SuperSonicStuff); //Call Super Sonic when a stage start.
-		WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
-
-			//Amy Stuff
-		WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
-		WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
-		WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-
-
-			//Sonic Race Stuff
-		WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
-		WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
-
-		WriteData<1>((void*)0x47DA01, 0x4); //prevent Casinopolis Race
-		WriteCall((void*)0x4616d5, FixVictoryTailsVoice); //Prevent Tails's victory voice to play when not Tails lol.
-		WriteCall((void*)0x4615b3, FixVictoryTailsVoice); //same 
-		WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
-
-		WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
-
-		/*Custom Layout / Missions*/
-
-
-
-		//Fix Camera while using wrong character
-		WriteCall((void*)0x422c09, CamWindyValley);
-		WriteCall((void*)0x422cdf, CamSpeedHighway); //SH
-		WriteCall((void*)0x422d59, CamRedMountain); //RM
-		WriteCall((void*)0x422fb6, CamFinalEgg); //RM
-
-		WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-
-
-		//Load different layout for the same act and character combination. (Really important for acts RNG so you can get a different layout)
-		WriteCall((void*)0x42300b, HotShelterAct4); //HS
-		WriteCall((void*)0x422bdf, WindyValleyAct4); //WV
-		WriteCall((void*)0x422bfd, WindyValleyAct5);
-		//WriteCall((void*)0x422c59, TwinkleParkAct4); //TPs //need to find a way to fix character position.
-		WriteCall((void*)0x422d2f, RedMountainAct4); //RM
-		WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH
-		WriteCall((void*)0x422d90, SkyDeckAct4); //SD
-		WriteCall((void*)0x422f7d, FinalEggAct4); //FE
 
 		if (RNGStages == true)
 		{
@@ -556,9 +410,154 @@ extern "C" {
 			myfile << "</Segments>\n<AutoSplitterSettings />\n</Run>";
 			myfile.close();
 		}
+	
+
+
+	/*
+	//Randomizer Fixes
+	*/
+
+	//Stages Fixes
+
+
+		//EC
+	WriteData<5>((void*)0x4f6afa, 0x90); //hook GetCurrentCharacterID when you enter at Emerald Coast act 2.
+
+		//Twinkle Park
+	WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
+	WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
+	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
+	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
+	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
+
+		//Speed Highway
+	WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
+	WriteCall((void*)0x610272, SHAct2Position); //teleport player during SH act 2.
+
+			//Red Mountain
+	WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
+	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge part 1
+	WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
+	WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
+
+		//Allow Tails at Red Mountain and Emerald Coast act 2.
+	WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
+	WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
+
+		//Hot Shelter Stuff
+	WriteCall((void*)0x4c5797, HotShelterHandle);
+	WriteData<1>((void*)0x4c5756, 0x00);
+	WriteData<1>((void*)0x4c57a2, 0x74);
+
+	WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result.
+
+				//Miscelleanous
+	WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
+	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
+	WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
+
+		//Zero Stuff
+	WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
+	WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
+	WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
+	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
+
+
+	/*
+	//Bosses Fixes
+	*/
+	WriteCall((void*)0x584430, FixGammaBounce); //Fix infinite Gamma bounce on Egg Viper Fight.
+	WriteCall((void*)0x580bed, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight. 
+	WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol 
+
+	WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (fix crash)
+	WriteCall((void*)0x4230a0, EggViperVoice); //Load Different Eggman Voice, depending on the character. (LoadCamFile hook)
+
+	WriteCall((void*)0x5872ed, DisableTime_Zero); //Prevent character from hiting Zero again once it's defeated.
+
+	//Chaos 4 Stuff
+	WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
+
+	//WriteData<6>((void*)0x5525fe, 0x91AEF8);
+	//WriteCall((void*)0x5525fe, FunnyTest);
+	WriteData<1>((void*)0x5525fe, 0xd8);
+
+	WriteData<1>((void*)0x552500, 0xF8); //Reduce HP even more.
+	WriteData<1>((void*)0x552501, 0xAE);
+	WriteData<1>((void*)0x552502, 0x91);
+
+	//Chaos 6 stuff
+	WriteData<1>((void*)0x5598f0, 0x00); //makes the bomb spawns for every character. (if ivar == 0)
+	WriteData<1>((void*)0x5598f1, 0x0075); //makes the bomb spawns for every character part 2. (convert JZ to JNZ this is important.)
+	WriteData<1>((void*)0x55a189, 0x0075); //Force Chaos to act like if you were playing Sonic or Knuckles. (attack, pattern etc.)
+	WriteData<5>((void*)0x559d3a, 0x90); //Display Chaos 6 life gauge while using a wrong character and fix camera issue.
+
+		//E101 Stuff
+	WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
+
+
+
+	/*
+	//Characters Fixes
+	*/
+
+	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
+	WriteData<5>((void*)0x478937, 0x90);
+	WriteData<5>((void*)0x478AFC, 0x90);
+	WriteData<5>((void*)0x47B395, 0x90);
+	WriteData<5>((void*)0x47B423, 0x90);
+
+	//Super Sonic Stuff
+	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
+	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
+	WriteCall((void*)0x4167da, SuperSonicStuff); //Call Super Sonic when a stage start.
+	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
+
+		//Amy Stuff
+	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
+	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
+	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
+
+
+		//Sonic Race Stuff
+	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
+	WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
+
+	WriteData<1>((void*)0x47DA01, 0x4); //prevent Casinopolis Race
+	WriteCall((void*)0x4616d5, FixVictoryTailsVoice); //Prevent Tails's victory voice to play when not Tails lol.
+	WriteCall((void*)0x4615b3, FixVictoryTailsVoice); //same 
+	WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
+
+	WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
+
+	//Tikal and Eggman
+	WriteData<3>((void*)0x7b43ba, 0x90); //remove debug mod
+	WriteData<1>((void*)0x7b527b, 0x08); // // //
+
+	/*Custom Layout / Missions*/
+
+
+
+	//Fix Camera while using wrong character
+	WriteCall((void*)0x422c09, CamWindyValley);
+	WriteCall((void*)0x422cdf, CamSpeedHighway); //SH
+	WriteCall((void*)0x422d59, CamRedMountain); //RM
+	WriteCall((void*)0x422fb6, CamFinalEgg); //RM
+
+	WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
+
+
+	//Load different layout for the same act and character combination. (Really important for acts RNG so you can get a different layout)
+	WriteCall((void*)0x42300b, HotShelterAct4); //HS
+	WriteCall((void*)0x422bdf, WindyValleyAct4); //WV
+	WriteCall((void*)0x422bfd, WindyValleyAct5);
+	//WriteCall((void*)0x422c59, TwinkleParkAct4); //TPs //need to find a way to fix character position.
+	WriteCall((void*)0x422d2f, RedMountainAct4); //RM
+	WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH
+	WriteCall((void*)0x422d90, SkyDeckAct4); //SD
+	WriteCall((void*)0x422f7d, FinalEggAct4); //FE
+
 	}
-
-
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		//Display DC Conversion warning
@@ -578,8 +577,28 @@ extern "C" {
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
 			SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "CURRENT SEED: %d", SeedCopy);
+			//SetDebugFontColor(0xf7ffffff);
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
+			if (Vanilla)
+				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Banned");
+			else
+				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
+			switch (Story)
+			{
+			case 1:
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Sonic's Story");
+				break;
+			case 2:
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: All Stories");
+				break;
+			case 3:
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Any%");
+				break;
+			}
+		
+			
 		}
+
 
 
 		if (CurrentLevel != 38 || CurrentLevel != 8)
@@ -658,14 +677,10 @@ extern "C" {
 			//AI Swap
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 50 && ControlEnabled == 1)
 			{
-				
-				SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-				DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Call AI switch");
 				AISwitch();
 			}
 
-
-
+	
 
 			// Increase their MaxAccel so they can complete stages they are not meant to.
 

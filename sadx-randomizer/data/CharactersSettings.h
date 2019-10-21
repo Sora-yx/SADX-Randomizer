@@ -43,3 +43,4 @@ void FixAISFXGamma5();
 int GetCharacter0ID();
 int GetCharacter1ID();
 void ResultVoiceFix();
+void CallBounce();
