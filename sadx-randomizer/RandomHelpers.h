@@ -146,6 +146,7 @@ DataPointer(char, TitleCardStuff, 0x3c53abc);
 DataPointer(char, TitleCardStuff2, 0x3c53abd);
 DataPointer(char, GetLevelType, 0x3c53abf);
 DataPointer(char, dword_03b28114, 0x3b28114);
+DataPointer(char, TitleCardCounter, 0x3C53ABD);
 DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
 DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
 DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);

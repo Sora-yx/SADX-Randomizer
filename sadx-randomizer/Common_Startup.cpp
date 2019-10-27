@@ -8,7 +8,7 @@ NJS_TEXNAME Missions[10];
 int CurrentMission = 0;
 
 void LoadStageMissionImage_r() {
-	if (GetLevelType) {
+	if (GetLevelType == 0) {
 		StageMissionTexlist.textures = Missions;
 		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
 		LoadPVM("textures\\Missions", &StageMissionTexlist);
@@ -22,6 +22,17 @@ void LoadStageMissionImage_r() {
 	}
 }
 
+int DisplayTitleCard_r() {
+	if (GetLevelType == 0) {
+		return DisplayTitleCard();
+	}
+	else {
+		if (++TitleCardCounter > TitleCardDispTime) return 1;
+	}
+
+	return 0;
+}
+
 int LoadTitleCardTexture_r(int minDispTime) {
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -33,15 +44,21 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	Direct3D_SetNearFarPlanes(-1.0, -3000.0);
 	TitleCardStuff = 2;
 	TitleCardStuff2 = 0;
-	GetLevelType = 1;
-
-	TitleCardDispTime = 180;
-	if (minDispTime) {
-		TitleCardDispTime = minDispTime;
+	
+	if (CurrentLevel > 14) {
+		GetLevelType = 1;
 	}
+	else {
+		GetLevelType = 0;
 
-	LoadPVM("textures\\RandomTitleCard", &CurrentCardTexture);
-	CurrentCardTexturePtr = &CurrentCardTexture;
+		TitleCardDispTime = 180;
+		if (minDispTime) {
+			TitleCardDispTime = minDispTime;
+		}
+
+		LoadPVM("textures\\RandomTitleCard", &CurrentCardTexture);
+		CurrentCardTexturePtr = &CurrentCardTexture;
+	}
 
 	return 1;
 }
@@ -73,5 +90,6 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 
 	WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
+	WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 }
