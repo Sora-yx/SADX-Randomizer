@@ -148,6 +148,7 @@ DataPointer(char, GetLevelType, 0x3c53abf);
 DataPointer(char, dword_03b28114, 0x3b28114);
 DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
 DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
+DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
 DataPointer(char, DWORD_03c53ac4, 0x3c53ac4);
 

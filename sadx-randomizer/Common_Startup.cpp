@@ -4,6 +4,24 @@
 
 HelperFunctions help;
 
+NJS_TEXNAME Missions[10];
+int CurrentMission = 0;
+
+void LoadStageMissionImage_r() {
+	if (GetLevelType) {
+		StageMissionTexlist.textures = Missions;
+		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
+		LoadPVM("textures\\Missions", &StageMissionTexlist);
+		MissionSpriteAnim.texid = CurrentMission;
+
+		ObjectMaster *obj = LoadObject(LoadObj_Data1, 6, (ObjectFuncPtr)0x457B60);
+		obj->Data1->InvulnerableTime = 120;
+		obj->Data1->Position.x = 320.0;
+		obj->Data1->Position.y = 360.0;
+		obj->DeleteSub = FreeStageMissionImage;
+	}
+}
+
 int LoadTitleCardTexture_r(int minDispTime) {
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -55,4 +73,5 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 
 	WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
+	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 }
