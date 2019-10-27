@@ -4,9 +4,32 @@
 
 HelperFunctions help;
 
+int LoadTitleCardTexture_r(int minDispTime) {
+	SoundManager_Delete2();
+	dword_03b28114 = 0;
+	ScreenTextureVer();
+	SetFrameRateMode(1, 1);
+	SetDefaultAlphaBlend();
+	DisableFog();
+	SetGlobalPoint2Col_Colors(0xff000000, 0xff000000, 0xff000000);
+	Direct3D_SetNearFarPlanes(-1.0, -3000.0);
+	TitleCardStuff = 2;
+	TitleCardStuff2 = 0;
+	GetLevelType = 1;
+
+	TitleCardDispTime = 180;
+	if (minDispTime) {
+		TitleCardDispTime = minDispTime;
+	}
+
+	LoadPVM("textures\\RandomTitleCard", &CurrentCardTexture);
+	CurrentCardTexturePtr = &CurrentCardTexture;
+
+	return 1;
+}
+
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions)
 {
-
 	//Initiliaze data
 	help = helperFunctions; //so we can use it everywhere
 
@@ -14,7 +37,6 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3000.wma", "system\\voices\\SuperSonicTransformation.wma"); //Introduce Super Sonic voice transformation
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3001.wma", "system\\voices\\LoadAura.wma"); //Introduce Super Sonic Aura Sound.
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\2053.wma", "system\\voices\\StageLoad.wma"); //Introduce Stage Load Sound
-	helperFunctions.ReplaceFile("system\\A_STAGE01_E.PVR", "system\\textures\\RandomTitleCard.pvr");
 
 	helperFunctions.ReplaceFile("system\\ENDBG_SONIC_0.PVM", "system\\textures\\ENDBG_RANDOMIZER_0.pvmx"); //background credits
 
@@ -31,49 +53,6 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5000.wma", "system\\voices\\Bounce.wma"); //Introduce Sonic bounce sfx
 	
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
-	//ResizeTextureList(&CON_REGULAR_TEXLIST, 75);
+
+	WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
 }
-
-
-
-
-
-int LoadTitleCardTexture_r(int param_1)
-
-{
-	int iVar1;
-	char* pcVar2;
-	int Character;
-	int LvlAct;
-
-	SoundManager_Delete2();
-	dword_03b28114 = 0;
-	ScreenTextureVer();
-	SetFrameRateMode(1, 1);
-	SetDefaultAlphaBlend();
-	DisableFog();
-	SetGlobalPoint2Col_Colors(0xff000000, 0xff000000, 0xff000000);
-	Direct3D_SetNearFarPlanes(0xbf800000, 0xc53b8000);
-	TitleCardStuff = 2;
-	TitleCardStuff2 = 0;
-	TitleCardDispTime = 0xb4;
-	if (param_1 != 0) {
-		TitleCardDispTime = (int)param_1;
-	}
-
-
-	if (CurrentLevel > 15 || CurrentLevel > 25)
-		GetLevelType = 1;
-	else
-		GetLevelType = 0;
-
-
-
-		/*DWORD_03c53ac4 = &;0091c548
-
-	iVar1 = njLoadTexture_Wrapper(*DWORD_03c53ac4);
-	return (int)(iVar1 != -1) - 1;*/
-
-}
-
-
