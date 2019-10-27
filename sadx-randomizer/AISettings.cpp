@@ -110,6 +110,12 @@ int CheckTailsAI_R(void) {
 			return 0;
 		}
 
+		if (CurrentLevel == LevelIDs_SpeedHighway && Race)
+		{
+			isAIActive = false;
+			return 0; //avoid funny crash
+		}
+
 
 
 	}
@@ -153,7 +159,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 					if (CurrentCharacter == Characters_Sonic)
 						CurrentAI = Characters_Tails; //don't rand and just call tails AI 
 
-			} while (CurrentCharacter == CurrentAI || (CurrentLevel == LevelIDs_TwinklePark && (CurrentAI == Characters_Eggman || CurrentAI == Characters_Tikal)));
+			} while (CurrentCharacter == CurrentAI || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0);
 		}
 			
 		
@@ -388,7 +394,10 @@ CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
 
-		if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
+		return;
+		
+	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
 		//initialize swap, taking actual character and ai information
 

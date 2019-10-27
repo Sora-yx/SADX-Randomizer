@@ -61,12 +61,10 @@ int LoadTitleCardTexture_r(int param_1)
 		TitleCardDispTime = (int)param_1;
 	}
 
-
 	if (CurrentLevel > 15 || CurrentLevel > 25)
 		GetLevelType = 1;
 	else
 		GetLevelType = 0;
-
 
 
 		/*DWORD_03c53ac4 = &;0091c548

@@ -240,7 +240,7 @@ void WindyValleyAct4() {
 void WindyValleyAct5() {
 	if (CurrentAct == 0 && !Race)
 	{
-		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Sonic)
+		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Gamma)
 		{
 			Race = false;
 			CurrentAct = 0;
@@ -267,10 +267,6 @@ void WindyValleyAct5() {
 			if (CurrentCharacter == Characters_Amy)
 			{
 				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-			}
-			if (CurrentCharacter == Characters_Gamma)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 			}
 			MetalSonicRace_Init();
 		}

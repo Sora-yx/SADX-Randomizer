@@ -50,7 +50,6 @@ int SwapDelay = 50;
 int CustomFlag = 0; //Used for progression story and credits
 
 int DCModWarningTimer = 0;
-int WarningSeed = 0;
 extern int CurrentAI;
 extern bool isAIActive;
 extern CollisionInfo* oldcol;
@@ -74,8 +73,8 @@ extern "C" {
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
-		RNGVoices = config->getBool("Randomizer", "RNGVoices", false);
-		RNGMusic = config->getBool("Randomizer", "RNGMusic", false);
+		RNGVoices = config->getBool("Randomizer", "RNGVoices", true);
+		RNGMusic = config->getBool("Randomizer", "RNGMusic", true);
 		SonicCD = config->getInt("Randomizer", "SonicCD", 0);
 		Missions = config->getBool("Randomizer", "Missions", true);
 
@@ -102,7 +101,6 @@ extern "C" {
 		if (seed)
 		{
 			srand(seed);
-			WarningSeed = 300;
 		}
 		else
 			srand((unsigned)time(&t));
@@ -123,7 +121,7 @@ extern "C" {
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
 
 		if (DCMod && !DCLight)
-			return; //don't display the DC Warning if Lantern Engine is missing.
+			return; //don't display the DC Warning message if Lantern Engine is missing.
 		else
 			if (DCMod || SADXFE)
 				DCModWarningTimer = 350;
@@ -583,20 +581,25 @@ extern "C" {
 				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Banned");
 			else
 				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
+
+			if (ban != 0)
+				DisplayDebugString(NJM_LOCATION(2, 3), "Character Roster: Edited.");
+			else
+				DisplayDebugString(NJM_LOCATION(2, 3), "Character Roster: Normal.");
+
 			switch (Story)
 			{
 			case 1:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Sonic's Story");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
 				break;
 			case 2:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: All Stories");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
 				break;
 			case 3:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Any%");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
 				break;
 			}
-		
-			
+
 		}
 
 
