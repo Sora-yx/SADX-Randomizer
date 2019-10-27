@@ -74,7 +74,7 @@ void LoadCharacter_r()
 	}
 	else
 	{
-		if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && isRandDone == false)
+		if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
 		{
 			TikalRand = rand() % 2;
 			EggmanRand = rand() % 2;

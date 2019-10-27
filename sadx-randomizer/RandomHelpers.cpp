@@ -75,7 +75,7 @@ short randomacts(RandomizedEntry entry) {
 				return actHS[rand() % 2];
 		break;
 	case LevelIDs_WindyValley:
-		if (entry.character == Characters_Sonic || entry.character == Characters_Big || entry.character == Characters_Tails)
+		if (entry.character == Characters_Sonic || entry.character == Characters_Big || entry.character == Characters_Tails || entry.character == Characters_Gamma)
 			return 0;
 		else
 			return actHS[rand() % 2];
