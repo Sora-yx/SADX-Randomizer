@@ -5,10 +5,12 @@
 HelperFunctions help;
 
 NJS_TEXNAME Missions[10];
-int CurrentMission = 0;
+int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 
 void LoadStageMissionImage_r() {
 	if (GetLevelType == 0) {
+		CurrentMission = 0; //do the mission check here
+
 		StageMissionTexlist.textures = Missions;
 		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
 		LoadPVM("textures\\Missions", &StageMissionTexlist);

@@ -38,9 +38,11 @@ extern int TransfoCount;  //Super Sonic Stuff
 extern int RNGSong;
 extern bool Vanilla;
 
-
+extern int CurrentMission;
 
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
+void Chao_Init();
+void Chao_OnFrame();
 
 //all levels
 

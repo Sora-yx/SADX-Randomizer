@@ -138,7 +138,6 @@ extern "C" {
 
 
 		//Activate all the edited stages to make them beatable.
-
 		Startup_Init(path, helperFunctions);
 		EmeraldCoast_Init(path, helperFunctions);
 		WindyValley_Init(path, helperFunctions);
@@ -177,6 +176,8 @@ extern "C" {
 		CreditsNewList(); //Initialize custom credits
 		WriteCall((void*)0x641aef, CreditFlag);
 
+		//Chao
+		Chao_Init();
 
 		//Characters Stuff, really important.
 		WriteJump((void*)0x41490D, ChangeStartPosCharLoading); //Fix Eggman Tikal transition crash
@@ -710,6 +711,7 @@ extern "C" {
 			SetTailsRaceVictory();
 		}
 
+		Chao_OnFrame();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
