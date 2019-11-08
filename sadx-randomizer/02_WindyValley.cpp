@@ -9,6 +9,9 @@ HelperFunctions extern help;
 
 extern int CustomLayout;
 extern bool Race;
+extern bool Missions;
+
+
 
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -188,91 +191,30 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 }
 
 
-void WindyValleyAct4() { 
+void WindyValleyAct4() {
 
-	if (!Race & CurrentAct != 2)
-	{ 
-		CustomLayout = rand() % 2;
+	//CustomLayout = rand() % 3;
+	CustomLayout = 3;
 
-		switch (CustomLayout)
-		{
-		case 0:
-			Race = false;
-			LoadSetFile(0, "0200"); //load Sonic layout
-			return;
-			break;
-		case 1:
-			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Gamma) //To avoid Vanilla combination; Sonic has Gamma layout by defaut and Gamma has Sonic version.
-			{
-				Race = false;
-				LoadSetFile(0, "0200"); //force act 1 layout for Sonic and Gamma because of vanilla combination.
-				CustomLayout = 0;
-				return;
-			}
-			else
-			{
-				Race = false;
-				LoadSetFile(0, "0203"); //load Gamma layout
-				return;
-			}
-			break;
-		case 2: //100 Rings mission
-			Race = false;
-			LoadSetFile(0, "0204"); //load 100 rings mission
-			return;
-			break;
-		case 3: //Lost Chao
-			Race = false;
-			LoadSetFile(0, "0205"); //load Lost Chao mission
-			return;
-			break;
-		}
-	}
-	else
+	switch (CustomLayout)
 	{
-		Race = false;
-		LoadSetFile(0, "0200"); //load Sonic layout
-		return;
+	case 0:
+		LoadSetFile(0, "0200"); //M1
+		break;
+	case 1:
+		LoadSetFile(0, "0203"); //Custom Layout
+		break;
+	case 2:
+		LoadSetFile(0, "0200");  //m2
+		break;
+	case 3:
+		LoadSetFile(0, "0200"); //M3
+		break;
 	}
 
 }
 
-void WindyValleyAct5() {
-	if (CurrentAct == 0 && !Race)
-	{
-		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Gamma)
-		{
-			Race = false;
-			CurrentAct = 0;
-			LoadSetFile(2, "0202"); //load Sonic layout
-			return;
-		}
-	}
-	else
-	{
-		if (CurrentLevel == 2 && !Race)
-		{
-			LoadSetFile(2, "0202"); //load Sonic layout
-			return;
-		}
-		else
-		{
-			LoadSetFile(2, "0206"); //load (Metal) Sonic race 
-			Race = true;
-			CurrentAct = 2;
-			if (CurrentCharacter == Characters_Knuckles)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
-			}
-			if (CurrentCharacter == Characters_Amy)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-			}
-			MetalSonicRace_Init();
-		}
-		
-	}
-}
+
 
 void CamWindyValley() { //ask the game to load a different camera depending on the layout you got, camera doesn't act the same for each character and layout.
 

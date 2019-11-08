@@ -5,6 +5,7 @@
 
 HelperFunctions extern help;
 extern int CustomLayout;
+extern bool Missions;
 
 
 void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -14,6 +15,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0500S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act2.bin");
+	
+	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500S.bin", "system\\cam\\CAM0500S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501S.bin", "system\\cam\\CAM0501S.bin");
@@ -24,6 +27,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0500M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act2.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0504M.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0500M.bin", "system\\cam\\CAM0500M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501M.bin", "system\\cam\\CAM0501M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, RM1_StartPositions[0]);
@@ -33,6 +38,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0500K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act2.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0504M.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500K.bin", "system\\cam\\CAM0500K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501K.bin", "system\\cam\\CAM0501K.bin");
@@ -76,7 +83,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 void RedMountainAct4() {
 
-	CustomLayout = rand() % 2;
+	//CustomLayout = rand() % 2;
+	CustomLayout = 3;
 
 	if (CurrentCharacter == Characters_Gamma)
 	{
@@ -89,7 +97,7 @@ void RedMountainAct4() {
 		if (CurrentCharacter == Characters_Sonic)
 		{
 			LoadSetFile(1, "0501"); //load Sonic version (Sonic has Gamma and Gamma has sonic version.)
-			CustomLayout = 0;
+			//CustomLayout = 0;
 			WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
 			WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
 			return;
@@ -114,6 +122,37 @@ void RedMountainAct4() {
 		}
 	}
 }
+
+void RMExtraMissions() {
+
+	if (Missions)
+		CustomLayout = 3;
+
+	switch (CustomLayout)
+	{
+	case 0:
+		LoadSetFile(0, "0500");
+		return;
+		break;
+	case 1:
+		CustomLayout = 0;
+		LoadSetFile(0, "0500");
+		return;
+		break;
+	case 2: //100 Rings
+		LoadSetFile(0, "0500");
+		return;
+		break;
+	case 3: //M3
+	LoadSetFile(0, "0504");
+	return;
+	break;
+	}
+
+	
+}
+
+
 
 void CamRedMountain() {
 

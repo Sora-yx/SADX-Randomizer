@@ -7,6 +7,7 @@
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Race;
+extern bool Missions;
 
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -16,6 +17,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0600S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0603S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
@@ -242,34 +245,20 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void SkyDeckAct4() {
 
-	/*if (Mission)
-{
-	CustomLayout = rand() % 5;
-}
-else*/
-	{
-		//CustomLayout = rand() % 2;
+	if (Missions)
+		//CustomLayout = rand() % 4;
 		CustomLayout = 3;
-	}
+	else
+		CustomLayout = 0;
 
 	switch (CustomLayout)
 	{
-	case 0:
+	case 0: //M1
 		Race = false;
 		LoadSetFile(0, "0600"); //load Sonic layout
 		return;
 		break;
-	case 1: //100 Rings mission
-		Race = false;
-		LoadSetFile(0, "0603"); //load 100 rings mission
-		return;
-		break;
-	case 2: //Lost chao
-		Race = false;
-		LoadSetFile(0, "0604"); //load Lost Chao mission
-		return;
-		break;
-	case 3: //race
+	case 1: //Race
 		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails)
 		{
 			LoadSetFile(0, "0600"); //load Sonic layout
@@ -297,5 +286,15 @@ else*/
 			return;
 			break;
 		}
+	case 2: //Rings
+		Race = false;
+		LoadSetFile(0, "0600"); //load 100 rings mission
+		return;
+		break;
+	case 3: //Lost CHao
+		Race = false;
+		LoadSetFile(0, "0603"); //load Lost Chao mission
+		return;
+		break;
 	}
 }

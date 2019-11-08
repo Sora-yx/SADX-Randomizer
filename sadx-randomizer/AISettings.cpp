@@ -20,6 +20,8 @@ extern int SwapDelay;
 extern int TikalRand;
 extern int EggmanRand;
 int AICount;
+extern int CustomLayout;
+
 
 
 //This is where all the AI is managed: Rand, loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -52,81 +54,104 @@ ObjectMaster* LoadCharObj(int i)
 
 int CheckTailsAI_R(void) {
 
-	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma)
-		return 0;
-
-		if (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1)
-		{
-			std::ofstream FunnyAI("AICheck.txt");
-			FunnyAI << "return 0 RM act 2 crash";
-			FunnyAI << "\n";
-			FunnyAI.close();
-			isAIActive = false;
-			return 0;
-		}
-
-
-	std::ofstream FunnyAI("AICheck.txt");
-	if (CurrentLevel > 25)
+	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0)
 	{
-		FunnyAI << "return 0 Level trop élevé";
-		FunnyAI << "\n";
-		FunnyAI << "Level numéro:";
-		FunnyAI << CurrentLevel;
-		FunnyAI << "\n";
-		FunnyAI.close();
 		isAIActive = false;
 		return 0;
 	}
-	else
+
+	if (CurrentLevel > 25 && CurrentLevel < 38)
 	{
-		if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0 || CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 1 && CurrentCharacter == Characters_Tails)
-		{
-			isAIActive = false;
-			return 0;
-		}
-
-		if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 0 && CurrentCharacter == Characters_Knuckles)
-		{
-			isAIActive = false;
-			return 0; //crash cutscene fix
-		}
-
-		if (CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_Chaos2 && CurrentCharacter == Characters_Knuckles || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 1)
-		{
-			FunnyAI << "return 0 Level imcompatible (egg viper, perfect chaos...)";
-			FunnyAI << "\n";
-			FunnyAI << "Level numéro:";
-			FunnyAI << CurrentLevel;
-			FunnyAI << "\n";
-			FunnyAI.close();
-			isAIActive = false;
-			return 0;
-		}
-
-		if (CurrentLevel == LevelIDs_Chaos6 && (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic))
-		{
-			isAIActive = false;
-			return 0;
-		}
-
-		if (CurrentLevel == LevelIDs_SpeedHighway && Race)
-		{
-			isAIActive = false;
-			return 0; //avoid funny crash
-		}
-
-
-
+		isAIActive = false;
+		return 0;
 	}
 
-	//Header
-	FunnyAI << "return 1, hey it's working!;";
-	FunnyAI << "\n";
-	FunnyAI << "Level numéro:";
-	FunnyAI << CurrentLevel; 
-	FunnyAI << "\n";
-	FunnyAI.close(); 
+	if (Race)
+	{
+		isAIActive = false;
+		return 0;
+	}
+
+
+	switch (CurrentLevel)
+	{
+		case LevelIDs_SpeedHighway:
+			if (CurrentAct == 1)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_FinalEgg:
+			if (CurrentCharacter == Characters_Amy)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_RedMountain:
+			if (CurrentAct == 1 && CurrentCharacter < 4)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Casinopolis:
+			if (CurrentAct > 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentAct == 0)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_EmeraldCoast:
+			if (CurrentAct == 1 && CurrentCharacter == Characters_Tails)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Chaos2:
+			if (CurrentCharacter == Characters_Knuckles)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Chaos6:
+			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_PerfectChaos:
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+		case LevelIDs_EggViper:
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+		case LevelIDs_TwinklePark:
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+	}
+
+
 	isAIActive = true;
 	return 1;
 
@@ -137,7 +162,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 {
 
 	if (!isAIAllowed)
-		FlagAI = CheckTailsAI(); //Check Tails AI if not random AI 
+		FlagAI = CheckTailsAI(); //Check Regular Tails AI if the random AI option is disabled. 
 	else
 		FlagAI = CheckTailsAI_R(); 
 
@@ -145,11 +170,9 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 	{
 		isAIActive = false;
 		return (ObjectMaster*)0x0;
-
 	}
 	else
 	{
-
 		if (CurrentLevel != AICopy) //Avoid randing a new AI if player restart or change act.
 		{
 			do {
@@ -159,7 +182,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 					if (CurrentCharacter == Characters_Sonic)
 						CurrentAI = Characters_Tails; //don't rand and just call tails AI 
 
-			} while (CurrentCharacter == CurrentAI || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0);
+			} while (CurrentCharacter == CurrentAI);
 		}
 			
 		
@@ -216,97 +239,208 @@ void moveAItoPlayer() {
 
 void FixAISFXSonic() {
 
-	if (CurrentAI == Characters_Sonic || CharaSwap == Characters_Sonic)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+		if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
+			return;
+	}
+
 		PlaySound(0x2fa, 0, 0, 0);
+		return;
 
 }
 
 void FixAISFXJump() {
 
-	if (CurrentAI == Characters_Knuckles || CurrentAI == Characters_Tails || CurrentAI == Characters_Amy)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Knuckles || GetChara->Data1->CharID == Characters_Tails || GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
 		PlaySound(0x11, 0, 0, 0);
+		return;
 }
 
 void FixAISFXKnuckles() {
 
-	if (CurrentAI == Characters_Knuckles || CharaSwap == Characters_Knuckles)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Knuckles)
+			return;
+	}
+
 		PlaySound(0x317, 0, 0, 0);
+		return;
 
 }
 
 void FixAISFXKnuckles2() {
 
-	if (CurrentAI == Characters_Knuckles || CharaSwap == Characters_Knuckles)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Knuckles)
+			return;
+	}
+
 		PlaySound(0x30c, 0, 0, 0);
+
+}
+void FixAISFXKnuckles3() {
+
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Knuckles)
+			return;
+	}
+
+		PlaySound(0x315, 0, 0, 0);
+
+}void FixAISFXKnuckles4() {
+
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Knuckles)
+			return;
+	}
+
+		PlaySound(0x30d, 0, 0, 0);
 
 }
 
 void FixAISFXAmy() {
-	if (CurrentAI == Characters_Amy || CharaSwap == Characters_Amy)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+
 		PlaySound(0x31d, 0, 0, 0);
 }
 
 void FixAISFXAmy2() {
-	if (CurrentAI == Characters_Amy || CharaSwap == Characters_Amy)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+
 		PlaySound(0x4ff, 0, 0, 0);
 }
 
 
 void FixAISFXAmy3() {
-	if (CurrentAI == Characters_Amy || CharaSwap == Characters_Amy)
-		return;
-	else
+
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+
 		PlaySound(0x500, 0, 0, 0);
 }
 
 void FixAISFXAmy4() {
-	if (CurrentAI == Characters_Amy || CharaSwap == Characters_Amy)
-		return;
-	else
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+
 	PlaySound(0x506, 0, 0, 0);
 }
 
-void FixAISFXGamma() {
+void FixAISFXAmy5() {
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
 
-	if (CurrentAI == Characters_Gamma)
-		return;
-	else
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+
+		PlaySound(0x31c, 0, 0, 0);
+}
+
+void FixAISFXGamma() {
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Gamma)
+			return;
+	}
+
 		PlaySound(0x519, 0, 0, 0);
 }
 
 void FixAISFXGamma2() {
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
 
-	if (CurrentAI == Characters_Gamma)
-		return;
+		if (GetChara->Data1->CharID == Characters_Gamma)
+			return;
+	}
 	else
 		PlaySound(0x33c, 0, 0, 0);
 
 }
 
 void FixAISFXGamma3() {
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
 
-	if (CurrentAI == Characters_Gamma)
-		return;
+		if (GetChara->Data1->CharID == Characters_Gamma)
+			return;
+	}
 	else
 		PlaySound(0x33b, 0, 0, 0);
 
 }
 
 void FixAISFXGamma4() {
-	if (CurrentAI == Characters_Gamma)
-		return;
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Gamma)
+			return;
+	}
 	else
 		if (MetalSonicFlag == 0)
 		{
@@ -318,12 +452,17 @@ void FixAISFXGamma4() {
 }
 
 void FixAISFXGamma5() {
-	if (CurrentAI == Characters_Gamma)
-		return;
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Gamma)
+			return;
+	}
 	else
 		PlaySound(0x33f, 0, 0, 0);
 }
-
 
 
 
@@ -366,14 +505,13 @@ void ResultVoiceFix() {
 		Load_DelayedSound_SFX(0x591);
 		break;
 	case Characters_Big:
-		if (CurrentLevel < 15 || CurrentLevel > 35)
+		if (CurrentLevel < 15 || CurrentLevel > 35 && CustomLayout < 2)
 			Load_DelayedSound_Voice(4010);
 		else
 			Load_DelayedSound_Voice(4011);
 
 		SoundManager_Delete2();
 		break;
-
 	}
 
 }
@@ -394,11 +532,16 @@ CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
 
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel == LevelIDs_EggWalker)
 		return;
+
+	if (CurrentAI == Characters_Tikal || CurrentAI == Characters_Eggman)
+		if (CurrentLevel > 14 && CurrentLevel < 26)
+			return;
 		
 	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
+		
 		//initialize swap, taking actual character and ai information
 
 		if (CurrentCharacter <= 5 && CurrentAI <= 5)
@@ -406,22 +549,12 @@ void AISwitch() {
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
 			AICount++; //credits stat
+			
 
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
-			if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
-			{
-				switch (obj->Data1->Action)
-				{
-				case 45:
-					return;
-					break;
-				case 48:
-					return;
-					break;
-				}
-			}
+
 			obj->DeleteSub(obj);
 			short powerups = obj2->Powerups;
 			short jumptime = obj2->JumpTime;
@@ -506,8 +639,7 @@ void AISwitch() {
 			AI2->Speed = speed;
 			AI2->ObjectHeld = heldobj;
 
-			SwapDelay = 0; 
-
+			SwapDelay = 0;
 
 		}
 

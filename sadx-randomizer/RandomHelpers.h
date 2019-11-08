@@ -9,6 +9,8 @@ bool isStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void testRefactor(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
+void GoToNextLevel_SA1R(char stage, char act);
+
 short randomacts(RandomizedEntry entry);
 
 //void AISwitch();
@@ -38,6 +40,11 @@ extern int TransfoCount;  //Super Sonic Stuff
 extern int RNGSong;
 extern bool Vanilla;
 
+extern int CurrentMission;
+
+void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
+void Chao_Init();
+void Chao_OnFrame();
 
 
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -89,7 +96,8 @@ void RandomVoice();
 void RandomMusic();
 
 void AddCustomFlag();
-void CustomFlagCheck();
+void CustomFlagCheck(); //sa2 style
+int CustomFlagCheckSA1_R(); //sa1
 
 void CancelResetPosition();
 
@@ -113,9 +121,7 @@ void FixRollerCoaster();
 
 //void RandomizerMission();
 void SHAct2Position();
-void MissionObject(ObjectMaster *obj);
 void MetalSonicRace_Init();
-void LoadEggman_AI_R();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
@@ -146,8 +152,10 @@ DataPointer(char, TitleCardStuff, 0x3c53abc);
 DataPointer(char, TitleCardStuff2, 0x3c53abd);
 DataPointer(char, GetLevelType, 0x3c53abf);
 DataPointer(char, dword_03b28114, 0x3b28114);
-
-DataPointer(char, DWORD_03c53ac4, 0x3c53ac4);
+DataPointer(char, TitleCardCounter, 0x3C53ABD);
+DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
+DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
+DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
 
 void LoadTails_AI_R();
@@ -155,11 +163,11 @@ void LoadTails_AI_R();
 
 int IsFastSonicAI_R(void);
 int CheckTailsAI_R(void);
-int DisplayTitleCard_R(void);
+int DisplayTitleCard_r();
+void LoadStageMissionImage_r();
+int LoadTitleCardTexture_r(int minDispTime);
+void StageMissionImage_result();
 
-//int FunnyTest(void);
-
-void FunnyTest();
 
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 
@@ -170,3 +178,12 @@ void AISwitch();
 
 void SetLevelAndAct_R(); //fix trial mod 
 void GetStats(); //get stats for credits
+
+DataPointer(char, ChaosAdventureData, 0x3B1860A);
+DataPointer(char, TailsAdventureData, 0x3B1860E);
+DataPointer(char, EventTailsData, 0x3B18809);
+FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
+FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
+
+
+VoidFunc(CutsceneFlagData, 0x431430);

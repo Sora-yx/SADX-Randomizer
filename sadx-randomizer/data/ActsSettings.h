@@ -5,14 +5,19 @@
  //void randomacts();
 
 //Custom layout Act
+void ECAct4();
+void ICAct4();
+void CasinoAct4();
  void TwinkleCircuitMusic();
  void TwinkleParkAct4();
  void SpeedHighwayAct4();
  void RedMountainAct4();
+ void RMExtraMissions(); //M2 //M3
  void HotShelterAct4();
  void WindyValleyAct4();
  void WindyValleyAct5();
  void SkyDeckAct4();
+ void LWAct4();
  void FinalEggAct4();
 
 

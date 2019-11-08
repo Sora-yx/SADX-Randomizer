@@ -166,7 +166,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentCharacter == Characters_Amy)
+	if (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma)
 		return;
 
 	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout == 0) //don't load Zero if Sonic Layout
@@ -197,7 +197,7 @@ void LoadEggmanAI() {
 
 	if (CurrentLevel == 4 && CurrentAct == 0)
 	{
-		if (CurrentCharacter == Characters_Sonic || CustomLayout != 0)
+		if (CurrentCharacter == Characters_Sonic && CustomLayout == 0 || CustomLayout == 1)
 		{
 			RaceWinnerPlayer = 0;
 			FastSonicAI = IsFastSonicAI();
@@ -270,19 +270,6 @@ int IsFastSonicAI_R(void) {
 
 }
 
-void CheckRings() {
-
-	if (GameMode == 4 && Rings == 100 && CustomLayout != 0)
-		LoadLevelResults();
-
-}
-
-void CheckChao() {
-
-	if (GameMode == 4 && Rings == 100)
-		LoadLevelResults();
-
-}
 
 void FixRollerCoaster() {
 

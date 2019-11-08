@@ -4,6 +4,36 @@
 #include "RandomHelpers.h"
 
 HelperFunctions extern help;
+extern int CustomLayout;
+extern bool Missions;
+
+void LWAct4() {
+
+	if (Missions)
+		CustomLayout = 3;
+	else
+	//CustomLayout = rand() % 4;
+
+		switch (CustomLayout)
+		{
+		case 0:
+			LoadSetFile(1, "0701"); //M1
+			break;
+		case 1:
+			CustomLayout = 0;
+			LoadSetFile(1, "0701"); //M1
+			break;
+		case 2:
+			LoadSetFile(1, "0701"); //M2
+			break;
+		case 3:
+			LoadSetFile(1, "0703"); //M3
+			break;
+		}
+
+}
+
+
 
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -11,8 +41,10 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0700S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701S.BIN", "system\\levels\\Lost World\\Sonic-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702S.BIN", "system\\levels\\Lost World\\Sonic-WV-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0701S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0702S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act3.bin");
+	
+	helperFunctions.ReplaceFile("system\\SET0703S.BIN", "system\\levels\\Lost World\\Sonic-LW-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0700S.bin", "system\\cam\\CAM0700S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701S.bin", "system\\cam\\CAM0701S.bin");

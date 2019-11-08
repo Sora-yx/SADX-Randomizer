@@ -5,6 +5,36 @@
 #include "RandomHelpers.h"
 
 HelperFunctions extern help;
+extern int CustomLayout;
+extern bool Missions;
+
+void CasinoAct4() {
+
+	CustomLayout = 3;
+
+	if (CurrentAct != 2)
+	{
+		CustomLayout = rand() % 4;
+
+		switch (CustomLayout)
+		{
+		case 0:
+			LoadSetFile(0, "0900"); //M1
+			break;
+		case 1:
+			CustomLayout = 0;
+			LoadSetFile(0, "0900"); //M1
+			break;
+		case 2:
+			LoadSetFile(0, "0900"); //M2
+			break;
+		case 3:
+			LoadSetFile(0, "0904"); //M3
+			break;
+		}
+
+	}
+}
 
 
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -14,6 +44,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0900S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0904S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900S.bin", "system\\cam\\CAM0900S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
@@ -24,6 +55,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0900M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0904M.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900S.bin", "system\\cam\\CAM0900S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
@@ -34,6 +66,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0900K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0900S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900K.bin", "system\\cam\\CAM0900K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901K.bin", "system\\cam\\CAM0901K.bin");
@@ -281,7 +314,6 @@ ObjectListEntry CasinopolisObjectList_list[] = {
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B0F40, "SPINA B" } /* "SPINA B" */,
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B1090, "SPINA C" } /* "SPINA C" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */
-	//{ LoadObj_Data1, 3, 1, 1500000, 0, ChaoGoal_Main, "O CHAOGOAL" }
 };
 
 ObjectList CasinopolisObjectList = { arraylengthandptrT(CasinopolisObjectList_list, int) };
@@ -290,44 +322,4 @@ FunctionPointer(int, Chao_Animation, (ObjectMaster* a1, int a2), 0x734F00);
 void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_Casinopolis * 8 + 0] = &CasinopolisObjectList;
-}
-
-// Chao goal
-void __cdecl ChaoGoal_Main(ObjectMaster* a1) {
-	switch (a1->Data1->Action) {
-	case 0:
-		a1->Data1->Action = 1;
-		a1->DisplaySub = a1->MainSub;
-		a1->DeleteSub = ChaoObj_Delete;
-		break;
-	case 1:
-		if (!ClipSetObject(a1)) {
-			a1->Data1->Action = 2;
-
-			Chao_LoadFiles();
-
-			ChaoData* chaodata = new ChaoData();
-			a1->Data1->LoopData = (Loop*)chaodata;
-			a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
-		}
-		break;
-	case 2:
-		if (!ClipSetObject(a1)) {
-			if (GameState == 15) {
-				a1->Child->Data1->Position = a1->Data1->Position;
-				a1->Child->Data1->Rotation = a1->Data1->Rotation;
-				if (++a1->Data1->InvulnerableTime == 20) {
-					Chao_Animation(a1->Child, 21);
-					a1->Data1->InvulnerableTime = 0;
-				}
-			}
-
-			if (IsPlayerInsideSphere(&a1->Data1->Position, 10.0f)) {
-				//ChaoObj_Delete(a1);
-
-				LoadLevelResults();
-				a1->Data1->Action = 3;
-			}
-		}
-	}
 }

@@ -4,6 +4,37 @@
 #include "RandomHelpers.h"
 
 HelperFunctions extern help;
+extern int CustomLayout;
+extern bool Missions;
+
+void ICAct4() {
+
+	CustomLayout = 0;
+
+	if (CurrentAct != 3)
+		CustomLayout = rand() % 4;
+
+		switch (CustomLayout)
+		{
+		case 0:
+			LoadSetFile(1, "0801"); //M1
+			break;
+		case 1:
+			CustomLayout = 0;
+			LoadSetFile(1, "0801"); //M1
+			break;
+		case 2:
+			LoadSetFile(1, "0801"); //M2
+			break;
+		case 3:
+			LoadSetFile(1, "0801"); //M3
+			break;
+		}
+
+}
+
+
+
 
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {

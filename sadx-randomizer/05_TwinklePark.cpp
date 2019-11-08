@@ -5,6 +5,7 @@
 
 extern int CustomLayout;
 HelperFunctions extern help;
+extern bool Missions;
 
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -14,6 +15,8 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0300S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0303S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300S.BIN", "system\\cam\\CAM0300S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");
@@ -26,6 +29,8 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0300M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0303M.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300M.BIN", "system\\cam\\CAM0300M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301M.BIN", "system\\cam\\CAM0301M.bin");
@@ -40,6 +45,8 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0300K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0303K.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300K.BIN", "system\\cam\\CAM0300K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301K.BIN", "system\\cam\\CAM0301K.bin");
@@ -93,29 +100,29 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 
 void TwinkleParkAct4() {
 
-	if (CurrentAct == 1)
-	{
-		//CustomLayout = rand() % 2;
-		//CustomLayout = rand() % 3;
-		//CustomLayout = 2;
-		switch (CustomLayout)
-		{ 
-		case 0:
-				LoadSetFile(1, "0301"); //Sonic Version
-				return;
-				break;
-		case 1:
-				LoadSetFile(1, "0303"); //Amy Version
-				return;
-				break;
-		case 2:
-			help.ReplaceFile("system\\sounddata\\bgm\\wma\\twnklpk2.wma", "system\\songs\\Mania_Mirage_Saloon_Act_2.mp3");
-			LoadSetFile(1, "0304"); //Special Custom Version
+	CustomLayout = 3;
+	//CustomLayout = rand() % 3;
 
+	switch (CustomLayout)
+	{ 
+	case 0:
+			LoadSetFile(1, "0301"); 
 			return;
 			break;
-		}
+	case 1:
+		LoadSetFile(1, "0301"); 
+			return;
+			break;
+	case 2:
+		LoadSetFile(1, "0301"); //M2
+
+		return;
+		break;
+	case 3:
+		LoadSetFile(1, "0303"); //M3 Version
+		return;
 	}
+	
 }
 
 

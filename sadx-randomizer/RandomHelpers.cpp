@@ -21,7 +21,7 @@ extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
 extern int split;
-extern int CustomFlag;
+int GetFlag;
 extern int TotalCount;
 extern bool isAIAllowed;
 extern bool isRandDone;
@@ -73,12 +73,6 @@ short randomacts(RandomizedEntry entry) {
 				return 0;
 			else
 				return actHS[rand() % 2];
-		break;
-	case LevelIDs_WindyValley:
-		if (entry.character == Characters_Sonic || entry.character == Characters_Big || entry.character == Characters_Tails || entry.character == Characters_Gamma)
-			return 0;
-		else
-			return actHS[rand() % 2];
 		break;
 	case LevelIDs_TwinklePark:
 		if (entry.character == Characters_Sonic || entry.character == Characters_Gamma)
@@ -279,6 +273,55 @@ void testRefactor(char stage, char act) {
 
 }
 
+void GoToNextLevel_SA1R(char stage, char act) {
+	
+	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
+	{
+
+		GetFlag = CustomFlagCheckSA1_R();
+
+		if (GetFlag == 1)
+		{
+
+			if (RNGCharacters)
+				CurrentCharacter = randomizedSets[levelCount].character;
+
+			LastLevel = CurrentLevel;
+			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
+			CurrentAct = randomizedSets[levelCount].act;
+
+			levelCount++;
+
+			if (levelCount == TotalCount)
+			{
+				for (int i = 0; i < 40; i++) { //generate 40 levels in case the player quits a lot to get the next stage. This will get updated if the player beat a story.
+					randomizedSets[i].character = getRandomCharacter();
+					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+					randomizedSets[i].act = randomacts(randomizedSets[i]);
+
+					if (randomizedSets[i].character == Characters_Sonic)
+					{
+						randomizedSets[i].sonic_mode = rand() % 2;
+					}
+
+
+					std::ofstream Reset("ResetLevel.txt");
+					//Header
+					Reset << "level count a été remit a 0 + generation de new splits, AU LEVEL:";
+					Reset << CurrentLevel;
+					Reset << "Après exactement";
+					Reset << levelCount;
+					Reset.close();
+					levelCount = 0;
+					return;
+				}
+			}
+		}
+		else
+			GoToNextLevel();
+	}
+}
+
 void GoToNextLevel_hook(char stage, char act) {
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
 	{
@@ -359,6 +402,7 @@ void RandomVoice() {
 	if (VoicesEnabled != 0) {
 		CurrentVoiceNumber = rand() % 2043;
 	}
+
 }
 
 //randomize musics
@@ -383,7 +427,6 @@ void TwinkleCircuitMusic() {
 			WriteData<1>((char*)0x004DAB4E, 0x57);
 			else
 				WriteData<1>((char*)0x004DAB4E, 0x19);
-
 	}
 
 

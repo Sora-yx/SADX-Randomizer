@@ -5,6 +5,7 @@
 
 HelperFunctions extern help;
 extern int CustomLayout;
+extern bool Missions;
 
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
 {

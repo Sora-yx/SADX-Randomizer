@@ -17,6 +17,7 @@ extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
 extern bool isAIAllowed;
 bool BounceActive = false;
+extern bool RNGCharacters;
 
 
 //Characters Settings, Load, Eggman and Tikal stuff.
@@ -74,12 +75,13 @@ void LoadCharacter_r()
 	}
 	else
 	{
-		if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
-		{
-			TikalRand = rand() % 2;
-			EggmanRand = rand() % 2;
-			isRandDone = true;
-		}
+		if (SonicRand == 0 && MetalSonicFlag == 0 && RNGCharacters)
+			if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
+			{
+				TikalRand = rand() % 2;
+				EggmanRand = rand() % 2;
+				isRandDone = true;
+			}
 
 		CheckRace();
 
@@ -179,6 +181,13 @@ void SuperSonicStuff() {
 		SonicRand = 0;
 	}
 
+	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Amy)
+	{
+		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
+		SonicRand = 0;
+
+	}
+
 
 	if (CurrentLevel < 15)
 	{
@@ -218,7 +227,6 @@ void SuperSonicStuff() {
 			}
 			else
 			{
-
 					if (MetalSonicFlag == 0)
 					{
 						if (SonicRand == 1 && CurrentCharacter == 0)
@@ -326,9 +334,6 @@ void BigWeightHook() {
 void AllUpgrades() {
 
 	CharSel_LoadThing();
-	CreditCheck = false;
-	Credits_CanSkip = 1;
-
 
 	if (Upgrade == true)
 	{
