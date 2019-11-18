@@ -20,8 +20,10 @@ extern bool isRandDone;
 extern int CurrentAI;
 extern int EggmanRand;
 extern int TikalRand;
+extern int GetCustomLayout;
+extern int AICopy;
 
-//While load result: Avoid getting the same character twice in a row, "fix" game crash. (There is probably a better way to do this.)
+//While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
 
@@ -35,12 +37,13 @@ void DisableTimeStuff() {
 	isRandDone = false;
 	EggmanRand = 0;
 	TikalRand = 0;
+	AICopy = 0;
 	ResultVoiceFix();
 	Credits_CanSkip = 1;
 
 	AddCustomFlag(); //credits check
 
-	if (!Race && isAIAllowed && isAIActive) //Move AI to player 1 if we are not racing.
+	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
 	{
 		ObjectMaster* play1 = GetCharacterObject(0);
 		ObjectMaster* play2 = GetCharacterObject(1);
@@ -50,7 +53,7 @@ void DisableTimeStuff() {
 		play2->Data1->Position.z = play1->Data1->Position.z + 5;
 		play2->Data1->Rotation.y = play1->Data1->Rotation.y;
 
-			if (CurrentAI == Characters_Tails)
+			if (CurrentAI == Characters_Tails && isAIActive == true)
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
@@ -64,18 +67,7 @@ void DisableTimeStuff() {
 			}
 	}
 
-	//are we racing against AI
-	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0)
-	{
-		if (CurrentCharacter == Characters_Sonic || CustomLayout != 0)
-		{
-			Tails_CheckRaceResult();
-			Race = false;
-			return;
-		}
-	}
-	else
-	{
+
 		if (Race)
 		{
 			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
@@ -90,7 +82,7 @@ void DisableTimeStuff() {
 				return;
 			}
 		}
-	}
+	
 
 	Race = false;
 	return;
@@ -166,16 +158,16 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma)
-		return;
 
 	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout == 0) //don't load Zero if Sonic Layout
 		return;
 
-
+	if (CurrentCharacter != Characters_Amy)
+	{
 		static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
 		LoadPVM("EGGROB", &EGGROB_TEXLIST);
 		CheckLoadZero();
+	}
 	
 }
 
@@ -184,6 +176,7 @@ void TwinkleCircuitResult() {
 
 	CustomFlag++;
 	GameMode = GameModes_Adventure_Field;
+	Rings = 0;
 	ScreenFade_Start();
 	GameState = 0x11;
 }
@@ -224,16 +217,8 @@ void CheckRace() {
 		
 		switch (CurrentLevel)
 		{
-		case LevelIDs_WindyValley:
-			if (CustomLayout == 4 && CurrentAct == 2)
-			{
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-				Race = true;
-				
-			}
-			break;
 		case LevelIDs_SkyDeck:
-			if (CustomLayout == 3 && CurrentAct == 0)
+			if (CustomLayout == 1 && CurrentAct == 0)
 			{
 				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 				Race = true;
@@ -282,6 +267,204 @@ void FixRollerCoaster() {
 
 
 
+void BackRing() { //capsule
+
+	SetTextureToCommon();
+
+
+	if (GetCustomLayout == 3 || GetCustomLayout == 2)
+	{
+		if (CurrentLevel == LevelIDs_TwinklePark)
+			return;
+
+		ObjectMaster* play1 = GetCharacterObject(0); //teleport player
+
+		StopMusic();
+
+		switch (CurrentLevel)
+		{
+		case LevelIDs_EmeraldCoast:
+			if (CurrentAct == 1)
+			{
+				PlayMusic(MusicIDs_EmeraldCoastWindyAndRipply);
+				play1->Data1->Position.x = -986.5;
+				play1->Data1->Position.y = 1145;
+				play1->Data1->Position.z = -2856;
+			}
+			break;
+		case LevelIDs_WindyValley:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_WindyValleyTheAir);
+				play1->Data1->Position.x = 1068.41;
+				play1->Data1->Position.y = -335;
+				play1->Data1->Position.z = -1232;
+				play1->Data1->Rotation.y = 26978;
+			}
+			break;
+		case LevelIDs_Casinopolis:
+			if (CurrentAct == 0)
+			{
+				PlayMusic(MusicIDs_casino1);
+				play1->Data1->Position.x = 0;
+				play1->Data1->Position.y = 0;
+				play1->Data1->Position.z = 0;
+			}
+			else
+			{
+				PlayMusic(MusicIDs_casino2);
+				play1->Data1->Position.x = 19;
+				play1->Data1->Position.y = -1695;
+				play1->Data1->Position.z = 2850;
+			}
+			break;
+		case LevelIDs_IceCap:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_icecap2);
+				play1->Data1->Position.x = 1060;
+				play1->Data1->Position.y = 336;
+				play1->Data1->Position.z = 280;
+			}
+			break;
+		case LevelIDs_TwinklePark:
+			/*	PlayMusic(MusicIDs_TwinkleParkPleasureCastle); //Doesn't work for now
+				play1->Data1->Position.x = 520;
+				play1->Data1->Position.y = 975;
+				play1->Data1->Position.z = 1620;*/
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_SpeedHighwaySpeedHighway);
+				play1->Data1->Position.x = 72;
+				play1->Data1->Position.y = 26;
+				play1->Data1->Position.z = 192;
+			}
+			break;
+		case LevelIDs_RedMountain:
+			if (CurrentAct == 1)
+			{
+				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
+				play1->Data1->Position.x = -78;
+				play1->Data1->Position.y = 831;
+				play1->Data1->Position.z = 1919;
+			}
+			break;
+		case LevelIDs_SkyDeck:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_SkyDeckGeneralOffensive);
+				play1->Data1->Position.x = -696;
+				play1->Data1->Position.y = -86;
+				play1->Data1->Position.z = 135;
+			}
+			break;
+		}
+	}
+	else
+		LoadLevelResults();
+
+}
+
+void BackRing2() { //Frog //Emerald
+
+	if (GetCustomLayout == 3 || GetCustomLayout == 2)
+	{
+		if (CurrentLevel == LevelIDs_TwinklePark)
+			return;
+
+		ObjectMaster* play1 = GetCharacterObject(0); //teleport player
+	
+		StopMusic();
+
+		switch (CurrentLevel)
+		{
+		case LevelIDs_EmeraldCoast:
+			if (CurrentAct == 1)
+			{
+				PlayMusic(MusicIDs_EmeraldCoastWindyAndRipply);
+				play1->Data1->Position.x = -986.5;
+				play1->Data1->Position.y = 1145;
+				play1->Data1->Position.z = -2856;
+			}
+			break;
+		case LevelIDs_WindyValley:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_WindyValleyTheAir);
+				play1->Data1->Position.x = 1068.41;
+				play1->Data1->Position.y = -335;
+				play1->Data1->Position.z = -1232;
+				play1->Data1->Rotation.y = 26978;
+			}
+			break;
+		case LevelIDs_Casinopolis:
+			if (CurrentAct == 0)
+			{
+				PlayMusic(MusicIDs_casino1);
+				play1->Data1->Position.x = 0;
+				play1->Data1->Position.y = 0;
+				play1->Data1->Position.z = 0;
+			}
+			else
+			{
+				PlayMusic(MusicIDs_casino2);
+				play1->Data1->Position.x = 19;
+				play1->Data1->Position.y = -1695;
+				play1->Data1->Position.z = 2850;
+			}
+			break;
+		case LevelIDs_IceCap:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_icecap2);
+				play1->Data1->Position.x = 1060;
+				play1->Data1->Position.y = 336;
+				play1->Data1->Position.z = 280;
+			}
+			break;
+		case LevelIDs_TwinklePark:
+			/*	PlayMusic(MusicIDs_TwinkleParkPleasureCastle); //Doesn't work for now
+				play1->Data1->Position.x = 520;
+				play1->Data1->Position.y = 975;
+				play1->Data1->Position.z = 1620;*/
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_SpeedHighwaySpeedHighway);
+				play1->Data1->Position.x = 72;
+				play1->Data1->Position.y = 26;
+				play1->Data1->Position.z = 192;
+			}
+			break;
+		case LevelIDs_RedMountain:
+			if (CurrentAct == 1)
+			{
+				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
+				play1->Data1->Position.x = -78;
+				play1->Data1->Position.y = 831;
+				play1->Data1->Position.z = 1919;
+			}
+			break;
+		case LevelIDs_SkyDeck:
+			if (CurrentAct == 2)
+			{
+				PlayMusic(MusicIDs_SkyDeckGeneralOffensive);
+				play1->Data1->Position.x = -696;
+				play1->Data1->Position.y = -86;
+				play1->Data1->Position.z = 135;
+			}
+			break;
+		}
+	}
+	else
+		LoadLevelResults();
+
+}
+
+
 
 void SHAct2Position() {
 
@@ -290,6 +473,26 @@ void SHAct2Position() {
 	else
 		ForcePlayerAction(0, 0x2b);
 	
+}
+
+
+void ICAct3Position() {
+
+	SetTextureToLevelObj();
+
+	if (CurrentCharacter > 2)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			TimeThing = 1;
+			PlaySound(0xde, 0, 0, 0);
+			EnableController(0);
+			PlayMusic(MusicIDs_icecap3);
+			PositionPlayer(0, -6674, -8167, -1776);
+		}
+	}
+
+	return;
 }
 
 

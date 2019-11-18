@@ -6,6 +6,7 @@
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
+extern int CurrentMission;
 
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -89,10 +90,15 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 
 void HotShelterAct4() {
 
+	CustomLayout = 0;
+	CurrentMission = 0;
+
 	CustomLayout = rand() % 2;
 
-	if (CurrentCharacter == Characters_Amy)
+	if (CustomLayout == 0)
 	{
+		if (CurrentCharacter == Characters_Amy)
+		{
 		LoadSetFile(0, "1200"); //load Big version for Amy.
 		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
 		WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
@@ -102,23 +108,21 @@ void HotShelterAct4() {
 		WriteData<1>((void*)0x59a125, 0x08);
 		WriteData<1>((void*)0x59a126, 0x74);
 		return;
-	}
-	else
-	{
-		if (CustomLayout == 0)
+		}
+		else
 		{
 			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-			WriteData<1>((void*)0x59a3bc, 0x75); //restore act 2 music song.
+			WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
 			return;
 		}
 	}
 
 	if (CustomLayout == 1)
 	{
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Gamma) //Amy has Big layout by defaut and Big has Amy layout by defaut.
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma) //Amy has Big layout by defaut and Big has Amy layout by defaut.
 		{
 			LoadSetFile(0, "1200");
-			WriteData<1>((void*)0x59a3bc, 0x75); //restore act 2 music song.
+			WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
 			return;
 		}
 		else
@@ -137,8 +141,6 @@ void HotShelterAct4() {
 	}
 
 }
-
-
 
 
 
@@ -239,7 +241,6 @@ ObjectListEntry HotShelter2ObjectList_list[] = {
 };
 
 ObjectList HotShelter2ObjectList = { arraylengthandptrT(HotShelter2ObjectList_list, int) };
-
 
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist

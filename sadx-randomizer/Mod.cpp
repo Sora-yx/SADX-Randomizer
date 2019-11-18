@@ -48,7 +48,7 @@ bool banCharacter[8];
 bool isloaded = false;
 bool isAIAllowed = true;
 
-int SwapDelay = 50;
+int SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
 int OldFlag = 0; //Used for progression story and credits
@@ -168,7 +168,7 @@ extern "C" {
 		RMObjects_Init(path, helperFunctions);
 		SDObjects_Init(path, helperFunctions);
 		LWObjects_Init(path, helperFunctions);
-		//HSObjects_Init(path, helperFunctions);
+		HSObjects_Init(path, helperFunctions);
 
 		//Boss
 		Chaos0_Init(path, helperFunctions);
@@ -205,6 +205,7 @@ extern "C" {
 		WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
 		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 		WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
+		WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
 
 
 		//if Random Voice option
@@ -240,14 +241,6 @@ extern "C" {
 			WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 		}
 
-		WriteData<6>((void*)0x48ADA5, 0x90u);
-
-		
-		if (Upgrade)
-		{
-			WriteCall((void*)0x5114eb, AllUpgrades);
-		}
-
 		if (Weight)
 		{
 			WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g if the player activated the option.
@@ -258,9 +251,35 @@ extern "C" {
 		WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
 		WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 		WriteCall((void*)0x4284ac, StageMissionImage_result);
+		WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
 
+		//Back Rings
 
-		WriteCall((void*)0x4159b8, LoadTails_AI_R); //Load AI
+		//capsule
+		WriteCall((void*)0x46adc2, BackRing);
+
+		//Ballon
+		WriteCall((void*)0x7a1e25, BackRing);
+
+		//Frog
+		WriteCall((void*)0x4fa2e8, BackRing2); 
+
+			//WV back ring
+		WriteCall((void*)0x04df349, BackRing2);
+		WriteCall((void*)0x4df383, BackRing2);
+		WriteCall((void*)0x4df395, BackRing2);
+
+		//Casino back ring
+		WriteCall((void*)0x5dd051, BackRing2);
+		WriteCall((void*)0x5dd07e, BackRing2);
+		WriteCall((void*)0x5dd08d, BackRing2);
+
+		//Ice Cap back ring
+		WriteCall((void*)0x4ecf61, BackRing2);
+		WriteCall((void*)0x4ecf85, BackRing2);
+		WriteCall((void*)0x4ecf94, BackRing2);
+		
+		
 
 		if (isAIAllowed)
 		{
@@ -278,7 +297,7 @@ extern "C" {
 
 			//AI SFX Fixes (there is probably a nicer way to do this, but I have no clue how)
 
-			WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack
+			WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack sound
 
 			WriteCall((void*)0x4768ea, FixAISFXJump); //Fix Jump Tails & Knuckles AI sound
 			WriteCall((void*)0x47359d, FixAISFXKnuckles); //Fix Knuckles Glide AI sound
@@ -306,8 +325,13 @@ extern "C" {
 			WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
 			WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
 			WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
-
 		}
+		else
+		{
+			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
+			//WriteCall((void*)0x4159b8, LoadTails_AI_Original); //Load AI
+		}
+	
 
 
 		/*
@@ -319,6 +343,9 @@ extern "C" {
 
 			//EC
 		WriteData<5>((void*)0x4f6afa, 0x90); //hook GetCurrentCharacterID when you enter at Emerald Coast act 2.
+
+		//Ice Cap
+		WriteCall((void*)0x4ed633, ICAct3Position); //teleport player during IC act 3.
 
 			//Twinkle Park
 		WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
@@ -374,8 +401,6 @@ extern "C" {
 		//Chaos 4 Stuff
 		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
 
-		//WriteData<6>((void*)0x5525fe, 0x91AEF8);
-		//WriteCall((void*)0x5525fe, FunnyTest);
 		WriteData<1>((void*)0x5525fe, 0xd8);
 
 		WriteData<1>((void*)0x552500, 0xF8); //Reduce HP even more.
@@ -430,7 +455,6 @@ extern "C" {
 
 
 		//Fix Camera while using wrong character
-		WriteCall((void*)0x422c09, CamWindyValley);
 		WriteCall((void*)0x422cdf, CamSpeedHighway); //SH
 		WriteCall((void*)0x422d59, CamRedMountain); //RM
 		WriteCall((void*)0x422fb6, CamFinalEgg); //RM
@@ -444,7 +468,7 @@ extern "C" {
 		WriteCall((void*)0x422ef4, CasinoAct4);
 		WriteCall((void*)0x422e75, ICAct4);
 		WriteCall((void*)0x422e0a, LWAct4);
-		WriteCall((void*)0x422bdf, WindyValleyAct4); //WV
+		WriteCall((void*)0x422bfd, WindyValleyAct4); //WV
 		//WriteCall((void*)0x422bfd, WindyValleyAct5);
 		WriteCall((void*)0x422c59, TwinkleParkAct4); //TPs 
 		WriteCall((void*)0x422d20, RMExtraMissions);
@@ -453,7 +477,7 @@ extern "C" {
 		WriteCall((void*)0x422d90, SkyDeckAct4); //SD
 		WriteCall((void*)0x422f7d, FinalEggAct4); //FE
 
-
+		
 		//SA2 Story Style, Hook all SetLevelandAct to make them random.
 
 		if (RNGStages == true) 
@@ -592,8 +616,7 @@ extern "C" {
 			SetDebugFontSize(11.4f * (float)VerticalResolution / 477.0f);
 			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
 			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
-			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER these mods,");
-			DisplayDebugString(NJM_LOCATION(2, 4), "It should be at the BOTTOM of your mod list.");
+			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER these mods!!");
 			DCModWarningTimer--;
 		}
 
@@ -652,10 +675,24 @@ extern "C" {
 		{
 			if (GameMode == 5 || GameMode == 4)
 			{
-
-				//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
-				if (GameState == 16) 
+				if (GameState == 16)  //Pause Menu
 				{
+					
+					//Display Current Mission Information
+					if (CurrentLevel < 15)
+					{
+						SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
+						if (CustomLayout == 0)
+							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1");
+
+						if (CustomLayout == 2)
+							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M2 (100 Rings)");
+
+						if (CustomLayout == 3)
+							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M3 (Lost Chao)");
+					}
+
+					//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
 					if (PauseSelection == 3)
 					{
 						GameMode = GameModes_Adventure_Field;
@@ -696,26 +733,12 @@ extern "C" {
 			HudDisplayScoreOrTimer();
 			HudDisplayRingTimeLife_Check();
 
-			if (SwapDelay != 50)
+			if (SwapDelay != 150)
 				SwapDelay++;
 
-
-			//Debugging
-			if (ControllerPointers[0]->PressedButtons & Buttons_Z && ControllerPointers[0]->PressedButtons & Buttons_X)
-			{
-				if (CurrentLevel != LevelIDs_TwinkleCircuit)
-				{
-					RaceWinnerPlayer = 1;
-					LoadLevelResults();
-				}
-				else
-					TwinkleCircuitResult();
-			}
-
 			//AI Swap
-			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 50 && ControlEnabled == 1)
+			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 			{
-				
 				AISwitch();
 			}
 

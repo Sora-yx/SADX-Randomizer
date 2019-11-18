@@ -53,6 +53,26 @@ void __cdecl Eggman_Display(ObjectMaster* obj)
 }
 
 
+void AllUpgrades() {
+
+	if (Upgrade == true)
+	{
+		EventFlagArray[EventFlags_Sonic_LightShoes] = true;
+		EventFlagArray[EventFlags_Sonic_CrystalRing] = true;
+		EventFlagArray[EventFlags_Sonic_AncientLight] = true;
+		EventFlagArray[EventFlags_Tails_JetAnklet] = true;
+		EventFlagArray[EventFlags_Tails_RhythmBadge] = true;
+		EventFlagArray[EventFlags_Amy_WarriorFeather] = true;
+		EventFlagArray[EventFlags_Amy_LongHammer] = true;
+		EventFlagArray[EventFlags_Knuckles_ShovelClaw] = true;
+		EventFlagArray[EventFlags_Knuckles_FightingGloves] = true;
+		EventFlagArray[EventFlags_Big_LifeRing] = true;
+		EventFlagArray[EventFlags_Big_PowerRod] = true;
+		EventFlagArray[EventFlags_Gamma_JetBooster] = true;
+		EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
+	}
+}
+
 
 FunctionPointer(int, sub_42FB00, (), 0x42FB00);
 void CheckRace();
@@ -75,25 +95,30 @@ void LoadCharacter_r()
 	}
 	else
 	{
-		if (SonicRand == 0 && MetalSonicFlag == 0 && RNGCharacters)
-			if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
-			{
-				TikalRand = rand() % 2;
-				EggmanRand = rand() % 2;
-				isRandDone = true;
-			}
+		if (CurrentLevel != LevelIDs_EmeraldCoast && CurrentLevel != LevelIDs_FinalEgg)
+			if (SonicRand == 0 && MetalSonicFlag == 0 && RNGCharacters)
+				if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
+				{
+					TikalRand = rand() % 2;
+					EggmanRand = rand() % 2;
+					isRandDone = true;
+				}
 
 		CheckRace();
+
+		AllUpgrades();
 
 			switch (CurrentCharacter)
 			{
 			case Characters_Knuckles:
+				MetalSonicFlag = 0;
 				if (TikalRand == 1 && CurrentAI != 4 && isRandDone == true)
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
 				else
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Knuckles
 				break;
 			case Characters_Amy:
+				MetalSonicFlag = 0;
 				CheckLoadBird();
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
 				break;
@@ -108,13 +133,6 @@ void LoadCharacter_r()
 				break;
 			default:
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
-				obj->Data1->CharID = (char)CurrentCharacter;
-				obj->Data1->CharIndex = 0;
-				*(void**)0x3B36DD0 = obj->Data2;
-				EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
-				EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
-				MovePlayerToStartPoint(obj->Data1);
-				return;
 				break;
 			}
 
@@ -126,6 +144,15 @@ void LoadCharacter_r()
 			MovePlayerToStartPoint(obj->Data1);
 
 			LoadEggmanAI(); //load eggman if Speed highway
+
+			if (isAIAllowed)
+				LoadTails_AI_R();
+			else
+				LoadTails_AI_Original();
+
+			if (CurrentCharacter != Characters_Sonic)
+				MetalSonicFlag = 0;
+
 			return;
 		
 	}
@@ -175,7 +202,8 @@ void SuperSonicStuff() {
 	TimeThing = 1; //activate the timer of the stage.
 
 
-	if (CurrentCharacter != Characters_Sonic && CustomLayout == 0)
+
+	if (CurrentCharacter != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
@@ -191,7 +219,7 @@ void SuperSonicStuff() {
 
 	if (CurrentLevel < 15)
 	{
-		if (CurrentLevel != LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel != LevelIDs_SpeedHighway && CurrentAct == 1)
+		if (CurrentLevel != LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel != LevelIDs_SpeedHighway && CurrentAct == 1 || CurrentLevel != LevelIDs_WindyValley)
 		{
 			FreeCam = 1;
 			SetCameraMode_(FreeCam);
@@ -331,29 +359,6 @@ void BigWeightHook() {
 
 
 
-void AllUpgrades() {
-
-	CharSel_LoadThing();
-
-	if (Upgrade == true)
-	{
-		EventFlagArray[EventFlags_Sonic_LightShoes] = true;
-		EventFlagArray[EventFlags_Sonic_CrystalRing] = true;
-		EventFlagArray[EventFlags_Sonic_AncientLight] = true;
-		EventFlagArray[EventFlags_Tails_JetAnklet] = true;
-		EventFlagArray[EventFlags_Tails_RhythmBadge] = true;
-		EventFlagArray[EventFlags_Amy_WarriorFeather] = true;
-		EventFlagArray[EventFlags_Amy_LongHammer] = true;
-		EventFlagArray[EventFlags_Knuckles_ShovelClaw] = true;
-		EventFlagArray[EventFlags_Knuckles_FightingGloves] = true;
-		EventFlagArray[EventFlags_Big_LifeRing] = true;
-		EventFlagArray[EventFlags_Big_PowerRod] = true;
-		EventFlagArray[EventFlags_Gamma_JetBooster] = true;
-		EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
-
-		WriteSaveFile();
-	}
-}
 
 
 

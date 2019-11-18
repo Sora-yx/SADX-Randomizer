@@ -30,10 +30,10 @@ extern bool Race;
 extern int AICopy;
 extern int EggmanRand;
 extern int TikalRand;
-
+extern int GetCustomLayout;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Knuckles, Characters_Tikal, Characters_Amy };
+int AIArray[5] = { Characters_Sonic, Characters_Eggman, Characters_Tails, /*Characters_Knuckles,*/ Characters_Tikal, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
@@ -62,6 +62,7 @@ struct RandomizedEntry randomizedSets[40];
 short randomacts(RandomizedEntry entry) {
 	//Set up act rng.
 	int actHS[2] = { 0, 2 };
+	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
 
 	switch (entry.level)
 	{
@@ -107,7 +108,7 @@ short randomacts(RandomizedEntry entry) {
 			if (entry.character == Characters_Tails)
 				return 0;
 			else
-				return rand() % 2;
+				return act0[rand() % 3];
 		}
 		break;
 	case LevelIDs_HotShelter:
@@ -117,11 +118,8 @@ short randomacts(RandomizedEntry entry) {
 			return actHS[rand() % 2];
 		break;
 	case LevelIDs_TwinkleCircuit:
-		do {
 			return rand() % 5;
-
-		} while (entry.act == 0);
-		break;
+			break;
 	default:
 		return 0;
 		break;
@@ -234,15 +232,12 @@ void testRefactor(char stage, char act) {
 			CurrentCharacter = randomizedSets[levelCount].character;
 		
 		LastLevel = CurrentLevel;
+		CustomLayout = 0;
+		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
 		levelCount++;
 
-			std::ofstream LevelCount("LvlCount.txt");
-			//Header
-			LevelCount << levelCount;
-			LevelCount << "\n";
-			LevelCount.close();
 			
 			if (levelCount == TotalCount)
 			{
@@ -258,13 +253,6 @@ void testRefactor(char stage, char act) {
 
 				}
 				
-				std::ofstream Reset("ResetLevel.txt");
-				//Header
-				Reset << "level count a été remit a 0 + generation de new splits, AU LEVEL:";
-				Reset << CurrentLevel;
-				Reset << "Après exactement";
-				Reset << levelCount;
-				Reset.close();
 				levelCount = 0;
 				return;
 			}
@@ -287,6 +275,8 @@ void GoToNextLevel_SA1R(char stage, char act) {
 				CurrentCharacter = randomizedSets[levelCount].character;
 
 			LastLevel = CurrentLevel;
+			CustomLayout = 0;
+			GetCustomLayout = 0;
 			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 			CurrentAct = randomizedSets[levelCount].act;
 
@@ -304,14 +294,6 @@ void GoToNextLevel_SA1R(char stage, char act) {
 						randomizedSets[i].sonic_mode = rand() % 2;
 					}
 
-
-					std::ofstream Reset("ResetLevel.txt");
-					//Header
-					Reset << "level count a été remit a 0 + generation de new splits, AU LEVEL:";
-					Reset << CurrentLevel;
-					Reset << "Après exactement";
-					Reset << levelCount;
-					Reset.close();
 					levelCount = 0;
 					return;
 				}
@@ -329,16 +311,14 @@ void GoToNextLevel_hook(char stage, char act) {
 			CurrentCharacter = randomizedSets[levelCount].character;
 
 		LastLevel = CurrentLevel;
+		CustomLayout = 0;
+		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
 
 		levelCount++;
 
-		std::ofstream LevelCount("LvlCount.txt");
-		//Header
-		LevelCount << levelCount;
-		LevelCount << "\n";
-		LevelCount.close();
+
 
 		if (levelCount == TotalCount)
 		{
@@ -353,13 +333,6 @@ void GoToNextLevel_hook(char stage, char act) {
 				}
 
 
-				std::ofstream Reset("ResetLevel.txt");
-				//Header
-				Reset << "level count a été remit a 0 + generation de new splits, AU LEVEL:";
-				Reset << CurrentLevel;
-				Reset << "Après exactement";
-				Reset << levelCount;
-				Reset.close();
 				levelCount = 0;
 				return;
 			}
@@ -376,6 +349,7 @@ void CancelResetPosition() {
 	TikalRand = 0;
 	EggmanRand = 0;
 	CustomLayout = 0;
+	GetCustomLayout = 0;
 	AICopy = 0;
 	isRandDone = false;
 	Race = false;

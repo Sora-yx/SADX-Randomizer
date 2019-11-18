@@ -11,19 +11,37 @@ HelperFunctions help;
 NJS_TEXNAME Missions[10];
 int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 
+int CheckMissionRequirements_r() {
+
+	GetCustomLayout = CustomLayout;
+
+	if (CurrentLevel > 14)
+		return 0;
+
+		if (GetCustomLayout == 2) //100 Rings check
+			return (int)(99 < (short)Rings);
+			
+		if (GetCustomLayout == 3) //Lost Chao
+			return 1;
+
+		return 1;
+
+}
+
 void LoadStageMissionImage_r() {
+
+	GetCustomLayout = 0;
+	CurrentMission = 0;
 
 	if (GetLevelType == 0) { //do the mission check here
 		//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails
 		if (CurrentLevel > 14 && CurrentLevel < 40)
 			return;
 
-		//GetCustomLayout = 0;
 		GetCustomLayout = CustomLayout;
 
 		if (CurrentLevel == LevelIDs_TwinkleCircuit)
 			return;
-
 
 		if (CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2)
 			CurrentMission = 5;
@@ -37,45 +55,30 @@ void LoadStageMissionImage_r() {
 			else
 				CurrentMission = 4;
 
-		if (CurrentLevel == LevelIDs_SpeedHighway)
-			if (Race)
-				CurrentMission = 7;
-			else
-				CurrentMission = 0;
 
-
-
-		if (CurrentCharacter == Characters_Big && (GetCustomLayout != 8 && GetCustomLayout != 3))
+		if (CurrentCharacter == Characters_Big && GetCustomLayout == 0)
 			CurrentMission = 5;
 
-		if (CurrentCharacter == Characters_Amy && (GetCustomLayout != 8 && GetCustomLayout != 3))
+		if (CurrentCharacter == Characters_Amy && GetCustomLayout == 0)
 			CurrentMission = 10;
 	
 
-		if (CurrentLevel == LevelIDs_SkyDeck)
-		{
-			if (Race)
-				CurrentMission = 3;
-			else
-			{
-				if (GetCustomLayout == 1) //100 Rings
-					CurrentMission = 8;
-
-				if (GetCustomLayout == 2) //Lost Chao
-					CurrentMission = 1;
-
-				if (GetCustomLayout == 0) //Normal
-					CurrentMission = 0;
-			}
-		}
-
-		if (GetCustomLayout == 2) //100 Rings
+		if (GetCustomLayout == 2 && !Race) //100 Rings
 			CurrentMission = 8;
 
-		if (GetCustomLayout == 3) //Lost Chao
+		if (GetCustomLayout == 3 && !Race) //Lost Chao
 			CurrentMission = 1;
-				
+	
 
+		if (Race && CurrentLevel == LevelIDs_SkyDeck)
+			CurrentMission = 3;
+
+
+		if (CurrentLevel == LevelIDs_SpeedHighway)
+			if (Race)
+				CurrentMission = 7;
+
+				
 		StageMissionTexlist.textures = Missions;
 		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
 		LoadPVM("textures\\Missions", &StageMissionTexlist);
@@ -93,7 +96,6 @@ void StageMissionImage_result() {
 
 	if (GetLevelType == 0) { //do the mission check here
 		//0 = capsule, 1 = Lost Chao, 2 = Beat Sonic, 3 = Emeralds Knux, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails
-	
 
 		GetCustomLayout = CustomLayout;
 		
@@ -110,6 +112,7 @@ void StageMissionImage_result() {
 		obj->Data1->Position.x = 320.0;
 		obj->Data1->Position.y = 240.0;
 		obj->DeleteSub = FreeStageMissionImage;
+
 	}
 }
 

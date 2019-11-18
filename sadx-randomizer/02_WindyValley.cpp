@@ -40,6 +40,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0201M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0205M.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
+
 	helperFunctions.ReplaceFile("system\\CAM0200M.BIN", "system\\cam\\CAM0200M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201M.BIN", "system\\cam\\CAM0201M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202M.BIN", "system\\cam\\CAM0202M.bin");
@@ -51,6 +53,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0200K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0205K.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
 
 
 	helperFunctions.ReplaceFile("system\\CAM0200K.BIN", "system\\cam\\CAM0200K.bin");
@@ -67,6 +71,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0202A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0204A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Race.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0205A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Chao.bin"); //Chao
+
 	helperFunctions.ReplaceFile("system\\CAM0200A.BIN", "system\\cam\\CAM0200A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201A.BIN", "system\\cam\\CAM0201A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202A.BIN", "system\\cam\\CAM0202A.bin");
@@ -79,6 +85,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0201B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0205B.BIN", "system\\levels\\Windy Valley\\Big-WV-Chao.bin"); //Chao
+
 	helperFunctions.ReplaceFile("system\\CAM0200B.BIN", "system\\cam\\CAM0200B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201B.BIN", "system\\cam\\CAM0201B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202B.BIN", "system\\cam\\CAM0202B.bin");
@@ -90,6 +98,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0200E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0205E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Chao.bin"); //Chao
 
 	helperFunctions.ReplaceFile("system\\CAM0200E.BIN", "system\\cam\\CAM0200E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201E.BIN", "system\\cam\\CAM0201E.bin");
@@ -193,40 +203,60 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void WindyValleyAct4() {
 
-	//CustomLayout = rand() % 3;
-	CustomLayout = 3;
+	CustomLayout = 0;
 
+	if (Missions)
+		CustomLayout = rand() % 4;
+	else
+		CustomLayout = rand() % 2;
+
+	
 	switch (CustomLayout)
 	{
 	case 0:
-		LoadSetFile(0, "0200"); //M1
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0203"); 
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
+		else
+		{
+			LoadSetFile(0, "0200"); 
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
 		break;
 	case 1:
-		LoadSetFile(0, "0203"); //Custom Layout
+		if (CurrentCharacter != Characters_Gamma || CurrentCharacter != Characters_Big)
+		{
+			LoadSetFile(0, "0203");
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
+		else
+		{
+			LoadSetFile(0, "0200"); //Custom Layout
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
 		break;
 	case 2:
 		LoadSetFile(0, "0200");  //m2
+		LoadSetFile(1, "0201");
+		LoadSetFile(2, "0202");
 		break;
 	case 3:
-		LoadSetFile(0, "0200"); //M3
+		LoadSetFile(0, "0200");
+		LoadSetFile(1, "0201");
+		LoadSetFile(2, "0205");
 		break;
 	}
 
+	return;
+
 }
 
 
 
-void CamWindyValley() { //ask the game to load a different camera depending on the layout you got, camera doesn't act the same for each character and layout.
-
-	if (CustomLayout == 1)
-	{
-		LoadCamFile(0, "0203"); //load Gamma camera
-		return;
-	}
-	else
-	{
-		LoadCamFile(0, "0200"); //load Sonic camera
-		return;
-	}
-}
 

@@ -4,6 +4,9 @@
 
 extern int CustomFlag;
 extern bool CreditCheck;
+extern int GetCustomLayout;
+extern int CustomLayout;
+extern int CurrentMission;
 
 void CreditFlag() {
 
@@ -616,6 +619,9 @@ void CreditsNewList() {
 void credits() {
 
 	Credits_CanSkip = 1;
+	CustomLayout = 0;
+	GetCustomLayout = 0;
+	CurrentMission = 0;
 
 	if (CreditCheck)
 	{

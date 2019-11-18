@@ -7,5 +7,5 @@ StartPosition Casino1_StartPositions[]{
 };
 
 StartPosition Casino2_StartPositions[]{
-	{ 9, 0,{ 0, 0, 0}, 0 }
+	{ 9, 1,{ 19, -1695, 2850}, 0 }
 };

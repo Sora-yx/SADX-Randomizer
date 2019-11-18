@@ -18,7 +18,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0401S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0402S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act3.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0403S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0403S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Race.bin");
+	helperFunctions.ReplaceFile("system\\SET0404S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0400S.BIN", "system\\cam\\CAM0400S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401S.BIN", "system\\cam\\CAM0401S.bin");
@@ -32,7 +33,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0401M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0402M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Act3.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0403M.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0404M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0400M.BIN", "system\\cam\\CAM0400M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401M.BIN", "system\\cam\\CAM0401M.bin");
@@ -46,6 +47,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0401K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0402K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0403K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Race.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0404K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0400K.BIN", "system\\cam\\CAM0400K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401K.BIN", "system\\cam\\CAM0401K.bin");
@@ -61,6 +64,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0402A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0403A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Race.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0404A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0400A.BIN", "system\\cam\\CAM0400A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401A.BIN", "system\\cam\\CAM0401A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0402A.BIN", "system\\cam\\CAM0402A.bin");
@@ -73,6 +78,9 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0401B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0402B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0404B.BIN", "system\\levels\\Speed Highway\\Big-SH-Chao.bin");
+
+
 	helperFunctions.ReplaceFile("system\\CAM0400B.BIN", "system\\cam\\CAM0400B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401B.BIN", "system\\cam\\CAM0401B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0402B.BIN", "system\\cam\\CAM0402B.bin");
@@ -84,7 +92,9 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0400E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0401E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0402E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0403E.BIN", "system\\levels\\Speed Highway\\Amy-SH-Race.bin");
+	helperFunctions.ReplaceFile("system\\SET0403E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Race.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0404E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0400E.BIN", "system\\cam\\CAM0400E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401E.BIN", "system\\cam\\CAM0401E.bin");
@@ -96,85 +106,113 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 
 void SpeedHighwayAct4() {
 
-	//CustomLayout = rand() % 4;
-	CustomLayout = 3;
+	CustomLayout = 0;
+
+	if (Missions)
+		CustomLayout = rand() % 4;
+	else
+		CustomLayout = rand() % 2;
+
 	switch (CustomLayout)
 	{
 	case 0:
 		if (CurrentCharacter == Characters_Sonic)
 		{
-			LoadSetFile(0, "0400"); //(Sonic's vanilla layout here is tails version so we want the game to force it anyway.)
-			CustomLayout = 0;
+			LoadSetFile(0, "0403"); //(Sonic's vanilla layout here is tails version so we want the game to force it anyway.)
 			Race = true;
 			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\Voices\\Haha_Sonic.wma"); //""I've got you now; Tails."  ==> "Hoo-haha! See if you can make it through here; Sonic!" 
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\Voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\Voices\\DontGiveUp.wma"); //"Goodbye Tails" ==> "Why don't you give up"
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\Voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "not ez"
+			CustomLayout = 1;
 		}
 		else
 		{
-			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-			{
-				LoadSetFile(0, "0400"); //don't load Tails version if character is Tails or Big. 
-				Race = false;
-				CustomLayout = 0;
-			}
+			LoadSetFile(0, "0400"); //don't load Tails version if character is Tails or Big. 
+			Race = false;
+			CustomLayout = 0;
 			break;
 		}
 		break;
 	case 1:
-		Race = true;
-		LoadSetFile(0, "0403"); //load Tails layout
-		if (CurrentCharacter == Characters_Amy)
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails)
 		{
-			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\GoingAmy.wma"); //"where do you think you're going amy"
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\NotEZ.wma"); //"What? He's caught up!"  ==> "not ez"
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\NotEZ.wma");//"you little fox" ==> "not ez"
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma");  //"Goodbye Tails" ==> "Why don't you give up"
-			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
-
+			LoadSetFile(0, "0400"); //load Tails layout
+			Race = false;
+			CustomLayout = 0;
 		}
 		else
-		{
-			if (CurrentCharacter == Characters_Knuckles)
+		{ 
+
+			Race = true;
+			LoadSetFile(0, "0403"); //load Tails layout
+	
+			if (CurrentCharacter == Characters_Sonic)
 			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+				Race = true;
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
 				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
-				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\NoUse.wma"); //""I've got you now; Tails."  ==> "It's no use, give up"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\Voices\\Haha_Sonic.wma"); //""I've got you now; Tails."  ==> "Hoo-haha! See if you can make it through here; Sonic!" 
 				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
-				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Knuckles.wma"); //"you little fox" == "Knuckles".
-				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\Knuckles.wma");  //"Tails wait for me" ==> "Knuckles" 
-				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
-				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "Not EZ"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\Voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\Voices\\DontGiveUp.wma"); //"Goodbye Tails" ==> "Why don't you give up"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\Voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "not ez"
+				CustomLayout = 1;
+			}
+	
+			if (CurrentCharacter == Characters_Amy)
+			{
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\GoingAmy.wma"); //"where do you think you're going amy"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\NotEZ.wma"); //"What? He's caught up!"  ==> "not ez"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\NotEZ.wma");//"you little fox" ==> "not ez"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma");  //"Goodbye Tails" ==> "Why don't you give up"
+				help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
+	
 			}
 			else
 			{
-				if (CurrentCharacter == Characters_Gamma)
+				if (CurrentCharacter == Characters_Knuckles)
 				{
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
 					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
-					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\BeGone.wma"); //""I've got you now; Tails."  ==> "BeGone!"
+					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\NoUse.wma"); //""I've got you now; Tails."  ==> "It's no use, give up"
 					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
-					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Useless.wma"); //"Useless machine".
-					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Knuckles.wma"); //"you little fox" == "Knuckles".
+					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\Knuckles.wma");  //"Tails wait for me" ==> "Knuckles" 
 					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
-					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\Useless.wma"); //"Give up now; Tails!" ==> "Useless machine"
+					help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "Not EZ"
 				}
-			}
+				else
+				{
+					if (CurrentCharacter == Characters_Gamma)
+					{
+						help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\BeGone.wma"); //""I've got you now; Tails."  ==> "BeGone!"
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Useless.wma"); //"Useless machine".
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
+						help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\Useless.wma"); //"Give up now; Tails!" ==> "Useless machine"
+					}
+				}
+		}
+
 		}
 		break;
 	case 2: //100 Rings
+		Race = false;
 		LoadSetFile(0, "0400"); //load Sonic layout
 		break;
 	case 3: //Lost Chao
-		LoadSetFile(0, "0403"); //load Sonic layout
+		Race = false;
+		LoadSetFile(0, "0404"); //load Sonic layout
 		break;
 	}
 }
@@ -192,6 +230,7 @@ void CamSpeedHighway() {
 		return;
 	}
 }
+
 
 ObjectListEntry SpeedHighwayObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,

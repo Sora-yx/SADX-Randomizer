@@ -12,6 +12,9 @@ VoidFunc(BigHoldingFroggy, 0x48cce4);
 
  int SetAmyWinPose(void);
 
+ void LoadTails_AI_R();
+ void LoadTails_AI_Original(); //Normal AI (Tails Only)
+
 
  VoidFunc(EggViperBounceHit, 0x441280);
 

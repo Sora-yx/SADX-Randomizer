@@ -60,7 +60,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			ArePvpLoaded = true;
 		}
 
-		ChaoManager_Load(); //Load chao behaviour
+		//ChaoManager_Load(); //Load chao behaviour
 
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		a1->Data1->Action = 1; //Wait a frame before loading the chao
@@ -77,23 +77,40 @@ void ChaoObj_Main(ObjectMaster* a1) {
 
 		a1->Data1->Action = 2;
 	}
-	else {
-		ChaoObj_Animate(2, 33);
+	else if (Action == 2) {
+		ChaoObj_Animate(2, 33); //lost animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
 
 		//water height
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
 
-		if (IsPlayerInsideSphere(&a1->Data1->Position, 8)) { //hitbox
-			if (TimeThing != 0)
-			{
-				LoadLevelResults();
-				DeleteObject_(a1);
+		if (CurrentCharacter < 6)
+			if (IsPlayerInsideSphere(&a1->Data1->Position, 8)) { //hitbox
+				if (TimeThing != 0)
+				{
+					LoadLevelResults();
+					a1->Data1->Action = 3;
+				}
 			}
-		}
+			else {
+				ChaoObj_Animate(3, 33); //found animation
+			}
+
+		if (CurrentCharacter >= 6)
+			if (IsPlayerInsideSphere(&a1->Data1->Position, 20)) { //hitbox
+				if (TimeThing != 0)
+				{
+					LoadLevelResults();
+					a1->Data1->Action = 3;
+				}
+			}
+			else {
+				ChaoObj_Animate(3, 33); //found animation
+			}
 	}
 }
+			
 
 void Chao_Init() {
 	//Trick the game into thinking we're in a specific chao garden
@@ -102,7 +119,7 @@ void Chao_Init() {
 }
 
 void Chao_OnFrame() {
-	if (!ChaoObject && CurrentMission == 1 && CurrentLevel < 15) {
+	if (!ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
 		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
 
 		NJS_VECTOR pos;
@@ -113,6 +130,7 @@ void Chao_OnFrame() {
 		{
 		case LevelIDs_EmeraldCoast:
 			pos = { 3857.76, 597.395, -2896.18 };
+			//pos = { 10, 5, 0 };
 			Yrot = 0x8000;
 			break;
 		case LevelIDs_WindyValley:
@@ -128,11 +146,11 @@ void Chao_OnFrame() {
 			Yrot = 0x8000;
 			break;
 		case LevelIDs_TwinklePark:
-			pos = { 520, 1333, 1630 };
+			pos = { 520, 1330, 1630 };
 			Yrot = 0x8000;
 			break;
 		case LevelIDs_SpeedHighway:
-			pos = { 4455, -368.395, 2930.18 };
+			pos = { 4455, -381.395, 2930.18 };
 			Yrot = 0x8000;
 			break;
 		case LevelIDs_RedMountain:
@@ -152,8 +170,6 @@ void Chao_OnFrame() {
 		ChaoObject->Data1->Position = pos;
 		ChaoObject->Data1->Rotation.y = Yrot;
 	}
-
-
 }
 
 

@@ -10,11 +10,13 @@ extern bool Missions;
 
 void CasinoAct4() {
 
-	CustomLayout = 3;
+	CustomLayout = 0;
 
-	if (CurrentAct != 2)
-	{
+	if (Missions)
 		CustomLayout = rand() % 4;
+	else
+		CustomLayout = rand() % 2;
+
 
 		switch (CustomLayout)
 		{
@@ -29,11 +31,18 @@ void CasinoAct4() {
 			LoadSetFile(0, "0900"); //M2
 			break;
 		case 3:
-			LoadSetFile(0, "0904"); //M3
+			if (CurrentAct == 1)
+			{
+				CustomLayout = 2;
+				LoadSetFile(0, "0900"); //M2
+				return;
+			}
+			else
+				LoadSetFile(0, "0904"); //M3
+
 			break;
 		}
-
-	}
+	
 }
 
 
@@ -55,7 +64,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0900M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904M.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0904M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900S.bin", "system\\cam\\CAM0900S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
@@ -66,7 +75,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0900K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0900S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0904K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900K.bin", "system\\cam\\CAM0900K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901K.bin", "system\\cam\\CAM0901K.bin");
@@ -78,6 +87,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0900A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0904A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900A.bin", "system\\cam\\CAM0900A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901A.bin", "system\\cam\\CAM0901A.bin");
@@ -88,6 +98,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0900B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0904B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900B.bin", "system\\cam\\CAM0900B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901B.bin", "system\\cam\\CAM0901B.bin");
@@ -98,6 +109,8 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0900E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0904E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Chao.bin");
+
 
 	helperFunctions.ReplaceFile("system\\CAM0900E.bin", "system\\cam\\CAM0900E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901E.bin", "system\\cam\\CAM0901E.bin");

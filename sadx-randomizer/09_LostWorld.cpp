@@ -9,10 +9,12 @@ extern bool Missions;
 
 void LWAct4() {
 
+	CustomLayout = 0;
+
 	if (Missions)
-		CustomLayout = 3;
+		CustomLayout = rand() % 4;
 	else
-	//CustomLayout = rand() % 4;
+		CustomLayout = rand() % 2;
 
 		switch (CustomLayout)
 		{
@@ -58,6 +60,8 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0701M.BIN", "system\\levels\\Lost World\\Tails-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702M.BIN", "system\\levels\\Lost World\\Tails-LW-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0703M.BIN", "system\\levels\\Lost World\\Tails-LW-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0700M.bin", "system\\cam\\CAM0700M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701M.bin", "system\\cam\\CAM0701M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702M.bin", "system\\cam\\CAM0702M.bin");
@@ -69,6 +73,8 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0700K.BIN", "system\\levels\\Lost World\\Knux-LW-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0701K.BIN", "system\\levels\\Lost World\\Knux-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702K.BIN", "system\\levels\\Lost World\\Knux-LW-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0703K.BIN", "system\\levels\\Lost World\\Knux-LW-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0700K.bin", "system\\cam\\CAM0700K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701K.bin", "system\\cam\\CAM0701K.bin");
@@ -83,6 +89,8 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0701A.BIN", "system\\levels\\Lost World\\Amy-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702A.BIN", "system\\levels\\Lost World\\Amy-LW-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0703A.BIN", "system\\levels\\Lost World\\Amy-LW-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0700A.bin", "system\\cam\\CAM0700A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701A.bin", "system\\cam\\CAM0701A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702A.bin", "system\\cam\\CAM0702A.bin");
@@ -95,6 +103,8 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0701B.BIN", "system\\levels\\Lost World\\Big-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702B.BIN", "system\\levels\\Lost World\\Big-LW-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0703B.BIN", "system\\levels\\Lost World\\Big-LW-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0700B.bin", "system\\cam\\CAM0700B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701B.bin", "system\\cam\\CAM0701B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702B.bin", "system\\cam\\CAM0702B.bin");
@@ -106,6 +116,8 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0700E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0701E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0703E.BIN", "system\\levels\\Lost World\\Gamma-LW-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0700E.bin", "system\\cam\\CAM0700E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701E.bin", "system\\cam\\CAM0701E.bin");

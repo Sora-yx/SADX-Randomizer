@@ -11,8 +11,10 @@ void ICAct4() {
 
 	CustomLayout = 0;
 
-	if (CurrentAct != 3)
+	if (Missions)
 		CustomLayout = rand() % 4;
+	else
+		CustomLayout = rand() % 2;
 
 		switch (CustomLayout)
 		{

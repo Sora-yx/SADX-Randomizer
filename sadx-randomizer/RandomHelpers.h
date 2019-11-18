@@ -28,7 +28,7 @@ void ChangeStartPosCharLoading();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 
 extern int level[21];
-extern int AIArray[6];
+extern int AIArray[5];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
@@ -121,6 +121,7 @@ void FixRollerCoaster();
 
 //void RandomizerMission();
 void SHAct2Position();
+void ICAct3Position();
 void MetalSonicRace_Init();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
@@ -158,7 +159,6 @@ DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
 DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
 
-void LoadTails_AI_R();
 
 
 int IsFastSonicAI_R(void);
@@ -167,7 +167,9 @@ int DisplayTitleCard_r();
 void LoadStageMissionImage_r();
 int LoadTitleCardTexture_r(int minDispTime);
 void StageMissionImage_result();
-
+int CheckMissionRequirements_r();
+void BackRing();
+void BackRing2();
 
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 

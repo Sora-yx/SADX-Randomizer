@@ -88,6 +88,8 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 
 void FinalEggAct4() {
 
+	CustomLayout = 0;
+
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Amy)
 	{
 		LoadSetFile(0, "1000"); //don't load Amy layout if Sonic, and vice versa.)

@@ -245,9 +245,10 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void SkyDeckAct4() {
 
+	CustomLayout = 0;
+
 	if (Missions)
-		//CustomLayout = rand() % 4;
-		CustomLayout = 3;
+		CustomLayout = rand() % 4;
 	else
 		CustomLayout = 0;
 
@@ -263,6 +264,7 @@ void SkyDeckAct4() {
 		{
 			LoadSetFile(0, "0600"); //load Sonic layout
 			Race = false;
+			CustomLayout = 0;
 			return;
 			break;
 		}

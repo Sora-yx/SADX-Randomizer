@@ -54,7 +54,7 @@ ObjectMaster* LoadCharObj(int i)
 
 int CheckTailsAI_R(void) {
 
-	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0)
+	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
 		isAIActive = false;
 		return 0;
@@ -83,7 +83,7 @@ int CheckTailsAI_R(void) {
 			}
 			break;
 		case LevelIDs_FinalEgg:
-			if (CurrentCharacter == Characters_Amy)
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
 			{
 				isAIActive = false;
 				return 0;
@@ -97,7 +97,7 @@ int CheckTailsAI_R(void) {
 			}
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct > 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles)
+			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles)
 			{
 				isAIActive = false;
 				return 0;
@@ -112,6 +112,13 @@ int CheckTailsAI_R(void) {
 			break;
 		case LevelIDs_EmeraldCoast:
 			if (CurrentAct == 1 && CurrentCharacter == Characters_Tails)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Chaos0:
+			if (CurrentCharacter == Characters_Sonic)
 			{
 				isAIActive = false;
 				return 0;
@@ -149,6 +156,23 @@ int CheckTailsAI_R(void) {
 			return 0;
 		}
 		break;
+		case LevelIDs_LostWorld:
+		{
+			if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		case LevelIDs_SkyDeck:
+		{
+			if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		break;
 	}
 
 
@@ -158,13 +182,10 @@ int CheckTailsAI_R(void) {
 }
 
 
-ObjectMaster* Load2PTails_r(ObjectMaster* player1)
+ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 {
 
-	if (!isAIAllowed)
-		FlagAI = CheckTailsAI(); //Check Regular Tails AI if the random AI option is disabled. 
-	else
-		FlagAI = CheckTailsAI_R(); 
+	FlagAI = CheckTailsAI_R(); 
 
 	if (FlagAI != 1)
 	{
@@ -177,15 +198,12 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 		{
 			do {
 				if (isAIAllowed)
-					CurrentAI = AIArray[rand() % 6];
-				else
-					if (CurrentCharacter == Characters_Sonic)
-						CurrentAI = Characters_Tails; //don't rand and just call tails AI 
+					CurrentAI = AIArray[rand() % 5];
 
-			} while (CurrentCharacter == CurrentAI);
+			} while (CurrentCharacter == CurrentAI || CurrentAI == 1 && EggmanRand == 1 || CurrentAI == 4 && TikalRand == 1 || CurrentAI == 1 && CurrentLevel == LevelIDs_FinalEgg);
 		}
-			
-		
+			 
+
 		ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
 		TailsAI_ptr = v1;
 
@@ -211,6 +229,49 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1)
 	return (ObjectMaster*)0x0;
 }
 //}
+
+ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails only)
+{
+
+		FlagAI = CheckTailsAI_R();
+
+	if (FlagAI != 1)
+	{
+		isAIActive = false;
+		return (ObjectMaster*)0x0;
+	}
+	else
+	{
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			CurrentAI = Characters_Tails; //don't rand and just call tails AI 
+
+
+			ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
+			TailsAI_ptr = v1;
+
+			if (v1)
+			{
+				v1->Data1->CharID = (char)CurrentAI;
+				v1->Data1->CharIndex = 1;
+				v1->DeleteSub = TailsAI_Delete;
+
+				ObjectMaster* v3 = LoadCharObj(1); //load AI 
+
+				v3->Data1->Position.x = v1->Data1->Position.x - njCos(v1->Data1->Rotation.y) * 30;
+				v3->Data1->Position.y = v1->Data1->Position.y;
+				v3->Data1->Position.z = v1->Data1->Position.z - njSin(v1->Data1->Rotation.y) * 30;
+				v3->Data1->Action = 0;
+				dword_3B2A304 = 0;
+
+				return v3;
+			}
+		}
+	}
+
+	return (ObjectMaster*)0x0;
+}
+		
 
 
 
@@ -532,6 +593,9 @@ CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
 
+	if (!isAIAllowed)
+		return;
+
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel == LevelIDs_EggWalker)
 		return;
 
@@ -652,7 +716,7 @@ void AISwitch() {
 
 void LoadTails_AI_R() {
 
-	SetFrameRateMode(1, 1);
+	//SetFrameRateMode(1, 1);
 	
 	
 	if (CreditCheck != true)
@@ -665,24 +729,41 @@ void LoadTails_AI_R() {
 				ObjectMaster* o2 = nullptr;
 				o2 = Load2PTails_r(obj);
 		}
-		
+		else
+		{
+			if (Race == false && isAIAllowed == false)
+			{
+				ObjectMaster* obj;
+				obj = GetCharacterObject(0);
+				ObjectMaster* lastobj = obj;
+				ObjectMaster* o2 = nullptr;
+				o2 = Load2PTails_r(obj);
+			}
+		}
+
+	}
+
+	return;
+	
+}
+
+void LoadTails_AI_Original() {
+
+
+	if (CreditCheck != true)
+	{
 		if (!Race && !isAIAllowed)
 		{
 			ObjectMaster* obj;
 			obj = GetCharacterObject(0);
 			ObjectMaster* lastobj = obj;
 			ObjectMaster* o2 = nullptr;
-			o2 = Load2PTails_r(obj);
+			o2 = Load2PTails_Original(obj);
 		}
 
 	}
 
-	std::ofstream FunnyAI("AICheck.txt");
-	FunnyAI << "didn't call the AI LUL";
-	FunnyAI << "\n";
-	FunnyAI.close();
-	isAIActive = false;
 	return;
-	
+
 }
 
