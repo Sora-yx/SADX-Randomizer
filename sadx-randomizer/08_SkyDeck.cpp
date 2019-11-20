@@ -8,6 +8,7 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;
+extern int levelCount;
 
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -248,7 +249,7 @@ void SkyDeckAct4() {
 	CustomLayout = 0;
 
 	if (Missions)
-		CustomLayout = rand() % 4;
+		CustomLayout = randomizedSets[levelCount].layout;
 	else
 		CustomLayout = 0;
 

@@ -7,9 +7,8 @@
 int SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
-int TikalRand = 0;
-int EggmanRand = 0;
-bool isRandDone = false;
+int ExtraChara = 0;
+extern int levelCount;
 
 extern int CurrentAI;
 extern bool CreditCheck;
@@ -97,11 +96,9 @@ void LoadCharacter_r()
 	{
 		if (CurrentLevel != LevelIDs_EmeraldCoast && CurrentLevel != LevelIDs_FinalEgg)
 			if (SonicRand == 0 && MetalSonicFlag == 0 && RNGCharacters)
-				if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_RedMountain && CurrentLevel != LevelIDs_WindyValley && isRandDone == false)
+				if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_FinalEgg)
 				{
-					TikalRand = rand() % 2;
-					EggmanRand = rand() % 2;
-					isRandDone = true;
+
 				}
 
 		CheckRace();
@@ -111,25 +108,14 @@ void LoadCharacter_r()
 			switch (CurrentCharacter)
 			{
 			case Characters_Knuckles:
-				MetalSonicFlag = 0;
-				if (TikalRand == 1 && CurrentAI != 4 && isRandDone == true)
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
-				else
+				if (ExtraChara == 0)
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Knuckles
+				else
+					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
 				break;
 			case Characters_Amy:
-				MetalSonicFlag = 0;
 				CheckLoadBird();
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
-				break;
-			case Characters_Sonic:
-				if (EggmanRand == 1 && SonicRand == 0 && CurrentAI != 1 && isRandDone == true)
-				{
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[1]); //Load Eggman
-					obj->DisplaySub = Eggman_Display;
-				}
-				else
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Sonic
 				break;
 			default:
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
@@ -143,7 +129,7 @@ void LoadCharacter_r()
 			EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
 			MovePlayerToStartPoint(obj->Data1);
 
-			LoadEggmanAI(); //load eggman if Speed highway
+			LoadEggmanAI(); //load eggman race if Speed highway
 
 			if (isAIAllowed)
 				LoadTails_AI_R();
@@ -202,24 +188,17 @@ void SuperSonicStuff() {
 	TimeThing = 1; //activate the timer of the stage.
 
 
-
 	if (CurrentCharacter != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
 
-	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Amy)
-	{
-		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
-		SonicRand = 0;
-
-	}
 
 
 	if (CurrentLevel < 15)
 	{
-		if (CurrentLevel != LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel != LevelIDs_SpeedHighway && CurrentAct == 1 || CurrentLevel != LevelIDs_WindyValley)
+		if (CurrentLevel == LevelIDs_Casinopolis || CurrentLevel > 6 && CurrentLevel < 13)
 		{
 			FreeCam = 1;
 			SetCameraMode_(FreeCam);
@@ -356,9 +335,6 @@ void BigWeightHook() {
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 2000; //display 2000g for Big
 }
-
-
-
 
 
 

@@ -16,12 +16,9 @@ extern int CustomLayout;
 bool Race = false;
 extern bool isAIAllowed;
 extern bool isAIActive;
-extern bool isRandDone;
 extern int CurrentAI;
 extern int EggmanRand;
-extern int TikalRand;
 extern int GetCustomLayout;
-extern int AICopy;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -34,10 +31,6 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 	SonicRand = 0;
-	isRandDone = false;
-	EggmanRand = 0;
-	TikalRand = 0;
-	AICopy = 0;
 	ResultVoiceFix();
 	Credits_CanSkip = 1;
 
@@ -362,8 +355,7 @@ void BackRing() { //capsule
 			break;
 		}
 	}
-	else
-		LoadLevelResults();
+
 
 }
 

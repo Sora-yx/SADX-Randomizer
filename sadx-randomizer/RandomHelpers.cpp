@@ -9,8 +9,11 @@
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Vanilla;
+extern bool Missions;
 extern int ban;
-
+extern bool ConsistentMusic;
+int musicCount;
+extern int CurrentAI;
 extern bool Sonic;
 extern bool Tails;
 extern bool Knuckles;
@@ -21,19 +24,14 @@ extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
 extern int split;
-int GetFlag;
 extern int TotalCount;
 extern bool isAIAllowed;
-extern bool isRandDone;
-int CurrentAI = 0;
 extern bool Race;
-extern int AICopy;
-extern int EggmanRand;
-extern int TikalRand;
 extern int GetCustomLayout;
+extern int ExtraChara;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[5] = { Characters_Sonic, Characters_Eggman, Characters_Tails, /*Characters_Knuckles,*/ Characters_Tikal, Characters_Amy };
+int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
@@ -44,7 +42,7 @@ int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, 
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 //Initiliaze banned regular stage
-int bannedRegularSonic[9] = { LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
+int bannedRegularSonic[8] = { LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
 int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
 int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
 int bannedRegularAmy[1] = { LevelIDs_Zero };
@@ -126,6 +124,16 @@ short randomacts(RandomizedEntry entry) {
 	}
 }
 
+short randomLayout(RandomizedEntry entry) {
+
+	if (Missions)
+		return rand() % 4;
+	else
+		return rand() % 2;
+
+}
+
+
 int8_t prev_char = -1;
 
 
@@ -146,6 +154,28 @@ uint8_t getRandomCharacter(bool allow_duplicate) {
 }
 
 
+
+
+
+
+short getRandomAI(RandomizedEntry entry) {
+
+	int8_t cur_AI = -1;
+	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
+
+	do {
+
+		cur_AI = AIArray[rand() % ai_count];
+
+	} while (cur_AI == entry.character || banCharacter[cur_AI]);
+	
+	
+	return cur_AI;
+}
+
+
+
+
 short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
@@ -155,20 +185,11 @@ short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 
 	if (AllowVanilla != true) {
 		do {
-			if (SuperSonic != true)
-				SonicRand = rand() % 2;
-
-			if (MetalSonic != true)
-				MetalSonicFlag = rand() % 2;
 			cur_stage = level[rand() % LengthOfArray(level)];
 		} while (isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
 	}
 	else {
 		do {
-			if (SuperSonic != true)
-				SonicRand = rand() % 2;
-			if (MetalSonic != true)
-				MetalSonicFlag = rand() % 2;
 			cur_stage = level[rand() % LengthOfArray(level)];
 		} while (cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
 	}
@@ -230,6 +251,15 @@ void testRefactor(char stage, char act) {
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
+
+		if (SuperSonic != true)
+			SonicRand = randomizedSets[levelCount].ss_mode;
+
+		if (MetalSonic != true)
+			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
+
+		CurrentAI = randomizedSets[levelCount].ai_mode;
+		ExtraChara = randomizedSets[levelCount].knux_mode;
 		
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
@@ -239,70 +269,16 @@ void testRefactor(char stage, char act) {
 		levelCount++;
 
 			
-			if (levelCount == TotalCount)
-			{
-				for (int i = 0; i < 40; i++) { //generate 40 levels in case the player quits a lot to get the next stage. This will get updated if the player beat a story.
-					randomizedSets[i].character = getRandomCharacter();
-					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-					randomizedSets[i].act = randomacts(randomizedSets[i]);
-
-					if (randomizedSets[i].character == Characters_Sonic)
-					{
-						randomizedSets[i].sonic_mode = rand() % 2;
-					}
-
-				}
-				
-				levelCount = 0;
-				return;
-			}
-	}
-
-
-}
-
-void GoToNextLevel_SA1R(char stage, char act) {
-	
-	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
-	{
-
-		GetFlag = CustomFlagCheckSA1_R();
-
-		if (GetFlag == 1)
+		if (levelCount == TotalCount)
 		{
-
-			if (RNGCharacters)
-				CurrentCharacter = randomizedSets[levelCount].character;
-
-			LastLevel = CurrentLevel;
-			CustomLayout = 0;
-			GetCustomLayout = 0;
-			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-			CurrentAct = randomizedSets[levelCount].act;
-
-			levelCount++;
-
-			if (levelCount == TotalCount)
-			{
-				for (int i = 0; i < 40; i++) { //generate 40 levels in case the player quits a lot to get the next stage. This will get updated if the player beat a story.
-					randomizedSets[i].character = getRandomCharacter();
-					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-					randomizedSets[i].act = randomacts(randomizedSets[i]);
-
-					if (randomizedSets[i].character == Characters_Sonic)
-					{
-						randomizedSets[i].sonic_mode = rand() % 2;
-					}
-
-					levelCount = 0;
-					return;
-				}
-			}
+			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
-		else
-			GoToNextLevel();
 	}
+
+
 }
+
+
 
 void GoToNextLevel_hook(char stage, char act) {
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
@@ -310,32 +286,30 @@ void GoToNextLevel_hook(char stage, char act) {
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
 
+		if (SuperSonic != true)
+			SonicRand = randomizedSets[levelCount].ss_mode;
+
+		if (MetalSonic != true)
+			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
+
+		CurrentAI = randomizedSets[levelCount].ai_mode;
+		ExtraChara = randomizedSets[levelCount].knux_mode;
+
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
+	
 
 		levelCount++;
 
-
+		if (ConsistentMusic)
+			musicCount++;
 
 		if (levelCount == TotalCount)
 		{
-			for (int i = 0; i < 40; i++) { //generate 40 levels in case the player quits a lot to get the next stage. This will get updated if the player beat a story.
-				randomizedSets[i].character = getRandomCharacter();
-				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-				randomizedSets[i].act = randomacts(randomizedSets[i]);
-
-				if (randomizedSets[i].character == Characters_Sonic)
-				{
-					randomizedSets[i].sonic_mode = rand() % 2;
-				}
-
-
-				levelCount = 0;
-				return;
-			}
+			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
 }
@@ -346,12 +320,8 @@ void CancelResetPosition() {
 	NextLevel = LastLevel;
 	NextAct = LastAct;
 	SonicRand = 0;
-	TikalRand = 0;
-	EggmanRand = 0;
 	CustomLayout = 0;
 	GetCustomLayout = 0;
-	AICopy = 0;
-	isRandDone = false;
 	Race = false;
 	GameMode = GameModes_Adventure_Field;
 }
@@ -379,16 +349,45 @@ void RandomVoice() {
 
 }
 
-//randomize musics
-void RandomMusic() {
-	if (Music_Enabled != 0) {
+
+
+short getRandomMusic(RandomizedEntry entry) {
+
+	short cur_music = -1;
+
 		do {
-			CurrentSong = rand() % 0x7C;
-			LastSong = CurrentSong;
-		} while (isValueInArray(bannedMusic, CurrentSong, 28));
+			cur_music = rand() % 125;
+
+		} while (isValueInArray(bannedMusic, cur_music, 28));
+	
+		return cur_music;
+}
+
+
+
+void RandomMusic() {
+
+	if (Music_Enabled != 0) {
+
+		CurrentSong = randomizedSets[musicCount].music;
+		LastSong = CurrentSong;
+
+		if (!ConsistentMusic)
+			musicCount++;
+
+		if (musicCount == TotalCount)
+		{
+			for (int i = 0; i < 40; i++) { //generate 40 musics.
+				randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+			}
+
+			musicCount = 0;
+		}
 	}
+	
 	return;
 }
+
 
 
 void TwinkleCircuitMusic() {
@@ -403,14 +402,29 @@ void TwinkleCircuitMusic() {
 				WriteData<1>((char*)0x004DAB4E, 0x19);
 	}
 
-
 }
 
-int RageQuit = 0;
+void GetNewLevel() {
 
-void GetStats() {
+	for (int i = 0; i < 40; i++) { //generate 40 new levels.
+		randomizedSets[i].character = getRandomCharacter();
+		randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+		randomizedSets[i].act = randomacts(randomizedSets[i]);
+		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 
-	RageQuit++;
-	EndLevelStuff();
+		if (RNGMusic)
+			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
+		if (isAIAllowed)
+			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+
+		if (randomizedSets[i].character == Characters_Sonic)
+		{
+			randomizedSets[i].sonic_mode = rand() % 2;
+		}
+
+
+		levelCount = 0;
+		return;
+	}
 }

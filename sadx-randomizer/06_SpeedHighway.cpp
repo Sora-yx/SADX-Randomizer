@@ -7,6 +7,7 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;
+extern int levelCount;
 
 
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -108,10 +109,7 @@ void SpeedHighwayAct4() {
 
 	CustomLayout = 0;
 
-	if (Missions)
-		CustomLayout = rand() % 4;
-	else
-		CustomLayout = rand() % 2;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
 	{

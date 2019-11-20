@@ -10,6 +10,7 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;
+extern int levelCount;
 
 
 
@@ -31,9 +32,9 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202S.BIN", "system\\cam\\CAM0202S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, WV1S_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2S_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3S_StartPositions[0]);
 
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0200M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act1.bin");
@@ -205,10 +206,7 @@ void WindyValleyAct4() {
 
 	CustomLayout = 0;
 
-	if (Missions)
-		CustomLayout = rand() % 4;
-	else
-		CustomLayout = rand() % 2;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 	
 	switch (CustomLayout)

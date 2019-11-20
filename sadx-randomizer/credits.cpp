@@ -72,7 +72,6 @@ void CreditFlag() {
 }
 
 extern int RageQuit;
-extern int AICount;
 
 //DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 

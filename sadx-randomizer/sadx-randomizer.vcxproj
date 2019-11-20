@@ -72,6 +72,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -109,6 +110,7 @@
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="Race.cpp" />
     <ClCompile Include="RandomHelpers.cpp" />
+    <ClCompile Include="SandHill.cpp" />
     <ClCompile Include="StageSettings.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

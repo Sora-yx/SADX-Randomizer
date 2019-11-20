@@ -15,15 +15,15 @@ void CasinoAct4();
  void RMExtraMissions(); //M2 //M3
  void HotShelterAct4();
  void WindyValleyAct4();
- void WindyValleyAct5();
  void SkyDeckAct4();
  void LWAct4();
  void FinalEggAct4();
+
+ void SHAct4();
 
 
 
 //Camera fixs.
  void CamSpeedHighway();
  void CamRedMountain();
- void CamWindyValley();
  void CamFinalEgg();

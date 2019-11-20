@@ -5,22 +5,30 @@ extern struct RandomizedEntry randomizedSets[40];
 
 uint8_t getRandomCharacter(bool allow_duplicate = false);
 short getRandomStage(uint8_t char_id, bool ban_regular = false);
+short getRandomMusic(RandomizedEntry entry);
 bool isStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void testRefactor(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
-void GoToNextLevel_SA1R(char stage, char act);
+
 
 short randomacts(RandomizedEntry entry);
-
-//void AISwitch();
+short randomLayout(RandomizedEntry entry);
+short getRandomAI(RandomizedEntry entry);
+void GetNewLevel();
 
 struct RandomizedEntry
 {
 	int8_t character;
 	short level;
 	short act;
-	char sonic_mode;
+	short layout;
+	char sonic_mode; //Metal Sonic
+	char ss_mode; //Super Sonic
+	char knux_mode; //Tikal-Eggman
+	int ai_mode;
+	short music;
+	short voices;
 };
 
 void LoadCharacter_r();
@@ -28,16 +36,17 @@ void ChangeStartPosCharLoading();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 
 extern int level[21];
-extern int AIArray[5];
+extern int AIArray[3];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
+extern bool RNGMusic;
+
 
 extern int character[6];
 extern int CharacterCopy;
 
 extern int TransfoCount;  //Super Sonic Stuff
-extern int RNGSong;
 extern bool Vanilla;
 
 extern int CurrentMission;
@@ -45,6 +54,7 @@ extern int CurrentMission;
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
 void Chao_Init();
 void Chao_OnFrame();
+
 
 
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -62,6 +72,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFunctions);
 
 //Custom Object level
 
@@ -89,10 +100,10 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 void CreditsNewList();
 
 
-
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
 void RandomVoice();
+//void RandomMusic();
 void RandomMusic();
 
 void AddCustomFlag();
@@ -132,6 +143,8 @@ VoidFunc(EndLevelStuff, 0x4179bc);
 ObjectFunc(Result_Score, 0x4141f0);
 
 VoidFunc(ScreenTextureVer, 0x432ea0);
+VoidFunc(SomethingAboutSave, 0x42d2f0);
+
 
 VoidFunc(SetupZero, 0x4b3eb0);
 VoidFunc(CheckLoadZero, 0x486a40);
@@ -179,7 +192,6 @@ void DisableTime_Zero();
 void AISwitch();
 
 void SetLevelAndAct_R(); //fix trial mod 
-void GetStats(); //get stats for credits
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 DataPointer(char, TailsAdventureData, 0x3B1860E);

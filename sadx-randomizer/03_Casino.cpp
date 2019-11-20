@@ -7,15 +7,13 @@
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
+extern int levelCount;
 
 void CasinoAct4() {
 
 	CustomLayout = 0;
 
-	if (Missions)
-		CustomLayout = rand() % 4;
-	else
-		CustomLayout = rand() % 2;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 
 		switch (CustomLayout)

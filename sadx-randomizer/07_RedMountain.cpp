@@ -6,7 +6,7 @@
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
-
+extern int levelCount;
 
 void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -133,10 +133,7 @@ void RMExtraMissions() {
 
 	if (CurrentAct != 1)
 	{
-		if (Missions)
-			CustomLayout = rand() % 4;
-		else
-			CustomLayout = rand() % 2;
+		CustomLayout = randomizedSets[levelCount].layout;
 
 		switch (CustomLayout)
 		{

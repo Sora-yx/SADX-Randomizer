@@ -6,22 +6,19 @@
 #include <fstream>
 
 extern bool isAIAllowed;
-extern int CurrentAI;
+int CurrentAI = 0;
 bool isAIActive = false;
 extern bool CreditCheck;
 
 bool isIADeleted;
 int FlagAI = 0;
 extern bool Race;
-int AICopy = 0;
 int AISwap = 0;
 int CharaSwap = 0;
 extern int SwapDelay;
-extern int TikalRand;
-extern int EggmanRand;
 int AICount;
 extern int CustomLayout;
-
+extern int levelCount;
 
 
 //This is where all the AI is managed: Rand, loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -59,6 +56,9 @@ int CheckTailsAI_R(void) {
 		isAIActive = false;
 		return 0;
 	}
+
+	if (CurrentCharacter == CurrentAI)
+		return 0;
 
 	if (CurrentLevel > 25 && CurrentLevel < 38)
 	{
@@ -173,6 +173,15 @@ int CheckTailsAI_R(void) {
 			}
 		}
 		break;
+		case LevelIDs_SandHill:
+		{
+			if (CurrentCharacter == Characters_Tails)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		break;
 	}
 
 
@@ -194,22 +203,13 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 	}
 	else
 	{
-		if (CurrentLevel != AICopy) //Avoid randing a new AI if player restart or change act.
-		{
-			do {
-				if (isAIAllowed)
-					CurrentAI = AIArray[rand() % 5];
-
-			} while (CurrentCharacter == CurrentAI || CurrentAI == 1 && EggmanRand == 1 || CurrentAI == 4 && TikalRand == 1 || CurrentAI == 1 && CurrentLevel == LevelIDs_FinalEgg);
-		}
-			 
 
 		ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
 		TailsAI_ptr = v1;
 
 		if (v1)
 		{
-			AICopy = CurrentLevel;
+			
 			v1->Data1->CharID = (char)CurrentAI;
 			v1->Data1->CharIndex = 1;
 			v1->DeleteSub = TailsAI_Delete;
@@ -327,63 +327,6 @@ void FixAISFXJump() {
 		return;
 }
 
-void FixAISFXKnuckles() {
-
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Knuckles)
-			return;
-	}
-
-		PlaySound(0x317, 0, 0, 0);
-		return;
-
-}
-
-void FixAISFXKnuckles2() {
-
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Knuckles)
-			return;
-	}
-
-		PlaySound(0x30c, 0, 0, 0);
-
-}
-void FixAISFXKnuckles3() {
-
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Knuckles)
-			return;
-	}
-
-		PlaySound(0x315, 0, 0, 0);
-
-}void FixAISFXKnuckles4() {
-
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Knuckles)
-			return;
-	}
-
-		PlaySound(0x30d, 0, 0, 0);
-
-}
 
 void FixAISFXAmy() {
 	if (isAIActive)
@@ -452,78 +395,6 @@ void FixAISFXAmy5() {
 		PlaySound(0x31c, 0, 0, 0);
 }
 
-void FixAISFXGamma() {
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Gamma)
-			return;
-	}
-
-		PlaySound(0x519, 0, 0, 0);
-}
-
-void FixAISFXGamma2() {
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Gamma)
-			return;
-	}
-	else
-		PlaySound(0x33c, 0, 0, 0);
-
-}
-
-void FixAISFXGamma3() {
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Gamma)
-			return;
-	}
-	else
-		PlaySound(0x33b, 0, 0, 0);
-
-}
-
-void FixAISFXGamma4() {
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Gamma)
-			return;
-	}
-	else
-		if (MetalSonicFlag == 0)
-		{
-			PlaySound(0x21, 0, 0, 0);
-		}
-		else
-			PlaySound(0x30a, 0, 0, 0);
-		
-}
-
-void FixAISFXGamma5() {
-	if (isAIActive)
-	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
-		GetChara->Data1->CharID;
-
-		if (GetChara->Data1->CharID == Characters_Gamma)
-			return;
-	}
-	else
-		PlaySound(0x33f, 0, 0, 0);
-}
 
 
 
@@ -612,8 +483,7 @@ void AISwitch() {
 		{
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
-			AICount++; //credits stat
-			
+
 
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;

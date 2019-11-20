@@ -5,6 +5,7 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 
+
 //global Randomizer value settings
 int StorySplits;
 
@@ -14,12 +15,13 @@ bool Upgrade = true;
 bool Vanilla = false;
 bool RNGVoices = true;
 bool RNGMusic = true;
+bool ConsistentMusic = false;
 int SonicCD = 0;
 bool Missions = true;
 bool Any = true;
 extern int CustomLayout;
 extern bool CreditCheck;
-//int StoryStyle = 1;
+extern int levelCount;
 
 
 //Character settings
@@ -70,6 +72,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		int seed = 0;
+	
 
 		//Ini file Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
@@ -83,6 +86,7 @@ extern "C" {
 
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
+		ConsistentMusic = config->getBool("SongsStuff", "ConsistentMusic", false);
 		SonicCD = config->getInt("SongsStuff", "SonicCD", 0);
 
 
@@ -131,7 +135,7 @@ extern "C" {
 			return; //don't display the DC Warning message if Lantern Engine is missing.
 		else
 			if (DCMod || SADXFE)
-				DCModWarningTimer = 350;
+				DCModWarningTimer = 250;
 
 		if (helperFunctions.Version < 7)
 		{
@@ -140,7 +144,6 @@ extern "C" {
 				L"Randomizer Error", MB_OK | MB_ICONERROR);
 			return;
 		}
-
 
 
 		//Activate all the edited stages to make them beatable.
@@ -157,6 +160,7 @@ extern "C" {
 		LostWorld_Init(path, helperFunctions);
 		FinalEgg_Init(path, helperFunctions);
 		HotShelter_Init(path, helperFunctions);
+		SandHill_Init(path, helperFunctions);
 
 		//Custom object list
 		//CasinoObjects_Init(path, helperFunctions);
@@ -300,22 +304,13 @@ extern "C" {
 			WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack sound
 
 			WriteCall((void*)0x4768ea, FixAISFXJump); //Fix Jump Tails & Knuckles AI sound
-			WriteCall((void*)0x47359d, FixAISFXKnuckles); //Fix Knuckles Glide AI sound
-			WriteCall((void*)0x478aeb, FixAISFXKnuckles2);
-			WriteCall((void*)0x4795cf, FixAISFXKnuckles3);
-			WriteCall((void*)0x474555, FixAISFXKnuckles4);
 
 			WriteCall((void*)0x487793, FixAISFXJump); //Fix Amy AI Jump
 			WriteCall((void*)0x48af5f, FixAISFXAmy);
 			WriteCall((void*)0x4877a3, FixAISFXAmy2);
 			WriteCall((void*)0x485023, FixAISFXAmy3);
 			WriteCall((void*)0x489a75, FixAISFXAmy5);
-			WriteCall((void*)0x4c522c, FixAISFXGamma); //fix Funny Gamma AI Sound
-			WriteCall((void*)0x4807b0, FixAISFXGamma2); //fix Funny Gamma AI Sound
-			WriteCall((void*)0x483294, FixAISFXGamma3); //fix Funny Gamma AI Sound
-			WriteCall((void*)0x47fc9e, FixAISFXGamma3);
-			WriteCall((void*)0x497a0a, FixAISFXGamma4);
-			WriteCall((void*)0x47fcca, FixAISFXGamma5);
+
 
 			//fix victory voice result (ai swap)
 
@@ -476,6 +471,7 @@ extern "C" {
 		WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH
 		WriteCall((void*)0x422d90, SkyDeckAct4); //SD
 		WriteCall((void*)0x422f7d, FinalEggAct4); //FE
+		//WriteCall((void*)0x423752, SHAct4); //Sand Hill
 
 		
 		//SA2 Story Style, Hook all SetLevelandAct to make them random.
@@ -499,21 +495,6 @@ extern "C" {
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		}
 
-		//SADX Story Style (hub world + cutscene)
-
-		/*if (RNGStages == true && StoryStyle == 0) 
-		{
-
-			WriteData<5>((void*)0x50659a, 0x90); //Remove one "SetLevelAndAct" as it's called twice when you select a character for some reason...
-
-			WriteCall((void*)0x41709d, GoToNextLevel_SA1R); //hook "Go to next level"
-			WriteCall((void*)0x417b47, GoToNextLevel_SA1R); //GameStateHandler_Adventure hook after movie cutscene
-			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-			//Redirect SetLevelAndAct in FUN_0x4133e0
-
-
-			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Twinkle Circuit Stuff
-		}*/
 
 		//Splits + RNG generator
 
@@ -521,17 +502,31 @@ extern "C" {
 		if (StorySplits == 0)
 		{
 			split = 40;
-			for (int i = 0; i < split; i++) { //generate 40 levels in case the player quits a lot to get the next stage. This will get updated if the player beat a story.
+			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
+
 				randomizedSets[i].character = getRandomCharacter();
 				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 				randomizedSets[i].act = randomacts(randomizedSets[i]);
+				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+
+				if (RNGMusic)
+					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+
+				if (isAIAllowed)
+					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+
 
 				TotalCount++;
 
 				if (randomizedSets[i].character == Characters_Sonic)
 				{
 					randomizedSets[i].sonic_mode = rand() % 2;
+					randomizedSets[i].ss_mode = rand() % 2;
 				}
+
+				if (randomizedSets[i].character == Characters_Knuckles)
+					randomizedSets[i].knux_mode = rand() % 2;  //tikal
+
 			}
 			return;
 		}
@@ -571,15 +566,24 @@ extern "C" {
 			int StageSplit = 0; //used to differentiate boss and normal stage.
 
 
-			for (int i = 0; StageSplit < split; i++) { //continue to generate split until we have 10 stages 
+			for (int i = 0; StageSplit < split; i++) { //continue to generate split until we have at least 10 action stages. 
 				randomizedSets[i].character = getRandomCharacter();
 				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 				randomizedSets[i].act = randomacts(randomizedSets[i]);
+				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+				
+				if (RNGMusic)
+					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+				
+				if (isAIAllowed)
+					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+
 				TotalCount++;
 
 				if (randomizedSets[i].character == Characters_Sonic)
 				{
 					randomizedSets[i].sonic_mode = rand() % 2;
+					randomizedSets[i].ss_mode = rand() % 2;
 				}
 
 
@@ -610,27 +614,21 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		//Display DC Conversion warning
-
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
-			SetDebugFontSize(11.4f * (float)VerticalResolution / 477.0f);
+			SetDebugFontSize(11.8f * (float)VerticalResolution / 480.0f);
 			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
 			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
 			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER these mods!!");
 			DCModWarningTimer--;
 		}
 
-		
 
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
 			SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-			//SetDebugFontColor(0xf7ffffff);
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
-			/*if (StoryStyle)
-				DisplayDebugModeString(NJM_LOCATION(2, 2), "Story Style: SA2");
-			else
-				DisplayDebugModeString(NJM_LOCATION(2, 2), "Story Style: SADX");*/
+			
 				if (Vanilla)
 					DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
 				else
@@ -657,7 +655,6 @@ extern "C" {
 		}
 
 
-
 		if (CurrentLevel != 38 || CurrentLevel != 8)
 		{
 			if (AmySpeed)
@@ -682,7 +679,7 @@ extern "C" {
 					if (CurrentLevel < 15)
 					{
 						SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-						if (CustomLayout == 0)
+						if (CustomLayout == 0 || CustomLayout > 3)
 							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1");
 
 						if (CustomLayout == 2)

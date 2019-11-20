@@ -12,6 +12,8 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;
+extern int levelCount;
+
 
 void ECAct4() {
 
@@ -20,7 +22,7 @@ void ECAct4() {
 
 	if (Missions && CurrentAct != 2)
 	{
-		CustomLayout = rand() % 4;
+		CustomLayout = randomizedSets[levelCount].layout;
 	}
 
 	if (CurrentAct == 2)

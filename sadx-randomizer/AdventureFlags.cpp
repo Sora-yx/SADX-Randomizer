@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "Utils.h"
+#include <string>
 #include <fstream>
+#include <iostream>
+#include <string.h>
+
+
 #include "RandomHelpers.h"
 
-
+using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
-//extern int StoryStyle;
-
-
 
 //SADX Style
 int CustomFlagCheckSA1_R() {
@@ -282,19 +284,10 @@ void AddCustomFlag() {
 		FlagFile << CustomFlag++;
 		FlagFile.close();
 	}
-
-	/*if (StoryStyle)
-	{
-		if (CurrentLevel < 15 || CurrentLevel > 25)
-		{
-			std::ofstream FlagFile("Flags.txt");
-			FlagFile << CustomFlag++;
-			FlagFile.close();
-		}
-	}
-	else
-		CustomFlag++;*/
 }
+
+
+
 
 
 //SA2 Style

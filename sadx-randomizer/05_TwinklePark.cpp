@@ -6,6 +6,7 @@
 extern int CustomLayout;
 HelperFunctions extern help;
 extern bool Missions;
+extern int levelCount;
 
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -111,10 +112,7 @@ void TwinkleParkAct4() {
 
 	CustomLayout = 0;
 
-	if (Missions)
-		CustomLayout = rand() % 4;
-	else
-		CustomLayout = rand() % 2;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
 	{ 
