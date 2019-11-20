@@ -21,7 +21,7 @@ extern int CustomLayout;
 extern int levelCount;
 
 
-//This is where all the AI is managed: Rand, loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
+//This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
 
 
 ObjectFuncPtr charfuncs[] = { 
@@ -49,7 +49,7 @@ ObjectMaster* LoadCharObj(int i)
 
 
 
-int CheckTailsAI_R(void) {
+int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
@@ -272,29 +272,6 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 	return (ObjectMaster*)0x0;
 }
 		
-
-
-
-//teleport AI to Player 
-
-void moveAItoPlayer() {
-
-	if (isAIAllowed)
-	
-	{
-		ObjectMaster* play1 = GetCharacterObject(0);
-		ObjectMaster* play2 = GetCharacterObject(1);
-
-		play2->Data1->Position.x = play1->Data1->Position.x - 7;
-		play2->Data1->Position.y = play1->Data1->Position.y;
-		play2->Data1->Position.z = play1->Data1->Position.z + 5;
-		play2->Data1->Rotation.y = play1->Data1->Rotation.y;
-
-		play2->Data1->Action = 1; 
-	}
-
-}
-
 
 //SFX characters ai fixes.
 
