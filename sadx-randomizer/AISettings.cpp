@@ -10,15 +10,15 @@ int CurrentAI = 0;
 bool isAIActive = false;
 extern bool CreditCheck;
 
-bool isIADeleted;
+
 int FlagAI = 0;
 extern bool Race;
 int AISwap = 0;
 int CharaSwap = 0;
 extern int SwapDelay;
-int AICount;
 extern int CustomLayout;
 extern int levelCount;
+extern int ExtraChara;
 
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -60,6 +60,13 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 	if (CurrentCharacter == CurrentAI)
 		return 0;
 
+	if (ExtraChara != 0)
+	{
+		isAIActive = false;
+		return 0;
+	}
+		
+
 	if (CurrentLevel > 25 && CurrentLevel < 38)
 	{
 		isAIActive = false;
@@ -90,7 +97,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_RedMountain:
-			if (CurrentAct == 1 && CurrentCharacter < 4)
+			if ( CurrentCharacter < 4)
 			{
 				isAIActive = false;
 				return 0;
@@ -111,7 +118,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_EmeraldCoast:
-			if (CurrentAct == 1 && CurrentCharacter == Characters_Tails)
+			if (CurrentCharacter == Characters_Tails && CurrentAct != 2)
 			{
 				isAIActive = false;
 				return 0;
@@ -318,16 +325,19 @@ void FixAISFXAmy() {
 		PlaySound(0x31d, 0, 0, 0);
 }
 
-void FixAISFXAmy2() {
+void FixAISFXAmy2() { //jump sound
 	if (isAIActive)
 	{
-		ObjectMaster* GetChara = GetCharacterObject(1);
+		ObjectMaster* GetChara = GetCharacterObject(0);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
+		ObjectMaster* GetAI = GetCharacterObject(1);
+		GetAI->Data1->CharID;
+
+		if (GetAI->Data1->CharID == Characters_Amy || GetChara->Data1->CharID == Characters_Amy)
 			return;
 	}
-
+	else
 		PlaySound(0x4ff, 0, 0, 0);
 }
 
@@ -371,6 +381,21 @@ void FixAISFXAmy5() {
 
 		PlaySound(0x31c, 0, 0, 0);
 }
+
+void FixAISFXAmy6() { //spin dash noise when you press B
+	if (isAIActive)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(0);
+		GetChara->Data1->CharID;
+
+		if (GetChara->Data1->CharID == Characters_Amy)
+			return;
+	}
+	else
+		PlaySound(0x508, 0, 0, 0);
+}
+
+
 
 
 
@@ -465,8 +490,6 @@ void AISwitch() {
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
-
-			obj->DeleteSub(obj);
 			short powerups = obj2->Powerups;
 			short jumptime = obj2->JumpTime;
 			short underwatertime = obj2->UnderwaterTime;
@@ -475,6 +498,7 @@ void AISwitch() {
 			ObjectMaster* heldobj = obj2->ObjectHeld;
 
 			//Display Character swap.
+			obj->DeleteSub(obj);
 			obj->MainSub = charfuncs[CharaSwap];
 			obj->Data1->CharID = (char)CharaSwap;
 
@@ -521,7 +545,8 @@ void AISwitch() {
 			//initialize swap, taking AI information
 			ObjectMaster* AI = GetCharacterObject(1);
 			CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
-
+			
+			
 			short AIpowerups = AI2->Powerups;
 			short AIjumptime = AI2->JumpTime;
 			short AIunderwatertime = AI2->UnderwaterTime;

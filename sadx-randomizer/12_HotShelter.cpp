@@ -16,6 +16,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1204S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act4.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200S.bin", "system\\cam\\CAM1200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201S.bin", "system\\cam\\CAM1201S.bin");
@@ -28,6 +29,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1204M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act4.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200M.bin", "system\\cam\\CAM1200M.bin");  
 	helperFunctions.ReplaceFile("system\\CAM1201M.bin", "system\\cam\\CAM1201M.bin");
@@ -40,6 +42,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1204K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act4.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200K.bin", "system\\cam\\CAM1200K.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201K.bin", "system\\cam\\CAM1201K.bin");
@@ -53,6 +56,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1204A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act4.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200A.bin", "system\\cam\\CAM1200A.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201A.bin", "system\\cam\\CAM1201A.bin");
@@ -107,7 +111,6 @@ void HotShelterAct4() {
 		WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
 		WriteData<1>((void*)0x59a125, 0x08);
 		WriteData<1>((void*)0x59a126, 0x74);
-		return;
 		}
 		else
 		{
@@ -119,7 +122,7 @@ void HotShelterAct4() {
 
 	if (CustomLayout == 1)
 	{
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Gamma) //Amy has Big layout by defaut and Big has Amy layout by defaut.
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma) //Amy has Big layout by defaut and Big has Amy layout by defaut.
 		{
 			LoadSetFile(0, "1200");
 			WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song

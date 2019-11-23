@@ -31,12 +31,15 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 	SonicRand = 0;
-	ResultVoiceFix();
+
+	if (CurrentCharacter != Characters_Tails)
+		ResultVoiceFix();
+
 	Credits_CanSkip = 1;
 
 	AddCustomFlag(); //credits check
 
-	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
+	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark && CurrentCharacter != Characters_Amy) //Move AI to player 1 if we are not racing.
 	{
 		ObjectMaster* play1 = GetCharacterObject(0);
 		ObjectMaster* play2 = GetCharacterObject(1);
@@ -59,7 +62,6 @@ void DisableTimeStuff() {
 				return;
 			}
 	}
-
 
 		if (Race)
 		{
@@ -199,7 +201,7 @@ void LoadEggmanAI() {
 
 void CheckRace() {
 
-	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
 	{
 		RaceWinnerPlayer = 1;
 		Race = false;
@@ -207,7 +209,6 @@ void CheckRace() {
 	}
 	else
 	{
-		
 		switch (CurrentLevel)
 		{
 		case LevelIDs_SkyDeck:

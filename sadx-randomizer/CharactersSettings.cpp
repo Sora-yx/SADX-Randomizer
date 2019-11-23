@@ -17,6 +17,8 @@ extern ObjectFuncPtr charfuncs[];
 extern bool isAIAllowed;
 bool BounceActive = false;
 extern bool RNGCharacters;
+extern bool Eggman;
+extern bool Tikal;
 
 
 //Characters Settings, Load, Eggman and Tikal stuff.
@@ -82,33 +84,22 @@ void LoadCharacter_r()
 {
 	ClearPlayerArrays();
 	ObjectMaster* obj;
+
 	if (CurrentLevel == LevelIDs_SkyChase1 || CurrentLevel == LevelIDs_SkyChase2)
 	{
 		obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, Tornado_Main);
 		obj->Data1->CharID = (char)CurrentCharacter;
 		obj->Data1->CharIndex = 0;
-		*(void**)0x3B36DD0 = obj->Data2;
 		EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
 		EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
 		MovePlayerToStartPoint(obj->Data1);
 	}
 	else
 	{
-		if (CurrentLevel != LevelIDs_EmeraldCoast && CurrentLevel != LevelIDs_FinalEgg)
-			if (SonicRand == 0 && MetalSonicFlag == 0 && RNGCharacters)
-				if (CurrentLevel < 12 && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_FinalEgg)
-				{
-
-				}
-
-		CheckRace();
-
-		AllUpgrades();
-
 			switch (CurrentCharacter)
 			{
 			case Characters_Knuckles:
-				if (ExtraChara == 0)
+				if (ExtraChara == 0 || Tikal == true || CurrentLevel >= 15 || CurrentLevel <= LevelIDs_TwinklePark || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0 || CurrentLevel == LevelIDs_Casinopolis)
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Knuckles
 				else
 					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
@@ -116,15 +107,28 @@ void LoadCharacter_r()
 			case Characters_Amy:
 				CheckLoadBird();
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
+				ExtraChara = 0;
+				break;
+			case Characters_Tails:
+				if (ExtraChara == 0 || Eggman == true || CurrentLevel >= 15 || CurrentLevel <= LevelIDs_TwinklePark || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0 || CurrentLevel == LevelIDs_Casinopolis)
+					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Tails
+				else
+				{
+					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[1]); //Load Eggman
+					obj->DisplaySub = Eggman_Display;
+				}
 				break;
 			default:
 				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
+				ExtraChara = 0;
 				break;
 			}
 
+			
+			ObjectMaster* lastobj = obj;
+			ObjectMaster* o2 = nullptr;
 			obj->Data1->CharID = (char)CurrentCharacter;
 			obj->Data1->CharIndex = 0;
-			*(void**)0x3B36DD0 = obj->Data2;
 			EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
 			EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
 			MovePlayerToStartPoint(obj->Data1);
@@ -138,6 +142,10 @@ void LoadCharacter_r()
 
 			if (CurrentCharacter != Characters_Sonic)
 				MetalSonicFlag = 0;
+
+			CheckRace();
+
+			AllUpgrades();
 
 			return;
 		
@@ -196,9 +204,9 @@ void SuperSonicStuff() {
 
 
 
-	if (CurrentLevel < 15)
+	if (CurrentLevel < LevelIDs_Chaos0)
 	{
-		if (CurrentLevel == LevelIDs_Casinopolis || CurrentLevel > 6 && CurrentLevel < 13)
+		if (CurrentLevel >= LevelIDs_SkyDeck && CurrentLevel < 13 && CurrentLevel != LevelIDs_IceCap)
 		{
 			FreeCam = 1;
 			SetCameraMode_(FreeCam);

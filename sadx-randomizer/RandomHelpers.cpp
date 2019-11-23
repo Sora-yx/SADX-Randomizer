@@ -37,11 +37,11 @@ int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
 
 
-//Initialize Ban few stage impossible to beat, depending on the character.
+//Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
-//Initiliaze banned regular stage
+//Initiliaze banned Vanilla stage (if option is checked)
 int bannedRegularSonic[8] = { LevelIDs_LostWorld, LevelIDs_IceCap, LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper };
 int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
 int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
@@ -49,11 +49,12 @@ int bannedRegularAmy[1] = { LevelIDs_Zero };
 int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
 int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 
-int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b };
+//Few jingle that we don't want in the random music function.
+int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
 
 
 
-//Contain randomly generated sets of character/level/act to work with
+//Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 
 struct RandomizedEntry randomizedSets[40];
 
@@ -116,8 +117,11 @@ short randomacts(RandomizedEntry entry) {
 			return actHS[rand() % 2];
 		break;
 	case LevelIDs_TwinkleCircuit:
+		if (Vanilla)
 			return rand() % 5;
-			break;
+		else
+			return rand() % 5 + 1;
+		break;
 	default:
 		return 0;
 		break;
@@ -126,10 +130,10 @@ short randomacts(RandomizedEntry entry) {
 
 short randomLayout(RandomizedEntry entry) {
 
-	if (Missions)
+	if (Missions) //SA2 missions 100 Rings, Lost Chao
 		return rand() % 4;
 	else
-		return rand() % 2;
+		return rand() % 2; 
 
 }
 
@@ -156,9 +160,7 @@ uint8_t getRandomCharacter(bool allow_duplicate) {
 
 
 
-
-
-short getRandomAI(RandomizedEntry entry) {
+short getRandomAI() {
 
 	int8_t cur_AI = -1;
 	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
@@ -167,7 +169,7 @@ short getRandomAI(RandomizedEntry entry) {
 
 		cur_AI = AIArray[rand() % ai_count];
 
-	} while (cur_AI == entry.character || banCharacter[cur_AI]);
+	} while (cur_AI == character[cur_AI] || cur_AI == banCharacter[cur_AI]);
 	
 	
 	return cur_AI;
@@ -259,7 +261,7 @@ void testRefactor(char stage, char act) {
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
 
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-		ExtraChara = randomizedSets[levelCount].knux_mode;
+		ExtraChara = randomizedSets[levelCount].extraChara;
 		
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
@@ -293,7 +295,7 @@ void GoToNextLevel_hook(char stage, char act) {
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
 
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-		ExtraChara = randomizedSets[levelCount].knux_mode;
+		ExtraChara = randomizedSets[levelCount].extraChara;
 
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
@@ -416,12 +418,15 @@ void GetNewLevel() {
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
 		if (isAIAllowed)
-			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+			randomizedSets[i].ai_mode = getRandomAI();
 
 		if (randomizedSets[i].character == Characters_Sonic)
 		{
 			randomizedSets[i].sonic_mode = rand() % 2;
 		}
+
+		if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
+			randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
 
 
 		levelCount = 0;

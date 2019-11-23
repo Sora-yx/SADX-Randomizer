@@ -117,21 +117,21 @@ void TwinkleParkAct4() {
 	switch (CustomLayout)
 	{ 
 	case 0:
-			LoadSetFile(1, "0301"); 
-			return;
-			break;
-	case 1:
 		LoadSetFile(1, "0301"); 
-			return;
-			break;
+		break;
+	case 1:
+		CustomLayout = 0;
+		LoadSetFile(1, "0301");
+		break;
 	case 2:
 		LoadSetFile(1, "0301"); //M2
-		return;
 		break;
 	case 3:
 		LoadSetFile(1, "0303"); //M3 Version
-		return;
+		break;
 	}
+
+	return;
 	
 }
 

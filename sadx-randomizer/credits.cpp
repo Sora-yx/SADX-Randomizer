@@ -17,7 +17,6 @@ void CreditFlag() {
 			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
 			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-			credits();
 	}
 
 	if (SelectedCharacter == 1)
@@ -53,7 +52,6 @@ void CreditFlag() {
 			EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_BigAdventureComplete] = true;
 			EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-
 	}
 
 	if (SelectedCharacter == 5)
@@ -67,7 +65,7 @@ void CreditFlag() {
 		EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
 	}
 
-	CustomFlag++;
+	CustomFlag = 0;
 	GetCurrentCharacterID();
 }
 
@@ -624,6 +622,7 @@ void credits() {
 
 	if (CreditCheck)
 	{
+		CustomFlag = 0;
 		GameMode = GameModes_StartCredits;
 		GameState = 21;
 		Credits_State = 1;

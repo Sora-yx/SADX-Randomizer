@@ -78,6 +78,13 @@ void LoadStageMissionImage_r() {
 			if (Race)
 				CurrentMission = 7;
 
+		if (CurrentLevel == LevelIDs_HotShelter)
+			if (CustomLayout == 1)
+				if (CurrentCharacter == Characters_Amy)
+					CurrentMission = 10;
+				else
+					CurrentMission = 0;
+
 				
 		StageMissionTexlist.textures = Missions;
 		StageMissionTexlist.nbTexture = LengthOfArray(Missions);

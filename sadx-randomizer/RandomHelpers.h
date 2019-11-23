@@ -14,7 +14,7 @@ void GoToNextLevel_hook(char stage, char act);
 
 short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);
-short getRandomAI(RandomizedEntry entry);
+short getRandomAI();
 void GetNewLevel();
 
 struct RandomizedEntry
@@ -25,7 +25,7 @@ struct RandomizedEntry
 	short layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
-	char knux_mode; //Tikal-Eggman
+	char extraChara; //Tikal-Eggman
 	int ai_mode;
 	short music;
 	short voices;

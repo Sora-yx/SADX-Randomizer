@@ -72,7 +72,8 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		int seed = 0;
-	
+		
+
 
 		//Ini file Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
@@ -142,6 +143,14 @@ extern "C" {
 			MessageBox(WindowHandle,
 				L"Please update SADX Mod Loader. Randomizer mod requires API version 7 or newer.",
 				L"Randomizer Error", MB_OK | MB_ICONERROR);
+			Exit();
+			return;
+		}
+
+		HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
+		if (HeroesMod) {
+			MessageBoxA(WindowHandle, "Warning: Heroes mod is not compatible with SADX Randomizer.", "SADX Randomizer", MB_ICONWARNING);
+			Exit();
 			return;
 		}
 
@@ -466,7 +475,7 @@ extern "C" {
 		WriteCall((void*)0x422bfd, WindyValleyAct4); //WV
 		//WriteCall((void*)0x422bfd, WindyValleyAct5);
 		WriteCall((void*)0x422c59, TwinkleParkAct4); //TPs 
-		WriteCall((void*)0x422d20, RMExtraMissions);
+		//WriteCall((void*)0x422d20, RMExtraMissions);
 		WriteCall((void*)0x422d2f, RedMountainAct4); //RM
 		WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH
 		WriteCall((void*)0x422d90, SkyDeckAct4); //SD
@@ -513,8 +522,7 @@ extern "C" {
 					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
 				if (isAIAllowed)
-					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
-
+					randomizedSets[i].ai_mode = getRandomAI();
 
 				TotalCount++;
 
@@ -524,8 +532,8 @@ extern "C" {
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
 
-				if (randomizedSets[i].character == Characters_Knuckles)
-					randomizedSets[i].knux_mode = rand() % 2;  //tikal
+				if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
+					randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
 
 			}
 			return;
@@ -546,7 +554,7 @@ extern "C" {
 			}
 			if (StorySplits == 2)
 			{
-				split = 33;
+				split = 37;
 				myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";
 			}
 			if (StorySplits == 3)
@@ -566,7 +574,7 @@ extern "C" {
 			int StageSplit = 0; //used to differentiate boss and normal stage.
 
 
-			for (int i = 0; StageSplit < split; i++) { //continue to generate split until we have at least 10 action stages. 
+			for (int i = 0; i < split; i++) { //continue to generate split until we have at least 10 action stages. 
 				randomizedSets[i].character = getRandomCharacter();
 				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 				randomizedSets[i].act = randomacts(randomizedSets[i]);
@@ -576,7 +584,7 @@ extern "C" {
 					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 				
 				if (isAIAllowed)
-					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+					randomizedSets[i].ai_mode = getRandomAI();
 
 				TotalCount++;
 
@@ -586,11 +594,13 @@ extern "C" {
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
 
+				if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
+					randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
 
-				if (!isBossStage(randomizedSets[i].level)) //do not count boss as a normal stage.
+				/*if (!isBossStage(randomizedSets[i].level)) //do not count boss as a normal stage.
 				{
 					StageSplit++;
-				}
+				}*/
 
 				myfile << "<Segment>\n";
 				myfile << "<Name>";

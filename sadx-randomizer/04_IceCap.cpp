@@ -10,7 +10,6 @@ extern int levelCount;
 
 void ICAct4() {
 
-	CustomLayout = 0;
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
@@ -27,7 +26,7 @@ void ICAct4() {
 			LoadSetFile(1, "0801"); //M2
 			break;
 		case 3:
-			LoadSetFile(1, "0801"); //M3
+			LoadSetFile(1, "0804"); //M3
 			break;
 		}
 
@@ -45,6 +44,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0804S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0800S.BIN", "system\\cam\\CAM0800S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801S.BIN", "system\\cam\\CAM0801S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802S.BIN", "system\\cam\\CAM0802S.bin");
@@ -57,6 +58,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0804M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0800M.BIN", "system\\cam\\CAM0800M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801M.BIN", "system\\cam\\CAM0801M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802M.BIN", "system\\cam\\CAM0802M.bin");
@@ -68,6 +71,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0800K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0804K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800K.BIN", "system\\cam\\CAM0800K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801K.BIN", "system\\cam\\CAM0801K.bin");
@@ -82,6 +87,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0804A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0800A.BIN", "system\\cam\\CAM0800A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801A.BIN", "system\\cam\\CAM0801A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802A.BIN", "system\\cam\\CAM0802A.bin");
@@ -94,6 +101,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0804B.BIN", "system\\levels\\Ice Cap\\Big-IC-Chao.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM0800B.BIN", "system\\cam\\CAM0800B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801B.BIN", "system\\cam\\CAM0801B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802B.BIN", "system\\cam\\CAM0802B.bin");
@@ -105,6 +114,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0800E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET080E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800E.BIN", "system\\cam\\CAM0800E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801E.BIN", "system\\cam\\CAM0801E.bin");

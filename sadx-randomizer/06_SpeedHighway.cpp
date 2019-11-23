@@ -144,7 +144,6 @@ void SpeedHighwayAct4() {
 		}
 		else
 		{ 
-
 			Race = true;
 			LoadSetFile(0, "0403"); //load Tails layout
 	

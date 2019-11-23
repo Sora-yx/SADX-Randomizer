@@ -15,7 +15,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0500S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act2.bin");
-	
+	helperFunctions.ReplaceFile("system\\SET0503S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-E102.bin");
+
 	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500S.bin", "system\\cam\\CAM0500S.bin");
@@ -26,6 +27,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0500M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0503M.BIN", "system\\levels\\Red Mountain\\Tails-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Chao.bin");
 
@@ -38,6 +40,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0500K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0503K.BIN", "system\\levels\\Red Mountain\\Knux-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Chao.bin");
 
@@ -50,6 +53,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0500A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0503A.BIN", "system\\levels\\Red Mountain\\Amy-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Chao.bin");
 
@@ -62,6 +66,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0500B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0503B.BIN", "system\\levels\\Red Mountain\\Big-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504B.BIN", "system\\levels\\Red Mountain\\Big-RM-Chao.bin");
 
@@ -74,6 +79,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0500E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0503E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Chao.bin");
 
@@ -90,48 +96,33 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 void RedMountainAct4() {
 
-
-	if (CurrentCharacter == Characters_Gamma)
-	{
-		LoadSetFile(1, "0501"); //load Sonic version (Sonic has Gamma and Gamma has Sonic version.)
-		return;
-	}
+	if (CurrentAct == 1)
+		CustomLayout = rand() % 2;
 	else
+		CustomLayout = randomizedSets[levelCount].layout;
+
+	
+	if (CurrentAct == 1)
 	{
-		if (CurrentCharacter == Characters_Sonic)
+		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.
 		{
-			LoadSetFile(1, "0501"); //load Sonic version (Sonic has Gamma and Gamma has sonic version.)
-			//CustomLayout = 0;
-			WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
-			WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
-			return;
+			LoadSetFile(0, "0500");
+			LoadSetFile(1, "0501"); //load Sonic version
+			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
+			WriteData<1>((void*)0x6027cb, 0x74); //restore original
+			CustomLayout = 0;
 		}
 		else
 		{
-			if (CurrentAct == 1)
-			{
-				CustomLayout = 1;
-				LoadSetFile(1, "0503"); //load Gamma version
-				WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
-				WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
-				return;
-			}
-			else
-			{
-				LoadSetFile(1, "0501"); //load Sonic version
-				WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-				WriteData<1>((void*)0x6027cb, 0x74); //restore original
-				return;
-			}
+			LoadSetFile(0, "0500");
+			LoadSetFile(1, "0503"); //load Gamma version
+			WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
+			WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
+			CustomLayout = 1;
 		}
 	}
-}
 
-void RMExtraMissions() {
-
-	CustomLayout = 0;
-
-	if (CurrentAct != 1)
+	if (CurrentAct == 0)
 	{
 		CustomLayout = randomizedSets[levelCount].layout;
 
@@ -139,40 +130,25 @@ void RMExtraMissions() {
 		{
 		case 0:
 			LoadSetFile(0, "0500");
+			LoadSetFile(1, "0501");
 			return;
 			break;
 		case 1:
-			CustomLayout = 0;
 			LoadSetFile(0, "0500");
-			return;
+			LoadSetFile(1, "0501"); 
 			break;
 		case 2: //100 Rings
 			LoadSetFile(0, "0500");
-			return;
+			LoadSetFile(1, "0501"); 
 			break;
-		case 3: //M3
+		case 3: //Lost Chao
 			LoadSetFile(0, "0504");
-			return;
+			LoadSetFile(1, "0501"); 
 			break;
 		}
 	}
 
-	if (CurrentAct == 1)
-	{
-		CustomLayout = 1;
-		LoadSetFile(1, "0503"); //load Gamma version
-		WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
-		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
-		return;
-	}
-	else
-	{
-		LoadSetFile(1, "0501"); //load Sonic version
-		WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-		WriteData<1>((void*)0x6027cb, 0x74); //restore original
-		return;
-	}
-	
+	return;
 }
 
 

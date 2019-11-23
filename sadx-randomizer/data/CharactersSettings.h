@@ -36,6 +36,7 @@ void FixAISFXAmy2();
 void FixAISFXAmy3();
 void FixAISFXAmy4();
 void FixAISFXAmy5();
+void FixAISFXAmy6();
 
 
 int GetCharacter0ID();
