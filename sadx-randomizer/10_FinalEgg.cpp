@@ -2,14 +2,58 @@
 #include "Utils.h"
 #include "FE.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
 
+void FinalEggAct4() {
+
+	CustomLayout = 0;
+
+	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Amy)
+	{
+		LoadSetFile(0, "1000"); //don't load Amy layout if Sonic, and vice versa.)
+		CustomLayout = 0;
+		return;
+	}
+	else
+	{
+		CustomLayout = rand() % 2;
+		if (CustomLayout == 1)
+		{
+			LoadSetFile(0, "1004"); //load Amy layout
+			return;
+		}
+		else
+		{
+			LoadSetFile(0, "1000"); //load Sonic layout
+			return;
+		}
+	}
+
+}
+
+void CamFinalEgg() {
+
+	if (CustomLayout == 1)
+	{
+		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
+		return;
+	}
+	else
+	{
+		LoadCamFile(0, "1000"); //load the camera used for Sonic.
+		return;
+	}
+}
+
 void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteCall((void*)0x422fb6, CamFinalEgg); //FE cam fix
+	WriteCall((void*)0x422f7d, FinalEggAct4); //FE random layout
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET1000S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Act1.bin");
@@ -86,46 +130,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 }
 
 
-void FinalEggAct4() {
 
-	CustomLayout = 0;
-
-	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Amy)
-	{
-		LoadSetFile(0, "1000"); //don't load Amy layout if Sonic, and vice versa.)
-		CustomLayout = 0;
-		return;
-	}
-	else
-	{
-		CustomLayout = rand() % 2;
-		if (CustomLayout == 1)
-		{
-			LoadSetFile(0, "1004"); //load Amy layout
-			return;
-		}
-		else
-		{
-			LoadSetFile(0, "1000"); //load Sonic layout
-			return;
-		}
-	}
-
-}
-
-void CamFinalEgg() {
-
-	if (CustomLayout == 1)
-	{
-		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
-		return;
-	}
-	else
-	{
-		LoadCamFile(0, "1000"); //load the camera used for Sonic.
-		return;
-	}
-}
 
 ObjectListEntry FinalEggObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,

@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "WindyValley.h"
 #include "RandomHelpers.h"
-#include "LandTableInfo.h"
+#include "ActsSettings.h"
 
 
 HelperFunctions extern help;
@@ -12,13 +12,70 @@ extern bool Race;
 extern bool Missions;
 extern int levelCount;
 
+void WindyValleyAct4() {
+
+	CustomLayout = 0;
+
+	CustomLayout = randomizedSets[levelCount].layout;
+
+
+	switch (CustomLayout)
+	{
+	case 0:
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0203"); //Gamma Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "0200"); //Sonic Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
+		break;
+	case 1:
+		if (CurrentCharacter >= Characters_Gamma)
+		{
+			LoadSetFile(0, "0200");  //Sonic Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+			CustomLayout = 0;
+		}
+		else
+		{
+			LoadSetFile(0, "0203"); //Gamma Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+			break;
+		}
+	case 2:
+		LoadSetFile(0, "0200"); //100 Rings
+		LoadSetFile(1, "0201");
+		LoadSetFile(2, "0202");
+		break;
+	case 3:
+		LoadSetFile(0, "0200");
+		LoadSetFile(1, "0201");
+		LoadSetFile(2, "0205"); //Lost Chao
+		break;
+	}
+
+	return;
+
+}
+
 
 
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	
 	//Initiliaze data
-	
+	WriteCall((void*)0x422bfd, WindyValleyAct4); //WV
+	WVObjects_Init(path, helperFunctions);
+
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0200S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act2.bin");
@@ -208,60 +265,6 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 }
 
 
-void WindyValleyAct4() {
-
-	CustomLayout = 0;
-
-	CustomLayout = randomizedSets[levelCount].layout;
-
-	
-	switch (CustomLayout)
-	{
-	case 0:
-		if (CurrentCharacter == Characters_Sonic)
-		{
-			LoadSetFile(0, "0203"); //Gamma Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0200"); //Sonic Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-		}
-		break;
-	case 1:
-		if (CurrentCharacter >= Characters_Gamma)
-		{
-			LoadSetFile(0, "0200");  //Sonic Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			CustomLayout = 0;
-		}
-		else
-		{
-			LoadSetFile(0, "0203"); //Gamma Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			break;
-		}
-	case 2:
-		LoadSetFile(0, "0200"); //100 Rings
-		LoadSetFile(1, "0201");
-		LoadSetFile(2, "0202");
-		break;
-	case 3:
-		LoadSetFile(0, "0200"); 
-		LoadSetFile(1, "0201");
-		LoadSetFile(2, "0205"); //Lost Chao
-		break;
-	}
-
-	return;
-
-}
 
 
 

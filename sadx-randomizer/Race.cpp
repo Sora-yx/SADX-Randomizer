@@ -1,8 +1,9 @@
+#include "stdafx.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "data\CharactersSettings.h"
 #include "Utils.h"
-#include "stdafx.h"
+
 
 
 extern int SonicCD;
@@ -13,6 +14,22 @@ extern int CustomLayout;
 
 HelperFunctions extern help;
 
+
+void Race_Init() {
+	//Sonic/Eggman Race Stuff
+	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
+	WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
+	WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI.
+
+	WriteData<1>((void*)0x47DA01, 0x4); //prevent Casinopolis Race
+
+	WriteCall((void*)0x4616d5, FixVictoryTailsVoice); //Prevent Tails's victory voice to play... when not Tails, lol.
+	WriteCall((void*)0x4615b3, FixVictoryTailsVoice); //same
+	WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
+
+	WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
+
+}
 
 void MetalSonicRace_Init()
 {

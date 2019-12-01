@@ -3,6 +3,7 @@
 #include "Casino.h"
 #include "Chao.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
@@ -47,6 +48,9 @@ void CasinoAct4() {
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+
+	WriteCall((void*)0x422ef4, CasinoAct4);
+	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0900S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Act1.bin");

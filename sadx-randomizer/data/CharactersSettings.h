@@ -10,7 +10,7 @@ VoidFunc(BigHoldingFroggy, 0x48cce4);
  void AllUpgrades();
  void FixCharacterSFX();
 
-
+ void SuperAuraStuff();
 
  void LoadTails_AI_R();
  void LoadTails_AI_Original(); //Normal AI (Tails Only)
@@ -27,6 +27,8 @@ DataPointer(char, InitUpgrade, 0x3c5a954);
 DataPointer(int, BigWeight, 0x3C52510);
 
 void FixVictoryTailsVoice();
+void set_character_hook();
+void character_settings();
 
 void FixAISFXJump();
 

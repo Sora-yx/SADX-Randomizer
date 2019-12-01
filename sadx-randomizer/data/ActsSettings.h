@@ -12,7 +12,6 @@ void CasinoAct4();
  void TwinkleParkAct4();
  void SpeedHighwayAct4();
  void RedMountainAct4();
- void RMExtraMissions(); //M2 //M3
  void HotShelterAct4();
  void WindyValleyAct4();
  void SkyDeckAct4();
@@ -20,7 +19,6 @@ void CasinoAct4();
  void FinalEggAct4();
 
  void SHAct4();
-
 
 
 //Camera fixs.

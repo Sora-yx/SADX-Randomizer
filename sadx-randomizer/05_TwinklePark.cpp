@@ -2,15 +2,54 @@
 #include "Utils.h"
 #include "TP.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 extern int CustomLayout;
 HelperFunctions extern help;
 extern bool Missions;
 extern int levelCount;
 
+//Random Act function
+
+void TwinkleParkAct4() {
+
+	CustomLayout = 0;
+
+	CustomLayout = randomizedSets[levelCount].layout;
+
+	switch (CustomLayout)
+	{
+	case 0:
+		LoadSetFile(1, "0301");
+		break;
+	case 1:
+		CustomLayout = 0;
+		LoadSetFile(1, "0301");
+		break;
+	case 2:
+		LoadSetFile(1, "0301"); //M2
+		break;
+	case 3:
+		LoadSetFile(1, "0303"); //M3 Version
+		break;
+	}
+
+	return;
+
+}
+
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
+	WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
+	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
+	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
+	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
+
+	WriteCall((void*)0x422c59, TwinkleParkAct4); //TP random layout
+
+	TPObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0300S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act1.bin");
@@ -106,34 +145,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	
 }
 
-//Random Act function
 
-void TwinkleParkAct4() {
-
-	CustomLayout = 0;
-
-	CustomLayout = randomizedSets[levelCount].layout;
-
-	switch (CustomLayout)
-	{ 
-	case 0:
-		LoadSetFile(1, "0301"); 
-		break;
-	case 1:
-		CustomLayout = 0;
-		LoadSetFile(1, "0301");
-		break;
-	case 2:
-		LoadSetFile(1, "0301"); //M2
-		break;
-	case 3:
-		LoadSetFile(1, "0303"); //M3 Version
-		break;
-	}
-
-	return;
-	
-}
 
 
 ObjectListEntry TwinkleParkObjectList_list[] = {

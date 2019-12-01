@@ -2,15 +2,46 @@
 #include "Utils.h"
 #include "RM.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
 
+
+void CamRedMountain() {
+
+	if (CustomLayout == 1)
+	{
+		LoadCamFile(1, "0503"); //load the camera used for Gamma.
+		return;
+	}
+	else
+	{
+		LoadCamFile(1, "0501"); //load the camera used for Sonic.
+		return;
+	}
+}
+
+
 void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+
+	WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
+	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge part 1
+	WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
+	WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
+
+	//Allow Tails to do Red Mountain
+	WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
+	WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
+
+	WriteCall((void*)0x422d59, CamRedMountain); //RM cam fix
+	WriteCall((void*)0x422d2f, RedMountainAct4); //RM random act
+
+	RMObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0500S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act1.bin");
@@ -153,19 +184,7 @@ void RedMountainAct4() {
 
 
 
-void CamRedMountain() {
 
-	if (CustomLayout == 1)
-	{
-		LoadCamFile(1, "0503"); //load the camera used for Gamma.
-		return;
-	}
-	else
-	{
-		LoadCamFile(1, "0501"); //load the camera used for Sonic.
-		return;
-	}
-}
 
 
 ObjectListEntry RedMountainObjectList_list[] = {

@@ -4,9 +4,18 @@
 #include "RandomHelpers.h"
 
 
+void DisableTime_Zero() {
+
+	ControlEnabled = 0;
+	TimeThing = 0;
+
+}
+
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+
+	WriteCall((void*)0x5872ed, DisableTime_Zero); //Prevent character from hiting Zero again once it's defeated.
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SETZEROS.bin", "system\\levels\\Zeros\\Sonic-Zero.bin");
@@ -33,9 +42,3 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 
 }
 
-void DisableTime_Zero() {
-
-	ControlEnabled = 0;
-	TimeThing = 0;
-
-}

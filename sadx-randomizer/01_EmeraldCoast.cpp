@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "EmeraldCoast.h"
 #include "RandomHelpers.h"
-#include "LandTableInfo.h"
+#include "ActsSettings.h"
 
 //LandTableInfo* ECAct1;
 
@@ -53,7 +53,8 @@ void ECAct4() {
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
+	WriteData<5>((void*)0x4f6afa, 0x90); //Allow GetCurrentCharacterID when you enter at Emerald Coast act 2.
+	WriteCall((void*)0x422b83, ECAct4); 
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0100S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act1.bin");

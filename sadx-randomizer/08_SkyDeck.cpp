@@ -3,6 +3,7 @@
 #include "SD.h"
 #include "ActsSettings.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
@@ -10,9 +11,44 @@ extern bool Race;
 extern bool Missions;
 extern int levelCount;
 
+void SkyDeckAct4() {
+
+	CustomLayout = 0;
+
+	if (Missions)
+		CustomLayout = randomizedSets[levelCount].layout;
+	else
+		CustomLayout = 0;
+
+	switch (CustomLayout)
+	{
+	case 0: //M1
+		Race = false;
+		LoadSetFile(0, "0600"); //load Sonic layout
+		break;
+	case 1:
+		Race = false;
+		LoadSetFile(0, "0600"); //load M1
+		CustomLayout = 0;
+
+	case 2: //Rings
+		Race = false;
+		LoadSetFile(0, "0600"); //load 100 rings mission
+		break;
+	case 3: //Lost CHao
+		Race = false;
+		LoadSetFile(0, "0603"); //load Lost Chao mission
+		break;
+	}
+
+	return;
+}
+
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteCall((void*)0x422d90, SkyDeckAct4); //SD
+	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0600S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act1.bin");
@@ -254,35 +290,3 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 	ObjLists[LevelIDs_SkyDeck * 8 + 2] = &SkyDeckObjectList;
 }
 
-void SkyDeckAct4() {
-
-	CustomLayout = 0;
-
-	if (Missions)
-		CustomLayout = randomizedSets[levelCount].layout;
-	else
-		CustomLayout = 0;
-
-	switch (CustomLayout)
-	{
-	case 0: //M1
-		Race = false;
-		LoadSetFile(0, "0600"); //load Sonic layout
-		break;
-	case 1: 
-		Race = false;
-		LoadSetFile(0, "0600"); //load M1
-		CustomLayout = 0;
-		
-	case 2: //Rings
-		Race = false;
-		LoadSetFile(0, "0600"); //load 100 rings mission
-		break;
-	case 3: //Lost CHao
-		Race = false;
-		LoadSetFile(0, "0603"); //load Lost Chao mission
-		break;
-	}
-
-	return;
-}

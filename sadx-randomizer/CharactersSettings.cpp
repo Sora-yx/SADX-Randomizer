@@ -23,6 +23,43 @@ extern bool Race;
 
 
 
+void character_settings() {
+
+	extern bool AmySpeed;
+	extern bool BigSpeed;
+
+	if (GameState == 15)
+	{
+		if (CurrentLevel != 38 || CurrentLevel != 8)
+		{
+			if (AmySpeed)
+				PhysicsArray[Characters_Amy].MaxAccel = 5;
+			if (BigSpeed)
+				PhysicsArray[Characters_Big].MaxAccel = 5;
+
+			return;
+		}
+
+		if (CurrentLevel == 38 || CurrentLevel == 8 && CurrentAct == 2)
+		{
+			if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Knuckles)
+			{
+				PhysicsArray[Characters_Amy].MaxAccel = 8;
+				PhysicsArray[Characters_Big].MaxAccel = 8;
+
+				SetCameraControlEnabled(1);
+			}
+		}
+	}
+
+	PhysicsArray[Characters_Amy].MaxAccel = 0.05000000075;
+	PhysicsArray[Characters_Big].MaxAccel = 1;
+
+	return;
+
+}
+
+
 void AllUpgrades() {
 
 	if (Upgrade == true)
@@ -231,13 +268,9 @@ void SetGammaTimer() {
 void FixGammaBounce() {
 
 	if (CurrentCharacter == Characters_Gamma)
-	{
 		return;
-	}
-	else
-	{
-		EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
-	}
+
+	EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
 
 }
 
@@ -246,13 +279,9 @@ void FixGammaBounce() {
 void FixGammaHitBounce() {
 
 	if (CurrentCharacter == Characters_Gamma)
-	{
 		return;
-	}
-	else
-	{
-		EggViperBounceHit();
-	}
+
+	EggViperBounceHit();
 
 }
 
@@ -344,3 +373,44 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
+void set_character_hook() {
+
+	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
+
+	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
+	WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
+	WriteCall((void*)0x4D682F, GetCharacter0ID); // ''
+	WriteCall((void*)0x4D69AF, GetCharacter0ID); // ''
+	WriteCall((void*)0x425E62, GetCharacter0ID); // fix life icon
+
+	WriteCall((void*)0x4D677C, GetCharacter0ID); // fix item boxes for Gamma
+	WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
+	WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
+	WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
+
+
+	WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
+	WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
+	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
+	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
+
+	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
+	WriteData<5>((void*)0x478937, 0x90);
+	WriteData<5>((void*)0x478AFC, 0x90);
+	WriteData<5>((void*)0x47B395, 0x90);
+	WriteData<5>((void*)0x47B423, 0x90);
+
+	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
+
+	//Super Sonic Stuff
+	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
+	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
+	WriteCall((void*)0x4167da, SuperSonicStuff); //Call Super Sonic when a stage start.
+	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
+
+		//Amy Stuff
+	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
+	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
+	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
+
+}

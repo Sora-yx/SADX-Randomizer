@@ -639,3 +639,28 @@ void LoadTails_AI_Original() {
 
 }
 
+void AIAudioFixes() {
+
+	//(there is probably a nicer way to do this, but I have no clue how)
+
+	WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack sound
+
+	WriteCall((void*)0x4768ea, FixAISFXJump); //Fix Jump Tails & Knuckles AI sound
+
+	WriteCall((void*)0x487793, FixAISFXJump); //Fix Amy AI Jump
+	WriteCall((void*)0x48af5f, FixAISFXAmy);
+	WriteCall((void*)0x4877a3, FixAISFXAmy2);
+	WriteCall((void*)0x485023, FixAISFXAmy3);
+	WriteCall((void*)0x489a75, FixAISFXAmy5);
+
+
+	//fix victory voice result (ai swap)
+
+	WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
+	WriteData<5>((void*)0x414264, 0x90); //Remove Sonic Boss Voice;
+	WriteData<5>((void*)0x41560d, 0x90); //remove knux play voice
+	WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
+	WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
+	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
+
+}

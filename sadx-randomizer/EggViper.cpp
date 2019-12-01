@@ -7,6 +7,14 @@ HelperFunctions extern help;
 
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)
 {
+
+	WriteCall((void*)0x584430, FixGammaBounce); //Fix infinite Gamma bounce on Egg Viper Fight.
+	WriteCall((void*)0x580bed, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight.
+	WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol
+
+	WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (crash fix)
+	WriteCall((void*)0x4230a0, EggViperVoice); //Load Different Eggman Voice, depending on the character. (LoadCamFile hook)
+
 	//Initiliaze data
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EV_StartPositions[0]);

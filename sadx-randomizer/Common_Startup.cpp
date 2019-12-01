@@ -11,6 +11,45 @@ HelperFunctions help;
 NJS_TEXNAME Missions[10];
 int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 
+void Set_MusicVoices() {
+
+	extern bool RNGVoices;
+	extern bool RNGMusic;
+
+	//if Random Voice option
+	if (RNGVoices)
+	{
+		WriteCall((void*)0x42571d, RandomVoice);
+	}
+
+	//if Random Music option
+	if (RNGMusic)
+	{
+		WriteCall((void*)0x425699, RandomMusic); //hook PlayMusic (Stages...)
+		WriteCall((void*)0x51b94a, RandomMusic); //hook playmusic (Hub World part 1)
+		WriteCall((void*)0x62ec81, RandomMusic); //hook playmusic (Hub World, bosses part 2) 
+
+		WriteCall((void*)0x441dd8, RandomMusic); //hook speed shoes sound
+		WriteCall((void*)0x4d6daf, RandomMusic); //hook invincibility music
+
+		WriteCall((void*)0x59a4ba, RandomMusic); //hook hot shelter music.
+		WriteCall((void*)0x59a215, RandomMusic); //hook hot shelter music part 2.
+		WriteCall((void*)0x59a258, RandomMusic); //hook hot shelter music part 3
+		WriteCall((void*)0x59a239, RandomMusic); //hook hot shelter music part 4
+		WriteCall((void*)0x59a107, RandomMusic); //hook hot shelter music part 5
+		WriteCall((void*)0x59a157, RandomMusic); //hook hot shelter music part 6
+		WriteCall((void*)0x59a177, RandomMusic); //hook hot shelter music part 7
+		WriteCall((void*)0x59a197, RandomMusic); //hook hot shelter music part 8
+
+		WriteCall((void*)0x5adda7, RandomMusic); //Final Egg Song
+		WriteCall((void*)0x5ae144, RandomMusic); //Final Egg Song act 2
+		WriteCall((void*)0x5adf85, RandomMusic); //Final Egg Song act 3
+
+		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
+		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
+	}
+}
+
 int CheckMissionRequirements_r() {
 
 	GetCustomLayout = CustomLayout;
@@ -192,3 +231,42 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 
 
 }
+
+void TitleCard_Init() {
+
+	WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
+	WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
+	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
+	WriteCall((void*)0x4284ac, StageMissionImage_result);
+	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
+}
+
+void Set_BackRing() {
+
+	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
+
+//capsule
+	WriteCall((void*)0x46adc2, BackRing);
+
+	//Ballon
+	WriteCall((void*)0x7a1e25, BackRing);
+
+	//Frog
+	WriteCall((void*)0x4fa2e8, BackRing2);
+
+	//WV back ring
+	WriteCall((void*)0x04df349, BackRing2);
+	WriteCall((void*)0x4df383, BackRing2);
+	WriteCall((void*)0x4df395, BackRing2);
+
+	//Casino back ring
+	WriteCall((void*)0x5dd051, BackRing2);
+	WriteCall((void*)0x5dd07e, BackRing2);
+	WriteCall((void*)0x5dd08d, BackRing2);
+
+	//Ice Cap back ring
+	WriteCall((void*)0x4ecf61, BackRing2);
+	WriteCall((void*)0x4ecf85, BackRing2);
+	WriteCall((void*)0x4ecf94, BackRing2);
+}
+

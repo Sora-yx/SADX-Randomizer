@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
+
+
 extern struct RandomizedEntry randomizedSets[40];
 
 uint8_t getRandomCharacter(bool allow_duplicate = false);
@@ -10,7 +12,8 @@ bool isStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void testRefactor(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
-
+void Split_Init();
+void AIAudioFixes();
 
 short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);
@@ -30,9 +33,10 @@ struct RandomizedEntry
 	short voices;
 };
 
-void LoadCharacter_r();
-void ChangeStartPosCharLoading();
+void Set_MusicVoices();
+void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
+void Set_BackRing();
 
 extern int level[21];
 extern int AIArray[3];
@@ -97,7 +101,7 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 
 
 void CreditsNewList();
-
+void Race_Init();
 
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
@@ -111,8 +115,8 @@ int CustomFlagCheckSA1_R(); //sa1
 
 void CancelResetPosition();
 
-void SuperAuraStuff();
-void SuperSonicStuff();
+
+
 void LoadZero();
 
 void credits();

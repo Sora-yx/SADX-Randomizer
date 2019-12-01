@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "IceCap.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
@@ -38,6 +39,11 @@ void ICAct4() {
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteCall((void*)0x4ed633, ICAct3Position); //teleport player during IC act 3.
+	WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
+	WriteCall((void*)0x422e75, ICAct4);
+
+	ICObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0800S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act1.bin");

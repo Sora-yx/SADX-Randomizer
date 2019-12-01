@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "SH.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
@@ -9,10 +10,30 @@ extern bool Race;
 extern bool Missions;
 extern int levelCount;
 
+void CamSpeedHighway() {
+
+	if (CustomLayout == 1)
+	{
+		LoadCamFile(0, "0403");
+		return;
+	}
+	else
+	{
+		LoadCamFile(0, "0400");
+		return;
+	}
+}
 
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+
+	WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
+	WriteCall((void*)0x610272, SHAct2Position); //teleport player during SH act 2.
+	WriteCall((void*)0x422cdf, CamSpeedHighway); //SH cam fix
+	WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH random layout
+
+	SHObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0400S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act1.bin");
@@ -214,19 +235,7 @@ void SpeedHighwayAct4() {
 	}
 }
 
-void CamSpeedHighway() {
 
-	if (CustomLayout == 1)
-	{
-		LoadCamFile(0, "0403");
-		return;
-	}
-	else
-	{
-		LoadCamFile(0, "0400");
-		return;
-	}
-}
 
 
 ObjectListEntry SpeedHighwayObjectList_list[] = {

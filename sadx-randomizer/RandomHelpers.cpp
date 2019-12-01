@@ -208,7 +208,6 @@ else {
 }
 
 
-
 bool isStageBanned(uint8_t char_id, short stage_id) {
 	int* bannedStages = nullptr;
 	size_t arraySize = 0;
@@ -435,4 +434,77 @@ void GetNewLevel() {
 		levelCount = 0;
 		return;
 	}
+}
+
+void Split_Init() { //speedrunner split init.
+
+	std::ofstream myfile("SADX_Randomizer_Splits.lss");
+	//Header
+	myfile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	myfile << "<Run version=\"1.7.0\">\n";
+	myfile << "<GameIcon />\n<GameName>Sonic Adventure (DX)</GameName>\n<CategoryName>Randomizer: ";
+	if (StorySplits == 1)
+	{
+		split = 10;
+		myfile << "Sonic's Story" << "</CategoryName>\n<Metadata>\n";
+	}
+	if (StorySplits == 2)
+	{
+		split = 37;
+		myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";
+	}
+	if (StorySplits == 3)
+	{
+		split = 21;
+		myfile << "Any%" << "</CategoryName>\n<Metadata>\n";
+	}
+	myfile << "<Run id = \"\" />\n";
+	myfile << "<Platform usesEmulator = \"False\">\n";
+	myfile << "</Platform>\n<Region>\n</Region>\n<Variables />\n</Metadata>\n<Offset>00:00:00</Offset>\n<AttemptCount>0</AttemptCount>\n";
+	myfile << "<AttemptHistory />\n<Segments>\n";
+
+	//Segments
+
+	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
+
+	int StageSplit = 0; //used to differentiate boss and normal stage.
+
+
+	for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number. 
+		randomizedSets[i].character = getRandomCharacter();
+		randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+		randomizedSets[i].act = randomacts(randomizedSets[i]);
+		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+
+		if (RNGMusic)
+			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+
+		if (isAIAllowed)
+			randomizedSets[i].ai_mode = getRandomAI();
+
+		TotalCount++;
+
+		if (randomizedSets[i].character == Characters_Sonic)
+		{
+			randomizedSets[i].sonic_mode = rand() % 2;
+			randomizedSets[i].ss_mode = rand() % 2;
+		}
+
+
+		myfile << "<Segment>\n";
+		myfile << "<Name>";
+
+		if (isBossStage(randomizedSets[i].level))
+			myfile << "Boss: " << randomizedSets[i].level;
+		else
+			myfile << "Stage: " << randomizedSets[i].level;
+
+		myfile << "</Name>\n";
+		myfile << "<Icon />\n";
+		myfile << "<SplitTimes>\n<SplitTime name=\"Personal Best\" />\n</SplitTimes>\n<BestSegmentTime />\n<SegmentHistory />";
+		myfile << "</Segment>\n";
+	}
+	myfile << "</Segments>\n<AutoSplitterSettings />\n</Run>";
+	myfile.close();
+
 }

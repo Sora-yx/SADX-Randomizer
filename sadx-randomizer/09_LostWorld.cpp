@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "LW.h"
 #include "RandomHelpers.h"
+#include "ActsSettings.h"
 
 HelperFunctions extern help;
 extern int CustomLayout;
@@ -38,6 +39,9 @@ void LWAct4() {
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
+	WriteCall((void*)0x422e0a, LWAct4);
+	LWObjects_Init(path, helperFunctions);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0700S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act1.bin");
