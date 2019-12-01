@@ -137,6 +137,7 @@ void HotShelterHandle() {
 	}
 }
 
+
 void LoadZero() {
 
 
@@ -164,6 +165,15 @@ void LoadZero() {
 		CheckLoadZero();
 	}
 	
+}
+
+void Set_Zero() {
+	//Zero Stuff
+	WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
+	WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
+	WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
+	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
+
 }
 
 
@@ -261,7 +271,7 @@ void BackRing() { //capsule
 
 	
 	SetTextureToCommon();
-
+	PlayVoice(5001);
 
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
@@ -273,8 +283,6 @@ void BackRing() { //capsule
 
 		GameMode = GameModes_Adventure_Field; //GameMode = 5
 		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
-		//TimeThing
-
 	}
 	
 
@@ -287,96 +295,21 @@ void BackRing2() { //Frog //Emerald
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
+		PlayVoice(5001);
+		StopMusic();
+
+		GetBackRing = true;
+		GameMode = GameModes_Adventure_Field; //GameMode = 5
+		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
+		
+
+		PlayVoice(5001);
 		StopMusic();
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();
 
 		GameMode = GameModes_Adventure_Field;
 		GameState = 0xb;
-
-		/*ObjectMaster* play1 = GetCharacterObject(0); //teleport player
-
-
-		switch (CurrentLevel)
-		{
-		case LevelIDs_EmeraldCoast:
-			if (CurrentAct == 1)
-			{
-				PlayMusic(MusicIDs_EmeraldCoastWindyAndRipply);
-				play1->Data1->Position.x = -986.5;
-				play1->Data1->Position.y = 1145;
-				play1->Data1->Position.z = -2856;
-			}
-			break;
-		case LevelIDs_WindyValley:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_WindyValleyTheAir);
-				play1->Data1->Position.x = 1068.41;
-				play1->Data1->Position.y = -335;
-				play1->Data1->Position.z = -1232;
-				play1->Data1->Rotation.y = 26978;
-			}
-			break;
-		case LevelIDs_Casinopolis:
-			if (CurrentAct == 0)
-			{
-				PlayMusic(MusicIDs_casino1);
-				play1->Data1->Position.x = 0;
-				play1->Data1->Position.y = 0;
-				play1->Data1->Position.z = 0;
-			}
-			else
-			{
-				PlayMusic(MusicIDs_casino2);
-				play1->Data1->Position.x = 19;
-				play1->Data1->Position.y = -1695;
-				play1->Data1->Position.z = 2850;
-			}
-			break;
-		case LevelIDs_IceCap:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_icecap2);
-				play1->Data1->Position.x = 1060;
-				play1->Data1->Position.y = 336;
-				play1->Data1->Position.z = 280;
-			}
-			break;
-		case LevelIDs_TwinklePark:
-			/*	PlayMusic(MusicIDs_TwinkleParkPleasureCastle); //Doesn't work for now
-				play1->Data1->Position.x = 520;
-				play1->Data1->Position.y = 975;
-				play1->Data1->Position.z = 1620;
-			break;
-		case LevelIDs_SpeedHighway:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_SpeedHighwaySpeedHighway);
-				play1->Data1->Position.x = 72;
-				play1->Data1->Position.y = 26;
-				play1->Data1->Position.z = 192;
-			}
-			break;
-		case LevelIDs_RedMountain:
-			if (CurrentAct == 1)
-			{
-				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
-				play1->Data1->Position.x = -78;
-				play1->Data1->Position.y = 831;
-				play1->Data1->Position.z = 1919;
-			}
-			break;
-		case LevelIDs_SkyDeck:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_SkyDeckGeneralOffensive);
-				play1->Data1->Position.x = -696;
-				play1->Data1->Position.y = -86;
-				play1->Data1->Position.z = 135;
-			}
-			break;
-		}*/
 	}
 	else
 		LoadLevelResults();

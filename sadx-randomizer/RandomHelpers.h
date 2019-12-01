@@ -118,6 +118,7 @@ void CancelResetPosition();
 
 
 void LoadZero();
+void Set_Zero();
 
 void credits();
 void HotShelterSecretSwitch();
@@ -175,7 +176,7 @@ DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
 
 
-
+void AI_Init();
 int IsFastSonicAI_R(void);
 int CheckTailsAI_R(void);
 int DisplayTitleCard_r();

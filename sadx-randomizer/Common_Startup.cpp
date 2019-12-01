@@ -227,6 +227,8 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5000.wma", "system\\voices\\Bounce.wma"); //Introduce Sonic bounce sfx
 
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5001.wma", "system\\voices\\Back Ring hit.wma"); //Back Ring SFX
+
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 
 

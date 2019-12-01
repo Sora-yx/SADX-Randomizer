@@ -7,31 +7,38 @@
 HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
+extern int levelCount;
 
 void FinalEggAct4() {
 
-	CustomLayout = 0;
+	CustomLayout = randomizedSets[levelCount].layout;
 
-	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Amy)
+	switch (CustomLayout)
 	{
+	case 0:
 		LoadSetFile(0, "1000"); //don't load Amy layout if Sonic, and vice versa.)
 		CustomLayout = 0;
-		return;
-	}
-	else
-	{
-		CustomLayout = rand() % 2;
-		if (CustomLayout == 1)
+		break;
+	case 1:
+		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Amy)
+		{
+			LoadSetFile(0, "1000"); //don't load Amy layout if Sonic, and vice versa.)
+			CustomLayout = 0;
+		}
+		else
 		{
 			LoadSetFile(0, "1004"); //load Amy layout
 			return;
 		}
-		else
-		{
-			LoadSetFile(0, "1000"); //load Sonic layout
-			return;
-		}
+	case 2:
+		LoadSetFile(0, "1000"); //100 Rings
+		break;
+	case 3:
+		LoadSetFile(0, "1000"); //Lost Chao
+		break;
 	}
+
+	return;
 
 }
 

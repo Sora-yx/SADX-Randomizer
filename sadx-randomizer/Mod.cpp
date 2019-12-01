@@ -196,53 +196,33 @@ extern "C" {
 		//Random Title Card + Missions
 		TitleCard_Init();
 
-		//Back Rings
+		//Back Rings for M2 & M3
 		Set_BackRing();
 
 
 		if (isAIAllowed)
 		{
 			//Allow the AI to spawn everywhere
-			WriteCall((void*)0x47ed8e, CheckTailsAI_R);
-			WriteCall((void*)0x47e943, CheckTailsAI_R);
-			WriteCall((void*)0x47ea46, CheckTailsAI_R);
-			WriteCall((void*)0x47ec62, CheckTailsAI_R);
-			WriteCall((void*)0x47ec62, CheckTailsAI_R);
-
-			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
-
-			//AI fixes
-			WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
-
+			AI_Init();
 			//AI SFX Fixes 
 			AIAudioFixes();
-
 		}
 		else
 		{
 			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
-			//WriteCall((void*)0x4159b8, LoadTails_AI_Original); //Load AI
 		}
 	
-
-
 		/*
 		//Randomizer Fixes
 		*/
 
 		//Stages Fixes
 
-
-
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 
 
-			//Zero Stuff
-		WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
-		WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
-		WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
-		WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
-
+		 //Zero Stuff
+		Set_Zero();
 
 		//Bosses Fixes
 
@@ -381,20 +361,17 @@ extern "C" {
 							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M3 (Lost Chao)");
 					}
 
-					//set gamemode to adventure when the player select quit option, so you will go back to the title screen.
+					//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
 					if (PauseSelection == 3)
-					{
 						GameMode = GameModes_Adventure_Field;
-					}
 					else
-					{
 						GameMode = GameModes_Adventure_ActionStg;
-					}
+
 				}
 
 			if (GameState == 21 || GameState == 24 || GameState == 17)
 				{
-					CustomFlagCheck(); //Check flag and credits
+					CustomFlagCheck(); //When loading, Check flag and credits
 				}
 			}
 		}
@@ -423,10 +400,11 @@ extern "C" {
 			HudDisplayScoreOrTimer();
 			HudDisplayRingTimeLife_Check();
 
+			
+			//AI Swap
 			if (SwapDelay != 150)
 				SwapDelay++;
 
-			//AI Swap
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 			{
 				AISwitch();
@@ -453,14 +431,12 @@ extern "C" {
 
 
 			// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
-			character_settings();
+			character_settings_onFrames();
 		}
 
 		//force the game to let you win as Tails in Speed Highway Act 3.
 		if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
-		{
 			SetTailsRaceVictory();
-		}
 
 	}
 

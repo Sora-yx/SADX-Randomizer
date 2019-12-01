@@ -664,3 +664,18 @@ void AIAudioFixes() {
 	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
 
 }
+
+
+void AI_Init() {
+
+	WriteCall((void*)0x47ed8e, CheckTailsAI_R);
+	WriteCall((void*)0x47e943, CheckTailsAI_R);
+	WriteCall((void*)0x47ea46, CheckTailsAI_R);
+	WriteCall((void*)0x47ec62, CheckTailsAI_R);
+	WriteCall((void*)0x47ec62, CheckTailsAI_R);
+
+	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
+
+	//AI fixes
+	WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
+}

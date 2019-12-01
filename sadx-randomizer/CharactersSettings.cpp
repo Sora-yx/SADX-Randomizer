@@ -23,7 +23,7 @@ extern bool Race;
 
 
 
-void character_settings() {
+void character_settings_onFrames() {
 
 	extern bool AmySpeed;
 	extern bool BigSpeed;

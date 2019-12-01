@@ -28,7 +28,7 @@ DataPointer(int, BigWeight, 0x3C52510);
 
 void FixVictoryTailsVoice();
 void set_character_hook();
-void character_settings();
+void character_settings_onFrames();
 
 void FixAISFXJump();
 

@@ -165,6 +165,10 @@ void Chao_OnFrame() {
 			pos = { 7410, -1964, 1316 };
 			Yrot = 0x8000;
 			break;
+		case LevelIDs_FinalEgg:
+			pos = { 2660.566406, -2888.049561, -943.2208862 };
+			Yrot = 0x8000;
+			break;
 		}
 
 		ChaoObject->Data1->Position = pos;
