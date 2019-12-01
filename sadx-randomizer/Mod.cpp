@@ -39,8 +39,6 @@ bool Gamma = false;
 bool Big = false;
 bool MetalSonic = false;
 bool SuperSonic = false;
-bool Eggman = false;
-bool Tikal = false;
 int ban = 0;
 
 
@@ -103,8 +101,6 @@ extern "C" {
 		banCharacter[6] = config->getBool("Roster", "Gamma", false);
 		MetalSonic = config->getBool("Roster", "MetalSonic", false);
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
-		Eggman = config->getBool("Roster", "Eggman", false);
-		Tikal = config->getBool("Roster", "Tikal", false);
 
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 
@@ -153,7 +149,7 @@ extern "C" {
 			Exit();
 			return;
 		}
-
+		
 
 		//Activate all the edited stages to make them beatable.
 
@@ -201,8 +197,7 @@ extern "C" {
 
 
 		//Characters Stuff, really important.
-		WriteJump((void*)0x41490D, ChangeStartPosCharLoading); //Fix Eggman Tikal transition crash
-		WriteJump(LoadCharacter, LoadCharacter_r); //Hook Load Character to allow Tikal and Eggman.
+		WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 
 		WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
 		WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
@@ -214,6 +209,7 @@ extern "C" {
 		WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
 		WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
 		WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
+
 
 		WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
 		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
@@ -267,6 +263,8 @@ extern "C" {
 		WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
 
 		//Back Rings
+
+		WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
 
 		//capsule
 		WriteCall((void*)0x46adc2, BackRing);
@@ -405,11 +403,6 @@ extern "C" {
 		//Chaos 4 Stuff
 		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
 
-		WriteData<1>((void*)0x5525fe, 0xd8);
-
-		WriteData<1>((void*)0x552500, 0xF8); //Reduce HP even more.
-		WriteData<1>((void*)0x552501, 0xAE);
-		WriteData<1>((void*)0x552502, 0x91);
 
 		//Chaos 6 stuff
 		WriteData<1>((void*)0x5598f0, 0x00); //makes the bomb spawns for every character. (if ivar == 0)
@@ -442,9 +435,10 @@ extern "C" {
 		WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
 
 
-			//Sonic Race Stuff
+			//Sonic/Eggman Race Stuff
 		WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
 		WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
+		WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI.
 
 		WriteData<1>((void*)0x47DA01, 0x4); //prevent Casinopolis Race
 		WriteCall((void*)0x4616d5, FixVictoryTailsVoice); //Prevent Tails's victory voice to play when not Tails lol.
@@ -452,10 +446,6 @@ extern "C" {
 		WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
 
 		WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
-
-		//Tikal and Eggman
-		WriteData<3>((void*)0x7b43ba, 0x90); //remove debug mod
-		WriteData<1>((void*)0x7b527b, 0x08); // // //
 
 
 		//Fix Camera while using wrong character
@@ -532,8 +522,6 @@ extern "C" {
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
 
-				if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
-					randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
 
 			}
 			return;
@@ -569,12 +557,12 @@ extern "C" {
 
 			//Segments
 
-			//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 33 if all stories and 21 if Any%
+			//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
 
 			int StageSplit = 0; //used to differentiate boss and normal stage.
 
 
-			for (int i = 0; i < split; i++) { //continue to generate split until we have at least 10 action stages. 
+			for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number. 
 				randomizedSets[i].character = getRandomCharacter();
 				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 				randomizedSets[i].act = randomacts(randomizedSets[i]);
@@ -594,13 +582,6 @@ extern "C" {
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
 
-				if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
-					randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
-
-				/*if (!isBossStage(randomizedSets[i].level)) //do not count boss as a normal stage.
-				{
-					StageSplit++;
-				}*/
 
 				myfile << "<Segment>\n";
 				myfile << "<Name>";
@@ -712,7 +693,7 @@ extern "C" {
 
 			if (GameState == 21 || GameState == 24 || GameState == 17)
 				{
-						CustomFlagCheck(); //Check flag and credits
+					CustomFlagCheck(); //Check flag and credits
 				}
 			}
 		}
@@ -767,6 +748,8 @@ extern "C" {
 			{
 				Chao_OnFrame();
 			}
+
+
 	
 
 			// Increase their MaxAccel so they can complete stages they are not meant to.

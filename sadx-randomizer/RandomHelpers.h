@@ -25,7 +25,6 @@ struct RandomizedEntry
 	short layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
-	char extraChara; //Tikal-Eggman
 	int ai_mode;
 	short music;
 	short voices;
@@ -127,7 +126,6 @@ void TwinkleCircuitResult();
 void FixEggViperCutscene();
 void EggViperVoice();
 
-void LoadEggmanAI();
 void FixRollerCoaster();
 
 //void RandomizerMission();
@@ -192,6 +190,7 @@ void DisableTime_Zero();
 void AISwitch();
 
 void SetLevelAndAct_R(); //fix trial mod 
+void ResetTime_R();
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 DataPointer(char, TailsAdventureData, 0x3B1860E);
@@ -201,3 +200,4 @@ FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
 
 
 VoidFunc(CutsceneFlagData, 0x431430);
+VoidFunc(PauseQuitThing2, 0x413f70);

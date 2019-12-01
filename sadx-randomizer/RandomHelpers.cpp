@@ -29,12 +29,14 @@ extern bool isAIAllowed;
 extern bool Race;
 extern int GetCustomLayout;
 extern int ExtraChara;
+extern int StorySplits;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
+
 
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
@@ -128,6 +130,7 @@ short randomacts(RandomizedEntry entry) {
 	}
 }
 
+
 short randomLayout(RandomizedEntry entry) {
 
 	if (Missions) //SA2 missions 100 Rings, Lost Chao
@@ -182,23 +185,28 @@ short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 
+
 	short cur_stage = -1;
+	int anyLevel = - 1;
 	AllowVanilla = Vanilla;
 
-	if (AllowVanilla != true) {
-		do {
-			cur_stage = level[rand() % LengthOfArray(level)];
-		} while (isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
-	}
-	else {
-		do {
-			cur_stage = level[rand() % LengthOfArray(level)];
-		} while (cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
-	}
+
+if (AllowVanilla != true) {
+	do {
+		cur_stage = level[rand() % LengthOfArray(level)];
+	} while (isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
+}
+else {
+	do {
+		cur_stage = level[rand() % LengthOfArray(level)];
+	} while (cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
+
+}
 
 	prev_stage = cur_stage;
 	return cur_stage;
 }
+
 
 
 bool isStageBanned(uint8_t char_id, short stage_id) {
@@ -261,7 +269,6 @@ void testRefactor(char stage, char act) {
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
 
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-		ExtraChara = randomizedSets[levelCount].extraChara;
 		
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
@@ -295,7 +302,6 @@ void GoToNextLevel_hook(char stage, char act) {
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
 
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-		ExtraChara = randomizedSets[levelCount].extraChara;
 
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
@@ -424,9 +430,6 @@ void GetNewLevel() {
 		{
 			randomizedSets[i].sonic_mode = rand() % 2;
 		}
-
-		if (randomizedSets[i].character == Characters_Knuckles || randomizedSets[i].character == Characters_Tails)
-			randomizedSets[i].extraChara = rand() % 2;  //tikal Eggman Rand
 
 
 		levelCount = 0;

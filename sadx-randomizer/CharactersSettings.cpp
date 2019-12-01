@@ -17,41 +17,10 @@ extern ObjectFuncPtr charfuncs[];
 extern bool isAIAllowed;
 bool BounceActive = false;
 extern bool RNGCharacters;
-extern bool Eggman;
-extern bool Tikal;
+extern bool GetBackRing;
+extern bool Race;
 
 
-//Characters Settings, Load, Eggman and Tikal stuff.
-
-const int loc_414914 = 0x414914;
-__declspec(naked) void ChangeStartPosCharLoading()
-{
-	__asm
-	{
-		mov eax, [CurrentCharacter]
-		movzx eax, word ptr[eax]
-		cmp eax, 7
-		jmp loc_414914
-	}
-}
-
-
-//Fix Tikal and Eggman act switch.
-const void* const sub_7B4450Ptr = (void*)0x7B4450;
-inline void sub_7B4450(CharObj2* a2, EntityData1* a3)
-{
-	__asm
-	{
-		mov edi, [a2]
-		mov esi, [a3]
-		call sub_7B4450Ptr
-	}
-}
-
-void __cdecl Eggman_Display(ObjectMaster* obj)
-{
-	sub_7B4450(((EntityData2*)obj->Data2)->CharacterData, obj->Data1);
-}
 
 
 void AllUpgrades() {
@@ -75,82 +44,32 @@ void AllUpgrades() {
 }
 
 
-FunctionPointer(int, sub_42FB00, (), 0x42FB00);
+
 void CheckRace();
-void LoadEggmanAI();
 
 //Hook Load Character
 void LoadCharacter_r()
 {
-	ClearPlayerArrays();
-	ObjectMaster* obj;
 
-	if (CurrentLevel == LevelIDs_SkyChase1 || CurrentLevel == LevelIDs_SkyChase2)
-	{
-		obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, Tornado_Main);
-		obj->Data1->CharID = (char)CurrentCharacter;
-		obj->Data1->CharIndex = 0;
-		EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
-		EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
-		MovePlayerToStartPoint(obj->Data1);
-	}
+	if (isAIAllowed)
+		LoadTails_AI_R();
 	else
-	{
-			switch (CurrentCharacter)
-			{
-			case Characters_Knuckles:
-				if (ExtraChara == 0 || Tikal == true || CurrentLevel >= 15 || CurrentLevel <= LevelIDs_TwinklePark || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0 || CurrentLevel == LevelIDs_Casinopolis)
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Knuckles
-				else
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[4]); //Load Tikal
-				break;
-			case Characters_Amy:
-				CheckLoadBird();
-				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
-				ExtraChara = 0;
-				break;
-			case Characters_Tails:
-				if (ExtraChara == 0 || Eggman == true || CurrentLevel >= 15 || CurrentLevel <= LevelIDs_TwinklePark || CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0 || CurrentLevel == LevelIDs_Casinopolis)
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]); //Load Tails
-				else
-				{
-					obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[1]); //Load Eggman
-					obj->DisplaySub = Eggman_Display;
-				}
-				break;
-			default:
-				obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentCharacter]);
-				ExtraChara = 0;
-				break;
-			}
+		LoadTails_AI_Original();
 
-			
-			ObjectMaster* lastobj = obj;
-			ObjectMaster* o2 = nullptr;
-			obj->Data1->CharID = (char)CurrentCharacter;
-			obj->Data1->CharIndex = 0;
-			EntityData1Ptrs[0] = (EntityData1*)obj->Data1;
-			EntityData2Ptrs[0] = (EntityData2*)obj->Data2;
-			MovePlayerToStartPoint(obj->Data1);
+	if (CurrentCharacter != Characters_Sonic)
+		MetalSonicFlag = 0;
 
-			LoadEggmanAI(); //load eggman race if Speed highway
+	if (CurrentCharacter == Characters_Amy)
+		CheckLoadBird();
 
-			if (isAIAllowed)
-				LoadTails_AI_R();
-			else
-				LoadTails_AI_Original();
+		CheckRace();
 
-			if (CurrentCharacter != Characters_Sonic)
-				MetalSonicFlag = 0;
+	AllUpgrades();
+	
+	LoadCharacter();
 
-			CheckRace();
-
-			AllUpgrades();
-
-			return;
+	return;
 		
-	}
-
 }
 
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
@@ -194,7 +113,7 @@ HelperFunctions extern help;
 void SuperSonicStuff() {
 
 	TimeThing = 1; //activate the timer of the stage.
-
+	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Sonic)
 	{

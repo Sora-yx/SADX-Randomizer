@@ -17,8 +17,8 @@ bool Race = false;
 extern bool isAIAllowed;
 extern bool isAIActive;
 extern int CurrentAI;
-extern int EggmanRand;
 extern int GetCustomLayout;
+bool GetBackRing = false;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -177,33 +177,11 @@ void TwinkleCircuitResult() {
 }
 
 
-//Eggman AI Speed Highway
-void LoadEggmanAI() {
-
-	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-		return;
-
-	if (CurrentLevel == 4 && CurrentAct == 0)
-	{
-		if (CurrentCharacter == Characters_Sonic && CustomLayout == 0 || CustomLayout == 1)
-		{
-			RaceWinnerPlayer = 0;
-			FastSonicAI = IsFastSonicAI();
-			AICourse = 0;
-			AICourse = Levels2P_SpeedHighway;
-			LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI);
-			LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
-			return;
-		}
-	}
-}
-
 
 void CheckRace() {
 
 	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
 	{
-		RaceWinnerPlayer = 1;
 		Race = false;
 		return;
 	}
@@ -211,6 +189,14 @@ void CheckRace() {
 	{
 		switch (CurrentLevel)
 		{
+		case LevelIDs_SpeedHighway:
+			if (CustomLayout == 1 && CurrentAct == 0)
+			{
+				AICourse = Levels2P_SpeedHighway;
+				//LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI);     //already called somewhere
+				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
+				Race = true;
+			}
 		case LevelIDs_SkyDeck:
 			if (CustomLayout == 1 && CurrentAct == 0)
 			{
@@ -219,6 +205,7 @@ void CheckRace() {
 			}
 			break;
 		}
+
 		return;
 
 	}
@@ -260,9 +247,19 @@ void FixRollerCoaster() {
 }
 
 
+void ResetTime_R() {
+
+	if (GetBackRing)
+		if (GetCustomLayout == 3 || GetCustomLayout == 2)
+			return;
+
+	ResetTime();
+	
+}
 
 void BackRing() { //capsule
 
+	
 	SetTextureToCommon();
 
 
@@ -271,92 +268,15 @@ void BackRing() { //capsule
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
-		ObjectMaster* play1 = GetCharacterObject(0); //teleport player
-
 		StopMusic();
+		GetBackRing = true;
 
-		switch (CurrentLevel)
-		{
-		case LevelIDs_EmeraldCoast:
-			if (CurrentAct == 1)
-			{
-				PlayMusic(MusicIDs_EmeraldCoastWindyAndRipply);
-				play1->Data1->Position.x = -986.5;
-				play1->Data1->Position.y = 1145;
-				play1->Data1->Position.z = -2856;
-			}
-			break;
-		case LevelIDs_WindyValley:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_WindyValleyTheAir);
-				play1->Data1->Position.x = 1068.41;
-				play1->Data1->Position.y = -335;
-				play1->Data1->Position.z = -1232;
-				play1->Data1->Rotation.y = 26978;
-			}
-			break;
-		case LevelIDs_Casinopolis:
-			if (CurrentAct == 0)
-			{
-				PlayMusic(MusicIDs_casino1);
-				play1->Data1->Position.x = 0;
-				play1->Data1->Position.y = 0;
-				play1->Data1->Position.z = 0;
-			}
-			else
-			{
-				PlayMusic(MusicIDs_casino2);
-				play1->Data1->Position.x = 19;
-				play1->Data1->Position.y = -1695;
-				play1->Data1->Position.z = 2850;
-			}
-			break;
-		case LevelIDs_IceCap:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_icecap2);
-				play1->Data1->Position.x = 1060;
-				play1->Data1->Position.y = 336;
-				play1->Data1->Position.z = 280;
-			}
-			break;
-		case LevelIDs_TwinklePark:
-			/*	PlayMusic(MusicIDs_TwinkleParkPleasureCastle); //Doesn't work for now
-				play1->Data1->Position.x = 520;
-				play1->Data1->Position.y = 975;
-				play1->Data1->Position.z = 1620;*/
-			break;
-		case LevelIDs_SpeedHighway:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_SpeedHighwaySpeedHighway);
-				play1->Data1->Position.x = 72;
-				play1->Data1->Position.y = 26;
-				play1->Data1->Position.z = 192;
-			}
-			break;
-		case LevelIDs_RedMountain:
-			if (CurrentAct == 1)
-			{
-				PlayMusic(MusicIDs_RedMountainMtRedASymbolOfThrill);
-				play1->Data1->Position.x = -78;
-				play1->Data1->Position.y = 831;
-				play1->Data1->Position.z = 1919;
-			}
-			break;
-		case LevelIDs_SkyDeck:
-			if (CurrentAct == 2)
-			{
-				PlayMusic(MusicIDs_SkyDeckGeneralOffensive);
-				play1->Data1->Position.x = -696;
-				play1->Data1->Position.y = -86;
-				play1->Data1->Position.z = 135;
-			}
-			break;
-		}
+		GameMode = GameModes_Adventure_Field; //GameMode = 5
+		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
+		//TimeThing
+
 	}
-
+	
 
 }
 
@@ -367,9 +287,15 @@ void BackRing2() { //Frog //Emerald
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
-		ObjectMaster* play1 = GetCharacterObject(0); //teleport player
-	
 		StopMusic();
+		short sVar1;
+		sVar1 = ScreenFade_RunActive();
+
+		GameMode = GameModes_Adventure_Field;
+		GameState = 0xb;
+
+		/*ObjectMaster* play1 = GetCharacterObject(0); //teleport player
+
 
 		switch (CurrentLevel)
 		{
@@ -421,7 +347,7 @@ void BackRing2() { //Frog //Emerald
 			/*	PlayMusic(MusicIDs_TwinkleParkPleasureCastle); //Doesn't work for now
 				play1->Data1->Position.x = 520;
 				play1->Data1->Position.y = 975;
-				play1->Data1->Position.z = 1620;*/
+				play1->Data1->Position.z = 1620;
 			break;
 		case LevelIDs_SpeedHighway:
 			if (CurrentAct == 2)
@@ -450,7 +376,7 @@ void BackRing2() { //Frog //Emerald
 				play1->Data1->Position.z = 135;
 			}
 			break;
-		}
+		}*/
 	}
 	else
 		LoadLevelResults();

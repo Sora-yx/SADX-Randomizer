@@ -2,4 +2,4 @@
 
  bool isValueInArray(int *array, int value, int size);
 
- int isvalid(int nombre, int* tab, int taille);
+ int isSameValueInArray(int* array, int value, int size);

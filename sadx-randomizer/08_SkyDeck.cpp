@@ -269,33 +269,11 @@ void SkyDeckAct4() {
 		Race = false;
 		LoadSetFile(0, "0600"); //load Sonic layout
 		break;
-	case 1: //Race
-		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails)
-		{
-			LoadSetFile(0, "0600"); //load Sonic layout
-			Race = false;
-			CustomLayout = 0;
-			break;
-		}
-		else
-		{
-			Race = true;
-			LoadSetFile(0, "0605"); //load Tails race layout
-			if (CurrentCharacter == Characters_Knuckles)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
-			}
-			if (CurrentCharacter == Characters_Amy)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-			}
-			if (CurrentCharacter == Characters_Gamma)
-			{
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
-			}
-			MetalSonicRace_Init();
-			break;
-		}
+	case 1: 
+		Race = false;
+		LoadSetFile(0, "0600"); //load M1
+		CustomLayout = 0;
+		
 	case 2: //Rings
 		Race = false;
 		LoadSetFile(0, "0600"); //load 100 rings mission
