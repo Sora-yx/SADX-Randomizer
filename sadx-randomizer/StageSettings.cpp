@@ -29,6 +29,8 @@ void DisableTimeStuff() {
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
 
+
+
 	TimeThing = 0;
 	SonicRand = 0;
 

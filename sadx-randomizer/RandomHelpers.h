@@ -17,7 +17,7 @@ void AIAudioFixes();
 
 short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);
-short getRandomAI();
+short getRandomAI(RandomizedEntry entry);
 void GetNewLevel();
 
 struct RandomizedEntry
@@ -195,6 +195,7 @@ void DisableTime_Zero();
 void AISwitch();
 
 void SetLevelAndAct_R(); //fix trial mod 
+void SetLevelAndAct_NoRNGStage(); //used if player select random chara without random level.
 void ResetTime_R();
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);

@@ -7,7 +7,6 @@
 int SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
-int ExtraChara = 0;
 extern int levelCount;
 
 extern int CurrentAI;
@@ -30,7 +29,7 @@ void character_settings_onFrames() {
 
 	if (GameState == 15)
 	{
-		if (CurrentLevel != 38 || CurrentLevel != 8)
+		if (CurrentLevel != 38 && CurrentLevel != 8)
 		{
 			if (AmySpeed)
 				PhysicsArray[Characters_Amy].MaxAccel = 5;
@@ -48,6 +47,8 @@ void character_settings_onFrames() {
 				PhysicsArray[Characters_Big].MaxAccel = 8;
 
 				SetCameraControlEnabled(1);
+
+				return;
 			}
 		}
 	}

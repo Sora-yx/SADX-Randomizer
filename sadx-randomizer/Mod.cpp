@@ -4,6 +4,7 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
+#include "Utils.h"
 
 
 //global Randomizer value settings
@@ -95,6 +96,8 @@ extern "C" {
 			return;
 		}
 
+
+
 		
 		int seed = 0;
 
@@ -117,6 +120,7 @@ extern "C" {
 		BigSpeed = config->getBool("CharactersStuff", "BigSpeed", true);
 		Weight = config->getBool("CharactersStuff", "Weight", true);
 
+
 		banCharacter[0] = config->getBool("Roster", "Sonic", false);
 		banCharacter[2] = config->getBool("Roster", "Tails", false);
 		banCharacter[3] = config->getBool("Roster", "Knuckles", false);
@@ -126,9 +130,15 @@ extern "C" {
 		MetalSonic = config->getBool("Roster", "MetalSonic", false);
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 
+
+
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 
 		delete config;
+
+		if (!RNGStages && StorySplits != 0) {
+			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer", MB_ICONWARNING);
+		}
 
 		if (seed)
 		{
@@ -138,13 +148,20 @@ extern "C" {
 			srand((unsigned)time(&t));
 
 		SeedCopy = seed;
-
-
+	
 		//ban roster check
-		if (banCharacter[0] || banCharacter[2] || banCharacter[3] || banCharacter[5] || banCharacter[7] || banCharacter[6])
-		{
-			ban = +1;
-		}
+			for (int i = 0; i < 8; i++)
+			{
+				if (banCharacter[i] == 1)
+					ban++;
+			}
+
+			if (ban >= 6)
+			{
+				MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONWARNING);
+				Exit();
+			}
+		
 
 
 		//Activate all the edited stages, including custom object, to make them beatable.
@@ -243,7 +260,7 @@ extern "C" {
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
 
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
-			WriteData<5>((void*)0x50659a, 0x90); //Remove one "SetLevelAndAct" as it's called twice when you select a character for some reason...
+			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
 			WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
@@ -265,16 +282,21 @@ extern "C" {
 			split = 40;
 			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 
-				randomizedSets[i].character = getRandomCharacter();
-				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-				randomizedSets[i].act = randomacts(randomizedSets[i]);
-				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+				if (RNGCharacters)
+					randomizedSets[i].character = getRandomCharacter();
+
+				if (RNGStages)
+				{
+					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+					randomizedSets[i].act = randomacts(randomizedSets[i]);
+					randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+				}
 
 				if (RNGMusic)
 					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
 				if (isAIAllowed)
-					randomizedSets[i].ai_mode = getRandomAI();
+					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
 
 				TotalCount++;
 
@@ -284,7 +306,6 @@ extern "C" {
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
 			}
-			return;
 		}
 		else
 		{
@@ -307,7 +328,7 @@ extern "C" {
 		}
 
 
-		//Display Current Mod Information on Character Select Screen.
+		//Display Current Randomized Settings Information on Character Select Screen.
 
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
@@ -432,6 +453,7 @@ extern "C" {
 
 			// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 			character_settings_onFrames();
+
 		}
 
 		//force the game to let you win as Tails in Speed Highway Act 3.

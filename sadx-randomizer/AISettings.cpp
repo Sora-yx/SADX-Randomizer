@@ -18,7 +18,6 @@ int CharaSwap = 0;
 extern int SwapDelay;
 extern int CustomLayout;
 extern int levelCount;
-extern int ExtraChara;
 
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -60,12 +59,6 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 	if (CurrentCharacter == CurrentAI)
 		return 0;
 
-	if (ExtraChara != 0)
-	{
-		isAIActive = false;
-		return 0;
-	}
-		
 
 	if (CurrentLevel > 25 && CurrentLevel < 38)
 	{
@@ -188,7 +181,12 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 		}
-		break;
+		case LevelIDs_EggWalker:
+		{
+			isAIActive = false;
+			return 0;
+			break;
+		}
 	}
 
 
