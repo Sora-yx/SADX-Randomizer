@@ -24,12 +24,10 @@ extern int CustomLayout;
 extern bool CreditCheck;
 extern int levelCount;
 
-
 //Character settings
 bool Weight = true;
 bool AmySpeed = true;
 bool BigSpeed = true;
-
 
 //banned character roster
 bool Sonic = false;
@@ -41,30 +39,28 @@ bool Big = false;
 bool MetalSonic = false;
 bool SuperSonic = false;
 int ban = 0;
+bool banCharacter[8];
 
-
+//Speedruner splits
 int split = 0;
 int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
-bool banCharacter[8];
-bool isloaded = false;
-bool isAIAllowed = true;
 
+//AI
+bool isAIAllowed = true;
 int SwapDelay = 150;
+extern int CurrentAI;
+extern bool isAIActive;
 
 int CustomFlag = 0; //Used for progression story and credits
 
 int DCModWarningTimer = 0;
-extern int CurrentAI;
-extern bool isAIActive;
+
 extern CollisionInfo* oldcol;
 extern bool Race;
 int SeedCopy = 0;
 time_t t;
 
-
-
 extern "C" {
-
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
@@ -75,7 +71,7 @@ extern "C" {
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
 
 		if (DCMod && !DCLight)
-			return; //don't display the DC Warning message if Lantern Engine is missing.
+			DCModWarningTimer = 0; //don't display the DC Warning message if Lantern Engine is missing.
 		else
 			if (DCMod || SADXFE)
 				DCModWarningTimer = 250;
@@ -96,9 +92,6 @@ extern "C" {
 			return;
 		}
 
-
-
-		
 		int seed = 0;
 
 		//Ini file Configuration
@@ -111,16 +104,18 @@ extern "C" {
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
 		Missions = config->getBool("Randomizer", "Missions", true);
 
+		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
 		ConsistentMusic = config->getBool("SongsStuff", "ConsistentMusic", false);
 		SonicCD = config->getInt("SongsStuff", "SonicCD", 0);
 
+		//Characters Settings
 		AmySpeed = config->getBool("CharactersStuff", "AmySpeed", true);
 		BigSpeed = config->getBool("CharactersStuff", "BigSpeed", true);
 		Weight = config->getBool("CharactersStuff", "Weight", true);
 
-
+		//Disable Character settings
 		banCharacter[0] = config->getBool("Roster", "Sonic", false);
 		banCharacter[2] = config->getBool("Roster", "Tails", false);
 		banCharacter[3] = config->getBool("Roster", "Knuckles", false);
@@ -130,40 +125,33 @@ extern "C" {
 		MetalSonic = config->getBool("Roster", "MetalSonic", false);
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 
-
-
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 
 		delete config;
 
-		if (!RNGStages && StorySplits != 0) {
+		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer", MB_ICONWARNING);
+
+		//ban roster check
+		for (int i = 0; i < 8; i++)
+		{
+			if (banCharacter[i] == 1)
+				ban++;
+		}
+
+		if (ban >= 6)
+		{
+			MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONWARNING);
+			Exit();
 		}
 
 		if (seed)
-		{
 			srand(seed);
-		}
 		else
 			srand((unsigned)time(&t));
 
 		SeedCopy = seed;
 	
-		//ban roster check
-			for (int i = 0; i < 8; i++)
-			{
-				if (banCharacter[i] == 1)
-					ban++;
-			}
-
-			if (ban >= 6)
-			{
-				MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONWARNING);
-				Exit();
-			}
-		
-
-
 		//Activate all the edited stages, including custom object, to make them beatable.
 
 		Startup_Init(path, helperFunctions);
@@ -179,7 +167,6 @@ extern "C" {
 		FinalEgg_Init(path, helperFunctions);
 		HotShelter_Init(path, helperFunctions);
 		SandHill_Init(path, helperFunctions);
-
 
 		//Boss
 		Chaos0_Init(path, helperFunctions);
@@ -197,10 +184,8 @@ extern "C" {
 		//Chao
 		Chao_Init();
 
-
 		//Characters Fixes and other Stuff, really important.
 		set_character_hook();
-
 
 		//Musics, Voices
 		Set_MusicVoices();
@@ -215,7 +200,6 @@ extern "C" {
 
 		//Back Rings for M2 & M3
 		Set_BackRing();
-
 
 		if (isAIAllowed)
 		{
@@ -236,7 +220,6 @@ extern "C" {
 		//Stages Fixes
 
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
-
 
 		 //Zero Stuff
 		Set_Zero();
@@ -273,7 +256,6 @@ extern "C" {
 			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Twinkle Circuit Stuff
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		}
-
 
 		//Splits + RNG generator
 
@@ -314,7 +296,6 @@ extern "C" {
 		}
 	}
 
-
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		//Display DC Conversion warning
@@ -327,7 +308,6 @@ extern "C" {
 			DCModWarningTimer--;
 		}
 
-
 		//Display Current Randomized Settings Information on Character Select Screen.
 
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
@@ -335,10 +315,10 @@ extern "C" {
 			SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 			
-				if (Vanilla)
-					DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
-				else
-					DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Banned");
+			if (Vanilla)
+				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
+			else
+				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Banned");
 
 			if (ban != 0)
 				DisplayDebugString(NJM_LOCATION(2, 3), "Character Roster: Edited");
@@ -360,14 +340,12 @@ extern "C" {
 
 		}
 
-
 		if (RNGStages == true)
 		{
 			if (GameMode == 5 || GameMode == 4)
 			{
 				if (GameState == 16)  //Pause Menu
 				{
-					
 					//Display Current Mission Information
 					if (CurrentLevel < 15)
 					{
@@ -397,7 +375,6 @@ extern "C" {
 			}
 		}
 
-
 		//AI fixes
 		if (!IsGamePaused() && oldcol)
 		{
@@ -412,24 +389,19 @@ extern "C" {
 			FreeMemory(oldcol);
 			oldcol = nullptr;
 		}
-		
 
 		if (GameMode == 5 && GameState == 15 || GameMode == 4 && GameState == 15 || GameMode == 9 && GameState == 15)
 		{
-
 			//Fix UI issue
 			HudDisplayScoreOrTimer();
 			HudDisplayRingTimeLife_Check();
 
-			
 			//AI Swap
 			if (SwapDelay != 150)
 				SwapDelay++;
 
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
-			{
 				AISwitch();
-			}
 
 			//Rings Mission 2 Check
 			if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == 8)
@@ -443,28 +415,21 @@ extern "C" {
 				}
 			}
 
-
 			//Chao Mission 3 Check
 			if (CurrentLevel < 15 && CurrentMission == 1)
-			{
 				Chao_OnFrame();
-			}
-
 
 			// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 			character_settings_onFrames();
-
 		}
 
 		//force the game to let you win as Tails in Speed Highway Act 3.
 		if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
 			SetTailsRaceVictory();
-
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-
 		if (GameMode == 4 || GameMode == 5 || GameMode == 9)
 		{
 			switch (CurrentLevel)
@@ -484,7 +449,6 @@ extern "C" {
 
 		}
 	}
-
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
 

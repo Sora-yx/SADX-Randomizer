@@ -143,7 +143,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
 			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -187,7 +186,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
 			EventFlagArray[EventFlags_TailsAdventureComplete] = true;
 			EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -225,7 +223,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
 			EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -253,7 +250,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Amy_ZeroClear] = true;
 			EventFlagArray[EventFlags_AmyAdventureComplete] = true;
 			EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -283,7 +279,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_BigAdventureComplete] = true;
 			EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -317,7 +312,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
 			EventFlagArray[EventFlags_GammaAdventureComplete] = true;
 			EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
-			WriteSaveFile();
 			credits();
 			break;
 		default:
@@ -332,7 +326,6 @@ void CustomFlagCheck() {
 			case 1:
 				CreditCheck = true;
 				EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
-				WriteSaveFile();
 				credits();
 				break;
 			default:

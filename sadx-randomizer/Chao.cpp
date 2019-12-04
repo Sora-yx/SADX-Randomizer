@@ -11,6 +11,8 @@ std::vector<NJS_PLANE> waterlist = {};
 
 FunctionPointer(int, Chao_Animation, (ObjectMaster* a1, int a2), 0x734F00);
 
+//This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
+
 int GetCurrentChaoStage_r() {
 	if (ChaoObject) return 5;
 	else return CurrentChaoStage;
@@ -26,7 +28,6 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 	DeleteObjectMaster(ChaoManager);
 	ChaoManager = nullptr;
 
-	//DeleteObjectMaster(CurrentChao);
 	CurrentChao = nullptr;
 	ChaoObject = nullptr;
 
@@ -60,7 +61,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			ArePvpLoaded = true;
 		}
 
-		//ChaoManager_Load(); //Load chao behaviour
+		//ChaoManager_Load(); //Load chao behaviour (broken atm)
 
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		a1->Data1->Action = 1; //Wait a frame before loading the chao
@@ -78,7 +79,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		a1->Data1->Action = 2;
 	}
 	else if (Action == 2) {
-		ChaoObj_Animate(2, 33); //lost animation
+		ChaoObj_Animate(2, 33); //animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
 
 		//water height

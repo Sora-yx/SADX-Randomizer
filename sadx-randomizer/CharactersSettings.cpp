@@ -79,6 +79,8 @@ void AllUpgrades() {
 		EventFlagArray[EventFlags_Gamma_JetBooster] = true;
 		EventFlagArray[EventFlags_Gamma_LaserBlaster] = true;
 	}
+
+	return;
 }
 
 
@@ -106,15 +108,13 @@ void LoadCharacter_r()
 	
 	LoadCharacter();
 
-	return;
-		
+	return;	
 }
 
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
 void SuperAuraStuff() {
 
 	TimeThing = 0;
-	
 	
 	if (CurrentCharacter != Characters_Sonic)
 	{
@@ -141,12 +141,11 @@ static void SuperSonicManager_Load()
 }
 
 
-
 extern int CustomLayout;
 
 HelperFunctions extern help;
 
-//Super Sonic Random transformation, used when the timer for a stage start. Also used to call some specific function and fixes.
+//Super Sonic Random transformation, used when the timer for a stage start. Also used to call some fixes. (Credit: SonicFreak94).
 
 void SuperSonicStuff() {
 
@@ -158,8 +157,6 @@ void SuperSonicStuff() {
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
-
-
 
 	if (CurrentLevel < LevelIDs_Chaos0)
 	{
@@ -178,17 +175,14 @@ void SuperSonicStuff() {
 	SuperSonicFlag = 0;
 	TransfoCount = 0;
 
-
 	//Banned SuperSonic Levels
 	if (CurrentCharacter == Characters_Sonic)
 	{
-
 		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		{
 			SonicRand = 0;
 			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
 			return;
-
 		}
 		else
 		{
@@ -247,11 +241,10 @@ void SuperSonicStuff() {
 							}
 						}
 					}
-				}
 			}
 		}
 	}
-
+}
 
 
 
@@ -275,15 +268,12 @@ void FixGammaBounce() {
 
 }
 
-
-
 void FixGammaHitBounce() {
 
 	if (CurrentCharacter == Characters_Gamma)
 		return;
 
 	EggViperBounceHit();
-
 }
 
 
@@ -292,7 +282,6 @@ void BigWeightHook() {
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 2000; //display 2000g for Big
 }
-
 
 
 void FixCharacterSFX() {
@@ -355,7 +344,6 @@ void FixCharacterSFX() {
 }
 
 
-
 void FixVictoryTailsVoice() {
 
 	if (CurrentCharacter == Characters_Tails)
@@ -413,5 +401,4 @@ void set_character_hook() {
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-
 }

@@ -88,7 +88,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino2_StartPositions[0]);
 
 
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0900A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act2.bin");

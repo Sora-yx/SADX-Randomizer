@@ -37,7 +37,6 @@ int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
 
 
-
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
@@ -52,7 +51,6 @@ int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4,
 
 //Few jingle that we don't want in the random music function.
 int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
-
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 
@@ -135,12 +133,9 @@ short randomLayout(RandomizedEntry entry) {
 		return rand() % 4;
 	else
 		return rand() % 2; 
-
 }
 
-
 int8_t prev_char = -1;
-
 
 uint8_t getRandomCharacter(bool allow_duplicate) {
 	
@@ -159,8 +154,6 @@ uint8_t getRandomCharacter(bool allow_duplicate) {
 }
 
 
-
-
 short getRandomAI(RandomizedEntry entry) {
 
 	int8_t cur_AI = -1;
@@ -171,12 +164,8 @@ short getRandomAI(RandomizedEntry entry) {
 
 	} while (entry.character == cur_AI);
 	
-	
 	return cur_AI;
 }
-
-
-
 
 short prev_stage = -1;
 
@@ -284,7 +273,6 @@ void testRefactor(char stage, char act) {
 }
 
 
-
 void GoToNextLevel_hook(char stage, char act) {
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
 	{
@@ -318,7 +306,6 @@ void GoToNextLevel_hook(char stage, char act) {
 	}
 }
 
-
 //cancel the reset position at 0 after quitting a stage.
 void CancelResetPosition() {
 	NextLevel = LastLevel;
@@ -329,7 +316,6 @@ void CancelResetPosition() {
 	Race = false;
 	GameMode = GameModes_Adventure_Field;
 }
-
 
 //Fix Trial Mode 
 void SetLevelAndAct_R() {
@@ -344,9 +330,6 @@ void SetLevelAndAct_R() {
 }
 
 
-
-
-
 //randomize voices
 void RandomVoice() {
 	if (VoicesEnabled != 0) {
@@ -354,8 +337,6 @@ void RandomVoice() {
 	}
 
 }
-
-
 
 short getRandomMusic(RandomizedEntry entry) {
 
@@ -370,7 +351,6 @@ short getRandomMusic(RandomizedEntry entry) {
 }
 
 
-
 void RandomMusic() {
 
 	if (Music_Enabled != 0) {
@@ -380,6 +360,9 @@ void RandomMusic() {
 
 		if (!ConsistentMusic)
 			musicCount++;
+
+		if (IsIngame)
+			MusicLooping = 1;
 
 		if (musicCount == TotalCount)
 		{
@@ -393,7 +376,6 @@ void RandomMusic() {
 	
 	return;
 }
-
 
 
 void TwinkleCircuitMusic() {
@@ -462,13 +444,11 @@ void Split_Init() { //speedrunner split init.
 		myfile << "</Platform>\n<Region>\n</Region>\n<Variables />\n</Metadata>\n<Offset>00:00:00</Offset>\n<AttemptCount>0</AttemptCount>\n";
 		myfile << "<AttemptHistory />\n<Segments>\n";
 	
-
 		//Segments
 
 		//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
 
 		int StageSplit = 0; //used to differentiate boss and normal stage.
-
 
 		for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number. 
 
@@ -496,7 +476,6 @@ void Split_Init() { //speedrunner split init.
 				randomizedSets[i].ss_mode = rand() % 2;
 			}
 
-
 			myfile << "<Segment>\n";
 			myfile << "<Name>";
 
@@ -512,6 +491,5 @@ void Split_Init() { //speedrunner split init.
 		}
 		myfile << "</Segments>\n<AutoSplitterSettings />\n</Run>";
 		myfile.close();
-	
 
 }

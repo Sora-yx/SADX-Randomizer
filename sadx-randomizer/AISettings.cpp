@@ -47,7 +47,6 @@ ObjectMaster* LoadCharObj(int i)
 
 
 
-
 int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
@@ -75,21 +74,21 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	switch (CurrentLevel)
 	{
-		case LevelIDs_SpeedHighway:
+		case LevelIDs_SpeedHighway: //crash
 			if (CurrentAct == 1)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_FinalEgg:
-			if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
+		case LevelIDs_FinalEgg: //cutscene issue
+			if (CurrentCharacter == Characters_Amy)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_RedMountain:
+		case LevelIDs_RedMountain: //cutscene crash
 			if ( CurrentCharacter < 4)
 			{
 				isAIActive = false;
@@ -97,54 +96,54 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles)
+			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_HotShelter:
+		case LevelIDs_HotShelter: //issue with handle
 			if (CurrentAct == 0)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_EmeraldCoast:
+		case LevelIDs_EmeraldCoast: //Tails rescue cutscene crash
 			if (CurrentCharacter == Characters_Tails && CurrentAct != 2)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_Chaos0:
+		case LevelIDs_Chaos0: //Crash if character is swap with AI
 			if (CurrentCharacter == Characters_Sonic)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_Chaos2:
+		case LevelIDs_Chaos2: //Potential cutscene crash
 			if (CurrentCharacter == Characters_Knuckles)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_Chaos6:
+		case LevelIDs_Chaos6: //Potential cutscene crash
 			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
 			{
 				isAIActive = false;
 				return 0;
 			}
 			break;
-		case LevelIDs_PerfectChaos:
+		case LevelIDs_PerfectChaos: //AI makes the fight a lot harder. 
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-		case LevelIDs_EggViper:
+		case LevelIDs_EggViper: //Potential cutscene crash + fight harder 
 		{
 			isAIActive = false;
 			return 0;
@@ -156,7 +155,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			return 0;
 		}
 		break;
-		case LevelIDs_LostWorld:
+		case LevelIDs_LostWorld: //cutscene crash
 		{
 			if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
 			{
@@ -164,7 +163,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 		}
-		case LevelIDs_SkyDeck:
+		case LevelIDs_SkyDeck:  //cutscene crash
 		{
 			if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
 			{
@@ -172,8 +171,8 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 		}
-		break;
-		case LevelIDs_SandHill:
+		break; 
+		case LevelIDs_SandHill:  //cutscene crash
 		{
 			if (CurrentCharacter == Characters_Tails)
 			{
@@ -181,7 +180,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 		}
-		case LevelIDs_EggWalker:
+		case LevelIDs_EggWalker:  //Character swap is broken in this fight 
 		{
 			isAIActive = false;
 			return 0;
@@ -189,10 +188,8 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 		}
 	}
 
-
 	isAIActive = true;
 	return 1;
-
 }
 
 
@@ -214,7 +211,6 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 
 		if (v1)
 		{
-			
 			v1->Data1->CharID = (char)CurrentAI;
 			v1->Data1->CharIndex = 1;
 			v1->DeleteSub = TailsAI_Delete;
@@ -249,7 +245,7 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 	{
 		if (CurrentCharacter == Characters_Sonic)
 		{
-			CurrentAI = Characters_Tails; //don't rand and just call tails AI 
+			CurrentAI = Characters_Tails; //don't rand, just set tails AI 
 
 
 			ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
@@ -392,9 +388,6 @@ void FixAISFXAmy6() { //spin dash noise when you press B
 	else
 		PlaySound(0x508, 0, 0, 0);
 }
-
-
-
 
 
 
@@ -574,7 +567,6 @@ void AISwitch() {
 			AI2->ObjectHeld = heldobj;
 
 			SwapDelay = 0;
-
 		}
 
 	}
@@ -586,9 +578,7 @@ void AISwitch() {
 
 void LoadTails_AI_R() {
 
-	//SetFrameRateMode(1, 1);
-	
-	
+
 	if (CreditCheck != true)
 	{
 		if (Race == false && isAIAllowed)

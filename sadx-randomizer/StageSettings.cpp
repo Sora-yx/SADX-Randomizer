@@ -29,10 +29,9 @@ void DisableTimeStuff() {
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
 
-
-
 	TimeThing = 0;
 	SonicRand = 0;
+	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
@@ -261,9 +260,15 @@ void FixRollerCoaster() {
 
 void ResetTime_R() {
 
+	int RingCopy = 0;
+	RingCopy = Rings;
+
 	if (GetBackRing)
 		if (GetCustomLayout == 3 || GetCustomLayout == 2)
+		{
+			Rings = RingCopy;
 			return;
+		}
 
 	ResetTime();
 	

@@ -10,7 +10,6 @@ extern int CurrentMission;
 
 void CreditFlag() {
 
-
 	if (SelectedCharacter == 0)
 	{
 			EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
@@ -137,9 +136,9 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Takanori Yoshioka" },
 	{ 3, -1, 0, 0, "Hiroyuki Kikui" },
 	{ 2, -1, 0, 0, "RANDOMIZER SPECIAL THANKS" },
-	{ 3, -1, 0, 0, "MastaKirby" },
-	{ 3, -1, 0, 0, "MelancholyMatoi" },
-	{ 3, -1, 0, 0, "JustLemres" },
+	{ 3, -1, 0, 0, "MastaKirby, MelancholyMatoi" },
+	{ 3, -1, 0, 0, "Kell, MainMemory" },
+	{ 3, -1, 0, 0, "Prahaha" },
 	{ 2, -1, 0, 0, "GRAPHIC TOOL PROGRAMMER" },
 	{ 3, -1, 0, 0, "Koji Ogino" },
 	{ 2, -1, 0, 0, "TECHNICAL SUPPORT" },
@@ -611,7 +610,6 @@ void CreditsNewList() {
 //Randomizer Background Credits
 
 
-
 //Credits 
 void credits() {
 
@@ -619,6 +617,7 @@ void credits() {
 	CustomLayout = 0;
 	GetCustomLayout = 0;
 	CurrentMission = 0;
+	WriteSaveFile();
 
 	if (CreditCheck)
 	{
