@@ -19,13 +19,12 @@ extern bool RNGCharacters;
 extern bool GetBackRing;
 extern bool Race;
 
+extern bool AmySpeed;
+extern bool BigSpeed;
 
 
 
 void character_settings_onFrames() {
-
-	extern bool AmySpeed;
-	extern bool BigSpeed;
 
 	if (GameState == 15)
 	{
@@ -52,12 +51,6 @@ void character_settings_onFrames() {
 			}
 		}
 	}
-
-	PhysicsArray[Characters_Amy].MaxAccel = 0.05000000075;
-	PhysicsArray[Characters_Big].MaxAccel = 1;
-
-	return;
-
 }
 
 

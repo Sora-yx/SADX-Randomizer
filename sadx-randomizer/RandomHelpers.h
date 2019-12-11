@@ -106,8 +106,9 @@ void Race_Init();
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
 void RandomVoice();
-//void RandomMusic();
 void RandomMusic();
+
+void PlayMusic_R(MusicIDs song);
 
 void AddCustomFlag();
 void CustomFlagCheck(); //sa2 style
@@ -190,10 +191,11 @@ void BackRing2();
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 
 void CreditFlag();
+void FinalStat();
 
 void DisableTime_Zero();
 void AISwitch();
-
+void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod 
 void SetLevelAndAct_NoRNGStage(); //used if player select random chara without random level.
 void ResetTime_R();
@@ -201,6 +203,7 @@ void ResetTime_R();
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 DataPointer(char, TailsAdventureData, 0x3B1860E);
 DataPointer(char, EventTailsData, 0x3B18809);
+DataPointer(char, SomethingAboutCredit, 0x3c83054);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
 FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
 

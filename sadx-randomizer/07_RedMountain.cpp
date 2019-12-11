@@ -30,7 +30,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Initiliaze data
 
 	WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
-	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge part 1
+	WriteData<1>((void*)0x608A1A, 0x08); //Allow the Trapdoor to open when Knuckles.
+	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge
 	WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
 	WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
 
@@ -127,14 +128,14 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 void RedMountainAct4() {
 
-	if (CurrentAct == 1)
-		CustomLayout = rand() % 2;
-	else
-		CustomLayout = randomizedSets[levelCount].layout;
+
+	//CustomLayout = randomizedSets[levelCount].layout;
+	CustomLayout = 3;
 
 	
 	if (CurrentAct == 1)
 	{
+
 		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.
 		{
 			LoadSetFile(0, "0500");
@@ -155,7 +156,6 @@ void RedMountainAct4() {
 
 	if (CurrentAct == 0)
 	{
-		CustomLayout = randomizedSets[levelCount].layout;
 
 		switch (CustomLayout)
 		{

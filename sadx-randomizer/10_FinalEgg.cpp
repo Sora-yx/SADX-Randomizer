@@ -31,10 +31,22 @@ void FinalEggAct4() {
 			return;
 		}
 	case 2:
-		LoadSetFile(0, "1000"); //100 Rings
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "1000"); //M1
+			CustomLayout = 0;
+		}
+		else
+			LoadSetFile(0, "1000"); //100 Rings
 		break;
 	case 3:
-		LoadSetFile(0, "1000"); //Lost Chao
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "1000"); //M1
+			CustomLayout = 0;
+		}
+		else
+			LoadSetFile(0, "1000"); //Lost Chao
 		break;
 	}
 

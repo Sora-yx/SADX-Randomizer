@@ -213,7 +213,8 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3001.wma", "system\\voices\\LoadAura.wma"); //Introduce Super Sonic Aura Sound.
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\2053.wma", "system\\voices\\StageLoad.wma"); //Introduce Stage Load Sound
 
-	helperFunctions.ReplaceFile("system\\ENDBG_SONIC_0.PVM", "system\\textures\\ENDBG_RANDOMIZER_0.pvmx"); //background credits
+	//helperFunctions.ReplaceFile("system\\ENDBG_SONIC_0.PVM", "system\\textures\\ENDBG_RANDOMIZER_0.pvmx"); //background credits
+	help.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.mp3"); //Introduce Stage Load Sound
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4000.wma", "system\\voices\\SonicHereWeGo.wma"); //Introduce Sonic Switch
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4001.wma", "system\\voices\\TailsLeaveItToMe.wma"); //Introduce Tails Switch
@@ -227,7 +228,7 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5000.wma", "system\\voices\\Bounce.wma"); //Introduce Sonic bounce sfx
 
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5001.wma", "system\\voices\\Back Ring hit.wma"); //Back Ring SFX
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5001.wma", "system\\voices\\BackRingHit.wma"); //Back Ring SFX
 
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 
@@ -247,7 +248,7 @@ void Set_BackRing() {
 
 	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
 
-//capsule
+	//capsule
 	WriteCall((void*)0x46adc2, BackRing);
 
 	//Ballon
@@ -255,6 +256,9 @@ void Set_BackRing() {
 
 	//Frog
 	WriteCall((void*)0x4fa2e8, BackRing2);
+
+	//EC + LW
+	WriteCall((void*)0x5b24d8, BackRing2);
 
 	//WV back ring
 	WriteCall((void*)0x04df349, BackRing2);

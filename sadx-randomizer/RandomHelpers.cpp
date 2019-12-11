@@ -30,11 +30,15 @@ extern bool Race;
 extern int GetCustomLayout;
 extern int StorySplits;
 
+extern int RageQuit;
+extern int ringsPB;
+
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
+//int level[21] = { 1, 6, 3, 6, 5, 6, 7, 6, 9, 6, 12, 6, 16, 6, 19, 6, 21, 6, 23, 6, 38 };
 
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
@@ -50,7 +54,7 @@ int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
 int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 
 //Few jingle that we don't want in the random music function.
-int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
+int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 
@@ -292,9 +296,9 @@ void GoToNextLevel_hook(char stage, char act) {
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
-	
-
-		levelCount++;
+		
+		if (Credits_State == 0 && GameMode != GameModes_Credits)
+			levelCount++;
 
 		if (ConsistentMusic)
 			musicCount++;
@@ -313,6 +317,8 @@ void CancelResetPosition() {
 	SonicRand = 0;
 	CustomLayout = 0;
 	GetCustomLayout = 0;
+	RageQuit++;
+	ringsPB += Rings; //total Rings credit stat
 	Race = false;
 	GameMode = GameModes_Adventure_Field;
 }
@@ -323,7 +329,7 @@ void SetLevelAndAct_R() {
 	if (GameMode == GameModes_Menu)
 	{
 		if (LevelList == 14 || LevelList == 238)
-			testRefactor(NextLevel, NextAct);
+			testRefactor(CurrentLevel, CurrentAct);
 		else
 			return;
 	}
@@ -355,6 +361,7 @@ void RandomMusic() {
 
 	if (Music_Enabled != 0) {
 
+
 		CurrentSong = randomizedSets[musicCount].music;
 		LastSong = CurrentSong;
 
@@ -372,6 +379,20 @@ void RandomMusic() {
 
 			musicCount = 0;
 		}
+	}
+
+	return;
+}
+
+void PlayMusic_R(MusicIDs song) {
+
+	if (Music_Enabled != 0) {
+
+		CurrentSong = song;
+		LastSong = song;
+
+		if (IsIngame)
+			MusicLooping = 1;
 	}
 	
 	return;

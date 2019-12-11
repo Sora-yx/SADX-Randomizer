@@ -37,7 +37,7 @@ void SkyDeckAct4() {
 		break;
 	case 3: //Lost CHao
 		Race = false;
-		LoadSetFile(0, "0603"); //load Lost Chao mission
+		LoadSetFile(0, "0600"); //load Lost Chao mission
 		break;
 	}
 
@@ -50,12 +50,12 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteCall((void*)0x422d90, SkyDeckAct4); //SD
 	SDObjects_Init(path, helperFunctions);
 
+
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0600S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act3.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0603S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
@@ -69,8 +69,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0601M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act3.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0603M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Chao.bin");
-
 	helperFunctions.ReplaceFile("system\\CAM0600M.bin", "system\\cam\\CAM0600M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601M.bin", "system\\cam\\CAM0601M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602M.bin", "system\\cam\\CAM0602M.bin");
@@ -83,8 +81,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0601K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0605K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0603K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600K.bin", "system\\cam\\CAM0600K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601K.bin", "system\\cam\\CAM0601K.bin");
@@ -100,8 +96,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0602A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0605A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Race.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0603A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Chao.bin");
-
 	helperFunctions.ReplaceFile("system\\CAM0600A.bin", "system\\cam\\CAM0600A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601A.bin", "system\\cam\\CAM0601A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602A.bin", "system\\cam\\CAM0602A.bin");
@@ -114,7 +108,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0601B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act3.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0603B.BIN", "system\\levels\\Sky Deck\\Big-SD-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600B.bin", "system\\cam\\CAM0600B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601B.bin", "system\\cam\\CAM0601B.bin");
@@ -126,10 +119,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0600E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0601E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0602E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0605E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0603E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600E.bin", "system\\cam\\CAM0600E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601E.bin", "system\\cam\\CAM0601E.bin");
@@ -138,8 +129,9 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD3_StartPositions[0]);
 
-	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
-	SkyDeckDeathZones[1] = SkyDeck2DeathZones;
+	//DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 3);
+
+
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {
@@ -285,8 +277,15 @@ ObjectListEntry SkyDeckObjectList_list[] = {
 
 ObjectList SkyDeckObjectList = { arraylengthandptrT(SkyDeckObjectList_list, int) };
 
+__declspec(dllexport) PointerList Pointers = { arrayptrandlengthT(pointers, int) };
+DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 3);
+
 void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_SkyDeck * 8 + 2] = &SkyDeckObjectList;
+	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
+	SkyDeckDeathZones[1] = SkyDeck2DeathZones;
+	
 }
+
 

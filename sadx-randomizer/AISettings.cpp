@@ -15,6 +15,7 @@ int FlagAI = 0;
 extern bool Race;
 int AISwap = 0;
 int CharaSwap = 0;
+extern int AISwapCount;
 extern int SwapDelay;
 extern int CustomLayout;
 extern int levelCount;
@@ -103,7 +104,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_HotShelter: //issue with handle
-			if (CurrentAct == 0)
+			if (CurrentAct <= 1)
 			{
 				isAIActive = false;
 				return 0;
@@ -477,7 +478,7 @@ void AISwitch() {
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
 
-
+			AISwapCount++; //Credit stat
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 

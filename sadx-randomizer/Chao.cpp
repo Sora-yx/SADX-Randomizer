@@ -6,6 +6,7 @@ ObjectMaster* CurrentChao;
 
 uint8_t SelectedChao = 0;
 bool ArePvpLoaded = false;
+extern int chaoPB;
 
 std::vector<NJS_PLANE> waterlist = {};
 
@@ -87,7 +88,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		WriteData((float*)0x73C24C, height);
 
 		if (CurrentCharacter < 6)
-			if (IsPlayerInsideSphere(&a1->Data1->Position, 8)) { //hitbox
+			if (IsPlayerInsideSphere(&a1->Data1->Position, 9)) { //hitbox
 				if (TimeThing != 0)
 				{
 					LoadLevelResults();
@@ -102,7 +103,8 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			if (IsPlayerInsideSphere(&a1->Data1->Position, 20)) { //hitbox
 				if (TimeThing != 0)
 				{
-					LoadLevelResults();
+					chaoPB++; //Chao Credit Stat
+					LoadLevelResults(); 
 					a1->Data1->Action = 3;
 				}
 			}
@@ -169,6 +171,18 @@ void Chao_OnFrame() {
 		case LevelIDs_FinalEgg:
 			pos = { 2660.566406, -2888.049561, -943.2208862 };
 			Yrot = 0x8000;
+			break;		
+		case LevelIDs_HotShelter:
+			if (CurrentAct == 2)
+			{
+				pos = { 2.01, 3222, -3136 };
+				Yrot = 0x8000;
+			}
+			else
+			{
+				pos = { 716.4085693, 428.2105103, -2952.347412 };
+				Yrot = 0x8000;
+			}
 			break;
 		}
 

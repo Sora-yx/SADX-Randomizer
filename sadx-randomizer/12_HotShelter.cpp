@@ -8,61 +8,148 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
 extern int CurrentMission;
+extern int levelCount;
+
 
 
 
 void HotShelterAct4() {
 
-	CustomLayout = 0;
 	CurrentMission = 0;
 
-	CustomLayout = rand() % 2;
+	CustomLayout = randomizedSets[levelCount].layout;
 
-	if (CustomLayout == 0)
-	{
-		if (CurrentCharacter == Characters_Amy)
+	//act 1 Amy/Big Version
+
+
+		switch (CustomLayout)
 		{
-			LoadSetFile(0, "1200"); //load Big version for Amy.
-			//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-			WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-			WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-			WriteData<1>((void*)0x59a3bb, 0x08);
-			WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-			WriteData<1>((void*)0x59a125, 0x08);
-			WriteData<1>((void*)0x59a126, 0x74);
+		case 0:
+			if (CurrentCharacter == Characters_Amy)
+			{
+				LoadSetFile(0, "1204"); //load Big version for Amy.
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
+				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
+				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+				WriteData<1>((void*)0x59a3bb, 0x08);
+				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+				WriteData<1>((void*)0x59a125, 0x08);
+				WriteData<1>((void*)0x59a126, 0x74);
+			}
+			else
+			{
+				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
+			}
+			break;
+		case 1:
+			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma) //Amy has Big layout and vice versa.
+			{
+				LoadSetFile(0, "1200");
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
+			}
+			else
+			{
+				LoadSetFile(0, "1204"); //load Big version for other characters.
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
+				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
+				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+				WriteData<1>((void*)0x59a3bb, 0x08);
+				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+				WriteData<1>((void*)0x59a125, 0x08);
+				WriteData<1>((void*)0x59a126, 0x74);
+			}
+			break;
+		case 2: //100 Rings
+			if (CurrentCharacter == Characters_Amy)
+			{
+				LoadSetFile(0, "1204"); //load Big version for Amy.
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
+				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
+				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+				WriteData<1>((void*)0x59a3bb, 0x08);
+				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+				WriteData<1>((void*)0x59a125, 0x08);
+				WriteData<1>((void*)0x59a126, 0x74);
+				CustomLayout = 0;
+			}
+			else
+			{
+				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+				LoadSetFile(1, "1201");
+				LoadSetFile(2, "1202");
+				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
+			}
+			break;
+		case 3: //Lost Chao
+			if (CurrentCharacter == Characters_Amy)
+			{
+				LoadSetFile(0, "1204"); //load Big version for Amy.
+				LoadSetFile(1, "1201"); //load Big version for Amy.
+				LoadSetFile(2, "1202"); //load Big version for Amy.
+				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
+				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
+				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+				WriteData<1>((void*)0x59a3bb, 0x08);
+				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+				WriteData<1>((void*)0x59a125, 0x08);
+				WriteData<1>((void*)0x59a126, 0x74);
+				CustomLayout = 0;
+			}
+			else
+			{
+				LoadSetFile(0, "1200"); //load Amy hot Shelter version. Lost Chao
+				LoadSetFile(1, "1205"); //Chao Amy Version
+				LoadSetFile(2, "1206"); //Chao Gamma Version
+				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
+			}
+			break;
 		}
-		else
+	
+
+	//act 3 Gamma Version
+
+	if (CurrentAct == 2)
+	{
+		switch (CustomLayout)
 		{
+		case 0:
 			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-			WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-			return;
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202");
+			break;
+		case 1:
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202");
+			CustomLayout = 0;
+			break;
+		case 2: //100 Rings
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202");
+			break;
+		case 3: //Lost Chao
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version. Lost Chao
+			LoadSetFile(1, "1205"); //Chao Amy Version
+			LoadSetFile(2, "1206"); //Chao Gamma Version
+			break;
 		}
 	}
 
-	if (CustomLayout == 1)
-	{
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma) //Amy has Big layout by defaut and Big has Amy layout by defaut.
-		{
-			LoadSetFile(0, "1200");
-			WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-			return;
-		}
-		else
-		{
-			LoadSetFile(0, "1204"); //load Big version for other characters.
-			//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-			WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-			WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-			WriteData<1>((void*)0x59a3bb, 0x08);
-			WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-			WriteData<1>((void*)0x59a125, 0x08);
-			WriteData<1>((void*)0x59a126, 0x74);
-			return;
-		}
-
-	}
-
+	return;
 }
+
 
 //Object
 
@@ -167,17 +254,15 @@ void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunct
 }
 
 
-
-
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 
-	WriteCall((void*)0x4c5797, HotShelterHandle);
+	/*WriteCall((void*)0x4c5797, HotShelterHandle); //not ready yet
 	WriteData<1>((void*)0x4c5756, 0x00);
-	WriteData<1>((void*)0x4c57a2, 0x74);
+	WriteData<1>((void*)0x4c57a2, 0x74);*/
 
-	WriteCall((void*)0x42300b, HotShelterAct4); //HS
+	WriteCall((void*)0x423038, HotShelterAct4); //HS act 5
 
 	HSObjects_Init(path, helperFunctions);
 
@@ -186,6 +271,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1201S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET1204S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act4.bin");
+
+	helperFunctions.ReplaceFile("system\\SET1205S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Chao2.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200S.bin", "system\\cam\\CAM1200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201S.bin", "system\\cam\\CAM1201S.bin");
@@ -200,6 +288,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1202M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET1204M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act4.bin");
 
+	helperFunctions.ReplaceFile("system\\SET1205M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Chao2.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM1200M.bin", "system\\cam\\CAM1200M.bin");  
 	helperFunctions.ReplaceFile("system\\CAM1201M.bin", "system\\cam\\CAM1201M.bin");
 	helperFunctions.ReplaceFile("system\\CAM1202M.bin", "system\\cam\\CAM1202M.bin");
@@ -212,6 +303,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1201K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET1204K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act4.bin");
+
+	helperFunctions.ReplaceFile("system\\SET1205K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Chao2.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200K.bin", "system\\cam\\CAM1200K.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201K.bin", "system\\cam\\CAM1201K.bin");
@@ -227,6 +321,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1202A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET1204A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act4.bin");
 
+	helperFunctions.ReplaceFile("system\\SET1205A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Chao2.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM1200A.bin", "system\\cam\\CAM1200A.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201A.bin", "system\\cam\\CAM1201A.bin");
 	helperFunctions.ReplaceFile("system\\CAM1202A.bin", "system\\cam\\CAM1202A.bin");
@@ -239,6 +336,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1201B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET1205B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Chao2.bin");
+
 	helperFunctions.ReplaceFile("system\\CAM1200B.bin", "system\\cam\\CAM1200B.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201B.bin", "system\\cam\\CAM1201B.bin");
 	helperFunctions.ReplaceFile("system\\CAM1202B.bin", "system\\cam\\CAM1202B.bin");
@@ -250,6 +350,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET1205E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET1206E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Chao2.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1200E.bin", "system\\cam\\CAM1200E.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201E.bin", "system\\cam\\CAM1201E.bin");

@@ -1,12 +1,27 @@
 #include "SADXModLoader.h"
 #include "stdafx.h"
 #include "RandomHelpers.h"
+#include <string.h>
 
 extern int CustomFlag;
 extern bool CreditCheck;
 extern int GetCustomLayout;
 extern int CustomLayout;
 extern int CurrentMission;
+
+extern int RageQuit;
+extern int JumpCount;
+extern int ringsPB;
+extern int chaoPB;
+extern int animalPB;
+extern int killPB;
+extern int hitsPB;
+extern int deathsPB;
+extern int AISwapCount;
+
+extern int SeedCopy;
+extern int StorySplits;
+extern int StatsTimer;
 
 void CreditFlag() {
 
@@ -32,16 +47,13 @@ void CreditFlag() {
 			EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
 			EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-
 	}
 	if (SelectedCharacter == 3)
 	{
-
 			EventFlagArray[EventFlags_Amy_FinalEggClear] = true;
 			EventFlagArray[EventFlags_Amy_ZeroClear] = true;
 			EventFlagArray[EventFlags_AmyAdventureComplete] = true;
 			EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-
 	}
 
 	if (SelectedCharacter == 4)
@@ -65,15 +77,28 @@ void CreditFlag() {
 	}
 
 	CustomFlag = 0;
+	CreditsNewList();
 	GetCurrentCharacterID();
 }
 
-extern int RageQuit;
-
 //DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 
+
 CreditsEntry CreditsText_list[] = {
-	{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.0" },
+		/*{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
+	{ 3, -1, 0, 0, "Deaths" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "Jumps" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "RageQuit" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "Hits" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "Character Swap" },
+	{ 2, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "End of the stats" },*/
+
+	{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.0" },  
 	{ 3, -1, 0, 0, "AUTHOR" },
 	{ 3, -1, 0, 0, "Sora" },
 	{ 2, -1, 0, 0, "HELP" },
@@ -86,12 +111,10 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Yuji Uekawa" },
 	{ 2, -1, 0, 0, "TECHNICAL DIRECTOR" },
 	{ 3, -1, 0, 0, "Masanobu Yamamoto" },
-	{ 2, -1, 0, 0, "Super Sonic Mod" },
-	{ 3, -1, 0, 0, "SonicFreak94" },
+	{ 2, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" },
 	{ 2, -1, 0, 0, "SOUND DIRECTOR" },
-	{ 3, -1, 0, 0, "Jun Senoue" },
-	{ 2, -1, 0, 0, "LEAD GAME DESIGNER" },
-	{ 3, -1, 0, 0, "Kenjiro Morimoto" },
+	{ 3, -1, 0, 0, "Jun Senoueo" },
 	{ 2, -1, 0, 0, "GAME DESIGNERS" },
 	{ 3, -1, 0, 0, "Hiroki Atoji" },
 	{ 3, -1, 0, 0, "Kentaro Kiyono" },
@@ -139,13 +162,13 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "MastaKirby, MelancholyMatoi" },
 	{ 3, -1, 0, 0, "Kell, MainMemory" },
 	{ 3, -1, 0, 0, "Prahaha" },
-	{ 2, -1, 0, 0, "GRAPHIC TOOL PROGRAMMER" },
-	{ 3, -1, 0, 0, "Koji Ogino" },
-	{ 2, -1, 0, 0, "TECHNICAL SUPPORT" },
-	{ 3, -1, 0, 0, "Tetsu Katano" },
-	{ 2, -1, 0, 0, "A-LIFE SYSTEM DESIGNERS" },
-	{ 3, -1, 0, 0, "Yoshihisa Hashimoto" },
-	{ 3, -1, 0, 0, "Sachiko Kawamura" },
+	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
+	{ 3, -1, 0, 0, "SonicFreak94" },
+	{ 2, -1, 0, 0, "LOST CHAO" },
+	{ 3, -1, 0, 0, "Kell" },
+	{ 2, -1, 0, 0, "CHARACTER + AI SWAP" },
+	{ 3, -1, 0, 0, "MainMemory" },
+	{ 3, -1, 0, 0, "Sora" },
 	{ 2, -1, 0, 0, "A-LIFE SYSTEM ARTISTS" },
 	{ 3, -1, 0, 0, "Sachiko Kawamura" },
 	{ 3, -1, 0, 0, "Kazuko Ito" },
@@ -601,8 +624,20 @@ CreditsEntry CreditsText_list[] = {
 CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 
 //Initiliaze Credits
+const char* nombre;
 
 void CreditsNewList() {
+
+	WriteCall((void*)0x640fe1, FinalStat);
+	WriteData<10>((void*)0x640fef, 0x90);
+	WriteData<6>((void*)0x640fe9, 0x90);
+	WriteData<6>((void*)0x640ff9, 0x90);
+	WriteData<5>((void*)0x640fff, 0x90);
+
+	char A[50]; 
+	sprintf(A, "%d", deathsPB); 
+	//CreditsText_list[7].Line = A;
+
 
 	*(CreditsList*)0x2BC2FD0 = CreditsText;
 }
@@ -617,6 +652,7 @@ void credits() {
 	CustomLayout = 0;
 	GetCustomLayout = 0;
 	CurrentMission = 0;
+	StatsTimer = 3000;
 	WriteSaveFile();
 
 	if (CreditCheck)
@@ -626,5 +662,52 @@ void credits() {
 		GameState = 21;
 		Credits_State = 1;
 		Load_SEGALOGO_E();
+	}
+}
+
+
+void FinalStat() {
+
+	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
+	{
+		int getHour = (SaveFile.PlayTime / 0xe10) / 60;
+		int getMin = (SaveFile.PlayTime / 0xe10) % 60;
+		
+
+		PlayMusic_R(MusicIDs_nights_k);
+
+		if (StatsTimer)
+		{
+			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
+
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 15), "Kills: %d", killPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 16), "Hits: %d", hitsPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 17), "Deaths: %d", deathsPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 18), "Chao Rescued: %d", chaoPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 19), "Final Time: %d:%d", getHour, getMin);
+
+			DisplayDebugString(NJM_LOCATION(6, 28), "Thank you for playing SADX Randomizer!");
+		}
+	
+		if (!StatsTimer && Credits_State == 2)
+		{
+			CheckThingButThenDeleteObject(EndBG_Ptr);
+			EndBG_Ptr = 0;
+			SomethingAboutCredit = 0;
+			SoundManager_Delete2();
+			Credits_State = 5;
+		}
+	}
+	else
+	{
+		CheckThingButThenDeleteObject(EndBG_Ptr);
+		EndBG_Ptr = 0;
+		SomethingAboutCredit = 0;
+		SoundManager_Delete2();
+		Credits_State = 5;
 	}
 }

@@ -20,6 +20,15 @@ extern int CurrentAI;
 extern int GetCustomLayout;
 bool GetBackRing = false;
 
+
+//Credits stats
+extern int ringsPB;
+extern int animalPB;
+extern int killPB;
+extern int hitsPB;
+extern int deathsPB;
+extern int JumpCount;
+
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
@@ -29,16 +38,22 @@ void DisableTimeStuff() {
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
 
+	if (SelectedCharacter == 6)
+		LastStoryFlag = 1;
+	else
+		LastStoryFlag = 0;
+
 	TimeThing = 0;
 	SonicRand = 0;
+	ringsPB += Rings; //total Rings credit stat
 	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
 
-	Credits_CanSkip = 1;
 
-	AddCustomFlag(); //credits check
+	if (CurrentLevel != LevelIDs_TwinkleCircuit)
+		AddCustomFlag(); //credits check
 
 	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark && CurrentCharacter != Characters_Amy) //Move AI to player 1 if we are not racing.
 	{
@@ -156,7 +171,7 @@ void LoadZero() {
 		SetCameraControlEnabled(1);
 
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout == 0) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout != 1) //don't load Zero if Sonic Layout
 		return;
 
 	if (CurrentCharacter != Characters_Amy)
@@ -278,7 +293,6 @@ void BackRing() { //capsule
 
 	
 	SetTextureToCommon();
-	PlayVoice(5001);
 
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
@@ -302,7 +316,6 @@ void BackRing2() { //Frog //Emerald
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
-		PlayVoice(5001);
 		StopMusic();
 
 		GetBackRing = true;
@@ -310,7 +323,6 @@ void BackRing2() { //Frog //Emerald
 		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
 		
 
-		PlayVoice(5001);
 		StopMusic();
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();
@@ -355,4 +367,46 @@ void ICAct3Position() {
 }
 
 
+void DeathsStat() {
+	//Hook used when you lose a live
+	deathsPB++;
+	GiveLives(0xffffffff);
+}
 
+void HitsStat() {
+	//Hook used when you lose your rings
+	hitsPB++;
+	rand();
+}
+
+int JumpStat() {
+
+	JumpCount++;
+	return 1;
+
+}
+
+void KillStat() {
+
+	killPB++;
+	GetCharacterID(0);
+
+}
+	
+void AnimalStat() {
+
+	animalPB++;
+	PlaySound(0x1c, 0, 0, 0);
+}
+
+
+void HookStats_Inits() {
+
+	WriteCall((void*)0x4506f2, HitsStat);
+	WriteCall((void*)0x416e7d, DeathsStat);
+	WriteCall((void*)0x417a1f, DeathsStat);
+	WriteCall((void*)0x4b8464, JumpStat);
+	WriteCall((void*)0x4d88ca, KillStat);
+	WriteCall((void*)0x4d7977, AnimalStat);
+
+}

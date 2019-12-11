@@ -11,5 +11,5 @@ StartPosition LW2_StartPositions[]{
 };
 
 StartPosition LW3_StartPositions[]{
-	{ 7, 2,{ 270, 10, 0 }, 8000 }
+	{ 7, 2,{ 247.5079, 10, -0.4205462}, 357.857666 }
 };

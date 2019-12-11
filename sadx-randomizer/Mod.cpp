@@ -53,19 +53,31 @@ extern bool isAIActive;
 
 int CustomFlag = 0; //Used for progression story and credits
 
+//Credits stats
+int RageQuit = 0;
+int JumpCount = 0;
+int ringsPB = 0;
+int chaoPB = 0;
+int animalPB = 0;
+int killPB = 0;
+int hitsPB = 0;
+int deathsPB = 0;
+int AISwapCount = 0;
+
 int DCModWarningTimer = 0;
+int StatsTimer = 3000;
 
 extern CollisionInfo* oldcol;
 extern bool Race;
 int SeedCopy = 0;
 time_t t;
 
+
 extern "C" {
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
-
 		HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
 		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
@@ -87,7 +99,7 @@ extern "C" {
 
 		HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
 		if (HeroesMod) {
-			MessageBoxA(WindowHandle, "Warning: Heroes mod is not compatible with SADX Randomizer.", "SADX Randomizer", MB_ICONWARNING);
+			MessageBoxA(WindowHandle, "Warning: Heroes mod is not compatible with SADX Randomizer.", "SADX Randomizer", MB_ICONERROR);
 			Exit();
 			return;
 		}
@@ -130,7 +142,7 @@ extern "C" {
 		delete config;
 
 		if (!RNGStages && StorySplits != 0)
-			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer", MB_ICONWARNING);
+			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer", MB_ICONINFORMATION);
 
 		//ban roster check
 		for (int i = 0; i < 8; i++)
@@ -141,7 +153,7 @@ extern "C" {
 
 		if (ban >= 6)
 		{
-			MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONWARNING);
+			MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONERROR);
 			Exit();
 		}
 
@@ -178,8 +190,10 @@ extern "C" {
 		Zero_Init(path, helperFunctions);
 
 		//Credits
-		CreditsNewList(); //Initialize custom credits
+		//CreditsNewList(); //Initialize custom credits
 		WriteCall((void*)0x641aef, CreditFlag);
+		//Credits Stat init
+		HookStats_Inits();
 
 		//Chao
 		Chao_Init();
@@ -189,6 +203,8 @@ extern "C" {
 
 		//Musics, Voices
 		Set_MusicVoices();
+
+	
 
 		if (Weight)
 		{
@@ -241,8 +257,8 @@ extern "C" {
 		if (RNGStages == true) 
 		{
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
-
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
+			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
 			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
@@ -340,6 +356,17 @@ extern "C" {
 
 		}
 
+		//Credits stat
+		if (StatsTimer && Credits_State >= 2)
+			StatsTimer--;
+
+
+		if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)
+			StatsTimer = 0;
+
+
+
+
 		if (RNGStages == true)
 		{
 			if (GameMode == 5 || GameMode == 4)
@@ -350,7 +377,7 @@ extern "C" {
 					if (CurrentLevel < 15)
 					{
 						SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-						if (CustomLayout == 0 || CustomLayout > 3)
+						if (CustomLayout <= 1 || CustomLayout > 3)
 							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1");
 
 						if (CustomLayout == 2)
