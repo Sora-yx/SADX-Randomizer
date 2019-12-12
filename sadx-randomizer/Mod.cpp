@@ -360,12 +360,8 @@ extern "C" {
 		if (StatsTimer && Credits_State >= 2)
 			StatsTimer--;
 
-
 		if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)
 			StatsTimer = 0;
-
-
-
 
 		if (RNGStages == true)
 		{
@@ -445,10 +441,10 @@ extern "C" {
 			//Chao Mission 3 Check
 			if (CurrentLevel < 15 && CurrentMission == 1)
 				Chao_OnFrame();
-
-			// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
-			character_settings_onFrames();
 		}
+
+		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
+		character_settings_onFrames();
 
 		//force the game to let you win as Tails in Speed Highway Act 3.
 		if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)

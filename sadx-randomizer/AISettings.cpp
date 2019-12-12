@@ -279,7 +279,7 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 
 void FixAISFXSonic() {
 
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
@@ -294,13 +294,17 @@ void FixAISFXSonic() {
 
 void FixAISFXJump() {
 
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Knuckles || GetChara->Data1->CharID == Characters_Tails || GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Knuckles || GetChara->Data1->CharID == Characters_Tails || GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
+
 	}
 		PlaySound(0x11, 0, 0, 0);
 		return;
@@ -308,20 +312,23 @@ void FixAISFXJump() {
 
 
 void FixAISFXAmy() {
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 
 		PlaySound(0x31d, 0, 0, 0);
 }
 
 void FixAISFXAmy2() { //jump sound
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
 		GetChara->Data1->CharID;
@@ -329,8 +336,11 @@ void FixAISFXAmy2() { //jump sound
 		ObjectMaster* GetAI = GetCharacterObject(1);
 		GetAI->Data1->CharID;
 
-		if (GetAI->Data1->CharID == Characters_Amy || GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr && GetAI != nullptr)
+		{
+			if (GetAI->Data1->CharID == Characters_Amy || GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 	else
 		PlaySound(0x4ff, 0, 0, 0);
@@ -339,58 +349,68 @@ void FixAISFXAmy2() { //jump sound
 
 void FixAISFXAmy3() {
 
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 
 		PlaySound(0x500, 0, 0, 0);
 }
 
 void FixAISFXAmy4() {
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 
 	PlaySound(0x506, 0, 0, 0);
 }
 
 void FixAISFXAmy5() {
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 
 		PlaySound(0x31c, 0, 0, 0);
 }
 
 void FixAISFXAmy6() { //spin dash noise when you press B
-	if (isAIActive)
+	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
 		GetChara->Data1->CharID;
 
-		if (GetChara->Data1->CharID == Characters_Amy)
-			return;
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
 	}
 	else
 		PlaySound(0x508, 0, 0, 0);
 }
-
-
 
 //Result Voice FIX
 void ResultVoiceFix() {
@@ -489,85 +509,88 @@ void AISwitch() {
 			NJS_VECTOR speed = obj2->Speed;
 			ObjectMaster* heldobj = obj2->ObjectHeld;
 
-			//Display Character swap.
-			obj->DeleteSub(obj);
-			obj->MainSub = charfuncs[CharaSwap];
-			obj->Data1->CharID = (char)CharaSwap;
-
-			//Play voice switch
-			switch (obj->Data1->CharID)
+			if (obj != nullptr)
 			{
-			case Characters_Sonic:
-				if (MetalSonicFlag == 0)
-					PlayVoice(4000);
-				break;
-			case Characters_Eggman:
-				PlayVoice(4005);
-				break;
-			case Characters_Tails:
-				PlayVoice(4001);
-				break;
-			case Characters_Knuckles:
-				PlayVoice(4002);
-				break;
-			case Characters_Amy:
-				PlayVoice(4003);
-				break;
+				//Display Character swap.
+				obj->DeleteSub(obj);
+				obj->MainSub = charfuncs[CharaSwap];
+				obj->Data1->CharID = (char)CharaSwap;
+
+				//Play voice switch
+				switch (obj->Data1->CharID)
+				{
+				case Characters_Sonic:
+					if (MetalSonicFlag == 0)
+						PlayVoice(4000);
+					break;
+				case Characters_Eggman:
+					PlayVoice(4005);
+					break;
+				case Characters_Tails:
+					PlayVoice(4001);
+					break;
+				case Characters_Knuckles:
+					PlayVoice(4002);
+					break;
+				case Characters_Amy:
+					PlayVoice(4003);
+					break;
+				}
+
+				obj->Data1->Action = 0;
+				obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				if (!oldcol)
+				{
+					oldcol = obj->Data1->CollisionInfo;
+					obj->Data1->CollisionInfo = nullptr;
+				}
+				else
+					Collision_Free(obj);
+				obj->MainSub(obj);
+				obj2 = ((EntityData2*)obj->Data2)->CharacterData;
+				obj2->Powerups = powerups;
+				obj2->JumpTime = jumptime;
+				obj2->UnderwaterTime = underwatertime;
+				obj2->LoopDist = loopdist;
+				obj2->Speed = speed;
+				obj2->ObjectHeld = heldobj;
+
+
+				//initialize swap, taking AI information
+				ObjectMaster* AI = GetCharacterObject(1);
+				CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
+
+
+				short AIpowerups = AI2->Powerups;
+				short AIjumptime = AI2->JumpTime;
+				short AIunderwatertime = AI2->UnderwaterTime;
+				float AIloopdist = AI2->LoopDist;
+				NJS_VECTOR AIspeed = AI2->Speed;
+				ObjectMaster* AIheldobj = AI2->ObjectHeld;
+
+				//Display AI swap.
+				AI->MainSub = charfuncs[AISwap];
+				AI->Data1->CharID = (char)AISwap;
+				AI->Data1->Action = 0;
+				AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				if (!oldcol)
+				{
+					oldcol = AI->Data1->CollisionInfo;
+					AI->Data1->CollisionInfo = nullptr;
+				}
+				else
+					Collision_Free(AI);
+				AI->MainSub(AI);
+				AI2 = ((EntityData2*)AI->Data2)->CharacterData;
+				AI2->Powerups = powerups;
+				AI2->JumpTime = jumptime;
+				AI2->UnderwaterTime = underwatertime;
+				AI2->LoopDist = loopdist;
+				AI2->Speed = speed;
+				AI2->ObjectHeld = heldobj;
+
+				SwapDelay = 0;
 			}
-
-			obj->Data1->Action = 0;
-			obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-			if (!oldcol)
-			{
-				oldcol = obj->Data1->CollisionInfo;
-				obj->Data1->CollisionInfo = nullptr;
-			}
-			else
-				Collision_Free(obj);
-			obj->MainSub(obj);
-			obj2 = ((EntityData2*)obj->Data2)->CharacterData;
-			obj2->Powerups = powerups;
-			obj2->JumpTime = jumptime;
-			obj2->UnderwaterTime = underwatertime;
-			obj2->LoopDist = loopdist;
-			obj2->Speed = speed;
-			obj2->ObjectHeld = heldobj;
-
-
-			//initialize swap, taking AI information
-			ObjectMaster* AI = GetCharacterObject(1);
-			CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
-			
-			
-			short AIpowerups = AI2->Powerups;
-			short AIjumptime = AI2->JumpTime;
-			short AIunderwatertime = AI2->UnderwaterTime;
-			float AIloopdist = AI2->LoopDist;
-			NJS_VECTOR AIspeed = AI2->Speed;
-			ObjectMaster* AIheldobj = AI2->ObjectHeld;
-
-			//Display AI swap.
-			AI->MainSub = charfuncs[AISwap];
-			AI->Data1->CharID = (char)AISwap;
-			AI->Data1->Action = 0;
-			AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-			if (!oldcol)
-			{
-				oldcol = AI->Data1->CollisionInfo;
-				AI->Data1->CollisionInfo = nullptr;
-			}
-			else
-				Collision_Free(AI);
-			AI->MainSub(AI);
-			AI2 = ((EntityData2*)AI->Data2)->CharacterData;
-			AI2->Powerups = powerups;
-			AI2->JumpTime = jumptime;
-			AI2->UnderwaterTime = underwatertime;
-			AI2->LoopDist = loopdist;
-			AI2->Speed = speed;
-			AI2->ObjectHeld = heldobj;
-
-			SwapDelay = 0;
 		}
 
 	}

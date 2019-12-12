@@ -26,32 +26,31 @@ extern bool BigSpeed;
 
 void character_settings_onFrames() {
 
-	if (GameState == 15)
+	
+	if (CurrentLevel != 38 && CurrentLevel != 8 && CurrentLevel != 0)
 	{
-		if (CurrentLevel != 38 && CurrentLevel != 8)
-		{
-			if (AmySpeed)
-				PhysicsArray[Characters_Amy].MaxAccel = 5;
-			if (BigSpeed)
-				PhysicsArray[Characters_Big].MaxAccel = 5;
+		if (AmySpeed)
+			PhysicsArray[Characters_Amy].MaxAccel = 5;
+		if (BigSpeed)
+			PhysicsArray[Characters_Big].MaxAccel = 5;
 
+		return;
+
+	}
+
+	if (CurrentLevel == 38 || CurrentLevel == 8 && CurrentAct == 2)
+	{
+		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Knuckles)
+		{
+			PhysicsArray[Characters_Amy].MaxAccel = 8;
+			PhysicsArray[Characters_Big].MaxAccel = 8;
 			return;
 		}
-
-		if (CurrentLevel == 38 || CurrentLevel == 8 && CurrentAct == 2)
-		{
-			if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Knuckles)
-			{
-				PhysicsArray[Characters_Amy].MaxAccel = 8;
-				PhysicsArray[Characters_Big].MaxAccel = 8;
-
-				SetCameraControlEnabled(1);
-
-				return;
-			}
-		}
 	}
+
+	return;
 }
+
 
 
 void AllUpgrades() {
@@ -144,6 +143,7 @@ void SuperSonicStuff() {
 
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
+	Credits_State = 0;
 
 	if (CurrentCharacter != Characters_Sonic)
 	{

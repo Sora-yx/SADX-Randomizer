@@ -19,7 +19,7 @@ extern bool isAIActive;
 extern int CurrentAI;
 extern int GetCustomLayout;
 bool GetBackRing = false;
-
+int RingCopy = 0; //Backring
 
 //Credits stats
 extern int ringsPB;
@@ -38,7 +38,7 @@ void DisableTimeStuff() {
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
 
-	if (SelectedCharacter == 6)
+	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
 	else
 		LastStoryFlag = 0;
@@ -51,7 +51,6 @@ void DisableTimeStuff() {
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
 
-
 	if (CurrentLevel != LevelIDs_TwinkleCircuit)
 		AddCustomFlag(); //credits check
 
@@ -60,23 +59,30 @@ void DisableTimeStuff() {
 		ObjectMaster* play1 = GetCharacterObject(0);
 		ObjectMaster* play2 = GetCharacterObject(1);
 
-		play2->Data1->Position.x = play1->Data1->Position.x - 7;
-		play2->Data1->Position.y = play1->Data1->Position.y;
-		play2->Data1->Position.z = play1->Data1->Position.z + 5;
-		play2->Data1->Rotation.y = play1->Data1->Rotation.y;
+		if (play2 != nullptr && play1 != nullptr)
+		{
+			play2->Data1->Position.x = play1->Data1->Position.x - 7;
+			play2->Data1->Position.y = play1->Data1->Position.y;
+			play2->Data1->Position.z = play1->Data1->Position.z + 5;
+			play2->Data1->Rotation.y = play1->Data1->Rotation.y;
 
-			if (CurrentAI == Characters_Tails && isAIActive == true)
+			play1->Data1->CharID;
+
+
+			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && isAIActive == true)
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
 
 			ForcePlayerAction(1, 19); //Force AI to Victory pose
 			dword_3B2A304 = 0;
-			
+
 			if (CurrentLevel != LevelIDs_SpeedHighway)
 			{
 				return;
 			}
+		}
+
 	}
 
 		if (Race)
@@ -110,48 +116,6 @@ void HotShelterSecretSwitch() { //used for Big Hot Shelter as a wrong character 
 
 }
 
-
-void HotShelterHandle() {
-
-	ObjectMaster* obj = GetCharacterObject(0);
-	EntityData1* ent;
-	ent = obj->Data1;
-
-	if (ControllerPointers[0]->PressedButtons & Buttons_B || ControllerPointers[0]->PressedButtons & Buttons_X)
-	{
-		EnemyBounceThing(0x0, 0, 1.50, 8.50);
-		CharObj2Ptrs[0]->AnimationThing.Index = 1;
-		ForcePlayerAction(0, 24);
-	}
-
-	else
-	{
-		ent->Rotation.y = 129;
-		switch (obj->Data1->CharID)
-		{
-		case Characters_Sonic:
-			obj->Data1->Action = 20;
-			CharObj2Ptrs[0]->AnimationThing.Index = 54;
-			break;
-		case Characters_Tails:
-			obj->Data1->Action = 18;
-			CharObj2Ptrs[0]->AnimationThing.Index = 79;
-			break;
-		case Characters_Knuckles:
-			obj->Data1->Action = 29;
-			CharObj2Ptrs[0]->AnimationThing.Index = 86;
-			break;
-		case Characters_Big:
-			obj->Data1->Action = 17;
-			CharObj2Ptrs[0]->AnimationThing.Index = 54;
-			break;
-		case Characters_Gamma:
-			obj->Data1->Action = 14;
-			CharObj2Ptrs[0]->AnimationThing.Index = 42;
-			break;
-		}
-	}
-}
 
 
 void LoadZero() {
@@ -273,9 +237,8 @@ void FixRollerCoaster() {
 }
 
 
-void ResetTime_R() {
+void ResetTime_R() { //Used for Back Ring, restore player's rings.
 
-	int RingCopy = 0;
 	RingCopy = Rings;
 
 	if (GetBackRing)
@@ -289,9 +252,8 @@ void ResetTime_R() {
 	
 }
 
-void BackRing() { //capsule
+void BackRing() { //swap capsule
 
-	
 	SetTextureToCommon();
 
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
@@ -309,7 +271,7 @@ void BackRing() { //capsule
 
 }
 
-void BackRing2() { //Frog //Emerald
+void BackRing2() { //swap Frog/Emerald etc.
 
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
@@ -322,7 +284,6 @@ void BackRing2() { //Frog //Emerald
 		GameMode = GameModes_Adventure_Field; //GameMode = 5
 		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
 		
-
 		StopMusic();
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();

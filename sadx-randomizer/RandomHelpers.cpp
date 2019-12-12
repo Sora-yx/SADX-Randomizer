@@ -246,6 +246,7 @@ bool isBossStage(short stage_id)
 int levelCount;
 
 void testRefactor(char stage, char act) {
+
 	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
 	{
 		if (RNGCharacters)
@@ -264,7 +265,9 @@ void testRefactor(char stage, char act) {
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
-		levelCount++;
+		
+		if (Credits_State == 0 && GameMode != GameModes_Credits)
+			levelCount++;
 
 			
 		if (levelCount == TotalCount)
@@ -317,6 +320,7 @@ void CancelResetPosition() {
 	SonicRand = 0;
 	CustomLayout = 0;
 	GetCustomLayout = 0;
+	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat
 	Race = false;
@@ -367,9 +371,6 @@ void RandomMusic() {
 
 		if (!ConsistentMusic)
 			musicCount++;
-
-		if (IsIngame)
-			MusicLooping = 1;
 
 		if (musicCount == TotalCount)
 		{

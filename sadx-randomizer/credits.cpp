@@ -1,6 +1,7 @@
 #include "SADXModLoader.h"
 #include "stdafx.h"
 #include "RandomHelpers.h"
+using namespace std;
 #include <string.h>
 
 extern int CustomFlag;
@@ -9,6 +10,7 @@ extern int GetCustomLayout;
 extern int CustomLayout;
 extern int CurrentMission;
 
+//credits stats
 extern int RageQuit;
 extern int JumpCount;
 extern int ringsPB;
@@ -18,6 +20,13 @@ extern int killPB;
 extern int hitsPB;
 extern int deathsPB;
 extern int AISwapCount;
+
+//conversion to string, used for credits stats (struct doesn't accept int)
+string DeathsSTD = "";
+string JumpCountSTD = "";
+string RageQuitSTD = "";
+string HitsSTD = "";
+string AISwapCountSTD = "";
 
 extern int SeedCopy;
 extern int StorySplits;
@@ -81,11 +90,19 @@ void CreditFlag() {
 	GetCurrentCharacterID();
 }
 
+
+
 //DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 
-
 CreditsEntry CreditsText_list[] = {
-		/*{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
+{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.0" },
+	{ 3, -1, 0, 0, "AUTHOR" },
+	{ 3, -1, 0, 0, "Sora" },
+	{ 2, -1, 0, 0, "HELP" },
+	{ 3, -1, 0, 0, "Raytwo, Kell, MainMemory" },
+	{ 2, -1, 0, 0, "RANDOMIZER BETA TESTER" },
+	{ 3, -1, 0, 0, "Astreachan, Yarlick" },
+	{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
 	{ 3, -1, 0, 0, "Deaths" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "Jumps" },
@@ -95,53 +112,35 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Hits" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "Character Swap" },
-	{ 2, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "End of the stats" },*/
-
-	{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.0" },  
-	{ 3, -1, 0, 0, "AUTHOR" },
-	{ 3, -1, 0, 0, "Sora" },
-	{ 2, -1, 0, 0, "HELP" },
-	{ 3, -1, 0, 0, "Raytwo, Kell, MainMemory" },
-	{ 2, -1, 0, 0, "BETA TESTER" },
-	{ 3, -1, 0, 0, "Astreachan, Yarlick" },
-	{ 2, -1, 0, 0, "DIRECTOR" },
-	{ 3, -1, 0, 0, "Kenjiro Morimoto" },
-	{ 2, -1, 0, 0, "ART DIRECTOR" },
-	{ 3, -1, 0, 0, "Yuji Uekawa" },
-	{ 2, -1, 0, 0, "TECHNICAL DIRECTOR" },
-	{ 3, -1, 0, 0, "Masanobu Yamamoto" },
-	{ 2, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
-	{ 2, -1, 0, 0, "SOUND DIRECTOR" },
-	{ 3, -1, 0, 0, "Jun Senoueo" },
-	{ 2, -1, 0, 0, "GAME DESIGNERS" },
-	{ 3, -1, 0, 0, "Hiroki Atoji" },
-	{ 3, -1, 0, 0, "Kentaro Kiyono" },
-	{ 2, -1, 0, 0, "BETA TESTER v1.1" },
-	{ 3, -1, 0, 0, "Astreachan" },
-	{ 3, -1, 0, 0, "Bloodsypher" },
-	{ 3, -1, 0, 0, "GuyStreamsStuff" },
-	{ 3, -1, 0, 0, "MakoHNM" },
-	{ 3, -1, 0, 0, "Quaker299" },
-	{ 3, -1, 0, 0, "R3FR4G" },
+	{ 3, -1, 0, 0, "" },
+	{ 2, -1, 0, 0, "RANDOMIZER SPECIAL THANKS" },
+	{ 3, -1, 0, 0, "MainMemory" },
+	{ 3, -1, 0, 0, "Prahaha" },
+	{ 3, -1, 0, 0, "Raytwo" },
+	{ 3, -1, 0, 0, "Kell" },
+	{ 3, -1, 0, 0, "SonicFreak94" },
+	{ 3, -1, 0, 0, "MelancholyMatoi" },
+	{ 3, -1, 0, 0, "Mastakirby" },
+	{ 2, -1, 0, 0, "BETA TESTER OLD VERSIONS" },
 	{ 3, -1, 0, 0, "Niczur" },
-	{ 2, -1, 0, 0, "LEAD CHARACTER DESIGNER" },
-	{ 3, -1, 0, 0, "Yuji Uekawa" },
-	{ 2, -1, 0, 0, "BETA TESTER V1.2" },
-	{ 3, -1, 0, 0, "Astreachan" },
+	{ 3, -1, 0, 0, "Refrag" },
+	{ 3, -1, 0, 0, "Quaker299" },
+	{ 3, -1, 0, 0, "MakoHNM" },
 	{ 3, -1, 0, 0, "GuyStreamsStuff" },
+	{ 3, -1, 0, 0, "Bloodsypher" },
 	{ 3, -1, 0, 0, "Koutasensei/Elise" },
-	{ 3, -1, 0, 0, "Yarlick" },
-	{ 2, -1, 0, 0, "BETA TESTER V1.3" },
-	{ 3, -1, 0, 0, "Astreachan" },
-	{ 2, -1, 0, 0, "FIELD ARTISTS" },
-	{ 3, -1, 0, 0, "Misako Ikoma" },
-	{ 3, -1, 0, 0, "Tsuyoshi Enomura" },
-	{ 3, -1, 0, 0, "Mutsumi Oda" },
-	{ 3, -1, 0, 0, "Kazuhito Tominaga" },
-	{ 3, -1, 0, 0, "Takashi Yoshida" },
-	{ 3, -1, 0, 0, "Yoichi Takeda" },
+	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
+	{ 3, -1, 0, 0, "SonicFreak94" },
+	{ 2, -1, 0, 0, "CHARACTER SWAP" },
+	{ 3, -1, 0, 0, "Sora" },
+	{ 3, -1, 0, 0, "MainMemory" },
+	{ 2, -1, 0, 0, "LOST CHAO" },
+	{ 3, -1, 0, 0, "Kell" },
+	{ 2, -1, 0, 0, "AI SETTINGS" },
+	{ 3, -1, 0, 0, "Sora" },
+	{ 3, -1, 0, 0, "MainMemory" },
+	{ 3, -1, 0, 0, "Kell" },
 	{ 2, -1, 0, 0, "LEAD VISUAL ARTIST" },
 	{ 3, -1, 0, 0, "Yuji Uekawa" },
 	{ 2, -1, 0, 0, "VISUAL ARTIST" },
@@ -158,17 +157,17 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Takashi Taketa" },
 	{ 3, -1, 0, 0, "Takanori Yoshioka" },
 	{ 3, -1, 0, 0, "Hiroyuki Kikui" },
-	{ 2, -1, 0, 0, "RANDOMIZER SPECIAL THANKS" },
-	{ 3, -1, 0, 0, "MastaKirby, MelancholyMatoi" },
-	{ 3, -1, 0, 0, "Kell, MainMemory" },
-	{ 3, -1, 0, 0, "Prahaha" },
-	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
-	{ 3, -1, 0, 0, "SonicFreak94" },
-	{ 2, -1, 0, 0, "LOST CHAO" },
-	{ 3, -1, 0, 0, "Kell" },
-	{ 2, -1, 0, 0, "CHARACTER + AI SWAP" },
-	{ 3, -1, 0, 0, "MainMemory" },
-	{ 3, -1, 0, 0, "Sora" },
+	{ 2, -1, 0, 0, "GRAPHIC ENGINE PROGRAMMERS" },
+	{ 3, -1, 0, 0, "Yoshitaka Kawabata" },
+	{ 3, -1, 0, 0, "Shinya Matsunami" },
+	{ 3, -1, 0, 0, "Takaaki Saito" },
+	{ 2, -1, 0, 0, "GRAPHIC TOOL PROGRAMMER" },
+	{ 3, -1, 0, 0, "Koji Ogino" },
+	{ 2, -1, 0, 0, "TECHNICAL SUPPORT" },
+	{ 3, -1, 0, 0, "Tetsu Katano" },
+	{ 2, -1, 0, 0, "A-LIFE SYSTEM DESIGNERS" },
+	{ 3, -1, 0, 0, "Yoshihisa Hashimoto" },
+	{ 3, -1, 0, 0, "Sachiko Kawamura" },
 	{ 2, -1, 0, 0, "A-LIFE SYSTEM ARTISTS" },
 	{ 3, -1, 0, 0, "Sachiko Kawamura" },
 	{ 3, -1, 0, 0, "Kazuko Ito" },
@@ -624,20 +623,28 @@ CreditsEntry CreditsText_list[] = {
 CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 
 //Initiliaze Credits
-const char* nombre;
-
 void CreditsNewList() {
 
+	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
 	WriteCall((void*)0x640fe1, FinalStat);
 	WriteData<10>((void*)0x640fef, 0x90);
 	WriteData<6>((void*)0x640fe9, 0x90);
 	WriteData<6>((void*)0x640ff9, 0x90);
 	WriteData<5>((void*)0x640fff, 0x90);
 
-	char A[50]; 
-	sprintf(A, "%d", deathsPB); 
-	//CreditsText_list[7].Line = A;
+	//Conversion int to string to const char and Display during credits
+	DeathsSTD += std::to_string(deathsPB);
+	RageQuitSTD += std::to_string(RageQuit);
+	JumpCountSTD += std::to_string(JumpCount);
+	HitsSTD += std::to_string(hitsPB);
+	AISwapCountSTD += std::to_string(AISwapCount);
 
+	//Credits Stats Display
+	CreditsText_list[9].Line = DeathsSTD.c_str();
+	CreditsText_list[11].Line = RageQuitSTD.c_str();
+	CreditsText_list[13].Line = JumpCountSTD.c_str();
+	CreditsText_list[15].Line = HitsSTD.c_str();
+	CreditsText_list[17].Line = AISwapCountSTD.c_str();
 
 	*(CreditsList*)0x2BC2FD0 = CreditsText;
 }
@@ -678,7 +685,7 @@ void FinalStat() {
 
 		if (StatsTimer)
 		{
-			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
+			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
