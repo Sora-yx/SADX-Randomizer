@@ -8,6 +8,7 @@ int SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
 extern int levelCount;
+extern int CustomLayout;
 
 extern int CurrentAI;
 extern bool CreditCheck;
@@ -52,6 +53,14 @@ void character_settings_onFrames() {
 }
 
 
+int SetAmyWinPose()
+{
+	if (CurrentCharacter != Characters_Amy || CurrentAI == Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || CurrentCharacter == Characters_Amy && CustomLayout >= 2)
+		return 42;
+	else
+		return 32;
+}
+
 
 void AllUpgrades() {
 
@@ -91,13 +100,16 @@ void LoadCharacter_r()
 	if (CurrentCharacter != Characters_Sonic)
 		MetalSonicFlag = 0;
 
-	if (CurrentCharacter == Characters_Amy)
+	if (CurrentCharacter == Characters_Amy || CurrentAI == Characters_Amy)
+	{
 		CheckLoadBird();
+	}
 
-		CheckRace();
+
+	CheckRace();
 
 	AllUpgrades();
-	
+	Credits_State = 0;
 	LoadCharacter();
 
 	return;	
@@ -394,4 +406,6 @@ void set_character_hook() {
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
+	WriteCall((void*)0x4879C2, SetAmyWinPose);
+	WriteData((char*)0x4879C1, (char)0x90);
 }

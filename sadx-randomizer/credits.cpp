@@ -19,6 +19,7 @@ extern int animalPB;
 extern int killPB;
 extern int hitsPB;
 extern int deathsPB;
+extern int TotalDeathsPB;
 extern int AISwapCount;
 
 //conversion to string, used for credits stats (struct doesn't accept int)
@@ -67,7 +68,6 @@ void CreditFlag() {
 
 	if (SelectedCharacter == 4)
 	{
-
 			EventFlagArray[EventFlags_Big_HotShelterClear] = true;
 			EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_BigAdventureComplete] = true;
@@ -81,9 +81,7 @@ void CreditFlag() {
 			EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
 	}
 	if (SelectedCharacter == 6)
-	{
 		EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
-	}
 
 	CustomFlag = 0;
 	CreditsNewList();
@@ -105,7 +103,7 @@ CreditsEntry CreditsText_list[] = {
 	{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
 	{ 3, -1, 0, 0, "Deaths" },
 	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "Jumps" },
+	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "RageQuit" },
 	{ 3, -1, 0, 0, "" },
@@ -635,14 +633,14 @@ void CreditsNewList() {
 	//Conversion int to string to const char and Display during credits
 	DeathsSTD += std::to_string(deathsPB);
 	RageQuitSTD += std::to_string(RageQuit);
-	JumpCountSTD += std::to_string(JumpCount);
+	//JumpCountSTD += std::to_string(JumpCount);
 	HitsSTD += std::to_string(hitsPB);
 	AISwapCountSTD += std::to_string(AISwapCount);
 
 	//Credits Stats Display
 	CreditsText_list[9].Line = DeathsSTD.c_str();
 	CreditsText_list[11].Line = RageQuitSTD.c_str();
-	CreditsText_list[13].Line = JumpCountSTD.c_str();
+	//CreditsText_list[13].Line = JumpCountSTD.c_str(); //doesn't work for now
 	CreditsText_list[15].Line = HitsSTD.c_str();
 	CreditsText_list[17].Line = AISwapCountSTD.c_str();
 
@@ -675,12 +673,12 @@ void credits() {
 
 void FinalStat() {
 
+
 	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
 	{
 		int getHour = (SaveFile.PlayTime / 0xe10) / 60;
 		int getMin = (SaveFile.PlayTime / 0xe10) % 60;
 		
-
 		PlayMusic_R(MusicIDs_nights_k);
 
 		if (StatsTimer)
@@ -693,7 +691,7 @@ void FinalStat() {
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 15), "Kills: %d", killPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 16), "Hits: %d", hitsPB);
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 17), "Deaths: %d", deathsPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 17), "Deaths: %d", TotalDeathsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 18), "Chao Rescued: %d", chaoPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 19), "Final Time: %d:%d", getHour, getMin);
 

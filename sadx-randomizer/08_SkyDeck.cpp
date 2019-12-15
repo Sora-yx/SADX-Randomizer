@@ -6,6 +6,7 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
+HMODULE DCMod2 = GetModuleHandle(L"DCMods_Main");
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;
@@ -282,10 +283,10 @@ DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 3);
 
 void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+
 	ObjLists[LevelIDs_SkyDeck * 8 + 2] = &SkyDeckObjectList;
 	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
 	SkyDeckDeathZones[1] = SkyDeck2DeathZones;
-	
 }
 
 

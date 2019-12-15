@@ -32,13 +32,14 @@ extern int StorySplits;
 
 extern int RageQuit;
 extern int ringsPB;
+extern int TotalDeathsPB;
+extern int deathsPB; //total Death credit stat
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
-//int level[21] = { 1, 6, 3, 6, 5, 6, 7, 6, 9, 6, 12, 6, 16, 6, 19, 6, 21, 6, 23, 6, 38 };
 
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
@@ -93,7 +94,7 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character == Characters_Sonic)
 			return 1;
 		else
-			return rand() % 2;
+			return act0[rand() % 3];
 		break;
 	case LevelIDs_IceCap:
 		if (entry.character == Characters_Big)
@@ -266,7 +267,7 @@ void testRefactor(char stage, char act) {
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
 		
-		if (Credits_State == 0 && GameMode != GameModes_Credits)
+		if (Credits_State == 0 && (GameMode != GameModes_Credits || GameMode != GameModes_StartCredits))
 			levelCount++;
 
 			
@@ -275,8 +276,6 @@ void testRefactor(char stage, char act) {
 			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
-
-
 }
 
 
@@ -300,7 +299,7 @@ void GoToNextLevel_hook(char stage, char act) {
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
 		
-		if (Credits_State == 0 && GameMode != GameModes_Credits)
+		if (Credits_State == 0 && (GameMode != GameModes_Credits || GameMode != GameModes_StartCredits))
 			levelCount++;
 
 		if (ConsistentMusic)
@@ -323,6 +322,7 @@ void CancelResetPosition() {
 	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat
+	TotalDeathsPB += deathsPB; //total Death credit stat
 	Race = false;
 	GameMode = GameModes_Adventure_Field;
 }
@@ -472,17 +472,20 @@ void Split_Init() { //speedrunner split init.
 
 		int StageSplit = 0; //used to differentiate boss and normal stage.
 
+
 		for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number. 
 
 			if (RNGCharacters)
 				randomizedSets[i].character = getRandomCharacter();
 
-			if (RNGStages)
-			{
-				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-				randomizedSets[i].act = randomacts(randomizedSets[i]);
-				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
-			}
+
+				if (RNGStages)
+				{
+					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+					randomizedSets[i].act = randomacts(randomizedSets[i]);
+					randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+				}
+
 
 			if (RNGMusic)
 				randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -490,13 +493,14 @@ void Split_Init() { //speedrunner split init.
 			if (isAIAllowed)
 				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
 
-			TotalCount++;
 
 			if (randomizedSets[i].character == Characters_Sonic)
 			{
 				randomizedSets[i].sonic_mode = rand() % 2;
 				randomizedSets[i].ss_mode = rand() % 2;
 			}
+
+			TotalCount++;
 
 			myfile << "<Segment>\n";
 			myfile << "<Name>";

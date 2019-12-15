@@ -4,6 +4,14 @@
 #include "RandomHelpers.h"
 
 HelperFunctions extern help;
+extern bool Viper;
+
+
+void EggViperNerfHP() {
+	BossHP = 5;
+	EggViperHP = 5;
+	BossHP_Stuff(600, 0x18, 5);
+}
 
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -16,6 +24,9 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 	WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (crash fix)
 	WriteCall((void*)0x4230a0, EggViperVoice); //Load Different Eggman Voice, depending on the character. (LoadCamFile hook)
 
+	if (Viper)
+		WriteCall((void*)0x57f20b, EggViperNerfHP);
+		
 	//Initiliaze data
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EV_StartPositions[0]);
@@ -37,12 +48,7 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 }
 
 
-DataPointer(char, EggViperHP, 0x3c6e164);
 
-void EggViperNerfHP() {
-	EggViperHP = 3;
-	Rings = 5;
-}
 
 
 

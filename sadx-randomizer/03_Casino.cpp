@@ -12,7 +12,6 @@ extern int levelCount;
 
 void CasinoAct4() {
 
-	CustomLayout = 0;
 
 	CustomLayout = randomizedSets[levelCount].layout;
 

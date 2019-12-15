@@ -28,6 +28,7 @@ extern int killPB;
 extern int hitsPB;
 extern int deathsPB;
 extern int JumpCount;
+extern int TotalDeathsPB;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -46,6 +47,7 @@ void DisableTimeStuff() {
 	TimeThing = 0;
 	SonicRand = 0;
 	ringsPB += Rings; //total Rings credit stat
+	TotalDeathsPB += deathsPB; //total Death credit stat
 	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Tails)
@@ -76,12 +78,12 @@ void DisableTimeStuff() {
 
 			ForcePlayerAction(1, 19); //Force AI to Victory pose
 			dword_3B2A304 = 0;
+		}
 
 			if (CurrentLevel != LevelIDs_SpeedHighway)
 			{
 				return;
 			}
-		}
 
 	}
 
@@ -366,7 +368,7 @@ void HookStats_Inits() {
 	WriteCall((void*)0x4506f2, HitsStat);
 	WriteCall((void*)0x416e7d, DeathsStat);
 	WriteCall((void*)0x417a1f, DeathsStat);
-	WriteCall((void*)0x4b8464, JumpStat);
+	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
 

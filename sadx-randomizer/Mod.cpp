@@ -20,6 +20,7 @@ bool ConsistentMusic = false;
 int SonicCD = 0;
 bool Missions = true;
 bool Any = true;
+bool Viper = false;
 extern int CustomLayout;
 extern bool CreditCheck;
 extern int levelCount;
@@ -62,6 +63,7 @@ int animalPB = 0;
 int killPB = 0;
 int hitsPB = 0;
 int deathsPB = 0;
+int TotalDeathsPB = 0;
 int AISwapCount = 0;
 
 int DCModWarningTimer = 0;
@@ -115,6 +117,7 @@ extern "C" {
 		seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
 		Missions = config->getBool("Randomizer", "Missions", true);
+		Viper = config->getBool("Randomizer", "Viper", false);
 
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
@@ -278,6 +281,7 @@ extern "C" {
 		if (StorySplits == 0)
 		{
 			split = 40;
+
 			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 
 				if (RNGCharacters)
@@ -295,14 +299,13 @@ extern "C" {
 
 				if (isAIAllowed)
 					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
-
-				TotalCount++;
-
 				if (randomizedSets[i].character == Characters_Sonic)
 				{
 					randomizedSets[i].sonic_mode = rand() % 2;
 					randomizedSets[i].ss_mode = rand() % 2;
 				}
+
+				TotalCount++;
 			}
 		}
 		else

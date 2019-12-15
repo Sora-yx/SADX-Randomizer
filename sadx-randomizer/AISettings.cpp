@@ -229,6 +229,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 	}
 
 	return (ObjectMaster*)0x0;
+	isAIActive = false;
 }
 //}
 
@@ -272,6 +273,7 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 	}
 
 	return (ObjectMaster*)0x0;
+	isAIActive = false;
 }
 		
 
@@ -396,7 +398,7 @@ void FixAISFXAmy5() {
 		PlaySound(0x31c, 0, 0, 0);
 }
 
-void FixAISFXAmy6() { //spin dash noise when you press B
+void FixAISFXAmy6() { 
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
@@ -408,9 +410,50 @@ void FixAISFXAmy6() { //spin dash noise when you press B
 				return;
 		}
 	}
-	else
+
 		PlaySound(0x508, 0, 0, 0);
 }
+
+void FixAISFXAmy7() { //spin dash noise when you press B
+
+	if (isAIActive && !Race)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(0);
+		GetChara->Data1->CharID;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
+	}
+
+	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
+		PlaySound(0x31c, 0, 0, 0); //hammer sound
+	else
+		PlaySound(0x31d, 0, 0, 0); //hammer sound
+			
+			
+			
+}
+
+void FixAISFXAmy8() { //spin dash noise when you press B
+	if (isAIActive && !Race)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(0);
+		GetChara->Data1->CharID;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Amy)
+				return;
+		}
+	}
+
+	PlaySound(0x509, 0, 0, 0);
+}
+
+
 
 //Result Voice FIX
 void ResultVoiceFix() {
@@ -418,46 +461,49 @@ void ResultVoiceFix() {
 	ObjectMaster* GetChara = GetCharacterObject(0);
 	GetChara->Data1->CharID;
 	
-	switch (GetChara->Data1->CharID)
+	if (GetChara != nullptr)
 	{
-	case Characters_Sonic:
-		if (MetalSonicFlag == 0) {
-			if ((short)CurrentLevel < 0xf) {
-				Load_DelayedSound_SFX(0x5d7);
+		switch (GetChara->Data1->CharID)
+		{
+		case Characters_Sonic:
+			if (MetalSonicFlag == 0) {
+				if ((short)CurrentLevel < 0xf) {
+					Load_DelayedSound_SFX(0x5d7);
+				}
+				else {
+					Load_DelayedSound_SFX(0x5da);
+				}
 			}
 			else {
-				Load_DelayedSound_SFX(0x5da);
+				PlayVoice(0x7fc);
 			}
-		}
-		else {
-			PlayVoice(0x7fc);
-		}
-		break;
-	case Characters_Eggman:
-		Load_DelayedSound_Voice(4012);
-		break;
-	case Characters_Tails:
-		Load_DelayedSound_SFX(0x5b2);
-		break;
-	case Characters_Knuckles:
-		if (CurrentLevel < 15)
-			Load_DelayedSound_SFX(0x5a5);
-		else
-			Load_DelayedSound_SFX(0x5a8);
-		break;
-	case Characters_Amy:
-		Load_DelayedSound_SFX(0x56c);
-	case Characters_Gamma:
-		Load_DelayedSound_SFX(0x591);
-		break;
-	case Characters_Big:
-		if (CurrentLevel < 15 || CurrentLevel > 35 && CustomLayout < 2)
-			Load_DelayedSound_Voice(4010);
-		else
-			Load_DelayedSound_Voice(4011);
+			break;
+		case Characters_Eggman:
+			Load_DelayedSound_Voice(4012);
+			break;
+		case Characters_Tails:
+			Load_DelayedSound_SFX(0x5b2);
+			break;
+		case Characters_Knuckles:
+			if (CurrentLevel < 15)
+				Load_DelayedSound_SFX(0x5a5);
+			else
+				Load_DelayedSound_SFX(0x5a8);
+			break;
+		case Characters_Amy:
+			Load_DelayedSound_SFX(0x56c);
+		case Characters_Gamma:
+			Load_DelayedSound_SFX(0x591);
+			break;
+		case Characters_Big:
+			if (CurrentLevel < 15 || CurrentLevel > 35 && CustomLayout < 2)
+				Load_DelayedSound_Voice(4010);
+			else
+				Load_DelayedSound_Voice(4011);
 
-		SoundManager_Delete2();
-		break;
+			SoundManager_Delete2();
+			break;
+		}
 	}
 
 }
@@ -613,17 +659,6 @@ void LoadTails_AI_R() {
 				ObjectMaster* o2 = nullptr;
 				o2 = Load2PTails_r(obj);
 		}
-		else
-		{
-			if (Race == false && isAIAllowed == false)
-			{
-				ObjectMaster* obj;
-				obj = GetCharacterObject(0);
-				ObjectMaster* lastobj = obj;
-				ObjectMaster* o2 = nullptr;
-				o2 = Load2PTails_r(obj);
-			}
-		}
 
 	}
 
@@ -664,6 +699,9 @@ void AIAudioFixes() {
 	WriteCall((void*)0x4877a3, FixAISFXAmy2);
 	WriteCall((void*)0x485023, FixAISFXAmy3);
 	WriteCall((void*)0x489a75, FixAISFXAmy5);
+	WriteCall((void*)0x485844, FixAISFXAmy6);
+	WriteCall((void*)0x48947c, FixAISFXAmy7);
+	WriteCall((void*)0x4857e0, FixAISFXAmy8);
 
 
 	//fix victory voice result (ai swap)
@@ -674,7 +712,6 @@ void AIAudioFixes() {
 	WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
 	WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
 	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
-
 }
 
 
@@ -689,5 +726,5 @@ void AI_Init() {
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 
 	//AI fixes
-	WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
+	//WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
 }

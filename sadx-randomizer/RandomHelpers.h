@@ -154,7 +154,7 @@ VoidFunc(SetupZero, 0x4b3eb0);
 VoidFunc(CheckLoadZero, 0x486a40);
 
 VoidFunc(EggViperCutscene, 0x431430);
-
+FunctionPointer(void, BossHP_Stuff, (int x, int y, int hp), 0x4b3cc0);
 
 DataPointer(char, BossHP, 0x3C58150);
 DataPointer(char, Emblem, 0x974AE0);
