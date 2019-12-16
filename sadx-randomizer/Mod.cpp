@@ -61,9 +61,10 @@ int ringsPB = 0;
 int chaoPB = 0;
 int animalPB = 0;
 int killPB = 0;
-int hitsPB = 0;
+int hurtsPB = 0;
 int deathsPB = 0;
 int TotalDeathsPB = 0;
+int TotalHurtsPB = 0;
 int AISwapCount = 0;
 
 int DCModWarningTimer = 0;
@@ -236,9 +237,12 @@ extern "C" {
 		//Randomizer Fixes
 		*/
 
-		//Stages Fixes
-
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
+
+		//Stats & Value Reset
+		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
+
+		//Stages Fixes
 
 		 //Zero Stuff
 		Set_Zero();
@@ -267,13 +271,20 @@ extern "C" {
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
 			WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
 			//Redirect SetLevelAndAct in FUN_0x4133e0
+
+			//WriteData<5>((void*)0x41348f, 0x90); //Remove SetLevelAndAct when loading adventure data
+			WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
+		//	WriteData<5>((void*)0x41342a, 0x90); //Remove SetLevelAndAct when loading adventure data
+			WriteData<1>((void*)0x413502, 0x08);
+			
 			WriteCall((void*)0x41348f, testRefactor); //hook SetLevelAndAct when loading adventure data
-			WriteCall((void*)0x4134f3, testRefactor); //hook SetLevelAndAct when loading adventure data
+			//WriteCall((void*)0x4134f3, testRefactor); //hook SetLevelAndAct when loading adventure data
 			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
-			WriteCall((void*)0x413522, testRefactor);
+			//WriteCall((void*)0x413522, SetLevelGammaStory);*/
 
 			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Twinkle Circuit Stuff
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+			
 		}
 
 		//Splits + RNG generator
@@ -320,10 +331,10 @@ extern "C" {
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
-			SetDebugFontSize(11.8f * (float)VerticalResolution / 480.0f);
+			SetDebugFontSize(12.0f * (unsigned short)VerticalResolution / 480.0f);
 			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
 			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
-			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER these mods!!");
+			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
 			DCModWarningTimer--;
 		}
 
@@ -331,29 +342,24 @@ extern "C" {
 
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
-			SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
-			
-			if (Vanilla)
-				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Allowed");
-			else
-				DisplayDebugModeString(NJM_LOCATION(2, 2), "Vanilla Stage: Banned");
+			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy); 
 
 			if (ban != 0)
-				DisplayDebugString(NJM_LOCATION(2, 3), "Character Roster: Edited");
+				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
 			else
-				DisplayDebugString(NJM_LOCATION(2, 3), "Character Roster: Normal");
+				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
 
 			switch (StorySplits)
 			{
 			case 1:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Sonic's Story");
 				break;
 			case 2:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: All Stories");
 				break;
 			case 3:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
+				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Any%");
 				break;
 			}
 

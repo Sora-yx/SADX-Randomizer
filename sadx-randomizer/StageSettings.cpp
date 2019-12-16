@@ -25,10 +25,11 @@ int RingCopy = 0; //Backring
 extern int ringsPB;
 extern int animalPB;
 extern int killPB;
-extern int hitsPB;
+extern int hurtsPB;
 extern int deathsPB;
 extern int JumpCount;
 extern int TotalDeathsPB;
+extern int TotalHurtsPB;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -48,6 +49,7 @@ void DisableTimeStuff() {
 	SonicRand = 0;
 	ringsPB += Rings; //total Rings credit stat
 	TotalDeathsPB += deathsPB; //total Death credit stat
+	TotalHurtsPB += hurtsPB; //total Death credit stat
 	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Tails)
@@ -336,10 +338,10 @@ void DeathsStat() {
 	GiveLives(0xffffffff);
 }
 
-void HitsStat() {
+void HurtsStat() {
 	//Hook used when you lose your rings
-	hitsPB++;
-	rand();
+	hurtsPB++;
+	Set0Rings();
 }
 
 int JumpStat() {
@@ -365,9 +367,9 @@ void AnimalStat() {
 
 void HookStats_Inits() {
 
-	WriteCall((void*)0x4506f2, HitsStat);
-	WriteCall((void*)0x416e7d, DeathsStat);
-	WriteCall((void*)0x417a1f, DeathsStat);
+	WriteCall((void*)0x45072d, HurtsStat);
+	WriteCall((void*)0x416e7d, DeathsStat); //Trial Mode
+	WriteCall((void*)0x417a1f, DeathsStat); //Adventure Mode
 	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);

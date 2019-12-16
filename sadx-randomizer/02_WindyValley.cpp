@@ -52,15 +52,35 @@ void WindyValleyAct4() {
 			break;
 		}
 	case 2:
-		LoadSetFile(0, "0200"); //100 Rings
-		LoadSetFile(1, "0201");
-		LoadSetFile(2, "0202");
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0203"); //Gamma Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "0200"); //100 Rings
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
 		break;
 	case 3:
-		LoadSetFile(0, "0200");
-		LoadSetFile(1, "0201");
-		LoadSetFile(2, "0205"); //Lost Chao
-		break;
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0203"); //Gamma Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "0200");
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0205"); //Lost Chao
+			break;
+		}
 	}
 
 	return;
@@ -89,7 +109,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202S.BIN", "system\\cam\\CAM0202S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV1S_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3S_StartPositions[0]);
 

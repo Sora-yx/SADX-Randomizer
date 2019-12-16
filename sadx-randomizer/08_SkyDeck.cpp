@@ -6,7 +6,6 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
-HMODULE DCMod2 = GetModuleHandle(L"DCMods_Main");
 extern int CustomLayout;
 extern bool Race;
 extern bool Missions;

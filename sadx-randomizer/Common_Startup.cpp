@@ -96,7 +96,10 @@ void LoadStageMissionImage_r() {
 
 
 		if (CurrentCharacter == Characters_Big && GetCustomLayout == 0)
-			CurrentMission = 5;
+			if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
+				CurrentMission = 0;
+			else
+				CurrentMission = 5;
 
 		if (CurrentCharacter == Characters_Amy && GetCustomLayout == 0)
 			CurrentMission = 10;

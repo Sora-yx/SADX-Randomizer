@@ -5,6 +5,7 @@
 
 
 
+
 void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data

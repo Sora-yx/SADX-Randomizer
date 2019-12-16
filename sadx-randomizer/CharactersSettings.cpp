@@ -55,7 +55,7 @@ void character_settings_onFrames() {
 
 int SetAmyWinPose()
 {
-	if (CurrentCharacter != Characters_Amy || CurrentAI == Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || CurrentCharacter == Characters_Amy && CustomLayout >= 2)
+	if (CurrentCharacter != Characters_Amy || CurrentAI == Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || CurrentCharacter == Characters_Amy && (CustomLayout >= 2 || CurrentLevel == LevelIDs_SandHill))
 		return 42;
 	else
 		return 32;
@@ -291,60 +291,66 @@ void BigWeightHook() {
 
 void FixCharacterSFX() {
 
-	switch (CurrentCharacter)
-	{ 
-	case Characters_Sonic:
-		if (MetalSonicFlag)
-			LoadSoundList(62);
-		else
+	ObjectMaster* obj = GetCharacterObject(0);
+
+	if (obj != nullptr)
+	{
+		//Play voice switch
+		switch (obj->Data1->CharID)
 		{
-			if (VoiceLanguage)
-				LoadSoundList(60);
+		case Characters_Sonic:
+			if (MetalSonicFlag)
+				LoadSoundList(62);
 			else
-				LoadSoundList(59);
+			{
+				if (VoiceLanguage)
+					LoadSoundList(60);
+				else
+					LoadSoundList(59);
+			}
+			break;
+		case Characters_Tails:
+			LoadSoundList(1);
+			if (VoiceLanguage)
+				LoadSoundList(72);
+			else
+				LoadSoundList(71);
+			break;
+		case Characters_Knuckles:
+			LoadSoundList(49);
+			if (VoiceLanguage)
+			{
+				LoadSoundList(70);
+				LoadSoundList(58);
+			}
+			else
+			{
+				LoadSoundList(69);
+				LoadSoundList(57);
+			}
+			break;
+		case Characters_Amy:
+			LoadSoundList(46);
+			if (VoiceLanguage)
+				LoadSoundList(64);
+			else
+				LoadSoundList(63);
+			break;
+		case Characters_Gamma:
+			LoadSoundList(48);
+			if (VoiceLanguage)
+				LoadSoundList(68);
+			else
+				LoadSoundList(67);
+			break;
+		case Characters_Big:
+			LoadSoundList(47);
+			if (VoiceLanguage)
+				LoadSoundList(66);
+			else
+				LoadSoundList(65);
+			break;
 		}
-		break;
-	case Characters_Tails:
-		LoadSoundList(1);
-		if (VoiceLanguage)
-			LoadSoundList(72);
-		else
-			LoadSoundList(71);
-		break;
-	case Characters_Knuckles:
-		LoadSoundList(49);
-		if (VoiceLanguage)
-		{
-			LoadSoundList(70);
-			LoadSoundList(58);
-		}
-		else
-		{
-			LoadSoundList(69);
-			LoadSoundList(57);
-		}
-		break;
-	case Characters_Amy:
-		LoadSoundList(46);
-		if (VoiceLanguage)
-			LoadSoundList(64);
-		else
-			LoadSoundList(63);
-		break;
-	case Characters_Gamma:
-		LoadSoundList(48);
-		if (VoiceLanguage)
-			LoadSoundList(68);
-		else
-			LoadSoundList(67);
-		break;
-	case Characters_Big:
-		LoadSoundList(47);
-		if (VoiceLanguage)
-			LoadSoundList(66);
-		else
-			LoadSoundList(65);
-		break;
 	}
 }
 

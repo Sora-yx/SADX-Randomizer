@@ -47,7 +47,6 @@ ObjectMaster* LoadCharObj(int i)
 }
 
 
-
 int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
@@ -57,7 +56,10 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 	}
 
 	if (CurrentCharacter == CurrentAI)
+	{
+		isAIActive = false;
 		return 0;
+	}
 
 
 	if (CurrentLevel > 25 && CurrentLevel < 38)
@@ -228,8 +230,9 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 		}
 	}
 
-	return (ObjectMaster*)0x0;
 	isAIActive = false;
+	return (ObjectMaster*)0x0;
+	
 }
 //}
 
@@ -272,8 +275,9 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 		}
 	}
 
-	return (ObjectMaster*)0x0;
 	isAIActive = false;
+	return (ObjectMaster*)0x0;
+	
 }
 		
 
@@ -332,19 +336,19 @@ void FixAISFXAmy() {
 void FixAISFXAmy2() { //jump sound
 	if (isAIActive && !Race)
 	{
-		ObjectMaster* GetChara = GetCharacterObject(0);
-		GetChara->Data1->CharID;
+		//ObjectMaster* GetChara = GetCharacterObject(0);
+		//GetChara->Data1->CharID;
 
 		ObjectMaster* GetAI = GetCharacterObject(1);
 		GetAI->Data1->CharID;
 
-		if (GetChara != nullptr && GetAI != nullptr)
+		if (GetAI != nullptr)
 		{
-			if (GetAI->Data1->CharID == Characters_Amy || GetChara->Data1->CharID == Characters_Amy)
+			if (GetAI->Data1->CharID == Characters_Amy) //|| GetChara->Data1->CharID == Characters_Amy)
 				return;
 		}
 	}
-	else
+
 		PlaySound(0x4ff, 0, 0, 0);
 }
 
@@ -395,7 +399,10 @@ void FixAISFXAmy5() {
 		}
 	}
 
-		PlaySound(0x31c, 0, 0, 0);
+	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
+		PlaySound(0x31d, 0, 0, 0); //hammer sound
+	else
+		PlaySound(0x31c, 0, 0, 0); //hammer sound
 }
 
 void FixAISFXAmy6() { 
@@ -429,9 +436,9 @@ void FixAISFXAmy7() { //spin dash noise when you press B
 	}
 
 	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
-		PlaySound(0x31c, 0, 0, 0); //hammer sound
-	else
 		PlaySound(0x31d, 0, 0, 0); //hammer sound
+	else
+		PlaySound(0x31c, 0, 0, 0); //hammer sound
 			
 			
 			
@@ -524,11 +531,19 @@ CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
 
-	if (!isAIAllowed)
+	if (!isAIAllowed || CurrentAI == CurrentCharacter)
+	{
+		isAIActive = false;
 		return;
+	}
+	
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel == LevelIDs_EggWalker)
+	{
+		isAIActive = false;
 		return;
+	}
+		
 
 	if (CurrentAI == Characters_Tikal || CurrentAI == Characters_Eggman)
 		if (CurrentLevel > 14 && CurrentLevel < 26)
@@ -566,20 +581,45 @@ void AISwitch() {
 				switch (obj->Data1->CharID)
 				{
 				case Characters_Sonic:
-					if (MetalSonicFlag == 0)
+					if (MetalSonicFlag)
+						LoadSoundList(62);
+					else
+					{
 						PlayVoice(4000);
-					break;
+						LoadSoundList(1);
+					}
+
+					if (VoiceLanguage)
+						LoadSoundList(72);
+					else
+						LoadSoundList(71);
+				break;
 				case Characters_Eggman:
 					PlayVoice(4005);
 					break;
 				case Characters_Tails:
 					PlayVoice(4001);
+					LoadSoundList(1);
+					if (VoiceLanguage)
+						LoadSoundList(72);
+					else
+						LoadSoundList(71);
 					break;
 				case Characters_Knuckles:
 					PlayVoice(4002);
+					LoadSoundList(49);
+					if (VoiceLanguage)
+						LoadSoundList(70);
+					else
+						LoadSoundList(69);
 					break;
 				case Characters_Amy:
 					PlayVoice(4003);
+					LoadSoundList(46);
+					if (VoiceLanguage)
+						LoadSoundList(64);
+					else
+						LoadSoundList(63);
 					break;
 				}
 
@@ -640,6 +680,8 @@ void AISwitch() {
 		}
 
 	}
+
+	return;
 }
 
 	

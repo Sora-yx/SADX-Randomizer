@@ -8,9 +8,9 @@ extern bool Viper;
 
 
 void EggViperNerfHP() {
-	BossHP = 5;
-	EggViperHP = 5;
-	BossHP_Stuff(600, 0x18, 5);
+	BossHP = 4;
+	EggViperHP = 4;
+	BossHP_Stuff(600, 0x18, 4);
 }
 
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)

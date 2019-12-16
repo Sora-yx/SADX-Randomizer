@@ -11,6 +11,7 @@
 using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
+extern bool isAIActive;
 
 
 void AddCustomFlag() {

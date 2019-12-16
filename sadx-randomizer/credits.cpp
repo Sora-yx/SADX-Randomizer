@@ -17,16 +17,17 @@ extern int ringsPB;
 extern int chaoPB;
 extern int animalPB;
 extern int killPB;
-extern int hitsPB;
+extern int hurtsPB;
 extern int deathsPB;
 extern int TotalDeathsPB;
+extern int TotalHurtsPB;
 extern int AISwapCount;
 
 //conversion to string, used for credits stats (struct doesn't accept int)
 string DeathsSTD = "";
 string JumpCountSTD = "";
 string RageQuitSTD = "";
-string HitsSTD = "";
+string HurtsSTD = "";
 string AISwapCountSTD = "";
 
 extern int SeedCopy;
@@ -103,13 +104,13 @@ CreditsEntry CreditsText_list[] = {
 	{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
 	{ 3, -1, 0, 0, "Deaths" },
 	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "RageQuit" },
 	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "Hits" },
+	{ 3, -1, 0, 0, "Hurts" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "Character Swap" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
 	{ 2, -1, 0, 0, "RANDOMIZER SPECIAL THANKS" },
@@ -630,19 +631,31 @@ void CreditsNewList() {
 	WriteData<6>((void*)0x640ff9, 0x90);
 	WriteData<5>((void*)0x640fff, 0x90);
 
+	DeathsSTD = "";
+	JumpCountSTD = "";
+	RageQuitSTD = "";
+	HurtsSTD = "";
+	AISwapCountSTD = "";
+
 	//Conversion int to string to const char and Display during credits
 	DeathsSTD += std::to_string(deathsPB);
 	RageQuitSTD += std::to_string(RageQuit);
 	//JumpCountSTD += std::to_string(JumpCount);
-	HitsSTD += std::to_string(hitsPB);
+	HurtsSTD += std::to_string(hurtsPB);
 	AISwapCountSTD += std::to_string(AISwapCount);
 
 	//Credits Stats Display
 	CreditsText_list[9].Line = DeathsSTD.c_str();
 	CreditsText_list[11].Line = RageQuitSTD.c_str();
 	//CreditsText_list[13].Line = JumpCountSTD.c_str(); //doesn't work for now
-	CreditsText_list[15].Line = HitsSTD.c_str();
-	CreditsText_list[17].Line = AISwapCountSTD.c_str();
+	CreditsText_list[13].Line = HurtsSTD.c_str();
+	CreditsText_list[15].Line = AISwapCountSTD.c_str();
+
+	//reset stat for next story
+	AISwapCount = 0;
+	hurtsPB = 0;
+	deathsPB = 0;
+	RageQuit = 0;
 
 	*(CreditsList*)0x2BC2FD0 = CreditsText;
 }
@@ -673,7 +686,6 @@ void credits() {
 
 void FinalStat() {
 
-
 	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
 	{
 		int getHour = (SaveFile.PlayTime / 0xe10) / 60;
@@ -690,7 +702,7 @@ void FinalStat() {
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 15), "Kills: %d", killPB);
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 16), "Hits: %d", hitsPB);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 16), "Hurts: %d", TotalHurtsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 17), "Deaths: %d", TotalDeathsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 18), "Chao Rescued: %d", chaoPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 19), "Final Time: %d:%d", getHour, getMin);

@@ -11,6 +11,7 @@ short getRandomMusic(RandomizedEntry entry);
 bool isStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void testRefactor(char stage, char act);
+void SetLevelGammaStory(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
 void AIAudioFixes();
@@ -148,7 +149,7 @@ ObjectFunc(Result_Score, 0x4141f0);
 
 VoidFunc(ScreenTextureVer, 0x432ea0);
 VoidFunc(SomethingAboutSave, 0x42d2f0);
-
+VoidFunc(FUN_00412ad0, 0x412ad0);
 
 VoidFunc(SetupZero, 0x4b3eb0);
 VoidFunc(CheckLoadZero, 0x486a40);
@@ -157,6 +158,7 @@ VoidFunc(EggViperCutscene, 0x431430);
 FunctionPointer(void, BossHP_Stuff, (int x, int y, int hp), 0x4b3cc0);
 
 DataPointer(char, BossHP, 0x3C58150);
+DataPointer(float, BossHP3, 0x3c58158);
 DataPointer(char, Emblem, 0x974AE0);
 DataPointer(unsigned char, LevelList, 0x3B2C5F8);
 DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
@@ -206,7 +208,10 @@ DataPointer(char, EventTailsData, 0x3B18809);
 DataPointer(char, SomethingAboutCredit, 0x3c83054);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
 FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
+void SetLevelAndAct_Original(char level, char act);
 
 
 VoidFunc(CutsceneFlagData, 0x431430);
 VoidFunc(PauseQuitThing2, 0x413f70);
+void QuitPauseEndLevel();
+void SoftReset_R();

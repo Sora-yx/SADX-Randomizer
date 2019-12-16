@@ -29,11 +29,15 @@ extern bool isAIAllowed;
 extern bool Race;
 extern int GetCustomLayout;
 extern int StorySplits;
+extern int CustomFlag;
+extern bool isAIActive;
 
 extern int RageQuit;
 extern int ringsPB;
 extern int TotalDeathsPB;
+extern int TotalHurtsPB;
 extern int deathsPB; //total Death credit stat
+extern int hurtsPB; //total Hits credit stat
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
@@ -55,7 +59,7 @@ int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
 int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
 
 //Few jingle that we don't want in the random music function.
-int bannedMusic[28] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
+int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 
@@ -248,7 +252,7 @@ int levelCount;
 
 void testRefactor(char stage, char act) {
 
-	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
+	if (GameMode != 8 || GameMode != 1 || GameMode != 11 || GameMode != 22 || GameMode != 21)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
@@ -260,85 +264,117 @@ void testRefactor(char stage, char act) {
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
 
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-		
+
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
-		
-		if (Credits_State == 0 && (GameMode != GameModes_Credits || GameMode != GameModes_StartCredits))
-			levelCount++;
 
-			
+		levelCount++;
+
+
 		if (levelCount == TotalCount)
 		{
 			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
+
+	return;
+
+}void SetLevelGammaStory(char stage, char act) {
+
+	if (RNGStages)
+		return;
+	else
+		SetLevelAndAct(LevelIDs_EggCarrierInside, 0);
 }
 
 
 void GoToNextLevel_hook(char stage, char act) {
-	if (GameMode != 8 || GameMode != 1 || GameMode != 11)
+
+	if (GameMode != 8 || GameMode != 1 || GameMode != 11 || GameMode != 22 || GameMode != 21)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
-
+	
 		if (SuperSonic != true)
 			SonicRand = randomizedSets[levelCount].ss_mode;
-
+	
 		if (MetalSonic != true)
 			MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
-
+	
 		CurrentAI = randomizedSets[levelCount].ai_mode;
-
+	
 		LastLevel = CurrentLevel;
 		CustomLayout = 0;
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
-		
-		if (Credits_State == 0 && (GameMode != GameModes_Credits || GameMode != GameModes_StartCredits))
-			levelCount++;
-
+	
+		levelCount++;
+	
 		if (ConsistentMusic)
 			musicCount++;
-
+	
 		if (levelCount == TotalCount)
 		{
 			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
+
+	return;
 }
 
-//cancel the reset position at 0 after quitting a stage.
-void CancelResetPosition() {
-	NextLevel = LastLevel;
-	NextAct = LastAct;
+void ResetStatsValues() {
+	isAIActive = false;
+	CurrentAI = 0;
 	SonicRand = 0;
 	CustomLayout = 0;
 	GetCustomLayout = 0;
 	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat
-	TotalDeathsPB += deathsPB; //total Death credit stat
 	Race = false;
+}
+
+//cancel the reset position at 0 after quitting a stage.
+void CancelResetPosition() {
+
+	NextAct = LastAct;
+	NextLevel = LastLevel;
+	
+	ResetStatsValues();
 	GameMode = GameModes_Adventure_Field;
+	return;
+}
+
+
+
+void SoftReset_R() {
+
+	if (LevelCopy != 0 && Credits_State == 0) 
+		ResetStatsValues();
+
+	FUN_00412ad0();
 }
 
 //Fix Trial Mode 
 void SetLevelAndAct_R() {
 
-	if (GameMode == GameModes_Menu)
+	if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == true)
 	{
-		if (LevelList == 14 || LevelList == 238)
-			testRefactor(CurrentLevel, CurrentAct);
-		else
-			return;
+		if (GameMode == GameModes_Menu)
+		{
+			if (LevelList == 14 || LevelList == 238)
+				testRefactor(CurrentLevel, CurrentAct);
+			else
+				return;
+		}
 	}
-}
 
+	return;
+}
 
 //randomize voices
 void RandomVoice() {
@@ -355,7 +391,7 @@ short getRandomMusic(RandomizedEntry entry) {
 		do {
 			cur_music = rand() % 125;
 
-		} while (isValueInArray(bannedMusic, cur_music, 28));
+		} while (isValueInArray(bannedMusic, cur_music, 29));
 	
 		return cur_music;
 }

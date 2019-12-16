@@ -91,6 +91,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			if (IsPlayerInsideSphere(&a1->Data1->Position, 9)) { //hitbox
 				if (TimeThing != 0)
 				{
+					chaoPB++;
 					LoadLevelResults();
 					a1->Data1->Action = 3;
 				}
