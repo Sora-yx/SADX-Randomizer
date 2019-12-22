@@ -6,10 +6,9 @@
 #include <fstream>
 
 extern bool isAIAllowed;
-int CurrentAI = 0;
+int CurrentAI = -1;
 bool isAIActive = false;
 extern bool CreditCheck;
-
 
 int FlagAI = 0;
 extern bool Race;
@@ -38,22 +37,26 @@ ObjectFuncPtr charfuncs[] = {
 ObjectMaster* LoadCharObj(int i)
 {
 	//setup AI correctly
+
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentAI]);
 	obj->Data1->CharID = CurrentAI;
 	obj->Data1->CharIndex = (char)1;
 	EntityData1Ptrs[1] = (EntityData1*)obj->Data1;
 	EntityData2Ptrs[1] = (EntityData2*)obj->Data2;
 	return obj;
+	
+
 }
 
 
 int CheckTailsAI_R(void) { //restriction and bug fixes.
 
-	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
+	if (CurrentAI == -1 || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
 		isAIActive = false;
 		return 0;
 	}
+
 
 	if (CurrentCharacter == CurrentAI)
 	{
@@ -239,7 +242,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails only)
 {
 
-		FlagAI = CheckTailsAI_R();
+	FlagAI = CheckTailsAI_R();
 
 	if (FlagAI != 1)
 	{
@@ -289,8 +292,12 @@ void FixAISFXSonic() {
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
 		GetChara->Data1->CharID;
-		if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
-			return;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
+				return;
+		}
 	}
 
 		PlaySound(0x2fa, 0, 0, 0);
@@ -400,7 +407,7 @@ void FixAISFXAmy5() {
 	}
 
 	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
-		PlaySound(0x31d, 0, 0, 0); //hammer sound
+		PlaySound(0x31d, 0, 0, 0); //long hammer sound
 	else
 		PlaySound(0x31c, 0, 0, 0); //hammer sound
 }
@@ -436,7 +443,7 @@ void FixAISFXAmy7() { //spin dash noise when you press B
 	}
 
 	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
-		PlaySound(0x31d, 0, 0, 0); //hammer sound
+		PlaySound(0x31d, 0, 0, 0); //long hammer sound
 	else
 		PlaySound(0x31c, 0, 0, 0); //hammer sound
 			
@@ -528,7 +535,6 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 
 CollisionInfo* oldcol = nullptr;
 
-
 void AISwitch() {
 
 	if (!isAIAllowed || CurrentAI == CurrentCharacter)
@@ -548,6 +554,7 @@ void AISwitch() {
 	if (CurrentAI == Characters_Tikal || CurrentAI == Characters_Eggman)
 		if (CurrentLevel > 14 && CurrentLevel < 26)
 			return;
+
 		
 	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
@@ -563,15 +570,16 @@ void AISwitch() {
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
-			short powerups = obj2->Powerups;
-			short jumptime = obj2->JumpTime;
-			short underwatertime = obj2->UnderwaterTime;
-			float loopdist = obj2->LoopDist;
-			NJS_VECTOR speed = obj2->Speed;
-			ObjectMaster* heldobj = obj2->ObjectHeld;
-
-			if (obj != nullptr)
+			if (obj != nullptr && obj2 != nullptr)
 			{
+				short powerups = obj2->Powerups;
+				short jumptime = obj2->JumpTime;
+				short underwatertime = obj2->UnderwaterTime;
+				float loopdist = obj2->LoopDist;
+				NJS_VECTOR speed = obj2->Speed;
+				ObjectMaster* heldobj = obj2->ObjectHeld;
+
+
 				//Display Character swap.
 				obj->DeleteSub(obj);
 				obj->MainSub = charfuncs[CharaSwap];
@@ -593,7 +601,7 @@ void AISwitch() {
 						LoadSoundList(72);
 					else
 						LoadSoundList(71);
-				break;
+					break;
 				case Characters_Eggman:
 					PlayVoice(4005);
 					break;
@@ -642,40 +650,43 @@ void AISwitch() {
 				obj2->ObjectHeld = heldobj;
 
 
+
 				//initialize swap, taking AI information
 				ObjectMaster* AI = GetCharacterObject(1);
 				CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
 
-
-				short AIpowerups = AI2->Powerups;
-				short AIjumptime = AI2->JumpTime;
-				short AIunderwatertime = AI2->UnderwaterTime;
-				float AIloopdist = AI2->LoopDist;
-				NJS_VECTOR AIspeed = AI2->Speed;
-				ObjectMaster* AIheldobj = AI2->ObjectHeld;
-
-				//Display AI swap.
-				AI->MainSub = charfuncs[AISwap];
-				AI->Data1->CharID = (char)AISwap;
-				AI->Data1->Action = 0;
-				AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-				if (!oldcol)
+				if (AI != nullptr && AI2 != nullptr)
 				{
-					oldcol = AI->Data1->CollisionInfo;
-					AI->Data1->CollisionInfo = nullptr;
-				}
-				else
-					Collision_Free(AI);
-				AI->MainSub(AI);
-				AI2 = ((EntityData2*)AI->Data2)->CharacterData;
-				AI2->Powerups = powerups;
-				AI2->JumpTime = jumptime;
-				AI2->UnderwaterTime = underwatertime;
-				AI2->LoopDist = loopdist;
-				AI2->Speed = speed;
-				AI2->ObjectHeld = heldobj;
+					short AIpowerups = AI2->Powerups;
+					short AIjumptime = AI2->JumpTime;
+					short AIunderwatertime = AI2->UnderwaterTime;
+					float AIloopdist = AI2->LoopDist;
+					NJS_VECTOR AIspeed = AI2->Speed;
+					ObjectMaster* AIheldobj = AI2->ObjectHeld;
 
-				SwapDelay = 0;
+					//Display AI swap.
+					AI->MainSub = charfuncs[AISwap];
+					AI->Data1->CharID = (char)AISwap;
+					AI->Data1->Action = 0;
+					AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+					if (!oldcol)
+					{
+						oldcol = AI->Data1->CollisionInfo;
+						AI->Data1->CollisionInfo = nullptr;
+					}
+					else
+						Collision_Free(AI);
+					AI->MainSub(AI);
+					AI2 = ((EntityData2*)AI->Data2)->CharacterData;
+					AI2->Powerups = powerups;
+					AI2->JumpTime = jumptime;
+					AI2->UnderwaterTime = underwatertime;
+					AI2->LoopDist = loopdist;
+					AI2->Speed = speed;
+					AI2->ObjectHeld = heldobj;
+
+					SwapDelay = 0;
+				}
 			}
 		}
 

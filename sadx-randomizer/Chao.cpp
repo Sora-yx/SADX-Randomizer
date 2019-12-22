@@ -181,8 +181,18 @@ void Chao_OnFrame() {
 			}
 			else
 			{
-				pos = { 716.4085693, 428.2105103, -2952.347412 };
-				Yrot = 0x8000;
+				HMODULE DCModChao = GetModuleHandle(L"DCMods_Main"); 
+				if (DCModChao)
+				{
+					pos = { 716.4085693, 428.2105103, -2952.347412 };
+					Yrot = 0x8000;
+				}
+				else
+				{
+					pos = { 716.4085693, 677.8605957, -2952.347412 };
+					Yrot = 0x8000;
+				}
+
 			}
 			break;
 		}

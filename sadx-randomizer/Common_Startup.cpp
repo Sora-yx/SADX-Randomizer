@@ -8,7 +8,7 @@ extern bool Race;
 
 HelperFunctions help;
 
-NJS_TEXNAME Missions[10];
+NJS_TEXNAME Missions[11];
 int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 
 void Set_MusicVoices() {
@@ -57,13 +57,14 @@ int CheckMissionRequirements_r() {
 	if (CurrentLevel > 14)
 		return 0;
 
-		if (GetCustomLayout == 2) //100 Rings check
-			return (int)(99 < (short)Rings);
-			
-		if (GetCustomLayout == 3) //Lost Chao
-			return 1;
-
+	if (GetCustomLayout == 2) //100 Rings check
+		return (int)(99 < (short)Rings);
+		
+	if (GetCustomLayout == 3) //Lost Chao
 		return 1;
+
+	
+	return 1;
 
 }
 
@@ -82,7 +83,7 @@ void LoadStageMissionImage_r() {
 		if (CurrentLevel == LevelIDs_TwinkleCircuit)
 			return;
 
-		if (CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2)
+		if (CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2 || CurrentLevel == LevelIDs_EmeraldCoast && CustomLayout == 1)
 			CurrentMission = 5;
 
 		if (CurrentLevel == LevelIDs_LostWorld && CustomLayout == 0)
@@ -101,7 +102,40 @@ void LoadStageMissionImage_r() {
 			else
 				CurrentMission = 5;
 
-		if (CurrentCharacter == Characters_Amy && GetCustomLayout == 0)
+		if (Race && CurrentLevel == LevelIDs_SkyDeck)
+		{
+			if (CurrentCharacter == Characters_Sonic)
+				CurrentMission = 11;
+			else
+				CurrentMission = 3;
+		}
+
+		if (Race && CurrentLevel == LevelIDs_Casinopolis)
+		{
+			if (CurrentCharacter == Characters_Sonic)
+				CurrentMission = 11;
+			else
+				CurrentMission = 3;
+		}
+
+
+		if (Race && CurrentLevel == LevelIDs_WindyValley)
+		{
+			if (CurrentCharacter == Characters_Sonic)
+				CurrentMission = 11;
+			else
+				CurrentMission = 3;
+		}
+
+		if (Race && CurrentLevel == LevelIDs_IceCap)
+		{
+			if (CurrentCharacter == Characters_Sonic)
+				CurrentMission = 11;
+			else
+				CurrentMission = 3;
+		}
+
+		if (CurrentCharacter == Characters_Amy && (GetCustomLayout == 0 || GetCustomLayout == 1 && CurrentLevel == LevelIDs_RedMountain))
 			CurrentMission = 10;
 	
 
@@ -111,10 +145,6 @@ void LoadStageMissionImage_r() {
 		if (GetCustomLayout == 3 && !Race) //Lost Chao
 			CurrentMission = 1;
 	
-
-		if (Race && CurrentLevel == LevelIDs_SkyDeck)
-			CurrentMission = 3;
-
 
 		if (CurrentLevel == LevelIDs_SpeedHighway)
 			if (Race)
@@ -144,7 +174,7 @@ void LoadStageMissionImage_r() {
 void StageMissionImage_result() {
 
 	if (GetLevelType == 0) { //do the mission check here
-		//0 = capsule, 1 = Lost Chao, 2 = Beat Sonic, 3 = Emeralds Knux, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails
+		//0 = capsule, 1 = Lost Chao, 2 = Beat Sonic, 3 = Emeralds Knux, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Fast Tails Race
 
 		GetCustomLayout = CustomLayout;
 		

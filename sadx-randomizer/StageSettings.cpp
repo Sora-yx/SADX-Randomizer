@@ -13,9 +13,9 @@ extern bool RNGStages;
 extern int CustomFlag;
 extern int TotalCount;
 extern int CustomLayout;
-bool Race = false;
 extern bool isAIAllowed;
 extern bool isAIActive;
+extern bool Race;
 extern int CurrentAI;
 extern int GetCustomLayout;
 bool GetBackRing = false;
@@ -98,6 +98,9 @@ void DisableTimeStuff() {
 			}
 			else
 			{
+				if (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_Casinopolis)
+					SetTailsRaceVictory();
+
 				Tails_CheckRaceResult();
 				Race = false;
 				return;
@@ -166,69 +169,11 @@ void TwinkleCircuitResult() {
 	CustomFlag++;
 	GameMode = GameModes_Adventure_Field;
 	Rings = 0;
+	PauseQuitThing2();
 	ScreenFade_Start();
 	GameState = 0x11;
 }
 
-
-
-void CheckRace() {
-
-	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-	{
-		Race = false;
-		return;
-	}
-	else
-	{
-		switch (CurrentLevel)
-		{
-		case LevelIDs_SpeedHighway:
-			if (CustomLayout == 1 && CurrentAct == 0)
-			{
-				AICourse = Levels2P_SpeedHighway;
-				//LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI);     //already called somewhere
-				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
-				Race = true;
-			}
-		case LevelIDs_SkyDeck:
-			if (CustomLayout == 1 && CurrentAct == 0)
-			{
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-				Race = true;
-			}
-			break;
-		}
-
-		return;
-
-	}
-}
-
-int IsFastSonicAI_R(void) {
-
-	if (Race)
-	{
-		switch (CurrentLevel)
-		{
-		case LevelIDs_WindyValley:
-			if (CustomLayout == 4 && CurrentAct == 2)
-				return FastSonicAI = 1;
-			break;
-		case LevelIDs_SkyDeck:
-			if (CustomLayout == 3 && CurrentAct == 0)
-				return FastSonicAI = 1;
-			break;
-
-		default:
-			return FastSonicAI = 0;
-			break;
-		}
-	}
-
-	return FastSonicAI = 0;
-
-}
 
 
 void FixRollerCoaster() {
@@ -237,7 +182,6 @@ void FixRollerCoaster() {
 	EntityData1* ent;
 	ent = obj->Data1;
 	obj->Data1->Action = 28; //force the character to leave the RC
-
 }
 
 
@@ -253,7 +197,6 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 		}
 
 	ResetTime();
-	
 }
 
 void BackRing() { //swap capsule

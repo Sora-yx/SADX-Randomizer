@@ -26,6 +26,7 @@ extern bool banCharacter[8];
 extern int split;
 extern int TotalCount;
 extern bool isAIAllowed;
+extern bool isRaceAIRandom;
 extern bool Race;
 extern int GetCustomLayout;
 extern int StorySplits;
@@ -40,7 +41,8 @@ extern int deathsPB; //total Death credit stat
 extern int hurtsPB; //total Hits credit stat
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy };
+int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
+int AIRaceArray[8] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Knuckles, Characters_Tikal, Characters_Amy, Characters_Gamma, Characters_Big }; //Tails Race AI
 int CustomLayout;
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
@@ -69,35 +71,36 @@ short randomacts(RandomizedEntry entry) {
 	//Set up act rng.
 	int actHS[2] = { 0, 2 };
 	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
+	int act1[3] = { 0, 0, 2 }; //increasing chance to get act 1
 
 	switch (entry.level)
 	{
 	case LevelIDs_EmeraldCoast:
-		if (entry.character == Characters_Sonic)
-			return 2;
+		if (entry.character == Characters_Big)
+			return 0;
 		else
-			if (entry.character == Characters_Big)
-				return 0;
-			else
-				return actHS[rand() % 2];
+			return act1[rand() % 3];
+		break;
+	case LevelIDs_WindyValley:
+		if (entry.character == Characters_Big || entry.character == Characters_Tails)
+			return 0;
+		else
+			return act1[rand() % 3];
 		break;
 	case LevelIDs_TwinklePark:
 		if (entry.character == Characters_Sonic || entry.character == Characters_Gamma)
 			return 1;
-		else
-		{
-			if (entry.character == Characters_Amy)
-				return 0;
-			else
-				return actHS[rand() % 2];
-		}
+		if (entry.character == Characters_Amy)
+			return 0;
+		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma && entry.character != Characters_Amy)
+			return actHS[rand() % 2];
 		break;
 	case LevelIDs_RedMountain:
-		if (entry.character == Characters_Gamma)
-			return 0;
 		if (entry.character == Characters_Sonic)
 			return 1;
-		else
+		if (entry.character == Characters_Gamma)
+			return 0;
+		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma)
 			return act0[rand() % 3];
 		break;
 	case LevelIDs_IceCap:
@@ -109,13 +112,10 @@ short randomacts(RandomizedEntry entry) {
 	case LevelIDs_Casinopolis:
 		if (entry.character == Characters_Sonic)
 			return 1;
-		else
-		{
-			if (entry.character == Characters_Tails)
-				return 0;
-			else
-				return act0[rand() % 3];
-		}
+		if (entry.character == Characters_Tails)
+			return 0;
+		if (entry.character != Characters_Sonic && entry.character != Characters_Tails)
+			return act0[rand() % 3];
 		break;
 	case LevelIDs_HotShelter:
 		if (entry.character == Characters_Gamma)
@@ -135,14 +135,24 @@ short randomacts(RandomizedEntry entry) {
 	}
 }
 
+short prev_mission = -1;
 
 short randomLayout(RandomizedEntry entry) {
 
-	if (Missions) //SA2 missions 100 Rings, Lost Chao
-		return rand() % 4;
-	else
-		return rand() % 2; 
+	short cur_mission = -1;
+
+	do {
+		if (Missions) //SA2 missions 100 Rings, Lost Chao
+			cur_mission = rand() % 4;
+		else
+			cur_mission = rand() % 2;
+	} while (prev_mission == cur_mission);
+	
+
+	prev_mission = cur_mission;
+	return cur_mission;
 }
+
 
 int8_t prev_char = -1;
 
@@ -163,6 +173,9 @@ uint8_t getRandomCharacter(bool allow_duplicate) {
 }
 
 
+int8_t prev_AI = -1;
+
+//AI following you
 short getRandomAI(RandomizedEntry entry) {
 
 	int8_t cur_AI = -1;
@@ -171,9 +184,29 @@ short getRandomAI(RandomizedEntry entry) {
 	do {
 		cur_AI = AIArray[rand() % ai_count];
 
-	} while (entry.character == cur_AI);
+	} while (entry.character == cur_AI || cur_AI == prev_AI);
 	
+	prev_AI = cur_AI;
 	return cur_AI;
+}
+
+//Tails Race AI
+
+short getRandomRaceAI(RandomizedEntry entry) {
+
+	int8_t cur_AIRace = -1;
+	size_t aiRace_count = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
+
+	if (entry.level == LevelIDs_SkyDeck || entry.level == LevelIDs_WindyValley || entry.level == LevelIDs_IceCap || entry.level == LevelIDs_Casinopolis)
+	{
+
+		do {
+			cur_AIRace = AIRaceArray[rand() % aiRace_count];
+
+		} while (entry.character == cur_AIRace);
+	}
+
+	return cur_AIRace;
 }
 
 short prev_stage = -1;
@@ -182,7 +215,6 @@ short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 
 
 	short cur_stage = -1;
-	int anyLevel = - 1;
 	AllowVanilla = Vanilla;
 
 
@@ -282,12 +314,6 @@ void testRefactor(char stage, char act) {
 
 	return;
 
-}void SetLevelGammaStory(char stage, char act) {
-
-	if (RNGStages)
-		return;
-	else
-		SetLevelAndAct(LevelIDs_EggCarrierInside, 0);
 }
 
 
@@ -353,8 +379,14 @@ void CancelResetPosition() {
 
 void SoftReset_R() {
 
-	if (LevelCopy != 0 && Credits_State == 0) 
+	if (LevelCopy != 0 && Credits_State == 0)
 		ResetStatsValues();
+
+	if (LevelCopy != 0)
+	{
+		GameMode = GameModes_Adventure_Field;
+		PauseQuitThing2(); //Delete stuff correctly.
+	}
 
 	FUN_00412ad0();
 }
@@ -464,6 +496,9 @@ void GetNewLevel() {
 		if (isAIAllowed)
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
 
+		if (isRaceAIRandom)
+			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+
 		if (randomizedSets[i].character == Characters_Sonic)
 		{
 			randomizedSets[i].sonic_mode = rand() % 2;
@@ -528,6 +563,9 @@ void Split_Init() { //speedrunner split init.
 
 			if (isAIAllowed)
 				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+
+			if (isRaceAIRandom)
+				randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 
 
 			if (randomizedSets[i].character == Characters_Sonic)

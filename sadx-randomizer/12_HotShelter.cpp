@@ -15,8 +15,6 @@ extern int levelCount;
 
 void HotShelterAct4() {
 
-	CurrentMission = 0;
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	//act 1 Amy/Big Version
@@ -124,17 +122,8 @@ void HotShelterAct4() {
 		switch (CustomLayout)
 		{
 		case 0:
-			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-			LoadSetFile(1, "1201"); //load Big version for Amy.
-			LoadSetFile(2, "1202");
-			break;
 		case 1:
-			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-			LoadSetFile(1, "1201"); //load Big version for Amy.
-			LoadSetFile(2, "1202");
-			CustomLayout = 0;
-			break;
-		case 2: //100 Rings
+		case 2:
 			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 			LoadSetFile(1, "1201"); //load Big version for Amy.
 			LoadSetFile(2, "1202");

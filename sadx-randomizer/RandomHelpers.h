@@ -19,6 +19,7 @@ void AIAudioFixes();
 short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);
 short getRandomAI(RandomizedEntry entry);
+short getRandomRaceAI(RandomizedEntry entry);
 void GetNewLevel();
 
 struct RandomizedEntry
@@ -29,7 +30,8 @@ struct RandomizedEntry
 	short layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
-	int ai_mode;
+	int ai_mode; //AI following you
+	int ai_race; //Tails race AI
 	short music;
 	short voices;
 };
@@ -41,6 +43,7 @@ void Set_BackRing();
 
 extern int level[21];
 extern int AIArray[3];
+extern int AIRaceArray[8];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
@@ -213,5 +216,6 @@ void SetLevelAndAct_Original(char level, char act);
 
 VoidFunc(CutsceneFlagData, 0x431430);
 VoidFunc(PauseQuitThing2, 0x413f70);
+VoidFunc(FUN_00424830, 0x424830);
 void QuitPauseEndLevel();
 void SoftReset_R();

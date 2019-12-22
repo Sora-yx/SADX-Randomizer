@@ -14,74 +14,122 @@ extern int levelCount;
 
 void WindyValleyAct4() {
 
-	CustomLayout = 0;
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
-
-	switch (CustomLayout)
+	if (CurrentAct == 2)
 	{
-	case 0:
-		if (CurrentCharacter == Characters_Sonic)
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //This scenario shouldn't be possible, but just in case.
 		{
-			LoadSetFile(0, "0203"); //Gamma Version
+			LoadSetFile(0, "0200");
 			LoadSetFile(1, "0201");
 			LoadSetFile(2, "0202");
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0200"); //Sonic Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-		}
-		break;
-	case 1:
-		if (CurrentCharacter >= Characters_Gamma)
-		{
-			LoadSetFile(0, "0200");  //Sonic Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
+			Race = false;
+			CurrentAct = 0;
 			CustomLayout = 0;
 		}
 		else
 		{
-			LoadSetFile(0, "0203"); //Gamma Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			break;
-		}
-	case 2:
-		if (CurrentCharacter == Characters_Sonic)
-		{
-			LoadSetFile(0, "0203"); //Gamma Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0200"); //100 Rings
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-		}
-		break;
-	case 3:
-		if (CurrentCharacter == Characters_Sonic)
-		{
-			LoadSetFile(0, "0203"); //Gamma Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			CustomLayout = 1;
-		}
-		else
-		{
+			Race = true;
 			LoadSetFile(0, "0200");
 			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0205"); //Lost Chao
-			break;
+			LoadSetFile(2, "0206"); //race
+			CustomLayout = 1;
+
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				if (MetalSonicFlag == 0)
+				{
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+				}
+				else
+				{
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
+				}
+			}
+
+			if (CurrentCharacter == Characters_Knuckles)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+
+			if (CurrentCharacter == Characters_Amy)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+
+			if (CurrentCharacter == Characters_Gamma)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 		}
+
 	}
+
+
+	if (CurrentAct == 0)
+	{
+		switch (CustomLayout)
+		{
+		case 0:
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				LoadSetFile(0, "0203"); //Gamma Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				CustomLayout = 1;
+			}
+			else
+			{
+				LoadSetFile(0, "0200"); //Sonic Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+			}
+			break;
+		case 1:
+			if (CurrentCharacter >= Characters_Gamma)
+			{
+				LoadSetFile(0, "0200");  //Sonic Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				CustomLayout = 0;
+			}
+			else
+			{
+				LoadSetFile(0, "0203"); //Gamma Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				break;
+			}
+		case 2:
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				LoadSetFile(0, "0203"); //Gamma Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				CustomLayout = 1;
+			}
+			else
+			{
+				LoadSetFile(0, "0200"); //100 Rings
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+			}
+			break;
+		case 3:
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				LoadSetFile(0, "0203"); //Gamma Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				CustomLayout = 1;
+			}
+			else
+			{
+				LoadSetFile(0, "0200");
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0205"); //Lost Chao
+				break;
+			}
+		}
+
+
+	}
+
 
 	return;
 
@@ -136,6 +184,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 
 
 	helperFunctions.ReplaceFile("system\\SET0205K.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
+	helperFunctions.ReplaceFile("system\\SET0206K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Race.bin"); //race
 
 
 	helperFunctions.ReplaceFile("system\\CAM0200K.BIN", "system\\cam\\CAM0200K.bin");
@@ -150,10 +199,11 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0200A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0204A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Race.bin");
+	
 	helperFunctions.ReplaceFile("system\\SET0203A.BIN", "system\\levels\\Windy Valley\\Amy-WV-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Chao.bin"); //Chao
+	helperFunctions.ReplaceFile("system\\SET0206A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0200A.BIN", "system\\cam\\CAM0200A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201A.BIN", "system\\cam\\CAM0201A.bin");
@@ -166,7 +216,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0200B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act1.bin");
+	helperFunctions.ReplaceFile("system\\SET0203B.BIN", "system\\levels\\Windy Valley\\Big-WV-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205B.BIN", "system\\levels\\Windy Valley\\Big-WV-Chao.bin"); //Chao
 
@@ -184,6 +234,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0203E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act1.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Chao.bin"); //Chao
+	helperFunctions.ReplaceFile("system\\SET0206E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0200E.BIN", "system\\cam\\CAM0200E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201E.BIN", "system\\cam\\CAM0201E.bin");

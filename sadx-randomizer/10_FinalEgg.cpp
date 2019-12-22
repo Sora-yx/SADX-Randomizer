@@ -13,6 +13,27 @@ void FinalEggAct4() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
+
+
+	/*if (CurrentAct == 2)
+	{
+		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.
+		{
+			LoadSetFile(0, "1000");
+			LoadSetFile(1, "1001");
+			LoadSetFile(2, "1002");
+			CustomLayout = 0;
+		}
+		else
+		{
+			LoadSetFile(0, "1000");
+			LoadSetFile(1, "1001");
+			LoadSetFile(2, "1005");
+			CustomLayout = 1;
+		}
+	}*/
+
+
 	switch (CustomLayout)
 	{
 	case 0:
@@ -78,6 +99,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000S.bin", "system\\cam\\CAM1000S.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001S.bin", "system\\cam\\CAM1001S.bin");
@@ -90,6 +112,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000M.BIN", "system\\levels\\Final Egg\\Tails-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001M.BIN", "system\\levels\\Final Egg\\Tails-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002M.BIN", "system\\levels\\Final Egg\\Tails-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005M.BIN", "system\\levels\\Final Egg\\Tails-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000M.bin", "system\\cam\\CAM1000M.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001M.bin", "system\\cam\\CAM1001M.bin");
@@ -102,6 +125,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000K.BIN", "system\\levels\\Final Egg\\Knux-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001K.BIN", "system\\levels\\Final Egg\\Knux-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002K.BIN", "system\\levels\\Final Egg\\Knux-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005K.BIN", "system\\levels\\Final Egg\\Knux-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000K.bin", "system\\cam\\CAM1000K.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001K.bin", "system\\cam\\CAM1001K.bin");
@@ -115,6 +139,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000A.BIN", "system\\levels\\Final Egg\\Amy-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001A.BIN", "system\\levels\\Final Egg\\Amy-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002A.BIN", "system\\levels\\Final Egg\\Amy-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005A.BIN", "system\\levels\\Final Egg\\Amy-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000A.bin", "system\\cam\\CAM1000A.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001A.bin", "system\\cam\\CAM1001A.bin");
@@ -127,6 +152,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000B.BIN", "system\\levels\\Final Egg\\Big-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001B.BIN", "system\\levels\\Final Egg\\Big-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002B.BIN", "system\\levels\\Final Egg\\Big-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005B.BIN", "system\\levels\\Final Egg\\Big-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000B.bin", "system\\cam\\CAM1000B.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001B.bin", "system\\cam\\CAM1001B.bin");
@@ -139,6 +165,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1000E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1002E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1005E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Gamma.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM1000E.bin", "system\\cam\\CAM1000E.bin");
 	helperFunctions.ReplaceFile("system\\CAM1001E.bin", "system\\cam\\CAM1001E.bin");

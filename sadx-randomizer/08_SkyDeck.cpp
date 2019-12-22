@@ -13,24 +13,57 @@ extern int levelCount;
 
 void SkyDeckAct4() {
 
-	CustomLayout = 0;
-
-	if (Missions)
-		CustomLayout = randomizedSets[levelCount].layout;
-	else
-		CustomLayout = 0;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
 	{
 	case 0: //M1
-		Race = false;
-		LoadSetFile(0, "0600"); //load Sonic layout
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			Race = true;
+			LoadSetFile(0, "0605"); //load Tails layout
+
+				if (MetalSonicFlag == 0)
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+				else
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race
+
+				CustomLayout = 1;
+		}
+		else
+		{
+			Race = false;
+			LoadSetFile(0, "0600"); //load Sonic layout
+		}
 		break;
 	case 1:
-		Race = false;
-		LoadSetFile(0, "0600"); //load M1
-		CustomLayout = 0;
+		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+		{
+			Race = false;
+			LoadSetFile(0, "0600"); //load Sonic layout
+			CustomLayout = 0;
+		}
+		else
+		{
+			Race = true;
+			LoadSetFile(0, "0605"); //load Tails layout
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				if (MetalSonicFlag == 0)
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+				else
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
+			}
+			if (CurrentCharacter == Characters_Knuckles)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
 
+			if (CurrentCharacter == Characters_Amy)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+
+			if (CurrentCharacter == Characters_Gamma)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+		}
+		break;
 	case 2: //Rings
 		Race = false;
 		LoadSetFile(0, "0600"); //load 100 rings mission
@@ -56,6 +89,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0601S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0605S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Race.bin");
+
 
 	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
@@ -68,6 +103,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0600M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act3.bin");
+
+	helperFunctions.ReplaceFile("system\\SET0605M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600M.bin", "system\\cam\\CAM0600M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601M.bin", "system\\cam\\CAM0601M.bin");
@@ -94,6 +131,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0600A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act3.bin");
+
 	helperFunctions.ReplaceFile("system\\SET0605A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600A.bin", "system\\cam\\CAM0600A.bin");
@@ -108,6 +146,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0601B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act3.bin");
 
+	helperFunctions.ReplaceFile("system\\SET0605B.BIN", "system\\levels\\Sky Deck\\Big-SD-Race.bin");
+
 
 	helperFunctions.ReplaceFile("system\\CAM0600B.bin", "system\\cam\\CAM0600B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601B.bin", "system\\cam\\CAM0601B.bin");
@@ -120,6 +160,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SET0600E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0601E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0602E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act3.bin");
+
 	helperFunctions.ReplaceFile("system\\SET0605E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0600E.bin", "system\\cam\\CAM0600E.bin");

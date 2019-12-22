@@ -11,21 +11,15 @@ extern int levelCount;
 
 void LWAct4() {
 
-	CustomLayout = 0;
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
 		switch (CustomLayout)
 		{
 		case 0:
-			LoadSetFile(1, "0701"); //M1
-			break;
 		case 1:
-			CustomLayout = 0;
-			LoadSetFile(1, "0701"); //M1
-			break;
 		case 2:
-			LoadSetFile(1, "0701"); //M2
+			LoadSetFile(1, "0701"); //M1
 			break;
 		case 3:
 			LoadSetFile(1, "0703"); //M3

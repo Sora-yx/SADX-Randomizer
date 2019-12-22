@@ -51,6 +51,7 @@ bool isAIAllowed = true;
 int SwapDelay = 150;
 extern int CurrentAI;
 extern bool isAIActive;
+bool isRaceAIRandom = false; //Sonic Race AI
 
 int CustomFlag = 0; //Used for progression story and credits
 
@@ -142,6 +143,7 @@ extern "C" {
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
+		isRaceAIRandom = config->getBool("RosterAI", "isRaceAIRandom", false);
 
 		delete config;
 
@@ -194,7 +196,6 @@ extern "C" {
 		Zero_Init(path, helperFunctions);
 
 		//Credits
-		//CreditsNewList(); //Initialize custom credits
 		WriteCall((void*)0x641aef, CreditFlag);
 		//Credits Stat init
 		HookStats_Inits();
@@ -207,8 +208,6 @@ extern "C" {
 
 		//Musics, Voices
 		Set_MusicVoices();
-
-	
 
 		if (Weight)
 		{
@@ -263,9 +262,10 @@ extern "C" {
 
 		if (RNGStages == true) 
 		{
-			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
 			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
+			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
+
 			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
@@ -310,6 +310,10 @@ extern "C" {
 
 				if (isAIAllowed)
 					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+				
+				if (isRaceAIRandom)
+					randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+
 				if (randomizedSets[i].character == Characters_Sonic)
 				{
 					randomizedSets[i].sonic_mode = rand() % 2;
@@ -331,7 +335,7 @@ extern "C" {
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
-			SetDebugFontSize(12.0f * (unsigned short)VerticalResolution / 480.0f);
+			SetDebugFontSize(11.8f * (unsigned short)VerticalResolution / 480.0f);
 			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
 			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
 			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
@@ -383,7 +387,7 @@ extern "C" {
 					{
 						SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
 						if (CustomLayout <= 1 || CustomLayout > 3)
-							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1");
+							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1 (Beat the Stage)");
 
 						if (CustomLayout == 2)
 							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M2 (100 Rings)");

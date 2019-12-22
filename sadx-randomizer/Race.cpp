@@ -9,25 +9,101 @@
 extern int SonicCD;
 extern bool Mission;
 int CDSong = 0;
+int AIRace = -1;
 extern int CustomLayout;
+bool Race = false;
+extern bool isAIActive;
+extern int levelCount;
+extern bool isRaceAIRandom;
 
-
+extern ObjectFuncPtr charfuncs[];
 HelperFunctions extern help;
+
+void AIRaceLoad_R() {
+
+	LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[AIRace]);
+}
+
+
+void CheckRace() {
+
+	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+	{
+		Race = false;
+		return;
+	}
+	else
+	{
+		MetalSonicRace_Init();
+	
+		if (isRaceAIRandom && CurrentLevel != LevelIDs_SpeedHighway)
+			AIRace = randomizedSets[levelCount].ai_race;
+		else
+		{
+			if (!CurrentCharacter && CurrentLevel != LevelIDs_SpeedHighway)
+				AIRace = Characters_Tails;
+			else
+				AIRace = Characters_Sonic;
+		}
+
+		switch (CurrentLevel)
+		{
+		case LevelIDs_WindyValley:
+			if (CustomLayout == 1 && CurrentAct == 2)
+			{
+				isAIActive = false;
+				AICourse = Levels2P_WindyValley;
+				Race = true;
+				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
+			}
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CustomLayout == 1 && CurrentAct == 0)
+			{
+				isAIActive = false;
+				Race = true;
+				AICourse = Levels2P_SpeedHighway;
+				LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI); 
+				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
+			}
+		case LevelIDs_SkyDeck:
+			if (CustomLayout == 1 && CurrentAct == 0)
+			{
+				isAIActive = false;
+				Race = true;
+				AICourse = Levels2P_SkyDeck;
+				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
+			}
+			break;
+		case LevelIDs_Casinopolis:
+			if (CustomLayout < 2 && CurrentAct == 1)
+			{
+				isAIActive = false;
+				AICourse = Levels2P_Casinopolis;
+				Race = true;
+				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
+			}
+			break;
+		}
+
+		return;
+
+	}
+}
 
 
 void Race_Init() {
 	//Sonic/Eggman Race Stuff
 	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
 	WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
-	WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI.
-
-	WriteData<1>((void*)0x47DA01, 0x4); //prevent Casinopolis Race
+	WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI. (we will manually call it.)
 
 	WriteCall((void*)0x4616d5, FixVictoryTailsVoice); //Prevent Tails's victory voice to play... when not Tails, lol.
 	WriteCall((void*)0x4615b3, FixVictoryTailsVoice); //same
 	WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
+	
+	WriteCall((void*)0x47da24, AIRaceLoad_R);  //Swap Sonic Race AI Random. (any character)
 
-	WriteCall((void*)0x47d961, IsFastSonicAI_R); //call Fast Sonic during Custom Sonic Races.
 
 }
 
@@ -86,3 +162,4 @@ void MetalSonicRace_Init()
 		break;
 	}
 }
+

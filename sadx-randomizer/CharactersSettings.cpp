@@ -53,12 +53,20 @@ void character_settings_onFrames() {
 }
 
 
-int SetAmyWinPose()
-{
-	if (CurrentCharacter != Characters_Amy || CurrentAI == Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || CurrentCharacter == Characters_Amy && (CustomLayout >= 2 || CurrentLevel == LevelIDs_SandHill))
+int SetAmyWinPose() {
+
+	switch (CurrentCharacter)
+	{
+	case Characters_Amy:
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_EmeraldCoast && CustomLayout == 1 || CustomLayout >= 2)
+			return 42;
+		else
+			return 32;
+		break;
+	default:
 		return 42;
-	else
-		return 32;
+		break;
+	}
 }
 
 
@@ -163,14 +171,6 @@ void SuperSonicStuff() {
 		SonicRand = 0;
 	}
 
-	if (CurrentLevel < LevelIDs_Chaos0)
-	{
-		if (CurrentLevel >= LevelIDs_SkyDeck && CurrentLevel < 13 && CurrentLevel != LevelIDs_IceCap)
-		{
-			FreeCam = 1;
-			SetCameraMode_(FreeCam);
-		}
-	}
 
 	if (GameMode != 9)
 	{

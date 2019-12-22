@@ -9,37 +9,84 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
+extern bool Race;
 
 void CasinoAct4() {
 
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
-
+	if (CurrentAct == 1)
+	{
 		switch (CustomLayout)
 		{
 		case 0:
-			LoadSetFile(0, "0900"); //M1
-			break;
 		case 1:
-			CustomLayout = 0;
-			LoadSetFile(0, "0900"); //M1
+			Race = true;
+			LoadSetFile(0, "0900"); //M1 Race
+			LoadSetFile(1, "0901"); //M1 Race
+
+			if (CurrentCharacter == Characters_Sonic)
+			{
+				if (MetalSonicFlag == 0)
+				{
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+				}
+				else
+				{
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
+				}
+			}
+
+			if (CurrentCharacter == Characters_Knuckles)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+
+			if (CurrentCharacter == Characters_Amy)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+
+			if (CurrentCharacter == Characters_Gamma)
+				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+			CustomLayout = 1;
 			break;
 		case 2:
+			Race = false;
 			LoadSetFile(0, "0905"); //M2
+			LoadSetFile(1, "0901"); //M2
 			break;
 		case 3:
-			if (CurrentAct == 1)
-			{
-				CustomLayout = 2;
-				LoadSetFile(0, "0905"); //M2
-				return;
-			}
-			else
-				LoadSetFile(0, "0904"); //M3
-
+			Race = false;
+			LoadSetFile(0, "0905"); //M2
+			LoadSetFile(1, "0901"); //M2
+			CustomLayout = 2;
 			break;
 		}
+	}
+
+	if (CurrentAct == 0)
+	{
+		switch (CustomLayout)
+		{
+		case 0:
+		case 1:
+		default:
+			Race = false;
+			LoadSetFile(0, "0900"); //M1
+			LoadSetFile(1, "0901"); //M1 
+			break;
+		case 2:
+			Race = false;
+			LoadSetFile(0, "0905"); //M2
+			LoadSetFile(1, "0901"); //M2
+			break;
+		case 3:
+			Race = false;
+			LoadSetFile(0, "0904"); //M3
+			LoadSetFile(1, "0901"); //M3
+			break;
+		}
+	
+	}
+
+	return;
 	
 }
 
@@ -48,7 +95,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 {
 	//Initiliaze data
 
-	WriteCall((void*)0x422ef4, CasinoAct4);
+	WriteCall((void*)0x422f03, CasinoAct4);
 	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic

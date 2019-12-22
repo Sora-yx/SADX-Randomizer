@@ -129,10 +129,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 void RedMountainAct4() {
 
 
-	//CustomLayout = randomizedSets[levelCount].layout;
-	CustomLayout = 3;
+	CustomLayout = randomizedSets[levelCount].layout;
 
-	
 	if (CurrentAct == 1)
 	{
 
@@ -156,21 +154,13 @@ void RedMountainAct4() {
 
 	if (CurrentAct == 0)
 	{
-
 		switch (CustomLayout)
 		{
 		case 0:
+		case 1:
+		case 2:
 			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0501");
-			return;
-			break;
-		case 1:
-			LoadSetFile(0, "0500");
-			LoadSetFile(1, "0501"); 
-			break;
-		case 2: //100 Rings
-			LoadSetFile(0, "0500");
-			LoadSetFile(1, "0501"); 
 			break;
 		case 3: //Lost Chao
 			LoadSetFile(0, "0504");
@@ -181,9 +171,6 @@ void RedMountainAct4() {
 
 	return;
 }
-
-
-
 
 
 
