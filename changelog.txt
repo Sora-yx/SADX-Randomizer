@@ -1,0 +1,216 @@
+V2.0
+
+Welcome to the new randomized update! The mod got a complete refactoring, take a look!
+
+General:
+- The RNG is now generated as soon as you start the game, this should fix a lot of previous bugs.
+- You don't need a specific number of emblems to finish a story anymore, everything is based on beating a specific number of stage and boss. No more frustration if you missed those 50 rings.
+- Speedruners can now get splits depending on the seed used. To do that, simply select the Randomizer in SADX Mod manager, click on "Configure..." then select which category you would like splits for. Then click on "Save & Play" The splits will be generated at the root of the game folder.
+- SA2 Randomized Missions are here, you can now randomly get a special goal for a stage. For example, you will have to find a lost Chao, or collect 100 rings and more! get ready for a new experience!
+- All the stages have been reworked to improve the experience.
+- Randomized AI is now possible, a random character will follow you just like like Tails follows Sonic.
+- You can swap the character with the AI in most of the area, just like in Sonic Heroes, by pressing the Y button. Keep in mind that it doesn't work with Big, Gamma and Knuckles atm.
+- The Randomizer mod is now compatible with Dreamcast Conversion mod and SADX Fixed Edition. Make sure to put the Randomzer at the bottom of the mod list to avoid any conflict.
+- Random music has been improved, Unused music files in SADX have been added to the song list, there is also a new option called "consistent music".
+- A summary of the current options has been added to the character select menu.
+- If you play on PC disc (PC 2004), you can now soft reset during the credits (alt+f2) without losing your progression, this should make All Stories faster.
+- You will now get a "Final Statistics" at the end of a run, it will display few stuff like your number of kills, hits etc.
+
+New Stage/Character combination:
+- Twinkle Circuit has been added, you can now get a different version of this stage, which aren't available in the game originally. (Unused game files.)
+- Amy's Final Egg has been added for every character.
+- Big's Hot Shelter has been added for every character.
+- Gamma's Windy Valley has been added for every character.
+- Gamma's Red Mountain has been added for every character.
+- Gamma's Emerald Coast has been added for every character.
+- Tails's Sky Deck has been added for every character.
+- Tails's Windy Valley has been added for every character.
+- Tails's Speed Highway has been added for every character, you will have to race Eggman as well, except for Big.
+
+Bug fixes:
+
+- The rocket in Tails's Casinopolis as Big has been fixed.
+- Gamma should now longer get bumped after hitting egg viper. (This is a different fix than the original bump which has been fixed in the previous update.)
+- Fixed a bug where RNG wasn't the same for people using the same seed. (oops lol.)
+- Fixed a bug where Sonic Layout was taking priority over the actual character after a while, making some stages impossible to beat. (oops lol.)
+- Fixed a bug where Zero was spawning Twice.
+- Zero should no longer spawn in the Sonic version of Final Egg.
+- Randomizer should now display the correct goal for each mission.
+
+For more information, please read the FAQ! (You can find it in the mod folder.)
+
+
+V1.3
+
+General:
+
+    You can now randomize music and voices! Select the mod in SADX ModManager and click on 'Configure...' then check the option for more fun!
+    Level layouts improvement, as usual.
+    100% aesthetic, but Amy's bird now spawns in every stage.
+    Zero will now spawn with every character.
+    You can now disable a character from the roster, time to do a Big solo run boys! (Because of technical limitation, you will get the same character twice (or more) in a row if you disable any character.)
+    You can now change the camera in Sand Hill.
+    Added an option to manage Amy and Big acceleration.
+    Added an option to set 2000G as a weight record.
+
+New Character / Stage combination:
+
+    Super Sonic has been added as a playable character, if the Randomizer select Sonic, you now have a chance to get Super Sonic instead.
+    Chaos 6 fight has been added for every character.
+    Perfect Chaos fight has been added for Sonic, Tails Knuckles and Amy.
+    Tails's Casinopolis has been added for every character.
+    Big's Hot Shelter has been added for Amy.
+    Sonic's Ice Cap Act 2 and 3 as Big has been added.
+    Sonic's Sky Deck as Tails has been added.
+    Sonic's Twinkle Park Act 2 as Gamma has been added.
+    Sonic will now race Eggman in Tails's Speed Highway.
+
+Bug fixes:
+
+    All the stages should now have functional kill planes. (Make sure your Sadx Mod Manager is up to date.)
+    Restarting will no longer send you at the very beginning of a stage (about damn time, yeah yeah I know.)
+    Gamma will no longer infinite hover on Egg Viper fight, that was cheating after all.
+    Hot Shelter act 2 music should now play correctly as Big.
+    
+    
+
+V1.2.2
+
+General:
+
+    It should now be impossible to get a boss fight twice in a row.
+    It should now be impossible to get the same character twice in a row.
+    Level layouts improvement.
+
+New Character / Stage combination:
+
+    Amy's Twinkle Park act 2 and 3 as Sonic has been added.
+    Amy's Twinkle Park act 3 has been added as a random act for every character.
+    Speed Highway now contains act 2 and 3.
+
+Bug fixes:
+
+Sonic
+
+    It should now be impossible to get Emerald Coast act 1 if "disable regular stages option" is activated.
+
+Tails
+
+    You can now finish Speed Highway normally, fun is allowed again.
+
+
+
+V1.2.1
+
+General:
+
+    You can now collect Emblem as Metal Sonic. (You will see Sonic during result screen, this is normal.)
+    You will now always get an Emblem as Big for Mission B and A. (Weight is forced at 2000g.)
+
+New Character / Stage combination:
+
+    Tails's Casinopolis as Sonic has been added.
+
+Bug fixes:
+
+Tails
+
+    Egg Hornet's area as Tails should now have rings.
+
+Amy
+
+    Fixed a bug that was teleporting Amy to a black hole in Hot Shelter.
+
+V1.2
+
+General:
+
+    The way the randomizer works has been changed, this should fix random hub world teleportation.
+    Random acts are now available! You can now randomly get Big's Emerald Coast, Hot Shelter Gamma version and Speed Highway Act 2.
+    It should now be impossible to get the same level twice in a row.
+    Getting a Game Over should no longer change the RNG.
+    You can now do an all stories! Credits will start after 10, 16, 22, 26, 31, 37 and 39 Emblems.
+    The title screen "randomizer" logo has been updated.
+    The titlecard while a stage load has been updated.
+    Made Stability Improvements.
+    Some levels layout improvements.
+
+New Character / Stage combination:
+
+    Metal Sonic has been added as a playable character, if the randomizer select Sonic, you now have a chance to get Metal Sonic instead.
+    Amy's Hot Shelter as Big has been added.
+    Sonic's Emerald Coast as Gamma has been added.
+    Big's Emerald Coast as Sonic has been added.
+    Tails's Speed Highway as Sonic has been added.
+    Speed Highway Act 2 and 3 as a Random Act has been added.
+    Gamma's Hot Shelter as a Random Act has been added.
+    Emerald Coast Act 2 has been added for Tails.
+    Red Mountain has been added for Tails.
+    Red Mountain Act 2 has been added for every characters.
+    Ice Cap Act 3 has been added for Tails, Knuckles and Amy.
+    Sonic's Twinkle Park Act 2 has been added for every characters.
+
+Character change:
+
+    Gamma's Time limit has been increased by 3 min, which means you will now have 6 min to finish a stage.
+
+Bug fixes:
+Tails
+
+    Fixed a bug that was giving you Sand Hill and Egg Hornet despite the "disable regular level" option was enabled.
+
+Knuckles
+
+    Fixed a bug that was showing a black screen when playing Sky Deck, Hot Shelter and Red Mountain.
+
+Big
+
+    Ice Cap and Egg Viper as Big have been banned. (for real this time.)
+    Others:
+    The game will no longer crash if you let the demo play.
+    Final Egg's doors are now random again.
+    The in-game timer should now display properly.
+
+V1.1
+General:
+
+    You can no longer be randomly teleported to the Hedgehog Hammer, no more infinite loop, yes!
+    A lot of crashes have been fixed.
+    Added an option to disable the regular stages. When enabled, you'll never get character/stage combination that are normally possible.
+    Kill plane are now functional, which means you will die if you fall in the void. No more falling into the darkness forever, no more cheating either huhu.
+    Adjustment for a lot of stages.
+    Sky Deck act 1 is now a little bit longer with Amy and Big, the first rocket won't send you very far away.
+
+New Level / combination:
+
+    Sonic's Final Egg as Gamma and Amy has been added.
+    Amy's Final Egg as Sonic has been added.
+    Sonic's Windy Valley as Gamma has been added.
+
+Characters fix:
+
+Gamma:
+
+    Gamma can now beat Amy's Hot Shelter, he was tired of having no object in the Act 2 so he finally decided to add everything, what a good robot.
+    Taking Final Egg's elevator at the end of the act 2 will no longer softlock Gamma.
+    Casinopolis Pinball as Gamma has been removed to avoid softlock. Reminder, You don't need to get 400 rings, you can just take the rocket and get the capsule on top.
+    Added the Laser Blaster upgrade.
+
+Big:
+
+    Egg Viper as Big has been removed, Big prefers fish in the end.
+    Windy Valley act 2's last spring has been fixed, you can now finish Windy Valley as Big, woah epic.
+    Emerald Coast is now a little bit longer with Big, rockets won't send you as far as they used to.
+    Lost World act 2's last spring has been fixed, you can now finish Lost World as Big, yeah!
+    Added the Power Rod upgrade, because epic skin.
+
+Amy:
+
+    Ice Cap with Amy should be a little bit easier.
+    Added the Warrior Feather upgrade.
+
+Knuckles:
+
+    Fixed a bug that prevented you from finishing a Knuckles stage. Fun is now allowed again.
+    Sky Deck act 3 has been added.
+    Lost World act 2 has been fixed.
