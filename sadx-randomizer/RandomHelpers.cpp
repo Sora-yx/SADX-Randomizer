@@ -112,9 +112,9 @@ short randomacts(RandomizedEntry entry) {
 	case LevelIDs_Casinopolis:
 		if (entry.character == Characters_Sonic)
 			return 1;
-		if (entry.character == Characters_Tails)
+		if (entry.character == Characters_Tails || entry.character == Characters_Big)
 			return 0;
-		if (entry.character != Characters_Sonic && entry.character != Characters_Tails)
+		if (entry.character != Characters_Sonic && entry.character != Characters_Tails && entry.character != Characters_Big)
 			return act0[rand() % 3];
 		break;
 	case LevelIDs_HotShelter:

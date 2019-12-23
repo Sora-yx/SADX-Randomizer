@@ -36,7 +36,6 @@ void character_settings_onFrames() {
 			PhysicsArray[Characters_Big].MaxAccel = 5;
 
 		return;
-
 	}
 
 	if (CurrentLevel == 38 || CurrentLevel == 8 && CurrentAct == 2)
@@ -108,11 +107,17 @@ void LoadCharacter_r()
 	if (CurrentCharacter != Characters_Sonic)
 		MetalSonicFlag = 0;
 
+	if (CurrentLevel >= LevelIDs_SkyDeck && CurrentLevel < 13 && CurrentLevel != LevelIDs_IceCap)
+	{
+		FreeCam = 1;
+		SetCameraMode_(FreeCam);
+	}
+
+
 	if (CurrentCharacter == Characters_Amy || CurrentAI == Characters_Amy)
 	{
 		CheckLoadBird();
 	}
-
 
 	CheckRace();
 

@@ -10,6 +10,9 @@ extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
 extern bool Race;
+extern int CurrentAI;
+extern bool isAIActive;
+
 
 void CasinoAct4() {
 
@@ -21,31 +24,41 @@ void CasinoAct4() {
 		{
 		case 0:
 		case 1:
-			Race = true;
-			LoadSetFile(0, "0900"); //M1 Race
-			LoadSetFile(1, "0901"); //M1 Race
-
-			if (CurrentCharacter == Characters_Sonic)
+			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
 			{
-				if (MetalSonicFlag == 0)
-				{
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-				}
-				else
-				{
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
-				}
+				LoadSetFile(0, "0900"); //M1 Race
+				LoadSetFile(1, "0901"); //M1 Race
+				CurrentAct = 0;
+				CustomLayout = 0;
 			}
+			else
+			{
+				Race = true;
+				LoadSetFile(0, "0900"); //M1 Race
+				LoadSetFile(1, "0901"); //M1 Race
 
-			if (CurrentCharacter == Characters_Knuckles)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+				if (CurrentCharacter == Characters_Sonic)
+				{
+					if (MetalSonicFlag == 0)
+					{
+						help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+					}
+					else
+					{
+						help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
+					}
+				}
 
-			if (CurrentCharacter == Characters_Amy)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+				if (CurrentCharacter == Characters_Knuckles)
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
 
-			if (CurrentCharacter == Characters_Gamma)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
-			CustomLayout = 1;
+				if (CurrentCharacter == Characters_Amy)
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+
+				if (CurrentCharacter == Characters_Gamma)
+					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+				CustomLayout = 1;
+			}
 			break;
 		case 2:
 			Race = false;

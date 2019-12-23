@@ -303,6 +303,15 @@ void FixAISFXSonic() {
 		PlaySound(0x2fa, 0, 0, 0);
 		return;
 
+
+
+}void FixShowerCasino() {
+
+	if (isAIActive)
+		return;
+
+	ForcePlayerAction(0, 0x28); //Shower
+
 }
 
 void FixAISFXJump() {
@@ -649,8 +658,6 @@ void AISwitch() {
 				obj2->Speed = speed;
 				obj2->ObjectHeld = heldobj;
 
-
-
 				//initialize swap, taking AI information
 				ObjectMaster* AI = GetCharacterObject(1);
 				CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
@@ -740,6 +747,8 @@ void LoadTails_AI_Original() {
 }
 
 void AIAudioFixes() {
+
+	WriteCall((void*)0x5cf22f, FixShowerCasino); //Prevent crash after chara swap
 
 	//(there is probably a nicer way to do this, but I have no clue how)
 

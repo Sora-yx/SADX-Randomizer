@@ -8,7 +8,6 @@ void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunct
 {
 	//Initiliaze data
 
-
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EH_StartPositions[0]);
 

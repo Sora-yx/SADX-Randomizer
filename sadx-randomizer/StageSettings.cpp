@@ -6,6 +6,7 @@
 #include "RandomHelpers.h"
 #include "Trampoline.h"
 
+
 HelperFunctions extern help;
 
 extern bool RNGStages;
@@ -58,6 +59,9 @@ void DisableTimeStuff() {
 	if (CurrentLevel != LevelIDs_TwinkleCircuit)
 		AddCustomFlag(); //credits check
 
+	if (CurrentCharacter == Characters_Tails && (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_IceCap || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck))
+		SetTailsRaceVictory();
+
 	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark && CurrentCharacter != Characters_Amy) //Move AI to player 1 if we are not racing.
 	{
 		ObjectMaster* play1 = GetCharacterObject(0);
@@ -77,7 +81,6 @@ void DisableTimeStuff() {
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
-
 			ForcePlayerAction(1, 19); //Force AI to Victory pose
 			dword_3B2A304 = 0;
 		}
@@ -166,6 +169,11 @@ void Set_Zero() {
 
 void TwinkleCircuitResult() {
 
+	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
+		LastStoryFlag = 1;
+	else
+		LastStoryFlag = 0;
+
 	CustomFlag++;
 	GameMode = GameModes_Adventure_Field;
 	Rings = 0;
@@ -198,6 +206,8 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 
 	ResetTime();
 }
+
+
 
 void BackRing() { //swap capsule
 
@@ -259,7 +269,7 @@ void ICAct3Position() {
 
 	SetTextureToLevelObj();
 
-	if (CurrentCharacter > 2)
+	if (CurrentCharacter >= 2)
 	{
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 		{
@@ -287,12 +297,6 @@ void HurtsStat() {
 	Set0Rings();
 }
 
-int JumpStat() {
-
-	JumpCount++;
-	return 1;
-
-}
 
 void KillStat() {
 

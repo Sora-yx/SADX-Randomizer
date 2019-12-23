@@ -63,7 +63,7 @@ void CheckRace() {
 				isAIActive = false;
 				Race = true;
 				AICourse = Levels2P_SpeedHighway;
-				LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI); 
+				//LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI); 
 				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
 			}
 		case LevelIDs_SkyDeck:

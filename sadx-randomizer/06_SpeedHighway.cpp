@@ -10,7 +10,9 @@ extern bool Race;
 extern bool Missions;
 extern int levelCount;
 
+
 void CamSpeedHighway() {
+
 
 	if (CustomLayout == 1)
 	{

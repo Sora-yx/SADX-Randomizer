@@ -8,20 +8,18 @@ HelperFunctions extern help;
 extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
+extern int CurrentAI;
 
 void ICAct4() {
-
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
 		switch (CustomLayout)
 		{
 		case 0:
-			LoadSetFile(1, "0801"); //M1
-			break;
 		case 1:
-			CustomLayout = 0;
 			LoadSetFile(1, "0801"); //M1
+			CustomLayout = 0;
 			break;
 		case 2:
 			LoadSetFile(1, "0801"); //M2

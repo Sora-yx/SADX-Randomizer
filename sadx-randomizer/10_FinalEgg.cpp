@@ -14,7 +14,6 @@ void FinalEggAct4() {
 	CustomLayout = randomizedSets[levelCount].layout;
 
 
-
 	/*if (CurrentAct == 2)
 	{
 		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.

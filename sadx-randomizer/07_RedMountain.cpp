@@ -10,7 +10,9 @@ extern bool Missions;
 extern int levelCount;
 
 
+
 void CamRedMountain() {
+
 
 	if (CustomLayout == 1)
 	{
@@ -49,7 +51,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0501S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0503S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-E102.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Tails-RM-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500S.bin", "system\\cam\\CAM0500S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501S.bin", "system\\cam\\CAM0501S.bin");
@@ -161,10 +163,14 @@ void RedMountainAct4() {
 		case 2:
 			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0501");
+			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
+			WriteData<1>((void*)0x6027cb, 0x74); //restore original
 			break;
 		case 3: //Lost Chao
 			LoadSetFile(0, "0504");
 			LoadSetFile(1, "0501"); 
+			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
+			WriteData<1>((void*)0x6027cb, 0x74); //restore original
 			break;
 		}
 	}

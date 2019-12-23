@@ -16,7 +16,6 @@ extern int levelCount;
 void HotShelterAct4() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
-
 	//act 1 Amy/Big Version
 
 

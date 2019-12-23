@@ -17,11 +17,12 @@ extern int levelCount;
 
 void ECAct4() {
 
-	if (CurrentAct != 2)
-		randomizedSets[levelCount].layout;
+	if (CurrentAct == 0)
+		CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 2)
 		CustomLayout = 5; //Froggy
+
 
 	switch (CustomLayout)
 	{
@@ -52,12 +53,30 @@ void ECAct4() {
 		}
 		break;
 	case 2:
-		LoadSetFile(0, "0100"); 
-		LoadSetFile(1, "0101"); //M2
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0104"); //M1 Gamma Version
+			LoadSetFile(1, "0101");
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "0100");
+			LoadSetFile(1, "0101"); //M2
+		}
 		break;
 	case 3:
-		LoadSetFile(0, "0100"); 
-		LoadSetFile(1, "0103"); //M3
+		if (CurrentCharacter == Characters_Sonic)
+		{
+			LoadSetFile(0, "0104"); //M1 Gamma Version
+			LoadSetFile(1, "0101");
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "0100");
+			LoadSetFile(1, "0103"); //M3
+		}
 		break;
 	}
 

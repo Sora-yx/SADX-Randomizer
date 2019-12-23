@@ -16,6 +16,7 @@ void WindyValleyAct4() {
 
 
 	CustomLayout = randomizedSets[levelCount].layout;
+	CustomLayout = 3;
 
 	if (CurrentAct == 2)
 	{
@@ -35,7 +36,6 @@ void WindyValleyAct4() {
 			LoadSetFile(1, "0201");
 			LoadSetFile(2, "0206"); //race
 			CustomLayout = 1;
-
 			if (CurrentCharacter == Characters_Sonic)
 			{
 				if (MetalSonicFlag == 0)
@@ -61,7 +61,7 @@ void WindyValleyAct4() {
 	}
 
 
-	if (CurrentAct == 0)
+	if (CurrentAct == 0 || CurrentAct == 1)
 	{
 		switch (CustomLayout)
 		{

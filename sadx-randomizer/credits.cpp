@@ -100,7 +100,7 @@ CreditsEntry CreditsText_list[] = {
 	{ 2, -1, 0, 0, "HELP" },
 	{ 3, -1, 0, 0, "Raytwo, Kell, MainMemory" },
 	{ 2, -1, 0, 0, "RANDOMIZER BETA TESTER" },
-	{ 3, -1, 0, 0, "Astreachan, Yarlick" },
+	{ 3, -1, 0, 0, "Astreachan, Refrag, Niczur, GuyStreamsStuff" },
 	{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
 	{ 3, -1, 0, 0, "Deaths" },
 	{ 3, -1, 0, 0, "" },
