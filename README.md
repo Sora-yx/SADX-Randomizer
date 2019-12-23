@@ -15,7 +15,7 @@ Installation:
 
 Set up the mod:
 
-1) Download and Install [SADX MOD manager](http://mm.reimuhakurei.net/sadxmods/SADXModLoader.7z) (If you are using the Steam version, do not use that link, you must install [PKR's installer](https://dcmods.unreliable.network/owncloud/data/PiKeyAr/files/Setup/sadx_setup.exe), which will also install the Mod Manager.)
+1) Download and Install [SADX Mod Loader](http://mm.reimuhakurei.net/sadxmods/SADXModLoader.7z) (If you are using the Steam version, do not use that link, you must install [PKR's installer](https://dcmods.unreliable.network/owncloud/data/PiKeyAr/files/Setup/sadx_setup.exe), which will also install the Mod Loader.)
 2) Copy the "Randomizer" folder in the "mods" folder from your SADX folder.
 3) You can configure the mod by selecting different settings. Open the SADX mod manager, select "Randomizer" in the Mods list, then Click on "Configure..." It is recommended to keep "have all upgrades" activated, since upgrades help to finish some specific stage or boss.
 4) If you want to race with a friend, make sure both of you are using the same "seed" in the settings, also make sure the seed used is different than "0". (0 makes the rng always different, when using another number makes it consistent.)
@@ -26,5 +26,4 @@ Once you are done with the settings (randomize music, disable characters...) Sta
 A story ends once you beat a specific number of stages, which now include bosses, depending on the character selected.  
 Enjoy!
 
-If you need any help, or want to leave a feedback, feel free to join the Sonic Adventure Series Randomizer Discord:
-https://discord.gg/BBrEg5K
+If you need any help, or want to leave a feedback, feel free to join the [Sonic Adventure Series Randomizer Discord](https://discord.gg/BBrEg5K).
