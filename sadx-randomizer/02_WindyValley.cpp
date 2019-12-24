@@ -16,7 +16,6 @@ void WindyValleyAct4() {
 
 
 	CustomLayout = randomizedSets[levelCount].layout;
-	CustomLayout = 3;
 
 	if (CurrentAct == 2)
 	{
