@@ -36,6 +36,7 @@ Bug fixes:
 - Fixed a bug where Zero was spawning Twice.
 - Zero should no longer spawn in the Sonic version of Final Egg.
 - Randomizer should now display the correct goal for each mission.
+- Credits should no longer start when you pick a new story.
 
 For more information, please read the FAQ! (You can find it in the mod folder.)
 
