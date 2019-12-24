@@ -88,10 +88,12 @@ short randomacts(RandomizedEntry entry) {
 			return act1[rand() % 3];
 		break;
 	case LevelIDs_TwinklePark:
-		if (entry.character == Characters_Sonic || entry.character == Characters_Gamma)
+		if (entry.character == Characters_Sonic)
 			return 1;
 		if (entry.character == Characters_Amy)
 			return 0;
+		if (entry.character == Characters_Gamma)
+			return rand() % 2 + 1; //act 2 and 3
 		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma && entry.character != Characters_Amy)
 			return actHS[rand() % 2];
 		break;

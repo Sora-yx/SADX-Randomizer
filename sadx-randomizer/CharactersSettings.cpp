@@ -152,10 +152,13 @@ static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
 	}
 
 }
+
 static void SuperSonicManager_Load()
 {
 	ObjectMaster* obj = LoadObject(static_cast<LoadObj>(0), 2, SuperSonicManager_Main);
 }
+
+
 
 
 extern int CustomLayout;
@@ -378,9 +381,14 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
+HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
+
 void set_character_hook() {
 
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
+
+	/*if (SSMod)
+		WriteJump(reinterpret_cast<void*>(0x004496E1), SomethingAboutWater2); //Cancel Super Sonic Float, restore original code*/ //seem like it works, but need more test for now.
 
 	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
 	WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''

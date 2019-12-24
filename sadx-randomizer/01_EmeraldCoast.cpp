@@ -23,6 +23,7 @@ void ECAct4() {
 	if (CurrentAct == 2)
 		CustomLayout = 5; //Froggy
 
+	SonicRand = 1;
 
 	switch (CustomLayout)
 	{

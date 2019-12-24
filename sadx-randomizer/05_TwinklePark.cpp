@@ -32,17 +32,26 @@ void TwinkleParkAct4() {
 
 	if (CurrentAct == 2)
 	{
-		switch (CustomLayout)
+		if (CurrentCharacter == Characters_Amy)
 		{
-		case 0:
-		case 1:
-			LoadSetFile(1, "0305"); //Amy TP version 
-		case 2:
-			LoadSetFile(1, "0303"); //M3 Version
-			break;
-		case 3:
-			LoadSetFile(1, "0303"); //M3 Version
-			break;
+			LoadSetFile(1, "0301");
+			CurrentAct = 0;
+		}
+		else
+		{
+			switch (CustomLayout)
+			{
+			case 0:
+			case 1:
+				LoadSetFile(1, "0305"); //Amy TP version 
+				break;
+			case 2:
+				LoadSetFile(1, "0303"); //M2 Version
+				break;
+			case 3:
+				LoadSetFile(1, "0303"); //M3 Version
+				break;
+			}
 		}
 
 	}
@@ -70,6 +79,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0302S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act3.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0303S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0305S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Amy.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300S.BIN", "system\\cam\\CAM0300S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");

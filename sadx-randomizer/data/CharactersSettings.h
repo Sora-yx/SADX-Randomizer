@@ -39,7 +39,7 @@ void FixAISFXAmy3();
 void FixAISFXAmy4();
 void FixAISFXAmy5();
 void FixAISFXAmy6();
-
+VoidFunc(SomethingAboutWater2, 0x4497b6);
 
 int GetCharacter0ID();
 int GetCharacter1ID();

@@ -215,6 +215,7 @@ void SetLevelAndAct_Original(char level, char act);
 
 
 VoidFunc(CutsceneFlagData, 0x431430);
+
 VoidFunc(PauseQuitThing2, 0x413f70);
 VoidFunc(FUN_00424830, 0x424830);
 void QuitPauseEndLevel();
