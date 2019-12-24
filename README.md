@@ -27,7 +27,10 @@ Note: If you are using the Dreamcast Mod, make sure to update it first.
 How to use:
 
 Once you are done with the settings (randomize music, disable characters...) Start the game, create a new savefile and select Sonic, then enjoy the show! 
-A story ends once you beat a specific number of stages, which now include bosses, depending on the character selected.  
-Enjoy!
+A story ends once you beat a specific number of stages, which now include bosses, depending on the character selected.
+
+For more information, please check the "README" in the mod folder.
 
 If you need any help, or want to leave a feedback, feel free to join the [Sonic Adventure Series Randomizer Discord](https://discord.gg/BBrEg5K).
+
+Enjoy!
