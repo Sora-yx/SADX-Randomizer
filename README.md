@@ -4,6 +4,8 @@ Sonic Adventure DX Randomizer is a mod for the PC Disc and Steam version (with P
 
 Dreamcast Mod is now fully compatible with Randomizer, as long as the Rando is loaded AFTER DC mod. Which means it should be at the end of your mod list.
 
+You can now swap Character and AI by pressing the Y button, just like in Sonic Heroes.
+
 Note: You can change the settings according to your play style. (sa2 missions, disable a character, speed...)
 
 Download
