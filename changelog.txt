@@ -30,7 +30,7 @@ New Stage/Character combination:
 Bug fixes:
 
 - The rocket in Tails's Casinopolis as Big has been fixed.
-- Gamma should now longer get bumped after hitting egg viper. (This is a different fix than the original bump which has been fixed in the previous update.)
+- Gamma should no longer get bumped after hitting egg viper. (This is a different fix than the original bump which has been fixed in the previous update.)
 - Fixed a bug where RNG wasn't the same for people using the same seed. (oops lol.)
 - Fixed a bug where Sonic Layout was taking priority over the actual character after a while, making some stages impossible to beat. (oops lol.)
 - Fixed a bug where Zero was spawning Twice.
