@@ -5,10 +5,10 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
-extern int CustomLayout;
-extern bool Race;
 extern bool Missions;
 extern int levelCount;
+extern bool Race;
+extern int CustomLayout;
 
 
 void CamSpeedHighway() {
@@ -17,13 +17,15 @@ void CamSpeedHighway() {
 	if (CustomLayout == 1)
 	{
 		LoadCamFile(0, "0403");
-		return;
 	}
 	else
 	{
 		LoadCamFile(0, "0400");
-		return;
 	}
+
+	LoadCamFile(1, "0401");
+	LoadCamFile(2, "0402");
+	return;
 }
 
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -32,8 +34,14 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 
 	WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
 	WriteCall((void*)0x610272, SHAct2Position); //teleport player during SH act 2.
-	WriteCall((void*)0x422cdf, CamSpeedHighway); //SH cam fix
-	WriteCall((void*)0x422cb5, SpeedHighwayAct4); //SH random layout
+
+	WriteData<5>((void*)0x422cb5, 0x90);
+	WriteData<5>((void*)0x422cc4, 0x90);
+	WriteData<5>((void*)0x422cd3, 0x90);
+	WriteData<5>((void*)0x422cdf, 0x90);
+	WriteData<5>((void*)0x422cee, 0x90);
+
+	WriteCall((void*)0x422cfd, SpeedHighway_Layout); //SH random layout
 
 	SHObjects_Init(path, helperFunctions);
 
@@ -128,7 +136,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SH3_StartPositions[0]);
 }
 
-void SpeedHighwayAct4() {
+void SpeedHighway_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
@@ -165,16 +173,15 @@ void SpeedHighwayAct4() {
 		}
 		else
 		{
-			LoadSetFile(0, "0400"); //don't load Tails version if character is Tails or Big. 
+			LoadSetFile(0, "0400"); 
 			Race = false;
 			CustomLayout = 0;
-			break;
 		}
 		break;
 	case 1:
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails)
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big. 
 		{
-			LoadSetFile(0, "0400"); //load Tails layout
+			LoadSetFile(0, "0400"); //load Tails layout (
 			Race = false;
 			CustomLayout = 0;
 		}
@@ -256,6 +263,11 @@ void SpeedHighwayAct4() {
 		LoadSetFile(0, "0404"); //load Sonic layout
 		break;
 	}
+
+	LoadSetFile(1, "0401");
+	LoadSetFile(2, "0402");
+	CamSpeedHighway();
+	return;
 }
 
 

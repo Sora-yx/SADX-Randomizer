@@ -5,7 +5,8 @@ VoidFunc(BigHoldingFroggy, 0x48cce4);
  void SetGammaTimer();  //force to 6 min instead of 3
  void BigWeightHook(); //force to 2000g
 
-
+ extern int CurrentAI;
+ extern int CustomLayout;
 
  void AllUpgrades();
  void FixCharacterSFX();
@@ -29,6 +30,8 @@ DataPointer(int, BigWeight, 0x3C52510);
 void FixVictoryTailsVoice();
 void set_character_hook();
 void character_settings_onFrames();
+int AmyCartImprovement();
+
 
 void FixAISFXJump();
 
@@ -43,4 +46,7 @@ VoidFunc(SomethingAboutWater2, 0x4497b6);
 
 int GetCharacter0ID();
 int GetCharacter1ID();
+
 void ResultVoiceFix();
+
+void Load_Cart_R();

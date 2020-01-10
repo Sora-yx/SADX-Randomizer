@@ -6,6 +6,7 @@
 #include "CharactersSettings.h"
 #include "Utils.h"
 
+extern short toto;
 
 //global Randomizer value settings
 int StorySplits;
@@ -21,9 +22,10 @@ int SonicCD = 0;
 bool Missions = true;
 bool Any = true;
 bool Viper = false;
-extern int CustomLayout;
 extern bool CreditCheck;
 extern int levelCount;
+
+extern short ChaoCryDelay;
 
 //Character settings
 bool Weight = true;
@@ -49,33 +51,20 @@ int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 //AI
 bool isAIAllowed = true;
 int SwapDelay = 150;
-extern int CurrentAI;
 extern bool isAIActive;
-bool isRaceAIRandom = false; //Sonic Race AI
 
 int CustomFlag = 0; //Used for progression story and credits
-
-//Credits stats
-int RageQuit = 0;
-int JumpCount = 0;
-int ringsPB = 0;
-int chaoPB = 0;
-int animalPB = 0;
-int killPB = 0;
-int hurtsPB = 0;
-int deathsPB = 0;
-int TotalDeathsPB = 0;
-int TotalHurtsPB = 0;
-int AISwapCount = 0;
+int CustomLayout = 0;
 
 int DCModWarningTimer = 0;
-int StatsTimer = 3000;
+int StatsTimer = 4000;
 
 extern CollisionInfo* oldcol;
-extern bool Race;
 int SeedCopy = 0;
 time_t t;
 
+extern int AIRace;
+extern bool Race;
 
 extern "C" {
 
@@ -119,8 +108,7 @@ extern "C" {
 		seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
 		Missions = config->getBool("Randomizer", "Missions", true);
-		Viper = config->getBool("Randomizer", "Viper", false);
-
+		
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
@@ -143,7 +131,8 @@ extern "C" {
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
-		isRaceAIRandom = config->getBool("RosterAI", "isRaceAIRandom", false);
+
+		Viper = config->getBool("Difficulty", "Viper", true);
 
 		delete config;
 
@@ -184,7 +173,6 @@ extern "C" {
 		LostWorld_Init(path, helperFunctions);
 		FinalEgg_Init(path, helperFunctions);
 		HotShelter_Init(path, helperFunctions);
-		SandHill_Init(path, helperFunctions);
 
 		//Boss
 		Chaos0_Init(path, helperFunctions);
@@ -239,10 +227,12 @@ extern "C" {
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 
 		//Stats & Value Reset
-		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
-
+		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.	
+		
 		//Stages Fixes
 
+		WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix crashes.)
+		
 		 //Zero Stuff
 		Set_Zero();
 
@@ -253,11 +243,14 @@ extern "C" {
 			//E101 Stuff
 		WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
 
+		//Perfect Chaos Stuff
+		WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
+		
 		//Sonic/Eggman Race Stuff
 		Race_Init();
 
 		WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-		
+
 		//SA2 Story Style, Hook all SetLevelandAct to make them random.
 
 		if (RNGStages == true) 
@@ -265,7 +258,7 @@ extern "C" {
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
 			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
-
+			
 			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
@@ -282,17 +275,17 @@ extern "C" {
 			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
 			//WriteCall((void*)0x413522, SetLevelGammaStory);*/
 
-			WriteCall((void*)0x4db051, TwinkleCircuitResult); //Twinkle Circuit Stuff
+			WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
+			WriteData<1>((void*)0x4DB0B2, 0x05);
+			WriteData<5>((void*)0x4db051, 0x90); 
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-			
 		}
 
-		//Splits + RNG generator
+		//RNG generator + Create splits.
 
-		if (StorySplits == 0)
+		if (!StorySplits)
 		{
 			split = 40;
-
 			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 
 				if (RNGCharacters)
@@ -310,9 +303,8 @@ extern "C" {
 
 				if (isAIAllowed)
 					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
-				
-				if (isRaceAIRandom)
-					randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+
+				randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 
 				if (randomizedSets[i].character == Characters_Sonic)
 				{
@@ -322,12 +314,14 @@ extern "C" {
 
 				TotalCount++;
 			}
+
 		}
 		else
 		{
 			//Splits Initialization 
 			Split_Init();
 		}
+
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -336,8 +330,8 @@ extern "C" {
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
 			SetDebugFontSize(11.8f * (unsigned short)VerticalResolution / 480.0f);
-			DisplayDebugString(NJM_LOCATION(2, 1), "Warning,");
-			DisplayDebugString(NJM_LOCATION(2, 2), "you are using the Dreamcast Conversion Mod / SADX FE,");
+			DisplayDebugString(NJM_LOCATION(2, 1), "Randomizer Mod Warning:");
+			DisplayDebugString(NJM_LOCATION(2, 2), "You are using the Dreamcast Conversion Mod / SADX FE,");
 			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
 			DCModWarningTimer--;
 		}
@@ -354,18 +348,24 @@ extern "C" {
 			else
 				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
 
+			if (Vanilla)
+				DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Allowed");
+			else
+				DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Banned");
+
 			switch (StorySplits)
 			{
 			case 1:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Sonic's Story");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
 				break;
 			case 2:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: All Stories");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
 				break;
 			case 3:
-				DisplayDebugString(NJM_LOCATION(2, 3), "Actual Splits: Any%");
+				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
 				break;
 			}
+
 
 		}
 
@@ -382,26 +382,7 @@ extern "C" {
 			{
 				if (GameState == 16)  //Pause Menu
 				{
-					//Display Current Mission Information
-					if (CurrentLevel < 15)
-					{
-						SetDebugFontSize(12.0f * (float)VerticalResolution / 480.0f);
-						if (CustomLayout <= 1 || CustomLayout > 3)
-							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M1 (Beat the Stage)");
-
-						if (CustomLayout == 2)
-							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M2 (100 Rings)");
-
-						if (CustomLayout == 3)
-							DisplayDebugString(NJM_LOCATION(2, 4), "Current Mission: M3 (Lost Chao)");
-					}
-
-					//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
-					if (PauseSelection == 3)
-						GameMode = GameModes_Adventure_Field;
-					else
-						GameMode = GameModes_Adventure_ActionStg;
-
+					PauseMenuFix();
 				}
 
 			if (GameState == 21 || GameState == 24 || GameState == 17)
@@ -436,6 +417,7 @@ extern "C" {
 			if (SwapDelay != 150)
 				SwapDelay++;
 
+			
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 				AISwitch();
 
@@ -451,9 +433,12 @@ extern "C" {
 				}
 			}
 
+
 			//Chao Mission 3 Check
 			if (CurrentLevel < 15 && CurrentMission == 1)
+			{
 				Chao_OnFrame();
+			}
 		}
 
 		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.

@@ -2,12 +2,14 @@
 #include "Utils.h"
 #include "Chaos0.h"
 #include "RandomHelpers.h"
+#include "Trampoline.h"
+
+
 
 
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
 
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Chaos0_StartPositions[0]);

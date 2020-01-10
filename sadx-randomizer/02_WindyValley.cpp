@@ -6,30 +6,19 @@
 
 
 HelperFunctions extern help;
-
 extern int CustomLayout;
 extern bool Race;
+
 extern bool Missions;
 extern int levelCount;
 
-void WindyValleyAct4() {
+void WindyValley_Layout() {
 
-
+	
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 2)
 	{
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //This scenario shouldn't be possible, but just in case.
-		{
-			LoadSetFile(0, "0200");
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			Race = false;
-			CurrentAct = 0;
-			CustomLayout = 0;
-		}
-		else
-		{
 			Race = true;
 			LoadSetFile(0, "0200");
 			LoadSetFile(1, "0201");
@@ -55,8 +44,6 @@ void WindyValleyAct4() {
 
 			if (CurrentCharacter == Characters_Gamma)
 				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
-		}
-
 	}
 
 
@@ -92,8 +79,9 @@ void WindyValleyAct4() {
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				break;
+				
 			}
+			break;
 		case 2:
 			if (CurrentCharacter == Characters_Sonic)
 			{
@@ -122,16 +110,18 @@ void WindyValleyAct4() {
 				LoadSetFile(0, "0200");
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0205"); //Lost Chao
-				break;
+				
 			}
+			break;
 		}
-
 
 	}
 
+	LoadCamFile(0, "0200");
+	LoadCamFile(1, "0201");
+	LoadCamFile(2, "0202");
 
 	return;
-
 }
 
 
@@ -140,8 +130,15 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 {
 	
 	//Initiliaze data
-	WriteCall((void*)0x422bfd, WindyValleyAct4); //WV
 	WVObjects_Init(path, helperFunctions);
+
+	WriteData<5>((void*)0x422bdf, 0x90);
+	WriteData<5>((void*)0x422bee, 0x90);
+	WriteData<5>((void*)0x422bfd, 0x90);
+	WriteData<5>((void*)0x422c09, 0x90);
+	WriteData<5>((void*)0x422c18, 0x90);
+
+	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0200S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act1.bin");

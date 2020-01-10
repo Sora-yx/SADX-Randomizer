@@ -4,16 +4,22 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-extern int CustomLayout;
+
 HelperFunctions extern help;
 extern bool Missions;
 extern int levelCount;
+extern int CustomLayout;
 
 //Random Act function
 
-void TwinkleParkAct4() {
+void TwinklePark_Layout() {
+
+	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
+	WriteData<1>((void*)0x7983c4, 0x7C);
 
 	CustomLayout = randomizedSets[levelCount].layout;
+
+	LoadSetFile(0, "0300");
 
 	if (CurrentAct <= 1)
 	{
@@ -32,13 +38,7 @@ void TwinkleParkAct4() {
 
 	if (CurrentAct == 2)
 	{
-		if (CurrentCharacter == Characters_Amy)
-		{
-			LoadSetFile(1, "0301");
-			CurrentAct = 0;
-		}
-		else
-		{
+
 			switch (CustomLayout)
 			{
 			case 0:
@@ -52,12 +52,16 @@ void TwinkleParkAct4() {
 				LoadSetFile(1, "0303"); //M3 Version
 				break;
 			}
-		}
 
 	}
 
-	return;
+	LoadSetFile(2, "0302");
 
+	LoadCamFile(0, "0300");
+	LoadCamFile(1, "0301");
+	LoadCamFile(2, "0302");
+
+	return;
 }
 
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -68,8 +72,17 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
 	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
+	//WriteData<1>((void*)0x798236, 0x03);
 
-	WriteCall((void*)0x422c59, TwinkleParkAct4); //TP random layout
+
+	WriteData<5>((void*)0x422c4a, 0x90);
+	WriteData<5>((void*)0x422c59, 0x90);
+	WriteData<5>((void*)0x422c68, 0x90);
+	WriteData<5>((void*)0x422c74, 0x90);
+	WriteData<5>((void*)0x422c83, 0x90);
+
+	WriteCall((void*)0x422c92, TwinklePark_Layout); //TP random layout
+
 
 	TPObjects_Init(path, helperFunctions);
 
@@ -127,7 +140,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0300A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act3.bin");
-	
 	
 	helperFunctions.ReplaceFile("system\\SET0303A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0304A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-ActSpecial.bin"); //not ready yet

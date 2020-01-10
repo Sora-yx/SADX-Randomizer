@@ -1,12 +1,18 @@
 #include "stdafx.h"
 #include "RandomHelpers.h"
+#include "chao.h"
 
 ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
+ObjectMaster* a2;
+ObjectMaster* chaoHint;
 
 uint8_t SelectedChao = 0;
+short ChaoCryDelay = 0;
 bool ArePvpLoaded = false;
 extern int chaoPB;
+bool ChaoSpawn = false;
+
 
 std::vector<NJS_PLANE> waterlist = {};
 
@@ -25,12 +31,15 @@ void ChaoObj_Animate(int id, int length) {
 	}
 }
 
+
+
 void ChaoObj_Delete(ObjectMaster* a1) {
 	DeleteObjectMaster(ChaoManager);
 	ChaoManager = nullptr;
-
+	chaoHint = nullptr;
 	CurrentChao = nullptr;
 	ChaoObject = nullptr;
+	a2 = nullptr;
 
 	//Release the chao textures
 	FreeChaoTexlists();
@@ -42,7 +51,7 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 
 void ChaoObj_Main(ObjectMaster* a1) {
 	uint8_t Action = a1->Data1->Action;
-
+	
 	if (Action == 0) {
 		if (!CurrentLandTable) return;
 
@@ -62,8 +71,6 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			ArePvpLoaded = true;
 		}
 
-		//ChaoManager_Load(); //Load chao behaviour (broken atm)
-
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		a1->Data1->Action = 1; //Wait a frame before loading the chao
 	}
@@ -82,10 +89,13 @@ void ChaoObj_Main(ObjectMaster* a1) {
 	else if (Action == 2) {
 		ChaoObj_Animate(2, 33); //animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
-
+		
 		//water height
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
+
+		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 400))
+			Chao_CrySound();
 
 		if (CurrentCharacter < 6)
 			if (IsPlayerInsideSphere(&a1->Data1->Position, 9)) { //hitbox
@@ -122,81 +132,177 @@ void Chao_Init() {
 	WriteJump((void*)0x715140, GetCurrentChaoStage_r);
 }
 
+short prevcry = -1;
+
+
+void Chao_CrySound() {
+
+	short cry = -1;
+	
+	if (!ChaoCryDelay)
+	{
+		do {
+			cry = rand() % 2;
+
+		} while (cry == prevcry);
+
+		if (!cry)
+			PlayVoice_R(5003);
+		else
+			PlayVoice_R(5002);
+
+		prevcry = cry;
+		ChaoCryDelay = 210;
+	}
+
+	return;
+}
+
+
+void TriggerObj(ObjectMaster* obj) {
+
+	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 100))
+		Chao_CrySound();
+}
+
+void ChaoCryHint() {
+	//LoadObject(Allocated Memory, Object List, Object Function)
+	//Memory: Data1 = EntityData1*; Data2 = EntityData2*, etc.
+	//List = ordre d'appel des objets (tous les objets 0 d'abord, puis les objets 1, etc.) 2 et 3 pour les objets de niveaux, 4 pour les enemies je crois.
+	//Function = chaque objet va appeler cette fonction, mais avec des données différentes.
+
+	if (!chaoHint && ChaoSpawn)
+	{
+		chaoHint = LoadObject(LoadObj_Data1, 2, TriggerObj);
+		chaoHint->Data1->Position = { 2810.905762, -442.8283997, -1126.383911 };
+		chaoHint->Data1->Scale.x = 50;
+	}
+}
+
+
 void Chao_OnFrame() {
-	if (!ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
-		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
 
-		NJS_VECTOR pos;
-		float Yrot;
+	if (ChaoCryDelay > 0)
+		ChaoCryDelay--;
 
-		//position for each levels
-		switch (CurrentLevel)
+	NJS_VECTOR pos;
+	float Yrot;
+
+	//position for each levels
+	switch (CurrentLevel)
+	{
+	case LevelIDs_EmeraldCoast:
+		if (CurrentAct == 1)
 		{
-		case LevelIDs_EmeraldCoast:
 			pos = { 3857.76, 597.395, -2896.18 };
-			//pos = { 10, 5, 0 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_WindyValley:
-			pos = { 4156.34, -4483, -1783 };
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_WindyValley:
+		if (CurrentAct == 2)
+		{
+			pos = { 4162.019, -4484, -1800 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_Casinopolis:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_Casinopolis:
+		if (CurrentAct == 0)
+		{
 			pos = { -361, 380, -40 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_IceCap:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_IceCap:
+		if (CurrentAct == 1)
+		{
 			pos = { 1480.62, 573.3, -256.67 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_TwinklePark:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_TwinklePark:
+		if (CurrentAct == 1)
+		{
 			pos = { 520, 1330, 1630 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_SpeedHighway:
-			pos = { 4455, -381.395, 2930.18 };
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_SpeedHighway:
+		if (CurrentAct == 0)
+		{
+			pos = { 4455, -385.135, 2930.18 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_RedMountain:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_RedMountain:
+		if (CurrentAct == 0)
+		{
 			pos = { -3861.85, 883.96, -2974.81 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_SkyDeck:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_SkyDeck:
+		if (CurrentAct == 0)
+		{
 			pos = { 448.18, -450, 3732.73 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_LostWorld:
-			pos = { 7410, -1964, 1316 };
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_LostWorld:
+		if (CurrentAct == 1)
+		{
+			pos = { 7410, -1965, 1316 };
 			Yrot = 0x8000;
-			break;
-		case LevelIDs_FinalEgg:
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_FinalEgg:
+		if (CurrentAct == 2)
+		{
 			pos = { 2660.566406, -2888.049561, -943.2208862 };
 			Yrot = 0x8000;
-			break;		
-		case LevelIDs_HotShelter:
-			if (CurrentAct == 2)
+			ChaoCryHint();
+			ChaoSpawn = true;
+		}
+		break;
+	case LevelIDs_HotShelter:
+		if (CurrentAct == 2)
+		{
+			pos = { 2.01, 3222, -3136 };
+			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
+		if (CurrentAct == 1)
+		{
+			ChaoSpawn = true;
+			HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
+			if (DCModChao)
 			{
-				pos = { 2.01, 3222, -3136 };
+				pos = { 716.4085693, 428.2105103, -2952.347412 };
 				Yrot = 0x8000;
 			}
 			else
 			{
-				HMODULE DCModChao = GetModuleHandle(L"DCMods_Main"); 
-				if (DCModChao)
-				{
-					pos = { 716.4085693, 428.2105103, -2952.347412 };
-					Yrot = 0x8000;
-				}
-				else
-				{
-					pos = { 716.4085693, 677.8605957, -2952.347412 };
-					Yrot = 0x8000;
-				}
-
+				pos = { 716.4085693, 677.8605957, -2952.347412 };
+				Yrot = 0x8000;
 			}
-			break;
 		}
+		break;
+	default:
+		ChaoSpawn = false;
+		break;
+	}
 
+	if (ChaoSpawn && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
+		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
+		
 		ChaoObject->Data1->Position = pos;
 		ChaoObject->Data1->Rotation.y = Yrot;
 	}

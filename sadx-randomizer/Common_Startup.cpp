@@ -2,13 +2,14 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 
-extern int CustomLayout;
 int GetCustomLayout;
+extern int CustomLayout;
 extern bool Race;
+extern int AIRace;
 
 HelperFunctions help;
 
-NJS_TEXNAME Missions[11];
+NJS_TEXNAME Missions[18];
 int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 
 void Set_MusicVoices() {
@@ -39,14 +40,16 @@ void Set_MusicVoices() {
 		WriteCall((void*)0x59a107, RandomMusic); //hook hot shelter music part 5
 		WriteCall((void*)0x59a157, RandomMusic); //hook hot shelter music part 6
 		WriteCall((void*)0x59a177, RandomMusic); //hook hot shelter music part 7
-		WriteCall((void*)0x59a197, RandomMusic); //hook hot shelter music part 8
+		WriteCall((void*)0x59a197, RandomMusic); //hook hot shelter music part 8 xd
 
 		WriteCall((void*)0x5adda7, RandomMusic); //Final Egg Song
 		WriteCall((void*)0x5ae144, RandomMusic); //Final Egg Song act 2
+		WriteCall((void*)0x5addd7, RandomMusic); //Final Egg Song act 2 part 2 
 		WriteCall((void*)0x5adf85, RandomMusic); //Final Egg Song act 3
 
 		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
 		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
+		WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
 	}
 }
 
@@ -74,66 +77,76 @@ void LoadStageMissionImage_r() {
 	CurrentMission = 0;
 
 	if (GetLevelType == 0) { //do the mission check here
-		//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails
+		//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
+
 		if (CurrentLevel > 14 && CurrentLevel < 40)
+			return;
+		if (CurrentLevel == LevelIDs_TwinkleCircuit)
 			return;
 
 		GetCustomLayout = CustomLayout;
 
-		if (CurrentLevel == LevelIDs_TwinkleCircuit)
-			return;
-
-		if (CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2 || CurrentLevel == LevelIDs_EmeraldCoast && CustomLayout == 1)
+		if (CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2 || CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 0 && CustomLayout == 1)
 			CurrentMission = 5;
 
 		if (CurrentLevel == LevelIDs_LostWorld && CustomLayout == 0)
 			CurrentMission = 6;
 
 		if (CurrentLevel == LevelIDs_FinalEgg)
+		{
 			if (CurrentCharacter == Characters_Amy)
 				CurrentMission = 10;
+
+			if (CustomLayout == 1)
+				CurrentMission = 0;
 			else
 				CurrentMission = 4;
+		}
 
 
 		if (CurrentCharacter == Characters_Big && GetCustomLayout == 0)
+		{
 			if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
+				CurrentMission = 0;
+			else if (CurrentLevel == LevelIDs_FinalEgg)
 				CurrentMission = 0;
 			else
 				CurrentMission = 5;
-
-		if (Race && CurrentLevel == LevelIDs_SkyDeck)
-		{
-			if (CurrentCharacter == Characters_Sonic)
-				CurrentMission = 11;
-			else
-				CurrentMission = 3;
-		}
-
-		if (Race && CurrentLevel == LevelIDs_Casinopolis)
-		{
-			if (CurrentCharacter == Characters_Sonic)
-				CurrentMission = 11;
-			else
-				CurrentMission = 3;
 		}
 
 
-		if (Race && CurrentLevel == LevelIDs_WindyValley)
+		if (Race && (CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2))
 		{
-			if (CurrentCharacter == Characters_Sonic)
-				CurrentMission = 11;
-			else
-				CurrentMission = 3;
+			switch (AIRace)
+			{
+				case Characters_Eggman:
+					CurrentMission = 16;
+					break;
+				case Characters_Tails:
+					CurrentMission = 11;
+					break;
+				case Characters_Knuckles:
+					CurrentMission = 12;
+					break;
+				case Characters_Tikal:
+					CurrentMission = 17;
+					break;
+				case Characters_Amy:
+					CurrentMission = 13;
+					break;
+				case Characters_Gamma:
+					CurrentMission = 15;
+					break;
+				case Characters_Big:
+					CurrentMission = 14;
+					break;
+				default:
+					CurrentMission = 3;
+					break;	
+			}	
 		}
 
-		if (Race && CurrentLevel == LevelIDs_IceCap)
-		{
-			if (CurrentCharacter == Characters_Sonic)
-				CurrentMission = 11;
-			else
-				CurrentMission = 3;
-		}
+
 
 		if (CurrentCharacter == Characters_Amy && (GetCustomLayout == 0 || GetCustomLayout == 1 && CurrentLevel == LevelIDs_RedMountain))
 			CurrentMission = 10;
@@ -242,18 +255,18 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	help = helperFunctions; //so we can use it everywhere
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3000.wma", "system\\voices\\SuperSonicTransformation.wma"); //Introduce Super Sonic voice transformation
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3001.wma", "system\\voices\\LoadAura.wma"); //Introduce Super Sonic Aura Sound.
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\2053.wma", "system\\voices\\StageLoad.wma"); //Introduce Stage Load Sound
+	//help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3000.wma", "system\\voices\\SuperSonicTransformation.wma"); //Introduce Super Sonic voice transformation
+	//help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3001.wma", "system\\voices\\LoadAura.wma"); //Introduce Super Sonic Aura Sound.
+	//help.ReplaceFile("system\\sounddata\\voice_us\\wma\\2053.wma", "system\\voices\\StageLoad.wma"); //Introduce Stage Load Sound
 
 	//helperFunctions.ReplaceFile("system\\ENDBG_SONIC_0.PVM", "system\\textures\\ENDBG_RANDOMIZER_0.pvmx"); //background credits
-	help.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.mp3"); //Introduce Stage Load Sound
+	help.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.mp3"); //Custom rando stats song
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4000.wma", "system\\voices\\SonicHereWeGo.wma"); //Introduce Sonic Switch
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4001.wma", "system\\voices\\TailsLeaveItToMe.wma"); //Introduce Tails Switch
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4002.wma", "system\\voices\\KnuxGotIt.wma"); //Introduce Knux Switch
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4003.wma", "system\\voices\\AmyHereWeGo.wma"); //Introduce Amy Switch
-	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4005.wma", "system\\voices\\EggmanSwap.wma"); //Introduce Amy Switch
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4005.wma", "system\\voices\\EggmanSwap.wma"); //Introduce Eggman Switch
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4010.wma", "system\\voices\\BigVictory.wma"); //Add Big Victory Stage voice
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\4011.wma", "system\\voices\\BigWouhou.wma"); //Add Big Victory Boss / other voice
@@ -262,9 +275,21 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5000.wma", "system\\voices\\Bounce.wma"); //Introduce Sonic bounce sfx
 
 	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5001.wma", "system\\voices\\BackRingHit.wma"); //Back Ring SFX
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5002.wma", "system\\voices\\ChaoCry1.mp3"); 
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5003.wma", "system\\voices\\ChaoCry2.mp3"); 
+
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5010.wma", "system\\voices\\Congratulations_Sonic.wma");
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5011.wma", "system\\voices\\Congratulations_Tails.wma");
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5012.wma", "system\\voices\\Congratulations_Knux.wma");
+	help.ReplaceFile("system\\sounddata\\voice_us\\wma\\5013.wma", "system\\voices\\Congratulations_Amy.wma");
 
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
+	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\TCAct3.BIN"); //TC act 4 fix
+	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\TCAct3.BIN");
+	WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); //test
 
+	/*WriteCall((void*)0x7983cc, AmyCartImprovement); //Improve Amy Cart TC
+	WriteCall((void*)0x797906, AmyCartImprovement); //Improve Amy Cart TP*/
 
 }
 
@@ -280,6 +305,7 @@ void TitleCard_Init() {
 void Set_BackRing() {
 
 	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
+
 
 	//capsule
 	WriteCall((void*)0x46adc2, BackRing);

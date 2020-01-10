@@ -1,14 +1,13 @@
 #pragma once
 #include "stdafx.h"
 
-
-
 extern struct RandomizedEntry randomizedSets[40];
 
 uint8_t getRandomCharacter(bool allow_duplicate = false);
 short getRandomStage(uint8_t char_id, bool ban_regular = false);
 short getRandomMusic(RandomizedEntry entry);
 bool isStageBanned(uint8_t char_id, short stage_id);
+bool isRegularStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void testRefactor(char stage, char act);
 void SetLevelGammaStory(char stage, char act);
@@ -42,14 +41,14 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 void Set_BackRing();
 
 extern int level[21];
-extern int AIArray[3];
+extern int AIArray[4];
 extern int AIRaceArray[8];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
 
-
+void Randomizer_Init();
 extern int character[6];
 extern int CharacterCopy;
 
@@ -61,6 +60,8 @@ extern int CurrentMission;
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
 void Chao_Init();
 void Chao_OnFrame();
+
+void PauseMenuFix();
 
 
 
@@ -94,6 +95,7 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 
+
 //Bosses
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Chaos2_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -113,13 +115,14 @@ void RandomVoice();
 void RandomMusic();
 
 void PlayMusic_R(MusicIDs song);
+void PlayVoice_R(int a1);
+void Chao_CrySound();
 
 void AddCustomFlag();
 void CustomFlagCheck(); //sa2 style
 int CustomFlagCheckSA1_R(); //sa1
 
 void CancelResetPosition();
-
 
 
 void LoadZero();
@@ -140,8 +143,9 @@ void FixRollerCoaster();
 
 //void RandomizerMission();
 void SHAct2Position();
-void ICAct3Position();
-void MetalSonicRace_Init();
+
+void ICAct3CutsceneSkip();
+void Reset_OriginalMusic();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
@@ -167,6 +171,7 @@ DataPointer(unsigned char, LevelList, 0x3B2C5F8);
 DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
 DataPointer(char, RNGDoor, 0x3C7457C);
 DataPointer(char, FirstHotShelterSwitch, 0x3c72a40);
+VoidFunc(Reset_HotShelterSwitch, 0x59a1b0);
 
 DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
@@ -204,19 +209,54 @@ void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod 
 void SetLevelAndAct_NoRNGStage(); //used if player select random chara without random level.
 void ResetTime_R();
+void LoadLevelFiles_R();
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
+
+
+
 DataPointer(char, TailsAdventureData, 0x3B1860E);
+DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
 DataPointer(char, SomethingAboutCredit, 0x3c83054);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
+
 FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
 void SetLevelAndAct_Original(char level, char act);
+VoidFunc(FUN_0042ce20, 0x42ce20); //Called with Delete Tails AI
 
+VoidFunc(CheckTC, 0x79a8e0);
 
 VoidFunc(CutsceneFlagData, 0x431430);
+VoidFunc(SkyDeckResetValue, 0x5ec790);
+VoidFunc(SomethingAboutMK2, 0x56b0c0);
+VoidFunc(SomethingAboutZeroBoss, 0x5875d0);
+VoidFunc(FUN_0040bda0, 0x40bda0);
+VoidFunc(FUN_0040be30, 0x40be30);
+VoidFunc(GetLevelCutscene, 0x413b20);
+void ICAct3Position();
 
 VoidFunc(PauseQuitThing2, 0x413f70);
 VoidFunc(FUN_00424830, 0x424830);
-void QuitPauseEndLevel();
 void SoftReset_R();
+void FixRestart_Cart();
+void Delete_Cart();
+void LoadCamFilePC_R();
+void ResetValueWhileLevelResult();
+void PlayRace_Music();
+void SongRace_Init();
+void AddRingSandHill();
+void fixTCCart();
+void preventCutscene();
+
+extern int RageQuit;
+extern int JumpCount;
+extern int ringsPB;
+extern int chaoPB;
+extern int animalPB;
+extern int killPB;
+extern int hurtsPB;
+extern int deathsPB;
+extern int TotalDeathsPB;
+extern int TotalHurtsPB;
+extern int AISwapCount;

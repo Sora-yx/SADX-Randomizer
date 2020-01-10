@@ -6,12 +6,12 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
-extern int CustomLayout;
-extern bool Race;
 extern bool Missions;
 extern int levelCount;
+extern bool Race;
+extern int CustomLayout;
 
-void SkyDeckAct4() {
+void SkyDeck_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
@@ -21,7 +21,7 @@ void SkyDeckAct4() {
 		if (CurrentCharacter == Characters_Sonic)
 		{
 			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout
+			LoadSetFile(0, "0605"); //load Tails layout-
 
 				if (MetalSonicFlag == 0)
 					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
@@ -65,22 +65,31 @@ void SkyDeckAct4() {
 		}
 		break;
 	case 2: //Rings
-		Race = false;
-		LoadSetFile(0, "0600"); //load 100 rings mission
-		break;
 	case 3: //Lost CHao
 		Race = false;
-		LoadSetFile(0, "0600"); //load Lost Chao mission
+		LoadSetFile(0, "0600"); 
 		break;
 	}
 
+	LoadSetFile(1, "0601"); 
+	LoadSetFile(2, "0602");
+
+	LoadCamFile(0, "0600");
+	LoadCamFile(1, "0601");
+	LoadCamFile(2, "0602");
 	return;
 }
 
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteCall((void*)0x422d90, SkyDeckAct4); //SD
+	WriteData<5>((void*)0x422d90, 0x90);
+	WriteData<5>((void*)0x422d9f, 0x90);
+	WriteData<5>((void*)0x422dae, 0x90);
+	WriteData<5>((void*)0x422dba, 0x90);
+	WriteData<5>((void*)0x422dc9, 0x90);
+
+	WriteCall((void*)0x422dd8, SkyDeck_Layout); //SD
 	SDObjects_Init(path, helperFunctions);
 
 
@@ -95,7 +104,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602S.bin", "system\\cam\\CAM0602S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD3_StartPositions[0]);
 

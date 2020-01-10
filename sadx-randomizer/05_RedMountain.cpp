@@ -13,17 +13,20 @@ extern int levelCount;
 
 void CamRedMountain() {
 
+	LoadCamFile(0, "0500"); 
 
 	if (CustomLayout == 1)
 	{
 		LoadCamFile(1, "0503"); //load the camera used for Gamma.
-		return;
 	}
 	else
 	{
 		LoadCamFile(1, "0501"); //load the camera used for Sonic.
-		return;
 	}
+
+	LoadCamFile(2, "0502");
+
+	return;
 }
 
 
@@ -41,8 +44,13 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
 	WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
 
-	WriteCall((void*)0x422d59, CamRedMountain); //RM cam fix
-	WriteCall((void*)0x422d2f, RedMountainAct4); //RM random act
+	WriteData<5>((void*)0x422d20, 0x90);
+	WriteData<5>((void*)0x422d2f, 0x90);
+	WriteData<5>((void*)0x422d3e, 0x90);
+	WriteData<5>((void*)0x422d4a, 0x90);
+	WriteData<5>((void*)0x422d59, 0x90);
+
+	WriteCall((void*)0x422d68, RedMountain_Layout); //RM random act
 
 	RMObjects_Init(path, helperFunctions);
 
@@ -128,7 +136,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 
 
-void RedMountainAct4() {
+void RedMountain_Layout() {
 
 
 	CustomLayout = randomizedSets[levelCount].layout;
@@ -174,7 +182,8 @@ void RedMountainAct4() {
 			break;
 		}
 	}
-
+	LoadSetFile(2, "0502"); //load Knux version
+	CamRedMountain();
 	return;
 }
 

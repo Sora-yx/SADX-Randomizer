@@ -8,9 +8,9 @@ extern bool Viper;
 
 
 void EggViperNerfHP() {
-	BossHP = 4;
-	EggViperHP = 4;
-	BossHP_Stuff(600, 0x18, 4);
+	BossHP = 5;
+	EggViperHP = 5;
+	BossHP_Stuff(600, 0x18, 5);
 }
 
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -62,25 +62,18 @@ void EggViperVoice() {
 		//WriteData<1>((void*)0x584c7f, 0x4); //restore original
 
 		if (CurrentCharacter == Characters_Sonic)
-		{
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\Haha_Sonic.wma"); //restore original voice
 
-		}
 
 		if (CurrentCharacter == Characters_Tails)
-		{
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\GiveUpTails.wma"); //"Give up now Tails"
-		}
 
 		if (CurrentCharacter == Characters_Knuckles)
-		{
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\NoUse.wma"); //"It's no use, give up." 
-		}
+
 
 		if (CurrentCharacter == Characters_Amy)
-		{
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\GiveUpAmy_424.wma"); //"Give up now Amy" (sa2 voice) 
-		}
 
 		if (CurrentCharacter == Characters_Big)
 		{
@@ -95,8 +88,6 @@ void EggViperVoice() {
 
 		if (CurrentCharacter == Characters_Gamma)
 			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\Useless.wma"); //"I'm so dissapointed; you useless machine!" 
-
-
 	}
 
 }
@@ -107,8 +98,6 @@ void BigEggViperPlatform() {
 	{
 		
 	}
-	
-
 }
 
 void FixEggViperCutscene() {

@@ -5,19 +5,24 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
-extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
+extern int CustomLayout;
+extern int CurrentAI;
 
-void LWAct4() {
-
+void LW_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
+
+	LoadSetFile(0, "0700"); 
 
 		switch (CustomLayout)
 		{
 		case 0:
 		case 1:
+			LoadSetFile(1, "0701"); //M1
+			CustomLayout = 0;
+			break;
 		case 2:
 			LoadSetFile(1, "0701"); //M1
 			break;
@@ -26,6 +31,12 @@ void LWAct4() {
 			break;
 		}
 
+		LoadSetFile(2, "0702");
+
+		LoadCamFile(0, "0700");
+		LoadCamFile(1, "0701");
+		LoadCamFile(2, "0702");
+		return;
 }
 
 
@@ -34,7 +45,14 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 {
 	//Initiliaze data
 	WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
-	WriteCall((void*)0x422e0a, LWAct4);
+
+	WriteData<5>((void*)0x422dfb, 0x90);
+	WriteData<5>((void*)0x422e0a, 0x90);
+	WriteData<5>((void*)0x422e19, 0x90);
+	WriteData<5>((void*)0x422e25, 0x90);
+	WriteData<5>((void*)0x422e34, 0x90);
+
+	WriteCall((void*)0x422e43, LW_Layout);
 	LWObjects_Init(path, helperFunctions);
 
 	//Sonic

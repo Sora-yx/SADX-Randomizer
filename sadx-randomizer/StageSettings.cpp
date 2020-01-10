@@ -10,33 +10,23 @@
 HelperFunctions extern help;
 
 extern bool RNGStages;
+extern bool Race;
 
 extern int CustomFlag;
 extern int TotalCount;
-extern int CustomLayout;
 extern bool isAIAllowed;
 extern bool isAIActive;
-extern bool Race;
-extern int CurrentAI;
+extern bool ChaoSpawn;
 extern int GetCustomLayout;
 bool GetBackRing = false;
 int RingCopy = 0; //Backring
-
-//Credits stats
-extern int ringsPB;
-extern int animalPB;
-extern int killPB;
-extern int hurtsPB;
-extern int deathsPB;
-extern int JumpCount;
-extern int TotalDeathsPB;
-extern int TotalHurtsPB;
+extern bool RandCongratsDone;
+bool IceCapCutsceneSkip = false;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-
-	if (GameMode != 9 && RNGStages == true)
+	if (GameMode != 9)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
@@ -47,11 +37,8 @@ void DisableTimeStuff() {
 		LastStoryFlag = 0;
 
 	TimeThing = 0;
-	SonicRand = 0;
+	ResetValueWhileLevelResult();
 	ringsPB += Rings; //total Rings credit stat
-	TotalDeathsPB += deathsPB; //total Death credit stat
-	TotalHurtsPB += hurtsPB; //total Death credit stat
-	GetBackRing = false;
 
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
@@ -77,7 +64,7 @@ void DisableTimeStuff() {
 			play1->Data1->CharID;
 
 
-			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && isAIActive == true)
+			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && (isAIActive == true || !Race))
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
@@ -91,6 +78,7 @@ void DisableTimeStuff() {
 			}
 
 	}
+
 
 		if (Race)
 		{
@@ -115,21 +103,39 @@ void DisableTimeStuff() {
 	return;
 }
 
+void ResetValueWhileLevelResult() {
+
+	SonicRand = 0;
+	ChaoSpawn = false;
+	GetBackRing = false;
+
+	if (CurrentLevel == LevelIDs_PerfectChaos)
+	{
+		WriteData<1>((void*)0x45BFCE, 0x01); //Restore original function tails hurt
+		WriteData<1>((void*)0x47360F, 0x01); //Restore original function knux hurt
+		WriteData<1>((void*)0x484FE3, 0x01); //Restore original function Amy hurt
+	}
+}
+
+void fixTCCart() {
+
+	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
+	WriteData<1>((void*)0x7983c4, 0x7C);
+}
 
 
-void HotShelterSecretSwitch() { //used for Big Hot Shelter as a wrong character for secret path.
+void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
 
 	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
 	{
 		SomethingAboutHotShelterSwitch = 1;
 	}
 
+	return;
 }
 
 
-
 void LoadZero() {
-
 
 	if (CurrentLevel == LevelIDs_HotShelter)
 		PressedSwitches_Reset();
@@ -145,7 +151,7 @@ void LoadZero() {
 		SetCameraControlEnabled(1);
 
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentCharacter != Characters_Sonic && CustomLayout != 1) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CustomLayout != 1) //don't load Zero if Sonic Layout
 		return;
 
 	if (CurrentCharacter != Characters_Amy)
@@ -166,8 +172,152 @@ void Set_Zero() {
 
 }
 
+ObjectMaster* CurrentCart = nullptr;
+
+void Load_Cart_R() {
+
+	ObjectMaster* play1 = GetCharacterObject(0);
+
+	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		if (play1 != nullptr && play1->Data1->CharID <= 2)
+			return; 
+
+	Delete_Cart();
+
+	LoadPVM("OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST);
+	CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
+
+	if (CurrentCart)
+	{
+		CurrentCart->Data1->Scale.y = 1; //Cart will spawn empty.
+
+		switch (CurrentCharacter)
+		{
+		case Characters_Gamma:
+			CurrentCart->Data1->Scale.x = 0;
+			CurrentCart->Data1->Scale.z = 2;
+			break;
+		case Characters_Big:
+			CurrentCart->Data1->Scale.x = 2;
+			CurrentCart->Data1->Scale.z = 1;
+			break;
+		default:
+			CurrentCart->Data1->Scale.z = 0;
+			break;
+		}
+
+
+		switch (CurrentLevel)
+		{
+		case LevelIDs_SandHill:
+			CurrentCart->Data1->Position = play1->Data1->Position;
+			CurrentCart->Data1->Rotation.y = 30300;
+			break;
+		default:
+			CurrentCart->Data1->Position = play1->Data1->Position;
+			break;
+		}
+	}
+	
+}
+
+
+
+void Delete_Cart()
+{
+
+	if (CurrentCart != nullptr)
+		DeleteObject_(CurrentCart);
+	
+	CurrentCart = nullptr;
+
+	ForcePlayerAction(0, 28);
+
+	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+			ForcePlayerAction(0, 0x18);
+}
+
+void FixRestart_Cart() //Prevent the game to crash if you restart while being in a custom cart.
+{
+	if (CurrentLevel == LevelIDs_IceCap)
+	{
+		if (CurrentCart != nullptr)
+			DeleteObjectMaster(CurrentCart);
+
+		CurrentCart = nullptr;
+		ForcePlayerAction(0, 28);
+	}
+
+	return; DisableControl();
+}
+
+/*
+void ICAct3CutsceneSkip() {
+
+	ObjectMaster* GetChara = GetCharacterObject(0);
+
+	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			TimeThing = 1;
+			EnableController(0);
+			PlayMusic(MusicIDs_icecap3);
+			IceCapCutsceneSkip = true;
+
+			if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
+			{
+				LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+				CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
+				LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
+				LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
+			}
+		}
+	}
+
+	return;
+}*/
+
+
+void ICAct3Position() {
+
+	ObjectMaster* GetChara = GetCharacterObject(0);
+
+	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			TimeThing = 1;
+			EnableController(0);
+			PlayMusic(MusicIDs_icecap3);
+			return PositionPlayer(0, -6674, -10025.23926, -1776);
+		}
+	}
+
+	return;
+}
+
+
+
+//Add rings every Checkpoint for cart speed.
+void AddRingSandHill() {
+
+	PlaySound(0x15, 0, 0, 0);
+
+	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > 2)
+		AddRings(10);
+
+	return;
+}
+
 
 void TwinkleCircuitResult() {
+
+	TCQuit = 1;
+	DisablePause();
+	ScreenFade_Timer = 0;
+	ScreenFade_Alpha = 0xff;
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
@@ -178,10 +328,8 @@ void TwinkleCircuitResult() {
 	GameMode = GameModes_Adventure_Field;
 	Rings = 0;
 	PauseQuitThing2();
-	ScreenFade_Start();
-	GameState = 0x11;
+	GameState = 0x5;
 }
-
 
 
 void FixRollerCoaster() {
@@ -190,6 +338,15 @@ void FixRollerCoaster() {
 	EntityData1* ent;
 	ent = obj->Data1;
 	obj->Data1->Action = 28; //force the character to leave the RC
+}
+
+int AmyCartImprovement() { 
+
+
+	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
+		return Characters_Sonic;
+	else
+		return CurrentCharacter;
 }
 
 
@@ -204,9 +361,8 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 			return;
 		}
 
-	ResetTime();
+	return ResetTime();
 }
-
 
 
 void BackRing() { //swap capsule
@@ -224,8 +380,6 @@ void BackRing() { //swap capsule
 		GameMode = GameModes_Adventure_Field; //GameMode = 5
 		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
 	}
-	
-
 }
 
 void BackRing2() { //swap Frog/Emerald etc.
@@ -247,10 +401,10 @@ void BackRing2() { //swap Frog/Emerald etc.
 
 		GameMode = GameModes_Adventure_Field;
 		GameState = 0xb;
+		return;
 	}
-	else
-		LoadLevelResults();
 
+	return LoadLevelResults();
 }
 
 
@@ -258,43 +412,39 @@ void BackRing2() { //swap Frog/Emerald etc.
 void SHAct2Position() {
 
 	if (CurrentCharacter != Characters_Sonic)
-		PositionPlayer(0, 10, -10000, 10);
+		return PositionPlayer(0, 10, -10000, 10);
 	else
-		ForcePlayerAction(0, 0x2b);
-	
+		return ForcePlayerAction(0, 0x2b);
 }
 
+void preventCutscene() {
 
-void ICAct3Position() {
-
-	SetTextureToLevelObj();
-
-	if (CurrentCharacter >= 2)
+	switch (CurrentLevel)
 	{
-		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		{
-			TimeThing = 1;
-			PlaySound(0xde, 0, 0, 0);
-			EnableController(0);
-			PlayMusic(MusicIDs_icecap3);
-			PositionPlayer(0, -6674, -8167, -1776);
-		}
+	case LevelIDs_RedMountain:
+		if (CurrentCharacter == Characters_Sonic || Characters_Tails)
+			return;
+		break;
+	case LevelIDs_EmeraldCoast:
+		if (CurrentCharacter == Characters_Tails)
+			return;	
+		break;
 	}
 
-	return;
+	return GetLevelCutscene();
 }
 
 
 void DeathsStat() {
 	//Hook used when you lose a live
 	deathsPB++;
-	GiveLives(0xffffffff);
+	return GiveLives(0xffffffff);
 }
 
 void HurtsStat() {
 	//Hook used when you lose your rings
 	hurtsPB++;
-	Set0Rings();
+	return Set0Rings();
 }
 
 
@@ -302,13 +452,14 @@ void KillStat() {
 
 	killPB++;
 	GetCharacterID(0);
-
+	return;
 }
 	
 void AnimalStat() {
 
 	animalPB++;
 	PlaySound(0x1c, 0, 0, 0);
+	return;
 }
 
 
@@ -320,5 +471,4 @@ void HookStats_Inits() {
 	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
-
 }

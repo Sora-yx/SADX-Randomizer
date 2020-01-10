@@ -5,24 +5,20 @@
 #include "Utils.h"
 
 
-
 extern int SonicCD;
 extern bool Mission;
 int CDSong = 0;
 int AIRace = -1;
-extern int CustomLayout;
-bool Race = false;
 extern bool isAIActive;
 extern int levelCount;
-extern bool isRaceAIRandom;
-
+bool Race = false;
 extern ObjectFuncPtr charfuncs[];
 HelperFunctions extern help;
 
 void AIRaceLoad_R() {
 
 	LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[AIRace]);
-}
+} 
 
 
 void CheckRace() {
@@ -34,18 +30,21 @@ void CheckRace() {
 	}
 	else
 	{
-		MetalSonicRace_Init();
-	
-		if (isRaceAIRandom && CurrentLevel != LevelIDs_SpeedHighway)
-			AIRace = randomizedSets[levelCount].ai_race;
-		else
+		
+		if (CurrentLevel != LevelIDs_SpeedHighway)
 		{
-			if (!CurrentCharacter && CurrentLevel != LevelIDs_SpeedHighway)
-				AIRace = Characters_Tails;
-			else
-				AIRace = Characters_Sonic;
+			AIRace = randomizedSets[levelCount].ai_race;
+
+			if (AIRace == CurrentCharacter) //prevent crash
+			{
+				if (CurrentCharacter == Characters_Sonic)
+					AIRace = Characters_Tails;
+				else
+					AIRace = Characters_Sonic;
+			}
 		}
 
+		
 		switch (CurrentLevel)
 		{
 		case LevelIDs_WindyValley:
@@ -66,6 +65,7 @@ void CheckRace() {
 				//LoadObject((LoadObj)(LoadObj_UnknownB | LoadObj_Data1), 0, Eggman2PAI); 
 				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
 			}
+			break;
 		case LevelIDs_SkyDeck:
 			if (CustomLayout == 1 && CurrentAct == 0)
 			{
@@ -103,15 +103,15 @@ void Race_Init() {
 	WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
 	
 	WriteCall((void*)0x47da24, AIRaceLoad_R);  //Swap Sonic Race AI Random. (any character)
-
-
 }
 
-void MetalSonicRace_Init()
-{
-	//help.ReplaceFile("system\\WINDY_BACK3.pvm", "system\\textures\\final-rush-bg.pvmx"); //swap WV background by final rush one
 
-	if (SonicCD == 0)
+
+void SongRace_Init()
+{
+	WriteCall((void*)0x61caad, PlayRace_Music); 
+
+	if (SonicCD == 0) //pick a random song depending
 	{
 		CDSong = rand() % 3;
 	}
@@ -130,7 +130,7 @@ void MetalSonicRace_Init()
 		{
 			help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\songs\\jp_cd_stardust-speedway-bad-future.wma");
 			help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\songs\\jp_cd_stardust-speedway-bad-future.wma");
-			
+			help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\songs\\jp_cd_stardust-speedway-bad-future.wma");
 		}
 		else
 		{
@@ -138,6 +138,7 @@ void MetalSonicRace_Init()
 			{
 				help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\songs\\us_cd_stardust_speedway_bad_future.wma");
 				help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\songs\\us_cd_stardust_speedway_bad_future.wma");
+				help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\songs\\us_cd_stardust_speedway_bad_future.wma");
 			}
 		}
 		break;
@@ -146,6 +147,7 @@ void MetalSonicRace_Init()
 		{
 			help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\songs\\jp_Gens_Stardust Speedway.wma");
 			help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\songs\\jp_Gens_Stardust Speedway.wma");
+			help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\songs\\jp_Gens_Stardust Speedway.wma");
 		}
 		else
 		{
@@ -153,13 +155,47 @@ void MetalSonicRace_Init()
 			{
 				help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\songs\\US_Gens_Stardust Speedway.wma");
 				help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\songs\\US_Gens_Stardust Speedway.wma");
+				help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\songs\\US_Gens_Stardust Speedway.wma");
 			}
 		}
 		break;
 	case 2: //if Mania Soundtrack Version
 		help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\songs\\mania_stardust_speedway-Boss.wma");
 		help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\songs\\mania_stardust_speedway-Boss.wma");
+		help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\songs\\mania_stardust_speedway-Boss.wma");
 		break;
 	}
+
+
 }
 
+void PlayRace_Music() {
+
+	switch (CurrentLevel)
+	{
+	case LevelIDs_WindyValley:
+		return PlayMusic_R(MusicIDs_WindyValleyWindyHill);
+		break;
+	case LevelIDs_Casinopolis:
+		return PlayMusic_R(MusicIDs_CasinopolisDilapidatedWay);
+		break;
+	case LevelIDs_SkyDeck:
+		return PlayMusic_R(MusicIDs_SkyDeckSkydeckAGoGo);
+		break;
+	}
+
+	return PlayMusic((MusicIDs)CurrentSong);
+}
+
+void Reset_OriginalMusic() {
+
+	//Restore original songs
+	help.ReplaceFile("system\\sounddata\\bgm\\wma\\wndyvly3.wma", "system\\sounddata\\bgm\\wma\\wndyvly3.wma");
+	help.ReplaceFile("system\\sounddata\\bgm\\wma\\skydeck1.wma", "system\\sounddata\\bgm\\wma\\skydeck1.wma");
+	help.ReplaceFile("system\\sounddata\\bgm\\wma\\casino2.wma", "system\\sounddata\\bgm\\wma\\casino2.wma");
+
+	if (RNGMusic)
+		WriteCall((void*)0x61caad, RandomMusic);
+	else
+		WriteCall((void*)0x61caad, PlayMusic);
+}

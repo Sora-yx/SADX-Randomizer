@@ -41,4 +41,3 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Zero_StartPositions[0]);
 
 }
-

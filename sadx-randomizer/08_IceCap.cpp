@@ -3,16 +3,35 @@
 #include "IceCap.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#include "CharactersSettings.h"
 
 HelperFunctions extern help;
-extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
 extern int CurrentAI;
 
-void ICAct4() {
+
+void IC_Layout() {
+
+	if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
+	{
+		WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
+		//WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
+
+		WriteData<5>((void*)0x4e9de1, 0x90); //Don't disable controller	
+		WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
+	}
+	else
+	{
+		WriteCall((void*)0x4e9415, DisableTimeThing); 
+		WriteCall((void*)0x4e9de1, DisableController); 
+		WriteData<1>((void*)0x4E9DE0, 0x04);
+		WriteCall((void*)0x4eda00, DisableController);
+	}
 
 	CustomLayout = randomizedSets[levelCount].layout;
+
+	LoadSetFile(0, "0800"); //M1
 
 		switch (CustomLayout)
 		{
@@ -28,18 +47,39 @@ void ICAct4() {
 			LoadSetFile(1, "0804"); //M3
 			break;
 		}
+		LoadSetFile(2, "0802"); //M1
+		LoadSetFile(3, "0803"); //M1
 
+		LoadCamFile(0, "0800");
+		LoadCamFile(1, "0801");
+		LoadCamFile(2, "0802");
+		LoadCamFile(3, "0803");
+
+		return;
 }
-
-
 
 
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteCall((void*)0x4ed633, ICAct3Position); //teleport player during IC act 3.
+
+
 	WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
-	WriteCall((void*)0x422e75, ICAct4);
+
+	WriteData<5>((void*)0x422e66, 0x90);
+	WriteData<5>((void*)0x422e75, 0x90);
+	WriteData<5>((void*)0x422e84, 0x90);
+	WriteData<5>((void*)0x422e93, 0x90);
+	WriteData<5>((void*)0x422e9f, 0x90);
+	WriteData<5>((void*)0x422eae, 0x90);
+	WriteData<5>((void*)0x422ebd, 0x90);
+	
+
+//	WriteCall((void*)0x4e95dc, Delete_Cart); //Force Character to leave Cart.
+	//WriteCall((void*)0x416ce3, FixRestart_Cart); //Force Character to leave Cart.
+
+
+	WriteCall((void*)0x422ecc, IC_Layout);
 
 	ICObjects_Init(path, helperFunctions);
 

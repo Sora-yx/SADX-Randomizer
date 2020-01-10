@@ -6,15 +6,13 @@
 #include "ActsSettings.h"
 
 HelperFunctions extern help;
-extern int CustomLayout;
 extern bool Missions;
 extern int levelCount;
-extern bool Race;
-extern int CurrentAI;
 extern bool isAIActive;
+extern bool Race;
+extern int CustomLayout;
 
-
-void CasinoAct4() {
+void Casino_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
@@ -28,7 +26,6 @@ void CasinoAct4() {
 			{
 				LoadSetFile(0, "0900"); //M1 Race
 				LoadSetFile(1, "0901"); //M1 Race
-				CurrentAct = 0;
 				CustomLayout = 0;
 			}
 			else
@@ -59,6 +56,7 @@ void CasinoAct4() {
 					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 				CustomLayout = 1;
 			}
+	
 			break;
 		case 2:
 			Race = false;
@@ -72,6 +70,12 @@ void CasinoAct4() {
 			CustomLayout = 2;
 			break;
 		}
+		LoadSetFile(2, "0902");
+		LoadSetFile(3, "0903");
+		LoadCamFile(0, "0900");
+		LoadCamFile(1, "0901");
+		LoadCamFile(2, "0902");
+		LoadCamFile(3, "0903");
 	}
 
 	if (CurrentAct == 0)
@@ -96,6 +100,12 @@ void CasinoAct4() {
 			LoadSetFile(1, "0901"); //M3
 			break;
 		}
+		LoadSetFile(2, "0902");
+		LoadSetFile(3, "0903");
+		LoadCamFile(0, "0900");
+		LoadCamFile(1, "0901");
+		LoadCamFile(2, "0902");
+		LoadCamFile(3, "0903");
 	
 	}
 
@@ -107,8 +117,15 @@ void CasinoAct4() {
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteData<5>((void*)0x422ef4, 0x90);
+	WriteData<5>((void*)0x422f03, 0x90);
+	WriteData<5>((void*)0x422f12, 0x90);
+	WriteData<5>((void*)0x422f21, 0x90);
+	WriteData<5>((void*)0x422f2d, 0x90);
+	WriteData<5>((void*)0x422f3c, 0x90);
+	WriteData<5>((void*)0x422f4b, 0x90);
 
-	WriteCall((void*)0x422f03, CasinoAct4);
+	WriteCall((void*)0x422f5a, Casino_Layout);
 	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic

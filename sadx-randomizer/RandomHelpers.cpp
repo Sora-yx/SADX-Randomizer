@@ -13,40 +13,41 @@ extern bool Missions;
 extern int ban;
 extern bool ConsistentMusic;
 int musicCount;
-extern int CurrentAI;
-extern bool Sonic;
-extern bool Tails;
-extern bool Knuckles;
-extern bool Amy;
-extern bool Big;
-extern bool Gamma;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
 extern int split;
 extern int TotalCount;
 extern bool isAIAllowed;
-extern bool isRaceAIRandom;
-extern bool Race;
 extern int GetCustomLayout;
 extern int StorySplits;
 extern int CustomFlag;
 extern bool isAIActive;
+extern bool ChaoSpawn;
+extern bool RandCongratsDone;
+extern bool Race;
 
-extern int RageQuit;
-extern int ringsPB;
-extern int TotalDeathsPB;
-extern int TotalHurtsPB;
-extern int deathsPB; //total Death credit stat
-extern int hurtsPB; //total Hits credit stat
+
+//Credits stats
+int RageQuit = 0;
+int JumpCount = 0;
+int ringsPB = 0;
+int chaoPB = 0;
+int animalPB = 0;
+int killPB = 0;
+int hurtsPB = 0;
+int deathsPB = 0;
+int TotalDeathsPB = 0;
+int TotalHurtsPB = 0;
+int AISwapCount = 0;
+
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[3] = { Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
+int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
 int AIRaceArray[8] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Knuckles, Characters_Tikal, Characters_Amy, Characters_Gamma, Characters_Big }; //Tails Race AI
-int CustomLayout;
+
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
-
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
@@ -58,7 +59,7 @@ int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggW
 int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
 int bannedRegularAmy[1] = { LevelIDs_Zero };
 int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
-int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
+int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero  };
 
 //Few jingle that we don't want in the random music function.
 int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
@@ -186,56 +187,88 @@ short getRandomAI(RandomizedEntry entry) {
 	do {
 		cur_AI = AIArray[rand() % ai_count];
 
-	} while (entry.character == cur_AI || cur_AI == prev_AI);
+	} while (cur_AI == prev_AI);
 	
 	prev_AI = cur_AI;
 	return cur_AI;
 }
 
-//Tails Race AI
-
 short getRandomRaceAI(RandomizedEntry entry) {
 
-	int8_t cur_AIRace = -1;
-	size_t aiRace_count = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
+	int8_t cur_RaceAI = -1;
+	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
 
-	if (entry.level == LevelIDs_SkyDeck || entry.level == LevelIDs_WindyValley || entry.level == LevelIDs_IceCap || entry.level == LevelIDs_Casinopolis)
-	{
+	cur_RaceAI = AIRaceArray[rand() % ai_Racecount];
 
-		do {
-			cur_AIRace = AIRaceArray[rand() % aiRace_count];
-
-		} while (entry.character == cur_AIRace);
-	}
-
-	return cur_AIRace;
+	return cur_RaceAI;
 }
+
+
+
 
 short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 
-
 	short cur_stage = -1;
 	AllowVanilla = Vanilla;
 
-
-if (AllowVanilla != true) {
-	do {
+	if (AllowVanilla != true) {
+		do {
 		cur_stage = level[rand() % LengthOfArray(level)];
-	} while (isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
-}
-else {
-	do {
-		cur_stage = level[rand() % LengthOfArray(level)];
-	} while (cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
+		} while (isRegularStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
+	}
+	else {
+		do {
+			cur_stage = level[rand() % LengthOfArray(level)];
+		} while (isStageBanned(char_id, cur_stage)  || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
 
-}
+	}
 
 	prev_stage = cur_stage;
 	return cur_stage;
 }
 
+
+bool isRegularStageBanned(uint8_t char_id, short stage_id) {
+	int* bannedVanillaStages = nullptr;
+	size_t arraySize = 0;
+
+	bool result;
+	switch (char_id) {
+	case Characters_Sonic:
+		bannedVanillaStages = bannedRegularSonic;
+		arraySize = LengthOfArray(bannedRegularSonic);
+		break;
+	case Characters_Tails:
+		bannedVanillaStages = bannedRegularTails;
+		arraySize = LengthOfArray(bannedRegularTails);
+		break;
+	case Characters_Knuckles:
+		bannedVanillaStages = bannedRegularKnuckles;
+		arraySize = LengthOfArray(bannedRegularKnuckles);
+		break;
+	case Characters_Amy:
+		bannedVanillaStages = bannedRegularAmy;
+		arraySize = LengthOfArray(bannedRegularAmy);
+		break;
+	case Characters_Gamma:
+		bannedVanillaStages = bannedRegularGamma;
+		arraySize = LengthOfArray(bannedRegularGamma);
+		break;
+	case Characters_Big:
+		bannedVanillaStages = bannedRegularBig;
+		arraySize = LengthOfArray(bannedRegularBig);
+		break;
+	default:
+		//If you reach this place, you're definitely doing something wrong
+		return false;
+		break;
+	}
+
+	result = isValueInArray(bannedVanillaStages, stage_id, arraySize);
+	return result;
+}
 
 bool isStageBanned(uint8_t char_id, short stage_id) {
 	int* bannedStages = nullptr;
@@ -243,32 +276,16 @@ bool isStageBanned(uint8_t char_id, short stage_id) {
 
 	bool result;
 	switch (char_id) {
-	case Characters_Sonic:
-		bannedStages = bannedRegularSonic;
-		arraySize = LengthOfArray(bannedRegularSonic);
-		break;
-	case Characters_Tails:
-		bannedStages = bannedRegularTails;
-		arraySize = LengthOfArray(bannedRegularTails);
-		break;
-	case Characters_Knuckles:
-		bannedStages = bannedRegularKnuckles;
-		arraySize = LengthOfArray(bannedRegularKnuckles);
-		break;
-	case Characters_Amy:
-		bannedStages = bannedRegularAmy;
-		arraySize = LengthOfArray(bannedRegularAmy);
-		break;
+
 	case Characters_Gamma:
-		bannedStages = bannedRegularGamma;
-		arraySize = LengthOfArray(bannedRegularGamma);
+		bannedStages = bannedLevelsGamma;
+		arraySize = LengthOfArray(bannedLevelsGamma);
 		break;
 	case Characters_Big:
-		bannedStages = bannedRegularBig;
-		arraySize = LengthOfArray(bannedRegularBig);
+		bannedStages = bannedLevelsBig;
+		arraySize = LengthOfArray(bannedLevelsBig);
 		break;
 	default:
-		//If you reach this place, you're definitely doing something wrong
 		return false;
 		break;
 	}
@@ -315,7 +332,6 @@ void testRefactor(char stage, char act) {
 	}
 
 	return;
-
 }
 
 
@@ -356,6 +372,7 @@ void GoToNextLevel_hook(char stage, char act) {
 
 void ResetStatsValues() {
 	isAIActive = false;
+	ChaoSpawn = false;
 	CurrentAI = 0;
 	SonicRand = 0;
 	CustomLayout = 0;
@@ -364,6 +381,13 @@ void ResetStatsValues() {
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat
 	Race = false;
+	RandCongratsDone = false;
+
+	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
+	WriteData<1>((void*)0x7983c4, 0x7C); 
+	WriteData<1>((void*)0x45BFCE, 0x01); //Restore original function tails hurt
+	WriteData<1>((void*)0x47360F, 0x01); //Restore original function knux hurt
+	WriteData<1>((void*)0x484FE3, 0x01); //Restore original function Amy hurt
 }
 
 //cancel the reset position at 0 after quitting a stage.
@@ -390,7 +414,7 @@ void SoftReset_R() {
 		PauseQuitThing2(); //Delete stuff correctly.
 	}
 
-	FUN_00412ad0();
+	return FUN_00412ad0();
 }
 
 //Fix Trial Mode 
@@ -412,11 +436,17 @@ void SetLevelAndAct_R() {
 
 //randomize voices
 void RandomVoice() {
+
 	if (VoicesEnabled != 0) {
 		CurrentVoiceNumber = rand() % 2043;
 	}
 
+	return;
+
 }
+
+short prev_music = -1;
+
 
 short getRandomMusic(RandomizedEntry entry) {
 
@@ -425,16 +455,19 @@ short getRandomMusic(RandomizedEntry entry) {
 		do {
 			cur_music = rand() % 125;
 
-		} while (isValueInArray(bannedMusic, cur_music, 29));
+		} while (cur_music == prev_music || isValueInArray(bannedMusic, cur_music, 29));
+
+
+		prev_music = cur_music;
 	
 		return cur_music;
 }
 
 
+
 void RandomMusic() {
 
 	if (Music_Enabled != 0) {
-
 
 		CurrentSong = randomizedSets[musicCount].music;
 		LastSong = CurrentSong;
@@ -450,6 +483,7 @@ void RandomMusic() {
 
 			musicCount = 0;
 		}
+
 	}
 
 	return;
@@ -469,6 +503,15 @@ void PlayMusic_R(MusicIDs song) {
 	return;
 }
 
+void PlayVoice_R(int a1) {
+
+	if (VoicesEnabled != 0) {
+		CurrentVoiceNumber = a1;
+	}
+
+	return;
+}
+
 
 void TwinkleCircuitMusic() {
 	if (Music_Enabled != 0) {
@@ -484,13 +527,42 @@ void TwinkleCircuitMusic() {
 
 }
 
+void PauseMenuFix() {
+
+	//Display Current Mission Information
+	if (CurrentLevel < 15)
+	{
+		SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
+		if (CustomLayout <= 1 || CustomLayout > 3)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Beat the Stage)");
+
+		if (CustomLayout == 2)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M2 (100 Rings)");
+
+		if (CustomLayout == 3)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M3 (Lost Chao)");
+	}
+
+	//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
+	if (PauseSelection == 3)
+		GameMode = GameModes_Adventure_Field;
+	else
+		GameMode = GameModes_Adventure_ActionStg;
+}
+
 void GetNewLevel() {
 
-	for (int i = 0; i < 40; i++) { //generate 40 new levels.
-		randomizedSets[i].character = getRandomCharacter();
-		randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-		randomizedSets[i].act = randomacts(randomizedSets[i]);
-		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+	for (int i = 0; i < 40; i++) { //generate 40 new levels. Used if you reach the maximum of level during a run.
+
+		if (RNGCharacters)
+			randomizedSets[i].character = getRandomCharacter();
+
+		if (RNGStages)
+		{
+			randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
+			randomizedSets[i].act = randomacts(randomizedSets[i]);
+			randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+		}
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -498,12 +570,12 @@ void GetNewLevel() {
 		if (isAIAllowed)
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
 
-		if (isRaceAIRandom)
-			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+		randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 
 		if (randomizedSets[i].character == Characters_Sonic)
 		{
 			randomizedSets[i].sonic_mode = rand() % 2;
+			randomizedSets[i].ss_mode = rand() % 2;
 		}
 
 
@@ -512,7 +584,9 @@ void GetNewLevel() {
 	}
 }
 
-void Split_Init() { //speedrunner split init.
+
+
+void Split_Init() { //speedrunner split init. Used when you start the game.
 
 		std::ofstream myfile("SADX_Randomizer_Splits.lss");
 		//Header
@@ -543,14 +617,11 @@ void Split_Init() { //speedrunner split init.
 
 		//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
 
-		int StageSplit = 0; //used to differentiate boss and normal stage.
-
 
 		for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number. 
 
 			if (RNGCharacters)
 				randomizedSets[i].character = getRandomCharacter();
-
 
 				if (RNGStages)
 				{
@@ -566,9 +637,7 @@ void Split_Init() { //speedrunner split init.
 			if (isAIAllowed)
 				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
 
-			if (isRaceAIRandom)
-				randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
-
+			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 
 			if (randomizedSets[i].character == Characters_Sonic)
 			{
@@ -594,4 +663,5 @@ void Split_Init() { //speedrunner split init.
 		myfile << "</Segments>\n<AutoSplitterSettings />\n</Run>";
 		myfile.close();
 
+		return;
 }

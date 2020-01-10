@@ -85,13 +85,13 @@
     <ClCompile Include="..\sadx-mod-loader\libmodutils\ModelInfo.cpp" />
     <ClCompile Include="01_EmeraldCoast.cpp" />
     <ClCompile Include="02_WindyValley.cpp" />
-    <ClCompile Include="03_Casino.cpp" />
-    <ClCompile Include="04_IceCap.cpp" />
-    <ClCompile Include="05_TwinklePark.cpp" />
-    <ClCompile Include="06_SpeedHighway.cpp" />
-    <ClCompile Include="07_RedMountain.cpp" />
-    <ClCompile Include="08_SkyDeck.cpp" />
-    <ClCompile Include="09_LostWorld.cpp" />
+    <ClCompile Include="09_Casino.cpp" />
+    <ClCompile Include="08_IceCap.cpp" />
+    <ClCompile Include="03_TwinklePark.cpp" />
+    <ClCompile Include="04_SpeedHighway.cpp" />
+    <ClCompile Include="05_RedMountain.cpp" />
+    <ClCompile Include="06_SkyDeck.cpp" />
+    <ClCompile Include="07_LostWorld.cpp" />
     <ClCompile Include="10_FinalEgg.cpp" />
     <ClCompile Include="12_HotShelter.cpp" />
     <ClCompile Include="AdventureFlags.cpp" />
@@ -108,6 +108,7 @@
     <ClCompile Include="EggWalker.cpp" />
     <ClCompile Include="LandTableInfo.cpp" />
     <ClCompile Include="mod.cpp" />
+    <ClCompile Include="PerfectChaos.cpp" />
     <ClCompile Include="Race.cpp" />
     <ClCompile Include="RandomHelpers.cpp" />
     <ClCompile Include="SandHill.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="data\IceCap.h" />
     <ClInclude Include="data\LW.h" />
     <ClInclude Include="data\RM.h" />
+    <ClInclude Include="data\SandHill.h" />
     <ClInclude Include="data\SD.h" />
     <ClInclude Include="data\SH.h" />
     <ClInclude Include="data\TP.h" />

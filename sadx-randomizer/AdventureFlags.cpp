@@ -4,8 +4,6 @@
 #include <fstream>
 #include <iostream>
 #include <string.h>
-
-
 #include "RandomHelpers.h"
 
 using namespace std;

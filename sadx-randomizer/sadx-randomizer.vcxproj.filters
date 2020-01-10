@@ -60,25 +60,7 @@
     <ClCompile Include="StageSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="08_SkyDeck.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="06_SpeedHighway.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EggViper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="04_IceCap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="05_TwinklePark.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="03_Casino.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="09_LostWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="10_FinalEgg.cpp">
@@ -88,9 +70,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="12_HotShelter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="07_RedMountain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EggHornet.cpp">
@@ -118,6 +97,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SandHill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="09_Casino.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="03_TwinklePark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="08_IceCap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="06_SkyDeck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="05_RedMountain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="04_SpeedHighway.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="07_LostWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfectChaos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\chao.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\SandHill.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

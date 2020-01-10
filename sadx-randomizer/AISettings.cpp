@@ -6,18 +6,17 @@
 #include <fstream>
 
 extern bool isAIAllowed;
-int CurrentAI = -1;
+extern bool Race;
+
 bool isAIActive = false;
 extern bool CreditCheck;
-
 int FlagAI = 0;
-extern bool Race;
 int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
 extern int SwapDelay;
-extern int CustomLayout;
 extern int levelCount;
+int CurrentAI = -1;
 
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -80,6 +79,13 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	switch (CurrentLevel)
 	{
+	case LevelIDs_IceCap: //potentail Tails crash
+		if (CurrentAct == 2)
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
 		case LevelIDs_SpeedHighway: //crash
 			if (CurrentAct == 1)
 			{
@@ -123,11 +129,10 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_Chaos0: //Crash if character is swap with AI
-			if (CurrentCharacter == Characters_Sonic)
-			{
-				isAIActive = false;
-				return 0;
-			}
+		{
+			isAIActive = false;
+			return 0;
+		}
 			break;
 		case LevelIDs_Chaos2: //Potential cutscene crash
 			if (CurrentCharacter == Characters_Knuckles)
@@ -575,12 +580,15 @@ void AISwitch() {
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
 
-			AISwapCount++; //Credit stat
+			
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
 			if (obj != nullptr && obj2 != nullptr)
 			{
+				if (obj->Data1->Action > 50 && obj->Data1->Action < 61) //Prevent Crash
+					return;
+
 				short powerups = obj2->Powerups;
 				short jumptime = obj2->JumpTime;
 				short underwatertime = obj2->UnderwaterTime;
@@ -588,7 +596,7 @@ void AISwitch() {
 				NJS_VECTOR speed = obj2->Speed;
 				ObjectMaster* heldobj = obj2->ObjectHeld;
 
-
+				AISwapCount++; //Credit stat
 				//Display Character swap.
 				obj->DeleteSub(obj);
 				obj->MainSub = charfuncs[CharaSwap];
@@ -776,6 +784,13 @@ void AIAudioFixes() {
 	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
 }
 
+//Reset value when AI is deleted
+void AI_ResetValue() {
+
+	isAIActive = false;
+	return FUN_0042ce20();
+}
+
 
 void AI_Init() {
 
@@ -783,10 +798,8 @@ void AI_Init() {
 	WriteCall((void*)0x47e943, CheckTailsAI_R);
 	WriteCall((void*)0x47ea46, CheckTailsAI_R);
 	WriteCall((void*)0x47ec62, CheckTailsAI_R);
-	WriteCall((void*)0x47ec62, CheckTailsAI_R);
 
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
-
-	//AI fixes
-	//WriteData<2>((void*)0x7A2061, 0x90u); //Make ballon working for everyone. (swap character)
+	WriteJump((void*)0x47db1a, AI_ResetValue);
 }
+

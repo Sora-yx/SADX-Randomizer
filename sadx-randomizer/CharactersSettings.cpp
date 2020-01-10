@@ -8,9 +8,8 @@ int SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
 extern int levelCount;
-extern int CustomLayout;
 
-extern int CurrentAI;
+
 extern bool CreditCheck;
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
@@ -18,34 +17,30 @@ extern bool isAIAllowed;
 bool BounceActive = false;
 extern bool RNGCharacters;
 extern bool GetBackRing;
-extern bool Race;
 
 extern bool AmySpeed;
 extern bool BigSpeed;
+extern bool IceCapCutsceneSkip;
 
 
 
 void character_settings_onFrames() {
 
 	
-	if (CurrentLevel != 38 && CurrentLevel != 8 && CurrentLevel != 0)
+	if (CurrentLevel != 38 || (CurrentLevel != 8 && CurrentAct != 2) || CurrentLevel != 0)
 	{
 		if (AmySpeed)
 			PhysicsArray[Characters_Amy].MaxAccel = 5;
 		if (BigSpeed)
 			PhysicsArray[Characters_Big].MaxAccel = 5;
-
-		return;
 	}
 
-	if (CurrentLevel == 38 || CurrentLevel == 8 && CurrentAct == 2)
+	if (CurrentLevel == 8 && CurrentAct == 2 && IceCapCutsceneSkip)
 	{
-		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Knuckles)
-		{
-			PhysicsArray[Characters_Amy].MaxAccel = 8;
-			PhysicsArray[Characters_Big].MaxAccel = 8;
-			return;
-		}
+		CharObj2Ptrs[0]->PhysicsData.FloorGrip = 10;
+		PhysicsArray[Characters_Amy].MaxAccel = 10;
+		PhysicsArray[Characters_Big].MaxAccel = 10;
+
 	}
 
 	return;
@@ -119,10 +114,12 @@ void LoadCharacter_r()
 		CheckLoadBird();
 	}
 
-	CheckRace();
+	if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_WindyValley)
+		CheckRace();
 
 	AllUpgrades();
 	Credits_State = 0;
+
 	LoadCharacter();
 
 	return;	
@@ -132,9 +129,10 @@ void LoadCharacter_r()
 void SuperAuraStuff() {
 
 	TimeThing = 0;
-	
+
 	if (CurrentCharacter != Characters_Sonic)
 	{
+		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 		CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
 		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
 		LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
@@ -142,7 +140,7 @@ void SuperAuraStuff() {
 	return;
 }
 
-//Initialize Super Sonic 
+//Initialize Super Sonic  (Credit: SonicFreak94).
 static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
 {
 	if (TransfoCount < 1)
@@ -161,13 +159,11 @@ static void SuperSonicManager_Load()
 
 
 
-extern int CustomLayout;
-
 HelperFunctions extern help;
 
-//Super Sonic Random transformation, used when the timer for a stage start. Also used to call some fixes. (Credit: SonicFreak94).
+//Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes. 
 
-void SuperSonicStuff() {
+void CallStuffWhenLevelStart() {
 
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
@@ -178,7 +174,6 @@ void SuperSonicStuff() {
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
-
 
 	if (GameMode != 9)
 	{
@@ -191,7 +186,7 @@ void SuperSonicStuff() {
 	//Banned SuperSonic Levels
 	if (CurrentCharacter == Characters_Sonic)
 	{
-		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
+		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		{
 			SonicRand = 0;
 			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
@@ -226,7 +221,7 @@ void SuperSonicStuff() {
 								bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
 								bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
 
-								//Super Sonic Transformation
+								//Super Sonic Transformation (Credit: SonicFreak94).
 
 								if (!transformation)
 								{
@@ -236,10 +231,7 @@ void SuperSonicStuff() {
 									PlayVoice(3001);
 									data2->Upgrades |= Upgrades_SuperSonic;
 									PlayMusic(MusicIDs_ThemeOfSuperSonic);
-									if (CurrentVoiceNumber != 3001)
-									{
-										PlayVoice(3000);
-									}
+
 									if (!TransfoCount++)
 									{
 										SuperSonicManager_Load();
@@ -418,13 +410,17 @@ void set_character_hook() {
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
-	WriteCall((void*)0x4167da, SuperSonicStuff); //Call Super Sonic when a stage start.
+	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 		//Amy Stuff
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-	WriteCall((void*)0x4879C2, SetAmyWinPose);
+	WriteCall((void*)0x4879C2, SetAmyWinPose); 
 	WriteData((char*)0x4879C1, (char)0x90);
+
+	WriteCall((void*)0x79ab84, AmyCartImprovement);
+	WriteCall((void*)0x79aa78, AmyCartImprovement);
+	WriteCall((void*)0x7979b9, AmyCartImprovement);
 }

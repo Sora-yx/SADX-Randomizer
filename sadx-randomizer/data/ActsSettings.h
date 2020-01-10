@@ -5,20 +5,19 @@
  //void randomacts();
 
 //Custom layout Act
-void ECAct4();
-void ICAct4();
-void CasinoAct4();
+void EC_Layout();
+void IC_Layout();
+void Casino_Layout();
  void TwinkleCircuitMusic();
- void TwinkleParkAct4();
- void SpeedHighwayAct4();
- void RedMountainAct4();
- void HotShelterAct4();
- void WindyValleyAct4();
- void SkyDeckAct4();
- void LWAct4();
- void FinalEggAct4();
+ void TwinklePark_Layout();
+ void SpeedHighway_Layout();
+ void RedMountain_Layout();
+ void HotShelter_Layout();
+ void WindyValley_Layout();
+ void SkyDeck_Layout();
+ void LW_Layout();
+ void FinalEgg_Layout();
 
- void SHAct4();
 
 
 //Camera fixs.

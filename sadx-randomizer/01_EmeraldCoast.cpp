@@ -9,61 +9,59 @@
 //void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions) 
 
 HelperFunctions extern help;
-extern int CustomLayout;
-extern bool Race;
 extern bool Missions;
 extern int levelCount;
+extern int CustomLayout;
 
 
-void ECAct4() {
+void EC_Layout() {
 
-	if (CurrentAct == 0)
-		CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 2)
-		CustomLayout = 5; //Froggy
+		CustomLayout = 1;
+	else
+		CustomLayout = randomizedSets[levelCount].layout;
 
-
+	
 	switch (CustomLayout)
 	{
 	case 0:
 		if (CurrentCharacter == Characters_Sonic)
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
-			LoadSetFile(1, "0101");
 			CustomLayout = 1;
 		}
 		else
 		{
 			LoadSetFile(0, "0100"); //M1 Sonic Version
-			LoadSetFile(1, "0101");
 		}
+
+		LoadSetFile(1, "0101");
 		break;
 	case 1:
 		if (CurrentCharacter == Characters_Gamma)
 		{
 			LoadSetFile(0, "0100"); 
-			LoadSetFile(1, "0101"); 
 			CustomLayout = 0;
 		}
 		else
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
-			LoadSetFile(1, "0101"); 
 		}
+
+		LoadSetFile(1, "0101");
 		break;
 	case 2:
 		if (CurrentCharacter == Characters_Sonic)
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
-			LoadSetFile(1, "0101");
 			CustomLayout = 1;
 		}
 		else
 		{
 			LoadSetFile(0, "0100");
-			LoadSetFile(1, "0101"); //M2
 		}
+		LoadSetFile(1, "0101"); //M2
 		break;
 	case 3:
 		if (CurrentCharacter == Characters_Sonic)
@@ -77,9 +75,16 @@ void ECAct4() {
 			LoadSetFile(0, "0100");
 			LoadSetFile(1, "0103"); //M3
 		}
+		
 		break;
 	}
 
+	LoadSetFile(2, "0102");
+	LoadCamFile(0, "0100");
+	LoadCamFile(1, "0101");
+	LoadCamFile(2, "0102");
+
+	return;
 }
 
 
@@ -88,10 +93,17 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 {
 	//Initiliaze data
 	WriteData<5>((void*)0x4f6afa, 0x90); //Allow GetCurrentCharacterID when you enter at Emerald Coast act 2.
-	WriteCall((void*)0x422b83, ECAct4); 
+	WriteData<5>((void*)0x422b74, 0x90);
+	WriteData<5>((void*)0x422b83, 0x90);
+	WriteData<5>((void*)0x422b92, 0x90);
+	WriteData<5>((void*)0x422b9e, 0x90);
+	WriteData<5>((void*)0x422bad, 0x90);
+	
+	WriteCall((void*)0x422bbc, EC_Layout);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0100S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act1.bin");
+	
 	helperFunctions.ReplaceFile("system\\SET0101S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0102S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0103S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Chao.bin");

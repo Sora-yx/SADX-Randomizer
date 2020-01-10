@@ -7,18 +7,10 @@ using namespace std;
 extern int CustomFlag;
 extern bool CreditCheck;
 extern int GetCustomLayout;
-extern int CustomLayout;
 extern int CurrentMission;
-
+extern int CustomLayout;
 //credits stats
-extern int RageQuit;
-extern int JumpCount;
-extern int ringsPB;
-extern int chaoPB;
-extern int animalPB;
-extern int killPB;
-extern int hurtsPB;
-extern int deathsPB;
+
 extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
@@ -33,6 +25,7 @@ string AISwapCountSTD = "";
 extern int SeedCopy;
 extern int StorySplits;
 extern int StatsTimer;
+bool RandCongratsDone = false;
 
 void CreditFlag() {
 
@@ -86,6 +79,7 @@ void CreditFlag() {
 
 	CustomFlag = 0;
 	CreditsNewList();
+	RandCongratsDone = false;
 	GetCurrentCharacterID();
 }
 
@@ -99,17 +93,15 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Sora" },
 	{ 2, -1, 0, 0, "HELP" },
 	{ 3, -1, 0, 0, "Raytwo, Kell, MainMemory" },
-	{ 2, -1, 0, 0, "RANDOMIZER BETA TESTER" },
-	{ 3, -1, 0, 0, "Astreachan, Refrag, Niczur, GuyStreamsStuff" },
 	{ 2, -1, 0, 0, "RANDOMIZER STORY STATS" },
 	{ 3, -1, 0, 0, "Deaths" },
-	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" }, //7
 	{ 3, -1, 0, 0, "RageQuit" },
-	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" }, //9
 	{ 3, -1, 0, 0, "Hurts" },
-	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" }, //11
 	{ 3, -1, 0, 0, "Character Swap" },
-	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" }, //13
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
@@ -121,14 +113,16 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "SonicFreak94" },
 	{ 3, -1, 0, 0, "MelancholyMatoi" },
 	{ 3, -1, 0, 0, "Mastakirby" },
+	{ 2, -1, 0, 0, "RANDOMIZER BETA TESTER" },
+	{ 3, -1, 0, 0, "Astreachan, Refrag, Niczur, GuyStreamsStuff" },
 	{ 2, -1, 0, 0, "BETA TESTER OLD VERSIONS" },
-	{ 3, -1, 0, 0, "Niczur" },
-	{ 3, -1, 0, 0, "Refrag" },
 	{ 3, -1, 0, 0, "Quaker299" },
+	{ 3, -1, 0, 0, "Yarlick" },
 	{ 3, -1, 0, 0, "MakoHNM" },
-	{ 3, -1, 0, 0, "GuyStreamsStuff" },
 	{ 3, -1, 0, 0, "Bloodsypher" },
 	{ 3, -1, 0, 0, "Koutasensei/Elise" },
+	{ 3, -1, 0, 0, "Astreachan" },
+	{ 3, -1, 0, 0, "GuyStreamsStuff" },
 	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
 	{ 3, -1, 0, 0, "SonicFreak94" },
 	{ 2, -1, 0, 0, "CHARACTER SWAP" },
@@ -140,8 +134,8 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Sora" },
 	{ 3, -1, 0, 0, "MainMemory" },
 	{ 3, -1, 0, 0, "Kell" },
-	{ 2, -1, 0, 0, "LEAD VISUAL ARTIST" },
-	{ 3, -1, 0, 0, "Yuji Uekawa" },
+	{ 2, -1, 0, 0, "RANDO TEXTURES" },
+	{ 3, -1, 0, 0, "MelonSpeedruns" },
 	{ 2, -1, 0, 0, "VISUAL ARTIST" },
 	{ 3, -1, 0, 0, "Masatoshi Yasumura" },
 	{ 2, -1, 0, 0, "LEAD SYSTEM PROGRAMMER" },
@@ -637,19 +631,23 @@ void CreditsNewList() {
 	HurtsSTD = "";
 	AISwapCountSTD = "";
 
+
+	TotalDeathsPB += deathsPB; //total Death credit final stat
+	TotalHurtsPB += hurtsPB; //total Death credit final stat
+
 	//Conversion int to string to const char and Display during credits
 	DeathsSTD += std::to_string(deathsPB);
 	RageQuitSTD += std::to_string(RageQuit);
-	//JumpCountSTD += std::to_string(JumpCount);
+	//JumpCountSTD += std::to_string(JumpCount); //Doesn't work for now.
 	HurtsSTD += std::to_string(hurtsPB);
 	AISwapCountSTD += std::to_string(AISwapCount);
 
 	//Credits Stats Display
-	CreditsText_list[9].Line = DeathsSTD.c_str();
-	CreditsText_list[11].Line = RageQuitSTD.c_str();
+	CreditsText_list[7].Line = DeathsSTD.c_str();
+	CreditsText_list[9].Line = RageQuitSTD.c_str();
 	//CreditsText_list[13].Line = JumpCountSTD.c_str(); //doesn't work for now
-	CreditsText_list[13].Line = HurtsSTD.c_str();
-	CreditsText_list[15].Line = AISwapCountSTD.c_str();
+	CreditsText_list[11].Line = HurtsSTD.c_str();
+	CreditsText_list[13].Line = AISwapCountSTD.c_str();
 
 	//reset stat for next story
 	AISwapCount = 0;
@@ -684,6 +682,7 @@ void credits() {
 }
 
 
+
 void FinalStat() {
 
 	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
@@ -693,11 +692,33 @@ void FinalStat() {
 		
 		PlayMusic_R(MusicIDs_nights_k);
 
+		if (!RandCongratsDone)
+		{
+			short RandomCongrats = rand() % 4;
+
+			switch (RandomCongrats)
+			{
+			case Characters_Tails:
+				PlayVoice_R(5011);
+				break;
+			case Characters_Knuckles:
+				PlayVoice_R(5012);
+				break;
+			case Characters_Amy:
+				PlayVoice_R(5013);
+				break;
+			default:
+				PlayVoice_R(5010);
+				break;
+			}
+
+			RandCongratsDone = true;
+		}
 		if (StatsTimer)
 		{
 			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0.1 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
@@ -717,6 +738,7 @@ void FinalStat() {
 			SomethingAboutCredit = 0;
 			SoundManager_Delete2();
 			Credits_State = 5;
+			RandCongratsDone = false;
 		}
 	}
 	else
@@ -726,5 +748,6 @@ void FinalStat() {
 		SomethingAboutCredit = 0;
 		SoundManager_Delete2();
 		Credits_State = 5;
+		RandCongratsDone = false;
 	}
 }
