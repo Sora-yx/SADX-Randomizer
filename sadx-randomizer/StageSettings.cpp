@@ -358,6 +358,7 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 		if (GetCustomLayout == 3 || GetCustomLayout == 2)
 		{
 			Rings = RingCopy;
+			ChaoSpawn = false;
 			return;
 		}
 
@@ -374,11 +375,18 @@ void BackRing() { //swap capsule
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
+
 		StopMusic();
+
 		GetBackRing = true;
 
-		GameMode = GameModes_Adventure_Field; //GameMode = 5
-		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
+		StopMusic();
+		short sVar1;
+		sVar1 = ScreenFade_RunActive();
+		ChaoSpawn = false;
+		GameMode = GameModes_Adventure_Field;
+		GameState = 0xb;
+		return;
 	}
 }
 
@@ -392,13 +400,11 @@ void BackRing2() { //swap Frog/Emerald etc.
 		StopMusic();
 
 		GetBackRing = true;
-		GameMode = GameModes_Adventure_Field; //GameMode = 5
-		GameState = 0xb; //Will teleport the player at the beginning of the level without losing lives or rings.
-		
+
 		StopMusic();
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();
-
+		ChaoSpawn = false;
 		GameMode = GameModes_Adventure_Field;
 		GameState = 0xb;
 		return;
