@@ -20,16 +20,16 @@ void TwinklePark_Layout() {
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	LoadSetFile(0, "0300");
+	LoadSetFile(1, "0301");
 
 	if (CurrentAct <= 1)
 	{
 		switch (CustomLayout)
 		{
-		case 0:
 		case 1:
-		case 2:
-			LoadSetFile(1, "0301");
+			CustomLayout = 0;
 			break;
+		case 2:
 		case 3:
 			LoadSetFile(1, "0303"); //M3 Version
 			break;
@@ -38,21 +38,17 @@ void TwinklePark_Layout() {
 
 	if (CurrentAct == 2)
 	{
-
-			switch (CustomLayout)
-			{
-			case 0:
-			case 1:
-				LoadSetFile(1, "0305"); //Amy TP version 
-				break;
-			case 2:
-				LoadSetFile(1, "0303"); //M2 Version
-				break;
-			case 3:
-				LoadSetFile(1, "0303"); //M3 Version
-				break;
-			}
-
+		switch (CustomLayout)
+		{
+		case 0:
+		case 1:
+			LoadSetFile(1, "0305"); //Amy TP version 
+			break;
+		case 2:
+		case 3:
+			LoadSetFile(1, "0303"); //M2-M3 Version
+			break;
+		}
 	}
 
 	LoadSetFile(2, "0302");

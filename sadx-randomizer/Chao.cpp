@@ -32,12 +32,12 @@ void ChaoObj_Animate(int id, int length) {
 }
 
 
-
 void ChaoObj_Delete(ObjectMaster* a1) {
 	DeleteObjectMaster(ChaoManager);
 	ChaoManager = nullptr;
 	chaoHint = nullptr;
 	CurrentChao = nullptr;
+	ChaoSpawn = false;
 	ChaoObject = nullptr;
 	a2 = nullptr;
 
@@ -94,34 +94,37 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
 
-		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 400))
+		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 300))
 			Chao_CrySound();
 
-		if (CurrentCharacter < 6)
-			if (IsPlayerInsideSphere(&a1->Data1->Position, 9)) { //hitbox
-				if (TimeThing != 0)
-				{
-					chaoPB++;
+		switch (CurrentCharacter)
+		{
+		case Characters_Gamma:
+		case Characters_Big:
+			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
+			{
+					chaoPB++; //Chao Credit Stat
 					LoadLevelResults();
 					a1->Data1->Action = 3;
-				}
 			}
-			else {
+			else 
+			{
 				ChaoObj_Animate(3, 33); //found animation
 			}
-
-		if (CurrentCharacter >= 6)
-			if (IsPlayerInsideSphere(&a1->Data1->Position, 20)) { //hitbox
-				if (TimeThing != 0)
-				{
-					chaoPB++; //Chao Credit Stat
-					LoadLevelResults(); 
-					a1->Data1->Action = 3;
-				}
+			break;
+		default:
+			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
+			{
+				chaoPB++;
+				LoadLevelResults();
+				a1->Data1->Action = 3;
 			}
-			else {
+			else
+			{
 				ChaoObj_Animate(3, 33); //found animation
 			}
+			break;
+		}
 	}
 }
 			
@@ -132,8 +135,6 @@ void Chao_Init() {
 	WriteJump((void*)0x715140, GetCurrentChaoStage_r);
 }
 
-short prevcry = -1;
-
 
 void Chao_CrySound() {
 
@@ -141,18 +142,16 @@ void Chao_CrySound() {
 	
 	if (!ChaoCryDelay)
 	{
-		do {
-			cry = rand() % 2;
 
-		} while (cry == prevcry);
+		cry = rand() % 2;
 
 		if (!cry)
 			PlayVoice_R(5003);
 		else
 			PlayVoice_R(5002);
 
-		prevcry = cry;
-		ChaoCryDelay = 210;
+		//prevcry = cry;
+		ChaoCryDelay = 300;
 	}
 
 	return;
@@ -171,10 +170,10 @@ void ChaoCryHint() {
 	//List = ordre d'appel des objets (tous les objets 0 d'abord, puis les objets 1, etc.) 2 et 3 pour les objets de niveaux, 4 pour les enemies je crois.
 	//Function = chaque objet va appeler cette fonction, mais avec des données différentes.
 
-	if (!chaoHint && ChaoSpawn)
+	if (!chaoHint && ChaoSpawn && CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 2)
 	{
 		chaoHint = LoadObject(LoadObj_Data1, 2, TriggerObj);
-		chaoHint->Data1->Position = { 2810.905762, -442.8283997, -1126.383911 };
+		chaoHint->Data1->Position = { 2708.575195, -622.6781616, -955.2252808 };
 		chaoHint->Data1->Scale.x = 50;
 	}
 }
@@ -281,22 +280,25 @@ void Chao_OnFrame() {
 		}
 		if (CurrentAct == 1)
 		{
-			ChaoSpawn = true;
 			HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
 			if (DCModChao)
 			{
 				pos = { 716.4085693, 428.2105103, -2952.347412 };
 				Yrot = 0x8000;
+				ChaoSpawn = true;
 			}
 			else
 			{
 				pos = { 716.4085693, 677.8605957, -2952.347412 };
 				Yrot = 0x8000;
+				ChaoSpawn = true;
 			}
 		}
 		break;
 	default:
 		ChaoSpawn = false;
+		DeleteObject_(ChaoObject);
+		return;
 		break;
 	}
 
@@ -306,6 +308,8 @@ void Chao_OnFrame() {
 		ChaoObject->Data1->Position = pos;
 		ChaoObject->Data1->Rotation.y = Yrot;
 	}
+
+	return;
 }
 
 

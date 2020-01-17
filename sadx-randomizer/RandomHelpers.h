@@ -65,8 +65,6 @@ void PauseMenuFix();
 
 
 
-void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
-
 //all levels
 
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions);

@@ -180,8 +180,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD3_StartPositions[0]);
 
 	//DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 3);
-
-
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {

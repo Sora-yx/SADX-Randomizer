@@ -26,7 +26,7 @@ extern bool isAIActive;
 extern bool ChaoSpawn;
 extern bool RandCongratsDone;
 extern bool Race;
-
+extern bool isPlayerInWaterSlide;
 
 //Credits stats
 int RageQuit = 0;
@@ -303,7 +303,7 @@ int levelCount;
 
 void testRefactor(char stage, char act) {
 
-	if (GameMode != 8 || GameMode != 1 || GameMode != 11 || GameMode != 22 || GameMode != 21)
+	if (GameMode != 8 && GameMode != 1 && GameMode != 11 && GameMode != 22 && GameMode != 21 && GameMode != 10)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
@@ -330,6 +330,10 @@ void testRefactor(char stage, char act) {
 			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
+	else
+	{
+		SetLevelAndAct(stage, act);
+	}
 
 	return;
 }
@@ -337,7 +341,7 @@ void testRefactor(char stage, char act) {
 
 void GoToNextLevel_hook(char stage, char act) {
 
-	if (GameMode != 8 || GameMode != 1 || GameMode != 11 || GameMode != 22 || GameMode != 21)
+	if (GameMode != 8 && GameMode != 1 && GameMode != 11 && GameMode != 22 && GameMode != 21 && GameMode != 10)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
@@ -366,6 +370,10 @@ void GoToNextLevel_hook(char stage, char act) {
 			GetNewLevel(); //reroll once the 40 stages have been beated.
 		}
 	}
+	else
+	{
+		SetLevelAndAct(stage, act);
+	}
 
 	return;
 }
@@ -376,18 +384,17 @@ void ResetStatsValues() {
 	CurrentAI = 0;
 	SonicRand = 0;
 	CustomLayout = 0;
+	CurrentMission = 0;
 	GetCustomLayout = 0;
 	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat
 	Race = false;
 	RandCongratsDone = false;
+	isPlayerInWaterSlide = false;
 
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C); 
-	WriteData<1>((void*)0x45BFCE, 0x01); //Restore original function tails hurt
-	WriteData<1>((void*)0x47360F, 0x01); //Restore original function knux hurt
-	WriteData<1>((void*)0x484FE3, 0x01); //Restore original function Amy hurt
 }
 
 //cancel the reset position at 0 after quitting a stage.
@@ -424,7 +431,7 @@ void SetLevelAndAct_R() {
 	{
 		if (GameMode == GameModes_Menu)
 		{
-			if (LevelList == 14 || LevelList == 238)
+			if (LevelList == 14 || LevelList == 238 || LevelList == 212 || LevelList == 138 || LevelList == 257)
 				testRefactor(CurrentLevel, CurrentAct);
 			else
 				return;

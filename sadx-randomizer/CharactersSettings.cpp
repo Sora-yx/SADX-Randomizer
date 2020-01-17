@@ -134,6 +134,7 @@ void SuperAuraStuff() {
 	{
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 		CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
+		CharObj2Ptrs[0]->Powerups |= Powerups_Invincibility;
 		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
 		LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
 	}
@@ -186,7 +187,7 @@ void CallStuffWhenLevelStart() {
 	//Banned SuperSonic Levels
 	if (CurrentCharacter == Characters_Sonic)
 	{
-		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_PerfectChaos || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
+		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck|| CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		{
 			SonicRand = 0;
 			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;

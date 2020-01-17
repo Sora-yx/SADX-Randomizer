@@ -24,7 +24,7 @@ void LW_Layout() {
 			CustomLayout = 0;
 			break;
 		case 2:
-			LoadSetFile(1, "0701"); //M1
+			LoadSetFile(1, "0701"); //M2
 			break;
 		case 3:
 			LoadSetFile(1, "0703"); //M3
@@ -39,6 +39,24 @@ void LW_Layout() {
 		return;
 }
 
+bool isPlayerInWaterSlide = false;
+
+void FixLWWaterSlide() {
+
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
+		isPlayerInWaterSlide = true;
+
+	return ForcePlayerAction(0, 0x17);
+}
+
+void FixLWWaterSlide2() {
+
+
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
+		isPlayerInWaterSlide = false;
+	
+	return ForcePlayerAction(0, 0x18);
+}
 
 
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -53,6 +71,9 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	WriteData<5>((void*)0x422e34, 0x90);
 
 	WriteCall((void*)0x422e43, LW_Layout);
+	
+	WriteCall((void*)0x5e3408, FixLWWaterSlide2);
+	WriteCall((void*)0x5e37fa, FixLWWaterSlide);
 	LWObjects_Init(path, helperFunctions);
 
 	//Sonic

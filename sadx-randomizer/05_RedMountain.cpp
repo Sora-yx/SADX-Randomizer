@@ -124,6 +124,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0503E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0505E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Chao2.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500E.bin", "system\\cam\\CAM0500E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501E.bin", "system\\cam\\CAM0501E.bin");
@@ -139,14 +140,14 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 void RedMountain_Layout() {
 
 
-	CustomLayout = randomizedSets[levelCount].layout;
+	CustomLayout = 3;//randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 1)
 	{
+		LoadSetFile(0, "0500");
 
 		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.
 		{
-			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0501"); //load Sonic version
 			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
 			WriteData<1>((void*)0x6027cb, 0x74); //restore original
@@ -154,7 +155,6 @@ void RedMountain_Layout() {
 		}
 		else
 		{
-			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0503"); //load Gamma version
 			WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
 			WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
@@ -164,24 +164,28 @@ void RedMountain_Layout() {
 
 	if (CurrentAct == 0)
 	{
+		LoadSetFile(0, "0500");
+		LoadSetFile(1, "0501");
+		WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
+		WriteData<1>((void*)0x6027cb, 0x74); //restore original
+
 		switch (CustomLayout)
 		{
-		case 0:
 		case 1:
+			CustomLayout = 0;
+			break;
 		case 2:
-			LoadSetFile(0, "0500");
-			LoadSetFile(1, "0501");
-			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-			WriteData<1>((void*)0x6027cb, 0x74); //restore original
 			break;
 		case 3: //Lost Chao
 			LoadSetFile(0, "0504");
-			LoadSetFile(1, "0501"); 
-			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-			WriteData<1>((void*)0x6027cb, 0x74); //restore original
+
+			if (CurrentCharacter == Characters_Gamma)
+				LoadSetFile(1, "0505");
+
 			break;
 		}
 	}
+
 	LoadSetFile(2, "0502"); //load Knux version
 	CamRedMountain();
 	return;

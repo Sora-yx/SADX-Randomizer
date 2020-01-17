@@ -714,6 +714,7 @@ void FinalStat() {
 
 			RandCongratsDone = true;
 		}
+
 		if (StatsTimer)
 		{
 			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);

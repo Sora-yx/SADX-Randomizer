@@ -17,6 +17,7 @@ extern int TotalCount;
 extern bool isAIAllowed;
 extern bool isAIActive;
 extern bool ChaoSpawn;
+extern bool isPlayerInWaterSlide;
 extern int GetCustomLayout;
 bool GetBackRing = false;
 int RingCopy = 0; //Backring
@@ -26,7 +27,7 @@ bool IceCapCutsceneSkip = false;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	if (GameMode != 9)
+	if (GameMode != 9 && GameMode != 10)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash
 	}
@@ -43,7 +44,7 @@ void DisableTimeStuff() {
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
 
-	if (CurrentLevel != LevelIDs_TwinkleCircuit)
+	if (CurrentLevel != LevelIDs_TwinkleCircuit && GameMode != GameModes_Mission)
 		AddCustomFlag(); //credits check
 
 	if (CurrentCharacter == Characters_Tails && (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_IceCap || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck))
@@ -108,19 +109,20 @@ void ResetValueWhileLevelResult() {
 	SonicRand = 0;
 	ChaoSpawn = false;
 	GetBackRing = false;
+	isPlayerInWaterSlide = false;
 
-	if (CurrentLevel == LevelIDs_PerfectChaos)
-	{
-		WriteData<1>((void*)0x45BFCE, 0x01); //Restore original function tails hurt
-		WriteData<1>((void*)0x47360F, 0x01); //Restore original function knux hurt
-		WriteData<1>((void*)0x484FE3, 0x01); //Restore original function Amy hurt
-	}
+	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
+		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
+
+	return;
 }
 
 void fixTCCart() {
 
 	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
 	WriteData<1>((void*)0x7983c4, 0x7C);
+
+	return;
 }
 
 
@@ -327,6 +329,7 @@ void TwinkleCircuitResult() {
 	CustomFlag++;
 	GameMode = GameModes_Adventure_Field;
 	Rings = 0;
+	DeleteAllObjects();
 	PauseQuitThing2();
 	GameState = 0x5;
 }

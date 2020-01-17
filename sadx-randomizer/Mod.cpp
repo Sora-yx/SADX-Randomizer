@@ -6,7 +6,7 @@
 #include "CharactersSettings.h"
 #include "Utils.h"
 
-extern short toto;
+
 
 //global Randomizer value settings
 int StorySplits;
@@ -65,6 +65,7 @@ time_t t;
 
 extern int AIRace;
 extern bool Race;
+extern bool isPlayerInWaterSlide;
 
 extern "C" {
 
@@ -326,6 +327,8 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+
+
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -333,6 +336,7 @@ extern "C" {
 			DisplayDebugString(NJM_LOCATION(2, 1), "Randomizer Mod Warning:");
 			DisplayDebugString(NJM_LOCATION(2, 2), "You are using the Dreamcast Conversion Mod / SADX FE,");
 			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
+
 			DCModWarningTimer--;
 		}
 
@@ -427,12 +431,16 @@ extern "C" {
 				ObjectMaster* obj = GetCharacterObject(0);
 				EntityData1* ent;
 				ent = obj->Data1;
-				if ((ent->Status & Status_Ground) == Status_Ground && TimeThing != 0)
+				if ((ent->Status & Status_Ground) == Status_Ground && TimeThing != 0 && !isPlayerInWaterSlide)
 				{
 					LoadLevelResults();
 				}
 			}
 
+			for (int i = 0; i > 512; i++)
+			{
+				EventFlagArray[i] = 1;
+			}
 
 			//Chao Mission 3 Check
 			if (CurrentLevel < 15 && CurrentMission == 1)
