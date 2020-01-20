@@ -59,7 +59,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0501S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0503S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-E102.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Tails-RM-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0500S.bin", "system\\cam\\CAM0500S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0501S.bin", "system\\cam\\CAM0501S.bin");
@@ -140,13 +140,13 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 void RedMountain_Layout() {
 
 
-	CustomLayout = 3;//randomizedSets[levelCount].layout;
+	CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 1)
 	{
 		LoadSetFile(0, "0500");
 
-		if (CurrentCharacter == Characters_Gamma) //This scenario shouldn't be possible, but just in case.
+		if (CurrentCharacter == Characters_Gamma && !Vanilla) //This scenario shouldn't be possible, but just in case.
 		{
 			LoadSetFile(1, "0501"); //load Sonic version
 			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
@@ -171,6 +171,7 @@ void RedMountain_Layout() {
 
 		switch (CustomLayout)
 		{
+		default:
 		case 1:
 			CustomLayout = 0;
 			break;
@@ -179,7 +180,7 @@ void RedMountain_Layout() {
 		case 3: //Lost Chao
 			LoadSetFile(0, "0504");
 
-			if (CurrentCharacter == Characters_Gamma)
+			if (CurrentCharacter == Characters_Gamma) //Back Ring Fix
 				LoadSetFile(1, "0505");
 
 			break;

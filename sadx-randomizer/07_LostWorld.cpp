@@ -20,6 +20,7 @@ void LW_Layout() {
 		{
 		case 0:
 		case 1:
+		default:
 			LoadSetFile(1, "0701"); //M1
 			CustomLayout = 0;
 			break;

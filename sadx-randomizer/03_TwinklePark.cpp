@@ -26,6 +26,7 @@ void TwinklePark_Layout() {
 	{
 		switch (CustomLayout)
 		{
+		default:
 		case 1:
 			CustomLayout = 0;
 			break;
@@ -42,6 +43,7 @@ void TwinklePark_Layout() {
 		{
 		case 0:
 		case 1:
+		default:
 			LoadSetFile(1, "0305"); //Amy TP version 
 			break;
 		case 2:

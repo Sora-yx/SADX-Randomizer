@@ -72,12 +72,12 @@ short randomacts(RandomizedEntry entry) {
 	//Set up act rng.
 	int actHS[2] = { 0, 2 };
 	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
-	int act1[3] = { 0, 0, 2 }; //increasing chance to get act 1
+	int act1[3] = { 0, 0, 2 }; 
 
 	switch (entry.level)
 	{
 	case LevelIDs_EmeraldCoast:
-		if (entry.character == Characters_Big)
+		if (entry.character == Characters_Big && !Vanilla)
 			return 0;
 		else
 			return act1[rand() % 3];
@@ -99,11 +99,11 @@ short randomacts(RandomizedEntry entry) {
 			return actHS[rand() % 2];
 		break;
 	case LevelIDs_RedMountain:
-		if (entry.character == Characters_Sonic)
+		if (entry.character == Characters_Sonic && !Vanilla)
 			return 1;
-		if (entry.character == Characters_Gamma)
+		if (entry.character == Characters_Gamma && !Vanilla)
 			return 0;
-		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma)
+		if (!Vanilla && entry.character != Characters_Sonic && entry.character != Characters_Gamma || Vanilla)
 			return act0[rand() % 3];
 		break;
 	case LevelIDs_IceCap:
@@ -113,15 +113,15 @@ short randomacts(RandomizedEntry entry) {
 			return 0;
 		break;
 	case LevelIDs_Casinopolis:
-		if (entry.character == Characters_Sonic)
+		if (entry.character == Characters_Sonic && !Vanilla)
 			return 1;
 		if (entry.character == Characters_Tails || entry.character == Characters_Big)
 			return 0;
-		if (entry.character != Characters_Sonic && entry.character != Characters_Tails && entry.character != Characters_Big)
+		if (!Vanilla && entry.character != Characters_Sonic && entry.character != Characters_Tails && entry.character != Characters_Big || Vanilla)
 			return act0[rand() % 3];
 		break;
 	case LevelIDs_HotShelter:
-		if (entry.character == Characters_Gamma)
+		if (!Vanilla && entry.character == Characters_Gamma)
 			return 0;
 		else
 			return actHS[rand() % 2];
@@ -303,7 +303,7 @@ int levelCount;
 
 void testRefactor(char stage, char act) {
 
-	if (GameMode != 8 && GameMode != 1 && GameMode != 11 && GameMode != 22 && GameMode != 21 && GameMode != 10)
+	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
@@ -335,13 +335,14 @@ void testRefactor(char stage, char act) {
 		SetLevelAndAct(stage, act);
 	}
 
+
 	return;
 }
 
 
 void GoToNextLevel_hook(char stage, char act) {
 
-	if (GameMode != 8 && GameMode != 1 && GameMode != 11 && GameMode != 22 && GameMode != 21 && GameMode != 10)
+	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
 		if (RNGCharacters)
 			CurrentCharacter = randomizedSets[levelCount].character;
@@ -375,6 +376,7 @@ void GoToNextLevel_hook(char stage, char act) {
 		SetLevelAndAct(stage, act);
 	}
 
+
 	return;
 }
 
@@ -392,7 +394,6 @@ void ResetStatsValues() {
 	Race = false;
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
-
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C); 
 }
@@ -407,7 +408,6 @@ void CancelResetPosition() {
 	GameMode = GameModes_Adventure_Field;
 	return;
 }
-
 
 
 void SoftReset_R() {

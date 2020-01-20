@@ -12,4 +12,8 @@ StartPosition EC2_StartPositions[]{
 
 StartPosition EC3_StartPositions[]{
 	{ 1, 2,{ 5791.8, 406.5, 698.6 }, 0 }
+
+
+};StartPosition EC3B_StartPositions[]{
+	{ 1, 2,{ 6090, 30, 1000 }, 0 }
 };

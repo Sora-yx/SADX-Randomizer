@@ -33,27 +33,6 @@ void Casino_Layout() {
 				Race = true;
 				LoadSetFile(0, "0900"); //M1 Race
 				LoadSetFile(1, "0901"); //M1 Race
-
-				if (CurrentCharacter == Characters_Sonic)
-				{
-					if (MetalSonicFlag == 0)
-					{
-						help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-					}
-					else
-					{
-						help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
-					}
-				}
-
-				if (CurrentCharacter == Characters_Knuckles)
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
-
-				if (CurrentCharacter == Characters_Amy)
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-
-				if (CurrentCharacter == Characters_Gamma)
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 				CustomLayout = 1;
 			}
 	
@@ -108,6 +87,9 @@ void Casino_Layout() {
 		LoadCamFile(3, "0903");
 	
 	}
+
+	if (Race)
+		SelectBarRace();
 
 	return;
 	

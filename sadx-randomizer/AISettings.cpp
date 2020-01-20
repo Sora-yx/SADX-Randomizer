@@ -33,18 +33,18 @@ ObjectFuncPtr charfuncs[] = {
 	Big_Main
 };
 
+ObjectMaster* CurAI = nullptr;
+
 ObjectMaster* LoadCharObj(int i)
 {
 	//setup AI correctly
 
-	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentAI]);
-	obj->Data1->CharID = CurrentAI;
-	obj->Data1->CharIndex = (char)1;
-	EntityData1Ptrs[1] = (EntityData1*)obj->Data1;
-	EntityData2Ptrs[1] = (EntityData2*)obj->Data2;
-	return obj;
-	
-
+	CurAI = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentAI]);
+	CurAI->Data1->CharID = CurrentAI;
+	CurAI->Data1->CharIndex = (char)1;
+	EntityData1Ptrs[1] = (EntityData1*)CurAI->Data1;
+	EntityData2Ptrs[1] = (EntityData2*)CurAI->Data2;
+	return CurAI;
 }
 
 
@@ -537,6 +537,7 @@ void ResultVoiceFix() {
 }
 
 FunctionPointer(void, sub_43FA90, (EntityData1* a1, CharObj2** a2, CharObj2* a3), 0x43FA90);
+
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 {
 	for (int i = 0; i < 8; i++)
@@ -788,6 +789,7 @@ void AIAudioFixes() {
 void AI_ResetValue() {
 
 	isAIActive = false;
+	DeleteObject_(CurAI);
 	return FUN_0042ce20();
 }
 

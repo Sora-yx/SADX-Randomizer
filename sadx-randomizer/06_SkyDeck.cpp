@@ -10,6 +10,7 @@ extern bool Missions;
 extern int levelCount;
 extern bool Race;
 extern int CustomLayout;
+extern int CurrentAI;
 
 void SkyDeck_Layout() {
 
@@ -18,17 +19,12 @@ void SkyDeck_Layout() {
 	switch (CustomLayout)
 	{
 	case 0: //M1
-		if (CurrentCharacter == Characters_Sonic)
+	default:
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout-
-
-				if (MetalSonicFlag == 0)
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-				else
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race
-
-				CustomLayout = 1;
+			LoadSetFile(0, "0605"); //load Tails layout
+			CustomLayout = 1;
 		}
 		else
 		{
@@ -47,29 +43,27 @@ void SkyDeck_Layout() {
 		{
 			Race = true;
 			LoadSetFile(0, "0605"); //load Tails layout
-			if (CurrentCharacter == Characters_Sonic)
-			{
-				if (MetalSonicFlag == 0)
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-				else
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
-			}
-			if (CurrentCharacter == Characters_Knuckles)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
-
-			if (CurrentCharacter == Characters_Amy)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-
-			if (CurrentCharacter == Characters_Gamma)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 		}
 		break;
 	case 2: //Rings
 	case 3: //Lost CHao
-		Race = false;
-		LoadSetFile(0, "0600"); 
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		{
+			Race = true;
+			LoadSetFile(0, "0605"); //load Tails layout
+			CustomLayout = 1;
+		}
+		else
+		{
+			Race = false;
+			LoadSetFile(0, "0600");
+		}
 		break;
+
 	}
+
+	if (Race)
+		SelectBarRace();
 
 	LoadSetFile(1, "0601"); 
 	LoadSetFile(2, "0602");
@@ -325,7 +319,6 @@ ObjectListEntry SkyDeckObjectList_list[] = {
 
 ObjectList SkyDeckObjectList = { arraylengthandptrT(SkyDeckObjectList_list, int) };
 
-__declspec(dllexport) PointerList Pointers = { arrayptrandlengthT(pointers, int) };
 DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 3);
 
 void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunctions) {

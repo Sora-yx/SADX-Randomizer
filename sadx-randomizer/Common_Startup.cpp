@@ -97,7 +97,7 @@ void LoadStageMissionImage_r() {
 			if (CurrentCharacter == Characters_Amy)
 				CurrentMission = 10;
 
-			if (CustomLayout == 1)
+			if (CustomLayout == 1 && CurrentCharacter != Characters_Amy)
 				CurrentMission = 0;
 			else
 				CurrentMission = 4;
@@ -164,11 +164,10 @@ void LoadStageMissionImage_r() {
 				CurrentMission = 7;
 
 		if (CurrentLevel == LevelIDs_HotShelter)
+		{
 			if (CustomLayout == 1)
-				if (CurrentCharacter == Characters_Amy)
-					CurrentMission = 10;
-				else
-					CurrentMission = 0;
+				CurrentMission = 5;
+		}
 
 				
 		StageMissionTexlist.textures = Missions;
@@ -252,7 +251,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	help = helperFunctions; //so we can use it everywhere
+	help = helperFunctions; 
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen
 	//help.ReplaceFile("system\\sounddata\\voice_us\\wma\\3000.wma", "system\\voices\\SuperSonicTransformation.wma"); //Introduce Super Sonic voice transformation
@@ -288,9 +287,14 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\TCAct3.BIN");
 	WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); //test
 
-	/*WriteCall((void*)0x7983cc, AmyCartImprovement); //Improve Amy Cart TC
-	WriteCall((void*)0x797906, AmyCartImprovement); //Improve Amy Cart TP*/
+	//Random Title Card + Missions
+	TitleCard_Init();
 
+	//Back Rings for M2 & M3
+	Set_BackRing();
+
+	if (CreditSkipCheck != 144) //is the player using the code to skip credit
+		WriteData<2>((void*)0x641232, 0x90); //allow you to skip credits.
 }
 
 void TitleCard_Init() {
@@ -305,7 +309,6 @@ void TitleCard_Init() {
 void Set_BackRing() {
 
 	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
-
 
 	//capsule
 	WriteCall((void*)0x46adc2, BackRing);

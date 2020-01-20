@@ -37,6 +37,7 @@ void IC_Layout() {
 		{
 		case 0:
 		case 1:
+		default:
 			LoadSetFile(1, "0801"); //M1
 			CustomLayout = 0;
 			break;
@@ -75,9 +76,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	WriteData<5>((void*)0x422ebd, 0x90);
 	
 
-//	WriteCall((void*)0x4e95dc, Delete_Cart); //Force Character to leave Cart.
-	//WriteCall((void*)0x416ce3, FixRestart_Cart); //Force Character to leave Cart.
-
 
 	WriteCall((void*)0x422ecc, IC_Layout);
 
@@ -95,7 +93,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0802S.BIN", "system\\cam\\CAM0802S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, IC3_StartPositions[0]);
 
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0800M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act1.bin");
@@ -109,7 +106,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0802M.BIN", "system\\cam\\CAM0802M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, IC3_StartPositions[0]);
 
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0800K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act1.bin");

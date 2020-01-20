@@ -26,7 +26,8 @@ void EC_Layout() {
 	switch (CustomLayout)
 	{
 	case 0:
-		if (CurrentCharacter == Characters_Sonic)
+	default:
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
 			CustomLayout = 1;
@@ -39,7 +40,7 @@ void EC_Layout() {
 		LoadSetFile(1, "0101");
 		break;
 	case 1:
-		if (CurrentCharacter == Characters_Gamma)
+		if (CurrentCharacter == Characters_Gamma && !Vanilla)
 		{
 			LoadSetFile(0, "0100"); 
 			CustomLayout = 0;
@@ -52,7 +53,7 @@ void EC_Layout() {
 		LoadSetFile(1, "0101");
 		break;
 	case 2:
-		if (CurrentCharacter == Characters_Sonic)
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
 			CustomLayout = 1;
@@ -64,7 +65,7 @@ void EC_Layout() {
 		LoadSetFile(1, "0101"); //M2
 		break;
 	case 3:
-		if (CurrentCharacter == Characters_Sonic)
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			LoadSetFile(0, "0104"); //M1 Gamma Version
 			LoadSetFile(1, "0101");
@@ -92,7 +93,9 @@ void EC_Layout() {
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x4f6afa, 0x90); //Allow GetCurrentCharacterID when you enter at Emerald Coast act 2.
+	WriteData<5>((void*)0x4f6afa, 0x90); //Prevent the game to start the cutscene as Tails.
+	WriteData<1>((void*)0x427FCA, 0x08); //Fix EC HUD display for Tails.
+
 	WriteData<5>((void*)0x422b74, 0x90);
 	WriteData<5>((void*)0x422b83, 0x90);
 	WriteData<5>((void*)0x422b92, 0x90);
@@ -171,7 +174,7 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\CAM0102B.BIN", "system\\cam\\CAM0102B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, EC2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, EC3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Big, EC3B_StartPositions[0]);
 
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0100E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Act1.bin");
@@ -186,7 +189,5 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC3_StartPositions[0]);
-
-
 }
 

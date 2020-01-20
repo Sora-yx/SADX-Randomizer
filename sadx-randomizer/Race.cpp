@@ -91,6 +91,86 @@ void CheckRace() {
 	}
 }
 
+void SelectBarRace() {
+
+	if (CurrentCharacter == Characters_Sonic)
+	{
+		if (MetalSonicFlag == 0)
+			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
+		else
+			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
+	}
+
+	if (CurrentCharacter == Characters_Knuckles)
+		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
+
+	if (CurrentCharacter == Characters_Amy)
+		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
+
+	if (CurrentCharacter == Characters_Gamma)
+		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+
+	//Voice Race stuff
+	if (CurrentLevel == LevelIDs_SpeedHighway)
+	{
+		if (MetalSonicFlag == 0)
+		{
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\Voices\\Haha_Sonic.wma"); //""I've got you now; Tails."  ==> "Hoo-haha! See if you can make it through here; Sonic!" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\Voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\Voices\\DontGiveUp.wma"); //"Goodbye Tails" ==> "Why don't you give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\Voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "not ez"
+		}
+		else
+		{
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\BeGone.wma"); //""I've got you now; Tails."  ==> "BeGone!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Useless.wma"); //"Useless machine".
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\Useless.wma"); //"Give up now; Tails!" ==> "Useless machine"
+		}
+
+
+		if (CurrentCharacter == Characters_Amy)
+		{
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\GoingAmy.wma"); //"where do you think you're going amy"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\NotEZ.wma"); //"What? He's caught up!"  ==> "not ez"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\NotEZ.wma");//"you little fox" ==> "not ez"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma");  //"Goodbye Tails" ==> "Why don't you give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\GiveUpAmy_424.wma"); //sa2 voice "give up amy"
+
+		}
+
+		if (CurrentCharacter == Characters_Knuckles)
+		{
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\NoUse.wma"); //""I've got you now; Tails."  ==> "It's no use, give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Knuckles.wma"); //"you little fox" == "Knuckles".
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\Knuckles.wma");  //"Tails wait for me" ==> "Knuckles" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\NotEZ.wma"); //"Give up now; Tails!" ==> "Not EZ"
+		}
+
+		if (CurrentCharacter == Characters_Gamma)
+		{
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0216.wma", "system\\voices\\KeepUp.wma"); //restore original voice.
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0217.wma", "system\\voices\\BeGone.wma"); //""I've got you now; Tails."  ==> "BeGone!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0218.wma", "system\\voices\\CaughUp.wma"); //restore original voice "What? He's caught up!"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0219.wma", "system\\voices\\Useless.wma"); //"Useless machine".
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0220.wma", "system\\voices\\NoWay.wma"); //"Tails wait for me" ==> "No way! I can't believe this!" 
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0222.wma", "system\\voices\\DontGiveUp.wma"); //"Goodbye; Tails!"  ==> "Why don't you give up"
+			help.ReplaceFile("system\\sounddata\\voice_us\\wma\\0226.wma", "system\\voices\\Useless.wma"); //"Give up now; Tails!" ==> "Useless machine"
+		}
+	}
+
+	return;
+}
 
 void Race_Init() {
 	//Sonic/Eggman Race Stuff

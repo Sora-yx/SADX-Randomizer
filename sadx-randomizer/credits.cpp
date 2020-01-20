@@ -664,7 +664,6 @@ void CreditsNewList() {
 //Credits 
 void credits() {
 
-	Credits_CanSkip = 1;
 	CustomLayout = 0;
 	GetCustomLayout = 0;
 	CurrentMission = 0;
@@ -682,8 +681,16 @@ void credits() {
 }
 
 
-
 void FinalStat() {
+
+
+
+	if (Credits_Skip)
+	{
+		Credits_State = 5; //Prevent infinite black screen.
+		return;
+	}
+
 
 	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
 	{
@@ -719,7 +726,7 @@ void FinalStat() {
 		{
 			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0.1 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0.2 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
@@ -751,4 +758,5 @@ void FinalStat() {
 		Credits_State = 5;
 		RandCongratsDone = false;
 	}
+
 }

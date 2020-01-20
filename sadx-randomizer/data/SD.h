@@ -94,9 +94,3 @@ DeathZone SkyDeck2DeathZones[] = {
 	{ 0 }
 };
 
-PointerInfo pointers[] = {
-	ptrdecl(0x223082C, &SkyDeck1DeathZones),
-	ptrdecl(0x2230830, &SkyDeck2DeathZones)
-};
-
-//DataArray(DeathZone*, SkyDeckDeathZones, 0x223082C, 2);

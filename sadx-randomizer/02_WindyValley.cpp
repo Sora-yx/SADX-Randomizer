@@ -12,6 +12,8 @@ extern bool Race;
 extern bool Missions;
 extern int levelCount;
 
+
+
 void WindyValley_Layout() {
 
 	
@@ -19,31 +21,21 @@ void WindyValley_Layout() {
 
 	if (CurrentAct == 2)
 	{
+		if (CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Big)
+		{
 			Race = true;
 			LoadSetFile(0, "0200");
 			LoadSetFile(1, "0201");
 			LoadSetFile(2, "0206"); //race
 			CustomLayout = 1;
-			if (CurrentCharacter == Characters_Sonic)
-			{
-				if (MetalSonicFlag == 0)
-				{
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\SONICRACE_HD.pvmx"); //draw Sonic Race 
-				}
-				else
-				{
-					help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race 
-				}
-			}
-
-			if (CurrentCharacter == Characters_Knuckles)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
-
-			if (CurrentCharacter == Characters_Amy)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\AMYRACE_HD.pvmx");
-
-			if (CurrentCharacter == Characters_Gamma)
-				help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+		}
+		else
+		{
+			Race = false;
+			LoadSetFile(0, "0200"); //Sonic Version
+			LoadSetFile(1, "0201");
+			LoadSetFile(2, "0202");
+		}
 	}
 
 
@@ -52,7 +44,8 @@ void WindyValley_Layout() {
 		switch (CustomLayout)
 		{
 		case 0:
-			if (CurrentCharacter == Characters_Sonic)
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
@@ -67,7 +60,7 @@ void WindyValley_Layout() {
 			}
 			break;
 		case 1:
-			if (CurrentCharacter >= Characters_Gamma)
+			if (CurrentCharacter == Characters_Gamma && !Vanilla)
 			{
 				LoadSetFile(0, "0200");  //Sonic Version
 				LoadSetFile(1, "0201");
@@ -79,11 +72,10 @@ void WindyValley_Layout() {
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				
 			}
 			break;
 		case 2:
-			if (CurrentCharacter == Characters_Sonic)
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
@@ -98,7 +90,7 @@ void WindyValley_Layout() {
 			}
 			break;
 		case 3:
-			if (CurrentCharacter == Characters_Sonic)
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
@@ -116,6 +108,9 @@ void WindyValley_Layout() {
 		}
 
 	}
+
+	if (Race)
+		SelectBarRace();
 
 	LoadCamFile(0, "0200");
 	LoadCamFile(1, "0201");
@@ -227,7 +222,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0200E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act1.bin");
+	helperFunctions.ReplaceFile("system\\SET0203E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Chao.bin"); //Chao
 	helperFunctions.ReplaceFile("system\\SET0206E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Race.bin");
@@ -330,6 +325,7 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 	//Change the objectlist
 	ObjLists[LevelIDs_WindyValley * 8 + 2] = &WindyValleyObjectList;
 }
+
 
 
 

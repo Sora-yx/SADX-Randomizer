@@ -20,6 +20,7 @@ short randomLayout(RandomizedEntry entry);
 short getRandomAI(RandomizedEntry entry);
 short getRandomRaceAI(RandomizedEntry entry);
 void GetNewLevel();
+void SelectBarRace();
 
 struct RandomizedEntry
 {
@@ -214,10 +215,17 @@ DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
+
+DataPointer(char, CreditSkipCheck, 0x641232);
+void FixCreditSkipStats();
+
+FunctionPointer(int, CreditStuff, (), 0x641138);
+
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
 DataPointer(char, SomethingAboutCredit, 0x3c83054);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
+
 
 FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
 void SetLevelAndAct_Original(char level, char act);
@@ -240,6 +248,7 @@ void SoftReset_R();
 void FixRestart_Cart();
 void Delete_Cart();
 void LoadCamFilePC_R();
+void CamHotShelter();
 void ResetValueWhileLevelResult();
 void PlayRace_Music();
 void SongRace_Init();
@@ -258,3 +267,6 @@ extern int deathsPB;
 extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
+
+
+

@@ -203,12 +203,6 @@ extern "C" {
 			WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g if the player activated the option.
 		}
 
-		//Random Title Card + Missions
-		TitleCard_Init();
-
-		//Back Rings for M2 & M3
-		Set_BackRing();
-
 		if (isAIAllowed)
 		{
 			//Allow the AI to spawn everywhere
@@ -224,7 +218,7 @@ extern "C" {
 		/*
 		//Randomizer Fixes
 		*/
-
+	
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 
 		//Stats & Value Reset
@@ -251,7 +245,7 @@ extern "C" {
 		Race_Init();
 
 		WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-
+		
 		//SA2 Story Style, Hook all SetLevelandAct to make them random.
 
 		if (RNGStages == true) 
@@ -259,7 +253,7 @@ extern "C" {
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
 			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
 			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
-			
+
 			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
 			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
@@ -270,7 +264,7 @@ extern "C" {
 			WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
 		//	WriteData<5>((void*)0x41342a, 0x90); //Remove SetLevelAndAct when loading adventure data
 			WriteData<1>((void*)0x413502, 0x08);
-			
+
 			WriteCall((void*)0x41348f, testRefactor); //hook SetLevelAndAct when loading adventure data
 			//WriteCall((void*)0x4134f3, testRefactor); //hook SetLevelAndAct when loading adventure data
 			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
@@ -278,7 +272,7 @@ extern "C" {
 
 			WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
 			WriteData<1>((void*)0x4DB0B2, 0x05);
-			WriteData<5>((void*)0x4db051, 0x90); 
+			WriteData<5>((void*)0x4db051, 0x90);
 			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		}
 
@@ -328,7 +322,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-
+		Race = false;
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -478,6 +472,8 @@ extern "C" {
 
 		}
 	}
+
+
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
 

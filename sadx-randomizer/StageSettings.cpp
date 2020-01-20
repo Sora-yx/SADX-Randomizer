@@ -5,7 +5,7 @@
 #include <fstream>
 #include "RandomHelpers.h"
 #include "Trampoline.h"
-
+#include "GameObject.h"
 
 HelperFunctions extern help;
 
@@ -23,6 +23,7 @@ bool GetBackRing = false;
 int RingCopy = 0; //Backring
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
+extern ObjectMaster* CurAI;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -50,20 +51,26 @@ void DisableTimeStuff() {
 	if (CurrentCharacter == Characters_Tails && (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_IceCap || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck))
 		SetTailsRaceVictory();
 
-	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark && CurrentCharacter != Characters_Amy) //Move AI to player 1 if we are not racing.
+	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
 	{
 		ObjectMaster* play1 = GetCharacterObject(0);
 		ObjectMaster* play2 = GetCharacterObject(1);
 
 		if (play2 != nullptr && play1 != nullptr)
 		{
-			play2->Data1->Position.x = play1->Data1->Position.x - 7;
-			play2->Data1->Position.y = play1->Data1->Position.y;
-			play2->Data1->Position.z = play1->Data1->Position.z + 5;
-			play2->Data1->Rotation.y = play1->Data1->Rotation.y;
+			if (CurrentCharacter != Characters_Amy)
+			{
+				play2->Data1->Position.x = play1->Data1->Position.x - 7;
+				play2->Data1->Position.y = play1->Data1->Position.y;
+				play2->Data1->Position.z = play1->Data1->Position.z + 5;
+				play2->Data1->Rotation.y = play1->Data1->Rotation.y;
+			}
+			else
+			{
+				DeleteObject_(TailsAI_ptr); //prevent crash as Amy.
+			}
 
 			play1->Data1->CharID;
-
 
 			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && (isAIActive == true || !Race))
 			{
@@ -152,16 +159,13 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-
 	if (CurrentLevel == LevelIDs_FinalEgg && CustomLayout != 1) //don't load Zero if Sonic Layout
 		return;
 
-	if (CurrentCharacter != Characters_Amy)
-	{
-		static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
-		LoadPVM("EGGROB", &EGGROB_TEXLIST);
-		CheckLoadZero();
-	}
+
+	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
+	LoadPVM("EGGROB", &EGGROB_TEXLIST);
+	CheckLoadZero();
 	
 }
 
@@ -437,6 +441,9 @@ void preventCutscene() {
 	case LevelIDs_EmeraldCoast:
 		if (CurrentCharacter == Characters_Tails)
 			return;	
+	case LevelIDs_HotShelter:
+		if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
+			return;
 		break;
 	}
 
@@ -481,3 +488,5 @@ void HookStats_Inits() {
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
 }
+
+

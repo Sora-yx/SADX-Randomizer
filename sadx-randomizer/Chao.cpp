@@ -297,7 +297,7 @@ void Chao_OnFrame() {
 		break;
 	default:
 		ChaoSpawn = false;
-		DeleteObject_(ChaoObject);
+		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
 		return;
 		break;
 	}

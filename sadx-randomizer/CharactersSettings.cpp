@@ -108,17 +108,13 @@ void LoadCharacter_r()
 		SetCameraMode_(FreeCam);
 	}
 
-
-	if (CurrentCharacter == Characters_Amy || CurrentAI == Characters_Amy)
-	{
+	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
-	}
 
 	if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_WindyValley)
 		CheckRace();
 
 	AllUpgrades();
-	Credits_State = 0;
 
 	LoadCharacter();
 
