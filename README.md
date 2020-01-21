@@ -30,7 +30,7 @@ A story ends once you beat a specific number of stages, which now include bosses
 
 For more information, please check the "README" in the mod folder.
 
-If you are looking for [Lost Chao location check this video.}(https://youtu.be/awqTK5RlAUo)
+If you are looking for [Lost Chao location check this video.](https://youtu.be/awqTK5RlAUo)
 
 If you are curious about what the Randomizer will pick and what it will avoid you can check the [Randomizer Level List Combination.](https://docs.google.com/spreadsheets/d/1Kmx2LL4-RIGHBDKIM6By_ExNAR9Tn_NYXNNPXF7vnH0/edit?usp=sharing)
 
