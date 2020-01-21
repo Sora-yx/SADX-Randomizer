@@ -45,7 +45,7 @@ void Set_BackRing();
 
 extern int level[21];
 extern int AIArray[4];
-extern int AIRaceArray[8];
+extern int AIRaceArray[7];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG

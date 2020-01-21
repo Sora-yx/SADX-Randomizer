@@ -50,9 +50,6 @@ void Set_MusicVoices() {
 		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
 		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 		WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
-		
-		
-
 	}
 }
 
@@ -168,7 +165,7 @@ void LoadStageMissionImage_r() {
 
 		if (CurrentLevel == LevelIDs_HotShelter)
 		{
-			if (CustomLayout == 1)
+			if (CustomLayout == 1 && CurrentAct == 0)
 				CurrentMission = 5;
 		}
 
@@ -296,8 +293,7 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	//Back Rings for M2 & M3
 	Set_BackRing();
 
-	if (CreditSkipCheck != 144) //is the player using the code to skip credit
-		WriteData<2>((void*)0x641232, 0x90); //allow you to skip credits.
+	WriteData<2>((void*)0x641232, 0x90); //allow you to skip credits.
 }
 
 void TitleCard_Init() {
