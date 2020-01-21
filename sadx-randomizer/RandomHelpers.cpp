@@ -519,6 +519,12 @@ void PlayVoice_R(int a1) {
 	return;
 }
 
+void MusicLoop_R() {
+
+	MusicLooping = 1;
+	return;
+}
+
 
 void TwinkleCircuitMusic() {
 	if (Music_Enabled != 0) {

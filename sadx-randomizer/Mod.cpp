@@ -322,7 +322,6 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		Race = false;
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{

@@ -3,6 +3,7 @@
 #include "Zero.h"
 #include "RandomHelpers.h"
 
+extern int CurrentAI;
 
 void DisableTime_Zero() {
 
@@ -14,7 +15,6 @@ void DisableTime_Zero() {
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
 	WriteCall((void*)0x5872ed, DisableTime_Zero); //Prevent character from hiting Zero again once it's defeated.
 
 	//Sonic

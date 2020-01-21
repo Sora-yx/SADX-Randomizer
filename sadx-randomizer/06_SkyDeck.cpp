@@ -10,7 +10,7 @@ extern bool Missions;
 extern int levelCount;
 extern bool Race;
 extern int CustomLayout;
-extern int CurrentAI;
+
 
 void SkyDeck_Layout() {
 

@@ -45,8 +45,6 @@ void DisableTimeStuff() {
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
 
-	if (CurrentLevel != LevelIDs_TwinkleCircuit && GameMode != GameModes_Mission)
-		AddCustomFlag(); //credits check
 
 	if (CurrentCharacter == Characters_Tails && (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_IceCap || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck))
 		SetTailsRaceVictory();
@@ -80,32 +78,25 @@ void DisableTimeStuff() {
 			dword_3B2A304 = 0;
 		}
 
-			if (CurrentLevel != LevelIDs_SpeedHighway)
-			{
-				return;
-			}
-
 	}
 
 
-		if (Race)
+	if (Race)
+	{
+		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
 		{
-			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-			{
-				Race = false;
-				return; //they don't race
-			}
-			else
-			{
-				if (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_Casinopolis)
-					SetTailsRaceVictory();
-
-				Tails_CheckRaceResult();
-				Race = false;
-				return;
-			}
+			Race = false;
+			return; //they don't race
 		}
+		else
+		{
+			SetTailsRaceVictory();
+			Tails_CheckRaceResult();
+		}
+	}
 	
+	if (CurrentLevel != LevelIDs_TwinkleCircuit && GameMode != GameModes_Mission)
+		AddCustomFlag(); //credits check
 
 	Race = false;
 	return;

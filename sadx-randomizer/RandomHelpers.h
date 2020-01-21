@@ -14,6 +14,8 @@ void SetLevelGammaStory(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
 void AIAudioFixes();
+void MusicLoop_R();
+void FixRMLava();
 
 short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);

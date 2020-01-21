@@ -39,6 +39,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge
 	WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
 	WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
+	WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
 
 	//Allow Tails to do Red Mountain
 	WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
@@ -142,32 +143,19 @@ void RedMountain_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
+	LoadSetFile(0, "0500");
+
 	if (CurrentAct == 1)
 	{
-		LoadSetFile(0, "0500");
-
-		if (CurrentCharacter == Characters_Gamma && !Vanilla) //This scenario shouldn't be possible, but just in case.
-		{
-			LoadSetFile(1, "0501"); //load Sonic version
-			WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-			WriteData<1>((void*)0x6027cb, 0x74); //restore original
-			CustomLayout = 0;
-		}
-		else
-		{
-			LoadSetFile(1, "0503"); //load Gamma version
-			WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
-			WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone.
-			CustomLayout = 1;
-		}
+		LoadSetFile(1, "0503"); //load Gamma version
+		CustomLayout = 1;
+		
 	}
 
 	if (CurrentAct == 0)
 	{
 		LoadSetFile(0, "0500");
 		LoadSetFile(1, "0501");
-		WriteData<1>((void*)0x6027c5, 0x00); //Fix Lava (Sonic Version)
-		WriteData<1>((void*)0x6027cb, 0x74); //restore original
 
 		switch (CustomLayout)
 		{
@@ -187,11 +175,21 @@ void RedMountain_Layout() {
 		}
 	}
 
+	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	LoadSetFile(2, "0502"); //load Knux version
 	CamRedMountain();
 	return;
 }
 
+void FixRMLava() {
+
+	if (CustomLayout == 1 && CurrentAct == 1)
+		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone
+	else
+		WriteData<1>((void*)0x6027cb, 0x74); //restore original
+
+	return;
+}
 
 
 ObjectListEntry RedMountainObjectList_list[] = {

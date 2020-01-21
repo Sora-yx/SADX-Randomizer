@@ -30,7 +30,6 @@ void CheckRace() {
 	}
 	else
 	{
-		
 		if (CurrentLevel != LevelIDs_SpeedHighway)
 		{
 			AIRace = randomizedSets[levelCount].ai_race;
@@ -42,6 +41,15 @@ void CheckRace() {
 				else
 					AIRace = Characters_Sonic;
 			}
+
+			if (AIRace == Characters_Big && CurrentLevel == LevelIDs_WindyValley)
+			{
+				if (CurrentCharacter == Characters_Sonic)
+					AIRace = Characters_Tails;
+				else
+					AIRace = Characters_Sonic;
+			}
+
 		}
 
 		
@@ -51,7 +59,6 @@ void CheckRace() {
 			if (CustomLayout == 1 && CurrentAct == 2)
 			{
 				isAIActive = false;
-				AICourse = Levels2P_WindyValley;
 				Race = true;
 				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 			}
@@ -61,7 +68,6 @@ void CheckRace() {
 			{
 				isAIActive = false;
 				Race = true;
-				AICourse = Levels2P_SpeedHighway;
 				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
 				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 			}
@@ -71,7 +77,6 @@ void CheckRace() {
 			{
 				isAIActive = false;
 				Race = true;
-				AICourse = Levels2P_SkyDeck;
 				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 			}
 			break;
@@ -79,7 +84,6 @@ void CheckRace() {
 			if (CustomLayout < 2 && CurrentAct == 1)
 			{
 				isAIActive = false;
-				AICourse = Levels2P_Casinopolis;
 				Race = true;
 				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 			}
@@ -87,7 +91,6 @@ void CheckRace() {
 		}
 
 		return;
-
 	}
 }
 
@@ -109,6 +112,7 @@ void SelectBarRace() {
 
 	if (CurrentCharacter == Characters_Gamma)
 		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
+
 
 	//Voice Race stuff
 	if (CurrentLevel == LevelIDs_SpeedHighway)

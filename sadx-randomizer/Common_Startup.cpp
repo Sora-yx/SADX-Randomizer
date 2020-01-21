@@ -50,6 +50,9 @@ void Set_MusicVoices() {
 		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
 		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 		WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
+		
+		
+
 	}
 }
 
@@ -94,13 +97,13 @@ void LoadStageMissionImage_r() {
 
 		if (CurrentLevel == LevelIDs_FinalEgg)
 		{
-			if (CurrentCharacter == Characters_Amy)
-				CurrentMission = 10;
-
 			if (CustomLayout == 1 && CurrentCharacter != Characters_Amy)
 				CurrentMission = 0;
 			else
 				CurrentMission = 4;
+
+			if (CurrentCharacter == Characters_Amy)
+				CurrentMission = 10;
 		}
 
 

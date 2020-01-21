@@ -67,6 +67,7 @@ void Casino_Layout() {
 			Race = false;
 			LoadSetFile(0, "0900"); //M1
 			LoadSetFile(1, "0901"); //M1 
+			CustomLayout = 0;
 			break;
 		case 2:
 			Race = false;
