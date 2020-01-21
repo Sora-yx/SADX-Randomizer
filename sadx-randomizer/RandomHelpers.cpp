@@ -204,8 +204,6 @@ short getRandomRaceAI(RandomizedEntry entry) {
 }
 
 
-
-
 short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
@@ -519,11 +517,6 @@ void PlayVoice_R(int a1) {
 	return;
 }
 
-void MusicLoop_R() {
-
-	MusicLooping = 1;
-	return;
-}
 
 
 void TwinkleCircuitMusic() {

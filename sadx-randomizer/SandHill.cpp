@@ -10,7 +10,6 @@ extern int CustomLayout;
 
 
 
-
 void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 
