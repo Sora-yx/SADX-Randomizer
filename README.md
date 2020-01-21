@@ -17,7 +17,7 @@ Installation:
 
 Set up the mod:
 
-1) Download and Install SADX Mod Loader.
+1) Download and Install [SADX Mod Loader](https://dcmods.unreliable.network/owncloud/data/PiKeyAr/files/Setup/sadx_setup.exe).
 2) Extract and Copy the "Randomizer" folder in the "mods" folder from your SADX folder.
 3) You can configure the mod by selecting different settings. Open the SADX mod manager, select "Randomizer" in the Mods list, then Click on "Configure...".
 4) If you want to race with a friend, make sure both of you are using the same "seed" in the settings, also make sure the seed used is different than "0". (0 makes the rng always different, when using another number makes it consistent.)
