@@ -1,3 +1,52 @@
+V2.0.2
+
+General:
+
+- You can now skip credits by pressing the start button. This should help people who can't soft reset.
+- Randomizer Save Files are now redirected in the mod folder, in other words, randomizer saves are now separated from your vanilla save files.
+- Chao cry noise is now less loud and less common.
+- A lot of vanilla stages combination have been restored.
+- Big can now do Windy Valley Gamma version.
+- Tails will now have a correct hud in Emerald Coast. (This wasn't a mod bug, the game originally hides the hud as Tails because of the cutscene.)
+- You'll now die if you fall from the Hot Shelter Train. 
+- Adjustment of few stages.
+
+Bug fixes:
+
+- The game will no longer crash if you get 100 rings in the waterslide of Lost World Act 2.
+- Lost Chao should now only spawn in the correct act. (For real this time LUL.)
+- The Back Ring as Gamma should now work properly in Red Mountain.
+- Fixed a bug where Sub Game in Trial Mode was sending you in an empty stage.
+- Tails's victory pose should now be correct after a character switch.
+
+
+V2.0.1
+
+General:
+
+- You will now hear a cry sound when you are around a Lost Chao.
+- Improved and fixed few stages.
+- Sonic Race AI can now be any character.
+- Cards missions goal have been reworked and improved.
+- There is now an option to reduce Egg Viper health, so the fight will take less time.
+- Amy has now much better cart controls.
+- The character select menu will now display if Vanilla stages are banned.
+- Randomizer will now try to avoid picking the same music twice in a row.
+
+Bug fixes:
+
+- You will no longer lose all your rings when getting hit by Perfect Chaos, however, you'll now die if you reach 0 ring, just like the original fight.
+- Fixed a bug in Twinkle Circuit Act 3 where Gamma was getting pushed back by a speed pad.
+- Lost Chao should now only spawn in the correct act. (Oops lol.)
+- Final Stats should now be more accurate.
+- Fixed a crash at Hot Shelter Gamma version while using Back Ring. (Oops lol.)
+- Fixed few missions goal display.
+- Random music should now work properly for Chaos 6 and Final Egg Act 2.
+- Fixed a bug where playing with Vanilla option was giving you impossible combinations.
+- Fixed a bug where few cutscenes were making the game crash with Tails and Super Sonic.
+- Swapping character / AI in Ice Cap  while hanging on icicle as Sonic should no longer make the game crash.
+
+
 V2.0
 
 Welcome to the new randomized update! The mod got a complete refactoring, take a look!
@@ -30,12 +79,13 @@ New Stage/Character combination:
 Bug fixes:
 
 - The rocket in Tails's Casinopolis as Big has been fixed.
-- Gamma should now longer get bumped after hitting egg viper. (This is a different fix than the original bump which has been fixed in the previous update.)
+- Gamma should no longer get bumped after hitting egg viper. (This is a different fix than the original bump which has been fixed in the previous update.)
 - Fixed a bug where RNG wasn't the same for people using the same seed. (oops lol.)
 - Fixed a bug where Sonic Layout was taking priority over the actual character after a while, making some stages impossible to beat. (oops lol.)
 - Fixed a bug where Zero was spawning Twice.
 - Zero should no longer spawn in the Sonic version of Final Egg.
 - Randomizer should now display the correct goal for each mission.
+- Credits should no longer start when you pick a new story.
 
 For more information, please read the FAQ! (You can find it in the mod folder.)
 
