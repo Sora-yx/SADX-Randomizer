@@ -33,6 +33,7 @@ void HotShelter_Layout() {
 
 
 	CustomLayout = randomizedSets[levelCount].layout;
+	
 	//act 1 Amy/Big Version
 
 		switch (CustomLayout)
@@ -41,14 +42,6 @@ void HotShelter_Layout() {
 		default:
 			if (CurrentCharacter == Characters_Amy && !Vanilla)
 			{
-				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-				WriteData<1>((void*)0x59a3bb, 0x08);
-				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-				WriteData<1>((void*)0x59a125, 0x08);
-				WriteData<1>((void*)0x59a126, 0x74);
-
 				LoadSetFile(0, "1204"); //load Big version for Amy.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
 				LoadSetFile(2, "1202"); //load Big version for Amy.
@@ -56,8 +49,6 @@ void HotShelter_Layout() {
 			}
 			else
 			{
-				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-
 				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				LoadSetFile(1, "1201"); 
 				LoadSetFile(2, "1202"); 
@@ -66,22 +57,12 @@ void HotShelter_Layout() {
 		case 1: //Big Version
 			if (CurrentCharacter == Characters_Big && !Vanilla || CurrentCharacter == Characters_Gamma) //Amy has Big layout and vice versa.
 			{
-				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-
 				LoadSetFile(0, "1200");
 				LoadSetFile(1, "1201"); 
 				LoadSetFile(2, "1202"); 
 			}
 			else
 			{
-				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-				WriteData<1>((void*)0x59a3bb, 0x08);
-				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-				WriteData<1>((void*)0x59a125, 0x08);
-				WriteData<1>((void*)0x59a126, 0x74);
-
 				LoadSetFile(0, "1204"); //load Big version for other characters.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
 				LoadSetFile(2, "1202"); //load Big version for Amy.
@@ -90,13 +71,6 @@ void HotShelter_Layout() {
 		case 2: //100 Rings
 			if (CurrentCharacter == Characters_Amy && !Vanilla)
 			{
-				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-				WriteData<1>((void*)0x59a3bb, 0x08);
-				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-				WriteData<1>((void*)0x59a125, 0x08);
-				WriteData<1>((void*)0x59a126, 0x74);
 
 				LoadSetFile(0, "1204"); //load Big version for Amy.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
@@ -106,8 +80,6 @@ void HotShelter_Layout() {
 			}
 			else
 			{
-				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-
 				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
@@ -116,13 +88,6 @@ void HotShelter_Layout() {
 		case 3: //Lost Chao
 			if (CurrentCharacter == Characters_Amy && !Vanilla)
 			{
-				//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
-				WriteData<1>((void*)0x5aaf12, 0x08); //open the door when you activate the switch. (if < 8)
-				WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-				WriteData<1>((void*)0x59a3bb, 0x08);
-				WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-				WriteData<1>((void*)0x59a125, 0x08);
-				WriteData<1>((void*)0x59a126, 0x74);
 
 				LoadSetFile(0, "1204"); //load Big version for Amy.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
@@ -131,8 +96,6 @@ void HotShelter_Layout() {
 			}
 			else
 			{
-				WriteData<1>((void*)0x59a3bb, 0x08); //restore act 2 song
-
 				LoadSetFile(0, "1200"); //load Amy hot Shelter version. Lost Chao
 				LoadSetFile(1, "1205"); //Chao Amy Version
 				LoadSetFile(2, "1206"); //Chao Gamma Version
@@ -163,9 +126,32 @@ void HotShelter_Layout() {
 	}
 
 	LoadSetFile(3, "1203"); 
+	BigLayoutHS();
 	CamHotShelter();
 
 	return;
+}
+
+void BigLayoutHS() {
+
+	if (CustomLayout == 1) //Big Layout
+	{
+		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
+		 //open the door when you activate the switch. (if < 8)
+		WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+		WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+		WriteData<1>((void*)0x59a125, 0x08);
+		WriteData<1>((void*)0x59a126, 0x74);
+	}
+	else
+	{
+		//Restore few functions to fix HS act 1 and 2 when Amy layout.
+		WriteData<1>((void*)0x5aaf14, 0x94);
+		WriteData<1>((void*)0x59a3bc, 0x75);
+		WriteData<1>((void*)0x59a125, 0x07);
+		WriteData<1>((void*)0x59a126, 0x75);
+	}
+
 }
 
 
@@ -417,6 +403,8 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	WriteData<5>((void*)0x423062, 0x90);
 
 	WriteCall((void*)0x423071, HotShelter_Layout); //HS Custom Layout
+	WriteData<1>((void*)0x5aaf12, 0x08); //Big HS Stuff
+	WriteData<1>((void*)0x59a3bb, 0x08);
 
 	HSObjects_Init(path, helperFunctions);
 

@@ -61,7 +61,7 @@ void FinalEgg_Layout() {
 	case 2:
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-			LoadSetFile(0, "1000"); //M1
+			LoadSetFile(0, "1004"); //M1 Amy Layout
 			CustomLayout = 1;
 		}
 		else
@@ -72,7 +72,7 @@ void FinalEgg_Layout() {
 	case 3:
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-			LoadSetFile(0, "1000"); //M1
+			LoadSetFile(0, "1004"); //M1 Amy Layout
 			CustomLayout = 1;
 		}
 		else

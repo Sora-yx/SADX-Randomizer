@@ -445,9 +445,6 @@ extern "C" {
 		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 		character_settings_onFrames();
 
-		//force the game to let you win as Tails in Speed Highway Act 3.
-		if (CurrentCharacter == Characters_Tails && CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 2)
-			SetTailsRaceVictory();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

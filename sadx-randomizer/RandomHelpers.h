@@ -41,6 +41,7 @@ void Set_MusicVoices();
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 void Set_BackRing();
+void BigLayoutHS();
 
 extern int level[21];
 extern int AIArray[4];

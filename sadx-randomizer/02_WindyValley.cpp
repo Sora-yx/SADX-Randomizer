@@ -11,6 +11,7 @@ extern bool Race;
 
 extern bool Missions;
 extern int levelCount;
+extern int CurrentAI;
 
 
 

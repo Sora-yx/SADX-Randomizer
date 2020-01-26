@@ -46,7 +46,7 @@ void DisableTimeStuff() {
 		ResultVoiceFix();
 
 
-	if (CurrentCharacter == Characters_Tails && (CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_IceCap || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck))
+	if (CurrentCharacter == Characters_Tails && !Race)
 		SetTailsRaceVictory();
 
 	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
