@@ -28,6 +28,7 @@ extern ObjectMaster* CurAI;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
+
 	if (GameMode != 9 && GameMode != 10)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash

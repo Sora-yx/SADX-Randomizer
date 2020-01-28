@@ -42,16 +42,26 @@ void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 void Set_BackRing();
 void BigLayoutHS();
+void TargetableEntity(ObjectMaster* obj);
+void EggHornet_LoadWithTarget();
+void Chaos0_LoadWithTarget();
+void Chaos2_LoadWithTarget();
+void Chaos6_LoadWithTarget();
+
+ObjectFunc(E101_Main, 0x567fd0);
+VoidFunc(LoadE101, 0x568090);
+
+void E101Target();
 
 extern int level[21];
 extern int AIArray[4];
-extern int AIRaceArray[7];
+extern int AIRaceArray[6];
 extern char stage;
 extern char act; 
 extern int SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
 
-void Randomizer_Init();
+
 extern int character[6];
 extern int CharacterCopy;
 
@@ -105,6 +115,7 @@ void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions);
 
 
 void CreditsNewList();

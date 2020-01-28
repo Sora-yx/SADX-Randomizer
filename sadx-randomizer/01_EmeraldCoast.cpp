@@ -16,7 +16,6 @@ extern int CustomLayout;
 
 void EC_Layout() {
 
-
 	if (CurrentAct == 2)
 		CustomLayout = 1;
 	else

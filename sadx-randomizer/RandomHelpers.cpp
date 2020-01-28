@@ -44,13 +44,13 @@ int AISwapCount = 0;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
-int AIRaceArray[7] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma, Characters_Big }; //Tails Race AI
+int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
 
 int TwinkleCircuitRNG = 0;
 int level[21] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
-int bannedLevelsGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero };
+int bannedLevelsGamma[7] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 //Initiliaze banned Vanilla stage (if option is checked)
@@ -59,7 +59,7 @@ int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggW
 int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
 int bannedRegularAmy[1] = { LevelIDs_Zero };
 int bannedRegularBig[2] = { LevelIDs_PerfectChaos, LevelIDs_EggViper };
-int bannedRegularGamma[8] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_Zero  };
+int bannedRegularGamma[7] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, LevelIDs_Zero };
 
 //Few jingle that we don't want in the random music function.
 int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b }; 
@@ -73,6 +73,7 @@ short randomacts(RandomizedEntry entry) {
 	int actHS[2] = { 0, 2 };
 	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
 	int act1[3] = { 0, 0, 2 }; 
+	int actIC[2] = { 0, 3 };
 
 	switch (entry.level)
 	{
@@ -110,7 +111,7 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character == Characters_Big)
 			return 1;
 		else
-			return 0;
+			return actIC[rand() % 2];
 		break;
 	case LevelIDs_Casinopolis:
 		if (entry.character == Characters_Sonic && !Vanilla)
@@ -208,20 +209,28 @@ short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 
-	short cur_stage = -1;
+	
 	AllowVanilla = Vanilla;
+	short cur_stage = -1;
 
-	if (AllowVanilla != true) {
-		do {
-		cur_stage = level[rand() % LengthOfArray(level)];
-		} while (isRegularStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
-	}
-	else {
 		do {
 			cur_stage = level[rand() % LengthOfArray(level)];
-		} while (isStageBanned(char_id, cur_stage)  || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
+		} while (isRegularStageBanned(char_id, cur_stage) && !AllowVanilla || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || cur_stage > 14 && cur_stage < 26 && prev_stage > 14 && prev_stage < 26);
 
+
+	if (cur_stage >= LevelIDs_TwinkleCircuit || cur_stage == LevelIDs_PerfectChaos || cur_stage >= LevelIDs_EggWalker && cur_stage < LevelIDs_Zero) //reduce the chance to get TC, SD and few bosses.
+	{
+		short trick = 0;
+		trick = rand() % 2;
+
+		if (trick)
+		{
+			do {
+				cur_stage = level[rand() % 10]; //pick a random stage between 1 and 10 instead.
+			} while (isRegularStageBanned(char_id, cur_stage) && !AllowVanilla || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage);
+		}
 	}
+
 
 	prev_stage = cur_stage;
 	return cur_stage;

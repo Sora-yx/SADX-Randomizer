@@ -2,7 +2,25 @@
 #include "Utils.h"
 #include "Chaos6.h"
 #include "RandomHelpers.h"
+#include "Trampoline.h"
 
+
+void Chaos6_LoadWithTarget() {
+	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+	obj->Data1->LoopData = (Loop*)LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, Chaos6_Main);
+}
+
+void IceBomb_Load_r(ObjectMaster* obj);
+Trampoline IceBomb_Load_t(0x55CA20, 0x55CA26, IceBomb_Load_r);
+
+void IceBomb_Load_r(ObjectMaster* obj) {
+	ObjectFunc(original, IceBomb_Load_t.Target());
+	original(obj);
+
+	ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+	target->Data1->LoopData = (Loop*)obj;
+	target->Data1->CharID = 1;
+}
 
 void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunctions)
 {

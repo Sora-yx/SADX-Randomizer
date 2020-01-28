@@ -3,6 +3,7 @@
 VoidFunc(BigHoldingFroggy, 0x48cce4);
 
  void SetGammaTimer();  //force to 6 min instead of 3
+ void GammaTarget_Init();
  void BigWeightHook(); //force to 2000g
 
  extern int CurrentAI;

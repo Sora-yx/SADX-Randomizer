@@ -169,6 +169,12 @@ void LoadStageMissionImage_r() {
 				CurrentMission = 5;
 		}
 
+		if (CurrentLevel == LevelIDs_IceCap)
+		{
+			if (CurrentAct == 3)
+				CurrentMission = 5;
+		}
+
 				
 		StageMissionTexlist.textures = Missions;
 		StageMissionTexlist.nbTexture = LengthOfArray(Missions);

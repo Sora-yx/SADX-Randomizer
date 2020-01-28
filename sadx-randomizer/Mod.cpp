@@ -28,7 +28,6 @@ extern int levelCount;
 extern short ChaoCryDelay;
 
 //Character settings
-bool Weight = true;
 bool AmySpeed = true;
 bool BigSpeed = true;
 
@@ -119,7 +118,6 @@ extern "C" {
 		//Characters Settings
 		AmySpeed = config->getBool("CharactersStuff", "AmySpeed", true);
 		BigSpeed = config->getBool("CharactersStuff", "BigSpeed", true);
-		Weight = config->getBool("CharactersStuff", "Weight", true);
 
 		//Disable Character settings
 		banCharacter[0] = config->getBool("Roster", "Sonic", false);
@@ -183,6 +181,7 @@ extern "C" {
 		EggWalker_Init(path, helperFunctions);
 		EggViper_Init(path, helperFunctions);
 		Zero_Init(path, helperFunctions);
+		//E101_Init(path, helperFunctions);
 
 		//Credits
 		WriteCall((void*)0x641aef, CreditFlag);
@@ -198,10 +197,8 @@ extern "C" {
 		//Musics, Voices
 		Set_MusicVoices();
 
-		if (Weight)
-		{
-			WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g if the player activated the option.
-		}
+
+		
 
 		if (isAIAllowed)
 		{
@@ -236,7 +233,7 @@ extern "C" {
 		//Chaos 4 Stuff
 		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
 			//E101 Stuff
-		WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
+		//WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
 
 		//Perfect Chaos Stuff
 		WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.

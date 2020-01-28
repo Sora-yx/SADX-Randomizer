@@ -31,7 +31,6 @@ void CamHotShelter() {
 
 void HotShelter_Layout() {
 
-
 	CustomLayout = randomizedSets[levelCount].layout;
 	
 	//act 1 Amy/Big Version

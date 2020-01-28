@@ -177,6 +177,11 @@ void CallStuffWhenLevelStart() {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 	}
 
+	if (CurrentLevel == LevelIDs_E101)
+	{
+		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
+	}
+
 	SuperSonicFlag = 0;
 	TransfoCount = 0;
 
@@ -249,6 +254,67 @@ void CallStuffWhenLevelStart() {
 }
 
 
+//Create an object so Gamma can hit some specific bosses.
+CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
+
+void TargetableEntity(ObjectMaster* obj)
+{
+	EntityData1* data = obj->Data1;
+
+	if (data->Action == 0) {
+		AllocateObjectData2(obj, obj->Data1);
+
+		//if the scale is specified, temporary set the collision scale to it.
+		if (data->Scale.x) {
+			col.scale.x = data->Scale.x;
+			Collision_Init(obj, &col, 1, 2u);
+			col.scale.x = 6;
+		}
+		else {
+			if (EntityData1Ptrs[0]->CharID != Characters_Gamma)
+			{
+				Collision_Init(obj, &col, 1, 3u);
+			}
+			else
+			{
+				Collision_Init(obj, &col, 1, 2u);
+			}
+
+		}
+
+		data->Action = 1;
+	}
+	else {
+		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
+
+		if (!boss || !boss->Data1) {
+			DeleteObject_(obj);
+			return;
+		}
+
+		if (EntityData1Ptrs[0]->CharID != Characters_Gamma) return;
+
+		data->Position = boss->Data1->Position;
+		data->Position.y += 10;
+
+		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
+		{
+			DeleteObject_(obj);
+
+			//if it is set, don't reload the target object
+			if (data->CharID == 1) return;
+
+			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+			target->Data1->LoopData = (Loop*)boss;
+		}
+		else
+		{
+			AddToCollisionList(data);
+		}
+	}
+}
+
+
 
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer() {
@@ -282,7 +348,7 @@ void FixGammaHitBounce() {
 void BigWeightHook() {
 
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
-	BigWeight = 2000; //display 2000g for Big
+	BigWeight = 1999; //display 2000g for Big
 }
 
 
@@ -401,8 +467,11 @@ void set_character_hook() {
 	WriteData<5>((void*)0x478AFC, 0x90);
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
+	
+	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g 
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
+	WriteCall((void*)0x4230a0, GammaTarget_Init); //allow gamma to target some boss (Called before boss fight.)
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.

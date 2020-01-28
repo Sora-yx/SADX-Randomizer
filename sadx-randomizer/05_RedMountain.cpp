@@ -143,37 +143,39 @@ void RedMountain_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
-	LoadSetFile(0, "0500");
+
+	switch (CustomLayout)
+	{
+	default:
+	case 1:
+		LoadSetFile(0, "0500");
+		LoadSetFile(1, "0501");
+		CustomLayout = 0;
+		break;
+	case 2:
+		LoadSetFile(0, "0500");
+		LoadSetFile(1, "0501");
+		break;
+	case 3: //Lost Chao
+		LoadSetFile(0, "0504");
+		
+		if (CurrentCharacter == Characters_Gamma) //Back Ring Fix
+			LoadSetFile(1, "0505");
+		else
+			LoadSetFile(1, "0501");
+
+		break;
+	}
+
 
 	if (CurrentAct == 1)
 	{
+		LoadSetFile(0, "0500");
 		LoadSetFile(1, "0503"); //load Gamma version
 		CustomLayout = 1;
-		
 	}
 
-	if (CurrentAct == 0)
-	{
-		LoadSetFile(0, "0500");
-		LoadSetFile(1, "0501");
-
-		switch (CustomLayout)
-		{
-		default:
-		case 1:
-			CustomLayout = 0;
-			break;
-		case 2:
-			break;
-		case 3: //Lost Chao
-			LoadSetFile(0, "0504");
-
-			if (CurrentCharacter == Characters_Gamma) //Back Ring Fix
-				LoadSetFile(1, "0505");
-
-			break;
-		}
-	}
+	
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	LoadSetFile(2, "0502"); //load Knux version

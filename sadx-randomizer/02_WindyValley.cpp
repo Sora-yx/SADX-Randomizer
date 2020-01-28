@@ -16,7 +16,6 @@ extern int CurrentAI;
 
 
 void WindyValley_Layout() {
-
 	
 	CustomLayout = randomizedSets[levelCount].layout;
 
@@ -149,7 +148,12 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202S.BIN", "system\\cam\\CAM0202S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
+
+	if (!Vanilla)
+		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
+	else
+		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1S_StartPositions[0]);
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3S_StartPositions[0]);
 

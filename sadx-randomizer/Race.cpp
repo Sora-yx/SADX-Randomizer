@@ -42,14 +42,6 @@ void CheckRace() {
 					AIRace = Characters_Sonic;
 			}
 
-			if (AIRace == Characters_Big && CurrentLevel == LevelIDs_WindyValley)
-			{
-				if (CurrentCharacter == Characters_Sonic)
-					AIRace = Characters_Tails;
-				else
-					AIRace = Characters_Sonic;
-			}
-
 		}
 
 		

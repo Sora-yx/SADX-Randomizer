@@ -31,7 +31,6 @@ void FinalEgg_Layout() {
 
 	CustomLayout = randomizedSets[levelCount].layout;
 
-
 	switch (CustomLayout)
 	{
 	case 0:

@@ -11,6 +11,8 @@ extern int levelCount;
 extern int CurrentAI;
 
 
+
+
 void IC_Layout() {
 
 	if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
@@ -29,7 +31,10 @@ void IC_Layout() {
 		WriteCall((void*)0x4eda00, DisableController);
 	}
 
-	CustomLayout = randomizedSets[levelCount].layout;
+	if (CurrentAct == 3)
+		CustomLayout = 0;
+	else
+		CustomLayout = randomizedSets[levelCount].layout;
 
 	LoadSetFile(0, "0800"); //M1
 
@@ -56,6 +61,7 @@ void IC_Layout() {
 		LoadCamFile(2, "0802");
 		LoadCamFile(3, "0803");
 
+
 		return;
 }
 
@@ -63,7 +69,6 @@ void IC_Layout() {
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
 
 	WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
 
@@ -85,84 +90,102 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0800S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0804S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800S.BIN", "system\\cam\\CAM0800S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801S.BIN", "system\\cam\\CAM0801S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802S.BIN", "system\\cam\\CAM0802S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803S.BIN", "system\\cam\\CAM0803S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, IC4_StartPositions[0]);
 
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0800M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0804M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800M.BIN", "system\\cam\\CAM0800M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801M.BIN", "system\\cam\\CAM0801M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802M.BIN", "system\\cam\\CAM0802M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803M.BIN", "system\\cam\\CAM0803M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Tails, IC4_StartPositions[0]);
 
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0800K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0804K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800K.BIN", "system\\cam\\CAM0800K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801K.BIN", "system\\cam\\CAM0801K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802K.BIN", "system\\cam\\CAM0802K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803K.BIN", "system\\cam\\CAM0803K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC4_StartPositions[0]);
 
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0800A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0804A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800A.BIN", "system\\cam\\CAM0800A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801A.BIN", "system\\cam\\CAM0801A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802A.BIN", "system\\cam\\CAM0802A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803A.BIN", "system\\cam\\CAM0803A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, IC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, IC3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Amy, IC4_StartPositions[0]);
 
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0800B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803B.BIN", "system\\levels\\Ice Cap\\Big-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0804B.BIN", "system\\levels\\Ice Cap\\Big-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800B.BIN", "system\\cam\\CAM0800B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801B.BIN", "system\\cam\\CAM0801B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802B.BIN", "system\\cam\\CAM0802B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803B.BIN", "system\\cam\\CAM0803B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, IC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, IC3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Big, IC4_StartPositions[0]);
 
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0800E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0801E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0803E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET080E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800E.BIN", "system\\cam\\CAM0800E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801E.BIN", "system\\cam\\CAM0801E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802E.BIN", "system\\cam\\CAM0802E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0803E.BIN", "system\\cam\\CAM0803E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, IC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, IC3_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Gamma, IC4_StartPositions[0]);
 }
 
 ObjectListEntry IceCapObjectList_list[] = {
@@ -298,7 +321,37 @@ ObjectListEntry IceCapObjectList_list[] = {
 
 ObjectList IceCapObjectList = { arraylengthandptrT(IceCapObjectList_list, int) };
 
+
+PVMEntry IceCapObjectTextures[] = {
+	{ "OBJ_ICECAP", (TexList*)0xE48F30 },
+	{ "OBJ_ICECAP2", (TexList*)0xE48F78 },
+	{ "E102TIME", (TexList*)0x91D5E0 },
+	{ "E_SAI", (TexList*)0x38C8EA8 },
+	{ "E_SNOWMAN", (TexList*)0x985990 },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "PEN", (TexList*)0x92D39C },
+	{ "E_SNAKE", (TexList*)0x94E640 },
+	{ "RAKO", (TexList*)0x949FC4 },
+	{ "MECHA", (TexList*)0x1726108 },
+	{ "MOGU", (TexList*)0x93ECEC },
+	{ "KAOS_EME", (TexList*)0xC3FE20 },
+	{ "SAKE", (TexList*)0x171BF60 },
+	{ "GOMA", (TexList*)0x92ACE4 },
+	{ "PIRANIA", (TexList*)0x1728BB8 },
+	{ "NEW_BB", (TexList*)0x17126F4 },
+	{ "HAMMER", (TexList*)0x1723CF4 },
+	{ "SAME", (TexList*)0x172AAC4 },
+	{ "UNAGI", (TexList*)0x172CD88 },
+	{ "GORI", (TexList*)0x945964 },
+	{ "BOARD_SCORE", (TexList*)0x9BE780 },
+	{ NULL, (TexList*)0x91CBE8 },
+	{ "big_kaeru", (TexList*)0x91D780 },
+	{ 0 }
+};
+
 void __cdecl ICObjects_Init(const char *path, const HelperFunctions &helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_IceCap * 8 + 2] = &IceCapObjectList;
+	ObjLists[LevelIDs_IceCap * 8 + 3] = &IceCapObjectList;
+	TexLists_Obj[LevelIDs_IceCap] = IceCapObjectTextures;
 }
