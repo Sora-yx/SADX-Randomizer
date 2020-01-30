@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 StartPosition SH1_StartPositions[]{
 	{ 4, 0,{-673, -10, 5 }, 182 }
 };

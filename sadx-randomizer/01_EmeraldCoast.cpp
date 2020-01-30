@@ -4,24 +4,14 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-//LandTableInfo* ECAct1;
-
-//void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions) 
-
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern int CustomLayout;
 
 
 void EC_Layout() {
-
 	if (CurrentAct == 2)
 		CustomLayout = 1;
 	else
 		CustomLayout = randomizedSets[levelCount].layout;
 
-	
 	switch (CustomLayout)
 	{
 	case 0:
@@ -41,7 +31,7 @@ void EC_Layout() {
 	case 1:
 		if (CurrentCharacter == Characters_Gamma && !Vanilla)
 		{
-			LoadSetFile(0, "0100"); 
+			LoadSetFile(0, "0100");
 			CustomLayout = 0;
 		}
 		else
@@ -75,7 +65,7 @@ void EC_Layout() {
 			LoadSetFile(0, "0100");
 			LoadSetFile(1, "0103"); //M3
 		}
-		
+
 		break;
 	}
 
@@ -86,8 +76,6 @@ void EC_Layout() {
 
 	return;
 }
-
-
 
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -100,12 +88,12 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	WriteData<5>((void*)0x422b92, 0x90);
 	WriteData<5>((void*)0x422b9e, 0x90);
 	WriteData<5>((void*)0x422bad, 0x90);
-	
+
 	WriteCall((void*)0x422bbc, EC_Layout);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0100S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act1.bin");
-	
+
 	helperFunctions.ReplaceFile("system\\SET0101S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0102S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0103S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Chao.bin");
@@ -145,7 +133,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC3_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0100A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Act1.bin");
@@ -189,4 +176,3 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC3_StartPositions[0]);
 }
-

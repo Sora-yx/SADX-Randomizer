@@ -4,16 +4,9 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern bool Race;
-extern int CustomLayout;
 
 
 void CamSpeedHighway() {
-
-
 	if (CustomLayout == 1)
 	{
 		LoadCamFile(0, "0403");
@@ -89,7 +82,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH3_StartPositions[0]);
 
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0400A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0401A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act2.bin");
@@ -111,7 +103,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	helperFunctions.ReplaceFile("system\\SET0402B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act3.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0404B.BIN", "system\\levels\\Speed Highway\\Big-SH-Chao.bin");
-
 
 	helperFunctions.ReplaceFile("system\\CAM0400B.BIN", "system\\cam\\CAM0400B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0401B.BIN", "system\\cam\\CAM0401B.bin");
@@ -137,7 +128,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 }
 
 void SpeedHighway_Layout() {
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
@@ -147,18 +137,18 @@ void SpeedHighway_Layout() {
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout		
+			LoadSetFile(0, "0403"); //load Tails layout
 			CustomLayout = 1;
 		}
 		else
 		{
-			LoadSetFile(0, "0400"); 
+			LoadSetFile(0, "0400");
 			Race = false;
 			CustomLayout = 0;
 		}
 		break;
 	case 1:
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big. 
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big.
 		{
 			LoadSetFile(0, "0400"); //load Sonic Layout
 			Race = false;
@@ -167,7 +157,7 @@ void SpeedHighway_Layout() {
 		else
 		{
 			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout		
+			LoadSetFile(0, "0403"); //load Tails layout
 			CustomLayout = 1;
 		}
 		break;
@@ -175,20 +165,20 @@ void SpeedHighway_Layout() {
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout		
+			LoadSetFile(0, "0403"); //load Tails layout
 			CustomLayout = 1;
 		}
 		else
 		{
 			Race = false;
-			LoadSetFile(0, "0400"); //load Sonic Layout	
+			LoadSetFile(0, "0400"); //load Sonic Layout
 		}
 		break;
 	case 3: //Lost Chao
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout		
+			LoadSetFile(0, "0403"); //load Tails layout
 			CustomLayout = 1;
 		}
 		else
@@ -207,7 +197,6 @@ void SpeedHighway_Layout() {
 	CamSpeedHighway();
 	return;
 }
-
 
 ObjectListEntry SpeedHighwayObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,
@@ -335,5 +324,5 @@ ObjectList SpeedHighwayObjectList = { arraylengthandptrT(SpeedHighwayObjectList_
 
 void __cdecl SHObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	ObjLists[LevelIDs_SpeedHighway * 8 +2] = &SpeedHighwayObjectList;
+	ObjLists[LevelIDs_SpeedHighway * 8 + 2] = &SpeedHighwayObjectList;
 }

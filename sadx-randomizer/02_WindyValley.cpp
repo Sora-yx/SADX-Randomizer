@@ -5,18 +5,7 @@
 #include "ActsSettings.h"
 
 
-HelperFunctions extern help;
-extern int CustomLayout;
-extern bool Race;
-
-extern bool Missions;
-extern int levelCount;
-extern int CurrentAI;
-
-
-
 void WindyValley_Layout() {
-	
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 2)
@@ -37,7 +26,6 @@ void WindyValley_Layout() {
 			LoadSetFile(2, "0202");
 		}
 	}
-
 
 	if (CurrentAct == 0 || CurrentAct == 1)
 	{
@@ -102,11 +90,9 @@ void WindyValley_Layout() {
 				LoadSetFile(0, "0200");
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0205"); //Lost Chao
-				
 			}
 			break;
 		}
-
 	}
 
 	if (Race)
@@ -119,11 +105,8 @@ void WindyValley_Layout() {
 	return;
 }
 
-
-
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
-	
 	//Initiliaze data
 	WVObjects_Init(path, helperFunctions);
 
@@ -143,7 +126,6 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 
 	helperFunctions.ReplaceFile("system\\SET0205S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
 	helperFunctions.ReplaceFile("system\\SET0206S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Race.bin"); //MS Race
-
 
 	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
@@ -178,10 +160,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0202K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0203K.BIN", "system\\levels\\Windy Valley\\Knux-WV-E102.bin");
 
-
 	helperFunctions.ReplaceFile("system\\SET0205K.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
 	helperFunctions.ReplaceFile("system\\SET0206K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Race.bin"); //race
-
 
 	helperFunctions.ReplaceFile("system\\CAM0200K.BIN", "system\\cam\\CAM0200K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201K.BIN", "system\\cam\\CAM0201K.bin");
@@ -190,12 +170,11 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV3S_StartPositions[0]);
 
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0200A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0201A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0202A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act3.bin");
-	
+
 	helperFunctions.ReplaceFile("system\\SET0203A.BIN", "system\\levels\\Windy Valley\\Amy-WV-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Chao.bin"); //Chao
@@ -330,10 +309,3 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 	//Change the objectlist
 	ObjLists[LevelIDs_WindyValley * 8 + 2] = &WindyValleyObjectList;
 }
-
-
-
-
-
-
-

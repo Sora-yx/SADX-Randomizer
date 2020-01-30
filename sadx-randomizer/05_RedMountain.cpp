@@ -4,16 +4,9 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern int CustomLayout;
-extern bool Missions;
-extern int levelCount;
-
-
 
 void CamRedMountain() {
-
-	LoadCamFile(0, "0500"); 
+	LoadCamFile(0, "0500");
 
 	if (CustomLayout == 1)
 	{
@@ -28,7 +21,6 @@ void CamRedMountain() {
 
 	return;
 }
-
 
 void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -79,7 +71,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Tails, RM1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, RM2_StartPositions[0]);
 
-
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0500K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act2.bin");
@@ -91,7 +82,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0501K.bin", "system\\cam\\CAM0501K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, RM1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, RM2_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0500A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Act1.bin");
@@ -105,7 +95,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Amy, RM1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, RM2_StartPositions[0]);
 
-
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0500B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act2.bin");
@@ -117,7 +106,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0501B.bin", "system\\cam\\CAM0501B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, RM1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, RM2_StartPositions[0]);
-
 
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0500E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Act1.bin");
@@ -133,16 +121,10 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Gamma, RM2_StartPositions[0]);
 
 	RedMountainDeathZones[0] = RedMountain1DeathZones;
-
 }
 
-
-
 void RedMountain_Layout() {
-
-
 	CustomLayout = randomizedSets[levelCount].layout;
-
 
 	switch (CustomLayout)
 	{
@@ -158,7 +140,7 @@ void RedMountain_Layout() {
 		break;
 	case 3: //Lost Chao
 		LoadSetFile(0, "0504");
-		
+
 		if (CurrentCharacter == Characters_Gamma) //Back Ring Fix
 			LoadSetFile(1, "0505");
 		else
@@ -167,15 +149,12 @@ void RedMountain_Layout() {
 		break;
 	}
 
-
 	if (CurrentAct == 1)
 	{
 		LoadSetFile(0, "0500");
 		LoadSetFile(1, "0503"); //load Gamma version
 		CustomLayout = 1;
 	}
-
-	
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	LoadSetFile(2, "0502"); //load Knux version
@@ -184,7 +163,6 @@ void RedMountain_Layout() {
 }
 
 void FixRMLava() {
-
 	if (CustomLayout == 1 && CurrentAct == 1)
 		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone
 	else
@@ -192,7 +170,6 @@ void FixRMLava() {
 
 	return;
 }
-
 
 ObjectListEntry RedMountainObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,
@@ -299,7 +276,5 @@ ObjectList RedMountainObjectList = { arraylengthandptrT(RedMountainObjectList_li
 
 void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	ObjLists[LevelIDs_RedMountain * 8 +1] = &RedMountainObjectList;
+	ObjLists[LevelIDs_RedMountain * 8 + 1] = &RedMountainObjectList;
 }
-
-

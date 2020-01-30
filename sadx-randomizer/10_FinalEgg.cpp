@@ -4,13 +4,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern int CustomLayout;
 
 void CamFinalEgg() {
-
 	if (CustomLayout == 1)
 	{
 		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
@@ -28,7 +23,6 @@ void CamFinalEgg() {
 }
 
 void FinalEgg_Layout() {
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
@@ -89,8 +83,6 @@ void FinalEgg_Layout() {
 	return;
 }
 
-
-
 void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
@@ -149,7 +141,6 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, FE3_StartPositions[0]);
 
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET1000A.BIN", "system\\levels\\Final Egg\\Amy-FE-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1001A.BIN", "system\\levels\\Final Egg\\Amy-FE-Act2.bin");
@@ -195,9 +186,6 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.RegisterStartPosition(Characters_Gamma, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, FE3_StartPositions[0]);
 }
-
-
-
 
 ObjectListEntry FinalEggObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,

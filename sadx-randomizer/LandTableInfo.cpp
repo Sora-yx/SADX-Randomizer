@@ -211,23 +211,23 @@ void LandTableInfo::fixmotionpointers(NJS_MOTION* motion, intptr_t base, int cou
 			fixedpointers.insert(motion->mdata);
 			switch (motion->inp_fn & 0xF)
 			{
-				case 1:
-					fixmdatapointers((NJS_MDATA1*)motion->mdata, base, count);
-					break;
-				case 2:
-					fixmdatapointers((NJS_MDATA2*)motion->mdata, base, count);
-					break;
-				case 3:
-					fixmdatapointers((NJS_MDATA3*)motion->mdata, base, count);
-					break;
-				case 4:
-					fixmdatapointers((NJS_MDATA4*)motion->mdata, base, count);
-					break;
-				case 5:
-					fixmdatapointers((NJS_MDATA5*)motion->mdata, base, count);
-					break;
-				default:
-					break;
+			case 1:
+				fixmdatapointers((NJS_MDATA1*)motion->mdata, base, count);
+				break;
+			case 2:
+				fixmdatapointers((NJS_MDATA2*)motion->mdata, base, count);
+				break;
+			case 3:
+				fixmdatapointers((NJS_MDATA3*)motion->mdata, base, count);
+				break;
+			case 4:
+				fixmdatapointers((NJS_MDATA4*)motion->mdata, base, count);
+				break;
+			case 5:
+				fixmdatapointers((NJS_MDATA5*)motion->mdata, base, count);
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -340,50 +340,50 @@ void LandTableInfo::init(istream& stream)
 		auto nextchunk = chunkbase + (streamoff)chunksz;
 		switch (chunktype)
 		{
-			case ChunkTypes_Label:
-				while (true)
+		case ChunkTypes_Label:
+			while (true)
+			{
+				void* dataptr;
+				readdata(stream, dataptr);
+				uint32_t labelptr;
+				readdata(stream, labelptr);
+
+				if (dataptr == (void*)-1 && labelptr == UINT32_MAX)
 				{
-					void* dataptr;
-					readdata(stream, dataptr);
-					uint32_t labelptr;
-					readdata(stream, labelptr);
-
-					if (dataptr == (void*)-1 && labelptr == UINT32_MAX)
-					{
-						break;
-					}
-
-					dataptr = (uint8_t*)dataptr + landtablebase;
-
-					if (reallocateddata.find(dataptr) != reallocateddata.end())
-					{
-						dataptr = reallocateddata[dataptr];
-					}
-
-					tmpaddr = (uint32_t)stream.tellg();
-					stream.seekg((uint32_t)chunkbase + labelptr);
-					string label = getstring(stream);
-					stream.seekg(tmpaddr);
-					labels1[dataptr] = label;
-					labels2[label] = dataptr;
+					break;
 				}
-				break;
-			case ChunkTypes_Author:
-				author = getstring(stream);
-				break;
-			case ChunkTypes_Tool:
-				tool = getstring(stream);
-				break;
-			case ChunkTypes_Description:
-				description = getstring(stream);
-				break;
-			default:
-				auto* buf = new uint8_t[chunksz];
-				allocatedmem.push_back(shared_ptr<uint8_t>(buf, default_delete<uint8_t[]>()));
-				stream.read((char*)buf, chunksz);
-				Metadata meta = { chunksz, buf };
-				metadata[chunktype] = meta;
-				break;
+
+				dataptr = (uint8_t*)dataptr + landtablebase;
+
+				if (reallocateddata.find(dataptr) != reallocateddata.end())
+				{
+					dataptr = reallocateddata[dataptr];
+				}
+
+				tmpaddr = (uint32_t)stream.tellg();
+				stream.seekg((uint32_t)chunkbase + labelptr);
+				string label = getstring(stream);
+				stream.seekg(tmpaddr);
+				labels1[dataptr] = label;
+				labels2[label] = dataptr;
+			}
+			break;
+		case ChunkTypes_Author:
+			author = getstring(stream);
+			break;
+		case ChunkTypes_Tool:
+			tool = getstring(stream);
+			break;
+		case ChunkTypes_Description:
+			description = getstring(stream);
+			break;
+		default:
+			auto* buf = new uint8_t[chunksz];
+			allocatedmem.push_back(shared_ptr<uint8_t>(buf, default_delete<uint8_t[]>()));
+			stream.read((char*)buf, chunksz);
+			Metadata meta = { chunksz, buf };
+			metadata[chunktype] = meta;
+			break;
 		}
 		stream.seekg(nextchunk);
 		readdata(stream, chunktype);

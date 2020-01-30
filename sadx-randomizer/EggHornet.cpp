@@ -3,9 +3,6 @@
 #include "data\EggHornet.h"
 #include "RandomHelpers.h"
 
-
-
-
 void EggHornet_LoadWithTarget() {
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
 	ObjectMaster* egghornet = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 1, EggHornet_Main);
@@ -20,34 +17,27 @@ void EggHornet_LoadWithTarget() {
 }
 
 void GammaTarget_Init() {
-
 	if (CurrentCharacter == Characters_Gamma)
 	{
-		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);	
+		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
+
 	}
 
 	return LoadCamFile(0, "0000");
 }
 
-
-
-
-
-
 void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	
+
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EH_StartPositions[0]);
-
 
 	//Tails
 	helperFunctions.RegisterStartPosition(Characters_Tails, EH_StartPositions[0]);
 
 	//Knuckles
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EH_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.RegisterStartPosition(Characters_Amy, EH_StartPositions[0]);
@@ -56,5 +46,4 @@ void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.RegisterStartPosition(Characters_Big, EH_StartPositions[0]);
 	//Gamma
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EH_StartPositions[0]);
-
 }

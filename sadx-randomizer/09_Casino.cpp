@@ -5,15 +5,9 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern bool isAIActive;
-extern bool Race;
-extern int CustomLayout;
+
 
 void Casino_Layout() {
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	if (CurrentAct == 1)
@@ -35,7 +29,7 @@ void Casino_Layout() {
 				LoadSetFile(1, "0901"); //M1 Race
 				CustomLayout = 1;
 			}
-	
+
 			break;
 		case 2:
 			Race = false;
@@ -66,7 +60,7 @@ void Casino_Layout() {
 		default:
 			Race = false;
 			LoadSetFile(0, "0900"); //M1
-			LoadSetFile(1, "0901"); //M1 
+			LoadSetFile(1, "0901"); //M1
 			CustomLayout = 0;
 			break;
 		case 2:
@@ -86,16 +80,13 @@ void Casino_Layout() {
 		LoadCamFile(1, "0901");
 		LoadCamFile(2, "0902");
 		LoadCamFile(3, "0903");
-	
 	}
 
 	if (Race)
 		SelectBarRace();
 
 	return;
-	
 }
-
 
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -122,7 +113,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino2_StartPositions[0]);
 
-
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0900M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act2.bin");
@@ -133,7 +123,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, Casino2_StartPositions[0]);
-
 
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0900K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act1.bin");
@@ -146,7 +135,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino2_StartPositions[0]);
 
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0900A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act2.bin");
@@ -157,7 +145,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0901A.bin", "system\\cam\\CAM0901A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, Casino2_StartPositions[0]);
-
 
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0900B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Act1.bin");
@@ -170,19 +157,16 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Big, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, Casino2_StartPositions[0]);
 
-
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SET0900E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0901E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0904E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0905E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Rings.bin");
 
-
 	helperFunctions.ReplaceFile("system\\CAM0900E.bin", "system\\cam\\CAM0900E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901E.bin", "system\\cam\\CAM0901E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino2_StartPositions[0]);
-
 }
 
 ObjectListEntry CasinopolisObjectList_list[] = {

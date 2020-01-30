@@ -3,9 +3,6 @@
 #include "EggWalker.h"
 #include "RandomHelpers.h"
 
-
-
-
 void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
@@ -25,5 +22,4 @@ void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.RegisterStartPosition(Characters_Big, EW_StartPositions[0]);
 	//Gamma
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EW_StartPositions[0]);
-
 }

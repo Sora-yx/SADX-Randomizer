@@ -14,18 +14,13 @@ void __cdecl E101Objects_Init(const char* path, const HelperFunctions& helperFun
 	//TexLists_Obj[LevelIDs_E101] = E101ObjectTextures;
 }
 
-
 void E101Target()
 {
-
 	/*ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
 	ObjectMaster* e101 = LoadObject((LoadObj)(2), 2, E101_Main);
 	*/
 
-	
-
 	return LoadE101();
-
 }
 
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)

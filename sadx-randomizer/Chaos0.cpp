@@ -12,16 +12,12 @@ void Chaos0_LoadWithTarget() {
 	chaos0->MainSub = Chaos0_Main;
 	chaos0->DisplaySub = (ObjectFuncPtr)0x548360;
 	//chaos0->DeleteSub = (ObjectFuncPtr)0x5481d0;
-	
+
 	obj->Data1->LoopData = (Loop*)chaos0;
 	obj->Data1->Scale.x = 20;
 	DeleteObject_(chaos0);
 	return;
 }
-
-
-
-
 
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -36,7 +32,6 @@ void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunction
 	//Knuckles
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Chaos0_StartPositions[0]);
 
-
 	//Amy
 	helperFunctions.RegisterStartPosition(Characters_Amy, Chaos0_StartPositions[0]);
 
@@ -44,5 +39,4 @@ void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Big, Chaos0_StartPositions[0]);
 	//Gamma
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Chaos0_StartPositions[0]);
-
 }

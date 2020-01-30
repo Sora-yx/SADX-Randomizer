@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 StartPosition LW1_StartPositions[]{
 	{ 7, 0,{ -264, 73, -168 }, 0 }
 };

@@ -8,7 +8,6 @@ void Chaos2_LoadWithTarget() {
 	obj->Data1->LoopData = (Loop*)LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, Chaos2_Main);
 }
 
-
 void __cdecl Chaos2_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data

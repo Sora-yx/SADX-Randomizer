@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClCompile Include="..\sadx-mod-loader\libmodutils\LandTableInfo.cpp" />
     <ClCompile Include="..\sadx-mod-loader\libmodutils\ModelInfo.cpp" />
+    <ClCompile Include="00_HedgehogHammer.cpp" />
     <ClCompile Include="01_EmeraldCoast.cpp" />
     <ClCompile Include="02_WindyValley.cpp" />
     <ClCompile Include="09_Casino.cpp" />
@@ -111,7 +112,7 @@
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="PerfectChaos.cpp" />
     <ClCompile Include="Race.cpp" />
-    <ClCompile Include="RandomHelpers.cpp" />
+    <ClCompile Include="Randomizer_Main.cpp" />
     <ClCompile Include="SandHill.cpp" />
     <ClCompile Include="StageSettings.cpp" />
     <ClCompile Include="stdafx.cpp">

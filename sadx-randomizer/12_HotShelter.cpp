@@ -4,14 +4,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int CurrentMission;
-extern int levelCount;
-extern int CustomLayout;
 
 void CamHotShelter() {
-
 	if (CustomLayout == 1)
 	{
 		LoadCamFile(0, "1204"); //load the camera used for Big Hot Shelter
@@ -28,80 +22,75 @@ void CamHotShelter() {
 	return;
 }
 
-
 void HotShelter_Layout() {
-
 	CustomLayout = randomizedSets[levelCount].layout;
-	
+
 	//act 1 Amy/Big Version
 
-		switch (CustomLayout)
+	switch (CustomLayout)
+	{
+	case 0: //Amy Version
+	default:
+		if (CurrentCharacter == Characters_Amy && !Vanilla)
 		{
-		case 0: //Amy Version
-		default:
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-				LoadSetFile(0, "1204"); //load Big version for Amy.
-				LoadSetFile(1, "1201"); //load Big version for Amy.
-				LoadSetFile(2, "1202"); //load Big version for Amy.
-				CustomLayout = 1;
-			}
-			else
-			{
-				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-				LoadSetFile(1, "1201"); 
-				LoadSetFile(2, "1202"); 
-			}
-			break;
-		case 1: //Big Version
-			if (CurrentCharacter == Characters_Big && !Vanilla || CurrentCharacter == Characters_Gamma) //Amy has Big layout and vice versa.
-			{
-				LoadSetFile(0, "1200");
-				LoadSetFile(1, "1201"); 
-				LoadSetFile(2, "1202"); 
-			}
-			else
-			{
-				LoadSetFile(0, "1204"); //load Big version for other characters.
-				LoadSetFile(1, "1201"); //load Big version for Amy.
-				LoadSetFile(2, "1202"); //load Big version for Amy.
-			}
-			break;
-		case 2: //100 Rings
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-
-				LoadSetFile(0, "1204"); //load Big version for Amy.
-				LoadSetFile(1, "1201"); //load Big version for Amy.
-				LoadSetFile(2, "1202"); //load Big version for Amy.
-
-				CustomLayout = 1;
-			}
-			else
-			{
-				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-				LoadSetFile(1, "1201");
-				LoadSetFile(2, "1202");
-			}
-			break;
-		case 3: //Lost Chao
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-
-				LoadSetFile(0, "1204"); //load Big version for Amy.
-				LoadSetFile(1, "1201"); //load Big version for Amy.
-				LoadSetFile(2, "1202"); //load Big version for Amy.
-				CustomLayout = 1;
-			}
-			else
-			{
-				LoadSetFile(0, "1200"); //load Amy hot Shelter version. Lost Chao
-				LoadSetFile(1, "1205"); //Chao Amy Version
-				LoadSetFile(2, "1206"); //Chao Gamma Version
-			}
-			break;
+			LoadSetFile(0, "1204"); //load Big version for Amy.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202"); //load Big version for Amy.
+			CustomLayout = 1;
 		}
-	
+		else
+		{
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+			LoadSetFile(1, "1201");
+			LoadSetFile(2, "1202");
+		}
+		break;
+	case 1: //Big Version
+		if (CurrentCharacter == Characters_Big && !Vanilla || CurrentCharacter == Characters_Gamma) //Amy has Big layout and vice versa.
+		{
+			LoadSetFile(0, "1200");
+			LoadSetFile(1, "1201");
+			LoadSetFile(2, "1202");
+		}
+		else
+		{
+			LoadSetFile(0, "1204"); //load Big version for other characters.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202"); //load Big version for Amy.
+		}
+		break;
+	case 2: //100 Rings
+		if (CurrentCharacter == Characters_Amy && !Vanilla)
+		{
+			LoadSetFile(0, "1204"); //load Big version for Amy.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202"); //load Big version for Amy.
+
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+			LoadSetFile(1, "1201");
+			LoadSetFile(2, "1202");
+		}
+		break;
+	case 3: //Lost Chao
+		if (CurrentCharacter == Characters_Amy && !Vanilla)
+		{
+			LoadSetFile(0, "1204"); //load Big version for Amy.
+			LoadSetFile(1, "1201"); //load Big version for Amy.
+			LoadSetFile(2, "1202"); //load Big version for Amy.
+			CustomLayout = 1;
+		}
+		else
+		{
+			LoadSetFile(0, "1200"); //load Amy hot Shelter version. Lost Chao
+			LoadSetFile(1, "1205"); //Chao Amy Version
+			LoadSetFile(2, "1206"); //Chao Gamma Version
+		}
+		break;
+	}
 
 	//act 3 Gamma Version
 
@@ -124,7 +113,7 @@ void HotShelter_Layout() {
 		}
 	}
 
-	LoadSetFile(3, "1203"); 
+	LoadSetFile(3, "1203");
 	BigLayoutHS();
 	CamHotShelter();
 
@@ -132,7 +121,6 @@ void HotShelter_Layout() {
 }
 
 void BigLayoutHS() {
-
 	if (CustomLayout == 1) //Big Layout
 	{
 		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
@@ -150,9 +138,7 @@ void BigLayoutHS() {
 		WriteData<1>((void*)0x59a125, 0x07);
 		WriteData<1>((void*)0x59a126, 0x75);
 	}
-
 }
-
 
 //Object
 
@@ -254,8 +240,6 @@ ObjectListEntry HotShelter1ObjectList_list[] = {
 	{ 2, 2, 1, 1600, 0, (ObjectFuncPtr)0x7A8E50, "O BUBBLE" } /* "O BUBBLE" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
 };
-
-
 
 ObjectListEntry HotShelter2ObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,
@@ -370,13 +354,10 @@ PVMEntry HotShelterObjectTextures[] = {
 	{ 0 }
 };
 
-
 ObjectList HotShelter1ObjectList = { arraylengthandptrT(HotShelter1ObjectList_list, int) };
 ObjectList HotShelter2ObjectList = { arraylengthandptrT(HotShelter2ObjectList_list, int) };
 
-
 DataArray(DeathZone*, HotShelterDeathZones, 0x17c45b8, 3);
-
 
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
@@ -385,9 +366,6 @@ void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunct
 	TexLists_Obj[LevelIDs_HotShelter] = HotShelterObjectTextures;
 	HotShelterDeathZones[2] = HotShelter3DeathZones;
 }
-
-
-
 
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -433,7 +411,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1205M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET1206M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Chao2.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1200M.bin", "system\\cam\\CAM1200M.bin");  
+	helperFunctions.ReplaceFile("system\\CAM1200M.bin", "system\\cam\\CAM1200M.bin");
 	helperFunctions.ReplaceFile("system\\CAM1201M.bin", "system\\cam\\CAM1201M.bin");
 	helperFunctions.ReplaceFile("system\\CAM1202M.bin", "system\\cam\\CAM1202M.bin");
 	helperFunctions.ReplaceFile("system\\CAM1204M.bin", "system\\cam\\CAM1204M.bin");
@@ -457,7 +435,6 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, HS1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, HS2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, HS3_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET1200A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act1.bin");
@@ -509,6 +486,3 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.RegisterStartPosition(Characters_Gamma, HS2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, HS3_StartPositions[0]);
 }
-
-
-

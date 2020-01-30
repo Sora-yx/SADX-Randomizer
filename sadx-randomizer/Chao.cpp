@@ -13,7 +13,6 @@ bool ArePvpLoaded = false;
 extern int chaoPB;
 bool ChaoSpawn = false;
 
-
 std::vector<NJS_PLANE> waterlist = {};
 
 FunctionPointer(int, Chao_Animation, (ObjectMaster* a1, int a2), 0x734F00);
@@ -30,7 +29,6 @@ void ChaoObj_Animate(int id, int length) {
 		Chao_Animation(CurrentChao, id);
 	}
 }
-
 
 void ChaoObj_Delete(ObjectMaster* a1) {
 	DeleteObjectMaster(ChaoManager);
@@ -51,7 +49,7 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 
 void ChaoObj_Main(ObjectMaster* a1) {
 	uint8_t Action = a1->Data1->Action;
-	
+
 	if (Action == 0) {
 		if (!CurrentLandTable) return;
 
@@ -89,7 +87,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 	else if (Action == 2) {
 		ChaoObj_Animate(2, 33); //animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
-		
+
 		//water height
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
@@ -103,11 +101,11 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		case Characters_Big:
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
 			{
-					chaoPB++; //Chao Credit Stat
-					LoadLevelResults();
-					a1->Data1->Action = 3;
+				chaoPB++; //Chao Credit Stat
+				LoadLevelResults();
+				a1->Data1->Action = 3;
 			}
-			else 
+			else
 			{
 				ChaoObj_Animate(3, 33); //found animation
 			}
@@ -127,7 +125,6 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		}
 	}
 }
-			
 
 void Chao_Init() {
 	//Trick the game into thinking we're in a specific chao garden
@@ -135,14 +132,11 @@ void Chao_Init() {
 	WriteJump((void*)0x715140, GetCurrentChaoStage_r);
 }
 
-
 void Chao_CrySound() {
-
 	short cry = -1;
-	
+
 	if (!ChaoCryDelay)
 	{
-
 		cry = rand() % 2;
 
 		if (!cry)
@@ -157,9 +151,7 @@ void Chao_CrySound() {
 	return;
 }
 
-
 void TriggerObj(ObjectMaster* obj) {
-
 	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 100))
 		Chao_CrySound();
 }
@@ -178,9 +170,7 @@ void ChaoCryHint() {
 	}
 }
 
-
 void Chao_OnFrame() {
-
 	if (ChaoCryDelay > 0)
 		ChaoCryDelay--;
 
@@ -304,12 +294,10 @@ void Chao_OnFrame() {
 
 	if (ChaoSpawn && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
 		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
-		
+
 		ChaoObject->Data1->Position = pos;
 		ChaoObject->Data1->Rotation.y = Yrot;
 	}
 
 	return;
 }
-
-

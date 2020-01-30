@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 StartPosition HS1_StartPositions[]{
 	{ 12, 0,{ 0, 236, 51.5 }, -82 }
 };
@@ -13,7 +11,6 @@ StartPosition HS2_StartPositions[]{
 StartPosition HS3_StartPositions[]{
 	{ 12, 2,{ -20, 486, 71.875 }, 270 }
 };
-
 
 //HS act Gamma Kill Plane
 //Add a Kill Plane below the train in case the player fall.
@@ -206,4 +203,3 @@ DeathZone HotShelter3DeathZones[] = {
 	{ CharacterFlags_Sonic | CharacterFlags_Eggman | CharacterFlags_Tails | CharacterFlags_Knuckles | CharacterFlags_Tikal | CharacterFlags_Amy | CharacterFlags_Gamma | CharacterFlags_Big, &object_01C31A10 },
 	{ 0 }
 };
-

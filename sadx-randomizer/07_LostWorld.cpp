@@ -4,46 +4,39 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern int CustomLayout;
-extern int CurrentAI;
 
 void LW_Layout() {
-
 	CustomLayout = randomizedSets[levelCount].layout;
 
-	LoadSetFile(0, "0700"); 
+	LoadSetFile(0, "0700");
 
-		switch (CustomLayout)
-		{
-		case 0:
-		case 1:
-		default:
-			LoadSetFile(1, "0701"); //M1
-			CustomLayout = 0;
-			break;
-		case 2:
-			LoadSetFile(1, "0701"); //M2
-			break;
-		case 3:
-			LoadSetFile(1, "0703"); //M3
-			break;
-		}
+	switch (CustomLayout)
+	{
+	case 0:
+	case 1:
+	default:
+		LoadSetFile(1, "0701"); //M1
+		CustomLayout = 0;
+		break;
+	case 2:
+		LoadSetFile(1, "0701"); //M2
+		break;
+	case 3:
+		LoadSetFile(1, "0703"); //M3
+		break;
+	}
 
-		LoadSetFile(2, "0702");
+	LoadSetFile(2, "0702");
 
-		LoadCamFile(0, "0700");
-		LoadCamFile(1, "0701");
-		LoadCamFile(2, "0702");
-		return;
+	LoadCamFile(0, "0700");
+	LoadCamFile(1, "0701");
+	LoadCamFile(2, "0702");
+	return;
 }
 
 bool isPlayerInWaterSlide = false;
 
 void FixLWWaterSlide() {
-
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
 		isPlayerInWaterSlide = true;
 
@@ -51,14 +44,11 @@ void FixLWWaterSlide() {
 }
 
 void FixLWWaterSlide2() {
-
-
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
 		isPlayerInWaterSlide = false;
-	
+
 	return ForcePlayerAction(0, 0x18);
 }
-
 
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -72,7 +62,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	WriteData<5>((void*)0x422e34, 0x90);
 
 	WriteCall((void*)0x422e43, LW_Layout);
-	
+
 	WriteCall((void*)0x5e3408, FixLWWaterSlide2);
 	WriteCall((void*)0x5e37fa, FixLWWaterSlide);
 	LWObjects_Init(path, helperFunctions);
@@ -81,7 +71,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\SET0700S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0701S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0702S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act3.bin");
-	
+
 	helperFunctions.ReplaceFile("system\\SET0703S.BIN", "system\\levels\\Lost World\\Sonic-LW-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0700S.bin", "system\\cam\\CAM0700S.bin");
@@ -118,7 +108,6 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW3_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0700A.BIN", "system\\levels\\Lost World\\Amy-LW-Act1.bin");
@@ -252,7 +241,6 @@ ObjectListEntry LostWorldObjectList_list[] = {
 	{ 2, 0, 1, 1000000, 0, (ObjectFuncPtr)0x4D4E10, "NO WATER" } /* "NO WATER" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */
 };
-
 
 ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, int) };
 

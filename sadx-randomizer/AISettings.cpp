@@ -5,24 +5,18 @@
 #include "Trampoline.h"
 #include <fstream>
 
-extern bool isAIAllowed;
-extern bool Race;
-
 bool isAIActive = false;
 extern bool CreditCheck;
 int FlagAI = 0;
 int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
-extern int SwapDelay;
-extern int levelCount;
+extern char SwapDelay;
 int CurrentAI = -1;
-
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
 
-
-ObjectFuncPtr charfuncs[] = { 
+ObjectFuncPtr charfuncs[] = {
 	Sonic_Main,
 	Eggman_Main,
 	Tails_Main,
@@ -47,22 +41,18 @@ ObjectMaster* LoadCharObj(int i)
 	return CurAI;
 }
 
-
 int CheckTailsAI_R(void) { //restriction and bug fixes.
-
 	if (CurrentAI == -1 || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
 		isAIActive = false;
 		return 0;
 	}
 
-
 	if (CurrentCharacter == CurrentAI)
 	{
 		isAIActive = false;
 		return 0;
 	}
-
 
 	if (CurrentLevel > 25 && CurrentLevel < 38)
 	{
@@ -76,7 +66,6 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 		return 0;
 	}
 
-
 	switch (CurrentLevel)
 	{
 	case LevelIDs_IceCap: //potentail Tails crash
@@ -86,128 +75,126 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			return 0;
 		}
 		break;
-		case LevelIDs_SpeedHighway: //crash
-			if (CurrentAct == 1)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_FinalEgg: //cutscene issue
-			if (CurrentCharacter == Characters_Amy)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_RedMountain: //cutscene crash
-			if ( CurrentCharacter < 4)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_Casinopolis:
-			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_HotShelter: //issue with handle
-			if (CurrentAct <= 1)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_EmeraldCoast: //Tails rescue cutscene crash
-			if (CurrentCharacter == Characters_Tails && CurrentAct != 2)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_Chaos0: //Crash if character is swap with AI
-		{
-			isAIActive = false;
-			return 0;
-		}
-			break;
-		case LevelIDs_Chaos2: //Potential cutscene crash
-			if (CurrentCharacter == Characters_Knuckles)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_Chaos6: //Potential cutscene crash
-			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
-			{
-				isAIActive = false;
-				return 0;
-			}
-			break;
-		case LevelIDs_PerfectChaos: //AI makes the fight a lot harder. 
+	case LevelIDs_SpeedHighway: //crash
+		if (CurrentAct == 1)
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-		case LevelIDs_EggViper: //Potential cutscene crash + fight harder 
+	case LevelIDs_FinalEgg: //cutscene issue
+		if (CurrentCharacter == Characters_Amy)
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-		case LevelIDs_TwinklePark:
+	case LevelIDs_RedMountain: //cutscene crash
+		if (CurrentCharacter < 4)
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-		case LevelIDs_LostWorld: //cutscene crash
-		{
-			if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
-			{
-				isAIActive = false;
-				return 0;
-			}
-		}
-		case LevelIDs_SkyDeck:  //cutscene crash
-		{
-			if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
-			{
-				isAIActive = false;
-				return 0;
-			}
-		}
-		break; 
-		case LevelIDs_SandHill:  //cutscene crash
-		{
-			if (CurrentCharacter == Characters_Tails)
-			{
-				isAIActive = false;
-				return 0;
-			}
-		}
-		case LevelIDs_EggWalker:  //Character swap is broken in this fight 
+	case LevelIDs_Casinopolis:
+		if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
 		{
 			isAIActive = false;
 			return 0;
-			break;
 		}
+		break;
+	case LevelIDs_HotShelter: //issue with handle
+		if (CurrentAct <= 1)
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+	case LevelIDs_EmeraldCoast: //Tails rescue cutscene crash
+		if (CurrentCharacter == Characters_Tails && CurrentAct != 2)
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+	case LevelIDs_Chaos0: //Crash if character is swap with AI
+	{
+		isAIActive = false;
+		return 0;
+	}
+	break;
+	case LevelIDs_Chaos2: //Potential cutscene crash
+		if (CurrentCharacter == Characters_Knuckles)
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+	case LevelIDs_Chaos6: //Potential cutscene crash
+		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
+		{
+			isAIActive = false;
+			return 0;
+		}
+		break;
+	case LevelIDs_PerfectChaos: //AI makes the fight a lot harder.
+	{
+		isAIActive = false;
+		return 0;
+	}
+	break;
+	case LevelIDs_EggViper: //Potential cutscene crash + fight harder
+	{
+		isAIActive = false;
+		return 0;
+	}
+	break;
+	case LevelIDs_TwinklePark:
+	{
+		isAIActive = false;
+		return 0;
+	}
+	break;
+	case LevelIDs_LostWorld: //cutscene crash
+	{
+		if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
+		{
+			isAIActive = false;
+			return 0;
+		}
+	}
+	case LevelIDs_SkyDeck:  //cutscene crash
+	{
+		if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
+		{
+			isAIActive = false;
+			return 0;
+		}
+	}
+	break;
+	case LevelIDs_SandHill:  //cutscene crash
+	{
+		if (CurrentCharacter == Characters_Tails)
+		{
+			isAIActive = false;
+			return 0;
+		}
+	}
+	case LevelIDs_EggWalker:  //Character swap is broken in this fight
+	{
+		isAIActive = false;
+		return 0;
+		break;
+	}
 	}
 
 	isAIActive = true;
 	return 1;
 }
 
-
 ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 {
-
-	FlagAI = CheckTailsAI_R(); 
+	FlagAI = CheckTailsAI_R();
 
 	if (FlagAI != 1)
 	{
@@ -216,8 +203,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 	}
 	else
 	{
-
-		ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
+		ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?)
 		TailsAI_ptr = v1;
 
 		if (v1)
@@ -226,7 +212,7 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 			v1->Data1->CharIndex = 1;
 			v1->DeleteSub = TailsAI_Delete;
 
-			ObjectMaster* v3 = LoadCharObj(1); //load AI 
+			ObjectMaster* v3 = LoadCharObj(1); //load AI
 
 			v3->Data1->Position.x = v1->Data1->Position.x - njCos(v1->Data1->Rotation.y) * 30;
 			v3->Data1->Position.y = v1->Data1->Position.y;
@@ -240,13 +226,11 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 
 	isAIActive = false;
 	return (ObjectMaster*)0x0;
-	
 }
 //}
 
 ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails only)
 {
-
 	FlagAI = CheckTailsAI_R();
 
 	if (FlagAI != 1)
@@ -258,10 +242,9 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 	{
 		if (CurrentCharacter == Characters_Sonic)
 		{
-			CurrentAI = Characters_Tails; //don't rand, just set tails AI 
+			CurrentAI = Characters_Tails; //don't rand, just set tails AI
 
-
-			ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?) 
+			ObjectMaster* v1 = LoadObject(LoadObj_Data1, 0, TailsAI_Main); //load AI moveset (basically?)
 			TailsAI_ptr = v1;
 
 			if (v1)
@@ -270,7 +253,7 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 				v1->Data1->CharIndex = 1;
 				v1->DeleteSub = TailsAI_Delete;
 
-				ObjectMaster* v3 = LoadCharObj(1); //load AI 
+				ObjectMaster* v3 = LoadCharObj(1); //load AI
 
 				v3->Data1->Position.x = v1->Data1->Position.x - njCos(v1->Data1->Rotation.y) * 30;
 				v3->Data1->Position.y = v1->Data1->Position.y;
@@ -285,14 +268,11 @@ ObjectMaster* Load2PTails_Original(ObjectMaster* player1) //Original AI (Tails o
 
 	isAIActive = false;
 	return (ObjectMaster*)0x0;
-	
 }
-		
 
 //SFX characters ai fixes.
 
 void FixAISFXSonic() {
-
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
@@ -305,22 +285,16 @@ void FixAISFXSonic() {
 		}
 	}
 
-		PlaySound(0x2fa, 0, 0, 0);
-		return;
-
-
-
+	PlaySound(0x2fa, 0, 0, 0);
+	return;
 }void FixShowerCasino() {
-
 	if (isAIActive)
 		return;
 
 	ForcePlayerAction(0, 0x28); //Shower
-
 }
 
 void FixAISFXJump() {
-
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
@@ -331,12 +305,10 @@ void FixAISFXJump() {
 			if (GetChara->Data1->CharID == Characters_Knuckles || GetChara->Data1->CharID == Characters_Tails || GetChara->Data1->CharID == Characters_Amy)
 				return;
 		}
-
 	}
-		PlaySound(0x11, 0, 0, 0);
-		return;
+	PlaySound(0x11, 0, 0, 0);
+	return;
 }
-
 
 void FixAISFXAmy() {
 	if (isAIActive && !Race)
@@ -351,7 +323,7 @@ void FixAISFXAmy() {
 		}
 	}
 
-		PlaySound(0x31d, 0, 0, 0);
+	PlaySound(0x31d, 0, 0, 0);
 }
 
 void FixAISFXAmy2() { //jump sound
@@ -370,12 +342,10 @@ void FixAISFXAmy2() { //jump sound
 		}
 	}
 
-		PlaySound(0x4ff, 0, 0, 0);
+	PlaySound(0x4ff, 0, 0, 0);
 }
 
-
 void FixAISFXAmy3() {
-
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(1);
@@ -388,7 +358,7 @@ void FixAISFXAmy3() {
 		}
 	}
 
-		PlaySound(0x500, 0, 0, 0);
+	PlaySound(0x500, 0, 0, 0);
 }
 
 void FixAISFXAmy4() {
@@ -426,7 +396,7 @@ void FixAISFXAmy5() {
 		PlaySound(0x31c, 0, 0, 0); //hammer sound
 }
 
-void FixAISFXAmy6() { 
+void FixAISFXAmy6() {
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
@@ -439,11 +409,10 @@ void FixAISFXAmy6() {
 		}
 	}
 
-		PlaySound(0x508, 0, 0, 0);
+	PlaySound(0x508, 0, 0, 0);
 }
 
 void FixAISFXAmy7() { //spin dash noise when you press B
-
 	if (isAIActive && !Race)
 	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
@@ -460,9 +429,6 @@ void FixAISFXAmy7() { //spin dash noise when you press B
 		PlaySound(0x31d, 0, 0, 0); //long hammer sound
 	else
 		PlaySound(0x31c, 0, 0, 0); //hammer sound
-			
-			
-			
 }
 
 void FixAISFXAmy8() { //spin dash noise when you press B
@@ -481,14 +447,11 @@ void FixAISFXAmy8() { //spin dash noise when you press B
 	PlaySound(0x509, 0, 0, 0);
 }
 
-
-
 //Result Voice FIX
 void ResultVoiceFix() {
-
 	ObjectMaster* GetChara = GetCharacterObject(0);
 	GetChara->Data1->CharID;
-	
+
 	if (GetChara != nullptr)
 	{
 		switch (GetChara->Data1->CharID)
@@ -533,7 +496,6 @@ void ResultVoiceFix() {
 			break;
 		}
 	}
-
 }
 
 FunctionPointer(void, sub_43FA90, (EntityData1* a1, CharObj2** a2, CharObj2* a3), 0x43FA90);
@@ -546,34 +508,27 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 	sub_43FA90(a1, a2, a3);
 }
 
-
-
 CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
-
 	if (!isAIAllowed || CurrentAI == CurrentCharacter)
 	{
 		isAIActive = false;
 		return;
 	}
-	
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 || CurrentLevel == LevelIDs_EggWalker)
 	{
 		isAIActive = false;
 		return;
 	}
-		
 
 	if (CurrentAI == Characters_Tikal || CurrentAI == Characters_Eggman)
 		if (CurrentLevel > 14 && CurrentLevel < 26)
 			return;
 
-		
 	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
-		
 		//initialize swap, taking actual character and ai information
 
 		if (CurrentCharacter <= 5 && CurrentAI <= 5)
@@ -581,7 +536,6 @@ void AISwitch() {
 			AISwap = GetCharacter0ID();
 			CharaSwap = GetCharacter1ID();
 
-			
 			ObjectMaster* obj = GetCharacterObject(0);
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
@@ -705,39 +659,30 @@ void AISwitch() {
 				}
 			}
 		}
-
 	}
 
 	return;
 }
-
-	
 
 //Load AI
 
 void LoadTails_AI_R() {
-
-
 	if (CreditCheck != true)
 	{
 		if (Race == false && isAIAllowed)
 		{
-				ObjectMaster* obj;
-				obj = GetCharacterObject(0);
-				ObjectMaster* lastobj = obj;
-				ObjectMaster* o2 = nullptr;
-				o2 = Load2PTails_r(obj);
+			ObjectMaster* obj;
+			obj = GetCharacterObject(0);
+			ObjectMaster* lastobj = obj;
+			ObjectMaster* o2 = nullptr;
+			o2 = Load2PTails_r(obj);
 		}
-
 	}
 
 	return;
-	
 }
 
 void LoadTails_AI_Original() {
-
-
 	if (CreditCheck != true)
 	{
 		if (!Race && !isAIAllowed)
@@ -748,15 +693,12 @@ void LoadTails_AI_Original() {
 			ObjectMaster* o2 = nullptr;
 			o2 = Load2PTails_Original(obj);
 		}
-
 	}
 
 	return;
-
 }
 
 void AIAudioFixes() {
-
 	WriteCall((void*)0x5cf22f, FixShowerCasino); //Prevent crash after chara swap
 
 	//(there is probably a nicer way to do this, but I have no clue how)
@@ -774,7 +716,6 @@ void AIAudioFixes() {
 	WriteCall((void*)0x48947c, FixAISFXAmy7);
 	WriteCall((void*)0x4857e0, FixAISFXAmy8);
 
-
 	//fix victory voice result (ai swap)
 
 	WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
@@ -787,15 +728,12 @@ void AIAudioFixes() {
 
 //Reset value when AI is deleted
 void AI_ResetValue() {
-
 	isAIActive = false;
 	DeleteObject_(CurAI);
 	return FUN_0042ce20();
 }
 
-
 void AI_Init() {
-
 	WriteCall((void*)0x47ed8e, CheckTailsAI_R);
 	WriteCall((void*)0x47e943, CheckTailsAI_R);
 	WriteCall((void*)0x47ea46, CheckTailsAI_R);
@@ -804,4 +742,3 @@ void AI_Init() {
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 	WriteJump((void*)0x47db1a, AI_ResetValue);
 }
-

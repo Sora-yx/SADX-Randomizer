@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 StartPosition SD1_StartPositions[]{
 	{ 6, 0,{ 0, -400, 60 }, 270 }
 };
@@ -16,13 +14,9 @@ StartPosition SD2_StartPositions[]{
 
 StartPosition SD3_StartPositions[]{
 	{ 6, 2,{ -696, -86, 135 }, 0 }
-
 };
 
-
-
 //Sky Deck Killplanes stuff
-
 
 NJS_MATERIAL matlist_01E30414[] = {
 	{ { 0xFFBFBFBF }, { 0xFFFFFFFF }, 6, 0, NJD_D_100 | NJD_DA_INV_SRC | NJD_SA_SRC }
@@ -93,4 +87,3 @@ DeathZone SkyDeck2DeathZones[] = {
 	{ CharacterFlags_Sonic | CharacterFlags_Tails | CharacterFlags_Knuckles | CharacterFlags_Amy | CharacterFlags_Gamma | CharacterFlags_Big, &object_01E305D0 },
 	{ 0 }
 };
-

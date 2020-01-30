@@ -33,9 +33,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RandomHelpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CharactersSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -124,6 +121,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="e101.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Randomizer_Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="00_HedgehogHammer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

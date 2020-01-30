@@ -7,18 +7,14 @@
 #include "Trampoline.h"
 #include "GameObject.h"
 
-HelperFunctions extern help;
 
+extern char SwapDelay;
 extern bool RNGStages;
-extern bool Race;
 
-extern int CustomFlag;
-extern int TotalCount;
-extern bool isAIAllowed;
-extern bool isAIActive;
+extern unsigned int TotalCount;
 extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
-extern int GetCustomLayout;
+extern char GetCustomLayout;
 bool GetBackRing = false;
 int RingCopy = 0; //Backring
 extern bool RandCongratsDone;
@@ -27,8 +23,6 @@ extern ObjectMaster* CurAI;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
-
-
 	if (GameMode != 9 && GameMode != 10)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash
@@ -45,7 +39,6 @@ void DisableTimeStuff() {
 
 	if (CurrentCharacter != Characters_Tails)
 		ResultVoiceFix();
-
 
 	if (CurrentCharacter == Characters_Tails && !Race)
 		SetTailsRaceVictory();
@@ -78,9 +71,7 @@ void DisableTimeStuff() {
 			ForcePlayerAction(1, 19); //Force AI to Victory pose
 			dword_3B2A304 = 0;
 		}
-
 	}
-
 
 	if (Race)
 	{
@@ -95,7 +86,7 @@ void DisableTimeStuff() {
 			Tails_CheckRaceResult();
 		}
 	}
-	
+
 	if (CurrentLevel != LevelIDs_TwinkleCircuit && GameMode != GameModes_Mission)
 		AddCustomFlag(); //credits check
 
@@ -104,7 +95,6 @@ void DisableTimeStuff() {
 }
 
 void ResetValueWhileLevelResult() {
-
 	SonicRand = 0;
 	ChaoSpawn = false;
 	GetBackRing = false;
@@ -117,16 +107,13 @@ void ResetValueWhileLevelResult() {
 }
 
 void fixTCCart() {
-
 	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
 	WriteData<1>((void*)0x7983c4, 0x7C);
 
 	return;
 }
 
-
 void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
-
 	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
 	{
 		SomethingAboutHotShelterSwitch = 1;
@@ -135,18 +122,15 @@ void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secr
 	return;
 }
 
-
 void LoadZero() {
-
 	if (CurrentLevel == LevelIDs_HotShelter)
 		PressedSwitches_Reset();
-	
 
 	if (CurrentLevel == LevelIDs_FinalEgg)
-		{
-			camerahax_b();
-			RNGDoor = rand() % 5;
-		}
+	{
+		camerahax_b();
+		RNGDoor = rand() % 5;
+	}
 
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
@@ -154,11 +138,9 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_FinalEgg && CustomLayout != 1) //don't load Zero if Sonic Layout
 		return;
 
-
 	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
 	LoadPVM("EGGROB", &EGGROB_TEXLIST);
 	CheckLoadZero();
-	
 }
 
 void Set_Zero() {
@@ -167,18 +149,16 @@ void Set_Zero() {
 	WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
 	WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
 	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
-
 }
 
 ObjectMaster* CurrentCart = nullptr;
 
 void Load_Cart_R() {
-
 	ObjectMaster* play1 = GetCharacterObject(0);
 
 	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 		if (play1 != nullptr && play1->Data1->CharID <= 2)
-			return; 
+			return;
 
 	Delete_Cart();
 
@@ -204,7 +184,6 @@ void Load_Cart_R() {
 			break;
 		}
 
-
 		switch (CurrentLevel)
 		{
 		case LevelIDs_SandHill:
@@ -216,17 +195,13 @@ void Load_Cart_R() {
 			break;
 		}
 	}
-	
 }
-
-
 
 void Delete_Cart()
 {
-
 	if (CurrentCart != nullptr)
 		DeleteObject_(CurrentCart);
-	
+
 	CurrentCart = nullptr;
 
 	ForcePlayerAction(0, 28);
@@ -252,7 +227,6 @@ void FixRestart_Cart() //Prevent the game to crash if you restart while being in
 
 /*
 void ICAct3CutsceneSkip() {
-
 	ObjectMaster* GetChara = GetCharacterObject(0);
 
 	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
@@ -277,9 +251,7 @@ void ICAct3CutsceneSkip() {
 	return;
 }*/
 
-
 void ICAct3Position() {
-
 	ObjectMaster* GetChara = GetCharacterObject(0);
 
 	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
@@ -296,11 +268,8 @@ void ICAct3Position() {
 	return;
 }
 
-
-
 //Add rings every Checkpoint for cart speed.
 void AddRingSandHill() {
-
 	PlaySound(0x15, 0, 0, 0);
 
 	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > 2)
@@ -309,9 +278,7 @@ void AddRingSandHill() {
 	return;
 }
 
-
 void TwinkleCircuitResult() {
-
 	TCQuit = 1;
 	DisablePause();
 	ScreenFade_Timer = 0;
@@ -330,27 +297,21 @@ void TwinkleCircuitResult() {
 	GameState = 0x5;
 }
 
-
 void FixRollerCoaster() {
-
 	ObjectMaster* obj = GetCharacterObject(0);
 	EntityData1* ent;
 	ent = obj->Data1;
 	obj->Data1->Action = 28; //force the character to leave the RC
 }
 
-int AmyCartImprovement() { 
-
-
+int AmyCartImprovement() {
 	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
 		return Characters_Sonic;
 	else
 		return CurrentCharacter;
 }
 
-
 void ResetTime_R() { //Used for Back Ring, restore player's rings.
-
 	RingCopy = Rings;
 
 	if (GetBackRing)
@@ -364,58 +325,67 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 	return ResetTime();
 }
 
-
 void BackRing() { //swap capsule
-
 	SetTextureToCommon();
 
+	SwapDelay = 0;
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
 
-		StopMusic();
-
 		GetBackRing = true;
+		PlayVoice_R(5001); //back ring hit SFX
 
-		StopMusic();
+		ScreenFade_Timer = 50;
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();
 		ChaoSpawn = false;
 		GameMode = GameModes_Adventure_Field;
-		GameState = 0xb;
-		return;
+
+		if (SwapDelay == 150)
+		{
+			GameState = 0xb;
+			return;
+		}
+
+
 	}
+
 }
 
 void BackRing2() { //swap Frog/Emerald etc.
-
+	SwapDelay = 0;
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
 		if (CurrentLevel == LevelIDs_TwinklePark)
 			return;
 
-		StopMusic();
 
 		GetBackRing = true;
-
-		StopMusic();
+		PlayVoice_R(5001); //back ring hit SFX
+		ScreenFade_Timer = 50;
 		short sVar1;
 		sVar1 = ScreenFade_RunActive();
 		ChaoSpawn = false;
 		GameMode = GameModes_Adventure_Field;
-		GameState = 0xb;
-		return;
-	}
 
-	return LoadLevelResults();
+		if (SwapDelay == 150)
+		{
+			GameState = 0xb;
+			return;
+		}
+		
+		
+	}
+	else
+	{
+		return LoadLevelResults();
+	}
 }
 
-
-
 void SHAct2Position() {
-
 	if (CurrentCharacter != Characters_Sonic)
 		return PositionPlayer(0, 10, -10000, 10);
 	else
@@ -423,7 +393,6 @@ void SHAct2Position() {
 }
 
 void preventCutscene() {
-
 	switch (CurrentLevel)
 	{
 	case LevelIDs_RedMountain:
@@ -432,7 +401,7 @@ void preventCutscene() {
 		break;
 	case LevelIDs_EmeraldCoast:
 		if (CurrentCharacter == Characters_Tails)
-			return;	
+			return;
 	case LevelIDs_HotShelter:
 		if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
 			return;
@@ -441,7 +410,6 @@ void preventCutscene() {
 
 	return GetLevelCutscene();
 }
-
 
 void DeathsStat() {
 	//Hook used when you lose a live
@@ -455,24 +423,19 @@ void HurtsStat() {
 	return Set0Rings();
 }
 
-
 void KillStat() {
-
 	killPB++;
 	GetCharacterID(0);
 	return;
 }
-	
-void AnimalStat() {
 
+void AnimalStat() {
 	animalPB++;
 	PlaySound(0x1c, 0, 0, 0);
 	return;
 }
 
-
 void HookStats_Inits() {
-
 	WriteCall((void*)0x45072d, HurtsStat);
 	WriteCall((void*)0x416e7d, DeathsStat); //Trial Mode
 	WriteCall((void*)0x417a1f, DeathsStat); //Adventure Mode
@@ -480,5 +443,3 @@ void HookStats_Inits() {
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
 }
-
-

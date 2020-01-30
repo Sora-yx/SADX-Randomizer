@@ -8,8 +8,6 @@ StartPosition RM2_StartPositions[]{
 	{ 5, 1,{ -78, 831, 1919 }, 0 }
 };
 
-
-
 //Killplane Stuff
 
 NJS_MATERIAL matlist_020BFB40[] = {

@@ -4,16 +4,9 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern int CustomLayout;
-
 //Random Act function
 
 void TwinklePark_Layout() {
-
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C);
 
@@ -44,7 +37,7 @@ void TwinklePark_Layout() {
 		case 0:
 		case 1:
 		default:
-			LoadSetFile(1, "0305"); //Amy TP version 
+			LoadSetFile(1, "0305"); //Amy TP version
 			break;
 		case 2:
 		case 3:
@@ -72,7 +65,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
 	//WriteData<1>((void*)0x798236, 0x03);
 
-
 	WriteData<5>((void*)0x422c4a, 0x90);
 	WriteData<5>((void*)0x422c59, 0x90);
 	WriteData<5>((void*)0x422c68, 0x90);
@@ -80,7 +72,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<5>((void*)0x422c83, 0x90);
 
 	WriteCall((void*)0x422c92, TwinklePark_Layout); //TP random layout
-
 
 	TPObjects_Init(path, helperFunctions);
 
@@ -114,8 +105,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Tails, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, TP3_StartPositions[0]);
 
-	
-
 	//Knuckles
 	helperFunctions.ReplaceFile("system\\SET0300K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act2.bin");
@@ -132,13 +121,11 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP3_StartPositions[0]);
 
-
-
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0300A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act3.bin");
-	
+
 	helperFunctions.ReplaceFile("system\\SET0303A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0304A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-ActSpecial.bin"); //not ready yet
 
@@ -179,8 +166,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP2E_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP3_StartPositions[0]);
 }
-
-
 
 ObjectListEntry TwinkleParkObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "O RING" } /* "O RING" */,
@@ -281,15 +266,11 @@ ObjectListEntry TwinkleParkObjectList_list[] = {
 
 ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
 
-
 //TexList TwinkleParkObjectTextures = { TwinkleParkObjectTextures };
-	
-//ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
 
+//ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
 
 void __cdecl TPObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_TwinklePark * 8 + 1] = &TwinkleParkObjectList;
-	
 }
-

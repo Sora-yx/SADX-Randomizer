@@ -1,32 +1,25 @@
-#include "RandomHelpers.h"
 #include "Utils.h"
 #include "ActsSettings.h"
 #include "stdafx.h"
 #include "data\CharactersSettings.h"
 
-int SonicRand = 0;
+char SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
-extern int levelCount;
-
 
 extern bool CreditCheck;
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
-extern bool isAIAllowed;
 bool BounceActive = false;
 extern bool RNGCharacters;
 extern bool GetBackRing;
+extern bool isAIAllowed;
 
 extern bool AmySpeed;
 extern bool BigSpeed;
 extern bool IceCapCutsceneSkip;
 
-
-
 void character_settings_onFrames() {
-
-	
 	if (CurrentLevel != 38 || (CurrentLevel != 8 && CurrentAct != 2) || CurrentLevel != 0)
 	{
 		if (AmySpeed)
@@ -40,15 +33,12 @@ void character_settings_onFrames() {
 		CharObj2Ptrs[0]->PhysicsData.FloorGrip = 10;
 		PhysicsArray[Characters_Amy].MaxAccel = 10;
 		PhysicsArray[Characters_Big].MaxAccel = 10;
-
 	}
 
 	return;
 }
 
-
 int SetAmyWinPose() {
-
 	switch (CurrentCharacter)
 	{
 	case Characters_Amy:
@@ -63,9 +53,7 @@ int SetAmyWinPose() {
 	}
 }
 
-
 void AllUpgrades() {
-
 	if (Upgrade == true)
 	{
 		EventFlagArray[EventFlags_Sonic_LightShoes] = true;
@@ -86,14 +74,11 @@ void AllUpgrades() {
 	return;
 }
 
-
-
 void CheckRace();
 
 //Hook Load Character
 void LoadCharacter_r()
 {
-
 	if (isAIAllowed)
 		LoadTails_AI_R();
 	else
@@ -118,12 +103,11 @@ void LoadCharacter_r()
 
 	LoadCharacter();
 
-	return;	
+	return;
 }
 
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
 void SuperAuraStuff() {
-
 	TimeThing = 0;
 
 	if (CurrentCharacter != Characters_Sonic)
@@ -145,7 +129,6 @@ static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
 		DeleteObject_(_this);
 		return;
 	}
-
 }
 
 static void SuperSonicManager_Load()
@@ -155,13 +138,9 @@ static void SuperSonicManager_Load()
 
 
 
-
-HelperFunctions extern help;
-
-//Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes. 
+//Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes.
 
 void CallStuffWhenLevelStart() {
-
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
 	Credits_State = 0;
@@ -188,7 +167,7 @@ void CallStuffWhenLevelStart() {
 	//Banned SuperSonic Levels
 	if (CurrentCharacter == Characters_Sonic)
 	{
-		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck|| CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
+		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		{
 			SonicRand = 0;
 			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
@@ -203,56 +182,55 @@ void CallStuffWhenLevelStart() {
 			}
 			else
 			{
-					if (MetalSonicFlag == 0)
+				if (MetalSonicFlag == 0)
+				{
+					if (SonicRand == 1 && CurrentCharacter == 0)
 					{
-						if (SonicRand == 1 && CurrentCharacter == 0)
+						static Uint8 last_action[8] = {};
+						Rings = 1;
+						static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
+						for (int i = 0; i < 8; i++)
 						{
-							static Uint8 last_action[8] = {};
-							Rings = 1;
-							static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
-							for (int i = 0; i < 8; i++)
+							EntityData1* data1 = EntityData1Ptrs[i];
+							CharObj2* data2 = CharObj2Ptrs[i];
+
+							if (data1 == nullptr || data1->CharID != Characters_Sonic)
 							{
-								EntityData1* data1 = EntityData1Ptrs[i];
-								CharObj2* data2 = CharObj2Ptrs[i];
-
-								if (data1 == nullptr || data1->CharID != Characters_Sonic)
-								{
-									continue;
-								}
-
-								bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-								bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
-
-								//Super Sonic Transformation (Credit: SonicFreak94).
-
-								if (!transformation)
-								{
-									data1->Status &= ~Status_LightDash;
-									ForcePlayerAction(i, 46);
-									LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-									PlayVoice(3001);
-									data2->Upgrades |= Upgrades_SuperSonic;
-									PlayMusic(MusicIDs_ThemeOfSuperSonic);
-
-									if (!TransfoCount++)
-									{
-										SuperSonicManager_Load();
-									}
-								}
-								else
-								{
-									last_action[i] = data1->Action;
-								}
-								SuperSonicFlag = TransfoCount > 0;
-								return;
+								continue;
 							}
+
+							bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
+							bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
+
+							//Super Sonic Transformation (Credit: SonicFreak94).
+
+							if (!transformation)
+							{
+								data1->Status &= ~Status_LightDash;
+								ForcePlayerAction(i, 46);
+								LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+								PlayVoice(3001);
+								data2->Upgrades |= Upgrades_SuperSonic;
+								PlayMusic(MusicIDs_ThemeOfSuperSonic);
+
+								if (!TransfoCount++)
+								{
+									SuperSonicManager_Load();
+								}
+							}
+							else
+							{
+								last_action[i] = data1->Action;
+							}
+							SuperSonicFlag = TransfoCount > 0;
+							return;
 						}
 					}
+				}
 			}
 		}
 	}
 }
-
 
 //Create an object so Gamma can hit some specific bosses.
 CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
@@ -279,7 +257,6 @@ void TargetableEntity(ObjectMaster* obj)
 			{
 				Collision_Init(obj, &col, 1, 2u);
 			}
-
 		}
 
 		data->Action = 1;
@@ -314,11 +291,8 @@ void TargetableEntity(ObjectMaster* obj)
 	}
 }
 
-
-
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer() {
-
 	TimeMinutes = 6;
 	TimeSeconds = 0;
 	TimeFrames = 0;
@@ -328,32 +302,25 @@ void SetGammaTimer() {
 //fix infinite gamma bounce on Egg Viper.
 
 void FixGammaBounce() {
-
 	if (CurrentCharacter == Characters_Gamma)
 		return;
 
 	EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
-
 }
 
 void FixGammaHitBounce() {
-
 	if (CurrentCharacter == Characters_Gamma)
 		return;
 
 	EggViperBounceHit();
 }
 
-
 void BigWeightHook() {
-
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 1999; //display 2000g for Big
 }
 
-
 void FixCharacterSFX() {
-
 	ObjectMaster* obj = GetCharacterObject(0);
 
 	if (obj != nullptr)
@@ -417,9 +384,7 @@ void FixCharacterSFX() {
 	}
 }
 
-
 void FixVictoryTailsVoice() {
-
 	if (CurrentCharacter == Characters_Tails)
 		ResultVoiceFix();
 	else
@@ -439,7 +404,6 @@ int GetCharacter1ID() //AI ID
 HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
 
 void set_character_hook() {
-
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 
 	/*if (SSMod)
@@ -456,7 +420,6 @@ void set_character_hook() {
 	WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
 	WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
 
-
 	WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
 	WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
@@ -467,8 +430,8 @@ void set_character_hook() {
 	WriteData<5>((void*)0x478AFC, 0x90);
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
-	
-	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g 
+
+	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
 	WriteCall((void*)0x4230a0, GammaTarget_Init); //allow gamma to target some boss (Called before boss fight.)
@@ -483,7 +446,7 @@ void set_character_hook() {
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-	WriteCall((void*)0x4879C2, SetAmyWinPose); 
+	WriteCall((void*)0x4879C2, SetAmyWinPose);
 	WriteData((char*)0x4879C1, (char)0x90);
 
 	WriteCall((void*)0x79ab84, AmyCartImprovement);

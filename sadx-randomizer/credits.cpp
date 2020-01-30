@@ -6,9 +6,8 @@ using namespace std;
 
 extern int CustomFlag;
 extern bool CreditCheck;
-extern int GetCustomLayout;
+extern char GetCustomLayout;
 extern int CurrentMission;
-extern int CustomLayout;
 //credits stats
 
 extern int TotalDeathsPB;
@@ -23,56 +22,55 @@ string HurtsSTD = "";
 string AISwapCountSTD = "";
 
 extern int SeedCopy;
-extern int StorySplits;
+extern char StorySplits;
 extern int StatsTimer;
 bool RandCongratsDone = false;
 
 void CreditFlag() {
-
 	if (SelectedCharacter == 0)
 	{
-			EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
-			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
-			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
-			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
+		EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
+		EventFlagArray[EventFlags_SonicAdventureComplete] = true;
+		EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
 	}
 
 	if (SelectedCharacter == 1)
 	{
-			EventFlagArray[EventFlags_Tails_SpeedHighwayClear] = true;
-			EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
-			EventFlagArray[EventFlags_TailsAdventureComplete] = true;
-			EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Tails_SpeedHighwayClear] = true;
+		EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
+		EventFlagArray[EventFlags_TailsAdventureComplete] = true;
+		EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
 	}
 
 	if (SelectedCharacter == 2)
 	{
-			EventFlagArray[EventFlags_Knuckles_SkyDeckClear] = true;
-			EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
-			EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
-			EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Knuckles_SkyDeckClear] = true;
+		EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
+		EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
+		EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
 	}
 	if (SelectedCharacter == 3)
 	{
-			EventFlagArray[EventFlags_Amy_FinalEggClear] = true;
-			EventFlagArray[EventFlags_Amy_ZeroClear] = true;
-			EventFlagArray[EventFlags_AmyAdventureComplete] = true;
-			EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Amy_FinalEggClear] = true;
+		EventFlagArray[EventFlags_Amy_ZeroClear] = true;
+		EventFlagArray[EventFlags_AmyAdventureComplete] = true;
+		EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
 	}
 
 	if (SelectedCharacter == 4)
 	{
-			EventFlagArray[EventFlags_Big_HotShelterClear] = true;
-			EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
-			EventFlagArray[EventFlags_BigAdventureComplete] = true;
-			EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Big_HotShelterClear] = true;
+		EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
+		EventFlagArray[EventFlags_BigAdventureComplete] = true;
+		EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
 	}
 
 	if (SelectedCharacter == 5)
 	{
-			EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
-			EventFlagArray[EventFlags_GammaAdventureComplete] = true;
-			EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
+		EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
+		EventFlagArray[EventFlags_GammaAdventureComplete] = true;
+		EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
 	}
 	if (SelectedCharacter == 6)
 		EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
@@ -82,8 +80,6 @@ void CreditFlag() {
 	RandCongratsDone = false;
 	GetCurrentCharacterID();
 }
-
-
 
 //DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 
@@ -617,7 +613,6 @@ CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 
 //Initiliaze Credits
 void CreditsNewList() {
-
 	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
 	WriteCall((void*)0x640fe1, FinalStat);
 	WriteData<10>((void*)0x640fef, 0x90);
@@ -630,7 +625,6 @@ void CreditsNewList() {
 	RageQuitSTD = "";
 	HurtsSTD = "";
 	AISwapCountSTD = "";
-
 
 	TotalDeathsPB += deathsPB; //total Death credit final stat
 	TotalHurtsPB += hurtsPB; //total Death credit final stat
@@ -660,10 +654,8 @@ void CreditsNewList() {
 
 //Randomizer Background Credits
 
-
-//Credits 
+//Credits
 void credits() {
-
 	CustomLayout = 0;
 	GetCustomLayout = 0;
 	CurrentMission = 0;
@@ -680,23 +672,18 @@ void credits() {
 	}
 }
 
-
 void FinalStat() {
-
-
-
 	if (Credits_Skip)
 	{
 		Credits_State = 5; //Prevent infinite black screen.
 		return;
 	}
 
-
 	if (StorySplits == 1 && SelectedCharacter == 0 || SelectedCharacter == 6)
 	{
 		int getHour = (SaveFile.PlayTime / 0xe10) / 60;
 		int getMin = (SaveFile.PlayTime / 0xe10) % 60;
-		
+
 		PlayMusic_R(MusicIDs_nights_k);
 
 		if (!RandCongratsDone)
@@ -738,7 +725,7 @@ void FinalStat() {
 
 			DisplayDebugString(NJM_LOCATION(6, 28), "Thank you for playing SADX Randomizer!");
 		}
-	
+
 		if (!StatsTimer && Credits_State == 2)
 		{
 			CheckThingButThenDeleteObject(EndBG_Ptr);
@@ -758,5 +745,4 @@ void FinalStat() {
 		Credits_State = 5;
 		RandCongratsDone = false;
 	}
-
 }

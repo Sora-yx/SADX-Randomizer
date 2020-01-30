@@ -9,11 +9,8 @@
 using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
-extern bool isAIActive;
-
 
 void AddCustomFlag() {
-
 	if (CurrentLevel >= 1 && CurrentLevel <= 40 && CurrentLevel != LevelIDs_TwinkleCircuit)
 	{
 		std::ofstream FlagFile("Flags.txt");
@@ -22,10 +19,8 @@ void AddCustomFlag() {
 	}
 }
 
-
 //SA2 Style
 void CustomFlagCheck() {
-
 	if (SelectedCharacter == 0) //Sonic
 	{
 		switch (CustomFlag)
@@ -254,30 +249,27 @@ void CustomFlagCheck() {
 			break;
 		}
 	}
-		if (SelectedCharacter == 6)
+	if (SelectedCharacter == 6)
+	{
+		switch (CustomFlag)
 		{
-			switch (CustomFlag)
-			{
-			case 1:
-				CreditCheck = true;
-				EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
-				credits();
-				break;
-			default:
-				CreditCheck = false;
-				break;
-			}
+		case 1:
+			CreditCheck = true;
+			EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
+			credits();
+			break;
+		default:
+			CreditCheck = false;
+			break;
 		}
+	}
 
-		return;
-	
+	return;
 }
-
 
 //SADX Style
 /*
 int CustomFlagCheckSA1_R() {
-
 	if (SelectedCharacter == 0) //Sonic
 	{
 		CurrentCharacter = 0;
@@ -330,9 +322,7 @@ int CustomFlagCheckSA1_R() {
 			return 0;
 		}
 
-
 		return 1;
-
 	}
 }
 

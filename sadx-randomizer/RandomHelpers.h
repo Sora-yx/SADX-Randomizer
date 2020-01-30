@@ -23,6 +23,7 @@ short getRandomRaceAI(RandomizedEntry entry);
 void GetNewLevel();
 void SelectBarRace();
 
+
 struct RandomizedEntry
 {
 	int8_t character;
@@ -36,6 +37,12 @@ struct RandomizedEntry
 	short music;
 	short voices;
 };
+
+extern unsigned char CustomLayout;
+extern int CustomFlag;
+extern bool Race;
+extern char AIRace;
+extern int levelCount;
 
 void Set_MusicVoices();
 void TitleCard_Init();
@@ -53,14 +60,13 @@ VoidFunc(LoadE101, 0x568090);
 
 void E101Target();
 
-extern int level[21];
+extern int level[22];
 extern int AIArray[4];
 extern int AIRaceArray[6];
 extern char stage;
-extern char act; 
-extern int SonicRand; //Super Sonic or Metal Sonic RNG
+extern char act;
+extern char SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
-
 
 extern int character[6];
 extern int CharacterCopy;
@@ -69,6 +75,9 @@ extern int TransfoCount;  //Super Sonic Stuff
 extern bool Vanilla;
 
 extern int CurrentMission;
+extern int CurrentAI;
+extern bool isAIActive;
+extern bool isAIAllowed;
 
 void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
 void Chao_Init();
@@ -76,10 +85,9 @@ void Chao_OnFrame();
 
 void PauseMenuFix();
 
-
-
 //all levels
 
+void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -106,7 +114,6 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 
-
 //Bosses
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Chaos2_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -116,7 +123,6 @@ void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions);
-
 
 void CreditsNewList();
 void Race_Init();
@@ -132,24 +138,22 @@ void Chao_CrySound();
 
 void AddCustomFlag();
 void CustomFlagCheck(); //sa2 style
-int CustomFlagCheckSA1_R(); //sa1
 
 void CancelResetPosition();
-
 
 void LoadZero();
 void Set_Zero();
 
 void credits();
 void HotShelterSecretSwitch();
-void HotShelterHandle();
 
 void FixGammaBounce();
 void FixGammaHitBounce();
 void TwinkleCircuitResult();
+void HedgehogHammerResult();
 
 void FixEggViperCutscene();
-void EggViperVoice();
+
 
 void FixRollerCoaster();
 
@@ -197,10 +201,7 @@ DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
 DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
 DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
-
-
 void AI_Init();
-int IsFastSonicAI_R(void);
 int CheckTailsAI_R(void);
 int DisplayTitleCard_r();
 void LoadStageMissionImage_r();
@@ -218,30 +219,26 @@ void FinalStat();
 void DisableTime_Zero();
 void AISwitch();
 void HookStats_Inits();
-void SetLevelAndAct_R(); //fix trial mod 
-void SetLevelAndAct_NoRNGStage(); //used if player select random chara without random level.
+void SetLevelAndAct_R(); //fix trial mod
 void ResetTime_R();
-void LoadLevelFiles_R();
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
-
-
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
 
 DataPointer(char, CreditSkipCheck, 0x641232);
-void FixCreditSkipStats();
 
 FunctionPointer(int, CreditStuff, (), 0x641138);
 
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
 DataPointer(char, SomethingAboutCredit, 0x3c83054);
+DataPointer(char, AdventureDataChaos4, 0x3B183AA);
+DataPointer(char, AdventureDataChaos4Post, 0x3B183AE);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
 
-
-FunctionPointer(void, StartCutscene, (int level), 0x4136e0);
-void SetLevelAndAct_Original(char level, char act);
+FunctionPointer(void, StartCutscene, (int flag), 0x4136e0);
+FunctionPointer(void, StartCutscene2, (int flag), 0x52e6c0);
 VoidFunc(FUN_0042ce20, 0x42ce20); //Called with Delete Tails AI
 
 VoidFunc(CheckTC, 0x79a8e0);
@@ -261,7 +258,6 @@ void SoftReset_R();
 void FixRestart_Cart();
 void Delete_Cart();
 void LoadCamFilePC_R();
-void CamHotShelter();
 void ResetValueWhileLevelResult();
 void PlayRace_Music();
 void SongRace_Init();
@@ -280,6 +276,3 @@ extern int deathsPB;
 extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
-
-
-

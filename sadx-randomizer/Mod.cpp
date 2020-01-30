@@ -6,10 +6,8 @@
 #include "CharactersSettings.h"
 #include "Utils.h"
 
-
-
 //global Randomizer value settings
-int StorySplits;
+char StorySplits;
 
 bool RNGCharacters = true;
 bool RNGStages = true;
@@ -18,14 +16,11 @@ bool Vanilla = false;
 bool RNGVoices = true;
 bool RNGMusic = true;
 bool ConsistentMusic = false;
-int SonicCD = 0;
+char SonicCD = 0;
 bool Missions = true;
 bool Any = true;
 bool Viper = false;
 extern bool CreditCheck;
-extern int levelCount;
-
-extern short ChaoCryDelay;
 
 //Character settings
 bool AmySpeed = true;
@@ -44,16 +39,15 @@ int ban = 0;
 bool banCharacter[8];
 
 //Speedruner splits
-int split = 0;
-int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
+unsigned int split = 0;
+unsigned int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 
 //AI
 bool isAIAllowed = true;
-int SwapDelay = 150;
-extern bool isAIActive;
+char SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
-int CustomLayout = 0;
+unsigned char CustomLayout = 0;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
@@ -62,12 +56,10 @@ extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
 
-extern int AIRace;
-extern bool Race;
+extern char AIRace;
 extern bool isPlayerInWaterSlide;
 
 extern "C" {
-
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
@@ -108,7 +100,7 @@ extern "C" {
 		seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
 		Missions = config->getBool("Randomizer", "Missions", true);
-		
+
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
@@ -157,31 +149,9 @@ extern "C" {
 			srand((unsigned)time(&t));
 
 		SeedCopy = seed;
-	
+
 		//Activate all the edited stages, including custom object, to make them beatable.
-
 		Startup_Init(path, helperFunctions);
-		EmeraldCoast_Init(path, helperFunctions);
-		WindyValley_Init(path, helperFunctions);
-		Casino_Init(path, helperFunctions);
-		IceCap_Init(path, helperFunctions);
-		TwinklePark_Init(path, helperFunctions);
-		SpeedHighway_Init(path, helperFunctions);
-		RedMountain_Init(path, helperFunctions);
-		SkyDeck_Init(path, helperFunctions);
-		LostWorld_Init(path, helperFunctions);
-		FinalEgg_Init(path, helperFunctions);
-		HotShelter_Init(path, helperFunctions);
-
-		//Boss
-		Chaos0_Init(path, helperFunctions);
-		Chaos2_Init(path, helperFunctions);
-		Chaos6_Init(path, helperFunctions);
-		EggHornet_Init(path, helperFunctions);
-		EggWalker_Init(path, helperFunctions);
-		EggViper_Init(path, helperFunctions);
-		Zero_Init(path, helperFunctions);
-		//E101_Init(path, helperFunctions);
 
 		//Credits
 		WriteCall((void*)0x641aef, CreditFlag);
@@ -197,34 +167,31 @@ extern "C" {
 		//Musics, Voices
 		Set_MusicVoices();
 
-
-		
-
 		if (isAIAllowed)
 		{
 			//Allow the AI to spawn everywhere
 			AI_Init();
-			//AI SFX Fixes 
+			//AI SFX Fixes
 			AIAudioFixes();
 		}
 		else
 		{
 			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 		}
-	
+
 		/*
 		//Randomizer Fixes
 		*/
-	
+
 		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 
 		//Stats & Value Reset
-		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.	
-		
+		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
+
 		//Stages Fixes
 
 		WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix crashes.)
-		
+
 		 //Zero Stuff
 		Set_Zero();
 
@@ -232,20 +199,18 @@ extern "C" {
 
 		//Chaos 4 Stuff
 		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
-			//E101 Stuff
-		//WriteData<5>((void*)0x567ae4, 0x90); //Fix E-101 crash while using a wrong character.
 
 		//Perfect Chaos Stuff
 		WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
-		
+
 		//Sonic/Eggman Race Stuff
 		Race_Init();
 
 		WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-		
+
 		//SA2 Story Style, Hook all SetLevelandAct to make them random.
 
-		if (RNGStages == true) 
+		if (RNGStages == true)
 		{
 			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
 			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
@@ -257,15 +222,11 @@ extern "C" {
 			WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
 			//Redirect SetLevelAndAct in FUN_0x4133e0
 
-			//WriteData<5>((void*)0x41348f, 0x90); //Remove SetLevelAndAct when loading adventure data
 			WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
-		//	WriteData<5>((void*)0x41342a, 0x90); //Remove SetLevelAndAct when loading adventure data
 			WriteData<1>((void*)0x413502, 0x08);
 
 			WriteCall((void*)0x41348f, testRefactor); //hook SetLevelAndAct when loading adventure data
-			//WriteCall((void*)0x4134f3, testRefactor); //hook SetLevelAndAct when loading adventure data
 			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
-			//WriteCall((void*)0x413522, SetLevelGammaStory);*/
 
 			WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
 			WriteData<1>((void*)0x4DB0B2, 0x05);
@@ -279,7 +240,6 @@ extern "C" {
 		{
 			split = 40;
 			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
-
 				if (RNGCharacters)
 					randomizedSets[i].character = getRandomCharacter();
 
@@ -306,19 +266,16 @@ extern "C" {
 
 				TotalCount++;
 			}
-
 		}
 		else
 		{
-			//Splits Initialization 
+			//Splits Initialization
 			Split_Init();
 		}
-
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -335,7 +292,7 @@ extern "C" {
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 		{
 			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy); 
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 
 			if (ban != 0)
 				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
@@ -359,8 +316,6 @@ extern "C" {
 				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
 				break;
 			}
-
-
 		}
 
 		//Credits stat
@@ -379,7 +334,7 @@ extern "C" {
 					PauseMenuFix();
 				}
 
-			if (GameState == 21 || GameState == 24 || GameState == 17)
+				if (GameState == 21 || GameState == 24 || GameState == 17)
 				{
 					CustomFlagCheck(); //When loading, Check flag and credits
 				}
@@ -411,9 +366,9 @@ extern "C" {
 			if (SwapDelay != 150)
 				SwapDelay++;
 
-			
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 				AISwitch();
+
 
 			//Rings Mission 2 Check
 			if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == 8)
@@ -427,11 +382,6 @@ extern "C" {
 				}
 			}
 
-			for (int i = 0; i > 512; i++)
-			{
-				EventFlagArray[i] = 1;
-			}
-
 			//Chao Mission 3 Check
 			if (CurrentLevel < 15 && CurrentMission == 1)
 			{
@@ -441,7 +391,6 @@ extern "C" {
 
 		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 		character_settings_onFrames();
-
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
@@ -460,14 +409,10 @@ extern "C" {
 				break;
 			case LevelIDs_Zero:
 				LoadSoundList(46);
-			break;
+				break;
 			}
-
 		}
 	}
 
-
-
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
-
 }

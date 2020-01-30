@@ -5,31 +5,26 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 
-HelperFunctions extern help;
-extern bool Missions;
-extern int levelCount;
-extern int CurrentAI;
-
-
 
 
 void IC_Layout() {
-
 	if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
 	{
 		WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
 		//WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
 
-		WriteData<5>((void*)0x4e9de1, 0x90); //Don't disable controller	
+		WriteData<5>((void*)0x4e9de1, 0x90); //Don't disable controller
 		WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
 	}
 	else
 	{
-		WriteCall((void*)0x4e9415, DisableTimeThing); 
-		WriteCall((void*)0x4e9de1, DisableController); 
+		WriteCall((void*)0x4e9415, DisableTimeThing);
+		WriteCall((void*)0x4e9de1, DisableController);
 		WriteData<1>((void*)0x4E9DE0, 0x04);
 		WriteCall((void*)0x4eda00, DisableController);
 	}
+
+	CurrentAI = 2;
 
 	if (CurrentAct == 3)
 		CustomLayout = 0;
@@ -38,33 +33,31 @@ void IC_Layout() {
 
 	LoadSetFile(0, "0800"); //M1
 
-		switch (CustomLayout)
-		{
-		case 0:
-		case 1:
-		default:
-			LoadSetFile(1, "0801"); //M1
-			CustomLayout = 0;
-			break;
-		case 2:
-			LoadSetFile(1, "0801"); //M2
-			break;
-		case 3:
-			LoadSetFile(1, "0804"); //M3
-			break;
-		}
-		LoadSetFile(2, "0802"); //M1
-		LoadSetFile(3, "0803"); //M1
+	switch (CustomLayout)
+	{
+	case 0:
+	case 1:
+	default:
+		LoadSetFile(1, "0801"); //M1
+		CustomLayout = 0;
+		break;
+	case 2:
+		LoadSetFile(1, "0801"); //M2
+		break;
+	case 3:
+		LoadSetFile(1, "0804"); //M3
+		break;
+	}
+	LoadSetFile(2, "0802"); //M1
+	LoadSetFile(3, "0803"); //M1
 
-		LoadCamFile(0, "0800");
-		LoadCamFile(1, "0801");
-		LoadCamFile(2, "0802");
-		LoadCamFile(3, "0803");
+	LoadCamFile(0, "0800");
+	LoadCamFile(1, "0801");
+	LoadCamFile(2, "0802");
+	LoadCamFile(3, "0803");
 
-
-		return;
+	return;
 }
-
 
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -79,8 +72,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	WriteData<5>((void*)0x422e9f, 0x90);
 	WriteData<5>((void*)0x422eae, 0x90);
 	WriteData<5>((void*)0x422ebd, 0x90);
-	
-
 
 	WriteCall((void*)0x422ecc, IC_Layout);
 
@@ -100,6 +91,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0803S.BIN", "system\\cam\\CAM0803S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, IC3_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC4_StartPositions[0]);
 
 	//Tails
@@ -116,6 +108,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0803M.BIN", "system\\cam\\CAM0803M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Tails, IC3_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, IC4_StartPositions[0]);
 
 	//Knuckles
@@ -134,7 +127,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC3_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, IC4_StartPositions[0]);
-
 
 	//Amy
 	helperFunctions.ReplaceFile("system\\SET0800A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act1.bin");
@@ -321,7 +313,6 @@ ObjectListEntry IceCapObjectList_list[] = {
 
 ObjectList IceCapObjectList = { arraylengthandptrT(IceCapObjectList_list, int) };
 
-
 PVMEntry IceCapObjectTextures[] = {
 	{ "OBJ_ICECAP", (TexList*)0xE48F30 },
 	{ "OBJ_ICECAP2", (TexList*)0xE48F78 },
@@ -349,7 +340,7 @@ PVMEntry IceCapObjectTextures[] = {
 	{ 0 }
 };
 
-void __cdecl ICObjects_Init(const char *path, const HelperFunctions &helperFunctions) {
+void __cdecl ICObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_IceCap * 8 + 2] = &IceCapObjectList;
 	ObjLists[LevelIDs_IceCap * 8 + 3] = &IceCapObjectList;

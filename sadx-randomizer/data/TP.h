@@ -1,6 +1,6 @@
 #pragma once
 
-// a finir 
+// a finir
 
 StartPosition TP1_StartPositions[]{
 	{ 3, 0,{ -2000, 1770, -985 }, 90 }
@@ -18,9 +18,6 @@ StartPosition TP3_StartPositions[]{
 	{ 3, 2,{ 75, 0, -390 }, 94 }
 };
 
-
 StartPosition TP2E_StartPositions[]{ //Amy Layout Gamma edition
 	{ 3, 1,{ -168.6365051, 77.33, -999.87 }, 320 }
 };
-
-

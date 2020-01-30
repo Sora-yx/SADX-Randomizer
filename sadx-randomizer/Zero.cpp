@@ -6,10 +6,8 @@
 extern int CurrentAI;
 
 void DisableTime_Zero() {
-
 	ControlEnabled = 0;
 	TimeThing = 0;
-
 }
 
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -39,5 +37,4 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 	//Gamma
 	helperFunctions.ReplaceFile("system\\SETZEROE.bin", "system\\levels\\Zero\\Gamma-Zero.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Zero_StartPositions[0]);
-
 }

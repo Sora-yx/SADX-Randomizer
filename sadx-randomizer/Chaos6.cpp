@@ -4,7 +4,6 @@
 #include "RandomHelpers.h"
 #include "Trampoline.h"
 
-
 void Chaos6_LoadWithTarget() {
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
 	obj->Data1->LoopData = (Loop*)LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, Chaos6_Main);
@@ -46,5 +45,4 @@ void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Big, Chaos6_StartPositions[0]);
 	//Gamma
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Chaos6_StartPositions[0]);
-
 }

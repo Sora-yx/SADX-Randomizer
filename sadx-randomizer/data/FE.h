@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 StartPosition FE1_StartPositions[]{
 	{ 10, 0,{ 170, -165, 490 }, 0 }
 };
