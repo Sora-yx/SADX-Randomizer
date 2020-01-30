@@ -711,7 +711,7 @@ void FinalStat() {
 
 		if (StatsTimer)
 		{
-			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
+			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
 
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.0.2 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);

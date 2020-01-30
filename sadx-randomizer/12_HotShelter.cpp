@@ -43,6 +43,7 @@ void HotShelter_Layout() {
 			LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 			LoadSetFile(1, "1201");
 			LoadSetFile(2, "1202");
+			CustomLayout = 0;
 		}
 		break;
 	case 1: //Big Version

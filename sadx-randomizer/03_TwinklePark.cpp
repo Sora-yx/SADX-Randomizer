@@ -167,6 +167,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP3_StartPositions[0]);
 }
 
+
 ObjectListEntry TwinkleParkObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "O RING" } /* "O RING" */,
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x79B2F0, "O GROUP RING" } /* "O GROUP RING" */,
@@ -266,9 +267,7 @@ ObjectListEntry TwinkleParkObjectList_list[] = {
 
 ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
 
-//TexList TwinkleParkObjectTextures = { TwinkleParkObjectTextures };
 
-//ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
 
 void __cdecl TPObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist

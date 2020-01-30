@@ -13,10 +13,22 @@ void LW_Layout() {
 	switch (CustomLayout)
 	{
 	case 0:
-	case 1:
 	default:
 		LoadSetFile(1, "0701"); //M1
 		CustomLayout = 0;
+		break;
+	case 1:
+		if (CurrentCharacter == Characters_Knuckles && !Vanilla)
+		{
+			LoadSetFile(1, "0701"); //M2
+			CustomLayout = 2;
+		}
+		else
+		{
+			LoadSetFile(1, "0704"); //Knux Treasure Hunting
+			SetRNGKnuckles();
+			CustomLayout = 4;
+		}
 		break;
 	case 2:
 		LoadSetFile(1, "0701"); //M2
@@ -29,7 +41,11 @@ void LW_Layout() {
 	LoadSetFile(2, "0702");
 
 	LoadCamFile(0, "0700");
-	LoadCamFile(1, "0701");
+
+	if (CustomLayout == 4)
+		LoadCamFile(1, "0701");
+	else
+
 	LoadCamFile(2, "0702");
 	return;
 }

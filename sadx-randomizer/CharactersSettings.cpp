@@ -99,7 +99,10 @@ void LoadCharacter_r()
 	if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_WindyValley)
 		CheckRace();
 
+
 	AllUpgrades();
+
+	EmeraldRadar_R();
 
 	LoadCharacter();
 
@@ -144,6 +147,7 @@ void CallStuffWhenLevelStart() {
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
 	Credits_State = 0;
+
 
 	if (CurrentCharacter != Characters_Sonic)
 	{
@@ -317,7 +321,40 @@ void FixGammaHitBounce() {
 
 void BigWeightHook() {
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
-	BigWeight = 1999; //display 2000g for Big
+	BigWeight = 1990; //meme display
+}
+
+void FixRadarSFX() {
+
+	if (CurrentCharacter != Characters_Knuckles)
+		PlayVoice_R(6000);
+	else
+		PlaySound(0x314, 0, 0, 0);
+
+	return;
+
+}
+
+void FixEmeraldGetSFX() {
+
+	if (CurrentCharacter != Characters_Knuckles)
+		PlayVoice_R(6001);
+	else
+		PlaySound(0x313, 0, 0, 0);
+
+	return;
+
+}
+
+void FixTikalSFX() {
+
+	if (CurrentCharacter != Characters_Knuckles)
+		PlayVoice_R(6002);
+	else
+		PlaySound(0x316, 0, 0, 0);
+
+	return;
+
 }
 
 void FixCharacterSFX() {
@@ -401,6 +438,8 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
+
+
 HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
 
 void set_character_hook() {
@@ -431,6 +470,13 @@ void set_character_hook() {
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
 
+	WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
+	WriteData<6>((void*)0x4764CC, 0x90u); // make Tikal hints work when not Knuckles
+	WriteCall((void*)0x4762a6, FixRadarSFX);
+	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
+	WriteCall((void*)0x7a907f, FixTikalSFX);
+	//WriteData<5>((void*)0x4762a6, 0x90);
+
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
@@ -452,4 +498,12 @@ void set_character_hook() {
 	WriteCall((void*)0x79ab84, AmyCartImprovement);
 	WriteCall((void*)0x79aa78, AmyCartImprovement);
 	WriteCall((void*)0x7979b9, AmyCartImprovement);
+	
+	WriteCall((void*)0x475852, KnuxRadar); //radar chara check
+
+	WriteCall((void*)0x4a306a, KnuxRadar); //display piece
+	WriteCall((void*)0x476661, KnuxRadar); //display piece
+	WriteCall((void*)0x477d96, KnuxRadar); //display piece
+
+
 }

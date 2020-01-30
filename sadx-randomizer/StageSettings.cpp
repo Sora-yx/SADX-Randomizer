@@ -34,6 +34,7 @@ void DisableTimeStuff() {
 		LastStoryFlag = 0;
 
 	TimeThing = 0;
+
 	ResetValueWhileLevelResult();
 	ringsPB += Rings; //total Rings credit stat
 
@@ -94,11 +95,17 @@ void DisableTimeStuff() {
 	return;
 }
 
+
 void ResetValueWhileLevelResult() {
+
 	SonicRand = 0;
+	KnuxCheck = 0;
+	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
 	isPlayerInWaterSlide = false;
+
+	RestoreRNGValueKnuckles();
 
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
@@ -268,6 +275,19 @@ void ICAct3Position() {
 	return;
 }
 
+void EmeraldRadar_R() {
+
+	if (CustomLayout == 4 && CurrentLevel <= LevelIDs_Casinopolis)
+	{
+		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
+		LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
+		if (CurrentCharacter != Characters_Knuckles)
+			KnuxCheck2 = 0; //fix Trial Mode Crash
+	}
+
+	return;
+}
+
 //Add rings every Checkpoint for cart speed.
 void AddRingSandHill() {
 	PlaySound(0x15, 0, 0, 0);
@@ -309,6 +329,41 @@ int AmyCartImprovement() {
 		return Characters_Sonic;
 	else
 		return CurrentCharacter;
+
+}
+
+int KnuxRadar() {  //trick the game to make it think we are playing Knuckles
+	
+	if (CustomLayout == 4)
+		return Characters_Knuckles;
+	else
+		return CurrentCharacter;
+}
+
+//Set Emerald RNG when not Knuckles
+
+void SetRNGKnuckles() {
+
+	if (CurrentLevel >= LevelIDs_SpeedHighway && CurrentLevel <= LevelIDs_Casinopolis)
+	{
+		if (CustomLayout == 4)
+		{
+			WriteData<1>((void*)0x416F06, 0x08);
+			WriteData<1>((void*)0x4153E1, 0x08);
+			WriteData<1>((void*)0x416f08, 0x74);
+			WriteData<1>((void*)0x4153e3, 0x74);
+		}
+	}
+}
+
+//restore original values
+void RestoreRNGValueKnuckles() {
+
+	WriteData<1>((void*)0x416F06, 0x03);
+	WriteData<1>((void*)0x4153E1, 0x03);
+	WriteData<1>((void*)0x416f08, 0x75);
+	WriteData<1>((void*)0x4153e3, 0x75);
+
 }
 
 void ResetTime_R() { //Used for Back Ring, restore player's rings.

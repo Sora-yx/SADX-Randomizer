@@ -24,6 +24,7 @@ void WindyValley_Layout() {
 			LoadSetFile(0, "0200"); //Sonic Version
 			LoadSetFile(1, "0201");
 			LoadSetFile(2, "0202");
+			CustomLayout = 0;
 		}
 	}
 

@@ -29,7 +29,7 @@ struct RandomizedEntry
 	int8_t character;
 	short level;
 	short act;
-	short layout;
+	unsigned char layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
 	int ai_mode; //AI following you
@@ -228,7 +228,13 @@ DataPointer(char, TailsAdventureData, 0x3B1860E);
 
 DataPointer(char, CreditSkipCheck, 0x641232);
 
+DataPointer(char, KnuxCheck, 0x3c52c04);
+DataPointer(char, KnuxCheck2, 0x3c52bd8);
+void SetRNGKnuckles();
+void RestoreRNGValueKnuckles();
+
 FunctionPointer(int, CreditStuff, (), 0x641138);
+
 
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);

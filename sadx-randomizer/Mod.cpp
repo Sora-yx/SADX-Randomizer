@@ -239,7 +239,7 @@ extern "C" {
 		if (!StorySplits)
 		{
 			split = 40;
-			for (int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
+			for (unsigned int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 				if (RNGCharacters)
 					randomizedSets[i].character = getRandomCharacter();
 
@@ -247,8 +247,9 @@ extern "C" {
 				{
 					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 					randomizedSets[i].act = randomacts(randomizedSets[i]);
-					randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 				}
+
+				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 
 				if (RNGMusic)
 					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -371,7 +372,7 @@ extern "C" {
 
 
 			//Rings Mission 2 Check
-			if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == 8)
+			if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == 8 || CurrentMission == 2 && KnuxCheck >= 3)
 			{
 				ObjectMaster* obj = GetCharacterObject(0);
 				EntityData1* ent;

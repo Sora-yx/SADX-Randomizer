@@ -8,10 +8,10 @@
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Vanilla;
-extern bool Missions;
 extern int ban;
 extern bool ConsistentMusic;
 int musicCount;
+extern bool Missions;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
@@ -45,7 +45,7 @@ int TwinkleCircuitRNG = 0;
 int level[22] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 18, 19, 20, 21, 22, 23, 35, 38 };
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
-int bannedLevelsGamma[7] = { LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, LevelIDs_Zero };
+int bannedLevelsGamma[8] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 //Initiliaze banned Vanilla stage (if option is checked)
@@ -93,13 +93,31 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma && entry.character != Characters_Amy)
 			return actHS[rand() % 2];
 		break;
+	case LevelIDs_SpeedHighway:
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
 	case LevelIDs_RedMountain:
 		if (entry.character == Characters_Sonic && !Vanilla)
-			return 1;
+			return actHS[rand() % 2];
 		if (entry.character == Characters_Gamma && !Vanilla)
+			return actHS[rand() % 2];
+		if (entry.character != Characters_Gamma && entry.character != Characters_Sonic)
+			return rand() % 3;
+		break;
+	case LevelIDs_SkyDeck:
+		if (entry.character == Characters_Knuckles && !Vanilla)
 			return 0;
-		if (!Vanilla && entry.character != Characters_Sonic && entry.character != Characters_Gamma || Vanilla)
-			return act0[rand() % 3];
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_LostWorld:
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else
+			return rand() % 2;
 		break;
 	case LevelIDs_IceCap:
 		if (entry.character == Characters_Big)
@@ -110,11 +128,9 @@ short randomacts(RandomizedEntry entry) {
 			return actIC[rand() % 2];
 		break;
 	case LevelIDs_Casinopolis:
-		if (entry.character == Characters_Sonic && !Vanilla)
-			return 1;
 		if (entry.character == Characters_Tails || entry.character == Characters_Big)
 			return 0;
-		if (!Vanilla && entry.character != Characters_Sonic && entry.character != Characters_Tails && entry.character != Characters_Big || Vanilla)
+		else
 			return act0[rand() % 3];
 		break;
 	case LevelIDs_HotShelter:
@@ -141,7 +157,7 @@ short randomLayout(RandomizedEntry entry) {
 	short cur_mission = -1;
 
 	do {
-		if (Missions) //SA2 missions 100 Rings, Lost Chao
+		if (Missions) //SA2 missions 100 Rings, Lost Chao (also SADX Tails Race and Knux Treasure Hunting)
 			cur_mission = rand() % 4;
 		else
 			cur_mission = rand() % 2;
@@ -362,6 +378,8 @@ void GoToNextLevel_hook(char stage, char act) {
 void ResetStatsValues() {
 	isAIActive = false;
 	ChaoSpawn = false;
+	KnuxCheck = 0;
+	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
 	CustomLayout = 0;
@@ -375,6 +393,7 @@ void ResetStatsValues() {
 	isPlayerInWaterSlide = false;
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C);
+	RestoreRNGValueKnuckles();
 }
 
 //cancel the reset position at 0 after quitting a stage.
@@ -402,12 +421,12 @@ void SoftReset_R() {
 
 //Fix Trial Mode
 void SetLevelAndAct_R() {
-	if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == true)
+	if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 1)
 	{
 		if (GameMode == GameModes_Menu)
 		{
 			if (LevelList == 14 || LevelList == 238 || LevelList == 212 || LevelList == 138 || LevelList == 257)
-				testRefactor(CurrentLevel, CurrentAct);
+				testRefactor((char)CurrentLevel, (char)CurrentAct);
 			else
 				return;
 		}
@@ -497,7 +516,10 @@ void PauseMenuFix() {
 	if (CurrentLevel < 15)
 	{
 		SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
-		if (CustomLayout <= 1 || CustomLayout > 3)
+		if (Race)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Race)");
+
+		if (CustomLayout <= 1 && !Race)
 			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Beat the Stage)");
 
 		if (CustomLayout == 2)
@@ -505,6 +527,9 @@ void PauseMenuFix() {
 
 		if (CustomLayout == 3)
 			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M3 (Lost Chao)");
+
+		if (CustomLayout == 4)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: Treasure Hunting");
 	}
 
 	//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
@@ -523,8 +548,9 @@ void GetNewLevel() {
 		{
 			randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
-			randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 		}
+
+		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -575,7 +601,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 
 	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
 
-	for (int i = 0; i < split; i++) { //continue to generate split until we have our specific number.
+	for (unsigned int i = 0; i < split; i++) { //continue to generate split until we have our specific number.
 		if (RNGCharacters)
 			randomizedSets[i].character = getRandomCharacter();
 
@@ -583,8 +609,9 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 		{
 			randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
-			randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 		}
+
+		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);

@@ -59,11 +59,23 @@ void SkyDeck_Layout() {
 		SelectBarRace();
 
 	LoadSetFile(1, "0601");
-	LoadSetFile(2, "0602");
-
 	LoadCamFile(0, "0600");
 	LoadCamFile(1, "0601");
-	LoadCamFile(2, "0602");
+	
+	
+	if (CurrentAct == 2)
+	{
+		CustomLayout = 4;
+		SetRNGKnuckles();
+		LoadSetFile(2, "0604");
+		LoadCamFile(2, "0604"); //Knuckles Verion
+	}
+	else
+	{
+		LoadSetFile(2, "0602");
+		LoadCamFile(2, "0602"); //Sonic Version
+	}
+
 	return;
 }
 

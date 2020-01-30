@@ -23,56 +23,41 @@ void CamFinalEgg() {
 }
 
 void FinalEgg_Layout() {
-	CustomLayout = randomizedSets[levelCount].layout;
+	
 
-	switch (CustomLayout)
+	if (CurrentCharacter == Characters_Sonic && !Vanilla)
 	{
-	case 0:
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		LoadSetFile(0, "1004"); //don't load Sonic layout.
+		CustomLayout = 1;
+	}
+	else
+	{
+		CustomLayout = randomizedSets[levelCount].layout;
+
+		switch (CustomLayout)
 		{
-			LoadSetFile(0, "1004"); //don't load Sonic layout.
-			CustomLayout = 1;
-		}
-		else
-		{
+		case 0:
+		default:
 			LoadSetFile(0, "1000"); //Sonic Layout
 			CustomLayout = 0;
-		}
 		break;
-	case 1:
-		if (CurrentCharacter == Characters_Amy && !Vanilla)
-		{
-			LoadSetFile(0, "1000"); //don't load Amy layout.
-			CustomLayout = 0;
+		case 1:
+			if (CurrentCharacter == Characters_Amy && !Vanilla)
+			{
+				LoadSetFile(0, "1000"); //don't load Amy layout.
+				CustomLayout = 0;
+			}
+			else
+			{
+				LoadSetFile(0, "1004"); //load Amy layout
+			}
+			break;
+
+		case 2:
+		case 3:
+			LoadSetFile(0, "1000"); //Sonic Layout
+			break;
 		}
-		else
-		{
-			LoadSetFile(0, "1004"); //load Amy layout
-		}
-		break;
-	case 2:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "1004"); //M1 Amy Layout
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "1000"); //100 Rings
-		}
-		break;
-	case 3:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "1004"); //M1 Amy Layout
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "1000"); //Lost Chao
-		}
-		break;
 	}
 
 	LoadSetFile(1, "1001");

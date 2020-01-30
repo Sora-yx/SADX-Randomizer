@@ -128,6 +128,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 }
 
 void SpeedHighway_Layout() {
+
 	CustomLayout = randomizedSets[levelCount].layout;
 
 	switch (CustomLayout)
@@ -187,13 +188,22 @@ void SpeedHighway_Layout() {
 			LoadSetFile(0, "0404"); //load Chao Layout
 		}
 		break;
+	case 4:
+		Race = false;
+		LoadSetFile(2, "0405"); //Knux Treasure Hunting
+		break;
 	}
 
 	if (Race)
 		SelectBarRace();
 
 	LoadSetFile(1, "0401");
-	LoadSetFile(2, "0402");
+
+	if (CustomLayout != 4)
+		LoadSetFile(2, "0402"); //Sonic Version
+	else
+		SetRNGKnuckles();
+
 	CamSpeedHighway();
 	return;
 }

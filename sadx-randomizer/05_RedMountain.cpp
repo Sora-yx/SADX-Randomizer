@@ -158,6 +158,14 @@ void RedMountain_Layout() {
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	LoadSetFile(2, "0502"); //load Knux version
+
+	if (CurrentAct == 2)
+	{
+		SetRNGKnuckles();
+		CustomLayout = 4;
+	}
+
+
 	CamRedMountain();
 	return;
 }

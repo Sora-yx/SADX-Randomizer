@@ -28,10 +28,14 @@ DataPointer(float, EggViperFloatThing, 0x3c6e330);
 DataPointer(char, InitUpgrade, 0x3c5a954);
 DataPointer(int, BigWeight, 0x3C52510);
 
+
 void FixVictoryTailsVoice();
 void set_character_hook();
 void character_settings_onFrames();
 int AmyCartImprovement();
+int KnuxRadar();
+void EmeraldRadar_R();
+extern void PlayVoice_R(int a1);
 
 void FixAISFXJump();
 

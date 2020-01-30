@@ -4,7 +4,7 @@
 #define AddVoices(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 
 char GetCustomLayout;
-NJS_TEXNAME Missions[18];
+NJS_TEXNAME MissionsText[18];
 int CurrentMission = 0; //the current mission, if it's 1 then we load a lost chao in Chao.cpp
 HelperFunctions help;
 
@@ -136,6 +136,9 @@ void LoadStageMissionImage_r() {
 			}
 		}
 
+		if (GetCustomLayout == 4)
+			CurrentMission = 2;
+
 		if (CurrentCharacter == Characters_Amy && (GetCustomLayout == 0 || GetCustomLayout == 1 && CurrentLevel == LevelIDs_RedMountain))
 			CurrentMission = 10;
 
@@ -161,8 +164,8 @@ void LoadStageMissionImage_r() {
 				CurrentMission = 5;
 		}
 
-		StageMissionTexlist.textures = Missions;
-		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
+		StageMissionTexlist.textures = MissionsText;
+		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
 		LoadPVM("textures\\Missions", &StageMissionTexlist);
 		MissionSpriteAnim.texid = CurrentMission;
 
@@ -183,8 +186,8 @@ void StageMissionImage_result() {
 		if (CurrentLevel > 14)
 			return;
 
-		StageMissionTexlist.textures = Missions;
-		StageMissionTexlist.nbTexture = LengthOfArray(Missions);
+		StageMissionTexlist.textures = MissionsText;
+		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
 		LoadPVM("textures\\Missions", &StageMissionTexlist);
 		MissionSpriteAnim.texid = CurrentMission;
 
@@ -288,6 +291,10 @@ void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctio
 	AddVoices("5011.", "Congratulations_Tails");
 	AddVoices("5012", "sCongratulations_Knux");
 	AddVoices("5013", "Congratulations_Amy");
+
+	AddVoices("6000", "RadarBlink");
+	AddVoices("6001", "KnuxEmeraldGet");
+	AddVoices("6002", "TikalHint");
 
 	//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\TCAct3.BIN"); //TC act 4 fix
