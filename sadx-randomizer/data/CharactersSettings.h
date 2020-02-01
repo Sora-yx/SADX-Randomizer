@@ -1,14 +1,12 @@
 #pragma once
 
-VoidFunc(BigHoldingFroggy, 0x48cce4);
-
 void SetGammaTimer();  //force to 6 min instead of 3
 void GammaTarget_Init();
 void BigWeightHook(); //force to 2000g
 
 
 extern int CurrentAI;
-extern unsigned char CustomLayout;
+extern unsigned char CurrentLevelLayout;
 
 void AllUpgrades();
 void FixCharacterSFX();
@@ -30,10 +28,10 @@ DataPointer(int, BigWeight, 0x3C52510);
 
 
 void FixVictoryTailsVoice();
-void set_character_hook();
+void Characters_Management();
 void character_settings_onFrames();
 int AmyCartImprovement();
-int KnuxRadar();
+int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
 extern void PlayVoice_R(int a1);
 

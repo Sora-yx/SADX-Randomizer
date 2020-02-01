@@ -41,7 +41,7 @@ void CheckRace() {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_WindyValley:
-			if (CustomLayout == 1 && CurrentAct == 2)
+			if (CurrentLevelLayout == 1 && CurrentAct == 2)
 			{
 				isAIActive = false;
 				Race = true;
@@ -49,7 +49,7 @@ void CheckRace() {
 			}
 			break;
 		case LevelIDs_SpeedHighway:
-			if (CustomLayout == 1 && CurrentAct == 0)
+			if (CurrentLevelLayout == 1 && CurrentAct == 0)
 			{
 				isAIActive = false;
 				Race = true;
@@ -58,7 +58,7 @@ void CheckRace() {
 			}
 			break;
 		case LevelIDs_SkyDeck:
-			if (CustomLayout == 1 && CurrentAct == 0)
+			if (CurrentLevelLayout == 1 && CurrentAct == 0)
 			{
 				isAIActive = false;
 				Race = true;
@@ -66,7 +66,7 @@ void CheckRace() {
 			}
 			break;
 		case LevelIDs_Casinopolis:
-			if (CustomLayout < 2 && CurrentAct == 1)
+			if (CurrentLevelLayout < 2 && CurrentAct == 1)
 			{
 				isAIActive = false;
 				Race = true;

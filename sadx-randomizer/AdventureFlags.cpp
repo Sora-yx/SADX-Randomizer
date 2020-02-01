@@ -5,13 +5,14 @@
 #include <iostream>
 #include <string.h>
 #include "RandomHelpers.h"
+#include "Credits.h"
 
 using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
 
 void AddCustomFlag() {
-	if (CurrentLevel >= 1 && CurrentLevel <= 40 && CurrentLevel != LevelIDs_TwinkleCircuit)
+	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SandHill && CurrentLevel != LevelIDs_TwinkleCircuit)
 	{
 		std::ofstream FlagFile("Flags.txt");
 		FlagFile << CustomFlag++;
@@ -21,6 +22,7 @@ void AddCustomFlag() {
 
 //SA2 Style
 void CustomFlagCheck() {
+
 	if (SelectedCharacter == 0) //Sonic
 	{
 		switch (CustomFlag)

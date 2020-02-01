@@ -5,8 +5,8 @@
 #include <fstream>
 #include "RandomHelpers.h"
 #include "Trampoline.h"
-#include "GameObject.h"
 
+#include "StageSettings.h"
 
 extern char SwapDelay;
 extern bool RNGStages;
@@ -23,9 +23,11 @@ extern ObjectMaster* CurAI;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
-	if (GameMode != 9 && GameMode != 10)
+
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission)
 	{
 		GameMode = GameModes_Adventure_Field; //fix game crash
+		AddCustomFlag(); //Add a flag for story progression.
 	}
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
@@ -36,6 +38,7 @@ void DisableTimeStuff() {
 	TimeThing = 0;
 
 	ResetValueWhileLevelResult();
+
 	ringsPB += Rings; //total Rings credit stat
 
 	if (CurrentCharacter != Characters_Tails)
@@ -88,8 +91,6 @@ void DisableTimeStuff() {
 		}
 	}
 
-	if (CurrentLevel != LevelIDs_TwinkleCircuit && GameMode != GameModes_Mission)
-		AddCustomFlag(); //credits check
 
 	Race = false;
 	return;
@@ -103,6 +104,7 @@ void ResetValueWhileLevelResult() {
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
+	TreasureHunting = false;
 	isPlayerInWaterSlide = false;
 
 	RestoreRNGValueKnuckles();
@@ -120,14 +122,7 @@ void fixTCCart() {
 	return;
 }
 
-void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
-	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
-	{
-		SomethingAboutHotShelterSwitch = 1;
-	}
 
-	return;
-}
 
 void LoadZero() {
 	if (CurrentLevel == LevelIDs_HotShelter)
@@ -142,7 +137,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CustomLayout != 1) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentLevelLayout != 1) //don't load Zero if Sonic Layout
 		return;
 
 	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
@@ -258,31 +253,35 @@ void ICAct3CutsceneSkip() {
 	return;
 }*/
 
-void ICAct3Position() {
-	ObjectMaster* GetChara = GetCharacterObject(0);
 
-	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
-	{
-		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		{
-			TimeThing = 1;
-			EnableController(0);
-			PlayMusic(MusicIDs_icecap3);
-			return PositionPlayer(0, -6674, -10025.23926, -1776);
-		}
-	}
-
-	return;
-}
 
 void EmeraldRadar_R() {
 
-	if (CustomLayout == 4 && CurrentLevel <= LevelIDs_Casinopolis)
+	if (TreasureHunting)
 	{
 		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
 		LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
+
 		if (CurrentCharacter != Characters_Knuckles)
+		{
 			KnuxCheck2 = 0; //fix Trial Mode Crash
+
+			switch (CurrentLevel)
+			{
+			case LevelIDs_RedMountain:
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37); 
+				}
+				break;
+			case LevelIDs_LostWorld:
+			case LevelIDs_SkyDeck:
+
+				break;
+			}
+		}
 	}
 
 	return;
@@ -317,12 +316,7 @@ void TwinkleCircuitResult() {
 	GameState = 0x5;
 }
 
-void FixRollerCoaster() {
-	ObjectMaster* obj = GetCharacterObject(0);
-	EntityData1* ent;
-	ent = obj->Data1;
-	obj->Data1->Action = 28; //force the character to leave the RC
-}
+
 
 int AmyCartImprovement() {
 	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
@@ -332,9 +326,9 @@ int AmyCartImprovement() {
 
 }
 
-int KnuxRadar() {  //trick the game to make it think we are playing Knuckles
+int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
 	
-	if (CustomLayout == 4)
+	if (TreasureHunting)
 		return Characters_Knuckles;
 	else
 		return CurrentCharacter;
@@ -344,16 +338,14 @@ int KnuxRadar() {  //trick the game to make it think we are playing Knuckles
 
 void SetRNGKnuckles() {
 
-	if (CurrentLevel >= LevelIDs_SpeedHighway && CurrentLevel <= LevelIDs_Casinopolis)
+	if (TreasureHunting)
 	{
-		if (CustomLayout == 4)
-		{
-			WriteData<1>((void*)0x416F06, 0x08);
-			WriteData<1>((void*)0x4153E1, 0x08);
-			WriteData<1>((void*)0x416f08, 0x74);
-			WriteData<1>((void*)0x4153e3, 0x74);
-		}
+		WriteData<1>((void*)0x416F06, 0x08);
+		WriteData<1>((void*)0x4153E1, 0x08);
+		WriteData<1>((void*)0x416f08, 0x74);
+		WriteData<1>((void*)0x4153e3, 0x74);
 	}
+	
 }
 
 //restore original values
@@ -367,6 +359,7 @@ void RestoreRNGValueKnuckles() {
 }
 
 void ResetTime_R() { //Used for Back Ring, restore player's rings.
+
 	RingCopy = Rings;
 
 	if (GetBackRing)
@@ -440,12 +433,39 @@ void BackRing2() { //swap Frog/Emerald etc.
 	}
 }
 
-void SHAct2Position() {
-	if (CurrentCharacter != Characters_Sonic)
-		return PositionPlayer(0, 10, -10000, 10);
-	else
-		return ForcePlayerAction(0, 0x2b);
+void Set_BackRing() {
+	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
+
+	//capsule
+	WriteCall((void*)0x46adc2, BackRing);
+
+	//Ballon
+	WriteCall((void*)0x7a1e25, BackRing);
+
+	//Frog
+	WriteCall((void*)0x4fa2e8, BackRing2);
+
+	//EC + LW
+	WriteCall((void*)0x5b24d8, BackRing2);
+
+	//WV back ring
+	WriteCall((void*)0x04df349, BackRing2);
+	WriteCall((void*)0x4df383, BackRing2);
+	WriteCall((void*)0x4df395, BackRing2);
+
+	//Casino back ring
+	WriteCall((void*)0x5dd051, BackRing2);
+	WriteCall((void*)0x5dd07e, BackRing2);
+	WriteCall((void*)0x5dd08d, BackRing2);
+
+	//Ice Cap back ring
+	WriteCall((void*)0x4ecf61, BackRing2);
+	WriteCall((void*)0x4ecf85, BackRing2);
+	WriteCall((void*)0x4ecf94, BackRing2);
 }
+
+
+
 
 void preventCutscene() {
 	switch (CurrentLevel)
@@ -466,35 +486,14 @@ void preventCutscene() {
 	return GetLevelCutscene();
 }
 
-void DeathsStat() {
-	//Hook used when you lose a live
-	deathsPB++;
-	return GiveLives(0xffffffff);
-}
 
-void HurtsStat() {
-	//Hook used when you lose your rings
-	hurtsPB++;
-	return Set0Rings();
-}
 
-void KillStat() {
-	killPB++;
-	GetCharacterID(0);
-	return;
-}
 
-void AnimalStat() {
-	animalPB++;
-	PlaySound(0x1c, 0, 0, 0);
-	return;
-}
+void Stages_Management() {
 
-void HookStats_Inits() {
-	WriteCall((void*)0x45072d, HurtsStat);
-	WriteCall((void*)0x416e7d, DeathsStat); //Trial Mode
-	WriteCall((void*)0x417a1f, DeathsStat); //Adventure Mode
-	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
-	WriteCall((void*)0x4d88ca, KillStat);
-	WriteCall((void*)0x4d7977, AnimalStat);
+	WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
+	Set_Zero();
+	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
+	Set_BackRing();
+	Race_Init();
 }

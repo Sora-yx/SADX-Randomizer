@@ -5,24 +5,15 @@
 #include <fstream>
 #include "RandomHelpers.h"
 
-extern bool RNGCharacters;
-extern bool RNGStages;
-extern bool Vanilla;
-extern int ban;
-extern bool ConsistentMusic;
-int musicCount;
-extern bool Missions;
-extern bool MetalSonic;
-extern bool SuperSonic;
-extern bool banCharacter[8];
-extern unsigned int split;
-extern unsigned int TotalCount;
+
 extern char GetCustomLayout;
 extern char StorySplits;
 extern int CustomFlag;
 extern bool ChaoSpawn;
 extern bool RandCongratsDone;
 extern bool isPlayerInWaterSlide;
+bool TreasureHunting = false;
+int musicCount;
 
 //Credits stats
 int RageQuit = 0;
@@ -104,7 +95,7 @@ short randomacts(RandomizedEntry entry) {
 			return actHS[rand() % 2];
 		if (entry.character == Characters_Gamma && !Vanilla)
 			return actHS[rand() % 2];
-		if (entry.character != Characters_Gamma && entry.character != Characters_Sonic)
+		if (entry.character != Characters_Gamma && entry.character != Characters_Sonic || Vanilla)
 			return rand() % 3;
 		break;
 	case LevelIDs_SkyDeck:
@@ -317,7 +308,7 @@ void testRefactor(char stage, char act) {
 		CurrentAI = randomizedSets[levelCount].ai_mode;
 
 		LastLevel = CurrentLevel;
-		CustomLayout = 0;
+		CurrentLevelLayout = 0;
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
@@ -352,7 +343,7 @@ void GoToNextLevel_hook(char stage, char act) {
 		CurrentAI = randomizedSets[levelCount].ai_mode;
 
 		LastLevel = CurrentLevel;
-		CustomLayout = 0;
+		CurrentLevelLayout = 0;
 		GetCustomLayout = 0;
 		CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 		CurrentAct = randomizedSets[levelCount].act;
@@ -377,12 +368,13 @@ void GoToNextLevel_hook(char stage, char act) {
 
 void ResetStatsValues() {
 	isAIActive = false;
+	TreasureHunting = false;
 	ChaoSpawn = false;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
-	CustomLayout = 0;
+	CurrentLevelLayout = 0;
 	CurrentMission = 0;
 	GetCustomLayout = 0;
 	Credits_State = 0;
@@ -513,30 +505,62 @@ void TwinkleCircuitMusic() {
 
 void PauseMenuFix() {
 	//Display Current Mission Information
-	if (CurrentLevel < 15)
+	if (CurrentLevel < LevelIDs_Chaos0)
 	{
 		SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
-		if (Race)
-			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Race)");
 
-		if (CustomLayout <= 1 && !Race)
+		if (TreasureHunting && CurrentLevelLayout == Mission1_Variation)
+			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Treasure Hunting)");
+
+		if (CurrentLevelLayout <= Mission1_Variation && !TreasureHunting)
 			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M1 (Beat the Stage)");
 
-		if (CustomLayout == 2)
+		if (CurrentLevelLayout == Mission2_100Rings)
 			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M2 (100 Rings)");
 
-		if (CustomLayout == 3)
+		if (CurrentLevelLayout == Mission3_LostChao)
 			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: M3 (Lost Chao)");
-
-		if (CustomLayout == 4)
-			DisplayDebugString(NJM_LOCATION(2, 5), "Current Mission: Treasure Hunting");
 	}
 
 	//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
-	if (PauseSelection == 3)
-		GameMode = GameModes_Adventure_Field;
-	else
-		GameMode = GameModes_Adventure_ActionStg;
+	if (GameMode != GameModes_Trial)
+	{
+		if (PauseSelection == 3)
+			GameMode = GameModes_Adventure_Field;
+		else
+			GameMode = GameModes_Adventure_ActionStg;
+	}
+}
+
+extern int SeedCopy;
+
+void DisplayRandoInformation() {
+
+		SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
+
+		if (ban != 0)
+			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
+		else
+			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
+
+		if (Vanilla)
+			DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Allowed");
+		else
+			DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Banned");
+
+		switch (StorySplits)
+		{
+		case 1:
+			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
+			break;
+		case 2:
+			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
+			break;
+		case 3:
+			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
+			break;
+		}
 }
 
 void GetNewLevel() {
@@ -550,7 +574,7 @@ void GetNewLevel() {
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
 		}
 
-		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+		randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -577,17 +601,17 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	myfile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	myfile << "<Run version=\"1.7.0\">\n";
 	myfile << "<GameIcon />\n<GameName>Sonic Adventure (DX)</GameName>\n<CategoryName>Randomizer: ";
-	if (StorySplits == 1)
+	if (StorySplits == SonicStory)
 	{
 		split = 10;
 		myfile << "Sonic's Story" << "</CategoryName>\n<Metadata>\n";
 	}
-	if (StorySplits == 2)
+	if (StorySplits == AllStories)
 	{
 		split = 37;
 		myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";
 	}
-	if (StorySplits == 3)
+	if (StorySplits == AnyPourcent)
 	{
 		split = 21;
 		myfile << "Any%" << "</CategoryName>\n<Metadata>\n";
@@ -611,7 +635,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
 		}
 
-		randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+		randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -646,4 +670,31 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	myfile.close();
 
 	return;
+}
+
+void RandomizeStages_Hook() {
+	if (RNGStages == true)
+	{
+		WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
+		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
+		WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
+
+		WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
+
+		WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
+		WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
+		//Redirect SetLevelAndAct in FUN_0x4133e0
+
+		WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
+		WriteData<1>((void*)0x413502, 0x08);
+
+		WriteCall((void*)0x41348f, testRefactor); //hook SetLevelAndAct when loading adventure data
+		WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
+
+		WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
+		WriteData<1>((void*)0x4DB0B2, 0x05);
+		WriteData<5>((void*)0x4db051, 0x90);
+		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+	}
+
 }

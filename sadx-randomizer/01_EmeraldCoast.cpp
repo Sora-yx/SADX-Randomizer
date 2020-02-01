@@ -3,77 +3,105 @@
 #include "EmeraldCoast.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Emerald Coast\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
+void EC_Cam() {
 
-void EC_Layout() {
-	if (CurrentAct == 2)
-		CustomLayout = 1;
-	else
-		CustomLayout = randomizedSets[levelCount].layout;
-
-	switch (CustomLayout)
+	if (Mission1_Variation)
 	{
-	case 0:
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "0104"); //M1 Gamma Version
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0100"); //M1 Sonic Version
-		}
-
-		LoadSetFile(1, "0101");
-		break;
-	case 1:
 		if (CurrentCharacter == Characters_Gamma && !Vanilla)
-		{
-			LoadSetFile(0, "0100");
-			CustomLayout = 0;
-		}
+			LoadCamFile(0, "0100");
 		else
-		{
-			LoadSetFile(0, "0104"); //M1 Gamma Version
-		}
-
-		LoadSetFile(1, "0101");
-		break;
-	case 2:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "0104"); //M1 Gamma Version
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0100");
-		}
-		LoadSetFile(1, "0101"); //M2
-		break;
-	case 3:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "0104"); //M1 Gamma Version
-			LoadSetFile(1, "0101");
-			CustomLayout = 1;
-		}
-		else
-		{
-			LoadSetFile(0, "0100");
-			LoadSetFile(1, "0103"); //M3
-		}
-
-		break;
+			LoadCamFile(0, "0104");
 	}
+	else
+	{
+		LoadCamFile(0, "0100");
+	}
+	
 
-	LoadSetFile(2, "0102");
-	LoadCamFile(0, "0100");
 	LoadCamFile(1, "0101");
 	LoadCamFile(2, "0102");
 
+	return;
+
+}
+
+void EC_Layout() {
+
+	if (CurrentAct != 2)
+	{
+		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
+		switch (CurrentLevelLayout)
+		{
+		case Mission1:
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "0104"); //M1 Gamma Version
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "0100"); //M1 Sonic Version
+			}
+			LoadSetFile(1, "0101");
+			break;
+		case Mission1_Variation:
+			if (CurrentCharacter == Characters_Gamma && !Vanilla)
+			{
+				LoadSetFile(0, "0100");
+				CurrentLevelLayout = Mission1;
+			}
+			else
+			{
+				LoadSetFile(0, "0104"); //M1 Gamma Version
+			}
+
+			LoadSetFile(1, "0101");
+			break;
+		case Mission2_100Rings:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "0104"); //M1 Gamma Version
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "0100");
+			}
+			LoadSetFile(1, "0101"); //M2
+			break;
+		case Mission3_LostChao:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "0104"); //M1 Gamma Version
+				LoadSetFile(1, "0101");
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "0100");
+				LoadSetFile(1, "0103"); //M3
+			}
+
+			break;
+		}
+	}
+
+	if (CurrentAct == 2)
+	{
+		CurrentLevelLayout = Mission1_Variation;
+
+		LoadSetFile(0, "0100");
+		LoadSetFile(1, "0101");
+	}
+
+	LoadSetFile(2, "0102");
+	EC_Cam();
 	return;
 }
 
@@ -92,86 +120,92 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	WriteCall((void*)0x422bbc, EC_Layout);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0100S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act1.bin");
+	ReplaceSET("SET0100S", "Sonic-EC-Act1");
+	ReplaceSET("SET0101S", "Sonic-EC-Act2");
+	ReplaceSET("SET0102S", "Sonic-EC-Act3");
+	ReplaceSET("SET0103S", "Sonic-EC-Chao");
+	ReplaceSET("SET0104S", "Sonic-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\SET0101S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104S.BIN", "system\\levels\\Emerald Coast\\Sonic-EC-Gamma.bin");
+	ReplaceCAM("CAM0100S", "CAM0100S");
+	ReplaceCAM("CAM0101S", "CAM0101S");
+	ReplaceCAM("CAM0102S", "CAM0102S");
+	ReplaceCAM("CAM0104S", "CAM0104S");
 
-	helperFunctions.ReplaceFile("system\\CAM0100S.BIN", "system\\cam\\CAM0100S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101S.BIN", "system\\cam\\CAM0101S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102S.BIN", "system\\cam\\CAM0102S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EC3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0100M.BIN", "system\\levels\\Emerald Coast\\Tails-EC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0101M.BIN", "system\\levels\\Emerald Coast\\Tails-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102M.BIN", "system\\levels\\Emerald Coast\\Tails-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103M.BIN", "system\\levels\\Emerald Coast\\Tails-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104M.BIN", "system\\levels\\Emerald Coast\\Tails-EC-Gamma.bin");
+	ReplaceSET("SET0100M", "Tails-EC-Act1");
+	ReplaceSET("SET0101M", "Tails-EC-Act2");
+	ReplaceSET("SET0102M", "Tails-EC-Act3");
+	ReplaceSET("SET0103M", "Tails-EC-Chao");
+	ReplaceSET("SET0104M", "Tails-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\CAM0100M.BIN", "system\\cam\\CAM0100M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101M.BIN", "system\\cam\\CAM0101M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102M.BIN", "system\\cam\\CAM0102M.bin");
+	ReplaceCAM("CAM0100M", "CAM0100M");
+	ReplaceCAM("CAM0101M", "CAM0101M");
+	ReplaceCAM("CAM0102M", "CAM0102M");
+	ReplaceCAM("CAM0104M", "CAM0104M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, EC3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0100K.BIN", "system\\levels\\Emerald Coast\\Knux-EC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0101K.BIN", "system\\levels\\Emerald Coast\\Knux-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102K.BIN", "system\\levels\\Emerald Coast\\Knux-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103K.BIN", "system\\levels\\Emerald Coast\\Knux-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104K.BIN", "system\\levels\\Emerald Coast\\Knux-EC-Gamma.bin");
+	ReplaceSET("SET0100K", "Knux-EC-Act1");
+	ReplaceSET("SET0101K", "Knux-EC-Act2");
+	ReplaceSET("SET0102K", "Knux-EC-Act3");
+	ReplaceSET("SET0103K", "Knux-EC-Chao");
+	ReplaceSET("SET0104K", "Knux-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\CAM0100K.BIN", "system\\cam\\CAM0100K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101K.BIN", "system\\cam\\CAM0101K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102K.BIN", "system\\cam\\CAM0102K.bin");
+	ReplaceCAM("CAM0100K", "CAM0100K");
+	ReplaceCAM("CAM0101K", "CAM0101K");
+	ReplaceCAM("CAM0102K", "CAM0102K");
+	ReplaceCAM("CAM0104K", "CAM0104K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, EC3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0100A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0101A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104A.BIN", "system\\levels\\Emerald Coast\\Amy-EC-Gamma.bin");
+	ReplaceSET("SET0100A", "Amy-EC-Act1");
+	ReplaceSET("SET0101A", "Amy-EC-Act2");
+	ReplaceSET("SET0102A", "Amy-EC-Act3");
+	ReplaceSET("SET0103A", "Amy-EC-Chao");
+	ReplaceSET("SET0104A", "Amy-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\CAM0100A.BIN", "system\\cam\\CAM0100A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101A.BIN", "system\\cam\\CAM0101A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102A.BIN", "system\\cam\\CAM0102A.bin");
+	ReplaceCAM("CAM0100A", "CAM0100A");
+	ReplaceCAM("CAM0101A", "CAM0101A");
+	ReplaceCAM("CAM0102A", "CAM0102A");
+	ReplaceCAM("CAM0104A", "CAM0104A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, EC3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0100B.BIN", "system\\levels\\Emerald Coast\\Big-EC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0101B.BIN", "system\\levels\\Emerald Coast\\Big-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102B.BIN", "system\\levels\\Emerald Coast\\Big-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103B.BIN", "system\\levels\\Emerald Coast\\Big-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104B.BIN", "system\\levels\\Emerald Coast\\Big-EC-Gamma.bin");
+	ReplaceSET("SET0100B", "Big-EC-Act1");
+	ReplaceSET("SET0101B", "Big-EC-Act2");
+	ReplaceSET("SET0102B", "Big-EC-Act3");
+	ReplaceSET("SET0103B", "Big-EC-Chao");
+	ReplaceSET("SET0104B", "Big-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\CAM0100B.BIN", "system\\cam\\CAM0100B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101B.BIN", "system\\cam\\CAM0101B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102B.BIN", "system\\cam\\CAM0102B.bin");
+	ReplaceCAM("CAM0100B", "CAM0100B");
+	ReplaceCAM("CAM0101B", "CAM0101B");
+	ReplaceCAM("CAM0102B", "CAM0102B");
+	ReplaceCAM("CAM0104B", "CAM0104B");
 	helperFunctions.RegisterStartPosition(Characters_Big, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, EC3B_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0100E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0101E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0102E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0103E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0104E.BIN", "system\\levels\\Emerald Coast\\Gamma-EC-Gamma.bin");
+	ReplaceSET("SET0100E", "Gamma-EC-Act1");
+	ReplaceSET("SET0101E", "Gamma-EC-Act2");
+	ReplaceSET("SET0102E", "Gamma-EC-Act3");
+	ReplaceSET("SET0103E", "Gamma-EC-Chao");
+	ReplaceSET("SET0104E", "Gamma-EC-Gamma");
 
-	helperFunctions.ReplaceFile("system\\CAM0100E.BIN", "system\\cam\\CAM0100E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0101E.BIN", "system\\cam\\CAM0101E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0102E.BIN", "system\\cam\\CAM0102E.bin");
+	ReplaceCAM("CAM0100E", "CAM0100E");
+	ReplaceCAM("CAM0101E", "CAM0101E");
+	ReplaceCAM("CAM0102E", "CAM0102E");
+	ReplaceCAM("CAM0104E", "CAM0104E");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC3_StartPositions[0]);

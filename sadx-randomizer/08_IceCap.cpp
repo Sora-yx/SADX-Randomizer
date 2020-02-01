@@ -5,9 +5,25 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 
+void ICAct3Position() {
+	ObjectMaster* GetChara = GetCharacterObject(0);
 
+	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			TimeThing = 1;
+			EnableController(0);
+			PlayMusic(MusicIDs_icecap3);
+			return PositionPlayer(0, -6674, -10025.23926, -1776);
+		}
+	}
+
+	return;
+}
 
 void IC_Layout() {
+
 	if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
 	{
 		WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
@@ -24,30 +40,30 @@ void IC_Layout() {
 		WriteCall((void*)0x4eda00, DisableController);
 	}
 
-	CurrentAI = 2;
 
 	if (CurrentAct == 3)
-		CustomLayout = 0;
+		CurrentLevelLayout = Mission1;
 	else
-		CustomLayout = randomizedSets[levelCount].layout;
+		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
 	LoadSetFile(0, "0800"); //M1
 
-	switch (CustomLayout)
+	switch (CurrentLevelLayout)
 	{
-	case 0:
-	case 1:
+	case Mission1:
+	case Mission1_Variation:
 	default:
 		LoadSetFile(1, "0801"); //M1
-		CustomLayout = 0;
+		CurrentLevelLayout = Mission1;
 		break;
-	case 2:
+	case Mission2_100Rings:
 		LoadSetFile(1, "0801"); //M2
 		break;
-	case 3:
+	case Mission3_LostChao:
 		LoadSetFile(1, "0804"); //M3
 		break;
 	}
+
 	LoadSetFile(2, "0802"); //M1
 	LoadSetFile(3, "0803"); //M1
 

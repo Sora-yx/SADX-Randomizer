@@ -6,7 +6,7 @@
 
 
 void CamFinalEgg() {
-	if (CustomLayout == 1)
+	if (CurrentLevelLayout == 1)
 	{
 		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
 	}
@@ -25,39 +25,46 @@ void CamFinalEgg() {
 void FinalEgg_Layout() {
 	
 
-	if (CurrentCharacter == Characters_Sonic && !Vanilla)
-	{
-		LoadSetFile(0, "1004"); //don't load Sonic layout.
-		CustomLayout = 1;
-	}
-	else
-	{
-		CustomLayout = randomizedSets[levelCount].layout;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-		switch (CustomLayout)
+	switch (CurrentLevelLayout)
+	{
+	case Mission1:
+	default:
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-		case 0:
-		default:
-			LoadSetFile(0, "1000"); //Sonic Layout
-			CustomLayout = 0;
-		break;
-		case 1:
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-				LoadSetFile(0, "1000"); //don't load Amy layout.
-				CustomLayout = 0;
-			}
-			else
-			{
-				LoadSetFile(0, "1004"); //load Amy layout
-			}
-			break;
-
-		case 2:
-		case 3:
-			LoadSetFile(0, "1000"); //Sonic Layout
-			break;
+			LoadSetFile(0, "1004"); //don't load Sonic layout.
+			CurrentLevelLayout = Mission1_Variation;
 		}
+		else
+		{
+			LoadSetFile(0, "1000"); //Sonic Layout
+			CurrentLevelLayout = Mission1;
+		}
+		break;
+	case Mission1_Variation:
+		if (CurrentCharacter == Characters_Amy && !Vanilla)
+		{
+			LoadSetFile(0, "1000"); //don't load Amy layout.
+			CurrentLevelLayout = Mission1;
+		}
+		else
+		{
+			LoadSetFile(0, "1004"); //load Amy layout
+		}
+		break;
+	case Mission2_100Rings:
+	case Mission3_LostChao:
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		{
+			LoadSetFile(0, "1004"); //don't load Sonic layout.
+			CurrentLevelLayout = Mission1_Variation;
+		}
+		else
+		{
+			LoadSetFile(0, "1000"); //Sonic Layout
+		}
+		break;
 	}
 
 	LoadSetFile(1, "1001");

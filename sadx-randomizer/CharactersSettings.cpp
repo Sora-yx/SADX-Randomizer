@@ -42,7 +42,7 @@ int SetAmyWinPose() {
 	switch (CurrentCharacter)
 	{
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_EmeraldCoast && CustomLayout == 1 || CustomLayout >= 2)
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_EmeraldCoast && CurrentLevelLayout == 1 || CurrentLevelLayout >= 2)
 			return 42;
 		else
 			return 32;
@@ -320,6 +320,7 @@ void FixGammaHitBounce() {
 }
 
 void BigWeightHook() {
+
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 1990; //meme display
 }
@@ -442,7 +443,7 @@ int GetCharacter1ID() //AI ID
 
 HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
 
-void set_character_hook() {
+void Characters_Management() {
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 
 	/*if (SSMod)
@@ -472,10 +473,10 @@ void set_character_hook() {
 
 	WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
 	WriteData<6>((void*)0x4764CC, 0x90u); // make Tikal hints work when not Knuckles
+	WriteData<6>((void*)0x4a31f0, 0x90u); // Display the emerald grab when not Knuckles.
 	WriteCall((void*)0x4762a6, FixRadarSFX);
 	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
 	WriteCall((void*)0x7a907f, FixTikalSFX);
-	//WriteData<5>((void*)0x4762a6, 0x90);
 
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
@@ -498,12 +499,10 @@ void set_character_hook() {
 	WriteCall((void*)0x79ab84, AmyCartImprovement);
 	WriteCall((void*)0x79aa78, AmyCartImprovement);
 	WriteCall((void*)0x7979b9, AmyCartImprovement);
-	
-	WriteCall((void*)0x475852, KnuxRadar); //radar chara check
 
-	WriteCall((void*)0x4a306a, KnuxRadar); //display piece
-	WriteCall((void*)0x476661, KnuxRadar); //display piece
-	WriteCall((void*)0x477d96, KnuxRadar); //display piece
+	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
 
-
+	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
+	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
+	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece
 }

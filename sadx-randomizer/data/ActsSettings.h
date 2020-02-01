@@ -8,7 +8,6 @@
 void EC_Layout();
 void IC_Layout();
 void Casino_Layout();
-void TwinkleCircuitMusic();
 void TwinklePark_Layout();
 void SpeedHighway_Layout();
 void RedMountain_Layout();
@@ -23,5 +22,10 @@ void CamSpeedHighway();
 void CamRedMountain();
 void CamFinalEgg();
 void CamHotShelter();
+void EC_Cam();
+void Cam_WV();
+void Cam_SkyDeck();
+void Cam_LW();
 
 int HedgehogHammerTrick();
+void FixGoldenAndCoin();

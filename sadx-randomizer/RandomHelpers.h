@@ -22,6 +22,21 @@ short getRandomAI(RandomizedEntry entry);
 short getRandomRaceAI(RandomizedEntry entry);
 void GetNewLevel();
 void SelectBarRace();
+void TwinkleCircuitMusic();
+void RandomizeStages_Hook();
+
+extern bool RNGCharacters;
+extern bool RNGStages;
+extern bool Vanilla;
+extern int ban;
+extern bool ConsistentMusic;
+extern bool Missions;
+extern bool MetalSonic;
+extern bool SuperSonic;
+extern bool banCharacter[8];
+extern unsigned int split;
+extern unsigned int TotalCount;
+extern char StorySplits;
 
 
 struct RandomizedEntry
@@ -29,7 +44,7 @@ struct RandomizedEntry
 	int8_t character;
 	short level;
 	short act;
-	unsigned char layout;
+	unsigned char LevelLayout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
 	int ai_mode; //AI following you
@@ -38,16 +53,38 @@ struct RandomizedEntry
 	short voices;
 };
 
-extern unsigned char CustomLayout;
+//Mission Card Enum 0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
+enum MissionCard {
+	CapsuleCard, LostChaoCard, EmeraldKnuxCard, SonicRaceCard, FinalEggCard, FroggyCard,
+	LostWorldCard, MissileRaceCard, RingsCard, RescueTailsCard, BallonCard, TailsRaceCard, KnuxRaceCard, AmyRaceCard,
+	BigRaceCard, GammaRaceCard, EggmanRaceCard, TikalRaceCard
+};
+
+
+
+
+//SADX / SA2 missions. (M1 Variation is used when a character share the same level and act, but with a different level layout, ex: Amy Hot Shelter and Big Hot Shelter, same act, different version.)
+enum CurMission {
+
+	Mission1, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
+};
+
+enum CurSplits {
+
+	None, SonicStory, AllStories, AnyPourcent
+};
+
+extern unsigned char CurrentLevelLayout;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;
 extern int levelCount;
+extern bool TreasureHunting;
 
 void Set_MusicVoices();
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
-void Set_BackRing();
+
 void BigLayoutHS();
 void TargetableEntity(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
@@ -57,6 +94,8 @@ void Chaos6_LoadWithTarget();
 
 ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
+ObjectFunc(InvisibleWallCasino, 0x5d03a0);
+void FixInvisibleWall();
 
 void E101Target();
 
@@ -79,7 +118,11 @@ extern int CurrentAI;
 extern bool isAIActive;
 extern bool isAIAllowed;
 
-void __cdecl Startup_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl Randomizer_Config(const char* path, const HelperFunctions& helperFunctions);
+
 void Chao_Init();
 void Chao_OnFrame();
 
@@ -123,14 +166,19 @@ void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFunctions);
 
 void CreditsNewList();
+void Credits_StatsDelayOnFrames();
 void Race_Init();
+void MissionResultCheck();
+void DisplayRandoInformation();
 
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
 void RandomVoice();
 void RandomMusic();
+void Stages_Management();
 
 void PlayMusic_R(MusicIDs song);
 void PlayVoice_R(int a1);
@@ -143,8 +191,9 @@ void CancelResetPosition();
 
 void LoadZero();
 void Set_Zero();
+void AI_FixesOnFrames();
 
-void credits();
+
 void HotShelterSecretSwitch();
 
 void FixGammaBounce();
@@ -208,37 +257,35 @@ void LoadStageMissionImage_r();
 int LoadTitleCardTexture_r(int minDispTime);
 void StageMissionImage_result();
 int CheckMissionRequirements_r();
-void BackRing();
-void BackRing2();
+
 
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 
-void CreditFlag();
+
 void FinalStat();
 
 void DisableTime_Zero();
 void AISwitch();
 void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
-void ResetTime_R();
+
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
 
-DataPointer(char, CreditSkipCheck, 0x641232);
 
 DataPointer(char, KnuxCheck, 0x3c52c04);
+DataPointer(char, KnuxEmerald2, 0x3C52B48);
 DataPointer(char, KnuxCheck2, 0x3c52bd8);
 void SetRNGKnuckles();
 void RestoreRNGValueKnuckles();
 
-FunctionPointer(int, CreditStuff, (), 0x641138);
 
 
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
-DataPointer(char, SomethingAboutCredit, 0x3c83054);
+
 DataPointer(char, AdventureDataChaos4, 0x3B183AA);
 DataPointer(char, AdventureDataChaos4Post, 0x3B183AE);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
@@ -256,6 +303,8 @@ VoidFunc(SomethingAboutZeroBoss, 0x5875d0);
 VoidFunc(FUN_0040bda0, 0x40bda0);
 VoidFunc(FUN_0040be30, 0x40be30);
 VoidFunc(GetLevelCutscene, 0x413b20);
+
+VoidFunc(Knuckles_SetRNG, 0x475840);
 void ICAct3Position();
 
 VoidFunc(PauseQuitThing2, 0x413f70);

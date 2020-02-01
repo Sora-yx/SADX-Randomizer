@@ -108,7 +108,7 @@
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />
     <ClCompile Include="EggWalker.cpp" />
-    <ClCompile Include="LandTableInfo.cpp" />
+    <ClCompile Include="Missions.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="PerfectChaos.cpp" />
     <ClCompile Include="Race.cpp" />
@@ -123,6 +123,7 @@
     <ClCompile Include="Zero.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Credits.h" />
     <ClInclude Include="data\ActsSettings.h" />
     <ClInclude Include="data\Casino.h" />
     <ClInclude Include="data\chao.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="data\WindyValley.h" />
     <ClInclude Include="data\Zero.h" />
     <ClInclude Include="RandomHelpers.h" />
+    <ClInclude Include="StageSettings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

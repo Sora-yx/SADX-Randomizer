@@ -6,25 +6,34 @@
 
 //Random Act function
 
+
+void FixRollerCoaster() {
+	ObjectMaster* obj = GetCharacterObject(0);
+	EntityData1* ent;
+	ent = obj->Data1;
+	obj->Data1->Action = 28; //force the character to leave the RC
+}
+
+
 void TwinklePark_Layout() {
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C);
 
-	CustomLayout = randomizedSets[levelCount].layout;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
 	LoadSetFile(0, "0300");
-	LoadSetFile(1, "0301");
 
 	if (CurrentAct <= 1)
 	{
-		switch (CustomLayout)
+		switch (CurrentLevelLayout)
 		{
 		default:
-		case 1:
-			CustomLayout = 0;
+		case Mission1_Variation:
+			LoadSetFile(1, "0301");
+			CurrentLevelLayout = Mission1;
 			break;
-		case 2:
-		case 3:
+		case Mission2_100Rings:
+		case Mission3_LostChao:
 			LoadSetFile(1, "0303"); //M3 Version
 			break;
 		}
@@ -32,15 +41,15 @@ void TwinklePark_Layout() {
 
 	if (CurrentAct == 2)
 	{
-		switch (CustomLayout)
+		switch (CurrentLevelLayout)
 		{
-		case 0:
-		case 1:
+		case Mission1:
+		case Mission1_Variation:
 		default:
 			LoadSetFile(1, "0305"); //Amy TP version
 			break;
-		case 2:
-		case 3:
+		case Mission2_100Rings:
+		case Mission3_LostChao:
 			LoadSetFile(1, "0303"); //M2-M3 Version
 			break;
 		}

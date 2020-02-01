@@ -1,6 +1,7 @@
 #include "SADXModLoader.h"
 #include "stdafx.h"
 #include "RandomHelpers.h"
+#include "Credits.h"
 using namespace std;
 #include <string.h>
 
@@ -14,6 +15,12 @@ extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
 
+extern int SeedCopy;
+extern char StorySplits;
+extern int StatsTimer;
+bool RandCongratsDone = false;
+
+
 //conversion to string, used for credits stats (struct doesn't accept int)
 string DeathsSTD = "";
 string JumpCountSTD = "";
@@ -21,10 +28,42 @@ string RageQuitSTD = "";
 string HurtsSTD = "";
 string AISwapCountSTD = "";
 
-extern int SeedCopy;
-extern char StorySplits;
-extern int StatsTimer;
-bool RandCongratsDone = false;
+//Stats
+
+void DeathsStat() {
+	//Hook used when you lose a live
+	deathsPB++;
+	return GiveLives(0xffffffff);
+}
+
+void HurtsStat() {
+	//Hook used when you lose your rings
+	hurtsPB++;
+	return Set0Rings();
+}
+
+void KillStat() {
+	killPB++;
+	GetCharacterID(0);
+	return;
+}
+
+void AnimalStat() {
+	animalPB++;
+	PlaySound(0x1c, 0, 0, 0);
+	return;
+}
+
+void HookStats_Inits() {
+	WriteCall((void*)0x45072d, HurtsStat);
+	WriteCall((void*)0x416e7d, DeathsStat); //Trial Mode
+	WriteCall((void*)0x417a1f, DeathsStat); //Adventure Mode
+	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
+	WriteCall((void*)0x4d88ca, KillStat);
+	WriteCall((void*)0x4d7977, AnimalStat);
+}
+
+//Credits
 
 void CreditFlag() {
 	if (SelectedCharacter == 0)
@@ -656,7 +695,7 @@ void CreditsNewList() {
 
 //Credits
 void credits() {
-	CustomLayout = 0;
+	CurrentLevelLayout = 0;
 	GetCustomLayout = 0;
 	CurrentMission = 0;
 	StatsTimer = 3000;
@@ -745,4 +784,22 @@ void FinalStat() {
 		Credits_State = 5;
 		RandCongratsDone = false;
 	}
+}
+
+void Credits_StartupInit() {
+
+	//Credits
+	WriteCall((void*)0x641aef, CreditFlag);
+	HookStats_Inits();
+	WriteData<2>((void*)0x641232, 0x90); //allow to skip credits.
+
+}
+
+void Credits_StatsDelayOnFrames() {
+
+	if (StatsTimer && Credits_State >= 2)
+		StatsTimer--;
+
+	if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)
+		StatsTimer = 0;
 }

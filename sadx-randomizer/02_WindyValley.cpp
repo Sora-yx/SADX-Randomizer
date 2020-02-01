@@ -4,42 +4,48 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+void Cam_WV() {
 
-void WindyValley_Layout() {
-	CustomLayout = randomizedSets[levelCount].layout;
-
-	if (CurrentAct == 2)
+	if (Mission1_Variation)
 	{
-		if (CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Big)
-		{
-			Race = true;
-			LoadSetFile(0, "0200");
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0206"); //race
-			CustomLayout = 1;
-		}
+		if (CurrentCharacter == Characters_Gamma && !Vanilla)
+			LoadCamFile(0, "0200");
 		else
-		{
-			Race = false;
-			LoadSetFile(0, "0200"); //Sonic Version
-			LoadSetFile(1, "0201");
-			LoadSetFile(2, "0202");
-			CustomLayout = 0;
-		}
+			LoadCamFile(0, "0203");
+	}
+	else
+	{
+		LoadCamFile(0, "0100");
 	}
 
-	if (CurrentAct == 0 || CurrentAct == 1)
+	
+	LoadCamFile(1, "0201");
+
+	if (CurrentAct == 2 && Race)
+		LoadCamFile(2, "0206");
+	else
+		LoadCamFile(2, "0202");
+
+	return;
+
+}
+
+void WindyValley_Layout() {
+
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
+	if (CurrentAct != 2)
 	{
-		switch (CustomLayout)
+		switch (CurrentLevelLayout)
 		{
-		case 0:
+		case Mission1:
 		default:
 			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				CustomLayout = 1;
+				CurrentLevelLayout = Mission1_Variation;
 			}
 			else
 			{
@@ -48,13 +54,13 @@ void WindyValley_Layout() {
 				LoadSetFile(2, "0202");
 			}
 			break;
-		case 1:
+		case Mission1_Variation:
 			if (CurrentCharacter == Characters_Gamma && !Vanilla)
 			{
 				LoadSetFile(0, "0200");  //Sonic Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				CustomLayout = 0;
+				CurrentLevelLayout = Mission1;
 			}
 			else
 			{
@@ -69,7 +75,7 @@ void WindyValley_Layout() {
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				CustomLayout = 1;
+				CurrentLevelLayout = Mission1_Variation;
 			}
 			else
 			{
@@ -84,7 +90,7 @@ void WindyValley_Layout() {
 				LoadSetFile(0, "0203"); //Gamma Version
 				LoadSetFile(1, "0201");
 				LoadSetFile(2, "0202");
-				CustomLayout = 1;
+				CurrentLevelLayout = Mission1_Variation;
 			}
 			else
 			{
@@ -95,13 +101,31 @@ void WindyValley_Layout() {
 			break;
 		}
 	}
+	
+		if (CurrentAct == 2)
+		{
+			if (CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Big)
+			{
+				Race = true;
+				LoadSetFile(0, "0200");
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0206"); //race
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = false;
+				LoadSetFile(0, "0200"); //Sonic Version
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				CurrentLevelLayout = Mission1;
+			}
+		}
 
 	if (Race)
 		SelectBarRace();
 
-	LoadCamFile(0, "0200");
-	LoadCamFile(1, "0201");
-	LoadCamFile(2, "0202");
+	Cam_WV();
 
 	return;
 }
@@ -131,6 +155,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202S.BIN", "system\\cam\\CAM0202S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203S.BIN", "system\\cam\\CAM0203S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206S.BIN", "system\\cam\\CAM0206S.bin");
 
 	if (!Vanilla)
 		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
@@ -151,6 +177,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200M.BIN", "system\\cam\\CAM0200M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201M.BIN", "system\\cam\\CAM0201M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202M.BIN", "system\\cam\\CAM0202M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203M.BIN", "system\\cam\\CAM0203M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206M.BIN", "system\\cam\\CAM0206M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, WV1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, WV3S_StartPositions[0]);
@@ -167,6 +195,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200K.BIN", "system\\cam\\CAM0200K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201K.BIN", "system\\cam\\CAM0201K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202K.BIN", "system\\cam\\CAM0202K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203K.BIN", "system\\cam\\CAM0203K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206K.BIN", "system\\cam\\CAM0206K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV3S_StartPositions[0]);
@@ -184,6 +214,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200A.BIN", "system\\cam\\CAM0200A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201A.BIN", "system\\cam\\CAM0201A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202A.BIN", "system\\cam\\CAM0202A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203A.BIN", "system\\cam\\CAM0203A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206A.BIN", "system\\cam\\CAM0206A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, WV1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, WV3S_StartPositions[0]);
@@ -199,6 +231,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200B.BIN", "system\\cam\\CAM0200B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201B.BIN", "system\\cam\\CAM0201B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202B.BIN", "system\\cam\\CAM0202B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203B.BIN", "system\\cam\\CAM0203B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206B.BIN", "system\\cam\\CAM0206B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, WV1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, WV3S_StartPositions[0]);
@@ -215,6 +249,8 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0200E.BIN", "system\\cam\\CAM0200E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201E.BIN", "system\\cam\\CAM0201E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0202E.BIN", "system\\cam\\CAM0202E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0203E.BIN", "system\\cam\\CAM0203E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0206E.BIN", "system\\cam\\CAM0206E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, WV1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, WV3S_StartPositions[0]);

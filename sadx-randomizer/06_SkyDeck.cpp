@@ -5,76 +5,95 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+void Cam_SkyDeck() {
 
+	if (Mission1_Variation && CurrentAct == 0 && Race)
+		LoadCamFile(0, "0603"); //Tails Camera
+	else
+		LoadCamFile(0, "0600"); //Sonic Camera
+	
+	
+	LoadCamFile(1, "0601");
+
+	if (CurrentAct == 2 && TreasureHunting)
+		LoadCamFile(2, "0604"); //Knuckles Version
+	else
+		LoadCamFile(2, "0600"); //Knuckles Version
+
+}
 
 void SkyDeck_Layout() {
-	CustomLayout = randomizedSets[levelCount].layout;
 
-	switch (CustomLayout)
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
+	if (CurrentAct != 2)
 	{
-	case 0: //M1
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		switch (CurrentLevelLayout)
 		{
-			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout
-			CustomLayout = 1;
+		case Mission1:
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				Race = true;
+				LoadSetFile(0, "0605"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = false;
+				LoadSetFile(0, "0600"); //load Sonic layout
+			}
+			break;
+		case Mission1_Variation:
+			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+			{
+				Race = false;
+				LoadSetFile(0, "0600"); //load Sonic layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = true;
+				LoadSetFile(0, "0605"); //load Tails layout
+			}
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				Race = true;
+				LoadSetFile(0, "0605"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = false;
+				LoadSetFile(0, "0600");
+			}
+			break;
 		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0600"); //load Sonic layout
-		}
-		break;
-	case 1:
-		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-		{
-			Race = false;
-			LoadSetFile(0, "0600"); //load Sonic layout
-			CustomLayout = 0;
-		}
-		else
-		{
-			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout
-		}
-		break;
-	case 2: //Rings
-	case 3: //Lost CHao
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout
-			CustomLayout = 1;
-		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0600");
-		}
-		break;
 	}
 
 	if (Race)
 		SelectBarRace();
 
-	LoadSetFile(1, "0601");
-	LoadCamFile(0, "0600");
-	LoadCamFile(1, "0601");
-	
-	
 	if (CurrentAct == 2)
 	{
-		CustomLayout = 4;
+		TreasureHunting = true;
+		CurrentLevelLayout = Mission1_Variation;
 		SetRNGKnuckles();
-		LoadSetFile(2, "0604");
-		LoadCamFile(2, "0604"); //Knuckles Verion
+		LoadSetFile(0, "0600");
+		LoadSetFile(1, "0601");
+		LoadSetFile(2, "0604"); //Knuckles Version
+
 	}
 	else
 	{
+		LoadSetFile(1, "0601");
 		LoadSetFile(2, "0602");
-		LoadCamFile(2, "0602"); //Sonic Version
 	}
+
+	Cam_SkyDeck();
 
 	return;
 }
@@ -101,6 +120,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602S.bin", "system\\cam\\CAM0602S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603S.bin", "system\\cam\\CAM0603S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604S.bin", "system\\cam\\CAM0604S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD3_StartPositions[0]);
@@ -115,6 +136,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600M.bin", "system\\cam\\CAM0600M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601M.bin", "system\\cam\\CAM0601M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602M.bin", "system\\cam\\CAM0602M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603M.bin", "system\\cam\\CAM0603M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604M.bin", "system\\cam\\CAM0604M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD3_StartPositions[0]);
@@ -128,6 +151,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600K.bin", "system\\cam\\CAM0600K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601K.bin", "system\\cam\\CAM0601K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602K.bin", "system\\cam\\CAM0602K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603K.bin", "system\\cam\\CAM0603K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604K.bin", "system\\cam\\CAM0604K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD3_StartPositions[0]);
@@ -142,6 +167,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600A.bin", "system\\cam\\CAM0600A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601A.bin", "system\\cam\\CAM0601A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602A.bin", "system\\cam\\CAM0602A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603A.bin", "system\\cam\\CAM0603A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604A.bin", "system\\cam\\CAM0604A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD3_StartPositions[0]);
@@ -156,6 +183,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600B.bin", "system\\cam\\CAM0600B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601B.bin", "system\\cam\\CAM0601B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602B.bin", "system\\cam\\CAM0602B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603B.bin", "system\\cam\\CAM0603B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604B.bin", "system\\cam\\CAM0604B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SD3_StartPositions[0]);
@@ -170,6 +199,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.ReplaceFile("system\\CAM0600E.bin", "system\\cam\\CAM0600E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0601E.bin", "system\\cam\\CAM0601E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0602E.bin", "system\\cam\\CAM0602E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0603E.bin", "system\\cam\\CAM0603E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0604E.bin", "system\\cam\\CAM0604E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD3_StartPositions[0]);

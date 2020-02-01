@@ -14,8 +14,14 @@ void FixSuperFormDeath() {
 
 void LoadCamFilePC_R()
 {
-	WriteCall((void*)0x55fde8, FixSuperFormDeath); // fix Death with 0 ring.
-
 	MetalSonicFlag = 0; //Prevent Metal Sonic
 	LoadCamFile(0, "1900");
+}
+
+void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFunctions)
+
+{
+	WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
+	WriteCall((void*)0x55fde8, FixSuperFormDeath); // fix Death with 0 ring.
+
 }

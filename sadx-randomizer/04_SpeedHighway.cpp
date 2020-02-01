@@ -4,10 +4,16 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+void SHAct2Position() {
+	if (CurrentCharacter != Characters_Sonic)
+		return PositionPlayer(0, 10, -10000, 10);
+	else
+		return ForcePlayerAction(0, 0x2b);
+}
 
 
 void CamSpeedHighway() {
-	if (CustomLayout == 1)
+	if (CurrentLevelLayout == Mission1_Variation)
 	{
 		LoadCamFile(0, "0403");
 	}
@@ -129,69 +135,68 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 
 void SpeedHighway_Layout() {
 
-	CustomLayout = randomizedSets[levelCount].layout;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-	switch (CustomLayout)
+	if (CurrentAct != 2)
 	{
-	case 0:
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		switch (CurrentLevelLayout)
 		{
-			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout
-			CustomLayout = 1;
+		case Mission1:
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				Race = true;
+				LoadSetFile(0, "0403"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "0400");
+				Race = false;
+				CurrentLevelLayout = Mission1;
+			}
+			break;
+		case Mission1_Variation:
+			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big.
+			{
+				LoadSetFile(0, "0400"); //load Sonic Layout
+				Race = false;
+				CurrentLevelLayout = Mission1;
+			}
+			else
+			{
+				Race = true;
+				LoadSetFile(0, "0403"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			break;
+		case Mission2_100Rings:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				Race = true;
+				LoadSetFile(0, "0403"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = false;
+				LoadSetFile(0, "0400"); //load Sonic Layout
+			}
+			break;
+		case Mission3_LostChao:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				Race = true;
+				LoadSetFile(0, "0403"); //load Tails layout
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				Race = false;
+				LoadSetFile(0, "0404"); //load Chao Layout
+			}
+			break;
 		}
-		else
-		{
-			LoadSetFile(0, "0400");
-			Race = false;
-			CustomLayout = 0;
-		}
-		break;
-	case 1:
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big.
-		{
-			LoadSetFile(0, "0400"); //load Sonic Layout
-			Race = false;
-			CustomLayout = 0;
-		}
-		else
-		{
-			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout
-			CustomLayout = 1;
-		}
-		break;
-	case 2: //100 Rings
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout
-			CustomLayout = 1;
-		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0400"); //load Sonic Layout
-		}
-		break;
-	case 3: //Lost Chao
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			Race = true;
-			LoadSetFile(0, "0403"); //load Tails layout
-			CustomLayout = 1;
-		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0404"); //load Chao Layout
-		}
-		break;
-	case 4:
-		Race = false;
-		LoadSetFile(2, "0405"); //Knux Treasure Hunting
-		break;
 	}
 
 	if (Race)
@@ -199,10 +204,17 @@ void SpeedHighway_Layout() {
 
 	LoadSetFile(1, "0401");
 
-	if (CustomLayout != 4)
-		LoadSetFile(2, "0402"); //Sonic Version
-	else
+	if (CurrentAct == 2)
+	{
+		TreasureHunting = true;
 		SetRNGKnuckles();
+		LoadSetFile(0, "0400");
+		LoadSetFile(2, "0405"); //Knuckles Version
+	}
+	else
+	{
+		LoadSetFile(2, "0402"); //Sonic Version
+	}
 
 	CamSpeedHighway();
 	return;

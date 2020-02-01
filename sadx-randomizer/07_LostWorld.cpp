@@ -5,62 +5,72 @@
 #include "ActsSettings.h"
 
 
-void LW_Layout() {
-	CustomLayout = randomizedSets[levelCount].layout;
-
-	LoadSetFile(0, "0700");
-
-	switch (CustomLayout)
-	{
-	case 0:
-	default:
-		LoadSetFile(1, "0701"); //M1
-		CustomLayout = 0;
-		break;
-	case 1:
-		if (CurrentCharacter == Characters_Knuckles && !Vanilla)
-		{
-			LoadSetFile(1, "0701"); //M2
-			CustomLayout = 2;
-		}
-		else
-		{
-			LoadSetFile(1, "0704"); //Knux Treasure Hunting
-			SetRNGKnuckles();
-			CustomLayout = 4;
-		}
-		break;
-	case 2:
-		LoadSetFile(1, "0701"); //M2
-		break;
-	case 3:
-		LoadSetFile(1, "0703"); //M3
-		break;
-	}
-
-	LoadSetFile(2, "0702");
+void Cam_LW() {
 
 	LoadCamFile(0, "0700");
 
-	if (CustomLayout == 4)
-		LoadCamFile(1, "0701");
+	if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 1 && TreasureHunting)
+	{
+		LoadCamFile(1, "0704");
+	}
 	else
+	{
+		LoadCamFile(1, "0701");
+	}
 
 	LoadCamFile(2, "0702");
+	return;
+}
+
+void LW_Layout() {
+
+	LoadSetFile(0, "0700");
+
+	if (CurrentAct != 1)
+	{
+		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
+		switch (CurrentLevelLayout)
+		{
+		case Mission1:
+		default:
+		case Mission1_Variation:
+			LoadSetFile(1, "0701"); //M1
+			CurrentLevelLayout = Mission1;
+			break;
+		case Mission2_100Rings:
+			LoadSetFile(1, "0701");
+			break;
+		case Mission3_LostChao:
+			LoadSetFile(1, "0703");
+			break;
+		}
+	}
+	else
+	{
+		CurrentLevelLayout = Mission1_Variation;
+		TreasureHunting = true;
+		LoadSetFile(1, "0704"); //Knux Treasure Hunting
+		SetRNGKnuckles();
+	}
+
+	LoadSetFile(2, "0702");
+	Cam_LW();
+
 	return;
 }
 
 bool isPlayerInWaterSlide = false;
 
 void FixLWWaterSlide() {
-	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
 		isPlayerInWaterSlide = true;
 
 	return ForcePlayerAction(0, 0x17);
 }
 
 void FixLWWaterSlide2() {
-	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == 8)
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
 		isPlayerInWaterSlide = false;
 
 	return ForcePlayerAction(0, 0x18);
@@ -93,6 +103,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700S.bin", "system\\cam\\CAM0700S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701S.bin", "system\\cam\\CAM0701S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702S.bin", "system\\cam\\CAM0702S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704S.bin", "system\\cam\\CAM0704S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW3_StartPositions[0]);
@@ -107,6 +118,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700M.bin", "system\\cam\\CAM0700M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701M.bin", "system\\cam\\CAM0701M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702M.bin", "system\\cam\\CAM0702M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704M.bin", "system\\cam\\CAM0704M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW3_StartPositions[0]);
@@ -121,6 +133,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700K.bin", "system\\cam\\CAM0700K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701K.bin", "system\\cam\\CAM0701K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702K.bin", "system\\cam\\CAM0702K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704K.bin", "system\\cam\\CAM0704K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW3_StartPositions[0]);
@@ -135,6 +148,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700A.bin", "system\\cam\\CAM0700A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701A.bin", "system\\cam\\CAM0701A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702A.bin", "system\\cam\\CAM0702A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704A.bin", "system\\cam\\CAM0704A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW3_StartPositions[0]);
@@ -149,6 +163,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700B.bin", "system\\cam\\CAM0700B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701B.bin", "system\\cam\\CAM0701B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702B.bin", "system\\cam\\CAM0702B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704B.bin", "system\\cam\\CAM0704B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, LW3_StartPositions[0]);
@@ -163,6 +178,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	helperFunctions.ReplaceFile("system\\CAM0700E.bin", "system\\cam\\CAM0700E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0701E.bin", "system\\cam\\CAM0701E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0702E.bin", "system\\cam\\CAM0702E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0704E.bin", "system\\cam\\CAM0704E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW3_StartPositions[0]);

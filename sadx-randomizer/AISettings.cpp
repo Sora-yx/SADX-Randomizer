@@ -487,7 +487,7 @@ void ResultVoiceFix() {
 			Load_DelayedSound_SFX(0x591);
 			break;
 		case Characters_Big:
-			if (CurrentLevel < 15 || CurrentLevel > 35 && CustomLayout < 2)
+			if (CurrentLevel < 15 || CurrentLevel > 35 && CurrentLevelLayout < 2)
 				Load_DelayedSound_Voice(4010);
 			else
 				Load_DelayedSound_Voice(4011);
@@ -733,12 +733,35 @@ void AI_ResetValue() {
 	return FUN_0042ce20();
 }
 
+void AI_FixesOnFrames() {
+
+	if (!IsGamePaused() && oldcol)
+	{
+		if (HIBYTE(oldcol->Flags) & 0x80)
+		{
+			if (oldcol->CollisionArray)
+			{
+				FreeMemory(oldcol->CollisionArray);
+				oldcol->CollisionArray = nullptr;
+			}
+		}
+		FreeMemory(oldcol);
+		oldcol = nullptr;
+	}
+}
+
 void AI_Init() {
-	WriteCall((void*)0x47ed8e, CheckTailsAI_R);
-	WriteCall((void*)0x47e943, CheckTailsAI_R);
-	WriteCall((void*)0x47ea46, CheckTailsAI_R);
-	WriteCall((void*)0x47ec62, CheckTailsAI_R);
 
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
-	WriteJump((void*)0x47db1a, AI_ResetValue);
+
+	if (isAIAllowed)
+	{
+		WriteCall((void*)0x47ed8e, CheckTailsAI_R);
+		WriteCall((void*)0x47e943, CheckTailsAI_R);
+		WriteCall((void*)0x47ea46, CheckTailsAI_R);
+		WriteCall((void*)0x47ec62, CheckTailsAI_R);
+		WriteJump((void*)0x47db1a, AI_ResetValue);
+		AIAudioFixes();
+	}
+
 }

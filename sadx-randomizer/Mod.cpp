@@ -6,9 +6,8 @@
 #include "CharactersSettings.h"
 #include "Utils.h"
 
-//global Randomizer value settings
+int Seed = 0;
 char StorySplits;
-
 bool RNGCharacters = true;
 bool RNGStages = true;
 bool Upgrade = true;
@@ -47,7 +46,7 @@ bool isAIAllowed = true;
 char SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
-unsigned char CustomLayout = 0;
+unsigned char CurrentLevelLayout = 0;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
@@ -57,9 +56,9 @@ int SeedCopy = 0;
 time_t t;
 
 extern char AIRace;
-extern bool isPlayerInWaterSlide;
 
 extern "C" {
+
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
@@ -89,15 +88,13 @@ extern "C" {
 			return;
 		}
 
-		int seed = 0;
-
 		//Ini file Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 		StorySplits = config->getInt("Randomizer", "StorySplits", 0); //speedrunners splits
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
-		seed = config->getInt("Randomizer", "Seed", 0);
+		Seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
 		Missions = config->getBool("Randomizer", "Missions", true);
 
@@ -143,99 +140,25 @@ extern "C" {
 			Exit();
 		}
 
-		if (seed)
-			srand(seed);
+		if (Seed)
+			srand(Seed);
 		else
 			srand((unsigned)time(&t));
 
-		SeedCopy = seed;
+		SeedCopy = Seed;
 
-		//Activate all the edited stages, including custom object, to make them beatable.
-		Startup_Init(path, helperFunctions);
+		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
+		StartupLevels_Init(path, helperFunctions);
+		StartupAudio_Init(path, helperFunctions);
+		StartupMiscellaneous_Init(path, helperFunctions);
 
-		//Credits
-		WriteCall((void*)0x641aef, CreditFlag);
-		//Credits Stat init
-		HookStats_Inits();
-
-		//Chao
 		Chao_Init();
-
-		//Characters Fixes and other Stuff, really important.
-		set_character_hook();
-
-		//Musics, Voices
-		Set_MusicVoices();
-
-		if (isAIAllowed)
-		{
-			//Allow the AI to spawn everywhere
-			AI_Init();
-			//AI SFX Fixes
-			AIAudioFixes();
-		}
-		else
-		{
-			WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
-		}
-
-		/*
-		//Randomizer Fixes
-		*/
-
-		WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
-
-		//Stats & Value Reset
-		WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
-
-		//Stages Fixes
-
-		WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix crashes.)
-
-		 //Zero Stuff
-		Set_Zero();
-
-		//Bosses Fixes
-
-		//Chaos 4 Stuff
-		WriteData<1>((void*)0x5525f9, 0x74); //Reduce HP Bar when not Tails
-
-		//Perfect Chaos Stuff
-		WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
-
-		//Sonic/Eggman Race Stuff
-		Race_Init();
-
-		WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-
-		//SA2 Story Style, Hook all SetLevelandAct to make them random.
-
-		if (RNGStages == true)
-		{
-			WriteData<5>((void*)0x4174a1, 0x90); //Remove the Chaos 0 fight and cutscene
-			WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
-			WriteData<1>((void*)0x40c6c0, 0x04); //force gamemode to 4 (action stage.)
-
-			WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
-
-			WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
-			WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
-			//Redirect SetLevelAndAct in FUN_0x4133e0
-
-			WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
-			WriteData<1>((void*)0x413502, 0x08);
-
-			WriteCall((void*)0x41348f, testRefactor); //hook SetLevelAndAct when loading adventure data
-			WriteCall((void*)0x41342a, testRefactor); //hook SetLevelAndAct when loading adventure data
-
-			WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
-			WriteData<1>((void*)0x4DB0B2, 0x05);
-			WriteData<5>((void*)0x4db051, 0x90);
-			WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-		}
+		Characters_Management();
+		Stages_Management();
+		RandomizeStages_Hook();
+		AI_Init();
 
 		//RNG generator + Create splits.
-
 		if (!StorySplits)
 		{
 			split = 40;
@@ -249,7 +172,7 @@ extern "C" {
 					randomizedSets[i].act = randomacts(randomizedSets[i]);
 				}
 
-				randomizedSets[i].layout = randomLayout(randomizedSets[i]);
+				randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
 
 				if (RNGMusic)
 					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
@@ -289,75 +212,29 @@ extern "C" {
 		}
 
 		//Display Current Randomized Settings Information on Character Select Screen.
-
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
-		{
-			SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
-
-			if (ban != 0)
-				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
-			else
-				DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
-
-			if (Vanilla)
-				DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Allowed");
-			else
-				DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Banned");
-
-			switch (StorySplits)
-			{
-			case 1:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
-				break;
-			case 2:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
-				break;
-			case 3:
-				DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
-				break;
-			}
-		}
-
-		//Credits stat
-		if (StatsTimer && Credits_State >= 2)
-			StatsTimer--;
-
-		if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)
-			StatsTimer = 0;
-
-		if (RNGStages == true)
-		{
-			if (GameMode == 5 || GameMode == 4)
-			{
-				if (GameState == 16)  //Pause Menu
-				{
-					PauseMenuFix();
-				}
-
-				if (GameState == 21 || GameState == 24 || GameState == 17)
-				{
-					CustomFlagCheck(); //When loading, Check flag and credits
-				}
-			}
-		}
+			DisplayRandoInformation();
 
 		//AI fixes
-		if (!IsGamePaused() && oldcol)
+		AI_FixesOnFrames();
+
+		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
+		character_settings_onFrames();
+
+		//Credits stat
+		Credits_StatsDelayOnFrames();
+
+
+		if (GameState == 16)  //Pause Menu
+			PauseMenuFix();
+
+		if (GameMode == GameModes_Adventure_Field || GameMode == GameModes_Adventure_ActionStg)
 		{
-			if (HIBYTE(oldcol->Flags) & 0x80)
-			{
-				if (oldcol->CollisionArray)
-				{
-					FreeMemory(oldcol->CollisionArray);
-					oldcol->CollisionArray = nullptr;
-				}
-			}
-			FreeMemory(oldcol);
-			oldcol = nullptr;
+			if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
+				CustomFlagCheck(); //When loading, Check flag and credits
 		}
 
-		if (GameMode == 5 && GameState == 15 || GameMode == 4 && GameState == 15 || GameMode == 9 && GameState == 15)
+		if (GameState == 15 && (GameMode == GameModes_Adventure_Field || GameMode == GameModes_Adventure_ActionStg  || GameMode ==  GameModes_Trial))
 		{
 			//Fix UI issue
 			HudDisplayScoreOrTimer();
@@ -370,28 +247,15 @@ extern "C" {
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 				AISwitch();
 
-
-			//Rings Mission 2 Check
-			if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == 8 || CurrentMission == 2 && KnuxCheck >= 3)
-			{
-				ObjectMaster* obj = GetCharacterObject(0);
-				EntityData1* ent;
-				ent = obj->Data1;
-				if ((ent->Status & Status_Ground) == Status_Ground && TimeThing != 0 && !isPlayerInWaterSlide)
-				{
-					LoadLevelResults();
-				}
-			}
+			//Rings Mission 2 and Treasure Hunting Check
+			MissionResultCheck();
 
 			//Chao Mission 3 Check
-			if (CurrentLevel < 15 && CurrentMission == 1)
+			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMission == LostChaoCard)
 			{
 				Chao_OnFrame();
 			}
 		}
-
-		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
-		character_settings_onFrames();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
