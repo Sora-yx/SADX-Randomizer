@@ -3,6 +3,8 @@
 #include "LW.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Lost World\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 void Cam_LW() {
@@ -21,6 +23,8 @@ void Cam_LW() {
 	LoadCamFile(2, "0702");
 	return;
 }
+
+
 
 void LW_Layout() {
 
@@ -76,6 +80,8 @@ void FixLWWaterSlide2() {
 	return ForcePlayerAction(0, 0x18);
 }
 
+
+
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
@@ -91,94 +97,96 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 
 	WriteCall((void*)0x5e3408, FixLWWaterSlide2);
 	WriteCall((void*)0x5e37fa, FixLWWaterSlide);
+	
 	LWObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0700S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702S.BIN", "system\\levels\\Lost World\\Sonic-LW-Act3.bin");
+	ReplaceSET("SET0700S", "Sonic-LW-Act1");
+	ReplaceSET("SET0701S", "Sonic-LW-Act2");
+	ReplaceSET("SET0702S", "Sonic-LW-Act3");
+	ReplaceSET("SET0703S", "Sonic-LW-Chao");
+	ReplaceSET("SET0704S", "Sonic-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703S.BIN", "system\\levels\\Lost World\\Sonic-LW-Chao.bin");
+	ReplaceCAM("CAM0700S", "CAM0700S");
+	ReplaceCAM("CAM0701S", "CAM0701S");
+	ReplaceCAM("CAM0702S", "CAM0702S");
+	ReplaceCAM("CAM0704S", "CAM0704S");
 
-	helperFunctions.ReplaceFile("system\\CAM0700S.bin", "system\\cam\\CAM0700S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701S.bin", "system\\cam\\CAM0701S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702S.bin", "system\\cam\\CAM0702S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704S.bin", "system\\cam\\CAM0704S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, LW3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0700M.BIN", "system\\levels\\Lost World\\Tails-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701M.BIN", "system\\levels\\Lost World\\Tails-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702M.BIN", "system\\levels\\Lost World\\Tails-LW-Act3.bin");
+	ReplaceSET("SET0700M", "Tails-LW-Act1");
+	ReplaceSET("SET0701M", "Tails-LW-Act2");
+	ReplaceSET("SET0702M", "Tails-LW-Act3");
+	ReplaceSET("SET0703M", "Tails-LW-Chao");
+	ReplaceSET("SET0704M", "Tails-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703M.BIN", "system\\levels\\Lost World\\Tails-LW-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0700M.bin", "system\\cam\\CAM0700M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701M.bin", "system\\cam\\CAM0701M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702M.bin", "system\\cam\\CAM0702M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704M.bin", "system\\cam\\CAM0704M.bin");
+	ReplaceCAM("CAM0700M", "CAM0700M");
+	ReplaceCAM("CAM0701M", "CAM0701M");
+	ReplaceCAM("CAM0702M", "CAM0702M");
+	ReplaceCAM("CAM0704M", "CAM0704M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
+	//helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0700K.BIN", "system\\levels\\Lost World\\Knux-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701K.BIN", "system\\levels\\Lost World\\Knux-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702K.BIN", "system\\levels\\Lost World\\Knux-LW-Act3.bin");
+	ReplaceSET("SET0700K", "Knux-LW-Act1");
+	ReplaceSET("SET0701K", "Knux-LW-Act2");
+	ReplaceSET("SET0702K", "Knux-LW-Act3");
+	ReplaceSET("SET0703K", "Knux-LW-Chao");
+	ReplaceSET("SET0704K", "Knux-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703K.BIN", "system\\levels\\Lost World\\Knux-LW-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0700K.bin", "system\\cam\\CAM0700K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701K.bin", "system\\cam\\CAM0701K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702K.bin", "system\\cam\\CAM0702K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704K.bin", "system\\cam\\CAM0704K.bin");
+	ReplaceCAM("CAM0700K", "CAM0700K");
+	ReplaceCAM("CAM0701K", "CAM0701K");
+	ReplaceCAM("CAM0702K", "CAM0702K");
+	ReplaceCAM("CAM0704K", "CAM0704K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
+	//helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0700A.BIN", "system\\levels\\Lost World\\Amy-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701A.BIN", "system\\levels\\Lost World\\Amy-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702A.BIN", "system\\levels\\Lost World\\Amy-LW-Act3.bin");
+	ReplaceSET("SET0700A", "Amy-LW-Act1");
+	ReplaceSET("SET0701A", "Amy-LW-Act2");
+	ReplaceSET("system\\SET0702A", "Amy-LW-Act3");
+	ReplaceSET("system\\SET0703A", "Amy-LW-Chao");
+	ReplaceSET("system\\SET0704A", "Amy-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703A.BIN", "system\\levels\\Lost World\\Amy-LW-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0700A.bin", "system\\cam\\CAM0700A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701A.bin", "system\\cam\\CAM0701A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702A.bin", "system\\cam\\CAM0702A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704A.bin", "system\\cam\\CAM0704A.bin");
+	ReplaceCAM("CAM0700A", "CAM0700A");
+	ReplaceCAM("CAM0701A", "CAM0701A");
+	ReplaceCAM("CAM0702A", "CAM0702A");
+	ReplaceCAM("CAM0704A", "CAM0704A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
+	//helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0700B.BIN", "system\\levels\\Lost World\\Big-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701B.BIN", "system\\levels\\Lost World\\Big-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702B.BIN", "system\\levels\\Lost World\\Big-LW-Act3.bin");
+	ReplaceSET("SET0700B", "Big-LW-Act1");
+	ReplaceSET("SET0701B", "Big-LW-Act2");
+	ReplaceSET("SET0702B", "Big-LW-Act3");
+	ReplaceSET("SET0703B", "Big-LW-Chao");
+	ReplaceSET("SET0704B", "Big-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703B.BIN", "system\\levels\\Lost World\\Big-LW-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0700B.bin", "system\\cam\\CAM0700B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701B.bin", "system\\cam\\CAM0701B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702B.bin", "system\\cam\\CAM0702B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704B.bin", "system\\cam\\CAM0704B.bin");
+	ReplaceCAM("CAM0700B", "CAM0700B");
+	ReplaceCAM("CAM0701B", "CAM0701B");
+	ReplaceCAM("CAM0702B", "CAM0702B");
+	ReplaceCAM("CAM0704B", "CAM0704B");
 	helperFunctions.RegisterStartPosition(Characters_Big, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, LW3_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0700E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0701E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0702E.BIN", "system\\levels\\Lost World\\Gamma-LW-Act3.bin");
+	ReplaceSET("SET0700E", "Gamma-LW-Act1");
+	ReplaceSET("SET0701E", "Gamma-LW-Act2");
+	ReplaceSET("SET0702E", "Gamma-LW-Act3");
+	ReplaceSET("SET0703E", "Gamma-LW-Chao");
+	ReplaceSET("SET0704E", "Gamma-LW-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0703E.BIN", "system\\levels\\Lost World\\Gamma-LW-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0700E.bin", "system\\cam\\CAM0700E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0701E.bin", "system\\cam\\CAM0701E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0702E.bin", "system\\cam\\CAM0702E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0704E.bin", "system\\cam\\CAM0704E.bin");
+	ReplaceCAM("CAM0700B", "CAM0700B");
+	ReplaceCAM("CAM0701B", "CAM0701B");
+	ReplaceCAM("CAM0702B", "CAM0702B");
+	ReplaceCAM("CAM0704B", "CAM0704B");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, LW3_StartPositions[0]);
@@ -279,4 +287,6 @@ ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, 
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_LostWorld * 8 + 2] = &LostWorldObjectList;
+
 }
+

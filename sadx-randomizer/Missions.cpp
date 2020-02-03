@@ -232,15 +232,19 @@ extern bool isPlayerInWaterSlide;
 
 void MissionResultCheck() {
 
-	if (Rings >= 100 && CurrentLevel != LevelIDs_TwinkleCircuit && CurrentMission == RingsCard || CurrentMission == EmeraldKnuxCard && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+	if (CurrentLevel < LevelIDs_Chaos0 && GameState == 15)
 	{
-		ObjectMaster* obj = GetCharacterObject(0);
-		EntityData1* ent;
-		ent = obj->Data1;
-		if ((ent->Status & Status_Ground) == Status_Ground && TimeThing != 0 && !isPlayerInWaterSlide)
+		if (Rings >= 100 && CurrentMission == RingsCard || CurrentMission == EmeraldKnuxCard && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 		{
-			LoadLevelResults();
+			ObjectMaster* obj = GetCharacterObject(0);
+			EntityData1* ent;
+			ent = obj->Data1;
+			if ((ent->Status & Status_Ground) == Status_Ground && !isPlayerInWaterSlide && TimeThing != 0)
+			{
+				LoadLevelResults();
+			}
 		}
 	}
 
+	return;
 }

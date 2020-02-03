@@ -29,3 +29,5 @@ void Cam_LW();
 
 int HedgehogHammerTrick();
 void FixGoldenAndCoin();
+int Chaos6_ReturnCharacter();
+void Chaos6_Layout(); 

@@ -6,7 +6,7 @@
 extern bool Viper;
 
 void EggViperNerfHP() {
-	BossHP = 5;
+	BossHP2 = 5;
 	EggViperHP = 5;
 	BossHP_Stuff(600, 0x18, 5);
 }

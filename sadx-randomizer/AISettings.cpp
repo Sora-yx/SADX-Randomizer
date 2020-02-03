@@ -11,7 +11,6 @@ int FlagAI = 0;
 int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
-extern char SwapDelay;
 int CurrentAI = -1;
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
@@ -511,6 +510,7 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 CollisionInfo* oldcol = nullptr;
 
 void AISwitch() {
+
 	if (!isAIAllowed || CurrentAI == CurrentCharacter)
 	{
 		isAIActive = false;

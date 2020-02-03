@@ -37,7 +37,7 @@ extern bool banCharacter[8];
 extern unsigned int split;
 extern unsigned int TotalCount;
 extern char StorySplits;
-
+extern unsigned char SwapDelay;
 
 struct RandomizedEntry
 {
@@ -229,7 +229,8 @@ VoidFunc(CheckLoadZero, 0x486a40);
 VoidFunc(EggViperCutscene, 0x431430);
 FunctionPointer(void, BossHP_Stuff, (int x, int y, int hp), 0x4b3cc0);
 
-DataPointer(char, BossHP, 0x3C58150);
+DataPointer(char, BossHP, 0x3c58148);
+DataPointer(char, BossHP2, 0x3C58150);
 DataPointer(float, BossHP3, 0x3c58158);
 DataPointer(char, Emblem, 0x974AE0);
 DataPointer(unsigned char, LevelList, 0x3B2C5F8);

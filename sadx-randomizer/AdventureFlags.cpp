@@ -23,6 +23,9 @@ void AddCustomFlag() {
 //SA2 Style
 void CustomFlagCheck() {
 
+	if (GameMode == 9 || GameMode == 10)
+		return;
+
 	if (SelectedCharacter == 0) //Sonic
 	{
 		switch (CustomFlag)

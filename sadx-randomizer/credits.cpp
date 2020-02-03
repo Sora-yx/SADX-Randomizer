@@ -652,6 +652,7 @@ CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 
 //Initiliaze Credits
 void CreditsNewList() {
+
 	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
 	WriteCall((void*)0x640fe1, FinalStat);
 	WriteData<10>((void*)0x640fef, 0x90);
@@ -668,7 +669,7 @@ void CreditsNewList() {
 	TotalDeathsPB += deathsPB; //total Death credit final stat
 	TotalHurtsPB += hurtsPB; //total Death credit final stat
 
-	//Conversion int to string to const char and Display during credits
+	//Conversion int to string, then to const char so we can Display the stats during credits.
 	DeathsSTD += std::to_string(deathsPB);
 	RageQuitSTD += std::to_string(RageQuit);
 	//JumpCountSTD += std::to_string(JumpCount); //Doesn't work for now.

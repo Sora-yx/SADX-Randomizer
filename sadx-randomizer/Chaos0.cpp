@@ -8,21 +8,14 @@ ObjectMaster* chaos0 = nullptr;
 
 void Chaos0_LoadWithTarget() {
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
-	chaos0 = LoadObject((LoadObj)(3), 2, Chaos0_Main);
-	chaos0->MainSub = Chaos0_Main;
-	chaos0->DisplaySub = (ObjectFuncPtr)0x548360;
-	//chaos0->DeleteSub = (ObjectFuncPtr)0x5481d0;
-
-	obj->Data1->LoopData = (Loop*)chaos0;
-	obj->Data1->Scale.x = 20;
-	DeleteObject_(chaos0);
-	return;
+	obj->Data1->LoopData = (Loop*)LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, Chaos0_Main);
 }
+
+
 
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Chaos0_StartPositions[0]);
 

@@ -3,6 +3,8 @@
 #include "SH.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Speed Highway\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 void SHAct2Position() {
 	if (CurrentCharacter != Characters_Sonic)
@@ -13,9 +15,10 @@ void SHAct2Position() {
 
 
 void CamSpeedHighway() {
+
 	if (CurrentLevelLayout == Mission1_Variation)
 	{
-		LoadCamFile(0, "0403");
+		LoadCamFile(0, "0403"); //Tails Camera
 	}
 	else
 	{
@@ -23,7 +26,12 @@ void CamSpeedHighway() {
 	}
 
 	LoadCamFile(1, "0401");
-	LoadCamFile(2, "0402");
+
+	if (CurrentAct == 2 && TreasureHunting)
+		LoadCamFile(2, "0405");
+	else
+		LoadCamFile(2, "0402");
+
 	return;
 }
 
@@ -45,89 +53,102 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	SHObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0400S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Act3.bin");
+	ReplaceSET("SET0400S", "Sonic-SH-Act1");
+	ReplaceSET("SET0401S", "Sonic-SH-Act2");
+	ReplaceSET("SET0402S", "Sonic-SH-Act3");
+	ReplaceSET("SET0403S", "Sonic-SH-Race");
+	ReplaceSET("SET0404S", "Sonic-SH-Chao");
+	ReplaceSET("SET0405S", "Sonic-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0403S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Race.bin");
-	helperFunctions.ReplaceFile("system\\SET0404S.BIN", "system\\levels\\Speed Highway\\Sonic-SH-Chao.bin");
+	ReplaceCAM("CAM0400S", "CAM0400S");
+	ReplaceCAM("CAM0401S", "CAM0401S");
+	ReplaceCAM("CAM0402S", "CAM0402S");
+	ReplaceCAM("CAM0405S", "CAM0405S");
 
-	helperFunctions.ReplaceFile("system\\CAM0400S.BIN", "system\\cam\\CAM0400S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401S.BIN", "system\\cam\\CAM0401S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402S.BIN", "system\\cam\\CAM0402S.bin");
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SH3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0400M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Act3.bin");
+	ReplaceSET("SET0400M", "Tails-SH-Act1");
+	ReplaceSET("SET0401M", "Tails-SH-Act2");
+	ReplaceSET("SET0402M", "Tails-SH-Act3");
+	ReplaceSET("SET0403M", "Tails-SH-Race");
+	ReplaceSET("SET0404M", "Tails-SH-Chao");
+	ReplaceSET("SET0405M", "Tails-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0404M.BIN", "system\\levels\\Speed Highway\\Tails-SH-Chao.bin");
+	ReplaceCAM("CAM0400M", "CAM0400M");
+	ReplaceCAM("CAM0401M", "CAM0401M");
+	ReplaceCAM("CAM0402M", "CAM0402M");
+	ReplaceCAM("CAM0405M", "CAM0405M");
 
-	helperFunctions.ReplaceFile("system\\CAM0400M.BIN", "system\\cam\\CAM0400M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401M.BIN", "system\\cam\\CAM0401M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402M.BIN", "system\\cam\\CAM0402M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SH3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0400K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0403K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Race.bin");
+	ReplaceSET("SET0400K", "Knux-SH-Act1");
+	ReplaceSET("SET0401K", "Knux-SH-Act2");
+	ReplaceSET("SET0402K", "Knux-SH-Act3");
+	ReplaceSET("SET0403K", "Knux-SH-Race");
+	ReplaceSET("SET0404K", "Knux-SH-Chao");
+	ReplaceSET("SET0405K", "Knux-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0404K.BIN", "system\\levels\\Speed Highway\\Knux-SH-Chao.bin");
+	ReplaceCAM("CAM0400K", "CAM0400K");
+	ReplaceCAM("CAM0401K", "CAM0401K");
+	ReplaceCAM("CAM0402K", "CAM0402K");
+	ReplaceCAM("CAM0405K", "CAM0405K");
 
-	helperFunctions.ReplaceFile("system\\CAM0400K.BIN", "system\\cam\\CAM0400K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401K.BIN", "system\\cam\\CAM0401K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402K.BIN", "system\\cam\\CAM0402K.bin");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0400A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0403A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Race.bin");
+	ReplaceSET("SET0400A", "Amy-SH-Act1");
+	ReplaceSET("SET0401A", "Amy-SH-Act2");
+	ReplaceSET("SET0402A", "Amy-SH-Act3");
+	ReplaceSET("SET0403A", "Amy-SH-Race");
+	ReplaceSET("SET0404A", "Amy-SH-Chao");
+	ReplaceSET("SET0405A", "Amy-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0404A.BIN", "system\\levels\\Speed Highway\\Amy-SH-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0400A.BIN", "system\\cam\\CAM0400A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401A.BIN", "system\\cam\\CAM0401A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402A.BIN", "system\\cam\\CAM0402A.bin");
+	ReplaceCAM("CAM0400A", "CAM0400A");
+	ReplaceCAM("CAM0401A", "CAM0401A");
+	ReplaceCAM("CAM0402A", "CAM0402A");
+	ReplaceCAM("CAM0405A", "CAM0405A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SH3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0400B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402B.BIN", "system\\levels\\Speed Highway\\Big-SH-Act3.bin");
+	ReplaceSET("SET0400B", "Big-SH-Act1");
+	ReplaceSET("SET0401B", "Big-SH-Act2");
+	ReplaceSET("SET0402B", "Big-SH-Act3");
+	ReplaceSET("SET0403B", "Big-SH-Race");
+	ReplaceSET("SET0404B", "Big-SH-Chao");
+	ReplaceSET("SET0405B", "Big-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0404B.BIN", "system\\levels\\Speed Highway\\Big-SH-Chao.bin");
+	ReplaceCAM("CAM0400B", "CAM0400B");
+	ReplaceCAM("CAM0401B", "CAM0401B");
+	ReplaceCAM("CAM0402B", "CAM0402B");
+	ReplaceCAM("CAM0405B", "CAM0405B");
 
-	helperFunctions.ReplaceFile("system\\CAM0400B.BIN", "system\\cam\\CAM0400B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401B.BIN", "system\\cam\\CAM0401B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402B.BIN", "system\\cam\\CAM0402B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SH3_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0400E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0401E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0402E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0403E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Race.bin");
+	ReplaceSET("SET0400E", "Gamma-SH-Act1");
+	ReplaceSET("SET0401E", "Gamma-SH-Act2");
+	ReplaceSET("SET0402E", "Gamma-SH-Act3");
+	ReplaceSET("SET0403E", "Gamma-SH-Race");
+	ReplaceSET("SET0404E", "Gamma-SH-Chao");
+	ReplaceSET("SET0405E", "Gamma-SH-Knux");
 
-	helperFunctions.ReplaceFile("system\\SET0404E.BIN", "system\\levels\\Speed Highway\\Gamma-SH-Chao.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0400E.BIN", "system\\cam\\CAM0400E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0401E.BIN", "system\\cam\\CAM0401E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0402E.BIN", "system\\cam\\CAM0402E.bin");
+	ReplaceCAM("CAM0400E", "CAM0400E");
+	ReplaceCAM("CAM0401E", "CAM0401E");
+	ReplaceCAM("CAM0402E", "CAM0402E");
+	ReplaceCAM("CAM0405E", "CAM0405E");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SH1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SH2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SH3_StartPositions[0]);
@@ -207,6 +228,7 @@ void SpeedHighway_Layout() {
 	if (CurrentAct == 2)
 	{
 		TreasureHunting = true;
+		CurrentLevelLayout = Mission1_Variation;
 		SetRNGKnuckles();
 		LoadSetFile(0, "0400");
 		LoadSetFile(2, "0405"); //Knuckles Version

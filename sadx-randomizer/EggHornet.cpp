@@ -16,15 +16,7 @@ void EggHornet_LoadWithTarget() {
 	//egghornet->DeleteSub = (ObjectFuncPtr)0x571FE0; //make the game crash lol
 }
 
-void GammaTarget_Init() {
-	if (CurrentCharacter == Characters_Gamma)
-	{
-		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
 
-	}
-
-	return LoadCamFile(0, "0000");
-}
 
 void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunctions)
 {

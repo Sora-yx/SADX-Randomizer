@@ -5,10 +5,10 @@
 #include <fstream>
 #include "RandomHelpers.h"
 #include "Trampoline.h"
-
 #include "StageSettings.h"
 
-extern char SwapDelay;
+extern bool TPAmyVersion;
+extern bool FEGammaVersion;
 extern bool RNGStages;
 
 extern unsigned int TotalCount;
@@ -20,6 +20,7 @@ int RingCopy = 0; //Backring
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
 extern ObjectMaster* CurAI;
+bool isCheckpointUsed = false;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -106,6 +107,9 @@ void ResetValueWhileLevelResult() {
 	GetBackRing = false;
 	TreasureHunting = false;
 	isPlayerInWaterSlide = false;
+	TPAmyVersion = false;
+	FEGammaVersion = false;
+	isCheckpointUsed = false;
 
 	RestoreRNGValueKnuckles();
 
@@ -318,6 +322,16 @@ void TwinkleCircuitResult() {
 
 
 
+void BossesFixes() {
+
+	if (CurrentCharacter == Characters_Gamma && CurrentLevel == LevelIDs_EggHornet)
+		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
+
+	return LoadCamFile(0, "0000");
+}
+
+
+
 int AmyCartImprovement() {
 	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
 		return Characters_Sonic;
@@ -376,7 +390,6 @@ void ResetTime_R() { //Used for Back Ring, restore player's rings.
 void BackRing() { //swap capsule
 	SetTextureToCommon();
 
-	SwapDelay = 0;
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
 		if (CurrentLevel == LevelIDs_TwinklePark)
@@ -392,19 +405,13 @@ void BackRing() { //swap capsule
 		ChaoSpawn = false;
 		GameMode = GameModes_Adventure_Field;
 
-		if (SwapDelay == 150)
-		{
-			GameState = 0xb;
-			return;
-		}
-
-
+		GameState = 0xb;
+		return;
 	}
-
 }
 
 void BackRing2() { //swap Frog/Emerald etc.
-	SwapDelay = 0;
+
 	if (GetCustomLayout == 3 || GetCustomLayout == 2)
 	{
 		if (CurrentLevel == LevelIDs_TwinklePark)
@@ -488,6 +495,54 @@ void preventCutscene() {
 
 
 
+//Use AnimalPickup function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic.
+void FixLayout_StartPosition_R() {
+
+	if (!isCheckpointUsed) //don't change player position if a CP has been grabbed.
+	{
+		switch (CurrentLevel)
+		{
+		case LevelIDs_LostWorld:
+			if (CurrentAct == 1 && TreasureHunting)
+				PositionPlayer(0, 7482, -2622, 908);
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CurrentAct == 2 && TreasureHunting)
+				PositionPlayer(0, -230, 150, -1740);
+			break;
+		case LevelIDs_SkyDeck:
+			if (CurrentAct == 2 && TreasureHunting)
+				PositionPlayer(0, 674, 207, 12);
+			break;
+		case LevelIDs_WindyValley: //Gamma version
+			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
+				PositionPlayer(0, -10, -102, -10);
+			break;
+		case LevelIDs_TwinklePark: //Amy version
+			if (CurrentAct == 1 && TPAmyVersion)
+				PositionPlayer(0, 723, 70, -358);
+			break;
+		case LevelIDs_FinalEgg: //Gamma version
+			if (CurrentAct == 2 && FEGammaVersion)
+				PositionPlayer(0, 46.5, -3240.6, -224.5);
+			break;
+		}
+	}
+
+	AnimalPickup_Load_();
+
+	return;
+}
+
+void FixRestartCheckPoint() {
+
+	//Check if a CP has been grabbed
+	if (!isCheckpointUsed && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
+		isCheckpointUsed = true;
+
+	return njColorBlendingMode(0, 8);
+
+}
 
 void Stages_Management() {
 
@@ -496,4 +551,7 @@ void Stages_Management() {
 	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 	Set_BackRing();
 	Race_Init();
+	WriteCall((void*)0x415a3d, FixLayout_StartPosition_R); //Fix start position with different stage character version.
+	WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
 }
+

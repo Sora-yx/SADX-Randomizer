@@ -4,6 +4,8 @@
 #include "ActsSettings.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Sky Deck\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 void Cam_SkyDeck() {
 
@@ -111,96 +113,97 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0600S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Act3.bin");
+	ReplaceSET("SET0600S", "Sonic-SD-Act1");
+	ReplaceSET("SET0601S", "Sonic-SD-Act2");
+	ReplaceSET("SET0602S", "Sonic-SD-Act3");
+	ReplaceSET("SET0604S", "Sonic-SD-Knux");
+	ReplaceSET("SET0605S", "Sonic-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0605S.BIN", "system\\levels\\Sky Deck\\Sonic-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0600S.bin", "system\\cam\\CAM0600S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601S.bin", "system\\cam\\CAM0601S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602S.bin", "system\\cam\\CAM0602S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603S.bin", "system\\cam\\CAM0603S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604S.bin", "system\\cam\\CAM0604S.bin");
+	ReplaceCAM("CAM0600S", "CAM0600S");
+	ReplaceCAM("CAM0601S", "CAM0601S");
+	ReplaceCAM("CAM0602S", "CAM0602S");
+	ReplaceCAM("CAM0603S", "CAM0603S");
+	ReplaceCAM("CAM0604S", "CAM0604S");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0600M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Act3.bin");
+	ReplaceSET("SET0600M", "Tails-SD-Act1");
+	ReplaceSET("SET0601M", "Tails-SD-Act2");
+	ReplaceSET("SET0602M", "Tails-SD-Act3");
+	ReplaceSET("SET0604M", "Tails-SD-Knux");
+	ReplaceSET("SET0605M", "Tails-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0605M.BIN", "system\\levels\\Sky Deck\\Tails-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0600M.bin", "system\\cam\\CAM0600M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601M.bin", "system\\cam\\CAM0601M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602M.bin", "system\\cam\\CAM0602M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603M.bin", "system\\cam\\CAM0603M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604M.bin", "system\\cam\\CAM0604M.bin");
+	ReplaceCAM("CAM0600M", "CAM0600M");
+	ReplaceCAM("CAM0601M", "CAM0601M");
+	ReplaceCAM("CAM0602M", "CAM0602M");
+	ReplaceCAM("CAM0603M", "CAM0603M");
+	ReplaceCAM("CAM0604M", "CAM0604M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0600K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0605K.BIN", "system\\levels\\Sky Deck\\Knux-SD-Race.bin");
+	ReplaceSET("SET0600K", "Knux-SD-Act1");
+	ReplaceSET("SET0601K", "Knux-SD-Act2");
+	ReplaceSET("SET0602K", "Knux-SD-Act3");
+	ReplaceSET("SET0604K", "Knux-SD-Knux");
+	ReplaceSET("SET0605K", "Knux-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\CAM0600K.bin", "system\\cam\\CAM0600K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601K.bin", "system\\cam\\CAM0601K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602K.bin", "system\\cam\\CAM0602K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603K.bin", "system\\cam\\CAM0603K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604K.bin", "system\\cam\\CAM0604K.bin");
+	ReplaceCAM("CAM0600K", "CAM0600K");
+	ReplaceCAM("CAM0601K", "CAM0601K");
+	ReplaceCAM("CAM0602K", "CAM0602K");
+	ReplaceCAM("CAM0603K", "CAM0603K");
+	ReplaceCAM("CAM0604K", "CAM0604K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0600A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Act3.bin");
+	ReplaceSET("SET0600A", "Knux-SD-Act1");
+	ReplaceSET("SET0601A", "Knux-SD-Act2");
+	ReplaceSET("SET0602A", "Knux-SD-Act3");
+	ReplaceSET("SET0604A", "Knux-SD-Knux");
+	ReplaceSET("SET0605A", "Knux-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0605A.BIN", "system\\levels\\Sky Deck\\Amy-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0600A.bin", "system\\cam\\CAM0600A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601A.bin", "system\\cam\\CAM0601A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602A.bin", "system\\cam\\CAM0602A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603A.bin", "system\\cam\\CAM0603A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604A.bin", "system\\cam\\CAM0604A.bin");
+	ReplaceCAM("CAM0600A", "CAM0600A");
+	ReplaceCAM("CAM0601A", "CAM0601A");
+	ReplaceCAM("CAM0602A", "CAM0602A");
+	ReplaceCAM("CAM0603A", "CAM0603A");
+	ReplaceCAM("CAM0604A", "CAM0604A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, SD3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0600B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602B.BIN", "system\\levels\\Sky Deck\\Big-SD-Act3.bin");
+	ReplaceSET("SET0600B", "Big-SD-Act1");
+	ReplaceSET("SET0601B", "Big-SD-Act2");
+	ReplaceSET("SET0602B", "Big-SD-Act3");
+	ReplaceSET("SET0604B", "Big-SD-Knux");
+	ReplaceSET("SET0605B", "Big-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0605B.BIN", "system\\levels\\Sky Deck\\Big-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0600B.bin", "system\\cam\\CAM0600B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601B.bin", "system\\cam\\CAM0601B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602B.bin", "system\\cam\\CAM0602B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603B.bin", "system\\cam\\CAM0603B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604B.bin", "system\\cam\\CAM0604B.bin");
+	ReplaceCAM("CAM0600B", "CAM0600B");
+	ReplaceCAM("CAM0601B", "CAM0601B");
+	ReplaceCAM("CAM0602B", "CAM0602B");
+	ReplaceCAM("CAM0603B", "CAM0603B");
+	ReplaceCAM("CAM0604B", "CAM0604B");
 	helperFunctions.RegisterStartPosition(Characters_Big, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, SD3_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0600E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0601E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0602E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Act3.bin");
+	ReplaceSET("SET0600E", "Gamma-SD-Act1");
+	ReplaceSET("SET0601E", "Gamma-SD-Act2");
+	ReplaceSET("SET0602E", "Gamma-SD-Act3");
+	ReplaceSET("SET0604E", "Gamma-SD-Knux");
+	ReplaceSET("SET0605E", "Gamma-SD-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0605E.BIN", "system\\levels\\Sky Deck\\Gamma-SD-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0600E.bin", "system\\cam\\CAM0600E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0601E.bin", "system\\cam\\CAM0601E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0602E.bin", "system\\cam\\CAM0602E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0603E.bin", "system\\cam\\CAM0603E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0604E.bin", "system\\cam\\CAM0604E.bin");
+	ReplaceCAM("CAM0600E", "CAM0600E");
+	ReplaceCAM("CAM0601E", "CAM0601E");
+	ReplaceCAM("CAM0602E", "CAM0602E");
+	ReplaceCAM("CAM0603E", "CAM0603E");
+	ReplaceCAM("CAM0604E", "CAM0604E");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, SD3_StartPositions[0]);

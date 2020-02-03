@@ -6,6 +6,7 @@
 
 //Random Act function
 
+bool TPAmyVersion = false;
 
 void FixRollerCoaster() {
 	ObjectMaster* obj = GetCharacterObject(0);
@@ -20,10 +21,11 @@ void TwinklePark_Layout() {
 	WriteData<1>((void*)0x7983c4, 0x7C);
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	TPAmyVersion = false;
 
 	LoadSetFile(0, "0300");
 
-	if (CurrentAct <= 1)
+	if (CurrentAct == 0)
 	{
 		switch (CurrentLevelLayout)
 		{
@@ -39,7 +41,7 @@ void TwinklePark_Layout() {
 		}
 	}
 
-	if (CurrentAct == 2)
+	if (CurrentAct == 1)
 	{
 		switch (CurrentLevelLayout)
 		{
@@ -47,12 +49,15 @@ void TwinklePark_Layout() {
 		case Mission1_Variation:
 		default:
 			LoadSetFile(1, "0305"); //Amy TP version
+			CurrentLevelLayout = Mission1_Variation;
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
 			LoadSetFile(1, "0303"); //M2-M3 Version
 			break;
 		}
+
+		TPAmyVersion = true;
 	}
 
 	LoadSetFile(2, "0302");

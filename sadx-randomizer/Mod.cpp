@@ -43,7 +43,7 @@ unsigned int TotalCount = 0; //Total of Random Stage, used to reroll later in-ga
 
 //AI
 bool isAIAllowed = true;
-char SwapDelay = 150;
+unsigned char SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
 unsigned char CurrentLevelLayout = 0;
@@ -200,6 +200,7 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -224,17 +225,13 @@ extern "C" {
 		//Credits stat
 		Credits_StatsDelayOnFrames();
 
-
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
-		if (GameMode == GameModes_Adventure_Field || GameMode == GameModes_Adventure_ActionStg)
-		{
-			if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
-				CustomFlagCheck(); //When loading, Check flag and credits
-		}
+		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
+			CustomFlagCheck(); //When loading, Check flag and credits
 
-		if (GameState == 15 && (GameMode == GameModes_Adventure_Field || GameMode == GameModes_Adventure_ActionStg  || GameMode ==  GameModes_Trial))
+		if (GameState == 15 && (GameMode == 5 || GameMode == 4|| GameMode ==  9))
 		{
 			//Fix UI issue
 			HudDisplayScoreOrTimer();

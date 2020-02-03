@@ -112,6 +112,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	//Big
 	helperFunctions.ReplaceFile("system\\SET0500B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0501B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act2.bin");
+	helperFunctions.ReplaceFile("system\\SET0502B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0503B.BIN", "system\\levels\\Red Mountain\\Big-RM-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0504B.BIN", "system\\levels\\Red Mountain\\Big-RM-Chao.bin");

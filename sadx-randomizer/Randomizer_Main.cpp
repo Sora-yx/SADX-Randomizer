@@ -14,6 +14,7 @@ extern bool RandCongratsDone;
 extern bool isPlayerInWaterSlide;
 bool TreasureHunting = false;
 int musicCount;
+extern bool isCheckpointUsed;
 
 //Credits stats
 int RageQuit = 0;
@@ -75,14 +76,12 @@ short randomacts(RandomizedEntry entry) {
 			return act1[rand() % 3];
 		break;
 	case LevelIDs_TwinklePark:
-		if (entry.character == Characters_Sonic)
+		if (entry.character == Characters_Sonic && !Vanilla || entry.character == Characters_Gamma)
 			return 1;
-		if (entry.character == Characters_Amy)
+		if (entry.character == Characters_Amy && !Vanilla)
 			return 0;
-		if (entry.character == Characters_Gamma)
-			return rand() % 2 + 1; //act 2 and 3
-		if (entry.character != Characters_Sonic && entry.character != Characters_Gamma && entry.character != Characters_Amy)
-			return actHS[rand() % 2];
+		if (entry.character != Characters_Gamma)
+			return rand() % 2;
 		break;
 	case LevelIDs_SpeedHighway:
 		if (entry.character == Characters_Knuckles && !Vanilla)
@@ -124,11 +123,20 @@ short randomacts(RandomizedEntry entry) {
 		else
 			return act0[rand() % 3];
 		break;
+	case LevelIDs_FinalEgg:
+		if (entry.character == Characters_Gamma && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
 	case LevelIDs_HotShelter:
 		if (!Vanilla && entry.character == Characters_Gamma)
 			return 0;
 		else
 			return actHS[rand() % 2];
+		break;
+	case LevelIDs_Chaos6:
+			return rand() % 2;
 		break;
 	case LevelIDs_TwinkleCircuit:
 		if (Vanilla)
@@ -213,12 +221,12 @@ short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 	if (cur_stage == LevelIDs_HedgehogHammer || cur_stage >= LevelIDs_TwinkleCircuit || cur_stage == LevelIDs_PerfectChaos || cur_stage >= LevelIDs_EggWalker && cur_stage < LevelIDs_Zero) //reduce the chance to get TC, SD and few bosses.
 	{
 		short trick = 0;
-		trick = rand() % 2;
+		trick = rand() % 3;
 
-		if (trick)
+		if (trick >= 1)
 		{
 			do {
-				cur_stage = level[rand() % 11]; //pick a random stage instead.
+				cur_stage = level[rand() % 12]; //pick a random stage instead.
 			} while (isRegularStageBanned(char_id, cur_stage) && !AllowVanilla || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage);
 		}
 	}
@@ -383,6 +391,7 @@ void ResetStatsValues() {
 	Race = false;
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
+	isCheckpointUsed = false;
 	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
 	WriteData<1>((void*)0x7983c4, 0x7C);
 	RestoreRNGValueKnuckles();

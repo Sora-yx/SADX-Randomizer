@@ -3,10 +3,14 @@
 #include "FE.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Final Egg\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
+bool FEGammaVersion = false;
 
 void CamFinalEgg() {
-	if (CurrentLevelLayout == 1)
+	
+	if (CurrentLevelLayout == Mission1_Variation)
 	{
 		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
 	}
@@ -16,7 +20,16 @@ void CamFinalEgg() {
 	}
 
 	LoadCamFile(1, "1001");
-	LoadCamFile(2, "1002");
+
+	if (CurrentAct == 2 && FEGammaVersion)
+	{
+		LoadCamFile(2, "1005");
+	}
+	else
+	{
+		LoadCamFile(2, "1002");
+	}
+
 	LoadCamFile(3, "1003");
 
 	return;
@@ -24,51 +37,66 @@ void CamFinalEgg() {
 
 void FinalEgg_Layout() {
 	
+	FEGammaVersion = false;
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-	switch (CurrentLevelLayout)
+	if (CurrentAct != 2)
 	{
-	case Mission1:
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		switch (CurrentLevelLayout)
 		{
-			LoadSetFile(0, "1004"); //don't load Sonic layout.
-			CurrentLevelLayout = Mission1_Variation;
+		case Mission1:
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "1004"); //don't load Sonic layout.
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "1000"); //Sonic Layout
+				CurrentLevelLayout = Mission1;
+			}
+			break;
+		case Mission1_Variation:
+			if (CurrentCharacter == Characters_Amy && !Vanilla)
+			{
+				LoadSetFile(0, "1000"); //don't load Amy layout.
+				CurrentLevelLayout = Mission1;
+			}
+			else
+			{
+				LoadSetFile(0, "1004"); //load Amy layout
+			}
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "1004"); //don't load Sonic layout.
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "1000"); //Sonic Layout
+			}
+			break;
 		}
-		else
-		{
-			LoadSetFile(0, "1000"); //Sonic Layout
-			CurrentLevelLayout = Mission1;
-		}
-		break;
-	case Mission1_Variation:
-		if (CurrentCharacter == Characters_Amy && !Vanilla)
-		{
-			LoadSetFile(0, "1000"); //don't load Amy layout.
-			CurrentLevelLayout = Mission1;
-		}
-		else
-		{
-			LoadSetFile(0, "1004"); //load Amy layout
-		}
-		break;
-	case Mission2_100Rings:
-	case Mission3_LostChao:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			LoadSetFile(0, "1004"); //don't load Sonic layout.
-			CurrentLevelLayout = Mission1_Variation;
-		}
-		else
-		{
-			LoadSetFile(0, "1000"); //Sonic Layout
-		}
-		break;
 	}
 
-	LoadSetFile(1, "1001");
-	LoadSetFile(2, "1002");
+	if (CurrentAct == 2)
+	{
+		FEGammaVersion = true;
+		LoadSetFile(0, "1000");
+		LoadSetFile(1, "1001");
+		LoadSetFile(2, "1005");
+	}
+	else
+	{
+		LoadSetFile(1, "1001");
+		LoadSetFile(2, "1002");
+	}
+
 	LoadSetFile(3, "1003");
 	CamFinalEgg();
 
@@ -95,10 +123,13 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005S.BIN", "system\\levels\\Final Egg\\Sonic-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000S.bin", "system\\cam\\CAM1000S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001S.bin", "system\\cam\\CAM1001S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002S.bin", "system\\cam\\CAM1002S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004S.bin", "system\\cam\\CAM1004S.bin");
+	ReplaceCAM("CAM1000S", "CAM1000S");
+	ReplaceCAM("CAM1001S", "CAM1001S");
+	ReplaceCAM("CAM1002S", "CAM1002S");
+	ReplaceCAM("CAM1004S", "CAM1004S");
+	ReplaceCAM("CAM1005S", "CAM1005S");
+
+	
 	helperFunctions.RegisterStartPosition(Characters_Sonic, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, FE3_StartPositions[0]);
@@ -110,10 +141,11 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004M.BIN", "system\\levels\\Final Egg\\Tails-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005M.BIN", "system\\levels\\Final Egg\\Tails-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000M.bin", "system\\cam\\CAM1000M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001M.bin", "system\\cam\\CAM1001M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002M.bin", "system\\cam\\CAM1002M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004M.bin", "system\\cam\\CAM1004M.bin");
+	ReplaceCAM("CAM1000M", "CAM1000M");
+	ReplaceCAM("CAM1001M", "CAM1001M");
+	ReplaceCAM("CAM1002M", "CAM1002M");
+	ReplaceCAM("CAM1004M", "CAM1004M");
+	ReplaceCAM("CAM1005M", "CAM1005M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, FE3_StartPositions[0]);
@@ -125,10 +157,11 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004K.BIN", "system\\levels\\Final Egg\\Knux-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005K.BIN", "system\\levels\\Final Egg\\Knux-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000K.bin", "system\\cam\\CAM1000K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001K.bin", "system\\cam\\CAM1001K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002K.bin", "system\\cam\\CAM1002K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004K.bin", "system\\cam\\CAM1004K.bin");
+	ReplaceCAM("CAM1000K", "CAM1000K");
+	ReplaceCAM("CAM1001K", "CAM1001K");
+	ReplaceCAM("CAM1002K", "CAM1002K");
+	ReplaceCAM("CAM1004K", "CAM1004K");
+	ReplaceCAM("CAM1005K", "CAM1005K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, FE3_StartPositions[0]);
@@ -140,10 +173,11 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004A.BIN", "system\\levels\\Final Egg\\Amy-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005A.BIN", "system\\levels\\Final Egg\\Amy-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000A.bin", "system\\cam\\CAM1000A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001A.bin", "system\\cam\\CAM1001A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002A.bin", "system\\cam\\CAM1002A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004A.bin", "system\\cam\\CAM1004A.bin");
+	ReplaceCAM("CAM1000A", "CAM1000A");
+	ReplaceCAM("CAM1001A", "CAM1001A");
+	ReplaceCAM("CAM1002A", "CAM1002A");
+	ReplaceCAM("CAM1004A", "CAM1004A");
+	ReplaceCAM("CAM1005A", "CAM1005A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, FE3_StartPositions[0]);
@@ -155,10 +189,11 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004B.BIN", "system\\levels\\Final Egg\\Big-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005B.BIN", "system\\levels\\Final Egg\\Big-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000B.bin", "system\\cam\\CAM1000B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001B.bin", "system\\cam\\CAM1001B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002B.bin", "system\\cam\\CAM1002B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004B.bin", "system\\cam\\CAM1004B.bin");
+	ReplaceCAM("CAM1000B", "CAM1000B");
+	ReplaceCAM("CAM1001B", "CAM1001B");
+	ReplaceCAM("CAM1002B", "CAM1002B");
+	ReplaceCAM("CAM1004B", "CAM1004B");
+	ReplaceCAM("CAM1005B", "CAM1005B");
 	helperFunctions.RegisterStartPosition(Characters_Big, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, FE3_StartPositions[0]);
@@ -170,10 +205,11 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	helperFunctions.ReplaceFile("system\\SET1004E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Amy.bin");
 	helperFunctions.ReplaceFile("system\\SET1005E.BIN", "system\\levels\\Final Egg\\Gamma-FE-Gamma.bin");
 
-	helperFunctions.ReplaceFile("system\\CAM1000E.bin", "system\\cam\\CAM1000E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1001E.bin", "system\\cam\\CAM1001E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1002E.bin", "system\\cam\\CAM1002E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1004E.bin", "system\\cam\\CAM1004E.bin");
+	ReplaceCAM("CAM1000E", "CAM1000E");
+	ReplaceCAM("CAM1001E", "CAM1001E");
+	ReplaceCAM("CAM1002E", "CAM1002E");
+	ReplaceCAM("CAM1004E", "CAM1004E");
+	ReplaceCAM("CAM1005E", "CAM1005E");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, FE1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, FE2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, FE3_StartPositions[0]);

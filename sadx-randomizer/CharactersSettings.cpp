@@ -101,7 +101,6 @@ void LoadCharacter_r()
 
 
 	AllUpgrades();
-
 	EmeraldRadar_R();
 
 	LoadCharacter();
@@ -253,14 +252,7 @@ void TargetableEntity(ObjectMaster* obj)
 			col.scale.x = 6;
 		}
 		else {
-			if (EntityData1Ptrs[0]->CharID != Characters_Gamma)
-			{
-				Collision_Init(obj, &col, 1, 3u);
-			}
-			else
-			{
-				Collision_Init(obj, &col, 1, 2u);
-			}
+			Collision_Init(obj, &col, 1, 2u);
 		}
 
 		data->Action = 1;
@@ -481,7 +473,7 @@ void Characters_Management() {
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
-	WriteCall((void*)0x4230a0, GammaTarget_Init); //allow gamma to target some boss (Called before boss fight.)
+	WriteCall((void*)0x4230a0, BossesFixes); //allow gamma to target some boss (Called before boss fight.)
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.

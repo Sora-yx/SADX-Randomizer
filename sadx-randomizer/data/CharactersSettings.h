@@ -1,7 +1,7 @@
 #pragma once
 
 void SetGammaTimer();  //force to 6 min instead of 3
-void GammaTarget_Init();
+void BossesFixes();
 void BigWeightHook(); //force to 2000g
 
 
@@ -52,3 +52,4 @@ int GetCharacter1ID();
 void ResultVoiceFix();
 
 void Load_Cart_R();
+void LW_StartPosition_R();
