@@ -147,6 +147,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 void RedMountain_Layout() {
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
+
 	if (CurrentAct == 0)
 	{
 		switch (CurrentLevelLayout)
@@ -168,7 +169,7 @@ void RedMountain_Layout() {
 			if (CurrentCharacter == Characters_Gamma) //Back Ring Fix
 				LoadSetFile(1, "0505");
 			else
-				LoadSetFile(2, "0501");
+				LoadSetFile(1, "0501");
 
 			break;
 		}

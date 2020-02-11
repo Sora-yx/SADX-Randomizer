@@ -5,39 +5,63 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 
+
+
+
 void ICAct3Position() {
 	ObjectMaster* GetChara = GetCharacterObject(0);
 
-	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
+	if (CurrentCharacter > Characters_Tails)
 	{
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 		{
 			TimeThing = 1;
 			EnableController(0);
 			PlayMusic(MusicIDs_icecap3);
-			return PositionPlayer(0, -6674, -10025.23926, -1776);
 		}
 	}
 
 	return;
 }
 
+void DisableController_R() {
+
+	if (CurrentCharacter > Characters_Tails)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			return EnableController(0);
+		}
+	}
+
+	return DisableController(0);
+}
+
+
 void IC_Layout() {
 
-	if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
+	if (CurrentAct != 3)
 	{
-		WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
-		//WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
+		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
+		{
+			CurrentAI = 2;
+			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
+			WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
+			WriteCall((void*)0x4e95dc, Delete_Cart); //Fix Delete Cart at the end of Ice Cap
 
-		WriteData<5>((void*)0x4e9de1, 0x90); //Don't disable controller
-		WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
-	}
-	else
-	{
-		WriteCall((void*)0x4e9415, DisableTimeThing);
-		WriteCall((void*)0x4e9de1, DisableController);
-		WriteData<1>((void*)0x4E9DE0, 0x04);
-		WriteCall((void*)0x4eda00, DisableController);
+			WriteCall((void*)0x4e9de1, DisableController_R);
+			WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
+
+			WriteData<1>((void*)0x798306, 0x84); //Jump auto in the cart
+			WriteData<1>((void*)0x7983c4, 0x7F);	
+		}
+		else
+		{
+			WriteCall((void*)0x4e9415, DisableTimeThing);
+			WriteCall((void*)0x4e9de1, DisableController_R);
+			WriteData<1>((void*)0x4E9DE0, 0x04);
+			WriteCall((void*)0x4eda00, DisableController);
+		}
 	}
 
 
@@ -71,9 +95,30 @@ void IC_Layout() {
 	LoadCamFile(1, "0801");
 	LoadCamFile(2, "0802");
 	LoadCamFile(3, "0803");
-
 	return;
 }
+
+
+
+void LoadRocketObj(ObjectMaster* obj) {
+
+	if (IsPlayerInsideSphere(&obj->Data1->Position, 25))
+		PositionPlayer(0, 567, 225, 1016);
+}
+//RocketIC->Data1->Position = { 456, 126, 905 };
+
+ObjectMaster* TriggerOBJ = nullptr;
+
+void LoadICTrigger() {
+
+	if (!TriggerOBJ)
+	{
+		TriggerOBJ = LoadObject(LoadObj_Data1, 2, LoadRocketObj);
+		TriggerOBJ->Data1->Position = { 445, 97, 978 };
+		TriggerOBJ->Data1->Scale.x = 15;
+	}
+}
+
 
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {

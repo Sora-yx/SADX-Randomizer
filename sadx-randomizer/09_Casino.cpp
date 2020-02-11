@@ -5,14 +5,45 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+ObjectMaster* TriggerCasino = nullptr;
 
+void TriggerCasinoChao_Main(ObjectMaster* obj) {
+
+	if (IsPlayerInsideSphere(&obj->Data1->Position, 25))
+	{
+		PlayVoice_R(5004);
+		ForcePlayerAction(0, 12);
+
+		if (++obj->Data1->Index == 5)
+		{
+			ForcePlayerAction(0, 24);
+			PositionPlayer(0, -1541.241, 70.75, 2636.955);
+		}
+	}
+}
+
+void TriggerCasinoChao_Delete(ObjectMaster* obj)
+{
+	DeleteObject_(TriggerCasino);
+	TriggerCasino = nullptr;
+}
+
+void LoadTriggerCasinoChao() {
+
+	if (char(0x3c5b37c) == 3 && !TriggerCasino && CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1)
+	{
+		TriggerCasino = LoadObject(LoadObj_Data1, 2, TriggerCasinoChao_Main);
+		TriggerCasino->Data1->Position = { -1568.96, -2199, 2642.24 };
+		TriggerCasino->Data1->Scale.x = 15;
+	}
+}
 
 void Casino_Layout() {
 
 
 	if (CurrentAct == 1)
 	{
-		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+		CurrentLevelLayout = 3; //randomizedSets[levelCount].LevelLayout;
 
 		switch (CurrentLevelLayout)
 		{
@@ -42,9 +73,8 @@ void Casino_Layout() {
 			break;
 		case Mission3_LostChao:
 			Race = false;
-			LoadSetFile(0, "0905"); //M2
-			LoadSetFile(1, "0901"); //M2
-			CurrentLevelLayout = Mission2_100Rings;
+			LoadSetFile(0, "0904"); //M3
+			LoadSetFile(1, "0907"); //M3
 			break;
 		}
 
@@ -68,7 +98,7 @@ void Casino_Layout() {
 		}
 		else
 		{
-			CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+			CurrentLevelLayout = 0; //randomizedSets[levelCount].LevelLayout;
 
 			switch (CurrentLevelLayout)
 			{
@@ -163,6 +193,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0904S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0905S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Rings.bin");
 	helperFunctions.ReplaceFile("system\\SET0906S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Knux.bin");
+	helperFunctions.ReplaceFile("system\\SET0907S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao2.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0900S.bin", "system\\cam\\CAM0900S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
@@ -264,8 +295,8 @@ void FixGoldenAndCoin() {
 		WriteData<1>((void*)0x5c4425, 0x75); //restore original function coin position
 		WriteData<1>((void*)0x5cef47, 0x75);
 
-		if (CurrentCharacter == Characters_Sonic)
-			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue
+		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles)
+			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
 		else
 			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue
 	}

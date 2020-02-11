@@ -4,8 +4,10 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+ObjectMaster* TriggerHS = nullptr;
 
 void CamHotShelter() {
+
 	if (CurrentLevelLayout == Mission1_Variation)
 	{
 		LoadCamFile(0, "1204"); //load the camera used for Big Hot Shelter
@@ -23,12 +25,49 @@ void CamHotShelter() {
 }
 
 void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
+
 	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
 	{
 		SomethingAboutHotShelterSwitch = 1;
 	}
 
+	LoadTriggerObjHS();
+
 	return;
+}
+
+void TriggerOBJHS_Delete(ObjectMaster* obj)
+{
+	DeleteObject_(TriggerHS);
+	TriggerHS = nullptr;
+
+}
+
+void TriggerObjHS_Main(ObjectMaster* obj) {
+
+	if (FirstHotShelterSwitch && CurrentLevelLayout == Mission1_Variation && IsPlayerInsideSphere(&obj->Data1->Position, 25))
+	{
+		PlayVoice_R(5004);
+		ForcePlayerAction(0, 12);
+
+		if (++obj->Data1->Index == 5)
+		{
+			ForcePlayerAction(0, 24);
+			PositionPlayer(0, 852.11, 203.63, -675.93);
+		}
+	}
+}
+
+
+void LoadTriggerObjHS() {
+
+	if (!TriggerHS && FirstHotShelterSwitch && CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma)
+	{
+		TriggerHS = LoadObject(LoadObj_Data1, 2, TriggerObjHS_Main);
+		TriggerHS->Data1->Position = { 750, -4.9, -650 };
+		TriggerHS->Data1->Scale.x = 15;
+		TriggerHS->DeleteSub = TriggerOBJHS_Delete;
+	}
 }
 
 
@@ -60,11 +99,12 @@ void HotShelter_Layout() {
 			}
 			break;
 		case 1: //Big Version
-			if (CurrentCharacter == Characters_Big && !Vanilla || CurrentCharacter == Characters_Gamma) //Amy has Big layout and vice versa.
+			if (CurrentCharacter == Characters_Big && !Vanilla) //Amy has Big layout and vice versa.
 			{
 				LoadSetFile(0, "1200");
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
+				CurrentLevelLayout = Mission1;
 			}
 			else
 			{
@@ -490,6 +530,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\SET1200E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET1201E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET1202E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET1204E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act4.bin");
 
 	helperFunctions.ReplaceFile("system\\SET1205E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET1206E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Chao2.bin");

@@ -24,11 +24,19 @@ void Cam_SkyDeck() {
 
 }
 
+int Switch_Gravity() {
+
+	if (TreasureHunting)
+		return (unsigned)Characters_Knuckles; 
+	else
+		return GetCharacterID(0);
+}
+
 void SkyDeck_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-	if (CurrentAct != 2)
+	if (CurrentAct == 0)
 	{
 		switch (CurrentLevelLayout)
 		{
@@ -109,7 +117,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteData<5>((void*)0x422dba, 0x90);
 	WriteData<5>((void*)0x422dc9, 0x90);
 
-	WriteCall((void*)0x422dd8, SkyDeck_Layout); //SD
+	WriteCall((void*)0x422dd8, SkyDeck_Layout); 
+	WriteCall((void*)0x5ecc7b, Switch_Gravity); 
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic

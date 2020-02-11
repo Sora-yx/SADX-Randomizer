@@ -3,10 +3,40 @@
 #include "SandHill.h"
 #include "RandomHelpers.h"
 
+int GetCurrentCharacterSD() {
+
+	if (CurrentCharacter > Characters_Tails)
+	{
+		WriteData<1>((void*)0x798306, 0x84);
+		WriteData<1>((void*)0x7983c4, 0x7F);
+	}
+	else
+	{
+		fixTCCart();
+	}
+
+	return GetCurrentCharacterID();
+
+}
+
+//Add rings every Checkpoint for cart speed.
+void AddRingSandHill() {
+	PlaySound(0x15, 0, 0, 0);
+
+	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
+		AddRings(10);
+
+	return;
+}
 
 
 void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFunctions)
 {
+
+	WriteCall((void*)0x423717, GetCurrentCharacterSD);
+	WriteCall((void*)0x5981d8, AddRingSandHill);
+	WriteCall((void*)0x423720, GetCurrentCharacterSD);
+
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SETSBOARD00S.bin", "system\\levels\\Sand Hill\\Sonic-SD.bin");
 

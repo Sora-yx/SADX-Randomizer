@@ -6,141 +6,84 @@
 
 void Cam_WV() {
 
-	if (Mission1_Variation)
-	{
-		if (CurrentCharacter == Characters_Gamma && !Vanilla)
-			LoadCamFile(0, "0200");
-		else
-			LoadCamFile(0, "0203");
-	}
+	if (CurrentLevelLayout != Mission1_Variation)
+		LoadCamFile(0, "0200");
 	else
-	{
-		LoadCamFile(0, "0100");
-	}
+		LoadCamFile(0, "0203");
 
-	
 	LoadCamFile(1, "0201");
 
-	if (CurrentAct == 2 && Race)
+	if (Race && CurrentAct == 2)
 		LoadCamFile(2, "0206");
 	else
 		LoadCamFile(2, "0202");
 
 	return;
-
 }
+
+
+
 
 void WindyValley_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-	if (CurrentAct != 2)
+	switch (CurrentLevelLayout)
 	{
-		switch (CurrentLevelLayout)
+	case Mission1:
+	case Mission2_100Rings:
+	default:
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-		case Mission1:
-		default:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0203"); //Gamma Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0200"); //Sonic Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-			}
-			break;
-		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Gamma && !Vanilla)
-			{
-				LoadSetFile(0, "0200");  //Sonic Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-				CurrentLevelLayout = Mission1;
-			}
-			else
-			{
-				LoadSetFile(0, "0203"); //Gamma Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-			}
-			break;
-		case 2:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0203"); //Gamma Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0200"); //100 Rings
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-			}
-			break;
-		case 3:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0203"); //Gamma Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0200");
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0205"); //Lost Chao
-			}
-			break;
+			LoadSetFile(0, "0203");
+			CurrentLevelLayout = Mission1_Variation;
 		}
+		else
+		{
+			LoadSetFile(0, "0200");
+		}
+		break;
+	case Mission1_Variation:
+		if (CurrentCharacter == Characters_Gamma && !Vanilla)
+		{
+			LoadSetFile(0, "0200");
+			CurrentLevelLayout = Mission1;
+		}
+		else
+		{
+			LoadSetFile(0, "0203");
+		}
+		break;
 	}
-	
-		if (CurrentAct == 2)
-		{
-			if (CurrentCharacter != Characters_Tails && CurrentCharacter != Characters_Big)
-			{
-				Race = true;
-				LoadSetFile(0, "0200");
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0206"); //race
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				Race = false;
-				LoadSetFile(0, "0200"); //Sonic Version
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
-				CurrentLevelLayout = Mission1;
-			}
-		}
+
+	LoadSetFile(1, "0201");
+
+	if (CurrentAct == 2)
+	{
+		LoadSetFile(2, "0206");
+		Race = true;
+	}
+	else
+	{
+		LoadSetFile(2, "0202");
+	}
 
 	if (Race)
+	{
 		SelectBarRace();
+		CurrentLevelLayout = Mission1_Variation;
+	}
 
 	Cam_WV();
-
+	
 	return;
 }
 
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+
 	WVObjects_Init(path, helperFunctions);
-
-	WriteData<5>((void*)0x422bdf, 0x90);
-	WriteData<5>((void*)0x422bee, 0x90);
-	WriteData<5>((void*)0x422bfd, 0x90);
-	WriteData<5>((void*)0x422c09, 0x90);
-	WriteData<5>((void*)0x422c18, 0x90);
-
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 
 	//Sonic
@@ -160,8 +103,6 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 
 	if (!Vanilla)
 		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
-	else
-		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1S_StartPositions[0]);
 
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3S_StartPositions[0]);
@@ -340,7 +281,10 @@ ObjectListEntry WindyValleyObjectList_list[] = {
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
 };
 
+
 ObjectList WindyValleyObjectList = { arraylengthandptrT(WindyValleyObjectList_list, int) };
+
+
 
 void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist

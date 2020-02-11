@@ -3,7 +3,7 @@
 void SetGammaTimer();  //force to 6 min instead of 3
 void BossesFixes();
 void BigWeightHook(); //force to 2000g
-
+void BackRingLoadCheck();
 
 extern int CurrentAI;
 extern unsigned char CurrentLevelLayout;
@@ -33,9 +33,11 @@ void character_settings_onFrames();
 int AmyCartImprovement();
 int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
-extern void PlayVoice_R(int a1);
+void PlayEmeraldGrabVoice_R(ObjectMaster* a1);
 
+extern void PlayVoice_R(int a1);
 void FixAISFXJump();
+extern int level[22];
 
 void FixAISFXSonic();
 void FixAISFXAmy();

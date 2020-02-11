@@ -39,7 +39,7 @@ void FinalEgg_Layout() {
 	
 	FEGammaVersion = false;
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = 1;// randomizedSets[levelCount].LevelLayout;
 
 	if (CurrentAct != 2)
 	{

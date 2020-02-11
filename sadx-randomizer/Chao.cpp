@@ -13,9 +13,38 @@ bool ArePvpLoaded = false;
 extern int chaoPB;
 bool ChaoSpawn = false;
 
+extern bool TPAmyVersion;
+
+ObjectMaster* ChaoTP = nullptr;
+
 std::vector<NJS_PLANE> waterlist = {};
 
 FunctionPointer(int, Chao_Animation, (ObjectMaster* a1, int a2), 0x734F00);
+
+void ChaoGameplayCheck() {
+
+	HMODULE ChaoGameplay = GetModuleHandle(L"sadx-chao-gameplay");
+	if (ChaoGameplay && !isChaoGameplayAllowed) {
+		int msgboxID = MessageBoxA(WindowHandle, "Chao Gameplay Mod has been detected, would you like to pick your Chao before starting your Randomizer Adventure?", "SADX Randomizer", MB_YESNO);
+
+		switch (msgboxID)
+		{
+		case IDYES:
+			isChaoGameplayAllowed = true;
+			MessageBoxA(WindowHandle, "Randomizer will now send you to the Chao Garden when starting a new story. You can disable this in the settings.", "SADX Randomizer", MB_ICONINFORMATION);
+			break;
+		case IDNO:
+		default:
+			isChaoGameplayAllowed = false;
+			break;
+		}
+	}
+
+	if (!ChaoGameplay && isChaoGameplayAllowed)
+	{
+		MessageBoxA(WindowHandle, "Couldn't find Chao Gameplay Mod, make sure the mod is checked and installed.", "SADX Randomizer Error", MB_ICONERROR);
+	}
+}
 
 //This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
 
@@ -31,13 +60,16 @@ void ChaoObj_Animate(int id, int length) {
 }
 
 void ChaoObj_Delete(ObjectMaster* a1) {
-	DeleteObjectMaster(ChaoManager);
+
+	DeleteObject_(ChaoManager);
 	ChaoManager = nullptr;
-	chaoHint = nullptr;
+	DeleteObject_(ChaoTP);
+	DeleteObject_(chaoHint);
+	DeleteObject_(CurrentChao);
 	CurrentChao = nullptr;
-	ChaoSpawn = false;
 	ChaoObject = nullptr;
-	a2 = nullptr;
+	ChaoTP = nullptr;
+	chaoHint = nullptr;
 
 	//Release the chao textures
 	FreeChaoTexlists();
@@ -92,8 +124,11 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
 
-		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 300))
+		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200))
 			Chao_CrySound();
+
+		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
+			return;
 
 		switch (CurrentCharacter)
 		{
@@ -152,7 +187,7 @@ void Chao_CrySound() {
 }
 
 void TriggerObj(ObjectMaster* obj) {
-	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 100))
+	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 80))
 		Chao_CrySound();
 }
 
@@ -169,6 +204,43 @@ void ChaoCryHint() {
 		chaoHint->Data1->Scale.x = 50;
 	}
 }
+
+void ChaoTPTriggerDelete(ObjectMaster* a1) {
+
+	DeleteObject_(ChaoTP);
+	ChaoTP = nullptr;
+}
+
+
+
+
+void ChaoTPTrigger(ObjectMaster* a1) {
+
+	short Size = 10;
+
+	if (CurrentCharacter >= Characters_Gamma)
+		Size = 15;
+
+	if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, Size))
+	{
+		chaoPB++; //Chao Credit Stat
+		LoadLevelResults();
+		a1->Data1->Action = 3;
+	}
+}
+
+
+void LoadChaoTPTrigger() {
+
+	if (!ChaoTP)
+	{
+		ChaoTP = LoadObject(LoadObj_Data1, 2, ChaoTPTrigger);
+		ChaoTP->Data1->Position = { -121, 50, 290 };
+		ChaoTP->Data1->Scale.x = 15;
+		ChaoTP->DeleteSub = ChaoTPTriggerDelete;
+	}
+}
+
 
 void Chao_OnFrame() {
 	if (ChaoCryDelay > 0)
@@ -203,6 +275,12 @@ void Chao_OnFrame() {
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		if (CurrentAct == 1)
+		{
+			pos = { -1541.241, 62.75, 2636.955 };
+			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
 		break;
 	case LevelIDs_IceCap:
 		if (CurrentAct == 1)
@@ -213,10 +291,17 @@ void Chao_OnFrame() {
 		}
 		break;
 	case LevelIDs_TwinklePark:
-		if (CurrentAct == 1)
+		if (CurrentAct == 1 && !TPAmyVersion)
 		{
 			pos = { 520, 1330, 1630 };
 			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
+		if (CurrentAct == 2 && TPAmyVersion)
+		{
+			pos = { -41.43054199, 50, 290.7596436 };
+			Yrot = 0;
+			LoadChaoTPTrigger();
 			ChaoSpawn = true;
 		}
 		break;
@@ -288,6 +373,8 @@ void Chao_OnFrame() {
 	default:
 		ChaoSpawn = false;
 		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
+		DeleteObject_(ChaoTP); 
+		DeleteObject_(chaoHint);
 		return;
 		break;
 	}

@@ -5,9 +5,9 @@
 // Mission Card settings, check, texture edit.
 
 int CurrentMission;
-NJS_TEXNAME MissionsText[18];
+NJS_TEXNAME MissionsText[25];
 char GetCustomLayout;
-
+extern HelperFunctions help;
 
 int CheckMissionRequirements_r() {
 
@@ -16,10 +16,10 @@ int CheckMissionRequirements_r() {
 	if (CurrentLevel > LevelIDs_Chaos0)
 		return 0;
 
-	if (GetCustomLayout == 2) //100 Rings check
+	if (GetCustomLayout == Mission2_100Rings) //100 Rings check
 		return (int)(99 < (short)Rings);
 
-	if (GetCustomLayout == 3) //Lost Chao
+	if (GetCustomLayout == Mission3_LostChao) //Lost Chao
 		return 1;
 
 	return 1;
@@ -28,25 +28,42 @@ int CheckMissionRequirements_r() {
 
 void LoadStageMissionImage_r() {
 
-	GetCustomLayout = Mission1;
+	GetCustomLayout = 0;
+	CurrentMission = 0;
 
 	if (GetLevelType == 0) { //Mission card check here
 
-		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel < LevelIDs_SandHill)
+		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= LevelIDs_SandHill)
 			return;
 
 		GetCustomLayout = CurrentLevelLayout;
 
+		if (CurrentLevelLayout < Mission2_100Rings)
+		{
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings)
+				CurrentMission = BalloonCard; //grab ballon
+
+			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
+				CurrentMission = FroggyCard; //grab Froggy
+
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+				CurrentMission = CapsuleCard;
+		}
+		
 		switch (CurrentLevel)
 		{
 		case LevelIDs_EmeraldCoast:
 			if (CurrentAct == 2 || CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
 				CurrentMission = FroggyCard; //Catch Froggy if Big or Gamma layout.
+			break;	
+		case LevelIDs_WindyValley:
+			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0 && (CurrentCharacter == Characters_Gamma))
+				CurrentMission = E103Card;
 			break;
 		case LevelIDs_LostWorld:
 			if (!CurrentLevelLayout)
 				CurrentMission = LostWorldCard; //Go to the center of the ruin.
-			if (CurrentLevelLayout == 1 && CurrentAct == 1)
+			if (TreasureHunting && CurrentAct == 1)
 				CurrentMission = EmeraldKnuxCard;
 			break;
 		case LevelIDs_FinalEgg:
@@ -55,19 +72,22 @@ void LoadStageMissionImage_r() {
 			else
 				CurrentMission = FinalEggCard; //Go to the center of the base.
 
-			if (CurrentCharacter == Characters_Amy)
-				CurrentMission = BallonCard; //grab balon if Amy regardless of the mission.
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
+				CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
+
+			if (CurrentAct == 2 && CurrentLevelLayout == Mission1_Variation)
+				CurrentMission = SonicDollCard;
 			break;
 		case LevelIDs_RedMountain:
-			if (CurrentAct == 2)
+			if (CurrentAct == 2 && TreasureHunting)
 				CurrentMission = EmeraldKnuxCard;
-			if (CurrentLevelLayout == 1 && CurrentAct == 1 && CurrentCharacter == Characters_Amy)
-				CurrentMission = BallonCard; //grab ballon
+			if (CurrentLevelLayout <= Mission1_Variation && CurrentAct <= 1 && (CurrentCharacter == Characters_Gamma))
+				CurrentMission = E104Card; 
 			break;
 		case LevelIDs_SpeedHighway:
-			if (Race)
+			if (Race && CurrentAct == 0)
 				CurrentMission = MissileRaceCard; //Eggman Race
-			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 2)
+			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 2 && TreasureHunting)
 				CurrentMission = EmeraldKnuxCard;
 			break;
 		case LevelIDs_SkyDeck:
@@ -79,7 +99,7 @@ void LoadStageMissionImage_r() {
 				CurrentMission = FroggyCard;  //Froggy
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
+			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation && TreasureHunting)
 				CurrentMission = EmeraldKnuxCard;
 			break;
 		case LevelIDs_HotShelter:
@@ -87,18 +107,13 @@ void LoadStageMissionImage_r() {
 				CurrentMission = FroggyCard; //Froggy
 			break;
 		default:
-			CurrentMission = CapsuleCard;
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings)
+				CurrentMission = BalloonCard; //grab ballon
+			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
+				CurrentMission = FroggyCard; //grab Froggy
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+				CurrentMission = CapsuleCard;
 			break;
-		}
-
-		if (CurrentCharacter == Characters_Big && GetCustomLayout == Mission1)
-		{
-			if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
-				CurrentMission = CapsuleCard;
-			else if (CurrentLevel == LevelIDs_FinalEgg)
-				CurrentMission = CapsuleCard;
-			else
-				CurrentMission = FroggyCard;
 		}
 
 		if (Race && (CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2))
@@ -132,19 +147,18 @@ void LoadStageMissionImage_r() {
 			}
 		}
 
+		if (!Race)
+		{
+			if (GetCustomLayout == Mission2_100Rings) //100 Rings
+				CurrentMission = RingsCard;
 
-		if (CurrentCharacter == Characters_Amy && GetCustomLayout == Mission1)
-			CurrentMission = BallonCard; //grab ballon
-
-		if (GetCustomLayout == Mission2_100Rings && !Race) //100 Rings
-			CurrentMission = RingsCard;
-
-		if (GetCustomLayout == Mission3_LostChao && !Race) //Lost Chao
-			CurrentMission = LostChaoCard;
+			if (GetCustomLayout == Mission3_LostChao) //Lost Chao
+				CurrentMission = LostChaoCard;
+		}
 
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
-		LoadPVM("textures\\Missions", &StageMissionTexlist);
+		LoadPVM("Missions", &StageMissionTexlist);
 		MissionSpriteAnim.texid = CurrentMission;
 
 		ObjectMaster* obj = LoadObject(LoadObj_Data1, 6, (ObjectFuncPtr)0x457B60);
@@ -156,17 +170,18 @@ void LoadStageMissionImage_r() {
 }
 
 void StageMissionImage_result() {
+
 	if (GetLevelType == 0) { //do the mission check here
 			//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
 
 		GetCustomLayout = CurrentLevelLayout;
 
-		if (CurrentLevel >= LevelIDs_Chaos0)
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_HedgehogHammer)
 			return;
 
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
-		LoadPVM("textures\\Missions", &StageMissionTexlist);
+		LoadPVM("Missions", &StageMissionTexlist);
 		MissionSpriteAnim.texid = CurrentMission;
 
 		ObjectMaster* obj = LoadObject(LoadObj_Data1, 6, (ObjectFuncPtr)0x457B60);
@@ -200,7 +215,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	TitleCardStuff = 2;
 	TitleCardStuff2 = 0;
 
-	if (CurrentLevel == 0 || CurrentLevel > 14 && CurrentLevel < 35) {
+	if (CurrentLevel > 14 && CurrentLevel < 40) {
 		GetLevelType = 1;
 	}
 	else {
@@ -226,22 +241,35 @@ void TitleCard_Init() {
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
+	help.ReplaceFile("system\\Missions.pvm", "system\\textures\\Missions.pvmx");
 }
 
 extern bool isPlayerInWaterSlide;
+ObjectMaster* test = nullptr;
 
 void MissionResultCheck() {
 
-	if (CurrentLevel < LevelIDs_Chaos0 && GameState == 15)
+	if (CurrentLevel > 0 && CurrentLevel < LevelIDs_Chaos0 && GameState == 15)
 	{
-		if (Rings >= 100 && CurrentMission == RingsCard || CurrentMission == EmeraldKnuxCard && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+		if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 		{
 			ObjectMaster* obj = GetCharacterObject(0);
 			EntityData1* ent;
 			ent = obj->Data1;
+			
 			if ((ent->Status & Status_Ground) == Status_Ground && !isPlayerInWaterSlide && TimeThing != 0)
 			{
-				LoadLevelResults();
+		
+				ent->InvulnerableTime = 0;
+				if (CurrentLevel != LevelIDs_TwinklePark && CurrentAct != 0)
+					obj->Data1->Action = 0; //fix potential crash
+				obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				
+				if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+				{
+					obj->Data1->Action = 1; //fix victory pose
+					LoadLevelResults();
+				}
 			}
 		}
 	}

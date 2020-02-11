@@ -120,7 +120,7 @@ void CreditFlag() {
 	GetCurrentCharacterID();
 }
 
-//DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
+
 
 CreditsEntry CreditsText_list[] = {
 { 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.0" },
@@ -139,18 +139,17 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "" }, //13
 	{ 3, -1, 0, 0, "" },
 	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "" },
 	{ 2, -1, 0, 0, "RANDOMIZER SPECIAL THANKS" },
 	{ 3, -1, 0, 0, "MainMemory" },
 	{ 3, -1, 0, 0, "Prahaha" },
 	{ 3, -1, 0, 0, "Raytwo" },
 	{ 3, -1, 0, 0, "Kell" },
 	{ 3, -1, 0, 0, "SonicFreak94" },
-	{ 3, -1, 0, 0, "MelancholyMatoi" },
+	{ 3, -1, 0, 0, "DeaTh" },
 	{ 3, -1, 0, 0, "Mastakirby" },
-	{ 2, -1, 0, 0, "RANDOMIZER BETA TESTER" },
-	{ 3, -1, 0, 0, "Astreachan, Refrag, Niczur, GuyStreamsStuff" },
-	{ 2, -1, 0, 0, "BETA TESTER OLD VERSIONS" },
+	{ 3, -1, 0, 0, "MelancholyMatoi" },
+	{ 2, -1, 0, 0, "BETA TESTERS" },
+	{ 3, -1, 0, 0, "Refrag" },
 	{ 3, -1, 0, 0, "Quaker299" },
 	{ 3, -1, 0, 0, "Yarlick" },
 	{ 3, -1, 0, 0, "MakoHNM" },
@@ -158,6 +157,7 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Koutasensei/Elise" },
 	{ 3, -1, 0, 0, "Astreachan" },
 	{ 3, -1, 0, 0, "GuyStreamsStuff" },
+	{ 3, -1, 0, 0, "Niczur" },
 	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
 	{ 3, -1, 0, 0, "SonicFreak94" },
 	{ 2, -1, 0, 0, "CHARACTER SWAP" },

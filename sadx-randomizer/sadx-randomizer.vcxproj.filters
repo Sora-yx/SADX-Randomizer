@@ -129,6 +129,9 @@
     <ClCompile Include="Missions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BackRing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\ActsSettings.h">

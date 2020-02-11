@@ -15,7 +15,7 @@ StartPosition WV3_StartPositions[]{
 
 //Other character Position (Sonic Layout)
 StartPosition WV1S_StartPositions[]{
-	{ 2, 0,{ 1230, -333, -140 }, -175 }
+	{ 2, 0,{ 1230, -333, -140 }, 0 }
 };
 
 StartPosition WV2S_StartPositions[]{

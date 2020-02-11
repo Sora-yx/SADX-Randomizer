@@ -23,8 +23,6 @@ void IceBomb_Load_r(ObjectMaster* obj) {
 	target->Data1->CharID = 1;
 }
 
-
-
 int Chaos6_ReturnCharacter() { //trick the game to make it think we are playing Sonic or Knuckles.
 
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Big && Vanilla)
@@ -34,7 +32,6 @@ int Chaos6_ReturnCharacter() { //trick the game to make it think we are playing 
 		return (unsigned int)Characters_Sonic;
 	else
 		return (unsigned int)Characters_Knuckles;
-
 }
 
 

@@ -97,6 +97,7 @@
     <ClCompile Include="12_HotShelter.cpp" />
     <ClCompile Include="AdventureFlags.cpp" />
     <ClCompile Include="AISettings.cpp" />
+    <ClCompile Include="BackRing.cpp" />
     <ClCompile Include="Chao.cpp" />
     <ClCompile Include="Chaos0.cpp" />
     <ClCompile Include="Chaos2.cpp" />

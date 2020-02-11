@@ -10,17 +10,34 @@ bool TPAmyVersion = false;
 
 void FixRollerCoaster() {
 	ObjectMaster* obj = GetCharacterObject(0);
-	EntityData1* ent;
-	ent = obj->Data1;
-	obj->Data1->Action = 28; //force the character to leave the RC
+	if (obj != nullptr)
+		obj->Data1->Action = 28; //force the character to leave the RC
 }
 
 
-void TwinklePark_Layout() {
-	WriteData<1>((void*)0x798306, 0x85); //Restore original TC Function
-	WriteData<1>((void*)0x7983c4, 0x7C);
+void TP_CAM() {
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	LoadCamFile(0, "0300");
+
+	if (CurrentAct == 0)
+		LoadCamFile(1, "0301");
+		
+	if (CurrentAct == 1 && CurrentLevelLayout != Mission1)
+		LoadCamFile(1, "0305");
+	else
+		LoadCamFile(1, "0301");
+
+	LoadCamFile(2, "0302");
+
+	return;
+
+}
+
+void TwinklePark_Layout() {
+
+	fixTCCart();
+
+	CurrentLevelLayout = 3; //randomizedSets[levelCount].LevelLayout;
 	TPAmyVersion = false;
 
 	LoadSetFile(0, "0300");
@@ -39,6 +56,12 @@ void TwinklePark_Layout() {
 			LoadSetFile(1, "0303"); //M3 Version
 			break;
 		}
+
+		if (CurrentCharacter >= Characters_Gamma)
+		{
+			WriteData<1>((void*)0x798306, 0x84); 
+			WriteData<1>((void*)0x7983c4, 0x7F);
+		}
 	}
 
 	if (CurrentAct == 1)
@@ -53,7 +76,7 @@ void TwinklePark_Layout() {
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
-			LoadSetFile(1, "0303"); //M2-M3 Version
+			LoadSetFile(1, "0305"); //Amy TP version
 			break;
 		}
 
@@ -61,10 +84,7 @@ void TwinklePark_Layout() {
 	}
 
 	LoadSetFile(2, "0302");
-
-	LoadCamFile(0, "0300");
-	LoadCamFile(1, "0301");
-	LoadCamFile(2, "0302");
+	TP_CAM();
 
 	return;
 }
@@ -100,8 +120,9 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0300S.BIN", "system\\cam\\CAM0300S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302S.BIN", "system\\cam\\CAM0302S.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305S.BIN", "system\\cam\\CAM0305S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, TP2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Sonic, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, TP3_StartPositions[0]);
 
 	//Tails
@@ -115,6 +136,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0300M.BIN", "system\\cam\\CAM0300M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301M.BIN", "system\\cam\\CAM0301M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302M.BIN", "system\\cam\\CAM0302M.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305M.BIN", "system\\cam\\CAM0305M.bin");
 	helperFunctions.RegisterStartPosition(Characters_Tails, TP1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, TP3_StartPositions[0]);
@@ -130,6 +152,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0300K.BIN", "system\\cam\\CAM0300K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301K.BIN", "system\\cam\\CAM0301K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302K.BIN", "system\\cam\\CAM0302K.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305K.BIN", "system\\cam\\CAM0305K.bin");
 
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP2S_StartPositions[0]);
@@ -146,6 +169,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0300A.BIN", "system\\cam\\CAM0300A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301A.BIN", "system\\cam\\CAM0301A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302A.BIN", "system\\cam\\CAM0302A.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305A.BIN", "system\\cam\\CAM0305A.bin");
 	helperFunctions.RegisterStartPosition(Characters_Amy, TP1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, TP3_StartPositions[0]);
@@ -158,9 +182,11 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0303B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Amy.bin");
 
+
 	helperFunctions.ReplaceFile("system\\CAM0300B.BIN", "system\\cam\\CAM0300B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301B.BIN", "system\\cam\\CAM0301B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302B.BIN", "system\\cam\\CAM0302B.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305B.BIN", "system\\cam\\CAM0305B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, TP1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, TP3_StartPositions[0]);
@@ -176,6 +202,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0300E.BIN", "system\\cam\\CAM0300E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301E.BIN", "system\\cam\\CAM0301E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302E.BIN", "system\\cam\\CAM0302E.bin");
+	helperFunctions.ReplaceFile("system\\CAM0305E.BIN", "system\\cam\\CAM0305E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP2E_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP3_StartPositions[0]);

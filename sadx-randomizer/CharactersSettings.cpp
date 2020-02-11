@@ -18,6 +18,8 @@ extern bool isAIAllowed;
 extern bool AmySpeed;
 extern bool BigSpeed;
 extern bool IceCapCutsceneSkip;
+extern int CurrentMission;
+extern bool Race;
 
 void character_settings_onFrames() {
 	if (CurrentLevel != 38 || (CurrentLevel != 8 && CurrentAct != 2) || CurrentLevel != 0)
@@ -42,7 +44,7 @@ int SetAmyWinPose() {
 	switch (CurrentCharacter)
 	{
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_EmeraldCoast && CurrentLevelLayout == 1 || CurrentLevelLayout >= 2)
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission <= 10 && CurrentMission != 3 || CurrentLevelLayout >= 2)
 			return 42;
 		else
 			return 32;
@@ -86,23 +88,15 @@ void LoadCharacter_r()
 
 	if (CurrentCharacter != Characters_Sonic)
 		MetalSonicFlag = 0;
-
-	if (CurrentLevel >= LevelIDs_SkyDeck && CurrentLevel < 13 && CurrentLevel != LevelIDs_IceCap)
-	{
-		FreeCam = 1;
-		SetCameraMode_(FreeCam);
-	}
-
+	
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
 	if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_WindyValley)
 		CheckRace();
 
-
 	AllUpgrades();
 	EmeraldRadar_R();
-
 	LoadCharacter();
 
 	return;
@@ -138,102 +132,115 @@ static void SuperSonicManager_Load()
 	ObjectMaster* obj = LoadObject(static_cast<LoadObj>(0), 2, SuperSonicManager_Main);
 }
 
+int SSLevel[7]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
+LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter };
+
+
+
+int GetSSLevelBanned() {
+
+	for (int i = 0; i < sizeof(level); i++)
+	{
+		if (CurrentLevel == SSLevel[i])
+		{
+			if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct != 0)
+				return false;
+
+			if (CurrentLevel == LevelIDs_SkyDeck && CurrentAct != 0)
+				return false;
+
+			if (CurrentLevel == LevelIDs_HotShelter && CurrentAct != 0)
+				return false;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+void SuperSonic_TransformationCheck() {
+
+	SuperSonicFlag = 0;
+	TransfoCount = 0;
+
+	bool isLevelBanned = GetSSLevelBanned();
+
+	if (isLevelBanned || MetalSonicFlag == 1 && SonicRand == 1)
+	{
+		SonicRand = 0;
+		return;
+	}
+	else
+	{
+		if (SonicRand == 1 && !MetalSonicFlag)
+		{
+			static Uint8 last_action[8] = {};
+			Rings = 1;
+			for (int i = 0; i < 8; i++)
+			{
+				EntityData1* data1 = EntityData1Ptrs[i];
+				CharObj2* data2 = CharObj2Ptrs[i];
+
+				bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
+				bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
+
+				//Super Sonic Transformation (Credit: SonicFreak94).
+
+				if (!transformation)
+				{
+					data1->Status &= ~Status_LightDash;
+					ForcePlayerAction(i, 46);
+					LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+					PlayVoice(3001);
+					data2->Upgrades |= Upgrades_SuperSonic;
+					PlayMusic(MusicIDs_ThemeOfSuperSonic);
+
+					if (!TransfoCount++)
+					{
+						SuperSonicManager_Load();
+					}
+				}
+
+				SuperSonicFlag = TransfoCount > 0;
+				return;
+			}
+		}
+	}
+}
+
 
 
 //Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes.
 
 void CallStuffWhenLevelStart() {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
-	Credits_State = 0;
 
-
-	if (CurrentCharacter != Characters_Sonic)
+	if (P1->Data1->CharID != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
-
-	if (GameMode != 9)
+	else
 	{
-		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
+		SuperSonic_TransformationCheck();
 	}
+
+	if (GameMode != 9 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
+		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	if (CurrentLevel == LevelIDs_E101)
-	{
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
-	}
 
-	SuperSonicFlag = 0;
-	TransfoCount = 0;
-
-	//Banned SuperSonic Levels
-	if (CurrentCharacter == Characters_Sonic)
-	{
-		if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_TwinkleCircuit || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_EggViper || CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
-		{
-			SonicRand = 0;
-			CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
-			return;
-		}
-		else
-		{
-			if (MetalSonicFlag == 1 && SonicRand == 1)
-			{
-				SonicRand = 0;
-				return;
-			}
-			else
-			{
-				if (MetalSonicFlag == 0)
-				{
-					if (SonicRand == 1 && CurrentCharacter == 0)
-					{
-						static Uint8 last_action[8] = {};
-						Rings = 1;
-						static const PVMEntry SuperSonicPVM = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
-						for (int i = 0; i < 8; i++)
-						{
-							EntityData1* data1 = EntityData1Ptrs[i];
-							CharObj2* data2 = CharObj2Ptrs[i];
-
-							if (data1 == nullptr || data1->CharID != Characters_Sonic)
-							{
-								continue;
-							}
-
-							bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-							bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
-
-							//Super Sonic Transformation (Credit: SonicFreak94).
-
-							if (!transformation)
-							{
-								data1->Status &= ~Status_LightDash;
-								ForcePlayerAction(i, 46);
-								LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-								PlayVoice(3001);
-								data2->Upgrades |= Upgrades_SuperSonic;
-								PlayMusic(MusicIDs_ThemeOfSuperSonic);
-
-								if (!TransfoCount++)
-								{
-									SuperSonicManager_Load();
-								}
-							}
-							else
-							{
-								last_action[i] = data1->Action;
-							}
-							SuperSonicFlag = TransfoCount > 0;
-							return;
-						}
-					}
-				}
-			}
-		}
-	}
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && P1->Data1->CharID >= Characters_Gamma ||
+		(P1->Data1->CharID > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2))
+		Load_Cart_R();
 }
+
 
 //Create an object so Gamma can hit some specific bosses.
 CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
@@ -469,7 +476,13 @@ void Characters_Management() {
 	WriteCall((void*)0x4762a6, FixRadarSFX);
 	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
 	WriteCall((void*)0x7a907f, FixTikalSFX);
-
+	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
+	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
+	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
+	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
+	WriteData<1>((void*)0x61A5B8, 0x8);
+	WriteData<1>((void*)0x61a5b9, 0x74);
+	
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
@@ -478,7 +491,8 @@ void Characters_Management() {
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
-	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.
+	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.	
+	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 		//Amy Stuff
@@ -491,10 +505,4 @@ void Characters_Management() {
 	WriteCall((void*)0x79ab84, AmyCartImprovement);
 	WriteCall((void*)0x79aa78, AmyCartImprovement);
 	WriteCall((void*)0x7979b9, AmyCartImprovement);
-
-	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
-
-	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece
 }

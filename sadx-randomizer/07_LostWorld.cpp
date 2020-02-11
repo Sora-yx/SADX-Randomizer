@@ -128,7 +128,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceCAM("CAM0702M", "CAM0702M");
 	ReplaceCAM("CAM0704M", "CAM0704M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW1_StartPositions[0]);
-	//helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, LW3_StartPositions[0]);
 
 	//Knuckles
@@ -143,7 +143,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceCAM("CAM0702K", "CAM0702K");
 	ReplaceCAM("CAM0704K", "CAM0704K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW1_StartPositions[0]);
-	//helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW3_StartPositions[0]);
 
 	//Amy
@@ -158,7 +158,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceCAM("CAM0702A", "CAM0702A");
 	ReplaceCAM("CAM0704A", "CAM0704A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW1_StartPositions[0]);
-	//helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, LW3_StartPositions[0]);
 
 	//Big

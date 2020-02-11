@@ -13,8 +13,18 @@ extern ObjectFuncPtr charfuncs[];
 HelperFunctions extern help;
 
 
+
 void AIRaceLoad_R() {
 	LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[AIRace]);
+}
+
+int IsFastSonicAI_R() {
+
+	if (isCriticalMode)
+		return 1;
+	else
+		return 0;
+
 }
 
 void CheckRace() {
@@ -36,6 +46,35 @@ void CheckRace() {
 				else
 					AIRace = Characters_Sonic;
 			}
+			/*
+			switch (AIRace)
+			{
+			case Characters_Eggman:
+				//WriteData<1>((void*)0x47C3D6, 0xB);
+				break;
+			case Characters_Tails:
+				WriteData<1>((void*)0x47C3D6, 0x2);
+				break;
+			case Characters_Knuckles:
+				//WriteData<1>((void*)0x47C3D6, 0xC);
+				break;
+			case Characters_Tikal:
+				WriteData<1>((void*)0x47C3D6, 0xF);
+				break;
+			case Characters_Amy:
+				WriteData<1>((void*)0x47C3D6, 0xD);
+				break;
+			case Characters_Gamma:
+				WriteData<1>((void*)0x47C3D6, 0xE);
+				break;
+			default:
+				if (!MetalSonicFlag)
+					WriteData<1>((void*)0x47C3D6, 0x1);
+				else
+					WriteData<1>((void*)0x47c3fe, 0x10);
+				break;
+			}
+			*/
 		}
 
 		switch (CurrentLevel)
@@ -74,13 +113,37 @@ void CheckRace() {
 			}
 			break;
 		}
+		/*
+		switch (CurrentCharacter)
+		{
+		case Characters_Tails:
+			WriteData<1>((void*)0x47c3fe, 0x2);
+			break;
+		case Characters_Knuckles:
+			WriteData<1>((void*)0x47c3fe, 0xC);
+			break;
+		case Characters_Amy:
+			WriteData<1>((void*)0x47c3fe, 0xD);
+			break;
+		case Characters_Gamma:
+			WriteData<1>((void*)0x47c3fe, 0xE);
+			break;
+		default:
+			if (!MetalSonicFlag)
+				WriteData<1>((void*)0x47c3fe, 0x1);
+			else
+				WriteData<1>((void*)0x47c3fe, 0x10);
+			break;
+		}*/
 
 		return;
 	}
 }
 
+
+
 void SelectBarRace() {
-	
+
 	if (CurrentCharacter == Characters_Sonic)
 	{
 		if (MetalSonicFlag == 0)
@@ -161,6 +224,7 @@ void SelectBarRace() {
 void Race_Init() {
 	//Sonic/Eggman Race Stuff
 	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
+	
 	WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
 	WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI. (we will manually call it.)
 
@@ -169,6 +233,7 @@ void Race_Init() {
 	WriteCall((void*)0x461639, FixVictoryTailsVoice);  //same
 
 	WriteCall((void*)0x47da24, AIRaceLoad_R);  //Swap Sonic Race AI Random. (any character)
+	WriteCall((void*)0x47d961, IsFastSonicAI_R);  
 }
 
 void SongRace_Init()

@@ -41,7 +41,7 @@ ObjectMaster* LoadCharObj(int i)
 }
 
 int CheckTailsAI_R(void) { //restriction and bug fixes.
-	if (CurrentAI == -1 || CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
+	if (CurrentAI == -1 || CurrentCharacter >= Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
 		isAIActive = false;
 		return 0;
@@ -67,13 +67,6 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	switch (CurrentLevel)
 	{
-	case LevelIDs_IceCap: //potentail Tails crash
-		if (CurrentAct == 2)
-		{
-			isAIActive = false;
-			return 0;
-		}
-		break;
 	case LevelIDs_SpeedHighway: //crash
 		if (CurrentAct == 1)
 		{
@@ -286,7 +279,69 @@ void FixAISFXSonic() {
 
 	PlaySound(0x2fa, 0, 0, 0);
 	return;
-}void FixShowerCasino() {
+}
+
+void FixAISFXSonic2() {
+	if (isAIActive && !Race)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
+				return;
+		}
+	}
+
+	if (CurrentCharacter != Characters_Sonic && Race)
+		return;
+
+	PlaySound(0x11, 0, 0, 0);
+	return;
+}
+
+void FixAISFXSonic3() {
+	if (isAIActive && !Race)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
+				return;
+		}
+	}
+
+	if (CurrentCharacter != Characters_Sonic && Race)
+		return;
+
+	PlaySound(0x12, 0, 0, 0);
+	return;
+}
+
+void FixAISFXSonic4() {
+	if (isAIActive && !Race)
+	{
+		ObjectMaster* GetChara = GetCharacterObject(1);
+		GetChara->Data1->CharID;
+
+		if (GetChara != nullptr)
+		{
+			if (GetChara->Data1->CharID == Characters_Sonic && isAIActive)
+				return;
+		}
+	}
+
+	if (CurrentCharacter != Characters_Sonic && Race)
+		return;
+
+	PlaySound(0x4d1, 0, 0, 0);
+	return;
+}
+
+void FixShowerCasino() {
 	if (isAIActive)
 		return;
 
@@ -322,6 +377,9 @@ void FixAISFXAmy() {
 		}
 	}
 
+	if (Race && CurrentCharacter != Characters_Amy)
+		return;
+
 	PlaySound(0x31d, 0, 0, 0);
 }
 
@@ -340,6 +398,9 @@ void FixAISFXAmy2() { //jump sound
 				return;
 		}
 	}
+
+	if (Race && CurrentCharacter != Characters_Amy)
+		return;
 
 	PlaySound(0x4ff, 0, 0, 0);
 }
@@ -372,6 +433,9 @@ void FixAISFXAmy4() {
 				return;
 		}
 	}
+
+	if (Race && CurrentCharacter != Characters_Amy)
+		return;
 
 	PlaySound(0x506, 0, 0, 0);
 }
@@ -424,6 +488,9 @@ void FixAISFXAmy7() { //spin dash noise when you press B
 		}
 	}
 
+	if (Race && CurrentCharacter != Characters_Amy)
+		return;
+
 	if (EventFlagArray[EventFlags_Amy_LongHammer] == 1)
 		PlaySound(0x31d, 0, 0, 0); //long hammer sound
 	else
@@ -446,6 +513,18 @@ void FixAISFXAmy8() { //spin dash noise when you press B
 	PlaySound(0x509, 0, 0, 0);
 }
 
+
+void FixAISFXGamma() { 
+
+	if (Race && CurrentCharacter != Characters_Gamma)
+		return;
+
+	PlaySound(0x33b, 0, 0, 0);
+
+	return;
+}
+
+extern bool FEGammaVersion;
 //Result Voice FIX
 void ResultVoiceFix() {
 	ObjectMaster* GetChara = GetCharacterObject(0);
@@ -486,11 +565,11 @@ void ResultVoiceFix() {
 			Load_DelayedSound_SFX(0x591);
 			break;
 		case Characters_Big:
-			if (CurrentLevel < 15 || CurrentLevel > 35 && CurrentLevelLayout < 2)
-				Load_DelayedSound_Voice(4010);
-			else
-				Load_DelayedSound_Voice(4011);
 
+				if (CurrentLevel < 15 && CurrentLevelLayout < Mission2_100Rings && !FEGammaVersion)
+					Load_DelayedSound_Voice(4010);
+				else
+					Load_DelayedSound_Voice(4011);
 			SoundManager_Delete2();
 			break;
 		}
@@ -509,6 +588,8 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 
 CollisionInfo* oldcol = nullptr;
 
+extern ObjectMaster* CurrentCart;
+
 void AISwitch() {
 
 	if (!isAIAllowed || CurrentAI == CurrentCharacter)
@@ -526,6 +607,12 @@ void AISwitch() {
 	if (CurrentAI == Characters_Tikal || CurrentAI == Characters_Eggman)
 		if (CurrentLevel > 14 && CurrentLevel < 26)
 			return;
+
+	if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+		return;
+
+	if (CurrentCart || CurrentCharacter <= Characters_Tails && CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		return;
 
 	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
 	{
@@ -565,7 +652,10 @@ void AISwitch() {
 						LoadSoundList(62);
 					else
 					{
-						PlayVoice(4000);
+						if (CustomVoices)
+							PlayVoice_R(4000);
+						else
+							PlayVoice(4000);
 						LoadSoundList(1);
 					}
 
@@ -575,10 +665,16 @@ void AISwitch() {
 						LoadSoundList(71);
 					break;
 				case Characters_Eggman:
-					PlayVoice(4005);
+					if (CustomVoices)
+						PlayVoice_R(4005);
+					else
+						PlayVoice(4005);
 					break;
 				case Characters_Tails:
-					PlayVoice(4001);
+					if (CustomVoices)
+						PlayVoice_R(4001);
+					else
+						PlayVoice(4001);
 					LoadSoundList(1);
 					if (VoiceLanguage)
 						LoadSoundList(72);
@@ -586,7 +682,10 @@ void AISwitch() {
 						LoadSoundList(71);
 					break;
 				case Characters_Knuckles:
-					PlayVoice(4002);
+					if (CustomVoices)
+						PlayVoice_R(4002);
+					else
+						PlayVoice(4002);
 					LoadSoundList(49);
 					if (VoiceLanguage)
 						LoadSoundList(70);
@@ -594,7 +693,10 @@ void AISwitch() {
 						LoadSoundList(69);
 					break;
 				case Characters_Amy:
-					PlayVoice(4003);
+					if (CustomVoices)
+						PlayVoice_R(4003);
+					else
+						PlayVoice(4003);
 					LoadSoundList(46);
 					if (VoiceLanguage)
 						LoadSoundList(64);
@@ -704,6 +806,9 @@ void AIAudioFixes() {
 	//(there is probably a nicer way to do this, but I have no clue how)
 
 	WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack sound
+	WriteCall((void*)0x495eaa, FixAISFXSonic2); //fix sonic jump sound
+	WriteCall((void*)0x4972c2, FixAISFXSonic3); //fix sonic sfx
+	WriteCall((void*)0x492f08, FixAISFXSonic4); //fix sonic sfx hurt
 
 	WriteCall((void*)0x4768ea, FixAISFXJump); //Fix Jump Tails & Knuckles AI sound
 
@@ -711,10 +816,13 @@ void AIAudioFixes() {
 	WriteCall((void*)0x48af5f, FixAISFXAmy);
 	WriteCall((void*)0x4877a3, FixAISFXAmy2);
 	WriteCall((void*)0x485023, FixAISFXAmy3);
+	WriteCall((void*)0x48b08b, FixAISFXAmy4);
 	WriteCall((void*)0x489a75, FixAISFXAmy5);
 	WriteCall((void*)0x485844, FixAISFXAmy6);
 	WriteCall((void*)0x48947c, FixAISFXAmy7);
 	WriteCall((void*)0x4857e0, FixAISFXAmy8);
+	
+	WriteCall((void*)0x47fc9e, FixAISFXGamma);
 
 	//fix victory voice result (ai swap)
 

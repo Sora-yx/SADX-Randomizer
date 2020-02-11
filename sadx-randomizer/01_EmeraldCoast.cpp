@@ -31,6 +31,8 @@ void EC_Cam() {
 
 void EC_Layout() {
 
+	CurrentAI = 0;
+
 	if (CurrentAct != 2)
 	{
 		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;

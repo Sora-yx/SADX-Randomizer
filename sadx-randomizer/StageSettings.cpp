@@ -10,26 +10,30 @@
 extern bool TPAmyVersion;
 extern bool FEGammaVersion;
 extern bool RNGStages;
-
+extern bool GetBackRing;
 extern unsigned int TotalCount;
 extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
 extern char GetCustomLayout;
-bool GetBackRing = false;
-int RingCopy = 0; //Backring
+
+
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
 extern ObjectMaster* CurAI;
 bool isCheckpointUsed = false;
+extern ObjectMaster* TriggerOBJ;
+extern ObjectMaster* TriggerHS;
+extern ObjectMaster* ChaoTP;
+ObjectMaster* CurrentCart = nullptr;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission)
-	{
-		GameMode = GameModes_Adventure_Field; //fix game crash
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
 		AddCustomFlag(); //Add a flag for story progression.
-	}
+
+	if (GameMode != GameModes_Trial)
+		GameMode = GameModes_Adventure_Field; //fix game crash
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
@@ -100,6 +104,7 @@ void DisableTimeStuff() {
 
 void ResetValueWhileLevelResult() {
 
+	isCheckpointUsed = false;
 	SonicRand = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
@@ -116,12 +121,19 @@ void ResetValueWhileLevelResult() {
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
+	DeleteObject_(TriggerOBJ);
+	TriggerOBJHS_Delete(TriggerHS);
+	DeleteObject_(ChaoTP);
+	Delete_Cart();
+	fixTCCart();
+
 	return;
 }
 
 void fixTCCart() {
 	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
 	WriteData<1>((void*)0x7983c4, 0x7C);
+	FlagAutoPilotCart = 0;
 
 	return;
 }
@@ -132,7 +144,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_HotShelter)
 		PressedSwitches_Reset();
 
-	if (CurrentLevel == LevelIDs_FinalEgg)
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 0)
 	{
 		camerahax_b();
 		RNGDoor = rand() % 5;
@@ -141,7 +153,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentLevelLayout != 1) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentLevelLayout != 1 || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
 		return;
 
 	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
@@ -151,23 +163,26 @@ void LoadZero() {
 
 void Set_Zero() {
 	//Zero Stuff
-	WriteCall((void*)0x61d169, LoadZero); //Call Zero when not Amy at Twinkle Park.
-	WriteCall((void*)0x59a119, LoadZero); //Call Zero when not Amy at Hot Shelter.
-	WriteCall((void*)0x5ae104, LoadZero); //Call Zero when not Amy at Final Egg.
+	WriteCall((void*)0x61d169, LoadZero); //Call Zero at Twinkle Park.
+	WriteCall((void*)0x59a119, LoadZero); //Call Zero at Hot Shelter.
+	WriteCall((void*)0x5ae104, LoadZero); //Call Zero at Final Egg.
 	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 }
 
-ObjectMaster* CurrentCart = nullptr;
+
 
 void Load_Cart_R() {
 	ObjectMaster* play1 = GetCharacterObject(0);
 
+	if (CurrentLevel == LevelIDs_TwinkleCircuit)
+		return;
+
 	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		if (play1 != nullptr && play1->Data1->CharID <= 2)
+		if (CurrentCharacter <= Characters_Tails)
 			return;
 
 	Delete_Cart();
-
+	FlagAutoPilotCart = 0; //fix that bullshit Twinkle Circuit thing.
 	LoadPVM("OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST);
 	CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
 
@@ -186,6 +201,7 @@ void Load_Cart_R() {
 			CurrentCart->Data1->Scale.z = 1;
 			break;
 		default:
+			CurrentCart->Data1->Scale.z = CurrentCharacter;
 			CurrentCart->Data1->Scale.z = 0;
 			break;
 		}
@@ -200,62 +216,74 @@ void Load_Cart_R() {
 			CurrentCart->Data1->Position = play1->Data1->Position;
 			break;
 		}
+
+		CurrentCart->field_30 = 59731468;
+		CurrentCart->Data1->Unknown = 10;
+		CurrentCart->DeleteSub = LevelItem_Delete; //TEST
+
+		//SetData is not initialized even if it's in the list, so we need to manually assign the cart to it.
+		SETObjData* cartSETData = new SETObjData();
+		CurrentCart->SETData.SETData = cartSETData;
+
+		//Set the data used in Twinkle Park/Twinkle Circuit (should fixes bug hopefully.)
+		CurrentCart->SETData.SETData->LoadCount = 1;
+		CurrentCart->SETData.SETData->f1 = 0;
+		CurrentCart->SETData.SETData->Flags -32767;
+		CurrentCart->SETData.SETData->Distance = 4000100.00;
+
+		SETEntry* cartSETEntry = new SETEntry();
+		CurrentCart->SETData.SETData->SETEntry = cartSETEntry;
+
+		CurrentCart->SETData.SETData->SETEntry->ObjectType = 15;
+		CurrentCart->SETData.SETData->SETEntry->YRotation = -9841;
+		CurrentCart->SETData.SETData->SETEntry->Properties.x = 1.00000000;
+		CurrentCart->SETData.SETData->SETEntry->Properties.y = 1.00000000;
+		CurrentCart->SETData.SETData->SETEntry->Properties.z = 0.000000000;
 	}
 }
+
+/*
+void Cart_Main_r(ObjectMaster* obj);
+Trampoline Cart_Main_t(0x79A9E0, 0x79A9E5, Cart_Main_r);
+void Cart_Main_r(ObjectMaster* obj) {
+	obj->Data1->Action = obj->Data1->Action;
+
+	ObjectFunc(origin, Cart_Main_t.Target());
+	origin(obj);
+}
+*/
 
 void Delete_Cart()
 {
 	if (CurrentCart != nullptr)
+	{
+		CurrentCart->Data1->Action = 12;
 		DeleteObject_(CurrentCart);
+	}
 
-	CurrentCart = nullptr;
-
+	FlagAutoPilotCart = 0;
 	ForcePlayerAction(0, 28);
+	CurrentCart = nullptr;
 
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 			ForcePlayerAction(0, 0x18);
 }
 
-void FixRestart_Cart() //Prevent the game to crash if you restart while being in a custom cart.
+void FixRestart_Stuff() //Prevent the game to crash if you restart while being in a custom cart.
 {
-	if (CurrentLevel == LevelIDs_IceCap)
+	if (CurrentCart != nullptr)
 	{
-		if (CurrentCart != nullptr)
-			DeleteObjectMaster(CurrentCart);
-
-		CurrentCart = nullptr;
-		ForcePlayerAction(0, 28);
+		DeleteObject_(CurrentCart);
 	}
+	FlagAutoPilotCart = 0;
+	CurrentCart = nullptr;
 
-	return; DisableControl();
+	if (Lives == 0)
+		ResetValueWhileLevelResult();
+
+	return DisableControl();
 }
-
-/*
-void ICAct3CutsceneSkip() {
-	ObjectMaster* GetChara = GetCharacterObject(0);
-
-	if (GetChara != nullptr && GetChara->Data1->CharID > 2)
-	{
-		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		{
-			TimeThing = 1;
-			EnableController(0);
-			PlayMusic(MusicIDs_icecap3);
-			IceCapCutsceneSkip = true;
-
-			if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
-			{
-				LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-				CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
-				LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
-				LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
-			}
-		}
-	}
-
-	return;
-}*/
 
 
 
@@ -281,8 +309,20 @@ void EmeraldRadar_R() {
 				}
 				break;
 			case LevelIDs_LostWorld:
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 36) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+				}
+				break;
 			case LevelIDs_SkyDeck:
-
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
+				}
 				break;
 			}
 		}
@@ -291,15 +331,83 @@ void EmeraldRadar_R() {
 	return;
 }
 
-//Add rings every Checkpoint for cart speed.
-void AddRingSandHill() {
-	PlaySound(0x15, 0, 0, 0);
-
-	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > 2)
-		AddRings(10);
-
-	return;
+int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
+	
+	if (TreasureHunting)
+		return Characters_Knuckles;
+	else
+		return CurrentCharacter;
 }
+
+//Set Emerald RNG when not Knuckles
+
+void SetRNGKnuckles() {
+
+	if (TreasureHunting && CurrentCharacter != Characters_Knuckles)
+	{
+		WriteData<1>((void*)0x416F06, 0x08);
+		WriteData<1>((void*)0x4153E1, 0x08);
+		WriteData<1>((void*)0x416f08, 0x74);
+		WriteData<1>((void*)0x4153e3, 0x74);
+	}
+	
+}
+
+//restore original values
+void RestoreRNGValueKnuckles() {
+
+	WriteData<1>((void*)0x416F06, 0x03);
+	WriteData<1>((void*)0x4153E1, 0x03);
+	WriteData<1>((void*)0x416f08, 0x75);
+	WriteData<1>((void*)0x4153e3, 0x75);
+}
+
+/*Trampoline PlayEmeraldGrabVoice_T(0x474f50, 0x474f55, PlayEmeraldGrabVoice_R);
+//Play Custom voice when grabbing an emerald when not Knuckles.
+void PlayEmeraldGrabVoice_R(ObjectMaster* a1) {
+
+	ObjectMaster* CurChar = GetCharacterObject(0);
+	if (CurChar != nullptr)
+	{
+		switch (CurChar->Data1->CharID)
+		{
+		case Characters_Sonic:
+			if (KnuxCheck == 1)
+				PlayVoice_R(1826);
+			if (KnuxCheck == 2)
+				PlayVoice_R(315);
+			break;
+		case Characters_Tails:
+			if (KnuxCheck == 1)
+				PlayVoice_R(1812);
+			if (KnuxCheck == 2)
+				PlayVoice_R(1456);
+			break;
+		case Characters_Amy:
+			if (KnuxCheck == 1)
+				PlayVoice_R(5020);
+			if (KnuxCheck == 2)
+				PlayVoice_R(1737);
+			break;
+		case Characters_Gamma:
+			if (KnuxCheck == 1 || KnuxCheck == 2)
+				PlayVoice_R(5023);
+			break;
+		case Characters_Big:
+			if (KnuxCheck == 1)
+				PlayVoice_R(5021);
+			if (KnuxCheck == 2)
+				PlayVoice_R(5022);
+			break;
+		}
+	}
+
+	ObjectFunc(origin, PlayEmeraldGrabVoice_T.Target());
+	origin(a1);
+}*/
+
+
+
 
 void TwinkleCircuitResult() {
 	TCQuit = 1;
@@ -340,139 +448,6 @@ int AmyCartImprovement() {
 
 }
 
-int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
-	
-	if (TreasureHunting)
-		return Characters_Knuckles;
-	else
-		return CurrentCharacter;
-}
-
-//Set Emerald RNG when not Knuckles
-
-void SetRNGKnuckles() {
-
-	if (TreasureHunting)
-	{
-		WriteData<1>((void*)0x416F06, 0x08);
-		WriteData<1>((void*)0x4153E1, 0x08);
-		WriteData<1>((void*)0x416f08, 0x74);
-		WriteData<1>((void*)0x4153e3, 0x74);
-	}
-	
-}
-
-//restore original values
-void RestoreRNGValueKnuckles() {
-
-	WriteData<1>((void*)0x416F06, 0x03);
-	WriteData<1>((void*)0x4153E1, 0x03);
-	WriteData<1>((void*)0x416f08, 0x75);
-	WriteData<1>((void*)0x4153e3, 0x75);
-
-}
-
-void ResetTime_R() { //Used for Back Ring, restore player's rings.
-
-	RingCopy = Rings;
-
-	if (GetBackRing)
-		if (GetCustomLayout == 3 || GetCustomLayout == 2)
-		{
-			Rings = RingCopy;
-			ChaoSpawn = false;
-			return;
-		}
-
-	return ResetTime();
-}
-
-void BackRing() { //swap capsule
-	SetTextureToCommon();
-
-	if (GetCustomLayout == 3 || GetCustomLayout == 2)
-	{
-		if (CurrentLevel == LevelIDs_TwinklePark)
-			return;
-
-
-		GetBackRing = true;
-		PlayVoice_R(5001); //back ring hit SFX
-
-		ScreenFade_Timer = 50;
-		short sVar1;
-		sVar1 = ScreenFade_RunActive();
-		ChaoSpawn = false;
-		GameMode = GameModes_Adventure_Field;
-
-		GameState = 0xb;
-		return;
-	}
-}
-
-void BackRing2() { //swap Frog/Emerald etc.
-
-	if (GetCustomLayout == 3 || GetCustomLayout == 2)
-	{
-		if (CurrentLevel == LevelIDs_TwinklePark)
-			return;
-
-
-		GetBackRing = true;
-		PlayVoice_R(5001); //back ring hit SFX
-		ScreenFade_Timer = 50;
-		short sVar1;
-		sVar1 = ScreenFade_RunActive();
-		ChaoSpawn = false;
-		GameMode = GameModes_Adventure_Field;
-
-		if (SwapDelay == 150)
-		{
-			GameState = 0xb;
-			return;
-		}
-		
-		
-	}
-	else
-	{
-		return LoadLevelResults();
-	}
-}
-
-void Set_BackRing() {
-	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
-
-	//capsule
-	WriteCall((void*)0x46adc2, BackRing);
-
-	//Ballon
-	WriteCall((void*)0x7a1e25, BackRing);
-
-	//Frog
-	WriteCall((void*)0x4fa2e8, BackRing2);
-
-	//EC + LW
-	WriteCall((void*)0x5b24d8, BackRing2);
-
-	//WV back ring
-	WriteCall((void*)0x04df349, BackRing2);
-	WriteCall((void*)0x4df383, BackRing2);
-	WriteCall((void*)0x4df395, BackRing2);
-
-	//Casino back ring
-	WriteCall((void*)0x5dd051, BackRing2);
-	WriteCall((void*)0x5dd07e, BackRing2);
-	WriteCall((void*)0x5dd08d, BackRing2);
-
-	//Ice Cap back ring
-	WriteCall((void*)0x4ecf61, BackRing2);
-	WriteCall((void*)0x4ecf85, BackRing2);
-	WriteCall((void*)0x4ecf94, BackRing2);
-}
-
-
-
 
 void preventCutscene() {
 	switch (CurrentLevel)
@@ -493,13 +468,22 @@ void preventCutscene() {
 	return GetLevelCutscene();
 }
 
+void FixRestartCheckPoint() {
+
+	//Check if a CP has been grabbed
+	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
+		isCheckpointUsed = true;
+
+	return njColorBlendingMode(0, 8);
+}
 
 
-//Use AnimalPickup function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic.
+//Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic.
 void FixLayout_StartPosition_R() {
 
 	if (!isCheckpointUsed) //don't change player position if a CP has been grabbed.
 	{
+		ObjectMaster* Play1 = GetCharacterObject(0);
 		switch (CurrentLevel)
 		{
 		case LevelIDs_LostWorld:
@@ -517,6 +501,8 @@ void FixLayout_StartPosition_R() {
 		case LevelIDs_WindyValley: //Gamma version
 			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
 				PositionPlayer(0, -10, -102, -10);
+			if (CurrentAct == 2 && Race)
+				PositionPlayer(0, 1093, -158, -1254);
 			break;
 		case LevelIDs_TwinklePark: //Amy version
 			if (CurrentAct == 1 && TPAmyVersion)
@@ -534,14 +520,19 @@ void FixLayout_StartPosition_R() {
 	return;
 }
 
-void FixRestartCheckPoint() {
+void LoadTriggerObject() {
 
-	//Check if a CP has been grabbed
-	if (!isCheckpointUsed && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
-		isCheckpointUsed = true;
+	if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
+		HotShelterSecretSwitch();
 
-	return njColorBlendingMode(0, 8);
+	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 0 && CurrentCharacter == Characters_Big)
+		LoadICTrigger();
 
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentLevelLayout == Mission3_LostChao)
+		LoadChaoTPTrigger();
+
+	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1 && CurrentLevelLayout == Mission3_LostChao)
+		LoadTriggerCasinoChao();
 }
 
 void Stages_Management() {
@@ -553,5 +544,8 @@ void Stages_Management() {
 	Race_Init();
 	WriteCall((void*)0x415a3d, FixLayout_StartPosition_R); //Fix start position with different stage character version.
 	WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
+	
+	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
+	WriteCall((void*)0x41676b, FixRestart_Stuff); //Fix checkpoint after editing player position.
 }
 

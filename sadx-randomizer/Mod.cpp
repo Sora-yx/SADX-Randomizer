@@ -13,13 +13,15 @@ bool RNGStages = true;
 bool Upgrade = true;
 bool Vanilla = false;
 bool RNGVoices = true;
+bool CustomVoices = true;
 bool RNGMusic = true;
-bool ConsistentMusic = false;
 char SonicCD = 0;
 bool Missions = true;
 bool Any = true;
 bool Viper = false;
 extern bool CreditCheck;
+bool isCriticalMode = false;
+bool isChaoGameplayAllowed = false;
 
 //Character settings
 bool AmySpeed = true;
@@ -54,8 +56,9 @@ int StatsTimer = 4000;
 extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
-
+extern bool GetBackRing;
 extern char AIRace;
+extern ObjectMaster* CurrentCart;
 
 extern "C" {
 
@@ -100,8 +103,8 @@ extern "C" {
 
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
+		CustomVoices = config->getBool("SongsStuff", "CustomVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
-		ConsistentMusic = config->getBool("SongsStuff", "ConsistentMusic", false);
 		SonicCD = config->getInt("SongsStuff", "SonicCD", 0);
 
 		//Characters Settings
@@ -119,13 +122,12 @@ extern "C" {
 		SuperSonic = config->getBool("Roster", "SuperSonic", false);
 
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
+		isChaoGameplayAllowed = config->getBool("RosterAI", "isChaoGameplayAllowed", false);
 
 		Viper = config->getBool("Difficulty", "Viper", true);
+		isCriticalMode = config->getBool("Difficulty", "isCriticalMode", false);
 
 		delete config;
-
-		if (!RNGStages && StorySplits != 0)
-			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer", MB_ICONINFORMATION);
 
 		//ban roster check
 		for (int i = 0; i < 8; i++)
@@ -139,6 +141,10 @@ extern "C" {
 			MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONERROR);
 			Exit();
 		}
+
+		if (!RNGStages && StorySplits != 0)
+			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);
+
 
 		if (Seed)
 			srand(Seed);
@@ -198,9 +204,10 @@ extern "C" {
 		}
 	}
 
+	
+
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -231,7 +238,7 @@ extern "C" {
 		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
 			CustomFlagCheck(); //When loading, Check flag and credits
 
-		if (GameState == 15 && (GameMode == 5 || GameMode == 4|| GameMode ==  9))
+		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9))
 		{
 			//Fix UI issue
 			HudDisplayScoreOrTimer();
@@ -252,6 +259,8 @@ extern "C" {
 			{
 				Chao_OnFrame();
 			}
+
+			LoadTriggerObject();
 		}
 	}
 
@@ -264,10 +273,6 @@ extern "C" {
 				//fix Casinopolis SFX when using wrong characters
 			case LevelIDs_Casinopolis:
 				FixCharacterSFX();
-				break;
-			case LevelIDs_HotShelter:
-				if (CurrentAct == 0)
-					HotShelterSecretSwitch();
 				break;
 			case LevelIDs_Zero:
 				LoadSoundList(46);

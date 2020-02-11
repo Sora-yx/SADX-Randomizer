@@ -8,3 +8,5 @@ void FixLayout_StartPosition_R();
 void FixRestartCheckPoint();
 
 ObjectFunc(EggHornet_Load, 0x572230);
+void __cdecl CheckLoadBalloon_r(ObjectMaster* a1);
+void __cdecl CheckLoadFroggy_r(ObjectMaster* a1);
