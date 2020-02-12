@@ -1,7 +1,7 @@
 #pragma once
 
 void SetGammaTimer();  //force to 6 min instead of 3
-void BossesFixes();
+void GammaBossesFixes();
 void BigWeightHook(); //force to 2000g
 void BackRingLoadCheck();
 

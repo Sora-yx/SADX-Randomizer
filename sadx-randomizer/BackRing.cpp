@@ -76,8 +76,7 @@ void BackRingObj_Display(ObjectMaster* obj) {
 		njTranslateV(nullptr, &obj->Data1->Position);
 		int yrot = obj->Data1->Rotation.y;
 		if (yrot)
-			njRotateY(nullptr, yrot);
-		
+			njRotateY(nullptr, yrot);		
 		sub_408530(&object_GoalRing);
 	
 		njPopMatrix(1);
@@ -177,11 +176,13 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
+		a1->Data1->Rotation.z = 15000;
+		a1->Data1->Position.y += 28;
+		a1->Data1->Rotation.x = 0xC000;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
 		return;
 	}
-
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -196,8 +197,11 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
+		a1->Data1->Rotation.z = 15000;
+		a1->Data1->Position.y += 32;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
 		return;
 	}
 
@@ -236,9 +240,10 @@ void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 28;
+		a1->Data1->Position.y += 32;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
 
 		return;
 	}
@@ -276,9 +281,10 @@ void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1) {
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 28;
+		a1->Data1->Position.y += 32;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
 
 		return;
 	}
@@ -316,9 +322,10 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 28;
+		a1->Data1->Position.y += 32;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
 
 		return;
 	}

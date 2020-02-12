@@ -13,7 +13,6 @@ bool ArePvpLoaded = false;
 extern int chaoPB;
 bool ChaoSpawn = false;
 
-extern bool TPAmyVersion;
 
 ObjectMaster* ChaoTP = nullptr;
 
@@ -187,7 +186,7 @@ void Chao_CrySound() {
 }
 
 void TriggerObj(ObjectMaster* obj) {
-	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 80))
+	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 50))
 		Chao_CrySound();
 }
 
@@ -259,6 +258,12 @@ void Chao_OnFrame() {
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		if (CurrentAct == 2)
+		{
+			pos = { 6388, 0.8, 1116 };
+			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
 		break;
 	case LevelIDs_WindyValley:
 		if (CurrentAct == 2)
@@ -291,10 +296,16 @@ void Chao_OnFrame() {
 		}
 		break;
 	case LevelIDs_TwinklePark:
-		if (CurrentAct == 1 && !TPAmyVersion)
+		if (CurrentAct == 1 && !TPAmyVersion && !TPBigVersion)
 		{
 			pos = { 520, 1330, 1630 };
 			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
+		if (CurrentAct == 1 && TPBigVersion && !TPAmyVersion)
+		{
+			pos = { 604, 338, 237 };
+			Yrot = 16000;
 			ChaoSpawn = true;
 		}
 		if (CurrentAct == 2 && TPAmyVersion)

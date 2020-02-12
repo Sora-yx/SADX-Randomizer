@@ -145,7 +145,6 @@ extern "C" {
 		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);
 
-
 		if (Seed)
 			srand(Seed);
 		else
@@ -251,14 +250,15 @@ extern "C" {
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
 				AISwitch();
 
+			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_X && SwapDelay >= 150 && ControlEnabled == 1)
+				Delete_Cart();
+
 			//Rings Mission 2 and Treasure Hunting Check
 			MissionResultCheck();
 
 			//Chao Mission 3 Check
 			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMission == LostChaoCard)
-			{
 				Chao_OnFrame();
-			}
 
 			LoadTriggerObject();
 		}

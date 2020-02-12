@@ -31,12 +31,10 @@ void EC_Cam() {
 
 void EC_Layout() {
 
-	CurrentAI = 0;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
 	if (CurrentAct != 2)
 	{
-		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
-
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
@@ -96,8 +94,6 @@ void EC_Layout() {
 
 	if (CurrentAct == 2)
 	{
-		CurrentLevelLayout = Mission1_Variation;
-
 		LoadSetFile(0, "0100");
 		LoadSetFile(1, "0101");
 	}

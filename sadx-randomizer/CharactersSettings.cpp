@@ -22,19 +22,12 @@ extern int CurrentMission;
 extern bool Race;
 
 void character_settings_onFrames() {
-	if (CurrentLevel != 38 || (CurrentLevel != 8 && CurrentAct != 2) || CurrentLevel != 0)
+	if (CurrentLevel != 0)
 	{
 		if (AmySpeed)
 			PhysicsArray[Characters_Amy].MaxAccel = 5;
 		if (BigSpeed)
 			PhysicsArray[Characters_Big].MaxAccel = 5;
-	}
-
-	if (CurrentLevel == 8 && CurrentAct == 2 && IceCapCutsceneSkip)
-	{
-		CharObj2Ptrs[0]->PhysicsData.FloorGrip = 10;
-		PhysicsArray[Characters_Amy].MaxAccel = 10;
-		PhysicsArray[Characters_Big].MaxAccel = 10;
 	}
 
 	return;
@@ -44,7 +37,7 @@ int SetAmyWinPose() {
 	switch (CurrentCharacter)
 	{
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission <= 10 && CurrentMission != 3 || CurrentLevelLayout >= 2)
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission <= 9 && CurrentMission != 3 || CurrentLevelLayout >= 2)
 			return 42;
 		else
 			return 32;
@@ -118,6 +111,7 @@ void SuperAuraStuff() {
 }
 
 //Initialize Super Sonic  (Credit: SonicFreak94).
+
 static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
 {
 	if (TransfoCount < 1)
@@ -135,24 +129,46 @@ static void SuperSonicManager_Load()
 int SSLevel[7]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter };
 
-
+extern bool TPAmyVersion;
+extern bool SHTailsVersion;
+extern bool TreasureHunting;
 
 int GetSSLevelBanned() {
 
-	for (int i = 0; i < sizeof(level); i++)
+	for (int i = 0; i < sizeof(SSLevel); i++)
 	{
 		if (CurrentLevel == SSLevel[i])
 		{
-			if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct != 0)
-				return false;
-
-			if (CurrentLevel == LevelIDs_SkyDeck && CurrentAct != 0)
-				return false;
-
-			if (CurrentLevel == LevelIDs_HotShelter && CurrentAct != 0)
-				return false;
-
-			return true;
+			switch (CurrentLevel)
+			{
+			case LevelIDs_TwinklePark:
+				if (CurrentAct == 1 && !TPAmyVersion || CurrentAct == 0)
+					return true;
+				else
+					return false;
+				break;
+			case LevelIDs_SpeedHighway:
+				if (CurrentAct == 0 && SHTailsVersion)
+					return true;
+				else
+					return false;
+				break;
+			case LevelIDs_Casinopolis:
+				if (CurrentAct == 0 && TreasureHunting)
+					return false;
+				else
+					return true;
+				break;
+			case LevelIDs_HotShelter:
+				if (CurrentAct < 2)
+					return true;
+				else
+					return false;
+				break;
+			default:
+				return true;
+				break;
+			}
 		}
 	}
 
@@ -211,16 +227,16 @@ void SuperSonic_TransformationCheck() {
 }
 
 
-
 //Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes.
 
 void CallStuffWhenLevelStart() {
 
 	ObjectMaster* P1 = GetCharacterObject(0);
+	char CurChara = P1->Data1->CharID;
 	TimeThing = 1; //activate the timer of the stage.
 	GetBackRing = false;
 
-	if (P1->Data1->CharID != Characters_Sonic)
+	if (CurChara != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
@@ -236,8 +252,8 @@ void CallStuffWhenLevelStart() {
 	if (CurrentLevel == LevelIDs_E101)
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && P1->Data1->CharID >= Characters_Gamma ||
-		(P1->Data1->CharID > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2))
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
+		(CurChara > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2))
 		Load_Cart_R();
 }
 
@@ -332,7 +348,6 @@ void FixRadarSFX() {
 		PlaySound(0x314, 0, 0, 0);
 
 	return;
-
 }
 
 void FixEmeraldGetSFX() {
@@ -343,10 +358,9 @@ void FixEmeraldGetSFX() {
 		PlaySound(0x313, 0, 0, 0);
 
 	return;
-
 }
 
-void FixTikalSFX() {
+void FixTikalHintSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)
 		PlayVoice_R(6002);
@@ -354,7 +368,6 @@ void FixTikalSFX() {
 		PlaySound(0x316, 0, 0, 0);
 
 	return;
-
 }
 
 void FixCharacterSFX() {
@@ -438,14 +451,12 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
-
-
 HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
 
 void Characters_Management() {
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 
-	/*if (SSMod)
+	if (SSMod)
 		WriteJump(reinterpret_cast<void*>(0x004496E1), SomethingAboutWater2); //Cancel Super Sonic Float, restore original code*/ //seem like it works, but need more test for now.
 
 	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
@@ -475,7 +486,7 @@ void Characters_Management() {
 	WriteData<6>((void*)0x4a31f0, 0x90u); // Display the emerald grab when not Knuckles.
 	WriteCall((void*)0x4762a6, FixRadarSFX);
 	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
-	WriteCall((void*)0x7a907f, FixTikalSFX);
+	WriteCall((void*)0x7a907f, FixTikalHintSFX);
 	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
 	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
@@ -486,13 +497,13 @@ void Characters_Management() {
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
-	WriteCall((void*)0x4230a0, BossesFixes); //allow gamma to target some boss (Called before boss fight.)
+	WriteCall((void*)0x4230a0, GammaBossesFixes); //allow gamma to target some boss (Called before boss fight.)
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
 	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.	
-	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.
+	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart); 
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 		//Amy Stuff

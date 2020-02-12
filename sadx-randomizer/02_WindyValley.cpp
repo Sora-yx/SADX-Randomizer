@@ -22,8 +22,6 @@ void Cam_WV() {
 }
 
 
-
-
 void WindyValley_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;

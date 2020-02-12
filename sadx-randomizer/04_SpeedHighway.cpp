@@ -6,6 +6,8 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Speed Highway\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
+bool SHTailsVersion = false;
+
 void SHAct2Position() {
 	if (CurrentCharacter != Characters_Sonic)
 		return PositionPlayer(0, 10, -10000, 10);
@@ -167,6 +169,7 @@ void SpeedHighway_Layout() {
 			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				Race = true;
+				SHTailsVersion = true;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}
@@ -187,6 +190,7 @@ void SpeedHighway_Layout() {
 			else
 			{
 				Race = true;
+				SHTailsVersion = true;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}
@@ -195,6 +199,7 @@ void SpeedHighway_Layout() {
 			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				Race = true;
+				SHTailsVersion = true;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}
@@ -208,6 +213,7 @@ void SpeedHighway_Layout() {
 			if (CurrentCharacter == Characters_Sonic && !Vanilla)
 			{
 				Race = true;
+				SHTailsVersion = true;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}

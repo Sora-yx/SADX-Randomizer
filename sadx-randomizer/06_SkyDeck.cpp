@@ -35,7 +35,6 @@ int Switch_Gravity() {
 void SkyDeck_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
-
 	if (CurrentAct == 0)
 	{
 		switch (CurrentLevelLayout)

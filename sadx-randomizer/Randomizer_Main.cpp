@@ -434,6 +434,7 @@ void ResetStatsValues() {
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
+	TransfoCount = 0;
 	CurrentLevelLayout = 0;
 	CurrentMission = 0;
 	GetCustomLayout = 0;

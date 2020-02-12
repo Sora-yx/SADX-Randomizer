@@ -53,12 +53,16 @@ void LoadStageMissionImage_r() {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_EmeraldCoast:
-			if (CurrentAct == 2 || CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
+			if (CurrentAct == 2 && CurrentLevelLayout <= Mission1_Variation || CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
 				CurrentMission = FroggyCard; //Catch Froggy if Big or Gamma layout.
 			break;	
 		case LevelIDs_WindyValley:
 			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0 && (CurrentCharacter == Characters_Gamma))
 				CurrentMission = E103Card;
+			break;
+		case LevelIDs_TwinklePark:
+			if (CurrentLevelLayout == Mission1 && CurrentAct == 1 && TPBigVersion)
+				CurrentMission = FroggyCard;
 			break;
 		case LevelIDs_LostWorld:
 			if (!CurrentLevelLayout)
@@ -95,7 +99,7 @@ void LoadStageMissionImage_r() {
 				CurrentMission = EmeraldKnuxCard;
 			break;
 		case LevelIDs_IceCap:
-			if (CurrentAct == 3)
+			if (CurrentAct == 3 && CurrentLevelLayout <= Mission1_Variation)
 				CurrentMission = FroggyCard;  //Froggy
 			break;
 		case LevelIDs_Casinopolis:
@@ -234,7 +238,6 @@ int LoadTitleCardTexture_r(int minDispTime) {
 }
 
 
-
 void TitleCard_Init() {
 	WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
 	WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
@@ -246,6 +249,7 @@ void TitleCard_Init() {
 
 extern bool isPlayerInWaterSlide;
 ObjectMaster* test = nullptr;
+extern ObjectMaster* CurrentCart;
 
 void MissionResultCheck() {
 
@@ -256,23 +260,29 @@ void MissionResultCheck() {
 			ObjectMaster* obj = GetCharacterObject(0);
 			EntityData1* ent;
 			ent = obj->Data1;
-			
-			if ((ent->Status & Status_Ground) == Status_Ground && !isPlayerInWaterSlide && TimeThing != 0)
+
+			if ((ent->Status & Status_Ground) == Status_Ground && (!isPlayerInWaterSlide && TimeThing != 0))
 			{
-		
-				ent->InvulnerableTime = 0;
-				if (CurrentLevel != LevelIDs_TwinklePark && CurrentAct != 0)
-					obj->Data1->Action = 0; //fix potential crash
-				obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-				
-				if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
 				{
-					obj->Data1->Action = 1; //fix victory pose
 					LoadLevelResults();
+					return;
+				}
+				else
+				{
+					ent->InvulnerableTime = 0;
+					obj->Data1->Action = 0; //fix potential crash
+					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+					{
+						if (!SonicRand)
+							obj->Data1->Action = 1; //fix victory pose
+						LoadLevelResults();
+					}
 				}
 			}
 		}
 	}
-
+	
 	return;
 }

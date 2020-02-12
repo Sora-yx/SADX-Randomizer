@@ -7,12 +7,24 @@
 //Random Act function
 
 bool TPAmyVersion = false;
+bool TPBigVersion = false;
 
 void FixRollerCoaster() {
 	ObjectMaster* obj = GetCharacterObject(0);
 	if (obj != nullptr)
 		obj->Data1->Action = 28; //force the character to leave the RC
 }
+
+void FixRCCharacterPosition() {
+	ObjectMaster* obj = GetCharacterObject(0);
+
+	if (obj != nullptr)
+		ForcePlayerAction(0, 18);
+
+	PlaySound(0x4d,0,0,0);
+	return;
+}
+
 
 
 void TP_CAM() {
@@ -22,7 +34,7 @@ void TP_CAM() {
 	if (CurrentAct == 0)
 		LoadCamFile(1, "0301");
 		
-	if (CurrentAct == 1 && CurrentLevelLayout != Mission1)
+	if (CurrentAct == 1 && TPAmyVersion)
 		LoadCamFile(1, "0305");
 	else
 		LoadCamFile(1, "0301");
@@ -37,8 +49,9 @@ void TwinklePark_Layout() {
 
 	fixTCCart();
 
-	CurrentLevelLayout = 3; //randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 	TPAmyVersion = false;
+	TPBigVersion = false;
 
 	LoadSetFile(0, "0300");
 
@@ -69,18 +82,55 @@ void TwinklePark_Layout() {
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
+			if (CurrentCharacter == Characters_Big && !Vanilla)
+			{
+				LoadSetFile(1, "0305"); //Amy TP version
+				CurrentLevelLayout = Mission1_Variation;
+				TPAmyVersion = true;
+				TPBigVersion = false;
+				break;
+			}
+			else
+			{
+				LoadSetFile(1, "0306"); //Big TP version
+				TPBigVersion = true;
+				TPAmyVersion = false;
+			}
+			break;
 		case Mission1_Variation:
 		default:
 			LoadSetFile(1, "0305"); //Amy TP version
 			CurrentLevelLayout = Mission1_Variation;
+			TPAmyVersion = true;
+			TPBigVersion = false;
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
-			LoadSetFile(1, "0305"); //Amy TP version
+			if (CurrentCharacter == Characters_Big && !Vanilla)
+			{
+				LoadSetFile(1, "0305"); //Amy TP version
+				TPAmyVersion = true;
+				TPBigVersion = false;
+				break;
+			}
+			else
+			{
+				bool RNGLayout = rand() % 2;
+				if (RNGLayout)
+				{
+					LoadSetFile(1, "0305"); //Amy TP version
+					TPAmyVersion = true;
+					TPBigVersion = false;
+				}
+				else
+				{
+					LoadSetFile(1, "0306"); //Big TP version
+					TPAmyVersion = false;
+					TPBigVersion = true;
+				}
+			}
 			break;
 		}
-
-		TPAmyVersion = true;
 	}
 
 	LoadSetFile(2, "0302");
@@ -96,8 +146,10 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
 	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
 	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
+	
+	
+	WriteCall((void*)0x61dd82, FixRCCharacterPosition); 
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
-	//WriteData<1>((void*)0x798236, 0x03);
 
 	WriteData<5>((void*)0x422c4a, 0x90);
 	WriteData<5>((void*)0x422c59, 0x90);
@@ -116,6 +168,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 
 	helperFunctions.ReplaceFile("system\\SET0303S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Amy.bin");
+	helperFunctions.ReplaceFile("system\\SET0306S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300S.BIN", "system\\cam\\CAM0300S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");
@@ -129,6 +182,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0300M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act1.bin");
 	helperFunctions.ReplaceFile("system\\SET0301M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act3.bin");
+	helperFunctions.ReplaceFile("system\\SET0306M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0303M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Amy.bin");
@@ -146,8 +200,10 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0301K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0302K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act3.bin");
 
+
 	helperFunctions.ReplaceFile("system\\SET0303K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Amy.bin");
+	helperFunctions.ReplaceFile("system\\SET0306K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300K.BIN", "system\\cam\\CAM0300K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301K.BIN", "system\\cam\\CAM0301K.bin");
@@ -164,7 +220,8 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0302A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act3.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0303A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0304A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-ActSpecial.bin"); //not ready yet
+	//helperFunctions.ReplaceFile("system\\SET0304A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-ActSpecial.bin"); //not ready yet
+	helperFunctions.ReplaceFile("system\\SET0306A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300A.BIN", "system\\cam\\CAM0300A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301A.BIN", "system\\cam\\CAM0301A.bin");
@@ -181,6 +238,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 
 	helperFunctions.ReplaceFile("system\\SET0303B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Amy.bin");
+	helperFunctions.ReplaceFile("system\\SET0306B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Big.bin");
 
 
 	helperFunctions.ReplaceFile("system\\CAM0300B.BIN", "system\\cam\\CAM0300B.bin");
@@ -198,13 +256,14 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 
 	helperFunctions.ReplaceFile("system\\SET0303E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Chao.bin");
 	helperFunctions.ReplaceFile("system\\SET0305E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Amy.bin");
+	helperFunctions.ReplaceFile("system\\SET0306E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Big.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0300E.BIN", "system\\cam\\CAM0300E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0301E.BIN", "system\\cam\\CAM0301E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302E.BIN", "system\\cam\\CAM0302E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0305E.BIN", "system\\cam\\CAM0305E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, TP2E_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Gamma, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, TP3_StartPositions[0]);
 }
 
@@ -306,11 +365,30 @@ ObjectListEntry TwinkleParkObjectList_list[] = {
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
 };
 
+PVMEntry TwinkleParkObjectTextures[] = {
+	{ "OBJ_TWINKLE", (TexList*)0x279BF68 },
+	{ "E_BUYON", (TexList*)0x38E23E4 },
+	{ "E_AMENBO", (TexList*)0x38CD5E0 },
+	{ "BG_SHAREOBJ", (TexList*)0x38A6BE8 },
+	{ "E_SARU", (TexList*)0x962560 },
+	{ "KOAR", (TexList*)0x9359B4 },
+	{ "WARA", (TexList*)0x93852C },
+	{ "USA", (TexList*)0x93CF74 },
+	{ "ZOU", (TexList*)0x94160C },
+	{ "BANB", (TexList*)0x93A8BC },
+	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ "E_BOMB", (TexList*)0x96B464 },
+	{ "big_kaeru", (TexList*)0x91D780 },
+	{ 0 }
+};
+
 ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
+
 
 
 
 void __cdecl TPObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_TwinklePark * 8 + 1] = &TwinkleParkObjectList;
+	TexLists_Obj[LevelIDs_TwinklePark] = TwinkleParkObjectTextures;
 }

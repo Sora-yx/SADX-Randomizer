@@ -36,9 +36,11 @@ void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secr
 	return;
 }
 
-void TriggerOBJHS_Delete(ObjectMaster* obj)
+void TriggerOBJHS_Delete()
 {
-	DeleteObject_(TriggerHS);
+	if (TriggerHS != nullptr)
+		DeleteObject_(TriggerHS);
+
 	TriggerHS = nullptr;
 
 }
@@ -66,7 +68,6 @@ void LoadTriggerObjHS() {
 		TriggerHS = LoadObject(LoadObj_Data1, 2, TriggerObjHS_Main);
 		TriggerHS->Data1->Position = { 750, -4.9, -650 };
 		TriggerHS->Data1->Scale.x = 15;
-		TriggerHS->DeleteSub = TriggerOBJHS_Delete;
 	}
 }
 

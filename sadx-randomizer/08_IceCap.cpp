@@ -33,7 +33,6 @@ void DisableController_R() {
 			return EnableController(0);
 		}
 	}
-
 	return DisableController(0);
 }
 
@@ -42,9 +41,8 @@ void IC_Layout() {
 
 	if (CurrentAct != 3)
 	{
-		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails)
+		if (CurrentCharacter > Characters_Tails)
 		{
-			CurrentAI = 2;
 			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
 			WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
 			WriteCall((void*)0x4e95dc, Delete_Cart); //Fix Delete Cart at the end of Ice Cap
@@ -65,10 +63,8 @@ void IC_Layout() {
 	}
 
 
-	if (CurrentAct == 3)
-		CurrentLevelLayout = Mission1;
-	else
-		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
 
 	LoadSetFile(0, "0800"); //M1
 

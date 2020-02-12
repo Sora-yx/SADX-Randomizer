@@ -7,7 +7,7 @@
 #include "Trampoline.h"
 #include "StageSettings.h"
 
-extern bool TPAmyVersion;
+
 extern bool FEGammaVersion;
 extern bool RNGStages;
 extern bool GetBackRing;
@@ -122,7 +122,7 @@ void ResetValueWhileLevelResult() {
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
 	DeleteObject_(TriggerOBJ);
-	TriggerOBJHS_Delete(TriggerHS);
+	TriggerOBJHS_Delete();
 	DeleteObject_(ChaoTP);
 	Delete_Cart();
 	fixTCCart();
@@ -190,18 +190,30 @@ void Load_Cart_R() {
 	{
 		CurrentCart->Data1->Scale.y = 1; //Cart will spawn empty.
 
-		switch (CurrentCharacter)
+		switch (CurrentCharacter) //Set Color and Size depending on character
 		{
 		case Characters_Gamma:
-			CurrentCart->Data1->Scale.x = 0;
+			CurrentCart->Data1->Scale.x = BlackColor;
 			CurrentCart->Data1->Scale.z = 2;
 			break;
 		case Characters_Big:
-			CurrentCart->Data1->Scale.x = 2;
+			CurrentCart->Data1->Scale.x = GreenColor;
 			CurrentCart->Data1->Scale.z = 1;
 			break;
+		case Characters_Tails:
+			CurrentCart->Data1->Scale.x = OrangeColor;
+			CurrentCart->Data1->Scale.z = 0;
+			break;
+		case Characters_Knuckles:
+			CurrentCart->Data1->Scale.x = RedColor;
+			CurrentCart->Data1->Scale.z = 0;
+			break;
+		case Characters_Amy:
+			CurrentCart->Data1->Scale.x = PurpleColor;
+			CurrentCart->Data1->Scale.z = 0;
+			break;
 		default:
-			CurrentCart->Data1->Scale.z = CurrentCharacter;
+			CurrentCart->Data1->Scale.x = BlueColor;
 			CurrentCart->Data1->Scale.z = 0;
 			break;
 		}
@@ -242,7 +254,7 @@ void Load_Cart_R() {
 	}
 }
 
-/*
+
 void Cart_Main_r(ObjectMaster* obj);
 Trampoline Cart_Main_t(0x79A9E0, 0x79A9E5, Cart_Main_r);
 void Cart_Main_r(ObjectMaster* obj) {
@@ -251,41 +263,59 @@ void Cart_Main_r(ObjectMaster* obj) {
 	ObjectFunc(origin, Cart_Main_t.Target());
 	origin(obj);
 }
-*/
+
 
 void Delete_Cart()
 {
-	if (CurrentCart != nullptr)
-	{
-		CurrentCart->Data1->Action = 12;
-		DeleteObject_(CurrentCart);
-	}
-
-	FlagAutoPilotCart = 0;
-	ForcePlayerAction(0, 28);
-	CurrentCart = nullptr;
 
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 			ForcePlayerAction(0, 0x18);
+
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
+		return;
+
+	if (CurrentCart != nullptr)
+		DeleteObject_(CurrentCart);
+	else
+		return;
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+	if (P1 != nullptr)
+	{
+		P1->Data1->InvulnerableTime = 0;
+		if (++P1->Data1->InvulnerableTime == 1 && P1->Data1->Action >= 42) //wait 1 frame before removing the cart, this fix Knuckles Action.
+			ForcePlayerAction(0, 28);
+	}
+
+	FlagAutoPilotCart = 0;
+	CurrentCart = nullptr;
 }
 
 void FixRestart_Stuff() //Prevent the game to crash if you restart while being in a custom cart.
 {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+
 	if (CurrentCart != nullptr)
 	{
 		DeleteObject_(CurrentCart);
 	}
+
 	FlagAutoPilotCart = 0;
 	CurrentCart = nullptr;
 
-	if (Lives == 0)
-		ResetValueWhileLevelResult();
+	if (P1 != nullptr)
+		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
+
+		DeleteObject_(TriggerOBJ);
+		TriggerOBJHS_Delete();
+		DeleteObject_(ChaoTP);
+		Delete_Cart();
+		fixTCCart();
 
 	return DisableControl();
 }
-
-
 
 void EmeraldRadar_R() {
 
@@ -407,8 +437,6 @@ void PlayEmeraldGrabVoice_R(ObjectMaster* a1) {
 }*/
 
 
-
-
 void TwinkleCircuitResult() {
 	TCQuit = 1;
 	DisablePause();
@@ -429,8 +457,7 @@ void TwinkleCircuitResult() {
 }
 
 
-
-void BossesFixes() {
+void GammaBossesFixes() {
 
 	if (CurrentCharacter == Characters_Gamma && CurrentLevel == LevelIDs_EggHornet)
 		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
@@ -439,15 +466,12 @@ void BossesFixes() {
 }
 
 
-
 int AmyCartImprovement() {
 	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
 		return Characters_Sonic;
 	else
 		return CurrentCharacter;
-
 }
-
 
 void preventCutscene() {
 	switch (CurrentLevel)
@@ -505,8 +529,10 @@ void FixLayout_StartPosition_R() {
 				PositionPlayer(0, 1093, -158, -1254);
 			break;
 		case LevelIDs_TwinklePark: //Amy version
-			if (CurrentAct == 1 && TPAmyVersion)
+			if (CurrentAct == 1 && TPAmyVersion && !TPBigVersion)
 				PositionPlayer(0, 723, 70, -358);
+			if (CurrentAct == 1 && TPBigVersion && !TPAmyVersion)
+				PositionPlayer(0, 230, 80, -538);
 			break;
 		case LevelIDs_FinalEgg: //Gamma version
 			if (CurrentAct == 2 && FEGammaVersion)
@@ -533,6 +559,9 @@ void LoadTriggerObject() {
 
 	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1 && CurrentLevelLayout == Mission3_LostChao)
 		LoadTriggerCasinoChao();
+
+	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
+		LoadRemoveCart();
 }
 
 void Stages_Management() {
@@ -546,6 +575,6 @@ void Stages_Management() {
 	WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
 	
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
-	WriteCall((void*)0x41676b, FixRestart_Stuff); //Fix checkpoint after editing player position.
+	WriteCall((void*)0x41676b, FixRestart_Stuff); 
 }
 

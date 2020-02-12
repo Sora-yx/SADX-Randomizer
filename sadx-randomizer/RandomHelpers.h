@@ -131,6 +131,10 @@ extern int CurrentAI;
 extern bool isAIActive;
 extern bool isAIAllowed;
 
+extern bool TPAmyVersion;
+extern bool TPBigVersion;
+extern bool SHTailsVersion;
+
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -338,7 +342,8 @@ void LoadChaoTPTrigger();
 void ChaoTPTrigger(ObjectMaster* a1);
 void LoadTriggerCasinoChao();
 void TriggerCasinoChao_Main(ObjectMaster* obj);
-void TriggerOBJHS_Delete(ObjectMaster* obj);
+void TriggerOBJHS_Delete();
+void LoadRemoveCart();
 VoidFunc(PauseQuitThing2, 0x413f70);
 VoidFunc(FUN_00424830, 0x424830);
 void SoftReset_R();
