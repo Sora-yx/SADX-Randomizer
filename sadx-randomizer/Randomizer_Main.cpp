@@ -54,161 +54,6 @@ int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x
 
 struct RandomizedEntry randomizedSets[40];
 
-short randomacts(RandomizedEntry entry) {
-	//Set up act rng.
-	int actHS[2] = { 0, 2 };
-	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
-	int act1[3] = { 0, 0, 2 };
-	int actIC[2] = { 0, 3 };
-
-	switch (entry.level)
-	{
-	case LevelIDs_EmeraldCoast:
-		if (entry.character == Characters_Big && !Vanilla)
-			return 0;
-		else
-			return act1[rand() % 3];
-		break;
-	case LevelIDs_WindyValley:
-		if (entry.character == Characters_Big || entry.character == Characters_Tails)
-			return 0;
-		else
-			return actHS[rand() % 2];
-		break;
-	case LevelIDs_TwinklePark:
-		if (entry.character == Characters_Sonic && !Vanilla)
-			return 1;
-		if (entry.character == Characters_Amy && !Vanilla)
-			return 0;
-		else
-			return rand() % 2;
-		break;
-	case LevelIDs_SpeedHighway:
-		if (entry.character == Characters_Knuckles && !Vanilla)
-			return 0;
-		else
-			return actHS[rand() % 2];
-		break;
-	case LevelIDs_RedMountain:
-		if (entry.character == Characters_Sonic && !Vanilla)
-			return actHS[rand() % 2];
-		if (entry.character == Characters_Gamma && !Vanilla)
-			return actHS[rand() % 2];
-		if (entry.character != Characters_Gamma && entry.character != Characters_Sonic || Vanilla)
-			return rand() % 3;
-		break;
-	case LevelIDs_SkyDeck:
-		if (entry.character == Characters_Knuckles && !Vanilla)
-			return 0;
-		else
-			return actHS[rand() % 2];
-		break;
-	case LevelIDs_LostWorld:
-		if (entry.character == Characters_Knuckles && !Vanilla)
-			return 0;
-		else if (entry.character == Characters_Sonic && !Vanilla)
-			return 1;
-		else
-			return rand() % 2;
-		break;
-	case LevelIDs_IceCap:
-		if (entry.character == Characters_Big && !Vanilla)
-			return 0;
-		if (entry.character == Characters_Sonic && !Vanilla)
-			return 3;
-		else
-			return actIC[rand() % 2];
-		break;
-	case LevelIDs_Casinopolis:
-		if (entry.character == Characters_Tails || entry.character == Characters_Big)
-			return 0;
-		else
-			return act0[rand() % 3];
-		break;
-	case LevelIDs_FinalEgg:
-		if (entry.character == Characters_Gamma && !Vanilla)
-			return 0;
-		else
-			return actHS[rand() % 2];
-		break;
-	case LevelIDs_HotShelter:
-		if (!Vanilla && entry.character == Characters_Gamma)
-			return 0;
-		else
-			return actHS[rand() % 2];
-		break;
-	case LevelIDs_Chaos6:
-			return rand() % 2;
-		break;
-	case LevelIDs_TwinkleCircuit:
-		if (Vanilla)
-			return rand() % 5;
-		else
-			return rand() % 5 + 1;
-		break;
-	default:
-		return 0;
-		break;
-	}
-}
-
-short prev_mission = -1;
-
-short randomLayout(RandomizedEntry entry) {
-	short cur_mission = -1;
-
-	do {
-		if (Missions) //SA2 missions 100 Rings, Lost Chao (also SADX Tails Race and Knux Treasure Hunting)
-			cur_mission = rand() % 4;
-		else
-			cur_mission = rand() % 2;
-	} while (prev_mission == cur_mission);
-
-	prev_mission = cur_mission;
-	return cur_mission;
-}
-
-int8_t prev_char = -1;
-
-uint8_t getRandomCharacter(bool allow_duplicate) {
-	int8_t cur_char = -1;
-	size_t char_count = sizeof(character) / sizeof(character[0]);
-
-	cur_char = character[rand() % char_count];
-
-	while (cur_char == prev_char && ban < 5 || banCharacter[cur_char])
-	{
-		cur_char = character[rand() % char_count];
-	}
-
-	prev_char = cur_char;
-	return cur_char;
-}
-
-int8_t prev_AI = -1;
-
-//AI following you
-short getRandomAI(RandomizedEntry entry) {
-	int8_t cur_AI = -1;
-	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
-
-	do {
-		cur_AI = AIArray[rand() % ai_count];
-	} while (cur_AI == prev_AI);
-
-	prev_AI = cur_AI;
-	return cur_AI;
-}
-
-short getRandomRaceAI(RandomizedEntry entry) {
-	int8_t cur_RaceAI = -1;
-	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
-
-	cur_RaceAI = AIRaceArray[rand() % ai_Racecount];
-
-	return cur_RaceAI;
-}
-
 short prev_stage = -1;
 
 short getRandomStage(uint8_t char_id, bool AllowVanilla) {
@@ -300,6 +145,167 @@ bool isBossStage(short stage_id)
 {
 	return stage_id > 14 && stage_id < 26;
 }
+
+short randomacts(RandomizedEntry entry) {
+	//Set up act rng.
+	int actHS[2] = { 0, 2 };
+	int act0[3] = { 0, 0, 1 }; //increasing chance to get act 1
+	int act1[3] = { 0, 0, 2 };
+	int actIC[2] = { 0, 3 };
+	int actIC2[2] = { 2, 3 };
+	int actIC3[3] = { 0, 2, 3 };
+
+	switch (entry.level)
+	{
+	case LevelIDs_EmeraldCoast:
+		if (entry.character == Characters_Big && !Vanilla)
+			return 0;
+		else
+			return act1[rand() % 3];
+		break;
+	case LevelIDs_WindyValley:
+		if (entry.character == Characters_Tails && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_TwinklePark:
+		if (entry.character == Characters_Sonic && !Vanilla)
+			return 1;
+		if (entry.character == Characters_Amy && !Vanilla)
+			return 0;
+		else
+			return rand() % 2;
+		break;
+	case LevelIDs_SpeedHighway:
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_RedMountain:
+		if (entry.character == Characters_Sonic && !Vanilla)
+			return actHS[rand() % 2];
+		if (entry.character == Characters_Gamma && !Vanilla)
+			return actHS[rand() % 2];
+		if (entry.character != Characters_Gamma && entry.character != Characters_Sonic || Vanilla)
+			return rand() % 3;
+		break;
+	case LevelIDs_SkyDeck:
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_LostWorld:
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else if (entry.character == Characters_Sonic && !Vanilla)
+			return 1;
+		else
+			return rand() % 2;
+		break;
+	case LevelIDs_IceCap:
+		if (entry.character == Characters_Sonic && !Vanilla)
+			return actIC2[rand() % 2]; //act 3 and 4
+		if (entry.character == Characters_Tails && !Vanilla)
+			return actIC[rand() % 2]; //act 1 and 4
+		if (entry.character == Characters_Big && !Vanilla)
+			return actHS[rand() % 2]; //Act 1 and 3
+		else
+			return actIC3[rand() % 3]; //all acts
+		break;
+	case LevelIDs_Casinopolis:
+		if (entry.character == Characters_Tails && !Vanilla)
+			return 0;
+		else
+			return act0[rand() % 3];
+		break;
+	case LevelIDs_FinalEgg:
+		if (entry.character == Characters_Gamma && !Vanilla)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_HotShelter:
+		if (!Vanilla && entry.character == Characters_Gamma)
+			return 0;
+		else
+			return actHS[rand() % 2];
+		break;
+	case LevelIDs_Chaos6:
+			return rand() % 2;
+		break;
+	case LevelIDs_TwinkleCircuit:
+		if (Vanilla)
+			return rand() % 5;
+		else
+			return rand() % 5 + 1;
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+short prev_mission = -1;
+
+short randomLayout(RandomizedEntry entry) {
+	short cur_mission = -1;
+
+	do {
+		if (Missions) //SA2 missions 100 Rings, Lost Chao (also SADX Tails Race and Knux Treasure Hunting)
+			cur_mission = rand() % 4;
+		else
+			cur_mission = rand() % 2;
+	} while (prev_mission == cur_mission);
+
+	prev_mission = cur_mission;
+	return cur_mission;
+}
+
+int8_t prev_char = -1;
+
+uint8_t getRandomCharacter(bool allow_duplicate) {
+	int8_t cur_char = -1;
+	size_t char_count = sizeof(character) / sizeof(character[0]);
+
+	cur_char = character[rand() % char_count];
+
+	while (cur_char == prev_char && ban < 5 || banCharacter[cur_char])
+	{
+		cur_char = character[rand() % char_count];
+	}
+
+	prev_char = cur_char;
+	return cur_char;
+}
+
+int8_t prev_AI = -1;
+
+//AI following you
+short getRandomAI(RandomizedEntry entry) {
+	int8_t cur_AI = -1;
+	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
+
+	do {
+		cur_AI = AIArray[rand() % ai_count];
+	} while (cur_AI == prev_AI);
+
+	prev_AI = cur_AI;
+	return cur_AI;
+}
+
+short getRandomRaceAI(RandomizedEntry entry) {
+	int8_t cur_RaceAI = -1;
+	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
+
+	cur_RaceAI = AIRaceArray[rand() % ai_Racecount];
+
+	return cur_RaceAI;
+}
+
+
 
 int GetCharaProgression() {
 
@@ -430,6 +436,10 @@ void ResetStatsValues() {
 	isAIActive = false;
 	TreasureHunting = false;
 	ChaoSpawn = false;
+	TPAmyVersion = false;
+	TPBigVersion = false;
+	HSAmyVersion = false;
+	HSBigVersion = false;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
@@ -447,7 +457,6 @@ void ResetStatsValues() {
 	isCheckpointUsed = false;
 	fixTCCart();
 	Delete_Cart();
-
 
 	RestoreRNGValueKnuckles();
 }

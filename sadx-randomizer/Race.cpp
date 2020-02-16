@@ -24,123 +24,101 @@ int IsFastSonicAI_R() {
 		return 1;
 	else
 		return 0;
-
 }
 
+
+
 void CheckRace() {
-	if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+
+	if (CurrentCharacter == Characters_Tails && !Vanilla)
 	{
 		Race = false;
 		return;
 	}
-	else
-	{
-		if (CurrentLevel != LevelIDs_SpeedHighway)
-		{
-			AIRace = randomizedSets[levelCount].ai_race;
 
-			if (AIRace == CurrentCharacter) //prevent crash
-			{
+	switch (CurrentLevel)
+	{
+	case LevelIDs_WindyValley:
+		if (CurrentLevelLayout == 1 && CurrentAct == 2)
+			isAIActive = false;
+		break;
+	case LevelIDs_SpeedHighway:
+		if (CurrentLevelLayout == 1 && CurrentAct == 0)
+		{
+			isAIActive = false;
+			Race = true;
+			LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
+			LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
+		}
+		break;
+	case LevelIDs_SkyDeck:
+		if (CurrentLevelLayout == 1 && CurrentAct == 0)
+			isAIActive = false;
+		break;
+	case LevelIDs_IceCap:
+		if (CurrentLevelLayout < 2 && CurrentAct == 2)
+			isAIActive = false;
+		break;
+	case LevelIDs_Casinopolis:
+		if (CurrentLevelLayout < 2 && CurrentAct == 1)
+			isAIActive = false;
+		break;
+	default:
+		Race = false;
+		break;
+	}
+
+	if (Race && CurrentLevel != LevelIDs_SpeedHighway)
+	{
+		AIRace = randomizedSets[levelCount].ai_race;
+
+		if (AIRace == CurrentCharacter) //prevent crash
+		{
 				if (CurrentCharacter == Characters_Sonic)
 					AIRace = Characters_Tails;
 				else
 					AIRace = Characters_Sonic;
-			}
-			/*
-			switch (AIRace)
-			{
-			case Characters_Eggman:
-				//WriteData<1>((void*)0x47C3D6, 0xB);
-				break;
-			case Characters_Tails:
-				WriteData<1>((void*)0x47C3D6, 0x2);
-				break;
-			case Characters_Knuckles:
-				//WriteData<1>((void*)0x47C3D6, 0xC);
-				break;
-			case Characters_Tikal:
-				WriteData<1>((void*)0x47C3D6, 0xF);
-				break;
-			case Characters_Amy:
-				WriteData<1>((void*)0x47C3D6, 0xD);
-				break;
-			case Characters_Gamma:
-				WriteData<1>((void*)0x47C3D6, 0xE);
-				break;
-			default:
-				if (!MetalSonicFlag)
-					WriteData<1>((void*)0x47C3D6, 0x1);
-				else
-					WriteData<1>((void*)0x47c3fe, 0x10);
-				break;
-			}
-			*/
 		}
 
-		switch (CurrentLevel)
-		{
-		case LevelIDs_WindyValley:
-			if (CurrentLevelLayout == 1 && CurrentAct == 2)
-			{
-				isAIActive = false;
-				Race = true;
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-			}
-			break;
-		case LevelIDs_SpeedHighway:
-			if (CurrentLevelLayout == 1 && CurrentAct == 0)
-			{
-				isAIActive = false;
-				Race = true;
-				LoadObject(LoadObj_Data1, 8, MRace_EggMobile_TexlistManager);
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-			}
-			break;
-		case LevelIDs_SkyDeck:
-			if (CurrentLevelLayout == 1 && CurrentAct == 0)
-			{
-				isAIActive = false;
-				Race = true;
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-			}
-			break;
-		case LevelIDs_Casinopolis:
-			if (CurrentLevelLayout < 2 && CurrentAct == 1)
-			{
-				isAIActive = false;
-				Race = true;
-				LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
-			}
-			break;
-		}
-		/*
-		switch (CurrentCharacter)
-		{
-		case Characters_Tails:
-			WriteData<1>((void*)0x47c3fe, 0x2);
-			break;
-		case Characters_Knuckles:
-			WriteData<1>((void*)0x47c3fe, 0xC);
-			break;
-		case Characters_Amy:
-			WriteData<1>((void*)0x47c3fe, 0xD);
-			break;
-		case Characters_Gamma:
-			WriteData<1>((void*)0x47c3fe, 0xE);
-			break;
-		default:
-			if (!MetalSonicFlag)
-				WriteData<1>((void*)0x47c3fe, 0x1);
-			else
-				WriteData<1>((void*)0x47c3fe, 0x10);
-			break;
-		}*/
-
-		return;
+		if (CurrentCharacter == Characters_Big && (AIRace == Characters_Knuckles || AIRace == Characters_Amy))
+			AIRace = Characters_Tails; //Prevent Big crash
+		
+		LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 	}
+		
+	return;
 }
+	
 
-
+/*
+switch (AIRace)
+{
+case Characters_Eggman:
+	//WriteData<1>((void*)0x47C3D6, 0xB);
+	break;
+case Characters_Tails:
+	WriteData<1>((void*)0x47C3D6, 0x2);
+	break;
+case Characters_Knuckles:
+	//WriteData<1>((void*)0x47C3D6, 0xC);
+	break;
+case Characters_Tikal:
+	WriteData<1>((void*)0x47C3D6, 0xF);
+	break;
+case Characters_Amy:
+	WriteData<1>((void*)0x47C3D6, 0xD);
+	break;
+case Characters_Gamma:
+	WriteData<1>((void*)0x47C3D6, 0xE);
+	break;
+default:
+	if (!MetalSonicFlag)
+		WriteData<1>((void*)0x47C3D6, 0x1);
+	else
+		WriteData<1>((void*)0x47c3fe, 0x10);
+	break;
+}
+*/
 
 void SelectBarRace() {
 
@@ -151,6 +129,9 @@ void SelectBarRace() {
 		else
 			help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MSRACE_HD.pvmx"); //draw Metal Sonic Race
 	}
+
+	if (CurrentCharacter == Characters_Tails)
+		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\MILESRACE_HD.pvmx");
 
 	if (CurrentCharacter == Characters_Knuckles)
 		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\KNUXRACE_HD.pvmx");
@@ -223,7 +204,8 @@ void SelectBarRace() {
 
 void Race_Init() {
 	//Sonic/Eggman Race Stuff
-	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character and prevent Tails to race.
+	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character
+	WriteData<1>((void*)0x47D945, 0x8); ///Load Race AI for any character 
 	
 	WriteData<5>((void*)0x60ffab, 0x90); //Prevent Eggman AI from spawning during SH
 	WriteData<5>((void*)0x415965, 0x90); //Prevent the game to load Race AI. (we will manually call it.)

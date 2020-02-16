@@ -9,54 +9,14 @@
 
 
 int RingCopy = 0; //Backring
+char TimeSecCopy = 0;
+char TimeMinCopy = 0;
+char TimeFrameCopy = 0;
 bool GetBackRing = false;
 extern char GetCustomLayout;
 extern bool ChaoSpawn;
 
-void ResetTime_R() { //Used for Back Ring, restore player's rings and prevent the timer to reset.
 
-	if (GetBackRing)
-	{
-		RingCopy = Rings;
-		if (CurrentLevelLayout >= Mission2_100Rings)
-		{
-			Rings = RingCopy;
-			ChaoSpawn = false;
-			return;
-		}
-	}
-
-	return ResetTime();
-}
-
-void ResetTime_R2() { //Used for Back Ring, prevent the game to reset the timer.
-
-	if (CurrentLevelLayout >= Mission2_100Rings && GetBackRing)
-	{
-		RingCopy = Rings;
-		return;
-	}
-		
-	if (CurrentLevelLayout >= Mission2_100Rings && (CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1 || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 1))
-		return ResetTime();
-	else
-		return SetTime2((unsigned int)RestartLevel.Minute, (unsigned int)RestartLevel.Second, (unsigned int)RestartLevel.Frame);
-}
-
-static Sint16 GetRings_R() { //Used for Back Ring, prevent the game to reset the rings.
-
-	if (GetBackRing)
-	{
-		if (CurrentLevelLayout >= Mission2_100Rings)
-		{
-			Rings = RingCopy;
-			ChaoSpawn = false;
-			return 0;
-		}
-	}
-
-	return Rings;
-}
 
 //back ring Model and Display Stuff
 extern NJS_MODEL_SADX model_0;
@@ -97,6 +57,10 @@ void BackRingObj_Main(ObjectMaster* obj) {
 			if (CurrentLevelLayout >= Mission2_100Rings)
 			{
 				GetBackRing = true;
+				RingCopy = Rings;
+				TimeSecCopy = TimeSeconds;
+				TimeMinCopy = TimeMinutes;
+				TimeFrameCopy = TimeFrames;
 				PlayVoice_R(5001); //back ring hit SFX
 				ObjectMaster* play1 = GetCharacterObject(0);
 				play1->Data1->Action = 0;
@@ -109,8 +73,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 					short sVar1;
 					sVar1 = ScreenFade_RunActive();
 					ChaoSpawn = false;
-					GameMode = GameModes_Adventure_Field;
-					GameState = 0xb;
+					GameState = 0xc;
 					obj->Data1->Action = 1;
 
 					return;
@@ -122,6 +85,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 				obj->Data1->Action = 1;
 				return;
 			}
+
 		}
 
 		BackRingObj_Display(obj); //run the display on unpaused frames
@@ -145,10 +109,18 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 			return;
 			break;
 		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
+			if (Race && CurrentLevel == LevelIDs_SkyDeck) //Force capsule here because this game is funny and let you win early if froggy spawns here for no reason.
+			{
+				ObjectFunc(origin, Capsule_Load_T.Target());
+				origin(a1);
+			}
+			else
+			{
+				LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
+				a1->Data1->Position.y += 20;
+				a1->MainSub = OFrog;
+				OFrog(a1);
+			}
 			return;
 			break;
 		}
@@ -198,7 +170,7 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
+		a1->Data1->Position.y += 0;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
 		a1->Data1->Rotation.x = 0xC000;
@@ -336,9 +308,11 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 }
 
 void Set_BackRing() {
-	WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
-	WriteCall((void*)0x44ee0a, ResetTime_R2); //prevent the game to reset the timer if you hit the back ring.
-	WriteCall((void*)0x44ee0f, GetRings_R); //prevent the game to reset the rings
+	//WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
+	//WriteCall((void*)0x44ee0a, ResetTime_R2); //prevent the game to reset the timer if you hit the back ring.
+	//WriteCall((void*)0x44ee0f, GetRings_R); //prevent the game to reset the rings
+	//WriteCall((void*)0x416f41, Set0Rings_R); //prevent the game to reset the rings	
+	//WriteCall((void*)0x417a30, Set0Rings_R); //prevent the game to reset the rings
 
 	WriteData((ObjectFuncPtr*)0x4FA050, CheckLoadCapsule_r); // crashed plane in Emerald Coast
 	WriteData((ObjectFuncPtr*)0x4DF3F0, CheckLoadCapsule_r); // Chaos Emerald in Windy Valley

@@ -115,8 +115,8 @@ void TwinklePark_Layout() {
 			}
 			else
 			{
-				bool RNGLayout = rand() % 2;
-				if (RNGLayout)
+				bool RNGLayoutTP = rand() % 2;
+				if (RNGLayoutTP)
 				{
 					LoadSetFile(1, "0305"); //Amy TP version
 					TPAmyVersion = true;
@@ -383,8 +383,6 @@ PVMEntry TwinkleParkObjectTextures[] = {
 };
 
 ObjectList TwinkleParkObjectList = { arraylengthandptrT(TwinkleParkObjectList_list, int) };
-
-
 
 
 void __cdecl TPObjects_Init(const char* path, const HelperFunctions& helperFunctions) {

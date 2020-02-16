@@ -16,6 +16,11 @@ extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
 extern char GetCustomLayout;
 
+extern char TimeSecCopy;
+extern char TimeMinCopy;
+extern char TimeFrameCopy;
+extern int RingCopy;
+
 
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
@@ -29,10 +34,7 @@ ObjectMaster* CurrentCart = nullptr;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
-		AddCustomFlag(); //Add a flag for story progression.
-
-	if (GameMode != GameModes_Trial)
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission)
 		GameMode = GameModes_Adventure_Field; //fix game crash
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
@@ -71,8 +73,6 @@ void DisableTimeStuff() {
 				DeleteObject_(TailsAI_ptr); //prevent crash as Amy.
 			}
 
-			play1->Data1->CharID;
-
 			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && (isAIActive == true || !Race))
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
@@ -82,25 +82,24 @@ void DisableTimeStuff() {
 		}
 	}
 
-	if (Race)
+	if (Race && CurrentCharacter != Characters_Tails)
 	{
-		if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-		{
-			Race = false;
-			return; //they don't race
-		}
-		else
-		{
-			SetTailsRaceVictory();
-			Tails_CheckRaceResult();
-		}
+		SetTailsRaceVictory();
+		Tails_CheckRaceResult();
 	}
 
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
+		AddCustomFlag(); //Add a flag for story progression.
 
 	Race = false;
 	return;
 }
 
+void DeleteTriggerObject() {
+
+	TriggerOBJHS_Delete();
+	TriggerCasinoChao_Delete();
+}
 
 void ResetValueWhileLevelResult() {
 
@@ -113,6 +112,9 @@ void ResetValueWhileLevelResult() {
 	TreasureHunting = false;
 	isPlayerInWaterSlide = false;
 	TPAmyVersion = false;
+	TPBigVersion = false;
+	HSAmyVersion = false;
+	HSBigVersion = false;
 	FEGammaVersion = false;
 	isCheckpointUsed = false;
 
@@ -121,8 +123,7 @@ void ResetValueWhileLevelResult() {
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
-	DeleteObject_(TriggerOBJ);
-	TriggerOBJHS_Delete();
+	DeleteTriggerObject();
 	DeleteObject_(ChaoTP);
 	Delete_Cart();
 	fixTCCart();
@@ -153,7 +154,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentLevelLayout != 1 || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && !FEAmyVersion || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
 		return;
 
 	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
@@ -254,7 +255,7 @@ void Load_Cart_R() {
 	}
 }
 
-
+/*
 void Cart_Main_r(ObjectMaster* obj);
 Trampoline Cart_Main_t(0x79A9E0, 0x79A9E5, Cart_Main_r);
 void Cart_Main_r(ObjectMaster* obj) {
@@ -263,11 +264,10 @@ void Cart_Main_r(ObjectMaster* obj) {
 	ObjectFunc(origin, Cart_Main_t.Target());
 	origin(obj);
 }
-
+*/
 
 void Delete_Cart()
 {
-
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 			ForcePlayerAction(0, 0x18);
@@ -292,15 +292,13 @@ void Delete_Cart()
 	CurrentCart = nullptr;
 }
 
-void FixRestart_Stuff() //Prevent the game to crash if you restart while being in a custom cart.
+void FixRestart_Stuff() //Prevent the game to crash if you restart while being in a custom cart, also reset other stuff.
 {
 
 	ObjectMaster* P1 = GetCharacterObject(0);
 
 	if (CurrentCart != nullptr)
-	{
 		DeleteObject_(CurrentCart);
-	}
 
 	FlagAutoPilotCart = 0;
 	CurrentCart = nullptr;
@@ -308,13 +306,11 @@ void FixRestart_Stuff() //Prevent the game to crash if you restart while being i
 	if (P1 != nullptr)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
-		DeleteObject_(TriggerOBJ);
-		TriggerOBJHS_Delete();
-		DeleteObject_(ChaoTP);
-		Delete_Cart();
-		fixTCCart();
+	DeleteTriggerObject();
+	DeleteObject_(ChaoTP);
+	Delete_Cart();
 
-	return DisableControl();
+	return;
 }
 
 void EmeraldRadar_R() {
@@ -330,6 +326,14 @@ void EmeraldRadar_R() {
 
 			switch (CurrentLevel)
 			{
+			case LevelIDs_SpeedHighway:
+				if (CurrentCharacter == Characters_Gamma && KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
+				}
+				break;
 			case LevelIDs_RedMountain:
 				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
 				{
@@ -343,7 +347,7 @@ void EmeraldRadar_R() {
 				{
 					do {
 						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 36);
 				}
 				break;
 			case LevelIDs_SkyDeck:
@@ -456,6 +460,57 @@ void TwinkleCircuitResult() {
 	GameState = 0x5;
 }
 
+//Create an object so Gamma can hit some specific bosses.
+CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
+
+void TargetableEntity(ObjectMaster* obj)
+{
+	EntityData1* data = obj->Data1;
+
+	if (data->Action == 0) {
+		AllocateObjectData2(obj, obj->Data1);
+
+		//if the scale is specified, temporary set the collision scale to it.
+		if (data->Scale.x) {
+			col.scale.x = data->Scale.x;
+			Collision_Init(obj, &col, 1, 2u);
+			col.scale.x = 6;
+		}
+		else {
+			Collision_Init(obj, &col, 1, 2u);
+		}
+
+		data->Action = 1;
+	}
+	else {
+		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
+
+		if (!boss || !boss->Data1) {
+			DeleteObject_(obj);
+			return;
+		}
+
+		if (EntityData1Ptrs[0]->CharID != Characters_Gamma) return;
+
+		data->Position = boss->Data1->Position;
+		data->Position.y += 10;
+
+		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
+		{
+			DeleteObject_(obj);
+
+			//if it is set, don't reload the target object
+			if (data->CharID == 1) return;
+
+			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+			target->Data1->LoopData = (Loop*)boss;
+		}
+		else
+		{
+			AddToCollisionList(data);
+		}
+	}
+}
 
 void GammaBossesFixes() {
 
@@ -464,6 +519,7 @@ void GammaBossesFixes() {
 
 	return LoadCamFile(0, "0000");
 }
+
 
 
 int AmyCartImprovement() {
@@ -502,7 +558,10 @@ void FixRestartCheckPoint() {
 }
 
 
+
 //Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic.
+//Also used to call different Stuff.
+
 void FixLayout_StartPosition_R() {
 
 	if (!isCheckpointUsed) //don't change player position if a CP has been grabbed.
@@ -534,12 +593,31 @@ void FixLayout_StartPosition_R() {
 			if (CurrentAct == 1 && TPBigVersion && !TPAmyVersion)
 				PositionPlayer(0, 230, 80, -538);
 			break;
+		case LevelIDs_IceCap: //Race
+			if (CurrentAct == 2 && Race && CurrentCharacter <= Characters_Tails)
+				PositionPlayer(0, 120, 375, -40);
+			break;
 		case LevelIDs_FinalEgg: //Gamma version
 			if (CurrentAct == 2 && FEGammaVersion)
 				PositionPlayer(0, 46.5, -3240.6, -224.5);
 			break;
 		}
 	}
+
+	if (GetBackRing && CurrentLevelLayout >= 2)
+	{
+		Rings = RingCopy;
+		TimeSeconds = TimeSecCopy;
+		TimeMinutes = TimeMinCopy;
+		TimeFrames = TimeFrameCopy;
+		Lives++;
+		GetBackRing = false;
+	}
+
+	if (GameMode != 9 && GameMode != 10 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
+		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
+
+	FixRestart_Stuff();
 
 	AnimalPickup_Load_();
 
@@ -551,9 +629,6 @@ void LoadTriggerObject() {
 	if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
 		HotShelterSecretSwitch();
 
-	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 0 && CurrentCharacter == Characters_Big)
-		LoadICTrigger();
-
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentLevelLayout == Mission3_LostChao)
 		LoadChaoTPTrigger();
 
@@ -564,6 +639,8 @@ void LoadTriggerObject() {
 		LoadRemoveCart();
 }
 
+
+
 void Stages_Management() {
 
 	WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
@@ -572,8 +649,8 @@ void Stages_Management() {
 	Set_BackRing();
 	Race_Init();
 	WriteCall((void*)0x415a3d, FixLayout_StartPosition_R); //Fix start position with different stage character version.
+
 	WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
-	
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
 	WriteCall((void*)0x41676b, FixRestart_Stuff); 
 }

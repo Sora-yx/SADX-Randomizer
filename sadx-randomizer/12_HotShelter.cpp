@@ -5,17 +5,16 @@
 #include "ActsSettings.h"
 
 ObjectMaster* TriggerHS = nullptr;
+bool HSAmyVersion = false;
+bool HSBigVersion = false;
+
 
 void CamHotShelter() {
 
-	if (CurrentLevelLayout == Mission1_Variation)
-	{
+	if (HSBigVersion)
 		LoadCamFile(0, "1204"); //load the camera used for Big Hot Shelter
-	}
 	else
-	{
 		LoadCamFile(0, "1200"); //load the camera used for Amy Hot Shelter
-	}
 
 	LoadCamFile(1, "1201");
 	LoadCamFile(2, "1202");
@@ -27,9 +26,7 @@ void CamHotShelter() {
 void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
 
 	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
-	{
 		SomethingAboutHotShelterSwitch = 1;
-	}
 
 	LoadTriggerObjHS();
 
@@ -42,7 +39,6 @@ void TriggerOBJHS_Delete()
 		DeleteObject_(TriggerHS);
 
 	TriggerHS = nullptr;
-
 }
 
 void TriggerObjHS_Main(ObjectMaster* obj) {
@@ -74,77 +70,102 @@ void LoadTriggerObjHS() {
 
 void HotShelter_Layout() {
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
-
+	HSAmyVersion = false;
+	HSBigVersion = false;
+	
 	//act 1 Amy/Big Version
 
-	if (CurrentAct != 2)
+	if (CurrentAct == 0)
 	{
-		switch (CurrentLevelLayout)
+		bool RNGLayoutHS = rand() % 2;
+		CurrentLevelLayout = 3; //randomizedSets[levelCount].LevelLayout;
+
+		//Prevent Amy and Big to get their original vanilla layout
+		if (CurrentCharacter == Characters_Amy && !Vanilla)
 		{
-		case Mission1: //Amy Version
-		default:
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-				LoadSetFile(0, "1204"); //load Big version for Amy.
-				LoadSetFile(1, "1201"); //load Big version for Amy.
-				LoadSetFile(2, "1202"); //load Big version for Amy.
+			LoadSetFile(0, "1204"); //load Big version for Amy.
+			LoadSetFile(1, "1201"); 
+			LoadSetFile(2, "1202"); 
+			HSAmyVersion = false;
+			HSBigVersion = true;
+
+			if (CurrentLevelLayout < Mission2_100Rings)
 				CurrentLevelLayout = Mission1_Variation;
+		}
+		if (CurrentCharacter == Characters_Big && !Vanilla) 
+		{
+			LoadSetFile(0, "1200"); //load Amy version for Big
+		
+			HSAmyVersion = true;
+			HSBigVersion = false;
+
+			if (CurrentLevelLayout < Mission2_100Rings)
+			{
+				LoadSetFile(1, "1201");
+				CurrentLevelLayout = Mission1;
 			}
 			else
 			{
+				LoadSetFile(1, "1205");
+			}
+
+			LoadSetFile(2, "1202");
+		}
+
+		if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big || Vanilla)
+		{
+			switch (CurrentLevelLayout)
+			{
+			case Mission1: //Amy Version
+			default:
+				HSAmyVersion = true;
+				HSBigVersion = false;
 				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
 				CurrentLevelLayout = Mission1;
-			}
-			break;
-		case 1: //Big Version
-			if (CurrentCharacter == Characters_Big && !Vanilla) //Amy has Big layout and vice versa.
-			{
-				LoadSetFile(0, "1200");
-				LoadSetFile(1, "1201");
-				LoadSetFile(2, "1202");
-				CurrentLevelLayout = Mission1;
-			}
-			else
-			{
+				break;
+			case 1: //Big Version
+				HSAmyVersion = false;
+				HSBigVersion = true;
 				LoadSetFile(0, "1204"); //load Big version for other characters.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
 				LoadSetFile(2, "1202"); //load Big version for Amy.
-			}
-			break;
-		case Mission2_100Rings:
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-				LoadSetFile(0, "1204"); //load Big version for Amy.
+				break;
+			case Mission2_100Rings:
+				if (RNGLayoutHS)
+				{
+					HSAmyVersion = true;
+					HSBigVersion = false;
+					LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+				}
+				else
+				{
+					HSAmyVersion = false;
+					HSBigVersion = true;
+					LoadSetFile(0, "1204"); //load Big version
+				}
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
+				break;
+			case Mission3_LostChao:
+				if (RNGLayoutHS)
+				{
+					HSAmyVersion = true;
+					HSBigVersion = false;
+					LoadSetFile(0, "1200"); //load Amy hot Shelter version.
+				}
+				else
+				{
+					HSAmyVersion = false;
+					HSBigVersion = true;
+					LoadSetFile(0, "1204"); //load Big version
+				}
 
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
-				LoadSetFile(1, "1201");
-				LoadSetFile(2, "1202");
-			}
-			break;
-		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Amy && !Vanilla)
-			{
-				LoadSetFile(0, "1204"); //load Big version for Amy.
-				LoadSetFile(1, "1201");
-				LoadSetFile(2, "1202");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "1200");
 				LoadSetFile(1, "1205");
 				LoadSetFile(2, "1206");
+				break;
 			}
-			break;
 		}
 	}
 
@@ -178,7 +199,7 @@ void HotShelter_Layout() {
 }
 
 void BigLayoutHS() {
-	if (CurrentLevelLayout == Mission1_Variation) //Big Layout
+	if (HSBigVersion && !HSAmyVersion) //Big Layout
 	{
 		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
 		 //open the door when you activate the switch. (if < 8)

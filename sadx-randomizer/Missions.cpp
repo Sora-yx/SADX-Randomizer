@@ -33,20 +33,20 @@ void LoadStageMissionImage_r() {
 
 	if (GetLevelType == 0) { //Mission card check here
 
-		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= LevelIDs_SandHill)
+		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= 42)
 			return;
 
 		GetCustomLayout = CurrentLevelLayout;
 
 		if (CurrentLevelLayout < Mission2_100Rings)
 		{
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings)
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && !HSBigVersion)
 				CurrentMission = BalloonCard; //grab ballon
 
 			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
 				CurrentMission = FroggyCard; //grab Froggy
 
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && !HSBigVersion && !TPBigVersion)
 				CurrentMission = CapsuleCard;
 		}
 		
@@ -73,7 +73,8 @@ void LoadStageMissionImage_r() {
 		case LevelIDs_FinalEgg:
 			if (CurrentLevelLayout == Mission1_Variation && CurrentCharacter != Characters_Amy)
 				CurrentMission = CapsuleCard; //capsule
-			else
+
+			if (CurrentLevelLayout == Mission1)
 				CurrentMission = FinalEggCard; //Go to the center of the base.
 
 			if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
@@ -111,11 +112,11 @@ void LoadStageMissionImage_r() {
 				CurrentMission = FroggyCard; //Froggy
 			break;
 		default:
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings)
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && !HSBigVersion)
 				CurrentMission = BalloonCard; //grab ballon
 			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
 				CurrentMission = FroggyCard; //grab Froggy
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && !HSBigVersion && !TPBigVersion)
 				CurrentMission = CapsuleCard;
 			break;
 		}
@@ -253,8 +254,6 @@ extern ObjectMaster* CurrentCart;
 
 void MissionResultCheck() {
 
-	if (CurrentLevel > 0 && CurrentLevel < LevelIDs_Chaos0 && GameState == 15)
-	{
 		if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 		{
 			ObjectMaster* obj = GetCharacterObject(0);
@@ -282,7 +281,7 @@ void MissionResultCheck() {
 				}
 			}
 		}
-	}
 	
 	return;
 }
+

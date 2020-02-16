@@ -244,14 +244,11 @@ extern "C" {
 			HudDisplayRingTimeLife_Check();
 
 			//AI Swap
-			if (SwapDelay != 150)
+			if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
 				SwapDelay++;
 
-			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled == 1)
+			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled)
 				AISwitch();
-
-			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_X && SwapDelay >= 150 && ControlEnabled == 1)
-				Delete_Cart();
 
 			//Rings Mission 2 and Treasure Hunting Check
 			MissionResultCheck();

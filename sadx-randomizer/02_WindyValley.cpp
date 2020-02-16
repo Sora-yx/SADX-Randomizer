@@ -166,6 +166,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\SET0203B.BIN", "system\\levels\\Windy Valley\\Big-WV-E102.bin");
 
 	helperFunctions.ReplaceFile("system\\SET0205B.BIN", "system\\levels\\Windy Valley\\Big-WV-Chao.bin"); //Chao
+	helperFunctions.ReplaceFile("system\\SET0206B.BIN", "system\\levels\\Windy Valley\\Big-WV-Race.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0200B.BIN", "system\\cam\\CAM0200B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0201B.BIN", "system\\cam\\CAM0201B.bin");

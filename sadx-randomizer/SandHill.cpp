@@ -3,20 +3,13 @@
 #include "SandHill.h"
 #include "RandomHelpers.h"
 
-int GetCurrentCharacterSD() {
+void GetCurrentCharacterSD() {
 
-	if (CurrentCharacter > Characters_Tails)
-	{
-		WriteData<1>((void*)0x798306, 0x84);
-		WriteData<1>((void*)0x7983c4, 0x7F);
-	}
-	else
-	{
-		fixTCCart();
-	}
+	WriteData<1>((void*)0x798306, 0x84);
+	WriteData<1>((void*)0x7983c4, 0x7F);
+	LoadCamFile(1, "SBoard01");
 
-	return GetCurrentCharacterID();
-
+	 return;
 }
 
 //Add rings every Checkpoint for cart speed.
@@ -53,9 +46,9 @@ void LoadRemoveCart() {
 void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 
-	WriteCall((void*)0x423717, GetCurrentCharacterSD);
+	WriteCall((void*)0x42377c, GetCurrentCharacterSD);
 	WriteCall((void*)0x5981d8, AddRingSandHill);
-	WriteCall((void*)0x423720, GetCurrentCharacterSD);
+
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SETSBOARD00S.bin", "system\\levels\\Sand Hill\\Sonic-SD.bin");

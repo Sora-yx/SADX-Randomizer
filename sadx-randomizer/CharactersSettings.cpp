@@ -21,6 +21,8 @@ extern bool IceCapCutsceneSkip;
 extern int CurrentMission;
 extern bool Race;
 
+
+
 void character_settings_onFrames() {
 	if (CurrentLevel != 0)
 	{
@@ -78,14 +80,10 @@ void LoadCharacter_r()
 		LoadTails_AI_R();
 	else
 		LoadTails_AI_Original();
-
-	if (CurrentCharacter != Characters_Sonic)
-		MetalSonicFlag = 0;
 	
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-	if (CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_WindyValley)
 		CheckRace();
 
 	AllUpgrades();
@@ -234,7 +232,6 @@ void CallStuffWhenLevelStart() {
 	ObjectMaster* P1 = GetCharacterObject(0);
 	char CurChara = P1->Data1->CharID;
 	TimeThing = 1; //activate the timer of the stage.
-	GetBackRing = false;
 
 	if (CurChara != Characters_Sonic)
 	{
@@ -242,14 +239,9 @@ void CallStuffWhenLevelStart() {
 		SonicRand = 0;
 	}
 	else
-	{
 		SuperSonic_TransformationCheck();
-	}
 
-	if (GameMode != 9 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
-		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
-
-	if (CurrentLevel == LevelIDs_E101)
+	if (CurrentLevel == LevelIDs_E101 && CurrentCharacter != Characters_Gamma)
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
@@ -257,58 +249,6 @@ void CallStuffWhenLevelStart() {
 		Load_Cart_R();
 }
 
-
-//Create an object so Gamma can hit some specific bosses.
-CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
-
-void TargetableEntity(ObjectMaster* obj)
-{
-	EntityData1* data = obj->Data1;
-
-	if (data->Action == 0) {
-		AllocateObjectData2(obj, obj->Data1);
-
-		//if the scale is specified, temporary set the collision scale to it.
-		if (data->Scale.x) {
-			col.scale.x = data->Scale.x;
-			Collision_Init(obj, &col, 1, 2u);
-			col.scale.x = 6;
-		}
-		else {
-			Collision_Init(obj, &col, 1, 2u);
-		}
-
-		data->Action = 1;
-	}
-	else {
-		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
-
-		if (!boss || !boss->Data1) {
-			DeleteObject_(obj);
-			return;
-		}
-
-		if (EntityData1Ptrs[0]->CharID != Characters_Gamma) return;
-
-		data->Position = boss->Data1->Position;
-		data->Position.y += 10;
-
-		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
-		{
-			DeleteObject_(obj);
-
-			//if it is set, don't reload the target object
-			if (data->CharID == 1) return;
-
-			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
-			target->Data1->LoopData = (Loop*)boss;
-		}
-		else
-		{
-			AddToCollisionList(data);
-		}
-	}
-}
 
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer() {

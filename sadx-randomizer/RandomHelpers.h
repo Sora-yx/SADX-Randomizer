@@ -40,6 +40,8 @@ extern char StorySplits;
 extern bool isChaoGameplayAllowed;
 extern unsigned char SwapDelay;
 
+
+
 struct RandomizedEntry
 {
 	int8_t character;
@@ -64,8 +66,7 @@ enum MissionCard {
 void BackRingObj_Main(ObjectMaster* obj);
 
 void __cdecl BackRing_Load_r(ObjectMaster* a1);
-void LoadICTrigger();
-void LoadBackRingTP();
+
 void LoadTriggerObject();
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1);
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1);
@@ -91,6 +92,11 @@ extern char AIRace;
 extern int levelCount;
 extern bool TreasureHunting;
 extern bool isCriticalMode;
+
+extern bool HSAmyVersion;
+extern bool HSBigVersion;
+extern bool FEGammaVersion;
+extern bool FEAmyVersion;
 
 void Set_MusicVoices();
 void TitleCard_Init();
@@ -304,6 +310,7 @@ void SetLevelAndAct_R(); //fix trial mod
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
+DataPointer(char, CasinoSwitch, 0x3c5b37c);
 
 
 DataPointer(char, KnuxCheck, 0x3c52c04);

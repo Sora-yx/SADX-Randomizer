@@ -4,6 +4,8 @@
 #include "Chao.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Casinopolis\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerCasino = nullptr;
 
@@ -22,7 +24,7 @@ void TriggerCasinoChao_Main(ObjectMaster* obj) {
 	}
 }
 
-void TriggerCasinoChao_Delete(ObjectMaster* obj)
+void TriggerCasinoChao_Delete()
 {
 	DeleteObject_(TriggerCasino);
 	TriggerCasino = nullptr;
@@ -30,7 +32,7 @@ void TriggerCasinoChao_Delete(ObjectMaster* obj)
 
 void LoadTriggerCasinoChao() {
 
-	if (char(0x3c5b37c) == 3 && !TriggerCasino && CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1)
+	if (CasinoSwitch == 3 && !TriggerCasino && CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1)
 	{
 		TriggerCasino = LoadObject(LoadObj_Data1, 2, TriggerCasinoChao_Main);
 		TriggerCasino->Data1->Position = { -1568.96, -2199, 2642.24 };
@@ -38,38 +40,58 @@ void LoadTriggerCasinoChao() {
 	}
 }
 
+void FixFlipperCharacterPosition() {
+
+	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
+	{
+		if (CurrentCharacter == Characters_Sonic)
+			ForcePlayerAction(0, 0x2d);
+		else
+			ForcePlayerAction(0, 24);
+	}
+
+}
+
+void IncreaseRings_R() { //increase the amount of ring get in the pinball to make this section shorter.
+
+	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
+		Rings += 1;
+
+	PlaySound(7, 0x0, 0x0, 0x0);
+}
+
+void FixShakeoffGarbageAction() { //This make the game crash as Tails.
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+	if (P1 != nullptr && P1->Data1->CharID != Characters_Sonic)
+		return;
+	else
+		ForcePlayerAction(0, 0x2a);
+
+	return;
+}
+
 void Casino_Layout() {
 
 
 	if (CurrentAct == 1)
 	{
-		CurrentLevelLayout = 3; //randomizedSets[levelCount].LevelLayout;
+		CurrentLevelLayout = 3;//randomizedSets[levelCount].LevelLayout;
 
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
 		case Mission1_Variation:
 		default:
-			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
-			{
-				LoadSetFile(0, "0900"); //M1 
-				LoadSetFile(1, "0901"); //M1 
-				CurrentLevelLayout = Mission1;
-				Race = false;
-			}
-			else
-			{
-				Race = true;
-				LoadSetFile(0, "0900"); //M1 Race
-				LoadSetFile(1, "0901"); //M1 Race
-				CurrentLevelLayout = Mission1_Variation;
-			}
-
+			Race = true;
+			LoadSetFile(0, "0900"); //M1 Race
+			LoadSetFile(1, "0908"); //M1 Race
+			CurrentLevelLayout = Mission1_Variation;
 			break;
 		case Mission2_100Rings:
 			Race = false;
 			LoadSetFile(0, "0905"); //M2
-			LoadSetFile(1, "0901"); //M2
+			LoadSetFile(1, "0908"); //M2
 			break;
 		case Mission3_LostChao:
 			Race = false;
@@ -177,92 +199,112 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	WriteData<5>((void*)0x422f4b, 0x90);
 
 	WriteCall((void*)0x422f5a, Casino_Layout);
+	
 	WriteData<1>((void*)0x5c0595, 0x08); //make pinball working for Knuckles
 	WriteData<1>((void*)0x5c0615, 0x08); //make pinball working for Knuckles
+	WriteData<1>((void*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
 	WriteData<1>((void*)0x5c4424, 0x08); //Fix coin (knuckles layout)
 	WriteData<2>((void*)0x5d049e, 0x90); //Fix Invisible wall when not Sonic. (drop ring Emerald room.)
 	
 	WriteCall((void*)0x5d04a9, FixInvisibleWall); //Add invisible wall if sonic version, otherwise remove it.
+	WriteCall((void*)0x5dacc8, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5d6914, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5d6997, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5da671, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5c14f5, IncreaseRings_R);
 	
+	WriteCall((void*)0x5c5906, FixShakeoffGarbageAction);
 
 	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0900S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Knux.bin");
-	helperFunctions.ReplaceFile("system\\SET0907S.BIN", "system\\levels\\Casinopolis\\Sonic-Casino-Chao2.bin");
+	ReplaceSET("SET0900S", "Sonic-Casino-Act1");
+	ReplaceSET("SET0901S", "Sonic-Casino-Act2");
+	ReplaceSET("SET0904S", "Sonic-Casino-Chao");
+	ReplaceSET("SET0905S", "Sonic-Casino-Rings");
+	ReplaceSET("SET0906S", "Sonic-Casino-Knux");
+	ReplaceSET("SET0907S", "Sonic-Casino-Chao2");
+	ReplaceSET("SET0908S", "Sonic-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900S.bin", "system\\cam\\CAM0900S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901S.bin", "system\\cam\\CAM0901S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906S.bin", "system\\cam\\CAM0906S.bin");
+	ReplaceCAM("CAM0900S", "CAM0900S");
+	ReplaceCAM("CAM0901S", "CAM0901S");
+	ReplaceCAM("CAM0906S", "CAM0906S");
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino2_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0900M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906M.BIN", "system\\levels\\Casinopolis\\Tails-Casino-Knux.bin");
+	ReplaceSET("SET0900M", "Tails-Casino-Act1");
+	ReplaceSET("SET0901M", "Tails-Casino-Act2");
+	ReplaceSET("SET0904M", "Tails-Casino-Chao");
+	ReplaceSET("SET0905M", "Tails-Casino-Rings");
+	ReplaceSET("SET0906M", "Tails-Casino-Knux");
+	ReplaceSET("SET0907M", "Tails-Casino-Chao2");
+	ReplaceSET("SET0908M", "Tails-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900M.bin", "system\\cam\\CAM0900M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901M.bin", "system\\cam\\CAM0901M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906M.bin", "system\\cam\\CAM0906M.bin");
+	ReplaceCAM("CAM0900M", "CAM0900M");
+	ReplaceCAM("CAM0901M", "CAM0901M");
+	ReplaceCAM("CAM0906M", "CAM0906M");
 	helperFunctions.RegisterStartPosition(Characters_Tails, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, Casino2_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0900K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906K.BIN", "system\\levels\\Casinopolis\\Knux-Casino-Knux.bin");
+	ReplaceSET("SET0900K", "Knux-Casino-Act1");
+	ReplaceSET("SET0901K", "Knux-Casino-Act2");
+	ReplaceSET("SET0904K", "Knux-Casino-Chao");
+	ReplaceSET("SET0905K", "Knux-Casino-Rings");
+	ReplaceSET("SET0906K", "Knux-Casino-Knux");
+	ReplaceSET("SET0907K", "Knux-Casino-Chao2");
+	ReplaceSET("SET0908K", "Knux-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900K.bin", "system\\cam\\CAM0900K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901K.bin", "system\\cam\\CAM0901K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906K.bin", "system\\cam\\CAM0906K.bin");
+	ReplaceCAM("CAM0900K", "CAM0900K");
+	ReplaceCAM("CAM0901K", "CAM0901K");
+	ReplaceCAM("CAM0906K", "CAM0906K");
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino2_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0900A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906A.BIN", "system\\levels\\Casinopolis\\Amy-Casino-Knux.bin");
+	ReplaceSET("SET0900A", "Amy-Casino-Act1");
+	ReplaceSET("SET0901A", "Amy-Casino-Act2");
+	ReplaceSET("SET0904A", "Amy-Casino-Chao");
+	ReplaceSET("SET0905A", "Amy-Casino-Rings");
+	ReplaceSET("SET0906A", "Amy-Casino-Knux");
+	ReplaceSET("SET0907A", "Amy-Casino-Chao2");
+	ReplaceSET("SET0908A", "Amy-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900A.bin", "system\\cam\\CAM0900A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901A.bin", "system\\cam\\CAM0901A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906A.bin", "system\\cam\\CAM0906A.bin");
+	ReplaceCAM("CAM0900A", "CAM0900A");
+	ReplaceCAM("CAM0901A", "CAM0901A");
+	ReplaceCAM("CAM0906A", "CAM0906A");
 	helperFunctions.RegisterStartPosition(Characters_Amy, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Amy, Casino2_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0900B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906B.BIN", "system\\levels\\Casinopolis\\Big-Casino-Knux.bin");
+	ReplaceSET("SET0900B", "Big-Casino-Act1");
+	ReplaceSET("SET0901B", "Big-Casino-Act2");
+	ReplaceSET("SET0904B", "Big-Casino-Chao");
+	ReplaceSET("SET0905B", "Big-Casino-Rings");
+	ReplaceSET("SET0906B", "Big-Casino-Knux");
+	ReplaceSET("SET0907B", "Big-Casino-Chao2");
+	ReplaceSET("SET0908B", "Big-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900B.bin", "system\\cam\\CAM0900B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901B.bin", "system\\cam\\CAM0901B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906B.bin", "system\\cam\\CAM0906B.bin");
+	ReplaceCAM("CAM0900B", "CAM0900B");
+	ReplaceCAM("CAM0901B", "CAM0901B");
+	ReplaceCAM("CAM0906B", "CAM0906B");
 	helperFunctions.RegisterStartPosition(Characters_Big, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, Casino2_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0900E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0901E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0904E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0905E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Rings.bin");
-	helperFunctions.ReplaceFile("system\\SET0906E.BIN", "system\\levels\\Casinopolis\\Gamma-Casino-Knux.bin");
+	ReplaceSET("SET0900E", "Gamma-Casino-Act1");
+	ReplaceSET("SET0901E", "Gamma-Casino-Act2");
+	ReplaceSET("SET0904E", "Gamma-Casino-Chao");
+	ReplaceSET("SET0905E", "Gamma-Casino-Rings");
+	ReplaceSET("SET0906E", "Gamma-Casino-Knux");
+	ReplaceSET("SET0907E", "Gamma-Casino-Chao2");
+	ReplaceSET("SET0908E", "Gamma-Casino-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0900E.bin", "system\\cam\\CAM0900E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0901E.bin", "system\\cam\\CAM0901E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0906E.bin", "system\\cam\\CAM0906E.bin");
+	ReplaceCAM("CAM0900E", "CAM0900E");
+	ReplaceCAM("CAM0901E", "CAM0901E");
+	ReplaceCAM("CAM0906E", "CAM0906E");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino2_StartPositions[0]);
 }
@@ -299,6 +341,16 @@ void FixGoldenAndCoin() {
 			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
 		else
 			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue
+		
+		
+	}
+
+	if (CurrentAct == 0 && !TreasureHunting)
+	{
+		if (CurrentCharacter == Characters_Gamma)
+			WriteData<1>((void*)0x5D118B, 0x2); //Fix gamma pinball teleportation
+		else
+			WriteData<1>((void*)0x5D118B, 0x1); //Restore original function.
 	}
 
 	return;

@@ -181,7 +181,7 @@ void SpeedHighway_Layout() {
 			}
 			break;
 		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Tails) //don't load Tails version if character is Tails or Big.
+			if (CurrentCharacter == Characters_Tails && !Vanilla) //don't load Tails version if !vanilla.
 			{
 				LoadSetFile(0, "0400"); //load Sonic Layout
 				Race = false;

@@ -349,11 +349,16 @@ void Chao_OnFrame() {
 		}
 		break;
 	case LevelIDs_FinalEgg:
-		if (CurrentAct == 2)
+		if (CurrentAct == 2 && !FEGammaVersion)
 		{
 			pos = { 2660.566406, -2888.049561, -943.2208862 };
 			Yrot = 0x8000;
 			ChaoCryHint();
+			ChaoSpawn = true;
+		}
+		if (CurrentAct == 0 && FEAmyVersion)
+		{
+			pos = { 2945.652344, 5589.605469, -2211.165039 };
 			ChaoSpawn = true;
 		}
 		break;
@@ -364,7 +369,7 @@ void Chao_OnFrame() {
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 1)
+		if (CurrentAct == 1 && HSAmyVersion)
 		{
 			HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
 			if (DCModChao)
@@ -380,11 +385,16 @@ void Chao_OnFrame() {
 				ChaoSpawn = true;
 			}
 		}
+			if (CurrentAct == 0 && HSBigVersion)
+			{
+				pos = { -254, 0, -461 };
+				ChaoSpawn = true;
+			}
 		break;
 	default:
 		ChaoSpawn = false;
 		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
-		DeleteObject_(ChaoTP); 
+		DeleteObject_(ChaoTP);
 		DeleteObject_(chaoHint);
 		return;
 		break;
@@ -398,4 +408,5 @@ void Chao_OnFrame() {
 	}
 
 	return;
+
 }

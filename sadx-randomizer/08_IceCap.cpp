@@ -7,6 +7,30 @@
 
 
 
+int IC_ReturnCharacter() { //trick the game to make it think we are playing Sonic this will make spawn the Ice Cave as Big.
+
+	if (CurrentCharacter != Characters_Big)
+		return GetCurrentCharacterID();
+	else
+		return (unsigned int)Characters_Sonic;
+}
+
+
+//Prevent the game to disable control for cutscene skip Ice Cap act 3 (Cart thing.)
+
+void DisableController_R() {
+
+	if (CurrentCharacter > Characters_Tails)
+	{
+		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			return EnableController(0);
+		}
+	}
+	return DisableController(0);
+}
+
+
 
 void ICAct3Position() {
 	ObjectMaster* GetChara = GetCharacterObject(0);
@@ -23,19 +47,6 @@ void ICAct3Position() {
 
 	return;
 }
-
-void DisableController_R() {
-
-	if (CurrentCharacter > Characters_Tails)
-	{
-		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		{
-			return EnableController(0);
-		}
-	}
-	return DisableController(0);
-}
-
 
 void IC_Layout() {
 
@@ -65,7 +76,6 @@ void IC_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
-
 	LoadSetFile(0, "0800"); //M1
 
 	switch (CurrentLevelLayout)
@@ -73,54 +83,50 @@ void IC_Layout() {
 	case Mission1:
 	case Mission1_Variation:
 	default:
-		LoadSetFile(1, "0801"); //M1
-		CurrentLevelLayout = Mission1;
-		break;
 	case Mission2_100Rings:
-		LoadSetFile(1, "0801"); //M2
-		break;
 	case Mission3_LostChao:
-		LoadSetFile(1, "0804"); //M3
+		LoadSetFile(1, "0801"); //M1
+
+		if (CurrentLevelLayout < Mission2_100Rings && CurrentAct == 0)
+			CurrentLevelLayout = Mission1;
 		break;
 	}
 
-	LoadSetFile(2, "0802"); //M1
+	if (CurrentAct == 2)
+	{
+		Race = true;
+		LoadSetFile(2, "0804"); //Tails Race
+	}
+	else
+	{
+		Race = false;
+		LoadSetFile(2, "0802"); //M1
+	}
+	
 	LoadSetFile(3, "0803"); //M1
 
 	LoadCamFile(0, "0800");
 	LoadCamFile(1, "0801");
 	LoadCamFile(2, "0802");
 	LoadCamFile(3, "0803");
+
+	if (Race)
+	{
+		SelectBarRace();
+		CurrentLevelLayout = Mission1_Variation;
+	}
+
 	return;
 }
 
-
-
-void LoadRocketObj(ObjectMaster* obj) {
-
-	if (IsPlayerInsideSphere(&obj->Data1->Position, 25))
-		PositionPlayer(0, 567, 225, 1016);
-}
-//RocketIC->Data1->Position = { 456, 126, 905 };
-
-ObjectMaster* TriggerOBJ = nullptr;
-
-void LoadICTrigger() {
-
-	if (!TriggerOBJ)
-	{
-		TriggerOBJ = LoadObject(LoadObj_Data1, 2, LoadRocketObj);
-		TriggerOBJ->Data1->Position = { 445, 97, 978 };
-		TriggerOBJ->Data1->Scale.x = 15;
-	}
-}
 
 
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 
-	WriteData<2>((void*)0x4e980a, 0x90); //Make Ice Cap cave spawn as Big.
+	WriteCall((void*)0x4e92e7, IC_ReturnCharacter);
+	WriteCall((void*)0x4e9802, IC_ReturnCharacter);
 
 	WriteData<5>((void*)0x422e66, 0x90);
 	WriteData<5>((void*)0x422e75, 0x90);
@@ -139,8 +145,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Big.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0804S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0804S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-T.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800S.BIN", "system\\cam\\CAM0800S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801S.BIN", "system\\cam\\CAM0801S.bin");
@@ -148,7 +153,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0803S.BIN", "system\\cam\\CAM0803S.bin");
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, IC3_StartPositions[0]);
+	//helperFunctions.RegisterStartPosition(Characters_Sonic, IC3_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC4_StartPositions[0]);
 
 	//Tails
@@ -156,8 +161,8 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Big.bin");
+	helperFunctions.ReplaceFile("system\\SET0804M.BIN", "system\\levels\\Ice Cap\\Tails-IC-T.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0804M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Chao.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800M.BIN", "system\\cam\\CAM0800M.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801M.BIN", "system\\cam\\CAM0801M.bin");
@@ -173,8 +178,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Big.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0804K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0804K.BIN", "system\\levels\\Ice Cap\\Knux-IC-T.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800K.BIN", "system\\cam\\CAM0800K.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801K.BIN", "system\\cam\\CAM0801K.bin");
@@ -190,8 +194,9 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Big.bin");
+	helperFunctions.ReplaceFile("system\\SET0804A.BIN", "system\\levels\\Ice Cap\\Amy-IC-T.bin");
 
-	helperFunctions.ReplaceFile("system\\SET0804A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Chao.bin");
+
 
 	helperFunctions.ReplaceFile("system\\CAM0800A.BIN", "system\\cam\\CAM0800A.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801A.BIN", "system\\cam\\CAM0801A.bin");
@@ -207,8 +212,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803B.BIN", "system\\levels\\Ice Cap\\Big-IC-Big.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0804B.BIN", "system\\levels\\Ice Cap\\Big-IC-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0804B.BIN", "system\\levels\\Ice Cap\\Big-IC-T.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800B.BIN", "system\\cam\\CAM0800B.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801B.BIN", "system\\cam\\CAM0801B.bin");
@@ -224,8 +228,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\SET0801E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act2.bin");
 	helperFunctions.ReplaceFile("system\\SET0802E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act3.bin");
 	helperFunctions.ReplaceFile("system\\SET0803E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Big.bin");
-
-	helperFunctions.ReplaceFile("system\\SET080E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Chao.bin");
+	helperFunctions.ReplaceFile("system\\SET0804E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-T.bin");
 
 	helperFunctions.ReplaceFile("system\\CAM0800E.BIN", "system\\cam\\CAM0800E.bin");
 	helperFunctions.ReplaceFile("system\\CAM0801E.BIN", "system\\cam\\CAM0801E.bin");

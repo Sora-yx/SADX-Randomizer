@@ -35,6 +35,7 @@ int Switch_Gravity() {
 void SkyDeck_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+
 	if (CurrentAct == 0)
 	{
 		switch (CurrentLevelLayout)
@@ -54,7 +55,7 @@ void SkyDeck_Layout() {
 			}
 			break;
 		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Tails || CurrentCharacter == Characters_Big)
+			if (CurrentCharacter == Characters_Tails && !Vanilla)
 			{
 				Race = false;
 				LoadSetFile(0, "0600"); //load Sonic layout
