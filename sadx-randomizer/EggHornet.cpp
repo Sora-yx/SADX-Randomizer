@@ -21,6 +21,7 @@ void EggHornet_LoadWithTarget() {
 void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
+	WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
 
 	//Sonic
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EH_StartPositions[0]);

@@ -437,7 +437,6 @@ void Characters_Management() {
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
 	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
-	WriteCall((void*)0x4230a0, GammaBossesFixes); //allow gamma to target some boss (Called before boss fight.)
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.

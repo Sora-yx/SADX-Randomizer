@@ -3,7 +3,9 @@
 #include "RM.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Red Mountain\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define RegisterPosition(E, F) helperFunctions.RegisterStartPosition( E , F )
 
 void CamRedMountain() {
 	LoadCamFile(0, "0500");
@@ -48,100 +50,100 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	RMObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0500S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0502S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Act3.bin"); //Knux
-	helperFunctions.ReplaceFile("system\\SET0503S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-E102.bin");
+	ReplaceSET("SET0500S", "Sonic-RM-Act1");
+	ReplaceSET("SET0501S", "Sonic-RM-Act2");
+	ReplaceSET("SET0502S", "Sonic-RM-Act3");
+	ReplaceSET("SET0503S", "Sonic-RM-E102");
+	ReplaceSET("SET0504S", "Sonic-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504S.BIN", "system\\levels\\Red Mountain\\Sonic-RM-Chao.bin");
+	ReplaceCAM("CAM0500S", "CAM0500S");
+	ReplaceCAM("CAM0501S", "CAM0501S");
+	ReplaceCAM("CAM0502S", "CAM0502S");
+	ReplaceCAM("CAM0503S", "CAM0503S");
 
-	helperFunctions.ReplaceFile("system\\CAM0500S.bin", "system\\cam\\CAM0500S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501S.bin", "system\\cam\\CAM0501S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502S.bin", "system\\cam\\CAM0502S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503S.bin", "system\\cam\\CAM0503S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, RM3_StartPositions[0]);
+	RegisterPosition(Characters_Sonic, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Sonic, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Sonic, RM3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0500M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0503M.BIN", "system\\levels\\Red Mountain\\Tails-RM-E102.bin");
+	ReplaceSET("SET0500M", "Tails-RM-Act1");
+	ReplaceSET("SET0501M", "Tails-RM-Act2");
+	ReplaceSET("SET0502M", "Tails-RM-Act3");
+	ReplaceSET("SET0503M", "Tails-RM-E102");
+	ReplaceSET("SET0504M", "Tails-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504M.BIN", "system\\levels\\Red Mountain\\Tails-RM-Chao.bin");
+	ReplaceCAM("CAM0500M", "CAM0500M");
+	ReplaceCAM("CAM0501M", "CAM0501M");
+	ReplaceCAM("CAM0502M", "CAM0502M");
+	ReplaceCAM("CAM0503M", "CAM0503M");
 
-	helperFunctions.ReplaceFile("system\\CAM0500M.bin", "system\\cam\\CAM0500M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501M.bin", "system\\cam\\CAM0501M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502M.bin", "system\\cam\\CAM0502M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503M.bin", "system\\cam\\CAM0503M.bin");
-	helperFunctions.RegisterStartPosition(Characters_Tails, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, RM3_StartPositions[0]);
+	RegisterPosition(Characters_Tails, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Tails, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Tails, RM3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0500K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0502K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0503K.BIN", "system\\levels\\Red Mountain\\Knux-RM-E102.bin");
+	ReplaceSET("SET0500K", "Knux-RM-Act1");
+	ReplaceSET("SET0501K", "Knux-RM-Act2");
+	ReplaceSET("SET0502K", "Knux-RM-Act3");
+	ReplaceSET("SET0503K", "Knux-RM-E102");
+	ReplaceSET("SET0504K", "Knux-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504K.BIN", "system\\levels\\Red Mountain\\Knux-RM-Chao.bin");
+	ReplaceCAM("CAM0500K", "CAM0500K");
+	ReplaceCAM("CAM0501K", "CAM0501K");
+	ReplaceCAM("CAM0502K", "CAM0502K");
+	ReplaceCAM("CAM0503K", "CAM0503K");
 
-	helperFunctions.ReplaceFile("system\\CAM0500K.bin", "system\\cam\\CAM0500K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501K.bin", "system\\cam\\CAM0501K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502K.bin", "system\\cam\\CAM0502K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503K.bin", "system\\cam\\CAM0503K.bin");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, RM3_StartPositions[0]);
+	RegisterPosition(Characters_Knuckles, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Knuckles, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Knuckles, RM3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0500A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0503A.BIN", "system\\levels\\Red Mountain\\Amy-RM-E102.bin");
+	ReplaceSET("SET0500A", "Amy-RM-Act1");
+	ReplaceSET("SET0501A", "Amy-RM-Act2");
+	ReplaceSET("SET0502A", "Amy-RM-Act3");
+	ReplaceSET("SET0503A", "Amy-RM-E102");
+	ReplaceSET("SET0504A", "Amy-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504A.BIN", "system\\levels\\Red Mountain\\Amy-RM-Chao.bin");
+	ReplaceCAM("CAM0500A", "CAM0500A");
+	ReplaceCAM("CAM0501A", "CAM0501A");
+	ReplaceCAM("CAM0502A", "CAM0502A");
+	ReplaceCAM("CAM0503A", "CAM0503A");
 
-	helperFunctions.ReplaceFile("system\\CAM0500A.bin", "system\\cam\\CAM0500A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501A.bin", "system\\cam\\CAM0501A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502A.bin", "system\\cam\\CAM0502A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503A.bin", "system\\cam\\CAM0503A.bin");
-	helperFunctions.RegisterStartPosition(Characters_Amy, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, RM3_StartPositions[0]);
+	RegisterPosition(Characters_Amy, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Amy, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Amy, RM3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0500B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0502B.BIN", "system\\levels\\Red Mountain\\Big-RM-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0503B.BIN", "system\\levels\\Red Mountain\\Big-RM-E102.bin");
+	ReplaceSET("SET0500B", "Big-RM-Act1");
+	ReplaceSET("SET0501B", "Big-RM-Act2");
+	ReplaceSET("SET0502B", "Big-RM-Act3");
+	ReplaceSET("SET0503B", "Big-RM-E102");
+	ReplaceSET("SET0504B", "Big-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504B.BIN", "system\\levels\\Red Mountain\\Big-RM-Chao.bin");
+	ReplaceCAM("CAM0500B", "CAM0500B");
+	ReplaceCAM("CAM0501B", "CAM0501B");
+	ReplaceCAM("CAM0502B", "CAM0502B");
+	ReplaceCAM("CAM0503B", "CAM0503B");
 
-	helperFunctions.ReplaceFile("system\\CAM0500B.bin", "system\\cam\\CAM0500B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501B.bin", "system\\cam\\CAM0501B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502B.bin", "system\\cam\\CAM0502B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503B.bin", "system\\cam\\CAM0503B.bin");
-	helperFunctions.RegisterStartPosition(Characters_Big, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, RM3_StartPositions[0]);
+	RegisterPosition(Characters_Big, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Big, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Big, RM3_StartPositions[0]);
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0500E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0501E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0503E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-E102.bin");
+	ReplaceSET("SET0500E", "Gamma-RM-Act1");
+	ReplaceSET("SET0501E", "Gamma-RM-Act2");
+	ReplaceSET("SET0502E", "Gamma-RM-Act3");
+	ReplaceSET("SET0503E", "Gamma-RM-E102");
+	ReplaceSET("SET0504E", "Gamma-RM-Chao");
 
-	helperFunctions.ReplaceFile("system\\SET0504E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0505E.BIN", "system\\levels\\Red Mountain\\Gamma-RM-Chao2.bin");
+	ReplaceCAM("CAM0500E", "CAM0500E");
+	ReplaceCAM("CAM0501E", "CAM0501E");
+	ReplaceCAM("CAM0502E", "CAM0502E");
+	ReplaceCAM("CAM0503E", "CAM0503E");
 
-	helperFunctions.ReplaceFile("system\\CAM0500E.bin", "system\\cam\\CAM0500E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0501E.bin", "system\\cam\\CAM0501E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0502E.bin", "system\\cam\\CAM0502E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0503E.bin", "system\\cam\\CAM0503E.bin");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, RM1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, RM2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, RM3_StartPositions[0]);
-
-
+	RegisterPosition(Characters_Gamma, RM1_StartPositions[0]);
+	RegisterPosition(Characters_Gamma, RM2_StartPositions[0]);
+	RegisterPosition(Characters_Gamma, RM3_StartPositions[0]);
 }
 
 void RedMountain_Layout() {

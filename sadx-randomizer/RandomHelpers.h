@@ -114,6 +114,9 @@ void ChaoGameplayCheck();
 ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
 ObjectFunc(InvisibleWallCasino, 0x5d03a0);
+ObjectFunc(SDCannon, 0x5f84e0);
+ObjectFunc(SDCannonS1, 0x5f9710);
+ObjectFunc(SDCannonS2, 0x5f8e00);
 void FixInvisibleWall();
 
 void E101Target();

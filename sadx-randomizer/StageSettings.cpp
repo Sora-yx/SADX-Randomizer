@@ -512,14 +512,6 @@ void TargetableEntity(ObjectMaster* obj)
 	}
 }
 
-void GammaBossesFixes() {
-
-	if (CurrentCharacter == Characters_Gamma && CurrentLevel == LevelIDs_EggHornet)
-		WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
-
-	return LoadCamFile(0, "0000");
-}
-
 
 
 int AmyCartImprovement() {
@@ -551,7 +543,7 @@ void preventCutscene() {
 void FixRestartCheckPoint() {
 
 	//Check if a CP has been grabbed
-	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
+	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && CurrentLevel != LevelIDs_SkyDeck && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
 		isCheckpointUsed = true;
 
 	return njColorBlendingMode(0, 8);
@@ -559,7 +551,7 @@ void FixRestartCheckPoint() {
 
 
 
-//Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic.
+//Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic and already used for a different layout.
 //Also used to call different Stuff.
 
 void FixLayout_StartPosition_R() {

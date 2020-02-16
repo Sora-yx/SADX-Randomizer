@@ -24,12 +24,62 @@ void Cam_SkyDeck() {
 
 }
 
+//Don't change the gravity if knuckles layout.
 int Switch_Gravity() {
 
 	if (TreasureHunting)
 		return (unsigned)Characters_Knuckles; 
 	else
 		return GetCharacterID(0);
+}
+
+//Allow Gamma to target the Sky Deck cannon
+
+void SkyDeckCannon_LoadWithTarget(ObjectMaster* SDCanonnObj) {
+	int iVar1;
+
+	iVar1 = ClipSetObject(SDCanonnObj);
+	if (iVar1 == 0) {
+		SDCannon(SDCanonnObj);
+	}
+	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+	
+	obj->Data1->LoopData = (Loop*)SDCanonnObj;
+	obj->Data1->Scale.x = 20;
+
+	return;
+}
+
+//Allow Gamma to target the Sky Deck cannon
+
+void SkyDeckCannonS1_LoadWithTarget(ObjectMaster* SDCanonnObj) {
+	int iVar1;
+
+	iVar1 = ClipSetObject(SDCanonnObj);
+	if (iVar1 == 0) {
+		SDCannonS1(SDCanonnObj);
+	}
+	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+
+	obj->Data1->LoopData = (Loop*)SDCanonnObj;
+	obj->Data1->Scale.x = 20;
+
+	return;
+}
+
+void SkyDeckCannonS2_LoadWithTarget(ObjectMaster* SDCanonnObj) {
+	int iVar1;
+
+	iVar1 = ClipSetObject(SDCanonnObj);
+	if (iVar1 == 0) {
+		SDCannonS2(SDCanonnObj);
+	}
+	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
+
+	obj->Data1->LoopData = (Loop*)SDCanonnObj;
+	obj->Data1->Scale.x = 20;
+
+	return;
 }
 
 void SkyDeck_Layout() {
@@ -119,6 +169,9 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 
 	WriteCall((void*)0x422dd8, SkyDeck_Layout); 
 	WriteCall((void*)0x5ecc7b, Switch_Gravity); 
+	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);	
+	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
+	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
@@ -170,11 +223,11 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD3_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0600A", "Knux-SD-Act1");
-	ReplaceSET("SET0601A", "Knux-SD-Act2");
-	ReplaceSET("SET0602A", "Knux-SD-Act3");
-	ReplaceSET("SET0604A", "Knux-SD-Knux");
-	ReplaceSET("SET0605A", "Knux-SD-Race");
+	ReplaceSET("SET0600A", "Amy-SD-Act1");
+	ReplaceSET("SET0601A", "Amy-SD-Act2");
+	ReplaceSET("SET0602A", "Amy-SD-Act3");
+	ReplaceSET("SET0604A", "Amy-SD-Knux");
+	ReplaceSET("SET0605A", "Amy-SD-Race");
 
 	ReplaceCAM("CAM0600A", "CAM0600A");
 	ReplaceCAM("CAM0601A", "CAM0601A");
