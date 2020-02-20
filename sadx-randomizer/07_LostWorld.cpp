@@ -12,13 +12,9 @@ void Cam_LW() {
 	LoadCamFile(0, "0700");
 
 	if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 1 && TreasureHunting)
-	{
 		LoadCamFile(1, "0704");
-	}
 	else
-	{
 		LoadCamFile(1, "0701");
-	}
 
 	LoadCamFile(2, "0702");
 	return;
@@ -287,6 +283,5 @@ ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, 
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_LostWorld * 8 + 2] = &LostWorldObjectList;
-
 }
 

@@ -12,6 +12,13 @@ void FixSuperFormDeath() {
 	}
 }
 
+void FixPerfectChaosHit() {
+	if (CurrentCharacter <= Characters_Knuckles)
+		ForcePlayerAction(0, 0xd);
+	else
+		ForcePlayerAction(0, 9);
+}
+
 void LoadCamFilePC_R()
 {
 	MetalSonicFlag = 0; //Prevent Metal Sonic
@@ -23,5 +30,7 @@ void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFu
 {
 	WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
 	WriteCall((void*)0x55fde8, FixSuperFormDeath); // fix Death with 0 ring.
+	WriteCall((void*)0x56016f, FixPerfectChaosHit); // fix the character being stuck.
+
 
 }

@@ -30,15 +30,6 @@ void TriggerCasinoChao_Delete()
 	TriggerCasino = nullptr;
 }
 
-void LoadTriggerCasinoChao() {
-
-	if (CasinoSwitch == 3 && !TriggerCasino && CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1)
-	{
-		TriggerCasino = LoadObject(LoadObj_Data1, 2, TriggerCasinoChao_Main);
-		TriggerCasino->Data1->Position = { -1568.96, -2199, 2642.24 };
-		TriggerCasino->Data1->Scale.x = 15;
-	}
-}
 
 void FixFlipperCharacterPosition() {
 
@@ -76,7 +67,7 @@ void Casino_Layout() {
 
 	if (CurrentAct == 1)
 	{
-		CurrentLevelLayout = 3;//randomizedSets[levelCount].LevelLayout;
+		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
 		switch (CurrentLevelLayout)
 		{
@@ -120,7 +111,7 @@ void Casino_Layout() {
 		}
 		else
 		{
-			CurrentLevelLayout = 0; //randomizedSets[levelCount].LevelLayout;
+			CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
 
 			switch (CurrentLevelLayout)
 			{
@@ -563,13 +554,35 @@ ObjectListEntry CasinopolisObjectList_list[] = {
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B0DF0, "SPINA A" } /* "SPINA A" */,
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B0F40, "SPINA B" } /* "SPINA B" */,
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B1090, "SPINA C" } /* "SPINA C" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */,
+	{ 14, 3, 1, 2250000, 0, (ObjectFuncPtr)0x618030, "O FLYST" } /* "O FLYST" */
 };
 
 ObjectList CasinopolisObjectList = { arraylengthandptrT(CasinopolisObjectList_list, int) };
 
 
+PVMEntry CasinopolisObjectTextures[] = {
+	{ "OUM", (TexList*)0x9334EC },
+	{ "KUJA", (TexList*)0x93142C },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "SUPI_SUPI", (TexList*)0x96F518 },
+	{ "TUBA", (TexList*)0x92F2BC },
+	{ "KOAR", (TexList*)0x9359B4 },
+	{ "USA", (TexList*)0x93CF74 },
+	{ "KAOS_EME", (TexList*)0xC3FE20 },
+	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ "OBJ_HIGHWAY", (TexList*)0x26703F0 },
+	{ "OBJ_HIGHWAY2", (TexList*)0x26706AC },
+	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ 0 }
+};
+
+
+
 void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_Casinopolis * 8 + 0] = &CasinopolisObjectList;
+	ObjLists[LevelIDs_Casinopolis * 8 + 1] = &CasinopolisObjectList;
+	TexLists_Obj[LevelIDs_Casinopolis] = CasinopolisObjectTextures;
 }

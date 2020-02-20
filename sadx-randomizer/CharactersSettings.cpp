@@ -71,6 +71,8 @@ void AllUpgrades() {
 	return;
 }
 
+
+
 void CheckRace();
 
 //Hook Load Character
@@ -84,7 +86,7 @@ void LoadCharacter_r()
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-		CheckRace();
+	CheckRace();
 
 	AllUpgrades();
 	EmeraldRadar_R();
@@ -92,6 +94,8 @@ void LoadCharacter_r()
 
 	return;
 }
+
+
 
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
 void SuperAuraStuff() {
@@ -124,8 +128,8 @@ static void SuperSonicManager_Load()
 	ObjectMaster* obj = LoadObject(static_cast<LoadObj>(0), 2, SuperSonicManager_Main);
 }
 
-int SSLevel[7]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
-LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter };
+int SSLevel[8]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
+LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap };
 
 extern bool TPAmyVersion;
 extern bool SHTailsVersion;
@@ -156,6 +160,12 @@ int GetSSLevelBanned() {
 					return false;
 				else
 					return true;
+				break;
+			case LevelIDs_IceCap:
+				if (CurrentAct == 2)
+					return true;
+				else
+					return false;
 				break;
 			case LevelIDs_HotShelter:
 				if (CurrentAct < 2)
@@ -191,7 +201,8 @@ void SuperSonic_TransformationCheck() {
 		if (SonicRand == 1 && !MetalSonicFlag)
 		{
 			static Uint8 last_action[8] = {};
-			Rings = 1;
+			if (!Rings)
+				Rings = 1;
 			for (int i = 0; i < 8; i++)
 			{
 				EntityData1* data1 = EntityData1Ptrs[i];
@@ -232,7 +243,7 @@ void CallStuffWhenLevelStart() {
 	ObjectMaster* P1 = GetCharacterObject(0);
 	char CurChara = P1->Data1->CharID;
 	TimeThing = 1; //activate the timer of the stage.
-
+		
 	if (CurChara != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.

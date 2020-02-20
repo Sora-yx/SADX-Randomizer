@@ -54,11 +54,12 @@ void DisableTimeStuff() {
 	if (CurrentCharacter == Characters_Tails && !Race)
 		SetTailsRaceVictory();
 
+	ObjectMaster* play1 = GetCharacterObject(0);
+	ObjectMaster* play2 = GetCharacterObject(1);
+
 	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
 	{
-		ObjectMaster* play1 = GetCharacterObject(0);
-		ObjectMaster* play2 = GetCharacterObject(1);
-
+		
 		if (play2 != nullptr && play1 != nullptr)
 		{
 			if (CurrentCharacter != Characters_Amy)
@@ -73,7 +74,7 @@ void DisableTimeStuff() {
 				DeleteObject_(TailsAI_ptr); //prevent crash as Amy.
 			}
 
-			if (CurrentAI == Characters_Tails && isAIActive == true || play1->Data1->CharID == Characters_Tails && (isAIActive == true || !Race))
+			if (CurrentAI == Characters_Tails || play1->Data1->CharID == Characters_Tails)
 			{
 				SetTailsRaceVictory(); //Fix Tails AI victory animation
 			}
@@ -134,11 +135,9 @@ void ResetValueWhileLevelResult() {
 void fixTCCart() {
 	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
 	WriteData<1>((void*)0x7983c4, 0x7C);
-	FlagAutoPilotCart = 0;
 
 	return;
 }
-
 
 
 void LoadZero() {
@@ -157,10 +156,26 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_FinalEgg && !FEAmyVersion || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
 		return;
 
-	static const PVMEntry EGGROBPVM = { "EGGROB", &EGGROB_TEXLIST };
 	LoadPVM("EGGROB", &EGGROB_TEXLIST);
 	CheckLoadZero();
 }
+
+void FixZeroSound() {
+
+	if (CurrentCharacter != Characters_Amy)
+		PlayVoice_R(6014);
+	else
+		PlaySound(0x324, 0x0, 0, 0x0);
+}
+
+void FixZeroSound2() {
+
+	if (CurrentCharacter != Characters_Amy)
+		PlayVoice_R(6013);
+	else
+		PlaySound(0x322, 0x0, 0, 0x0);
+}
+
 
 void Set_Zero() {
 	//Zero Stuff
@@ -169,6 +184,7 @@ void Set_Zero() {
 	WriteCall((void*)0x5ae104, LoadZero); //Call Zero at Final Egg.
 	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 }
+
 
 
 
@@ -194,7 +210,7 @@ void Load_Cart_R() {
 		switch (CurrentCharacter) //Set Color and Size depending on character
 		{
 		case Characters_Gamma:
-			CurrentCart->Data1->Scale.x = BlackColor;
+			CurrentCart->Data1->Scale.x = 3;
 			CurrentCart->Data1->Scale.z = 2;
 			break;
 		case Characters_Big:
@@ -266,6 +282,7 @@ void Cart_Main_r(ObjectMaster* obj) {
 }
 */
 
+
 void Delete_Cart()
 {
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
@@ -274,7 +291,7 @@ void Delete_Cart()
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
 		return;
-
+	FlagAutoPilotCart = 1;
 	if (CurrentCart != nullptr)
 		DeleteObject_(CurrentCart);
 	else
@@ -288,7 +305,6 @@ void Delete_Cart()
 			ForcePlayerAction(0, 28);
 	}
 
-	FlagAutoPilotCart = 0;
 	CurrentCart = nullptr;
 }
 
@@ -343,11 +359,11 @@ void EmeraldRadar_R() {
 				}
 				break;
 			case LevelIDs_LostWorld:
-				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 36) //If diggable emeralds, rand again.
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
 				{
 					do {
 						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 36);
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
 				}
 				break;
 			case LevelIDs_SkyDeck:
@@ -458,6 +474,20 @@ void TwinkleCircuitResult() {
 	DeleteAllObjects();
 	PauseQuitThing2();
 	GameState = 0x5;
+}
+
+void SetCamera() {
+	if (CurrentLevel >= LevelIDs_RedMountain && CurrentLevel <= LevelIDs_HotShelter)
+	{
+		FreeCam = 1;
+		SetCameraMode_(FreeCam);
+	}
+
+	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SpeedHighway)
+	{
+		FreeCam = 0;
+		SetCameraMode_(0);
+	}
 }
 
 //Create an object so Gamma can hit some specific bosses.
@@ -596,6 +626,7 @@ void FixLayout_StartPosition_R() {
 		}
 	}
 
+	
 	if (GetBackRing && CurrentLevelLayout >= 2)
 	{
 		Rings = RingCopy;
@@ -623,9 +654,6 @@ void LoadTriggerObject() {
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentLevelLayout == Mission3_LostChao)
 		LoadChaoTPTrigger();
-
-	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct == 1 && CurrentLevelLayout == Mission3_LostChao)
-		LoadTriggerCasinoChao();
 
 	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
 		LoadRemoveCart();

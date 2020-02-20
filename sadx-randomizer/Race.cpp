@@ -3,6 +3,8 @@
 #include "ActsSettings.h"
 #include "data\CharactersSettings.h"
 #include "Utils.h"
+#include "Trampoline.h"
+#include "StageSettings.h"
 
 extern char SonicCD;
 extern bool Mission;
@@ -20,12 +22,21 @@ void AIRaceLoad_R() {
 
 int IsFastSonicAI_R() {
 
-	if (isCriticalMode)
+	if (isCriticalMode && CurrentCharacter != Characters_Big)
 		return 1;
 	else
 		return 0;
 }
 
+
+
+void Sonic2PAI_Load_r(ObjectMaster* AIRaceOBJ) {
+
+	AIRaceOBJ = LoadObject((LoadObj)10, 0, Sonic2PAI_Load);
+	AIRaceOBJ->Data1->Action = AIRaceOBJ->Data1->Action;
+	AIRaceOBJ->Data1->LoopData = (Loop*)AIRaceOBJ;
+	AIRaceOBJ->Data1->Scale.x = 20;
+}
 
 
 void CheckRace() {

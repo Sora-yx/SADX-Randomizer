@@ -180,6 +180,7 @@ void RedMountain_Layout() {
 	if (CurrentAct == 1)
 	{
 		LoadSetFile(0, "0500");
+		LoadSetFile(1, "0501");
 		LoadSetFile(1, "0503"); //load Gamma version
 		CurrentLevelLayout = Mission1_Variation;
 	}

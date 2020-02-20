@@ -164,43 +164,7 @@ extern "C" {
 		AI_Init();
 
 		//RNG generator + Create splits.
-		if (!StorySplits)
-		{
-			split = 40;
-			for (unsigned int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
-				if (RNGCharacters)
-					randomizedSets[i].character = getRandomCharacter();
-
-				if (RNGStages)
-				{
-					randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-					randomizedSets[i].act = randomacts(randomizedSets[i]);
-				}
-
-				randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
-
-				if (RNGMusic)
-					randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
-
-				if (isAIAllowed)
-					randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
-
-				randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
-
-				if (randomizedSets[i].character == Characters_Sonic)
-				{
-					randomizedSets[i].sonic_mode = rand() % 2;
-					randomizedSets[i].ss_mode = rand() % 2;
-				}
-
-				TotalCount++;
-			}
-		}
-		else
-		{
-			//Splits Initialization
-			Split_Init();
-		}
+		Randomizer_GetNewRNG();
 	}
 
 	

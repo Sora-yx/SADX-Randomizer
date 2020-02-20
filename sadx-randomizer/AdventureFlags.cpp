@@ -11,6 +11,14 @@ using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
 
+void DeleteCustomFlag() {
+
+	if (CurrentLevel == 0 && GameMode == 12 && !DemoPlaying)
+		CustomFlag = 0;
+
+	return SomethingAboutFlag();
+}
+
 void AddCustomFlag() {
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SandHill && CurrentLevel != LevelIDs_TwinkleCircuit)
 	{
@@ -128,6 +136,8 @@ void CustomFlagCheck() {
 			break;
 		}
 	}
+
+	
 
 	if (SelectedCharacter == 2) //Knuckles
 	{

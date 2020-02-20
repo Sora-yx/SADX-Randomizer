@@ -7,7 +7,8 @@ uint8_t getRandomCharacter(bool allow_duplicate = false);
 short getRandomStage(uint8_t char_id, bool ban_regular = false);
 short getRandomMusic(RandomizedEntry entry);
 bool isStageBanned(uint8_t char_id, short stage_id);
-bool isRegularStageBanned(uint8_t char_id, short stage_id);
+bool isDuplicateStage(short stage_id, short prev_stage_id);
+bool isVanillaStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
@@ -20,7 +21,7 @@ short randomacts(RandomizedEntry entry);
 short randomLayout(RandomizedEntry entry);
 short getRandomAI(RandomizedEntry entry);
 short getRandomRaceAI(RandomizedEntry entry);
-void GetNewLevel();
+void Randomizer_GetNewRNG();
 void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
@@ -120,6 +121,8 @@ ObjectFunc(SDCannonS2, 0x5f8e00);
 void FixInvisibleWall();
 
 void E101Target();
+void SetCamera();
+void Sonic2PAI_Load_r();
 
 extern int level[22];
 extern int AIArray[4];
@@ -215,6 +218,7 @@ void Chao_CrySound();
 
 void AddCustomFlag();
 void CustomFlagCheck(); //sa2 style
+void DeleteCustomFlag();
 
 void CancelResetPosition();
 
@@ -245,6 +249,8 @@ VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
 VoidFunc(Tails_CheckRaceResult, 0x461560);
 VoidFunc(EndLevelStuff, 0x4179bc);
+
+VoidFunc(SomethingAboutFlag, 0x42f5d0);
 
 ObjectFunc(Result_Score, 0x4141f0);
 

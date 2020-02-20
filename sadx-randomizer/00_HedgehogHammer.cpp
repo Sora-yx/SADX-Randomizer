@@ -14,13 +14,8 @@ void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helper
 	WriteCall((void*)0x624b00, HedgehogHammerTrick);
 	WriteCall((void*)0x62519c, HedgehogHammerTrick);
 
-
-	WriteData<5>((void*)0x62665c, 0x90);
-	WriteData<5>((void*)0x626673, 0x90);
-	WriteData<5>((void*)0x626701, 0x90);
-	
-	//WriteCall((void*)0x62665c, HedgehogHammerResult);
-
+	WriteData<1>((void*)0x62662F, 0x06);
+	WriteCall((void*)0x626744, HedgehogHammerResult);
 
 	//Sonic
 	ReplaceSET("SET0000S", "Sonic-HH");
@@ -45,13 +40,16 @@ int HedgehogHammerTrick() {
 void HedgehogHammerResult() {
 
 
-	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
-		LastStoryFlag = 1;
-	else
-		LastStoryFlag = 0;
+		if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
+			LastStoryFlag = 1;
+		else
+			LastStoryFlag = 0;
 
-	CustomFlag++;
-	GameMode = GameModes_Adventure_Field;
-	Rings = 0;
-	StartLevelCutscene(0x1);
+		CustomFlag++;
+		
+		Rings = 0;
+		GameState = 0x5;
+	
+
+	return;
 }

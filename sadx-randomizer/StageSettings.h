@@ -17,3 +17,6 @@ enum Color {
 	BlackColor, BlueColor, GreenColor, LightBlueColor, OrangeColor, PurpleColor, RedColor
 };
 
+
+
+void Sonic2PAI_Load_r(ObjectMaster* obj);

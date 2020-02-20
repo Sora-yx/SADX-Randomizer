@@ -215,6 +215,13 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddVoices("6000", "RadarBlink");
 	AddVoices("6001", "KnuxEmeraldGet");
 	AddVoices("6002", "TikalHint");
+
+	AddVoices("6010", "ZeroArm");
+	AddVoices("6011", "ZeroHit");
+	AddVoices("6013", "ZeroTarget");
+	AddVoices("6014", "ZeroThink");
+
+	WriteCall((void*)0x45be57, PlayVoice_R);
 }
 
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
@@ -232,7 +239,8 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	//Stats & Value Reset
 	WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
 	WriteCall((void*)0x416b7a, TrialModeQuit_R); //Reset value and stuff properly when you Quit Trial Mode
-	
+	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
+
 	Credits_StartupInit();
 }
 

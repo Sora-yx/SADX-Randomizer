@@ -29,6 +29,10 @@ extern NJS_TEXLIST GoalRingTextures;
 
 FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
 
+bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
+	return (powf(pos->x - center->x, 2) + pow(pos->y - center->y, 2) + pow(pos->z - center->z, 2)) <= pow(radius, 2);
+}
+
 void BackRingObj_Display(ObjectMaster* obj) {
 	if (!MissedFrames) {
 		njSetTexture(&GoalRingTextures);
@@ -43,26 +47,28 @@ void BackRingObj_Display(ObjectMaster* obj) {
 	}
 }
 
+extern ObjectMaster* AIRaceOBJ;
+
 //ran every UNpaused frame
 void BackRingObj_Main(ObjectMaster* obj) {
 
 	if (!ClipSetObject(obj)) { //delete the object if we're too far away
-
+		ObjectMaster* play1 = GetCharacterObject(0);
+		CharObj2* obj2 = ((EntityData2*)play1->Data2)->CharacterData;
 		EntityData1* v1 = obj->Data1;
 		LoadPVM("textures\\GOALRING", &GoalRingTextures);
-
-		//Hit
 		if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
 		{
 			if (CurrentLevelLayout >= Mission2_100Rings)
 			{
 				GetBackRing = true;
+				DisableControl();
+				obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 				RingCopy = Rings;
 				TimeSecCopy = TimeSeconds;
 				TimeMinCopy = TimeMinutes;
 				TimeFrameCopy = TimeFrames;
 				PlayVoice_R(5001); //back ring hit SFX
-				ObjectMaster* play1 = GetCharacterObject(0);
 				play1->Data1->Action = 0;
 				play1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 
@@ -81,6 +87,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 			}
 			else
 			{
+				
 				LoadLevelResults();
 				obj->Data1->Action = 1;
 				return;

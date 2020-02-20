@@ -67,117 +67,109 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 
 	switch (CurrentLevel)
 	{
-	case LevelIDs_SpeedHighway: //crash
-		if (CurrentAct == 1)
+		case LevelIDs_SpeedHighway: //crash
+			if (CurrentAct == 1)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_FinalEgg: //cutscene issue
+			if (CurrentCharacter == Characters_Amy)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Casinopolis:
+			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_HotShelter: //issue with handle
+			if (CurrentAct <= 1)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Chaos0: //Crash if character is swap with AI
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-	case LevelIDs_FinalEgg: //cutscene issue
-		if (CurrentCharacter == Characters_Amy)
+		case LevelIDs_Chaos2: //Potential cutscene crash
+			if (CurrentCharacter == Characters_Knuckles)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_Chaos6: //Potential cutscene crash
+			if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
+		case LevelIDs_PerfectChaos: //AI makes the fight a lot harder.
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-	case LevelIDs_RedMountain: //cutscene crash
-		if (CurrentCharacter < 4)
+		case LevelIDs_EggViper: //Potential cutscene crash + fight harder
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-	case LevelIDs_Casinopolis:
-		if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
+		case LevelIDs_TwinklePark:
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-	case LevelIDs_HotShelter: //issue with handle
-		if (CurrentAct <= 1)
+		case LevelIDs_LostWorld: //cutscene crash
+		{
+			if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		break;
+		case LevelIDs_SkyDeck:  //cutscene crash
+		{
+			if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		break;
+		case LevelIDs_SandHill:  //cutscene crash
+		{
+			if (CurrentCharacter == Characters_Tails)
+			{
+				isAIActive = false;
+				return 0;
+			}
+		}
+		break;
+		case LevelIDs_EggWalker:  //Character swap is broken in this fight
 		{
 			isAIActive = false;
 			return 0;
 		}
 		break;
-	case LevelIDs_EmeraldCoast: //Tails rescue cutscene crash
-		if (CurrentCharacter == Characters_Tails && CurrentAct != 2)
-		{
-			isAIActive = false;
-			return 0;
-		}
-		break;
-	case LevelIDs_Chaos0: //Crash if character is swap with AI
-	{
-		isAIActive = false;
-		return 0;
-	}
-	break;
-	case LevelIDs_Chaos2: //Potential cutscene crash
-		if (CurrentCharacter == Characters_Knuckles)
-		{
-			isAIActive = false;
-			return 0;
-		}
-		break;
-	case LevelIDs_Chaos6: //Potential cutscene crash
-		if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
-		{
-			isAIActive = false;
-			return 0;
-		}
-		break;
-	case LevelIDs_PerfectChaos: //AI makes the fight a lot harder.
-	{
-		isAIActive = false;
-		return 0;
-	}
-	break;
-	case LevelIDs_EggViper: //Potential cutscene crash + fight harder
-	{
-		isAIActive = false;
-		return 0;
-	}
-	break;
-	case LevelIDs_TwinklePark:
-	{
-		isAIActive = false;
-		return 0;
-	}
-	break;
-	case LevelIDs_LostWorld: //cutscene crash
-	{
-		if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
-		{
-			isAIActive = false;
-			return 0;
-		}
-	}
-	case LevelIDs_SkyDeck:  //cutscene crash
-	{
-		if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
-		{
-			isAIActive = false;
-			return 0;
-		}
-	}
-	break;
-	case LevelIDs_SandHill:  //cutscene crash
-	{
-		if (CurrentCharacter == Characters_Tails)
-		{
-			isAIActive = false;
-			return 0;
-		}
-	}
-	case LevelIDs_EggWalker:  //Character swap is broken in this fight
-	{
-		isAIActive = false;
-		return 0;
-		break;
-	}
+		default:
+			isAIActive = true;
+			return 1;
+			break;
 	}
 
 	isAIActive = true;
@@ -524,6 +516,26 @@ void FixAISFXGamma() {
 	return;
 }
 
+void FixAISFXGamma2() { 
+
+	if (Race && CurrentCharacter != Characters_Gamma)
+		return;
+
+	PlaySound(0x33d, 0, 0, 0);
+
+	return;
+}
+
+void FixAISFXGamma3() {
+
+	if (Race && CurrentCharacter != Characters_Gamma)
+		return;
+
+	PlaySound(0x33e, 0, 0, 0);
+
+	return;
+}
+
 extern bool FEGammaVersion;
 //Result Voice FIX
 void ResultVoiceFix() {
@@ -565,11 +577,10 @@ void ResultVoiceFix() {
 			Load_DelayedSound_SFX(0x591);
 			break;
 		case Characters_Big:
-
-				if (CurrentLevel < 15 && CurrentLevelLayout < Mission2_100Rings && !FEGammaVersion)
-					Load_DelayedSound_Voice(4010);
-				else
-					Load_DelayedSound_Voice(4011);
+			if (CurrentLevel < LevelIDs_Chaos0 && CurrentLevelLayout < Mission2_100Rings && !FEGammaVersion && !TreasureHunting || CurrentLevel == LevelIDs_SandHill)
+				Load_DelayedSound_Voice(4010);
+			else
+				Load_DelayedSound_Voice(4011);
 			SoundManager_Delete2();
 			break;
 		}
@@ -823,6 +834,9 @@ void AIAudioFixes() {
 	WriteCall((void*)0x4857e0, FixAISFXAmy8);
 	
 	WriteCall((void*)0x47fc9e, FixAISFXGamma);
+	WriteCall((void*)0x47fd0, FixAISFXGamma2);
+	WriteCall((void*)0x481dac, FixAISFXGamma3);
+
 
 	//fix victory voice result (ai swap)
 

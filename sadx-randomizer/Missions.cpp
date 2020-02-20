@@ -71,17 +71,22 @@ void LoadStageMissionImage_r() {
 				CurrentMission = EmeraldKnuxCard;
 			break;
 		case LevelIDs_FinalEgg:
-			if (CurrentLevelLayout == Mission1_Variation && CurrentCharacter != Characters_Amy)
-				CurrentMission = CapsuleCard; //capsule
+			if (CurrentAct != 2)
+			{
+				if (CurrentLevelLayout == Mission1_Variation && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+					CurrentMission = CapsuleCard; //capsule
 
-			if (CurrentLevelLayout == Mission1)
-				CurrentMission = FinalEggCard; //Go to the center of the base.
+				if (CurrentLevelLayout == Mission1)
+					CurrentMission = FinalEggCard; //Go to the center of the base.
 
-			if (CurrentCharacter == Characters_Amy && CurrentAct == 0)
-				CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
-
-			if (CurrentAct == 2 && CurrentLevelLayout == Mission1_Variation)
-				CurrentMission = SonicDollCard;
+				if (CurrentCharacter == Characters_Amy)
+					CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
+			}
+			else
+			{
+				if (CurrentAct == 2 && CurrentLevelLayout == Mission1_Variation)
+					CurrentMission = SonicDollCard;
+			}
 			break;
 		case LevelIDs_RedMountain:
 			if (CurrentAct == 2 && TreasureHunting)

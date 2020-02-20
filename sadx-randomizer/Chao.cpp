@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RandomHelpers.h"
 #include "chao.h"
+#include "Trampoline.h"
 
 ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
@@ -116,6 +117,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		a1->Data1->Action = 2;
 	}
 	else if (Action == 2) {
+		
 		ChaoObj_Animate(2, 33); //animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
 
@@ -135,30 +137,34 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		case Characters_Big:
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
 			{
+				ChaoManager_Load();
 				chaoPB++; //Chao Credit Stat
 				LoadLevelResults();
 				a1->Data1->Action = 3;
-			}
-			else
-			{
-				ChaoObj_Animate(3, 33); //found animation
 			}
 			break;
 		default:
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
 			{
+				ChaoManager_Load();
 				chaoPB++;
 				LoadLevelResults();
 				a1->Data1->Action = 3;
-			}
-			else
-			{
-				ChaoObj_Animate(3, 33); //found animation
 			}
 			break;
 		}
 	}
 }
+
+void Chao_Gravity_r(ObjectMaster* obj);
+Trampoline Chao_Gravity_t(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
+void Chao_Gravity_r(ObjectMaster* obj) {
+	if (CurrentLevel >= LevelIDs_SSGarden || obj->Data1->CharIndex != 1) {
+		ObjectFunc(original, Chao_Gravity_t.Target());
+		original(obj);
+	}
+}
+
 
 void Chao_Init() {
 	//Trick the game into thinking we're in a specific chao garden
@@ -179,7 +185,7 @@ void Chao_CrySound() {
 			PlayVoice_R(5002);
 
 		//prevcry = cry;
-		ChaoCryDelay = 300;
+		ChaoCryDelay = 420;
 	}
 
 	return;
@@ -209,8 +215,6 @@ void ChaoTPTriggerDelete(ObjectMaster* a1) {
 	DeleteObject_(ChaoTP);
 	ChaoTP = nullptr;
 }
-
-
 
 
 void ChaoTPTrigger(ObjectMaster* a1) {
@@ -280,9 +284,9 @@ void Chao_OnFrame() {
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 1)
+		if (CurrentAct == 1 && CasinoSwitch == 3)
 		{
-			pos = { -1541.241, 62.75, 2636.955 };
+			pos = { -1565.96, -2205, 2654.24 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
@@ -291,6 +295,12 @@ void Chao_OnFrame() {
 		if (CurrentAct == 1)
 		{
 			pos = { 1480.62, 573.3, -256.67 };
+			Yrot = 0x8000;
+			ChaoSpawn = true;
+		}
+		if (CurrentAct == 3)
+		{
+			pos = { 1790.85, 371.968811, 11.265 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
@@ -333,9 +343,9 @@ void Chao_OnFrame() {
 		}
 		break;
 	case LevelIDs_SkyDeck:
-		if (CurrentAct == 0)
+		if (CurrentAct == 1)
 		{
-			pos = { 448.18, -450, 3732.73 };
+			pos = { -316.7368469, 40.99000168, -687.1625977 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
@@ -349,12 +359,21 @@ void Chao_OnFrame() {
 		}
 		break;
 	case LevelIDs_FinalEgg:
-		if (CurrentAct == 2 && !FEGammaVersion)
+		if (CurrentAct == 2)
 		{
-			pos = { 2660.566406, -2888.049561, -943.2208862 };
-			Yrot = 0x8000;
-			ChaoCryHint();
-			ChaoSpawn = true;
+			if (!FEGammaVersion) //Sonic Version
+			{
+				pos = { 2660.566406, -2888.049561, -943.2208862 };
+				Yrot = 0x8000;
+				ChaoCryHint();
+				ChaoSpawn = true;
+			}
+			else //Gamma Version
+			{
+				pos = { 1939, -3174.049561, -128 };
+				Yrot = 0x8000;
+				ChaoSpawn = true;
+			}
 		}
 		if (CurrentAct == 0 && FEAmyVersion)
 		{
