@@ -35,11 +35,11 @@ extern bool Missions;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
-extern unsigned int split;
-extern unsigned int TotalCount;
+extern uint32_t split;
+extern uint32_t TotalCount;
 extern char StorySplits;
 extern bool isChaoGameplayAllowed;
-extern unsigned char SwapDelay;
+extern uint8_t SwapDelay;
 
 
 
@@ -73,6 +73,9 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1);
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1);
 void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1);
 void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1);
+void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1);
+void __cdecl CheckLWTrigger_r(ObjectMaster* a1);
+void __cdecl CheckFETrigger_r(ObjectMaster* a1);
 
 
 //SADX / SA2 missions. (M1 Variation is used when a character share the same level and act, but with a different level layout, ex: Amy Hot Shelter and Big Hot Shelter, same act, different version.)
@@ -86,7 +89,7 @@ enum CurSplits {
 	None, SonicStory, AllStories, AnyPourcent
 };
 
-extern unsigned char CurrentLevelLayout;
+extern uint8_t CurrentLevelLayout;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;

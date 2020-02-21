@@ -33,8 +33,10 @@ bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
 	return (powf(pos->x - center->x, 2) + pow(pos->y - center->y, 2) + pow(pos->z - center->z, 2)) <= pow(radius, 2);
 }
 
+bool isBackRingTextureLoaded = false;
+
 void BackRingObj_Display(ObjectMaster* obj) {
-	if (!MissedFrames) {
+	if (!MissedFrames && isBackRingTextureLoaded) {
 		njSetTexture(&GoalRingTextures);
 		njPushMatrix(nullptr);
 		njTranslateV(nullptr, &obj->Data1->Position);
@@ -54,16 +56,18 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 	if (!ClipSetObject(obj)) { //delete the object if we're too far away
 		ObjectMaster* play1 = GetCharacterObject(0);
-		CharObj2* obj2 = ((EntityData2*)play1->Data2)->CharacterData;
 		EntityData1* v1 = obj->Data1;
 		LoadPVM("textures\\GOALRING", &GoalRingTextures);
+		isBackRingTextureLoaded = true;
+
 		if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
 		{
 			if (CurrentLevelLayout >= Mission2_100Rings)
 			{
+				isBackRingTextureLoaded = false;
 				GetBackRing = true;
 				DisableControl();
-				obj2 = ((EntityData2*)obj->Data2)->CharacterData;
+				DisablePause();
 				RingCopy = Rings;
 				TimeSecCopy = TimeSeconds;
 				TimeMinCopy = TimeMinutes;
@@ -72,14 +76,25 @@ void BackRingObj_Main(ObjectMaster* obj) {
 				play1->Data1->Action = 0;
 				play1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 
-				if (++obj->Data1->Index == 3)
+				if (++obj->Data1->Index == 2)
 				{
 					Delete_Cart();
+					DisablePause();
 					ScreenFade_Timer = 50;
 					short sVar1;
 					sVar1 = ScreenFade_RunActive();
 					ChaoSpawn = false;
-					GameState = 0xc;
+					
+					if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
+					{
+						GameState = 24; //fix gamma hot shelter crash
+					}
+					else
+					{
+						GameMode = GameModes_Adventure_Field;
+						GameState = 0xb;
+					}
+
 					obj->Data1->Action = 1;
 
 					return;
@@ -311,6 +326,127 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 
 	//call original function (Emerald.)
 	ObjectFunc(origin, ICEmerald_Load_T.Target());
+	origin(a1);
+}
+
+
+Trampoline CheckLoadTailsPlaneEC_t(0x4f9fb0, 0x4f9fb6, CheckLoadTailsPlaneEC_r);
+
+void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1) {
+
+	if (CurrentLevelLayout <= Mission1_Variation)
+	{
+		switch (CurrentCharacter)
+		{
+		case Characters_Amy:
+			a1->Data1->Position.y += 37;
+			a1->MainSub = Balloon_Main;
+			Balloon_Main(a1);
+			return;
+			break;
+		case Characters_Big:
+			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
+			a1->Data1->Position.y += 20;
+			a1->MainSub = OFrog;
+			OFrog(a1);
+			return;
+			break;
+		}
+	}
+
+	if (CurrentLevelLayout >= Mission2_100Rings)
+	{
+		a1->Data1->Rotation.z = 15000;
+		a1->Data1->Position.y += 32;
+		a1->DisplaySub = BackRingObj_Display;
+		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
+
+		return;
+	}
+
+	//call original function
+	ObjectFunc(origin, CheckLoadTailsPlaneEC_t.Target());
+	origin(a1);
+}
+
+Trampoline CheckLWTrigger_t(0x7b0da0, 0x7b0da6, CheckLWTrigger_r);
+
+void __cdecl CheckLWTrigger_r(ObjectMaster* a1) {
+
+	if (CurrentLevelLayout <= Mission1_Variation)
+	{
+		switch (CurrentCharacter)
+		{
+		case Characters_Amy:
+			a1->Data1->Position.y += 37;
+			a1->MainSub = Balloon_Main;
+			Balloon_Main(a1);
+			return;
+			break;
+		case Characters_Big:
+			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
+			a1->Data1->Position.y += 20;
+			a1->MainSub = OFrog;
+			OFrog(a1);
+			return;
+			break;
+		}
+	}
+
+	if (CurrentLevelLayout >= Mission2_100Rings)
+	{
+		a1->Data1->Rotation.z = 15000;
+		a1->Data1->Position.y += 32;
+		a1->DisplaySub = BackRingObj_Display;
+		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
+
+		return;
+	}
+
+	//call original function
+	ObjectFunc(origin, CheckLWTrigger_t.Target());
+	origin(a1);
+}
+
+Trampoline CheckFETrigger_t(0x5b24f0, 0x5b24f6, CheckFETrigger_r);
+
+void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
+
+	if (CurrentLevelLayout <= Mission1_Variation)
+	{
+		switch (CurrentCharacter)
+		{
+		case Characters_Amy:
+			a1->Data1->Position.y += 37;
+			a1->MainSub = Balloon_Main;
+			Balloon_Main(a1);
+			return;
+			break;
+		case Characters_Big:
+			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
+			a1->Data1->Position.y += 20;
+			a1->MainSub = OFrog;
+			OFrog(a1);
+			return;
+			break;
+		}
+	}
+
+	if (CurrentLevelLayout >= Mission2_100Rings)
+	{
+		a1->Data1->Rotation.z = 15000;
+		a1->Data1->Position.y += 32;
+		a1->DisplaySub = BackRingObj_Display;
+		a1->MainSub = BackRingObj_Main;
+		a1->Data1->Rotation.x = 0xC000;
+
+		return;
+	}
+
+	//call original function
+	ObjectFunc(origin, CheckFETrigger_t.Target());
 	origin(a1);
 }
 

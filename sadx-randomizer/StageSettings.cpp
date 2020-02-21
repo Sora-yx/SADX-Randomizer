@@ -11,7 +11,7 @@
 extern bool FEGammaVersion;
 extern bool RNGStages;
 extern bool GetBackRing;
-extern unsigned int TotalCount;
+extern uint32_t TotalCount;
 extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
 extern char GetCustomLayout;
@@ -579,7 +579,7 @@ void FixRestartCheckPoint() {
 	return njColorBlendingMode(0, 8);
 }
 
-
+extern bool isBackRingTextureLoaded;
 
 //Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic and already used for a different layout.
 //Also used to call different Stuff.
@@ -633,7 +633,7 @@ void FixLayout_StartPosition_R() {
 		TimeSeconds = TimeSecCopy;
 		TimeMinutes = TimeMinCopy;
 		TimeFrames = TimeFrameCopy;
-		Lives++;
+		GameMode = GameModes_Adventure_ActionStg;
 		GetBackRing = false;
 	}
 
@@ -641,7 +641,7 @@ void FixLayout_StartPosition_R() {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	FixRestart_Stuff();
-
+	isBackRingTextureLoaded = false;
 	AnimalPickup_Load_();
 
 	return;

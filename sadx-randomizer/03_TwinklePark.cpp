@@ -116,17 +116,18 @@ void TwinklePark_Layout() {
 			else
 			{
 				bool RNGLayoutTP = rand() % 2;
-				if (RNGLayoutTP)
-				{
-					LoadSetFile(1, "0305"); //Amy TP version
-					TPAmyVersion = true;
-					TPBigVersion = false;
-				}
-				else
+				if (!RNGLayoutTP)
 				{
 					LoadSetFile(1, "0306"); //Big TP version
 					TPAmyVersion = false;
 					TPBigVersion = true;
+				}
+				else
+				{
+					LoadSetFile(1, "0305"); //Amy TP version
+					TPAmyVersion = true;
+					TPBigVersion = false;
+	
 				}
 			}
 			break;

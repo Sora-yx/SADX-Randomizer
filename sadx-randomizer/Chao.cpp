@@ -1,6 +1,6 @@
 #include "stdafx.h"
+#include "data\chao.h"
 #include "RandomHelpers.h"
-#include "chao.h"
 #include "Trampoline.h"
 
 ObjectMaster* ChaoObject;
@@ -19,7 +19,7 @@ ObjectMaster* ChaoTP = nullptr;
 
 std::vector<NJS_PLANE> waterlist = {};
 
-FunctionPointer(int, Chao_Animation, (ObjectMaster* a1, int a2), 0x734F00);
+ChaoHandle ChaoMaster;
 
 void ChaoGameplayCheck() {
 
@@ -80,7 +80,11 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 }
 
 void ChaoObj_Main(ObjectMaster* a1) {
+
 	uint8_t Action = a1->Data1->Action;
+	EntityData1* data = a1->Data1;
+	ChaoLeash* Leash = &ChaoMaster.ChaoHandles[a1->Data1->CharIndex];
+	
 
 	if (Action == 0) {
 		if (!CurrentLandTable) return;
@@ -99,8 +103,10 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			al_confirmload_load();
 			LoadChaoPVPs();
 			ArePvpLoaded = true;
+			ChaoManager_Load();
 		}
 
+		
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		a1->Data1->Action = 1; //Wait a frame before loading the chao
 	}
@@ -110,21 +116,22 @@ void ChaoObj_Main(ObjectMaster* a1) {
 
 		//Start position is behind the player
 		NJS_VECTOR v = a1->Data1->Position;
-
+		
 		//Load the chao
 		CurrentChao = CreateChao(chaodata, 0, CurrentChao, &v, 0);
+		chaodata->data.FlyStat = 1000;
+		chaodata->data.FlyLevel = 50;
 
 		a1->Data1->Action = 2;
 	}
 	else if (Action == 2) {
 		
-		ChaoObj_Animate(2, 33); //animation
 		CurrentChao->Data1->Position = a1->Data1->Position;
 
 		//water height
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
-
+		
 		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200))
 			Chao_CrySound();
 
@@ -137,7 +144,6 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		case Characters_Big:
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
 			{
-				ChaoManager_Load();
 				chaoPB++; //Chao Credit Stat
 				LoadLevelResults();
 				a1->Data1->Action = 3;
@@ -146,7 +152,6 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		default:
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
 			{
-				ChaoManager_Load();
 				chaoPB++;
 				LoadLevelResults();
 				a1->Data1->Action = 3;
@@ -159,12 +164,20 @@ void ChaoObj_Main(ObjectMaster* a1) {
 void Chao_Gravity_r(ObjectMaster* obj);
 Trampoline Chao_Gravity_t(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
 void Chao_Gravity_r(ObjectMaster* obj) {
-	if (CurrentLevel >= LevelIDs_SSGarden || obj->Data1->CharIndex != 1) {
+	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing) {
 		ObjectFunc(original, Chao_Gravity_t.Target());
 		original(obj);
 	}
 }
 
+void Chao_Movements_r(ObjectMaster* obj);
+Trampoline Chao_Movements_t(0x71EFB0, 0x71EFB9, Chao_Movements_r);
+void Chao_Movements_r(ObjectMaster* obj) {
+	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing) {
+		ObjectFunc(original, Chao_Movements_t.Target());
+		original(obj);
+	}
+}
 
 void Chao_Init() {
 	//Trick the game into thinking we're in a specific chao garden
@@ -345,7 +358,7 @@ void Chao_OnFrame() {
 	case LevelIDs_SkyDeck:
 		if (CurrentAct == 1)
 		{
-			pos = { -316.7368469, 40.99000168, -687.1625977 };
+			pos = { -316.7368469, 50.99000168, -687.1625977 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}

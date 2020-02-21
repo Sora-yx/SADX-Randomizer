@@ -194,7 +194,7 @@ short randomacts(RandomizedEntry entry) {
 	int act1[3] = { 0, 0, 2 };
 	int actIC[2] = { 0, 3 };
 	int actIC2[2] = { 2, 3 };
-	int actIC3[3] = { 0, 2, 3 };
+	int actIC3[4] = { 0, 0, 2, 3 };
 
 	switch (entry.level)
 	{
@@ -254,9 +254,9 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character == Characters_Tails && !Vanilla)
 			return actIC[rand() % 2]; //act 1 and 4
 		if (entry.character == Characters_Big && !Vanilla)
-			return actHS[rand() % 2]; //Act 1 and 3
+			return act1[rand() % 3]; //Act 1 and 3
 		else
-			return actIC3[rand() % 3]; //all acts
+			return actIC3[rand() % 4]; //all acts
 		break;
 	case LevelIDs_Casinopolis:
 		if (entry.character == Characters_Tails && !Vanilla)
@@ -268,7 +268,7 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character == Characters_Gamma && !Vanilla)
 			return 0;
 		else
-			return actHS[rand() % 2];
+			return act1[rand() % 3];
 		break;
 	case LevelIDs_HotShelter:
 		if (!Vanilla && entry.character == Characters_Gamma)
@@ -450,6 +450,12 @@ void GoToNextLevel_hook(char stage, char act) {
 
 		if (isAIAllowed)
 			CurrentAI = randomizedSets[levelCount].ai_mode;
+
+		if (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) //fix mission card display
+		{
+			CurrentVideo = 0;
+			CutsceneMode = 0;
+		}
 
 		LastLevel = CurrentLevel;
 		CurrentLevelLayout = 0;
@@ -659,6 +665,7 @@ void DisplayRandoInformation() {
 
 		SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
+		
 
 		if (ban != 0)
 			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
@@ -693,7 +700,7 @@ void Randomizer_GetNewRNG() {
 	if (!StorySplits)
 	{
 		split = 40;
-		for (unsigned int i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
+		for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 			if (RNGCharacters)
 				randomizedSets[i].character = getRandomCharacter();
 
@@ -734,7 +741,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	//Header
 	myfile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	myfile << "<Run version=\"1.7.0\">\n";
-	myfile << "<GameIcon />\n<GameName>Sonic Adventure (DX)</GameName>\n<CategoryName>Randomizer: ";
+	myfile << "<GameIcon />\n<GameName>Sonic Adventure DX: Randomizer</GameName>\n<CategoryName> ";
 	if (StorySplits == SonicStory)
 	{
 		split = 10;
@@ -759,7 +766,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 
 	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
 
-	for (unsigned int i = 0; i < split; i++) { //continue to generate split until we have our specific number.
+	for (uint32_t i = 0; i < split; i++) { //continue to generate split until we have our specific number.
 		if (RNGCharacters)
 			randomizedSets[i].character = getRandomCharacter();
 

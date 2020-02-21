@@ -149,6 +149,13 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				isAIActive = false;
 				return 0;
 			}
+
+			if (CurrentAct == 0 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) 
+			{
+				isAIActive = false;
+				return 0;
+			}
+			break;
 		}
 		break;
 		case LevelIDs_SandHill:  //cutscene crash

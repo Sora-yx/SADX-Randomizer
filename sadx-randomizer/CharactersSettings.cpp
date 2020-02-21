@@ -235,6 +235,45 @@ void SuperSonic_TransformationCheck() {
 	}
 }
 
+extern bool isAIActive;
+void fixCharacterSoundAfterReset() {
+
+	if (isAIActive)
+	{
+		switch (CurrentCharacter)
+		{
+		case Characters_Sonic:
+			if (MetalSonicFlag)
+				LoadSoundList(62);
+			else
+				LoadSoundList(1);
+
+			if (VoiceLanguage)
+				LoadSoundList(72);
+			else
+				LoadSoundList(71);
+			break;
+
+		case Characters_Tails:
+			LoadSoundList(1);
+			if (VoiceLanguage)
+				LoadSoundList(72);
+			else
+				LoadSoundList(71);
+			break;
+		case Characters_Amy:
+			LoadSoundList(46);
+			if (VoiceLanguage)
+				LoadSoundList(64);
+			else
+				LoadSoundList(63);
+			break;
+		}
+	}
+
+	return;
+}
+
 
 //Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes.
 
@@ -255,10 +294,15 @@ void CallStuffWhenLevelStart() {
 	if (CurrentLevel == LevelIDs_E101 && CurrentCharacter != Characters_Gamma)
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
+	if (CurrentLevel)
+
+	fixCharacterSoundAfterReset();
+
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
 		(CurChara > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2))
 		Load_Cart_R();
 }
+
 
 
 //Set Gamma's Timer to 6 min instead of 3.

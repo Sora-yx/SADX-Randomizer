@@ -40,15 +40,15 @@ int ban = 0;
 bool banCharacter[8];
 
 //Speedruner splits
-unsigned int split = 0;
-unsigned int TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
+uint32_t split = 0;
+uint32_t TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 
 //AI
 bool isAIAllowed = true;
-unsigned char SwapDelay = 150;
+uint8_t SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
-unsigned char CurrentLevelLayout = 0;
+uint8_t CurrentLevelLayout = 0;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
@@ -56,9 +56,7 @@ int StatsTimer = 4000;
 extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
-extern bool GetBackRing;
-extern char AIRace;
-extern ObjectMaster* CurrentCart;
+
 
 extern "C" {
 
