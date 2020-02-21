@@ -50,6 +50,7 @@ void BackRingObj_Display(ObjectMaster* obj) {
 }
 
 extern ObjectMaster* AIRaceOBJ;
+void ChaoObj_Delete(ObjectMaster* a1);
 
 //ran every UNpaused frame
 void BackRingObj_Main(ObjectMaster* obj) {
@@ -83,10 +84,11 @@ void BackRingObj_Main(ObjectMaster* obj) {
 					ScreenFade_Timer = 50;
 					short sVar1;
 					sVar1 = ScreenFade_RunActive();
-					ChaoSpawn = false;
 					
+					ChaoSpawn = false;
 					if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
 					{
+						ChaoObj_Delete(obj);
 						GameState = 24; //fix gamma hot shelter crash
 					}
 					else

@@ -37,19 +37,23 @@ int HedgehogHammerTrick() {
 	return Characters_Amy;
 }
 
+bool LimitCustomFlag = false;
+
 void HedgehogHammerResult() {
 
-
+	if (!LimitCustomFlag) //prevent the game to call this several times.
+	{
 		if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 			LastStoryFlag = 1;
 		else
 			LastStoryFlag = 0;
 
-		CustomFlag++;
-		
 		Rings = 0;
+		CustomFlag++;
+		GameMode = GameModes_Adventure_Field;
 		GameState = 0x5;
+		LimitCustomFlag = true;
+	}
 	
-
 	return;
 }

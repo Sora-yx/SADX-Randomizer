@@ -25,7 +25,7 @@ void IceBomb_Load_r(ObjectMaster* obj) {
 
 int Chaos6_ReturnCharacter() { //trick the game to make it think we are playing Sonic or Knuckles.
 
-	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Big && Vanilla)
+	if (CurrentCharacter == Characters_Sonic && CurrentAct == 0 || CurrentCharacter == Characters_Knuckles && CurrentAct == 1 || CurrentCharacter == Characters_Big && Vanilla && CurrentAct == 0)
 		return GetCurrentCharacterID();
 
 	if (CurrentAct != 1)

@@ -41,9 +41,9 @@ int bannedLevelsGamma[8] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 //Initiliaze banned Vanilla stage (if option is checked)
-int bannedRegularSonic[7] = { LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper, LevelIDs_SandHill };
+int bannedRegularSonic[6] = { LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper, LevelIDs_SandHill };
 int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
-int bannedRegularKnuckles[3] = { LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6 };
+int bannedRegularKnuckles[2] = { LevelIDs_Chaos2, LevelIDs_Chaos4 };
 int bannedRegularAmy[1] = { LevelIDs_Zero };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
@@ -277,6 +277,11 @@ short randomacts(RandomizedEntry entry) {
 			return actHS[rand() % 2];
 		break;
 	case LevelIDs_Chaos6:
+		if (entry.character == Characters_Sonic && !Vanilla)
+			return 1;
+		if (entry.character == Characters_Knuckles && !Vanilla)
+			return 0;
+		else
 			return rand() % 2;
 		break;
 	case LevelIDs_TwinkleCircuit:
@@ -478,8 +483,10 @@ void GoToNextLevel_hook(char stage, char act) {
 
 extern ObjectMaster* TriggerOBJ;
 extern ObjectMaster* TriggerHS;
+extern bool LimitCustomFlag;
 
 void ResetStatsValues() {
+	LimitCustomFlag = false;
 	isAIActive = false;
 	TreasureHunting = false;
 	ChaoSpawn = false;

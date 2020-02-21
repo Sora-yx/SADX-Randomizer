@@ -126,6 +126,8 @@ void ChaoObj_Main(ObjectMaster* a1) {
 	}
 	else if (Action == 2) {
 		
+		if (Chao_FinishedAnimation(CurrentChao)) { Chao_Animation(CurrentChao, 0); }
+
 		CurrentChao->Data1->Position = a1->Data1->Position;
 
 		//water height

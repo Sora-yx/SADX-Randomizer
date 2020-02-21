@@ -20,7 +20,7 @@ extern char TimeSecCopy;
 extern char TimeMinCopy;
 extern char TimeFrameCopy;
 extern int RingCopy;
-
+extern bool LimitCustomFlag;
 
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
@@ -103,7 +103,7 @@ void DeleteTriggerObject() {
 }
 
 void ResetValueWhileLevelResult() {
-
+	LimitCustomFlag = false;
 	isCheckpointUsed = false;
 	SonicRand = 0;
 	KnuxCheck = 0;

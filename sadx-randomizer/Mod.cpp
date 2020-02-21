@@ -58,6 +58,7 @@ int SeedCopy = 0;
 time_t t;
 
 
+
 extern "C" {
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
