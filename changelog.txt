@@ -1,3 +1,47 @@
+Bug report: https://github.com/Sora-yx/SADX-Randomizer/issues
+
+V2.1.0
+
+    SADX Rando has now a speedrun.com page, you can now submit your run! Check it out: https://www.speedrun.com/sadxrando
+    You should now get less often Twinkle Circuit, Perfect Chaos, Egg Viper and Egg Walker.
+    Treasure hunting is here! Collect the pieces of the Master Emerald with every character!
+    Amy's Twinkle park and Gamma's Windy Valley should now be complete with other characters.
+    Eggman will now spawn during Sonic's Chaos 6 fight.
+    All characters can now do any action stage! A goal has been reached!
+    All the musics should now loop properly when using "Randomize Music" option.
+    Level mission cards have been updated and improved.
+    You will now see the Back Ring and you'll need to hit it in order to get teleported.
+    Sand Hill and Ice Cap Act 3 are now a lot more fun. :)
+    Sonic's Casinopolis has been reworked. All characters can now use pinball and you have to collect rings to finish the stage just like in the original game.
+    The save files are no longer redirected due to some specific bugs.
+    More stages have now 100 Rings and Lost Chao mission.
+    Some Lost Chao location has changed, the guide video has also been updated.
+
+New level / Character combination:
+
+    Big's Twinkle Park has been added.
+    Big's Ice Cap has been added.
+    Egg Hornet as Gamma has been added.
+    Knuckles's Speed Highway has been added.
+    Knuckles's Casinopolis has been added.
+    Knuckles's Red Mountain has been added.
+    Knuckles's Lost World has been added.
+    Knuckles's Sky Deck has been added.
+    Gamma's Final Egg has been added.
+    Gamma can now do Big's Hot Shelter.
+    Knuckles's Chaos 6 version has been added.
+    Hedgehog Hammer Sub Game has been added.
+    Big can now do Ice Cap act 1.
+    Gamma can now do Twinkle Park act 1.
+
+Bug fixes:
+
+    You should now spawn at the correct spot in Chaos 6 area.
+    Fixed a bug where the camera in Windy Valley wasn't loaded properly, preventing from going to act 2.
+    Fixed a bug where the progression wasn't resetting after creating a new save file.
+    RNG should now reset properly after completing a story.
+    Amy will no longer take a while to hit Perfect Chaos.
+
 V2.0.1
 
 General:
