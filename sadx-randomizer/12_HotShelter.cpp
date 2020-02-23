@@ -76,11 +76,10 @@ void HotShelter_Layout() {
 	
 	//act 1 Amy/Big Version
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
+	short RNGLayoutHS = randomizedSets[levelCount].Layout;
 
 	if (CurrentAct == 0)
 	{
-		short RNGLayoutHS = randomizedSets[levelCount].Layout;
-		
 		//Prevent Amy and Big to get their original vanilla layout
 		if (CurrentCharacter == Characters_Amy && !Vanilla)
 		{

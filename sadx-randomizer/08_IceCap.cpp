@@ -27,7 +27,16 @@ void DisableController_R() {
 			return EnableController(0);
 		}
 	}
-	return DisableController(0);
+	else
+	{ 
+		ObjectMaster* GetChara = GetCharacterObject(0);
+		ObjectMaster* GetAI = GetCharacterObject(1);
+
+		if (isAIActive && GetAI != nullptr)
+			GetAI->Data1->Position.z = GetChara->Data1->Position.z + 100;
+
+		return DisableController(0);
+	}
 }
 
 
@@ -72,7 +81,6 @@ void IC_Layout() {
 			WriteCall((void*)0x4eda00, DisableController);
 		}
 	}
-
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 

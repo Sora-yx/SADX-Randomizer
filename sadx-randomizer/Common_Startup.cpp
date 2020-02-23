@@ -222,6 +222,22 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddVoices("6014", "ZeroThink");
 
 	WriteCall((void*)0x45be57, PlayVoice_R);
+
+	WriteCall((void*)0x47fc9e, FixAISFXGamma);
+	WriteCall((void*)0x483294, FixAISFXGamma);
+	WriteCall((void*)0x47fd07, FixAISFXGamma2);
+	WriteCall((void*)0x481dac, FixAISFXGamma3);
+	WriteCall((void*)0x47fcca, FixAISFXGamma4);
+
+
+	//fix victory voice result (ai swap)
+
+	WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
+	WriteData<5>((void*)0x414264, 0x90); //Remove Sonic Boss Voice;
+	WriteData<5>((void*)0x41560d, 0x90); //remove knux play voice
+	WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
+	WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
+	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
 }
 
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
@@ -231,7 +247,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 		//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\TCAct3.BIN"); //TC act 4 fix
 	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\TCAct3.BIN");
-	WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); //test
+	//WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); //test
 
 	//Random Title Card + Missions
 	TitleCard_Init();

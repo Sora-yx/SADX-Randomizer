@@ -641,7 +641,7 @@ void AISwitch() {
 	if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 		return;
 
-	if (CurrentCart || CurrentCharacter <= Characters_Tails && CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+	if (CurrentCart)
 		return;
 
 	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
@@ -658,7 +658,7 @@ void AISwitch() {
 
 			if (obj != nullptr && obj2 != nullptr)
 			{
-				if (obj->Data1->Action > 50 && obj->Data1->Action < 61) //Prevent Crash
+				if (obj->Data1->Action > 50 && obj->Data1->Action < 71 || obj->Data1->CharID == Characters_Tails && obj->Data1->Action >= 48) //Prevent Crash
 					return;
 
 				short powerups = obj2->Powerups;
@@ -851,21 +851,7 @@ void AIAudioFixes() {
 	WriteCall((void*)0x485844, FixAISFXAmy6);
 	WriteCall((void*)0x48947c, FixAISFXAmy7);
 	WriteCall((void*)0x4857e0, FixAISFXAmy8);
-	
-	WriteCall((void*)0x47fc9e, FixAISFXGamma);
-	WriteCall((void*)0x47fd07, FixAISFXGamma2);
-	WriteCall((void*)0x481dac, FixAISFXGamma3);
-	WriteCall((void*)0x47fcca, FixAISFXGamma4);
 
-
-	//fix victory voice result (ai swap)
-
-	WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
-	WriteData<5>((void*)0x414264, 0x90); //Remove Sonic Boss Voice;
-	WriteData<5>((void*)0x41560d, 0x90); //remove knux play voice
-	WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
-	WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
-	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
 }
 
 //Reset value when AI is deleted

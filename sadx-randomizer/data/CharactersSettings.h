@@ -1,9 +1,7 @@
 #pragma once
 
 void SetGammaTimer();  //force to 6 min instead of 3
-void GammaAddTarget();
 void BigWeightHook(); //force to 2000g
-void BackRingLoadCheck();
 
 extern int CurrentAI;
 extern short CurrentLevelLayout;
@@ -54,4 +52,3 @@ int GetCharacter1ID();
 void ResultVoiceFix();
 
 void Load_Cart_R();
-void LW_StartPosition_R();

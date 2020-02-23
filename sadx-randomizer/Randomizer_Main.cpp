@@ -44,7 +44,7 @@ int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 int bannedRegularSonic[6] = { LevelIDs_Chaos0, LevelIDs_Chaos4, LevelIDs_PerfectChaos, LevelIDs_EggHornet, LevelIDs_EggViper, LevelIDs_SandHill };
 int bannedRegularTails[4] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_EggWalker, LevelIDs_SandHill };
 int bannedRegularKnuckles[2] = { LevelIDs_Chaos2, LevelIDs_Chaos4 };
-int bannedRegularAmy[1] = { LevelIDs_Zero };
+int bannedRegularAmy[2] = { LevelIDs_HedgehogHammer, LevelIDs_Zero };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
 //Few jingle that we don't want in the random music function.
@@ -299,7 +299,6 @@ short prev_mission = -1;
 
 short randomMission(short stage_id) {
 	short cur_mission = -1;
-	short LayoutVariation = -1;
 
 	if (stage_id >= LevelIDs_Chaos0)
 		return 0;
@@ -321,7 +320,7 @@ short randomLayout(short stage_id) {
 
 	short cur_layout = -1;
 
-	if (stage_id == LevelIDs_TwinklePark || stage_id == LevelIDs_HotShelter)
+	if (stage_id == LevelIDs_TwinklePark || stage_id == LevelIDs_HotShelter || stage_id == LevelIDs_FinalEgg)
 		cur_layout = rand() % 2;
 
 	return cur_layout;

@@ -18,5 +18,5 @@ enum Color {
 };
 
 
-
+void HotShelterSecretSwitch();
 void Sonic2PAI_Load_r(ObjectMaster* obj);

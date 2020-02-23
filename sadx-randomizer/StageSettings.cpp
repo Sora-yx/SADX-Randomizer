@@ -627,7 +627,7 @@ void FixLayout_StartPosition_R() {
 				PositionPlayer(0, 230, 80, -538);
 			break;
 		case LevelIDs_IceCap: //Race
-			if (CurrentAct == 2 && Race && CurrentCharacter <= Characters_Tails)
+			if (CurrentAct == 2 && CurrentCharacter <= Characters_Tails)
 				PositionPlayer(0, 120, 375, -40);
 			break;
 		case LevelIDs_FinalEgg: //Gamma version

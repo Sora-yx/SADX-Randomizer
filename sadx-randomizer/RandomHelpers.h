@@ -127,7 +127,7 @@ void FixInvisibleWall();
 
 void E101Target();
 void SetCamera();
-void Sonic2PAI_Load_r();
+
 
 extern int level[22];
 extern int AIArray[4];
@@ -155,8 +155,7 @@ extern bool SHTailsVersion;
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions);
-void __cdecl Randomizer_Config(const char* path, const HelperFunctions& helperFunctions);
-void LoadCartStopper();
+
 
 void Chao_Init();
 void Chao_OnFrame();
@@ -191,7 +190,6 @@ void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions);
-void __cdecl SandHillObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 //Bosses
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Chaos2_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -207,7 +205,6 @@ void CreditsNewList();
 void Credits_StatsDelayOnFrames();
 void Credits_StartupInit();
 void Race_Init();
-void VSBar_R();
 void MissionResultCheck();
 void DisplayRandoInformation();
 
@@ -230,9 +227,10 @@ void CancelResetPosition();
 void LoadZero();
 void Set_Zero();
 void AI_FixesOnFrames();
-
-
-void HotShelterSecretSwitch();
+void FixAISFXGamma();
+void FixAISFXGamma2();
+void FixAISFXGamma3();
+void FixAISFXGamma4();
 
 void FixGammaBounce();
 void FixGammaHitBounce();
@@ -361,7 +359,6 @@ VoidFunc(Knuckles_SetRNG, 0x475840);
 void ICAct3Position();
 void LoadChaoTPTrigger();
 void ChaoTPTrigger(ObjectMaster* a1);
-void LoadTriggerCasinoChao();
 void TriggerCasinoChao_Main(ObjectMaster* obj);
 void TriggerOBJHS_Delete();
 void LoadRemoveCart();

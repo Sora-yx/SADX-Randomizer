@@ -41,11 +41,11 @@ void FinalEgg_Layout() {
 	FEGammaVersion = false;
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
+	short RNGLayoutFE = randomizedSets[levelCount].Layout;
 
 	if (CurrentAct != 2)
 	{
-		short RNGLayoutFE = randomizedSets[levelCount].Layout;
-
+		
 		//Prevent Sonic and Amy to load their vanilla stage
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{

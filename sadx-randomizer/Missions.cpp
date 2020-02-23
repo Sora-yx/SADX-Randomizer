@@ -67,6 +67,8 @@ void LoadStageMissionImage_r() {
 		case LevelIDs_LostWorld:
 			if (!CurrentLevelLayout)
 				CurrentMission = LostWorldCard; //Go to the center of the ruin.
+			 if (CurrentCharacter == Characters_Amy)
+				CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
 			if (TreasureHunting && CurrentAct == 1)
 				CurrentMission = EmeraldKnuxCard;
 			break;

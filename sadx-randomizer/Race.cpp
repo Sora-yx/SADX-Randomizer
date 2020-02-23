@@ -93,6 +93,16 @@ void CheckRace() {
 
 		if (CurrentCharacter == Characters_Big && (AIRace == Characters_Knuckles || AIRace == Characters_Amy))
 			AIRace = Characters_Tails; //Prevent Big crash
+
+		switch (AIRace)
+		{
+		case Characters_Eggman:
+			WriteData<1>((void*)0x47C3D6, 0xB);
+			break;
+		default:
+			WriteData<1>((void*)0x47C3D6, 0x1);
+			break;
+		}
 		
 		LoadTailsOpponent(CurrentCharacter, 1, CurrentLevel);
 	}
@@ -101,35 +111,9 @@ void CheckRace() {
 }
 	
 
-/*
-switch (AIRace)
-{
-case Characters_Eggman:
-	//WriteData<1>((void*)0x47C3D6, 0xB);
-	break;
-case Characters_Tails:
-	WriteData<1>((void*)0x47C3D6, 0x2);
-	break;
-case Characters_Knuckles:
-	//WriteData<1>((void*)0x47C3D6, 0xC);
-	break;
-case Characters_Tikal:
-	WriteData<1>((void*)0x47C3D6, 0xF);
-	break;
-case Characters_Amy:
-	WriteData<1>((void*)0x47C3D6, 0xD);
-	break;
-case Characters_Gamma:
-	WriteData<1>((void*)0x47C3D6, 0xE);
-	break;
-default:
-	if (!MetalSonicFlag)
-		WriteData<1>((void*)0x47C3D6, 0x1);
-	else
-		WriteData<1>((void*)0x47c3fe, 0x10);
-	break;
-}
-*/
+
+
+
 
 void SelectBarRace() {
 
