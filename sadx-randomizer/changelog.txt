@@ -1,3 +1,5 @@
+Bug report: https://github.com/Sora-yx/SADX-Randomizer/issues
+
 V2.1.0
 
     SADX Rando has now a speedrun.com page, you can now submit your run! Check it out: https://www.speedrun.com/sadxrando
