@@ -67,7 +67,7 @@ short getRandomStage(uint8_t char_id, bool AllowVanilla) {
 	do {
 		cur_stage = level[rand() % LengthOfArray(level)];
 
-	} while (isDuplicateStage(cur_stage, prev_stage) || isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage));
+	} while (isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || isDuplicateStage(cur_stage, prev_stage));
 
 
 	prev_stage = cur_stage;
@@ -140,6 +140,7 @@ bool isStageBanned(uint8_t char_id, short stage_id) {
 //This function check if we need to rand to pick another stage or not.
 bool isDuplicateStage(short stage_id, short prev_stage_id)
 {
+
 	short trick = 0;
 
 	switch (stage_id)
@@ -171,9 +172,6 @@ bool isDuplicateStage(short stage_id, short prev_stage_id)
 			return true;
 		break;
 	}
-
-	if (stage_id == prev_stage_id)
-		return true;
 
 	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R && prev_stage_id >= LevelIDs_Chaos0 && prev_stage_id <= LevelIDs_E101R)
 		return true;
@@ -208,7 +206,7 @@ short randomacts(RandomizedEntry entry) {
 		if (entry.character == Characters_Tails && !Vanilla)
 			return 0;
 		else
-			return actHS[rand() % 2];
+			return act1[rand() % 3];
 		break;
 	case LevelIDs_TwinklePark:
 		if (entry.character == Characters_Sonic && !Vanilla)
@@ -246,7 +244,7 @@ short randomacts(RandomizedEntry entry) {
 		else if (entry.character == Characters_Sonic && !Vanilla)
 			return 1;
 		else
-			return rand() % 2;
+			return act0[rand() % 3];
 		break;
 	case LevelIDs_IceCap:
 		if (entry.character == Characters_Sonic && !Vanilla)
@@ -296,11 +294,16 @@ short randomacts(RandomizedEntry entry) {
 	}
 }
 
+
 short prev_mission = -1;
 
-short randomLayout(RandomizedEntry entry) {
+short randomMission(short stage_id) {
 	short cur_mission = -1;
+	short LayoutVariation = -1;
 
+	if (stage_id >= LevelIDs_Chaos0)
+		return 0;
+	
 	do {
 		if (Missions) //SA2 missions 100 Rings, Lost Chao (also SADX Tails Race and Knux Treasure Hunting)
 			cur_mission = rand() % 4;
@@ -310,6 +313,18 @@ short randomLayout(RandomizedEntry entry) {
 
 	prev_mission = cur_mission;
 	return cur_mission;
+}
+
+
+
+short randomLayout(short stage_id) {
+
+	short cur_layout = -1;
+
+	if (stage_id == LevelIDs_TwinklePark || stage_id == LevelIDs_HotShelter)
+		cur_layout = rand() % 2;
+
+	return cur_layout;
 }
 
 int8_t prev_char = -1;
@@ -329,16 +344,22 @@ uint8_t getRandomCharacter(bool allow_duplicate) {
 	return cur_char;
 }
 
-int8_t prev_AI = -1;
+int prev_AI = -1;
 
 //AI following you
-short getRandomAI(RandomizedEntry entry) {
-	int8_t cur_AI = -1;
+short getRandomAI(uint8_t char_id, short stage_id) {
+	int cur_AI = -1;
 	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
+
+	if (char_id == Characters_Knuckles || char_id >= Characters_Gamma)
+		return -1;
+
+	if (stage_id >= LevelIDs_EggWalker || stage_id == LevelIDs_PerfectChaos || stage_id == LevelIDs_Chaos0)
+		return -1;
 
 	do {
 		cur_AI = AIArray[rand() % ai_count];
-	} while (cur_AI == prev_AI);
+	} while (cur_AI == prev_AI || cur_AI == char_id);
 
 	prev_AI = cur_AI;
 	return cur_AI;
@@ -717,13 +738,14 @@ void Randomizer_GetNewRNG() {
 				randomizedSets[i].act = randomacts(randomizedSets[i]);
 			}
 
-			randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
+			randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
+			randomizedSets[i].Layout = randomLayout(randomizedSets[i].level);
 
 			if (RNGMusic)
 				randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
 			if (isAIAllowed)
-				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
 			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 
@@ -783,13 +805,14 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
 		}
 
-		randomizedSets[i].LevelLayout = randomLayout(randomizedSets[i]);
+		randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
+		randomizedSets[i].Layout = randomLayout(randomizedSets[i].level);
 
 		if (RNGMusic)
 			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
 		if (isAIAllowed)
-			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i]);
+			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
 		randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
 

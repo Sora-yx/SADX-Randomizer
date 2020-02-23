@@ -158,7 +158,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 
 void SpeedHighway_Layout() {
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct != 2)
 	{

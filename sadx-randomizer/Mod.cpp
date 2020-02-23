@@ -48,7 +48,7 @@ bool isAIAllowed = true;
 uint8_t SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
-uint8_t CurrentLevelLayout = 0;
+short CurrentLevelLayout = 0;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
@@ -166,10 +166,11 @@ extern "C" {
 		Randomizer_GetNewRNG();
 	}
 
-	
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "HS: %d", CopyRNGLayoutHS);
+
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{

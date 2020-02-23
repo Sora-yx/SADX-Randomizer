@@ -110,13 +110,18 @@ void ResetValueWhileLevelResult() {
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
-	TreasureHunting = false;
+	if (CurrentCharacter != Characters_Big)
+	{
+		TreasureHunting = false;
+		FEGammaVersion = false;
+	}
+
 	isPlayerInWaterSlide = false;
 	TPAmyVersion = false;
 	TPBigVersion = false;
 	HSAmyVersion = false;
 	HSBigVersion = false;
-	FEGammaVersion = false;
+	
 	isCheckpointUsed = false;
 
 	RestoreRNGValueKnuckles();
@@ -162,19 +167,21 @@ void LoadZero() {
 
 void FixZeroSound() {
 
-	if (CurrentCharacter != Characters_Amy)
-		PlayVoice_R(6014);
+	if (CurrentCharacter != Characters_Amy && CurrentLevel != LevelIDs_Zero)
+		return;
 	else
 		PlaySound(0x324, 0x0, 0, 0x0);
 }
 
 void FixZeroSound2() {
 
-	if (CurrentCharacter != Characters_Amy)
-		PlayVoice_R(6013);
+	if (CurrentCharacter != Characters_Amy && CurrentLevel != LevelIDs_Zero)
+		return;
 	else
 		PlaySound(0x322, 0x0, 0, 0x0);
 }
+
+
 
 
 void Set_Zero() {
@@ -182,6 +189,10 @@ void Set_Zero() {
 	WriteCall((void*)0x61d169, LoadZero); //Call Zero at Twinkle Park.
 	WriteCall((void*)0x59a119, LoadZero); //Call Zero at Hot Shelter.
 	WriteCall((void*)0x5ae104, LoadZero); //Call Zero at Final Egg.
+	WriteCall((void*)0x4d2d12, FixZeroSound); 
+	WriteCall((void*)0x4d31ce, FixZeroSound);
+
+
 	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 }
 

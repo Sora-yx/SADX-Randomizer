@@ -18,9 +18,10 @@ void AIAudioFixes();
 void FixRMLava();
 
 short randomacts(RandomizedEntry entry);
-short randomLayout(RandomizedEntry entry);
-short getRandomAI(RandomizedEntry entry);
+short randomMission(short stage_id);
+short getRandomAI(uint8_t char_id, short stage_id);
 short getRandomRaceAI(RandomizedEntry entry);
+short randomLayout(short CurStage);
 void Randomizer_GetNewRNG();
 void SelectBarRace();
 void TwinkleCircuitMusic();
@@ -48,7 +49,8 @@ struct RandomizedEntry
 	int8_t character;
 	short level;
 	short act;
-	unsigned char LevelLayout;
+	short MissionLayout;
+	short Layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
 	int ai_mode; //AI following you
@@ -89,7 +91,7 @@ enum CurSplits {
 	None, SonicStory, AllStories, AnyPourcent
 };
 
-extern uint8_t CurrentLevelLayout;
+extern short CurrentLevelLayout;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;

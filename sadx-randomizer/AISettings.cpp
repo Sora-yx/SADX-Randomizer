@@ -543,6 +543,16 @@ void FixAISFXGamma3() {
 	return;
 }
 
+void FixAISFXGamma4() {
+
+	if (Race && CurrentCharacter != Characters_Gamma)
+		return;
+
+	PlaySound(0x33f, 0, 0, 0);
+
+	return;
+}
+
 extern bool FEGammaVersion;
 //Result Voice FIX
 void ResultVoiceFix() {
@@ -579,16 +589,18 @@ void ResultVoiceFix() {
 				Load_DelayedSound_SFX(0x5a8);
 			break;
 		case Characters_Amy:
-			Load_DelayedSound_SFX(0x56c);
+			Load_DelayedSound_SFX(0x56e);
 		case Characters_Gamma:
 			Load_DelayedSound_SFX(0x591);
 			break;
 		case Characters_Big:
-			if (CurrentLevel < LevelIDs_Chaos0 && CurrentLevelLayout < Mission2_100Rings && !FEGammaVersion && !TreasureHunting || CurrentLevel == LevelIDs_SandHill)
-				Load_DelayedSound_Voice(4010);
-			else
+			if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || FEGammaVersion || TreasureHunting)
 				Load_DelayedSound_Voice(4011);
+			else
+				Load_DelayedSound_Voice(4010);
 			SoundManager_Delete2();
+			TreasureHunting = false;
+			FEGammaVersion = false;
 			break;
 		}
 	}
@@ -841,8 +853,9 @@ void AIAudioFixes() {
 	WriteCall((void*)0x4857e0, FixAISFXAmy8);
 	
 	WriteCall((void*)0x47fc9e, FixAISFXGamma);
-	WriteCall((void*)0x47fd0, FixAISFXGamma2);
+	WriteCall((void*)0x47fd07, FixAISFXGamma2);
 	WriteCall((void*)0x481dac, FixAISFXGamma3);
+	WriteCall((void*)0x47fcca, FixAISFXGamma4);
 
 
 	//fix victory voice result (ai swap)

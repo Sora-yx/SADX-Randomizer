@@ -153,6 +153,9 @@ void SelectBarRace() {
 	if (CurrentCharacter == Characters_Gamma)
 		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\GAMMARACE_HD.pvmx");
 
+	if (CurrentCharacter == Characters_Big)
+		help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\BIGRACE_HD.pvmx");
+
 	//Voice Race stuff
 	if (CurrentLevel == LevelIDs_SpeedHighway)
 	{

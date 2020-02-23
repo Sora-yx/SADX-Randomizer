@@ -128,8 +128,8 @@ static void SuperSonicManager_Load()
 	ObjectMaster* obj = LoadObject(static_cast<LoadObj>(0), 2, SuperSonicManager_Main);
 }
 
-int SSLevel[8]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
-LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap };
+int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
+LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
 extern bool TPAmyVersion;
 extern bool SHTailsVersion;
@@ -294,7 +294,6 @@ void CallStuffWhenLevelStart() {
 	if (CurrentLevel == LevelIDs_E101 && CurrentCharacter != Characters_Gamma)
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
-	if (CurrentLevel)
 
 	fixCharacterSoundAfterReset();
 

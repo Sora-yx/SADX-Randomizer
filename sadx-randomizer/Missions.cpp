@@ -115,6 +115,8 @@ void LoadStageMissionImage_r() {
 		case LevelIDs_HotShelter:
 			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0)
 				CurrentMission = FroggyCard; //Froggy
+			if (CurrentLevelLayout == Mission1 && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
+				CurrentMission = E105Card;
 			break;
 		default:
 			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && !HSBigVersion)

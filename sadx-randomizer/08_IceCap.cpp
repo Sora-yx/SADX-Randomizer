@@ -74,7 +74,7 @@ void IC_Layout() {
 	}
 
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	LoadSetFile(0, "0800"); //M1
 

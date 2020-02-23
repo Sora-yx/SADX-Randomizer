@@ -147,7 +147,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 }
 
 void RedMountain_Layout() {
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 
 	if (CurrentAct == 0)

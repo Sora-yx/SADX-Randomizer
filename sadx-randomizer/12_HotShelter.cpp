@@ -68,17 +68,18 @@ void LoadTriggerObjHS() {
 }
 
 
+
 void HotShelter_Layout() {
 
 	HSAmyVersion = false;
 	HSBigVersion = false;
 	
 	//act 1 Amy/Big Version
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct == 0)
 	{
-		bool RNGLayoutHS = rand() % 2;
+		short RNGLayoutHS = randomizedSets[levelCount].Layout;
 		
 		//Prevent Amy and Big to get their original vanilla layout
 		if (CurrentCharacter == Characters_Amy && !Vanilla)
@@ -545,7 +546,7 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\CAM1202B.bin", "system\\cam\\CAM1202B.bin");
 	helperFunctions.ReplaceFile("system\\CAM1204B.bin", "system\\cam\\CAM1204B.bin");
 	helperFunctions.RegisterStartPosition(Characters_Big, HS1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, HS2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Big, HS2_StartPositionsBE[0]);
 	helperFunctions.RegisterStartPosition(Characters_Big, HS3_StartPositions[0]);
 
 	//Gamma
@@ -562,6 +563,6 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	helperFunctions.ReplaceFile("system\\CAM1202E.bin", "system\\cam\\CAM1202E.bin");
 	helperFunctions.ReplaceFile("system\\CAM1204E.bin", "system\\cam\\CAM1204E.bin");
 	helperFunctions.RegisterStartPosition(Characters_Gamma, HS1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, HS2_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Gamma, HS2_StartPositionsBE[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, HS3_StartPositions[0]);
 }

@@ -6,7 +6,7 @@ void BigWeightHook(); //force to 2000g
 void BackRingLoadCheck();
 
 extern int CurrentAI;
-extern uint8_t CurrentLevelLayout;
+extern short CurrentLevelLayout;
 
 void AllUpgrades();
 void FixCharacterSFX();

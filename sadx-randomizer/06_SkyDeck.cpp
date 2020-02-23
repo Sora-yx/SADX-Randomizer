@@ -85,7 +85,7 @@ void SkyDeckCannonS2_LoadWithTarget(ObjectMaster* SDCanonnObj) {
 
 void SkyDeck_Layout() {
 
-	CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct == 0)
 	{

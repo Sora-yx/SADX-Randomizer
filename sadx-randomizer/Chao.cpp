@@ -163,14 +163,18 @@ void ChaoObj_Main(ObjectMaster* a1) {
 	}
 }
 
+
+
 void Chao_Gravity_r(ObjectMaster* obj);
 Trampoline Chao_Gravity_t(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
 void Chao_Gravity_r(ObjectMaster* obj) {
-	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing) {
+	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing && DoesChaoNeedGravity(CurrentLevel)) {
 		ObjectFunc(original, Chao_Gravity_t.Target());
 		original(obj);
 	}
 }
+
+
 
 void Chao_Movements_r(ObjectMaster* obj);
 Trampoline Chao_Movements_t(0x71EFB0, 0x71EFB9, Chao_Movements_r);
@@ -179,6 +183,41 @@ void Chao_Movements_r(ObjectMaster* obj) {
 		ObjectFunc(original, Chao_Movements_t.Target());
 		original(obj);
 	}
+}
+
+bool DoesChaoNeedGravity(_int16 CurLevel) {
+
+	switch (CurLevel)
+	{
+	case LevelIDs_TwinklePark:
+		if (CurrentAct == 2)
+			return true;
+		else
+			return false;
+		break;
+	case LevelIDs_SpeedHighway:
+	case LevelIDs_SkyDeck:
+	case LevelIDs_LostWorld:
+		return false;
+		break;
+	case LevelIDs_FinalEgg:
+		if (CurrentAct == 2)
+			return true;
+		else
+			return false;
+		break;
+	case LevelIDs_HotShelter:
+		if (CurrentAct == 2)
+			return false;
+		else
+			return true;
+		break;
+	default:
+		return true;
+		break;
+	}
+
+	return true;
 }
 
 void Chao_Init() {
@@ -419,11 +458,19 @@ void Chao_OnFrame() {
 				ChaoSpawn = true;
 			}
 		}
-			if (CurrentAct == 0 && HSBigVersion)
+		if (CurrentAct == 0 && HSBigVersion)
+		{
+			if (CurrentCharacter != Characters_Gamma)
 			{
 				pos = { -254, 0, -461 };
 				ChaoSpawn = true;
 			}
+			else
+			{
+				pos = { -278.8718262, 80, -499.0888367 };
+				ChaoSpawn = true;
+			}
+		}
 		break;
 	default:
 		ChaoSpawn = false;

@@ -67,7 +67,7 @@ void Casino_Layout() {
 
 	if (CurrentAct == 1)
 	{
-		CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+		CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 		switch (CurrentLevelLayout)
 		{
@@ -111,7 +111,7 @@ void Casino_Layout() {
 		}
 		else
 		{
-			CurrentLevelLayout = randomizedSets[levelCount].LevelLayout;
+			CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 			switch (CurrentLevelLayout)
 			{

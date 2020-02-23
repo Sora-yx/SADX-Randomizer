@@ -33,6 +33,7 @@ FunctionPointer(int, BigWhistle, (int a3, int a4, int a5, int a6), 0x423BE0);
 void ChaoObj_Init(ObjectMaster* a1);
 void ChaoObj_Delete(ObjectMaster* a1);
 void ChaoObj_Reset(ObjectMaster* a1);
+bool DoesChaoNeedGravity(_int16 CurLevel);
 void Chao_LoadFiles();
 void ChaoFix();
 extern bool TPAmyVersion;
