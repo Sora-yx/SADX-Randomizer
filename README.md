@@ -5,7 +5,7 @@ Big in Speed Highway? Amy vs Egg Viper? Sonic in Hot Shelter? Yeah, this is happ
 
 Note: You can change the settings according to your play style. (SA2 missions, disable a character...) You can also swap Character and AI by pressing the Y button, just like in Sonic Heroes.
 
-Note about Dreamcast Conversion mod: DC mod is now fully compatible with Randomizer, as long as the Rando is loaded AFTER DC mod. Which means it should be at the end of your mod list. Make sure both mods are also up to date.
+Note about Dreamcast Conversion mod: DC mod is now fully compatible with Randomizer, as long as the Rando is loaded AFTER DC mod. Which means that the Randomizer should be at the end of your mod list (bottom). Make sure both mods are also up to date.
 
 Download
 --------
