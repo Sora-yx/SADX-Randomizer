@@ -79,6 +79,8 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 	WriteData((float*)0x73C24C, height);
 }
 
+ObjectMaster* ChaoCheck = nullptr;
+
 void ChaoObj_Main(ObjectMaster* a1) {
 
 	uint8_t Action = a1->Data1->Action;
@@ -298,122 +300,155 @@ void LoadChaoTPTrigger() {
 	}
 }
 
+NJS_VECTOR pos;
+float Yrot;
 
-void Chao_OnFrame() {
-	if (ChaoCryDelay > 0)
-		ChaoCryDelay--;
+bool isChaoAllowedtoSpawn(short CurLevel, short CurAct) 
+{
 
-	NJS_VECTOR pos;
-	float Yrot;
-
-	//position for each levels
-	switch (CurrentLevel)
+	switch (CurLevel)
 	{
 	case LevelIDs_EmeraldCoast:
-		if (CurrentAct == 1)
+		if (CurAct == 1)
 		{
 			pos = { 3857.76, 597.395, -2896.18 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 2)
+		if (CurAct == 2)
 		{
 			pos = { 6388, 0.8, 1116 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_WindyValley:
-		if (CurrentAct == 2)
+		if (CurAct == 2)
 		{
 			pos = { 4162.019, -4484, -1800 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_Casinopolis:
-		if (CurrentAct == 0)
+		if (CurAct == 0)
 		{
 			pos = { -361, 380, -40 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 1 && CasinoSwitch == 3)
+		if (CurAct == 1 && CasinoSwitch == 3)
 		{
 			pos = { -1565.96, -2205, 2654.24 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_IceCap:
-		if (CurrentAct == 1)
+		if (CurAct == 1)
 		{
 			pos = { 1480.62, 573.3, -256.67 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 3)
+		if (CurAct == 3)
 		{
 			pos = { 1790.85, 371.968811, 11.265 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_TwinklePark:
-		if (CurrentAct == 1 && !TPAmyVersion && !TPBigVersion)
+		if (CurAct == 1 && !TPAmyVersion && !TPBigVersion)
 		{
 			pos = { 520, 1330, 1630 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 1 && TPBigVersion && !TPAmyVersion)
+		if (CurAct == 1 && TPBigVersion && !TPAmyVersion)
 		{
 			pos = { 604, 338, 237 };
 			Yrot = 16000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 2 && TPAmyVersion)
+		if (CurAct == 2 && TPAmyVersion)
 		{
 			pos = { -41.43054199, 50, 290.7596436 };
 			Yrot = 0;
 			LoadChaoTPTrigger();
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_SpeedHighway:
-		if (CurrentAct == 0)
+		if (CurAct == 0)
 		{
 			pos = { 4455, -385.135, 2930.18 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_RedMountain:
-		if (CurrentAct == 0)
+		if (CurAct == 0)
 		{
 			pos = { -3861.85, 883.96, -2974.81 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_SkyDeck:
-		if (CurrentAct == 1)
+		if (CurAct == 1)
 		{
 			pos = { -316.7368469, 50.99000168, -687.1625977 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_LostWorld:
-		if (CurrentAct == 1)
+		if (CurAct == 1)
 		{
 			pos = { 7410, -1965, 1316 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_FinalEgg:
-		if (CurrentAct == 2)
+		if (CurAct == 2)
 		{
 			if (!FEGammaVersion) //Sonic Version
 			{
@@ -429,20 +464,24 @@ void Chao_OnFrame() {
 				ChaoSpawn = true;
 			}
 		}
-		if (CurrentAct == 0 && FEAmyVersion)
+		if (CurAct == 0 && FEAmyVersion)
 		{
 			pos = { 2945.652344, 5589.605469, -2211.165039 };
 			ChaoSpawn = true;
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	case LevelIDs_HotShelter:
-		if (CurrentAct == 2)
+		if (CurAct == 2)
 		{
 			pos = { 2.01, 3222, -3136 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurrentAct == 1 && HSAmyVersion)
+		if (CurAct == 1 && HSAmyVersion)
 		{
 			HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
 			if (DCModChao)
@@ -458,7 +497,11 @@ void Chao_OnFrame() {
 				ChaoSpawn = true;
 			}
 		}
-		if (CurrentAct == 0 && HSBigVersion)
+		else
+		{
+			ChaoSpawn = false;
+		}
+		if (CurAct == 0 && HSBigVersion)
 		{
 			if (CurrentCharacter != Characters_Gamma)
 			{
@@ -471,17 +514,38 @@ void Chao_OnFrame() {
 				ChaoSpawn = true;
 			}
 		}
+		else
+		{
+			ChaoSpawn = false;
+		}
 		break;
 	default:
 		ChaoSpawn = false;
-		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
-		DeleteObject_(ChaoTP);
-		DeleteObject_(chaoHint);
-		return;
+		return ChaoSpawn;
 		break;
 	}
 
-	if (ChaoSpawn && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
+	return ChaoSpawn;
+
+	//position for each levels
+}
+
+
+void Chao_OnFrame() {
+	if (ChaoCryDelay > 0)
+		ChaoCryDelay--;
+
+	bool ChaoSpawnAllowed = isChaoAllowedtoSpawn(CurrentLevel, CurrentAct);
+
+	if (!ChaoSpawnAllowed && ChaoObject != nullptr)
+	{
+		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
+		DeleteObject_(ChaoTP);
+		DeleteObject_(chaoHint);
+		ChaoSpawn = false;
+	}
+
+	if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
 		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
 
 		ChaoObject->Data1->Position = pos;
@@ -489,5 +553,4 @@ void Chao_OnFrame() {
 	}
 
 	return;
-
 }

@@ -16,8 +16,6 @@ bool GetBackRing = false;
 extern char GetCustomLayout;
 extern bool ChaoSpawn;
 
-
-
 //back ring Model and Display Stuff
 extern NJS_MODEL_SADX model_0;
 

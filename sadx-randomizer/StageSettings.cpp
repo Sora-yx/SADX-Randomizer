@@ -31,6 +31,7 @@ extern ObjectMaster* TriggerHS;
 extern ObjectMaster* ChaoTP;
 ObjectMaster* CurrentCart = nullptr;
 
+
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
@@ -48,8 +49,6 @@ void DisableTimeStuff() {
 
 	ringsPB += Rings; //total Rings credit stat
 
-	if (CurrentCharacter != Characters_Tails)
-		ResultVoiceFix();
 
 	if (CurrentCharacter == Characters_Tails && !Race)
 		SetTailsRaceVictory();
@@ -95,6 +94,225 @@ void DisableTimeStuff() {
 	Race = false;
 	return;
 }
+
+
+void SetResultsCamera()
+{
+	switch (GetCharacter0ID())
+	{
+	case Characters_Sonic:
+	case Characters_Tails:
+		sub_469300((int*)0x919BF4, 3, 720);
+		break;
+	case Characters_Knuckles:
+		sub_469300((int*)0x91A848, 3, 720);
+		break;
+	case Characters_Amy:
+		sub_469300((int*)0x9196D0, 3, 720);
+		break;
+	case Characters_Gamma:
+		sub_469300((int*)0x91A248, 3, 720);
+		break;
+	}
+}
+
+
+void __cdecl sub_461560()
+{
+	CharObj2* v3; // eax@20
+
+	switch (CurrentLevel)
+	{
+	case LevelIDs_SpeedHighway:
+		if (GetRaceWinnerPlayer() == 1)
+		{
+			SetResultsCamera();
+			ResultVoiceFix();
+			Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		}
+		else
+			Load_DelayedSound_Voice(225);
+		if (GameMode != GameModes_Trial || byte_3B2A2F1 != 1)
+			LoadObject(LoadObj_Data1, 3, sub_47D300);
+		break;
+	case LevelIDs_WindyValley:
+	case LevelIDs_SkyDeck:
+	case LevelIDs_IceCap:
+	case LevelIDs_Casinopolis:
+		if (sub_46A820())
+		{
+			if (sub_46A7F0() == 1)
+				SetOpponentRaceVictory();
+			else
+				SetTailsRaceVictory();
+		}
+		if (GetRaceWinnerPlayer() == 1)
+		{
+			SetResultsCamera();
+			ResultVoiceFix();
+			Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		}
+		else
+			Load_DelayedSound_SFX(214);
+		if (GameMode != GameModes_Trial || byte_3B2A2F1 != 1)
+			LoadObject(LoadObj_Data1, 3, sub_47D300);
+		break;
+	default:
+		SetTailsRaceVictory();
+		if (CurrentLevel == LevelIDs_SandHill)
+		{
+			v3 = GetCharObj2(0);
+			v3->PhysicsData.CollisionSize = 9;
+			v3->PhysicsData.YOff = 4.5f;
+		}
+		SetResultsCamera();
+		ResultVoiceFix();
+		Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		break;
+	}
+}
+
+void __cdecl sub_4141F0(ObjectMaster* obj)
+{
+	EntityData1* v1 = GetCharacterObject(0)->Data1;
+	if (EntityData1Ptrs[1] && sub_46A820() && sub_46A7F0() == 1)
+		v1 = EntityData1Ptrs[1];
+	if (v1->Status & 3)
+	{
+
+		ForcePlayerAction(0, 19);
+		switch (CurrentCharacter)
+		{
+		case Characters_Tails:
+			sub_461560();
+			break;
+		case Characters_Gamma:
+			if (GetCharacter0ID() == Characters_Gamma)
+			{
+				sub_469300((int*)0x91A248, 3, 720);
+				switch (CurrentLevel)
+				{
+				case LevelIDs_EmeraldCoast:
+					Load_DelayedSound_SFX(1772);
+					break;
+				case LevelIDs_HotShelter:
+					Load_DelayedSound_SFX(1773);
+					break;
+				case LevelIDs_RedMountain:
+					Load_DelayedSound_SFX(1774);
+					break;
+				case LevelIDs_WindyValley:
+					Load_DelayedSound_SFX(1775);
+					break;
+				default:
+					Load_DelayedSound_SFX(1770);
+					break;
+				}
+			}
+			else
+			{
+				SetResultsCamera();
+				ResultVoiceFix();
+			}
+			break;
+		default:
+			SetResultsCamera();
+			ResultVoiceFix();
+			//PlayStandardResultsVoice();
+			break;
+		}
+		sub_457D00();
+		LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
+		Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		CheckThingButThenDeleteObject(obj);
+	}
+}
+
+
+
+void __cdecl LoadLevelResults_r()
+{
+	NJS_VECTOR a1; // [sp+0h] [bp-18h]@12
+	NJS_VECTOR a2; // [sp+Ch] [bp-Ch]@12
+
+	DisableController(0);
+	PauseEnabled = 0;
+	DisableTimeStuff();
+	if (GameMode == GameModes_Mission)
+		sub_5919E0();
+	if (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails)
+		SetTailsRaceVictory();
+	switch (CurrentCharacter)
+	{
+	case Characters_Tails:
+		if (GetRaceWinnerPlayer() == 1)
+			LoadObject((LoadObj)0, 3, sub_4141F0);
+		else
+		{
+			ForcePlayerAction(0, 19);
+			sub_461560();
+			sub_457D00();
+			LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
+		}
+		break;
+	case Characters_Knuckles:
+		ForcePlayerAction(0, 19);
+		sub_457D00();
+		LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
+		SoundManager_Delete2();
+		if ((CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || GetCharacter0ID() != Characters_Knuckles)
+		{
+			SetResultsCamera();
+			ResultVoiceFix();
+		}
+		else
+		{
+			sub_469300((int*)0x91A848, 3, 720);
+			Load_DelayedSound_SFX(1790);
+		}
+		Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		break;
+	case Characters_Amy:
+		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill)
+			LoadObject((LoadObj)0, 3, sub_4141F0);
+		else
+		{
+			ForcePlayerAction(0, 19);
+			sub_457D00();
+			LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
+			SoundManager_Delete2();
+			if (GetCharacter0ID() == Characters_Amy)
+				Load_DelayedSound_SFX(1733);
+			else
+				ResultVoiceFix();
+			Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		}
+		break;
+	case Characters_Big:
+		ForcePlayerAction(0, 19);
+		a2.x = -36.072899f;
+		a2.y = 5.7132001f;
+		a2.z = -1.5176001f;
+		sub_43EC90(EntityData1Ptrs[0], &a2);
+		a1 = EntityData1Ptrs[0]->CollisionInfo->CollisionArray->origin;
+		stru_3B2C6DC = a1;
+		njSubVector(&a1, &a2);
+		stru_3B2C6D0 = a1;
+		sub_437D20(sub_464B00, 1, 2);
+		sub_457D00();
+		LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
+		if ((CurrentAct | (CurrentLevel << 8)) < LevelAndActIDs_Chaos0)
+			SoundManager_Delete2();
+		ResultVoiceFix();
+		Load_DelayedSound_BGM(MusicIDs_RoundClear);
+		break;
+	default:
+		LoadObject((LoadObj)0, 3, sub_4141F0);
+		SoundManager_Delete2();
+		break;
+	}
+}
+
 
 void DeleteTriggerObject() {
 
@@ -674,7 +892,9 @@ void LoadTriggerObject() {
 
 void Stages_Management() {
 
-	WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
+	WriteJump(LoadLevelResults, LoadLevelResults_r); //TEST
+
+	//WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 	Set_Zero();
 	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 	Set_BackRing();

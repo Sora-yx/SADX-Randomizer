@@ -25,6 +25,7 @@ DataPointer(char, InitUpgrade, 0x3c5a954);
 DataPointer(int, BigWeight, 0x3C52510);
 
 
+
 void FixVictoryTailsVoice();
 void Characters_Management();
 void character_settings_onFrames();

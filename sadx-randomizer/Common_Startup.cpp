@@ -247,7 +247,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 		//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\TCAct3.BIN"); //TC act 4 fix
 	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\TCAct3.BIN");
-	//WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); //test
+	WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); 
 
 	//Random Title Card + Missions
 	TitleCard_Init();

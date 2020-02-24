@@ -29,7 +29,7 @@ void LW_Layout() {
 	if (CurrentAct != 1)
 	{
 		CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
+		
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:

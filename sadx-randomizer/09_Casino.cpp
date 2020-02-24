@@ -64,11 +64,10 @@ void FixShakeoffGarbageAction() { //This make the game crash as Tails.
 
 void Casino_Layout() {
 
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct == 1)
 	{
-		CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
@@ -110,9 +109,7 @@ void Casino_Layout() {
 			CurrentLevelLayout = Mission1_Variation;
 		}
 		else
-		{
-			CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
+		{			
 			switch (CurrentLevelLayout)
 			{
 			case Mission1:
@@ -177,6 +174,56 @@ void Casino_Layout() {
 
 	return;
 }
+
+void FixInvisibleWall() {
+
+	//if Sonic layout, add an invisible wall, if not, return.
+	if (CurrentLevelLayout != 1)
+	{
+		LoadObject((LoadObj)2, 6, InvisibleWallCasino);
+	}
+
+	return;
+}
+
+void FixGoldenAndCoin() {
+
+	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
+	if (CurrentLevelLayout == 1 && CurrentAct == 0)
+	{
+		WriteData<1>((void*)0x5c4425, 0x74); //Coin position
+
+		if (CurrentCharacter == Characters_Gamma)
+			WriteData<1>((void*)0x5c4232, 0x74); //don't display golden statue
+		else
+			WriteData<1>((void*)0x5c4232, 0x75); //display golden statue when not Sonic/Gamma
+	}
+	else
+	{
+		WriteData<1>((void*)0x5c4425, 0x75); //restore original function coin position
+		WriteData<1>((void*)0x5cef47, 0x75);
+
+		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles)
+			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
+		else
+			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue*/
+
+
+	}
+
+	if (CurrentAct == 0 && !TreasureHunting)
+	{
+		if (CurrentCharacter == Characters_Gamma)
+			WriteData<1>((void*)0x5D118B, 0x2); //Fix gamma pinball teleportation
+		else
+			WriteData<1>((void*)0x5D118B, 0x1); //Restore original function.
+	}
+
+	return;
+}
+
+
+
 
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -300,52 +347,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino2_StartPositions[0]);
 }
 
-void FixInvisibleWall() {
 
-	//if Sonic layout, add an invisible wall, if not, return.
-	if (CurrentLevelLayout != 1)
-	{
-		LoadObject((LoadObj)2, 6, InvisibleWallCasino);
-	}
-
-	return;
-}
-
-void FixGoldenAndCoin() {
-
-	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
-	if (CurrentLevelLayout == 1 && CurrentAct == 0)
-	{
-		WriteData<1>((void*)0x5c4425, 0x74); //Coin position
-		
-		if (CurrentCharacter == Characters_Gamma)
-			WriteData<1>((void*)0x5c4232, 0x74); //don't display golden statue
-		else
-			WriteData<1>((void*)0x5c4232, 0x75); //display golden statue when not Sonic/Gamma
-	}
-	else
-	{
-		WriteData<1>((void*)0x5c4425, 0x75); //restore original function coin position
-		WriteData<1>((void*)0x5cef47, 0x75);
-
-		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles)
-			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
-		else
-			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue
-		
-		
-	}
-
-	if (CurrentAct == 0 && !TreasureHunting)
-	{
-		if (CurrentCharacter == Characters_Gamma)
-			WriteData<1>((void*)0x5D118B, 0x2); //Fix gamma pinball teleportation
-		else
-			WriteData<1>((void*)0x5D118B, 0x1); //Restore original function.
-	}
-
-	return;
-}
 
 ObjectListEntry CasinopolisObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,

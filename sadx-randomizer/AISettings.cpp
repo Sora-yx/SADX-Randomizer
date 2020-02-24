@@ -82,7 +82,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentCharacter == Characters_Knuckles) //cutscene + pinball issue
+			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentLevelLayout < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
 			{
 				isAIActive = false;
 				return 0;
@@ -744,6 +744,7 @@ void AISwitch() {
 				}
 				else
 					Collision_Free(obj);
+				
 				obj->MainSub(obj);
 				obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 				obj2->Powerups = powerups;
@@ -765,7 +766,6 @@ void AISwitch() {
 					float AIloopdist = AI2->LoopDist;
 					NJS_VECTOR AIspeed = AI2->Speed;
 					ObjectMaster* AIheldobj = AI2->ObjectHeld;
-
 					//Display AI swap.
 					AI->MainSub = charfuncs[AISwap];
 					AI->Data1->CharID = (char)AISwap;

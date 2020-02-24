@@ -445,13 +445,47 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
-HMODULE SSMod = GetModuleHandle(L"sadx-super-sonic");
+int __cdecl SetSonicWinPose_i()
+{
+	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
+		return 75;
+	else
+		return 47;
+}
+
+const int loc_4961DD = 0x4961DD;
+__declspec(naked) void SetSonicWinPose()
+{
+	__asm
+	{
+		call SetSonicWinPose_i
+		mov word ptr[esi + 124h], ax
+		jmp loc_4961DD
+	}
+}
+
+int __cdecl SetKnucklesWinPose_i()
+{
+	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
+		return 39;
+	else
+		return 84;
+}
+
+const int loc_476B62 = 0x476B62;
+__declspec(naked) void SetKnucklesWinPose()
+{
+	__asm
+	{
+		call SetKnucklesWinPose_i
+		mov word ptr[edi + 124h], ax
+		jmp loc_476B62
+	}
+}
+
 
 void Characters_Management() {
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
-
-	if (SSMod)
-		WriteJump(reinterpret_cast<void*>(0x004496E1), SomethingAboutWater2); //Cancel Super Sonic Float, restore original code*/ //seem like it works, but need more test for now.
 
 	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
 	WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
@@ -468,6 +502,13 @@ void Characters_Management() {
 	WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
+
+	WriteCall((void*)0x4E966C, GetCharacter0ID); // fix ice cap snowboard 1
+	WriteCall((void*)0x4E9686, GetCharacter0ID); // fix ice cap snowboard 2
+	WriteCall((void*)0x597B1C, GetCharacter0ID); // fix sand hill snowboard
+
+	WriteJump((void*)0x4961D4, SetSonicWinPose);
+	WriteJump((void*)0x476B59, SetKnucklesWinPose);
 
 	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
 	WriteData<5>((void*)0x478937, 0x90);

@@ -41,7 +41,7 @@ extern uint32_t TotalCount;
 extern char StorySplits;
 extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
-
+extern bool ChaoSpawn;
 
 
 struct RandomizedEntry

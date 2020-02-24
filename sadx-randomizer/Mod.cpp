@@ -169,7 +169,7 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "HS: %d", CopyRNGLayoutHS);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "HS: %d", ChaoSpawn);
 
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)

@@ -308,7 +308,7 @@ short randomMission(short stage_id) {
 			cur_mission = rand() % 4;
 		else
 			cur_mission = rand() % 2;
-	} while (prev_mission == cur_mission || prev_mission >= 0 && prev_mission <= 1 && cur_mission >= 0 && cur_mission <=1);
+	} while (prev_mission == cur_mission);
 
 	prev_mission = cur_mission;
 	return cur_mission;
