@@ -50,7 +50,7 @@ void TwinklePark_Layout() {
 
 	fixTCCart();
 
-	CurrentLevelLayout = 2; //randomizedSets[levelCount].MissionLayout;
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 	
 	TPAmyVersion = false;
 	TPBigVersion = false;

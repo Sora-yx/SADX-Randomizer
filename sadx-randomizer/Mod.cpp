@@ -239,6 +239,12 @@ extern "C" {
 			case LevelIDs_Zero:
 				LoadSoundList(46);
 				break;
+			case LevelIDs_SSGarden:
+			case LevelIDs_ECGarden:
+			case LevelIDs_MRGarden:
+			case LevelIDs_ChaoRace:
+				LoadCharVoices();
+				break;
 			}
 		}
 	}
