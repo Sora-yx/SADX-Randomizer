@@ -8,6 +8,7 @@
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerCasino = nullptr;
+bool CasinoTails = false;
 
 void TriggerCasinoChao_Main(ObjectMaster* obj) {
 
@@ -64,10 +65,14 @@ void FixShakeoffGarbageAction() { //This make the game crash as Tails.
 
 void Casino_Layout() {
 
+	CasinoTails = false;
+
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct == 1)
 	{
+		CasinoTails = true;
+
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
@@ -100,6 +105,7 @@ void Casino_Layout() {
 
 	if (CurrentAct == 0)
 	{
+		CasinoTails = false;
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
 			Race = false;

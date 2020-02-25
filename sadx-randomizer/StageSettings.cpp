@@ -30,7 +30,8 @@ extern ObjectMaster* TriggerOBJ;
 extern ObjectMaster* TriggerHS;
 extern ObjectMaster* ChaoTP;
 ObjectMaster* CurrentCart = nullptr;
-
+extern bool isZeroActive;
+extern bool CasinoTails;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
@@ -320,7 +321,10 @@ void DeleteTriggerObject() {
 	TriggerCasinoChao_Delete();
 }
 
+
+
 void ResetValueWhileLevelResult() {
+	isZeroActive = false;
 	LimitCustomFlag = false;
 	isCheckpointUsed = false;
 	SonicRand = 0;
@@ -339,6 +343,7 @@ void ResetValueWhileLevelResult() {
 	TPBigVersion = false;
 	HSAmyVersion = false;
 	HSBigVersion = false;
+	CasinoTails = false;
 	
 	isCheckpointUsed = false;
 
@@ -363,6 +368,7 @@ void fixTCCart() {
 }
 
 
+
 void LoadZero() {
 	if (CurrentLevel == LevelIDs_HotShelter)
 		PressedSwitches_Reset();
@@ -379,6 +385,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_FinalEgg && !FEAmyVersion || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
 		return;
 
+	isZeroActive = true;
 	LoadPVM("EGGROB", &EGGROB_TEXLIST);
 	CheckLoadZero();
 }
@@ -892,7 +899,7 @@ void LoadTriggerObject() {
 
 void Stages_Management() {
 
-	WriteJump(LoadLevelResults, LoadLevelResults_r); //TEST
+	WriteJump(LoadLevelResults, LoadLevelResults_r); 
 
 	//WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 	Set_Zero();

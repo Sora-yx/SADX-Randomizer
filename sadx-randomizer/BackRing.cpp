@@ -61,7 +61,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 		if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
 		{
-			if (CurrentLevelLayout >= Mission2_100Rings)
+			if (CurrentLevelLayout == Mission2_100Rings && Rings < 100 || CurrentLevelLayout == Mission3_LostChao)
 			{
 				isBackRingTextureLoaded = false;
 				GetBackRing = true;

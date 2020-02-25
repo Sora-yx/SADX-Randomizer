@@ -41,7 +41,7 @@ void FinalEgg_Layout() {
 	FEGammaVersion = false;
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-	short RNGLayoutFE = randomizedSets[levelCount].Layout;
+
 
 	if (CurrentAct != 2)
 	{
@@ -87,6 +87,7 @@ void FinalEgg_Layout() {
 				break;
 			case Mission2_100Rings:
 			case Mission3_LostChao:
+				short RNGLayoutFE = randomizedSets[levelCount].Layout;
 				if (RNGLayoutFE)
 				{
 					FEAmyVersion = false;

@@ -1,4 +1,15 @@
-Bug report: https://github.com/Sora-yx/SADX-Randomizer/issues
+Bug Report: https://github.com/Sora-yx/SADX-Randomizer/issues
+V2.1.1
+
+General:
+- Chao Gameplay Mod is now compatible with the Randomizer, get ready to have your Chao following your Randomized adventure!
+
+Bug fixes:
+- Fixed a bug where the Lost Chao was spawned in a different location after a restart.
+- Twinkle Park should now have a Back Ring for every character.
+- Fixed a bug where finishing a stage as Amy could make the game crash.
+- Adding a way to prevent the player to grab the Back Ring while having 100 Rings collected during Mission 2.
+
 
 V2.1.0
 

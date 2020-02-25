@@ -123,7 +123,7 @@ void CreditFlag() {
 
 
 CreditsEntry CreditsText_list[] = {
-{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER V2.1.1" },
+{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER" },
 	{ 3, -1, 0, 0, "AUTHOR" },
 	{ 3, -1, 0, 0, "Sora" },
 	{ 2, -1, 0, 0, "HELP" },

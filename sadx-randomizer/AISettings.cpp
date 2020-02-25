@@ -150,7 +150,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 
-			if (CurrentAct == 0 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) 
+			if (CurrentAct < 2 && !TreasureHunting && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) 
 			{
 				isAIActive = false;
 				return 0;
@@ -512,10 +512,11 @@ void FixAISFXAmy8() { //spin dash noise when you press B
 	PlaySound(0x509, 0, 0, 0);
 }
 
+bool isZeroActive = false;
 
 void FixAISFXGamma() { 
 
-	if (Race && CurrentCharacter != Characters_Gamma)
+	if (Race && CurrentCharacter != Characters_Gamma || isZeroActive)
 		return;
 
 	PlaySound(0x33b, 0, 0, 0);
@@ -525,7 +526,7 @@ void FixAISFXGamma() {
 
 void FixAISFXGamma2() { 
 
-	if (Race && CurrentCharacter != Characters_Gamma)
+	if (Race && CurrentCharacter != Characters_Gamma || isZeroActive)
 		return;
 
 	PlaySound(0x33d, 0, 0, 0);

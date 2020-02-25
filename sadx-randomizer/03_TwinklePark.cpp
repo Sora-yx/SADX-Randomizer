@@ -50,8 +50,8 @@ void TwinklePark_Layout() {
 
 	fixTCCart();
 
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-	short RNGLayoutTP = randomizedSets[levelCount].Layout;
+	CurrentLevelLayout = 2; //randomizedSets[levelCount].MissionLayout;
+	
 	TPAmyVersion = false;
 	TPBigVersion = false;
 
@@ -117,6 +117,7 @@ void TwinklePark_Layout() {
 			}
 			else
 			{
+				short RNGLayoutTP = randomizedSets[levelCount].Layout;
 				if (!RNGLayoutTP)
 				{
 					LoadSetFile(1, "0306"); //Big TP version

@@ -2,6 +2,8 @@
 #include "data\chao.h"
 #include "RandomHelpers.h"
 #include "Trampoline.h"
+#include <fstream>
+#include <iostream> 
 
 ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
@@ -13,6 +15,7 @@ short ChaoCryDelay = 0;
 bool ArePvpLoaded = false;
 extern int chaoPB;
 bool ChaoSpawn = false;
+extern bool CasinoTails;
 
 
 ObjectMaster* ChaoTP = nullptr;
@@ -21,17 +24,22 @@ std::vector<NJS_PLANE> waterlist = {};
 
 ChaoHandle ChaoMaster;
 
-void ChaoGameplayCheck() {
+bool DoesConfigExist(const std::string& file)
+{
+	std::ifstream fichier(file.c_str());
+	return !fichier.fail();
+}
+
+void __cdecl ChaoGameplayCheck() {
 
 	HMODULE ChaoGameplay = GetModuleHandle(L"sadx-chao-gameplay");
+
 	if (ChaoGameplay && !isChaoGameplayAllowed) {
 		int msgboxID = MessageBoxA(WindowHandle, "Chao Gameplay Mod has been detected, would you like to pick your Chao before starting your Randomizer Adventure?", "SADX Randomizer", MB_YESNO);
-
 		switch (msgboxID)
 		{
 		case IDYES:
 			isChaoGameplayAllowed = true;
-			MessageBoxA(WindowHandle, "Randomizer will now send you to the Chao Garden when starting a new story. You can disable this in the settings.", "SADX Randomizer", MB_ICONINFORMATION);
 			break;
 		case IDNO:
 		default:
@@ -44,6 +52,7 @@ void ChaoGameplayCheck() {
 	{
 		MessageBoxA(WindowHandle, "Couldn't find Chao Gameplay Mod, make sure the mod is checked and installed.", "SADX Randomizer Error", MB_ICONERROR);
 	}
+
 }
 
 //This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
@@ -321,7 +330,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		else
+		if (CurAct == 0)
 		{
 			ChaoSpawn = false;
 		}
@@ -345,13 +354,13 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		if (CurAct == 1 && CasinoSwitch == 3)
+		if (CurAct == 1 && CasinoSwitch == 3 && CasinoTails)
 		{
 			pos = { -1565.96, -2205, 2654.24 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		else
+		if (CurAct > 1 || CurrentAct == 1 && !CasinoTails)
 		{
 			ChaoSpawn = false;
 		}
@@ -369,7 +378,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}
-		else
+		if (CurAct == 0 || CurAct == 2)
 		{
 			ChaoSpawn = false;
 		}
@@ -394,7 +403,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 			LoadChaoTPTrigger();
 			ChaoSpawn = true;
 		}
-		else
+		if (CurAct == 0)
 		{
 			ChaoSpawn = false;
 		}
@@ -469,7 +478,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 			pos = { 2945.652344, 5589.605469, -2211.165039 };
 			ChaoSpawn = true;
 		}
-		else
+		if (CurAct == 1 || CurAct == 0 && !FEAmyVersion)
 		{
 			ChaoSpawn = false;
 		}
@@ -497,10 +506,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 				ChaoSpawn = true;
 			}
 		}
-		else
-		{
-			ChaoSpawn = false;
-		}
+
 		if (CurAct == 0 && HSBigVersion)
 		{
 			if (CurrentCharacter != Characters_Gamma)
@@ -514,14 +520,14 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 				ChaoSpawn = true;
 			}
 		}
-		else
+
+		if (CurAct == 0 && !HSBigVersion || CurAct == 1 && !HSAmyVersion)
 		{
 			ChaoSpawn = false;
 		}
 		break;
 	default:
 		ChaoSpawn = false;
-		return ChaoSpawn;
 		break;
 	}
 

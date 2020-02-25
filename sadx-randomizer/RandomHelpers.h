@@ -115,7 +115,7 @@ void EggHornet_LoadWithTarget();
 void Chaos0_LoadWithTarget();
 void Chaos2_LoadWithTarget();
 void Chaos6_LoadWithTarget();
-void ChaoGameplayCheck();
+void __cdecl ChaoGameplayCheck();
 
 ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
@@ -306,7 +306,7 @@ void LoadStageMissionImage_r();
 int LoadTitleCardTexture_r(int minDispTime);
 void StageMissionImage_result();
 int CheckMissionRequirements_r();
-
+void __cdecl LoadLevelResults_r();
 
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 

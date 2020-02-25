@@ -15,6 +15,7 @@ extern bool isPlayerInWaterSlide;
 bool TreasureHunting = false;
 int musicCount;
 extern bool isCheckpointUsed;
+extern bool CasinoTails;
 
 //Credits stats
 int RageQuit = 0;
@@ -405,6 +406,14 @@ int GetCharaProgression() {
 			if (EventFlagArray[EventFlags_Big_TwinkleParkClear] == 0)
 				return 0;
 			break;
+		case 5:
+			if (EventFlagArray[EventFlags_Gamma_FinalEggClear] == 0 && isChaoGameplayAllowed)
+				return 0;
+			break;
+		case 6:
+			if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 0 && isChaoGameplayAllowed)
+				return 0;
+			break;
 		default: 
 			return 1;
 			break;
@@ -455,7 +464,10 @@ void SetRandomStageAct(char stage, char act) {
 	else
 	{
 		CustomFlag = 0;
-		SetLevelAndAct(stage, act);
+		if (isChaoGameplayAllowed)
+			SetLevelAndAct(LevelIDs_SSGarden, 0);
+		else
+			SetLevelAndAct(stage, act);
 	}
 
 	return;
@@ -504,9 +516,12 @@ void GoToNextLevel_hook(char stage, char act) {
 extern ObjectMaster* TriggerOBJ;
 extern ObjectMaster* TriggerHS;
 extern bool LimitCustomFlag;
+extern bool isZeroActive;
+
 
 void ResetStatsValues() {
 	LimitCustomFlag = false;
+	isZeroActive = false;
 	isAIActive = false;
 	TreasureHunting = false;
 	ChaoSpawn = false;
@@ -514,6 +529,7 @@ void ResetStatsValues() {
 	TPBigVersion = false;
 	HSAmyVersion = false;
 	HSBigVersion = false;
+	CasinoTails = false;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;

@@ -150,13 +150,14 @@ extern "C" {
 			srand((unsigned)time(&t));
 
 		SeedCopy = Seed;
-
+		
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
 		StartupAudio_Init(path, helperFunctions);
 		StartupMiscellaneous_Init(path, helperFunctions);
 
 		Chao_Init();
+		ChaoGameplayCheck();
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();

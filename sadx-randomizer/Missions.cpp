@@ -271,24 +271,22 @@ void MissionResultCheck() {
 
 			if ((ent->Status & Status_Ground) == Status_Ground && (!isPlayerInWaterSlide && TimeThing != 0))
 			{
-				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
-				{
-					LoadLevelResults();
+				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && ent->Action >= 40 && ent->Action <= 60)
 					return;
-				}
-				else
-				{
+		
 					ent->InvulnerableTime = 0;
 					if (!SonicRand && !MetalSonicFlag)
 						obj->Data1->Action = 0; //fix potential crash
 					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+
 					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
 					{
 						if (!SonicRand && !MetalSonicFlag)
 							obj->Data1->Action = 1; //fix victory pose
-						LoadLevelResults();
+						LoadLevelResults_r();
+						return;
 					}
-				}
+				
 			}
 		}
 	
