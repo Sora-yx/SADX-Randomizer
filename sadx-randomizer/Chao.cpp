@@ -35,7 +35,7 @@ void __cdecl ChaoGameplayCheck() {
 	HMODULE ChaoGameplay = GetModuleHandle(L"sadx-chao-gameplay");
 
 	if (ChaoGameplay && !isChaoGameplayAllowed) {
-		int msgboxID = MessageBoxA(WindowHandle, "Chao Gameplay Mod has been detected, would you like to pick your Chao before starting your Randomizer Adventure?", "SADX Randomizer", MB_YESNO);
+		int msgboxID = MessageBoxA(WindowHandle, "Chao Gameplay Mod has been detected, would you like to pick your Chao before starting your Randomizer Adventure? (Note: to disable this message, please Allow Chao Gameplay in the settings.)", "SADX Randomizer", MB_YESNO);
 		switch (msgboxID)
 		{
 		case IDYES:
