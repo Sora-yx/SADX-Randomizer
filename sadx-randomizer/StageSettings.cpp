@@ -36,8 +36,10 @@ extern bool CasinoTails;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission)
+
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
 		GameMode = GameModes_Adventure_Field; //fix game crash
+	
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
@@ -50,8 +52,7 @@ void DisableTimeStuff() {
 
 	ringsPB += Rings; //total Rings credit stat
 
-
-	if (CurrentCharacter == Characters_Tails && !Race)
+	if (!Race && CurrentCharacter == Characters_Tails)
 		SetTailsRaceVictory();
 
 	ObjectMaster* play1 = GetCharacterObject(0);
@@ -59,7 +60,6 @@ void DisableTimeStuff() {
 
 	if (!Race && isAIAllowed && isAIActive && CurrentLevel != LevelIDs_TwinklePark) //Move AI to player 1 if we are not racing.
 	{
-		
 		if (play2 != nullptr && play1 != nullptr)
 		{
 			if (CurrentCharacter != Characters_Amy)
@@ -180,7 +180,6 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 		v1 = EntityData1Ptrs[1];
 	if (v1->Status & 3)
 	{
-
 		ForcePlayerAction(0, 19);
 		switch (CurrentCharacter)
 		{
@@ -194,19 +193,45 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 				switch (CurrentLevel)
 				{
 				case LevelIDs_EmeraldCoast:
-					Load_DelayedSound_SFX(1772);
+					if (CurrentAct == 2 && CurrentMission == 5 || CurrentAct == 0 && CurrentMission == 1)
+						Load_DelayedSound_Voice(1772);
+					else
+						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_HotShelter:
-					Load_DelayedSound_SFX(1773);
+					if (CurrentAct == 2 && CurrentMission == Mission1)
+						Load_DelayedSound_Voice(1773);
+					if (CurrentAct == 0 && CurrentMission == 5 && HSBigVersion)
+						Load_DelayedSound_Voice(1772);
+					else
+						Load_DelayedSound_Voice(1770);
+					break;
+				case LevelIDs_TwinklePark:
+					if (CurrentAct == 1 && CurrentLevelLayout < 2 && TPBigVersion)
+						Load_DelayedSound_Voice(1772);
+					else
+						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_RedMountain:
-					Load_DelayedSound_SFX(1774);
+					if (CurrentAct == 1 && CurrentMission == Mission1_Variation)
+						Load_DelayedSound_Voice(1774);
+					else
+						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_WindyValley:
-					Load_DelayedSound_SFX(1775);
+					if (CurrentAct == 0 & CurrentMission == Mission1_Variation)
+						Load_DelayedSound_Voice(1775);
+					else
+						Load_DelayedSound_Voice(1770);
+					break;
+				case LevelIDs_IceCap:
+					if (CurrentAct == 3 && CurrentMission == 5)
+						Load_DelayedSound_Voice(1772);
+					else
+						Load_DelayedSound_Voice(1770);
 					break;
 				default:
-					Load_DelayedSound_SFX(1770);
+					Load_DelayedSound_Voice(1770);
 					break;
 				}
 			}
@@ -219,7 +244,6 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 		default:
 			SetResultsCamera();
 			ResultVoiceFix();
-			//PlayStandardResultsVoice();
 			break;
 		}
 		sub_457D00();
@@ -238,7 +262,15 @@ void __cdecl LoadLevelResults_r()
 
 	DisableController(0);
 	PauseEnabled = 0;
-	DisableTimeStuff();
+	if (Race && RaceWinnerPlayer == 2 && GameMode < 9)
+	{
+		GameMode = GameModes_Adventure_ActionStg; //fix Softlock race
+		TimeThing = 0;
+	}
+	else
+	{
+		DisableTimeStuff();
+	}
 	if (GameMode == GameModes_Mission)
 		sub_5919E0();
 	if (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails)
@@ -264,17 +296,17 @@ void __cdecl LoadLevelResults_r()
 		if ((CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill) || GetCharacter0ID() != Characters_Knuckles)
 		{
 			SetResultsCamera();
-			ResultVoiceFix();
+			Load_DelayedSound_SFX(0x5a8);
 		}
 		else
 		{
 			sub_469300((int*)0x91A848, 3, 720);
-			Load_DelayedSound_SFX(1790);
+			Load_DelayedSound_SFX(0x5a5);
 		}
 		Load_DelayedSound_BGM(MusicIDs_RoundClear);
 		break;
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill)
+		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill || CurrentLevelLayout >= 2)
 			LoadObject((LoadObj)0, 3, sub_4141F0);
 		else
 		{
@@ -283,7 +315,7 @@ void __cdecl LoadLevelResults_r()
 			LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
 			SoundManager_Delete2();
 			if (GetCharacter0ID() == Characters_Amy)
-				Load_DelayedSound_SFX(1733);
+				Load_DelayedSound_Voice(1733);
 			else
 				ResultVoiceFix();
 			Load_DelayedSound_BGM(MusicIDs_RoundClear);
@@ -327,6 +359,7 @@ void ResetValueWhileLevelResult() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
 	isCheckpointUsed = false;
+	isGameOver = false;
 	SonicRand = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
@@ -352,9 +385,12 @@ void ResetValueWhileLevelResult() {
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
-	DeleteTriggerObject();
-	DeleteObject_(ChaoTP);
-	Delete_Cart();
+	if (CurrentLevel != 0)
+	{
+		DeleteTriggerObject();
+		DeleteObject_(ChaoTP);
+		Delete_Cart();
+	}
 	fixTCCart();
 
 	return;
@@ -435,9 +471,13 @@ void Load_Cart_R() {
 			return;
 
 	Delete_Cart();
-	FlagAutoPilotCart = 0; //fix that bullshit Twinkle Circuit thing.
-	LoadPVM("OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST);
-	CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
+	if (!CurrentCart)
+	{
+		SwapDelay = 0;
+		FlagAutoPilotCart = 0; //fix that bullshit Twinkle Circuit thing.
+		LoadPVM("OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST);
+		CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
+	}
 
 	if (CurrentCart)
 	{
@@ -521,12 +561,14 @@ void Cart_Main_r(ObjectMaster* obj) {
 
 void Delete_Cart()
 {
+
 	if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
 			ForcePlayerAction(0, 0x18);
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)
 		return;
+
 	FlagAutoPilotCart = 1;
 	if (CurrentCart != nullptr)
 		DeleteObject_(CurrentCart);
@@ -546,6 +588,8 @@ void Delete_Cart()
 
 void FixRestart_Stuff() //Prevent the game to crash if you restart while being in a custom cart, also reset other stuff.
 {
+	DisableTimeThing();
+	DisableControl();
 
 	ObjectMaster* P1 = GetCharacterObject(0);
 
@@ -647,6 +691,33 @@ void RestoreRNGValueKnuckles() {
 	WriteData<1>((void*)0x416f08, 0x75);
 	WriteData<1>((void*)0x4153e3, 0x75);
 }
+
+bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
+	return (powf(pos->x - center->x, 2) + pow(pos->y - center->y, 2) + pow(pos->z - center->z, 2)) <= pow(radius, 2);
+}
+
+int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius) {
+	for (uint8_t player = 0; player < 8; ++player) {
+		if (!EntityData1Ptrs[player])
+			continue;
+
+		NJS_VECTOR* pos = &EntityData1Ptrs[player]->Position;
+		if (IsPointInsideSphere(center, pos, radius)) {
+			return player + 1;
+		}
+	}
+
+	return 0;
+}
+
+
+bool IsSpecificPlayerInSphere(NJS_VECTOR* center, float radius, uint8_t player) {
+	if (IsPlayerInsideSphere_(center, radius) == player + 1)
+		return true;
+	else
+		return false;
+}
+
 
 /*Trampoline PlayEmeraldGrabVoice_T(0x474f50, 0x474f55, PlayEmeraldGrabVoice_R);
 //Play Custom voice when grabbing an emerald when not Knuckles.
@@ -756,17 +827,23 @@ void TargetableEntity(ObjectMaster* obj)
 			return;
 		}
 
-		if (EntityData1Ptrs[0]->CharID != Characters_Gamma) return;
+		if (EntityData1Ptrs[0]->CharID != Characters_Gamma) 
+			return;
 
 		data->Position = boss->Data1->Position;
-		data->Position.y += 10;
+		if (CurrentLevel != LevelIDs_EggWalker)
+			data->Position.y += 10;
+		else
+			data->Position.y += 45;
+
 
 		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
 		{
 			DeleteObject_(obj);
 
 			//if it is set, don't reload the target object
-			if (data->CharID == 1) return;
+			if (data->CharID == 1) 
+				return;
 
 			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
 			target->Data1->LoopData = (Loop*)boss;
@@ -778,6 +855,110 @@ void TargetableEntity(ObjectMaster* obj)
 	}
 }
 
+void TargetableEntitySmallOBJ(ObjectMaster* obj)
+{
+	EntityData1* data = obj->Data1;
+
+	if (data->Action == 0) {
+		AllocateObjectData2(obj, obj->Data1);
+
+		//if the scale is specified, temporary set the collision scale to it.
+		if (data->Scale.x) {
+			col.scale.x = data->Scale.x;
+			Collision_Init(obj, &col, 1, 2u);
+			col.scale.x = 10;
+		}
+		else {
+			Collision_Init(obj, &col, 1, 2u);
+		}
+
+		data->Action = 1;
+	}
+	else {
+		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
+
+		if (!boss || !boss->Data1) {
+			DeleteObject_(obj);
+			return;
+		}
+
+		if (EntityData1Ptrs[0]->CharID != Characters_Gamma)
+			return;
+
+		data->Position = boss->Data1->Position;
+		data->Position.y += 10;
+
+
+		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
+		{
+			DeleteObject_(obj);
+
+			//if it is set, don't reload the target object
+			if (data->CharID == 1)
+				return;
+
+			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntitySmallOBJ);
+			target->Data1->LoopData = (Loop*)boss;
+		}
+		else
+		{
+			AddToCollisionList(data);
+		}
+	}
+}
+
+
+
+void TargetableEntity_RegularChara(ObjectMaster* obj)
+{
+	EntityData1* data = obj->Data1;
+
+	if (data->Action == 0) {
+		AllocateObjectData2(obj, obj->Data1);
+
+		//if the scale is specified, temporary set the collision scale to it.
+		if (data->Scale.x) {
+			col.scale.x = data->Scale.x;
+			Collision_Init(obj, &col, 5, 2u);
+			col.scale.x = 6;
+		}
+		else {
+			Collision_Init(obj, &col, 5, 2u);
+		}
+
+		data->Action = 1;
+	}
+	else {
+		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
+
+		if (!boss || !boss->Data1) {
+			DeleteObject_(obj);
+			return;
+		}
+
+		if (EntityData1Ptrs[0]->CharID == Characters_Gamma) 
+			return;
+
+		data->Position = boss->Data1->Position;
+		//data->Position.y += 10;
+
+		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
+		{
+			DeleteObject_(obj);
+
+			//if it is set, don't reload the target object
+			if (data->CharID == 1) 
+				return;
+
+			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity_RegularChara);
+			target->Data1->LoopData = (Loop*)boss;
+		}
+		else
+		{
+			AddToCollisionList(data);
+		}
+	}
+}
 
 
 int AmyCartImprovement() {
@@ -822,7 +1003,7 @@ extern bool isBackRingTextureLoaded;
 
 void FixLayout_StartPosition_R() {
 
-	if (!isCheckpointUsed) //don't change player position if a CP has been grabbed.
+	if (!isCheckpointUsed || GetBackRing && CurrentLevelLayout >= 2) //don't change player position if a CP has been grabbed.
 	{
 		ObjectMaster* Play1 = GetCharacterObject(0);
 		switch (CurrentLevel)
@@ -896,12 +1077,10 @@ void LoadTriggerObject() {
 }
 
 
-
 void Stages_Management() {
 
 	WriteJump(LoadLevelResults, LoadLevelResults_r); 
 
-	//WriteCall((void*)0x415556, DisableTimeStuff); //While result screen: avoid crash and add race result. (really important)
 	Set_Zero();
 	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 	Set_BackRing();

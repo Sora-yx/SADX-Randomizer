@@ -108,10 +108,6 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceCAM("CAM0702S", "CAM0702S");
 	ReplaceCAM("CAM0704S", "CAM0704S");
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, LW3_StartPositions[0]);
-
 	//Tails
 	ReplaceSET("SET0700M", "Tails-LW-Act1");
 	ReplaceSET("SET0701M", "Tails-LW-Act2");

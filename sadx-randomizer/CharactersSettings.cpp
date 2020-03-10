@@ -20,7 +20,7 @@ extern bool BigSpeed;
 extern bool IceCapCutsceneSkip;
 extern int CurrentMission;
 extern bool Race;
-
+extern bool isCriticalMode;
 
 
 void character_settings_onFrames() {
@@ -312,21 +312,7 @@ void SetGammaTimer() {
 	return;
 }
 
-//fix infinite gamma bounce on Egg Viper.
 
-void FixGammaBounce() {
-	if (CurrentCharacter == Characters_Gamma)
-		return;
-
-	EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
-}
-
-void FixGammaHitBounce() {
-	if (CurrentCharacter == Characters_Gamma)
-		return;
-
-	EggViperBounceHit();
-}
 
 void BigWeightHook() {
 
@@ -530,8 +516,9 @@ void Characters_Management() {
 	WriteData<1>((void*)0x61a5b9, 0x74);
 	
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
-
-	WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
+	
+	if (!isCriticalMode)
+		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.

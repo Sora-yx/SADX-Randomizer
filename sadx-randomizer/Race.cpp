@@ -22,20 +22,80 @@ void AIRaceLoad_R() {
 
 int IsFastSonicAI_R() {
 
-	if (isCriticalMode && CurrentCharacter != Characters_Big)
+	if (isCriticalMode && CurrentCharacter < Characters_Amy)
 		return 1;
 	else
 		return 0;
 }
 
 
+bool isRaceLevel() {
 
-void Sonic2PAI_Load_r(ObjectMaster* AIRaceOBJ) {
+	if (Race)
+	{
+		switch (CurrentLevel)
+		{
+		case LevelIDs_WindyValley:
+			if (CurrentAct == 2)
+				return true;
+			else
+				return false;
+			break;
+		case LevelIDs_SpeedHighway:
+			if (CurrentAct == 0)
+				return true;
+			else
+				return false;
+			break;
+		case LevelIDs_IceCap:
+			if (CurrentAct == 2)
+				return true;
+			else
+				return false;
+			break;
+		case LevelIDs_SkyDeck:
+			if (CurrentAct == 0)
+				return true;
+			else
+				return false;
+			break;
+		case LevelIDs_Casinopolis:
+			if (CurrentAct == 1)
+				return true;
+			else
+				return false;
+			break;
+		default:
+			return false;
+			break;
+		}
 
-	AIRaceOBJ = LoadObject((LoadObj)10, 0, Sonic2PAI_Load);
-	AIRaceOBJ->Data1->Action = AIRaceOBJ->Data1->Action;
-	AIRaceOBJ->Data1->LoopData = (Loop*)AIRaceOBJ;
-	AIRaceOBJ->Data1->Scale.x = 20;
+	}
+
+	return false;
+}
+
+void SetAIRaceWin() {
+
+	if (TimeThing != 0)
+	{
+		CutsceneMode = 0;
+		SetOpponentRaceVictory();
+		if (Lives <= 0)
+			Lives = 1;
+		GameState = 0xc; //forcing this gamestate with 0 live make the game crash.
+		ScreenFade_Start_CopyAlpha();
+	}
+}
+
+void FixRaceResult() {
+
+	if (CurrentCharacter != Characters_Tails)
+		return;
+	else
+		LoadLevelResults_r();
+
+	return;
 }
 
 
@@ -100,7 +160,7 @@ void CheckRace() {
 			WriteData<1>((void*)0x47C3D6, 0xB);
 			break;
 		default:
-			WriteData<1>((void*)0x47C3D6, 0x1);
+			WriteData<1>((void*)0x47C3D6, 0X1);
 			break;
 		}
 		
@@ -110,9 +170,6 @@ void CheckRace() {
 	return;
 }
 	
-
-
-
 
 
 void SelectBarRace() {
@@ -200,6 +257,8 @@ void SelectBarRace() {
 	return;
 }
 
+
+
 void Race_Init() {
 	//Sonic/Eggman Race Stuff
 	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character
@@ -214,6 +273,8 @@ void Race_Init() {
 
 	WriteCall((void*)0x47da24, AIRaceLoad_R);  //Swap Sonic Race AI Random. (any character)
 	WriteCall((void*)0x47d961, IsFastSonicAI_R);  
+
+	help.ReplaceFile("system\\MILESRACE.pvm", "system\\textures\\RACE_HD.pvmx");
 }
 
 void SongRace_Init()

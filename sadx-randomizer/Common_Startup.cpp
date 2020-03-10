@@ -29,13 +29,14 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	//Boss
 	Chaos0_Init(path, helperFunctions);
 	Chaos2_Init(path, helperFunctions);
+	Chaos4_Init(path, helperFunctions);
 	Chaos6_Init(path, helperFunctions);
 	EggHornet_Init(path, helperFunctions);
 	EggWalker_Init(path, helperFunctions);
 	EggViper_Init(path, helperFunctions);
 	Zero_Init(path, helperFunctions);
 	PerfectChaos_Init(path, helperFunctions);
-	//E101_Init(path, helperFunctions);
+	E101_Init(path, helperFunctions);
 }
 
 //change the list of music to make more song looping, used for "random music" option.
@@ -179,7 +180,7 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
 
 	helperFunctions.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.mp3"); //Custom rando stats song
-	AddMusics("NIGHTS_A", "NIGHTS_A");	
+	AddMusics("NIGHTS_A", "NIGHTS_A");
 	AddMusics("NIGHTS_S", "NIGHTS_S");
 	AddMusics("SONIC_CD", "SONIC_CD");
 	AddMusics("SSRACING", "SSRACING");
@@ -199,14 +200,14 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddVoices("5002", "ChaoCry1");
 	AddVoices("5003", "ChaoCry2");
 	AddVoices("5004", "teleport");
-	
+
 
 	AddVoices("5010", "Congratulations_Sonic");
 	AddVoices("5011.", "Congratulations_Tails");
 	AddVoices("5012", "sCongratulations_Knux");
 	AddVoices("5013", "Congratulations_Amy");
 
-	AddVoices("5020", "amyyesyes"); 
+	AddVoices("5020", "amyyesyes");
 	AddVoices("5021", "biggotit");
 	AddVoices("5022", "bighehe");
 	AddVoices("5023", "gammagetitem");
@@ -221,6 +222,8 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddVoices("6013", "ZeroTarget");
 	AddVoices("6014", "ZeroThink");
 
+	//Use 6050 Here
+
 	WriteCall((void*)0x45be57, PlayVoice_R);
 
 	WriteCall((void*)0x47fc9e, FixAISFXGamma);
@@ -229,7 +232,6 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	WriteCall((void*)0x481dac, FixAISFXGamma3);
 	WriteCall((void*)0x47fcca, FixAISFXGamma4);
 
-
 	//fix victory voice result (ai swap)
 
 	WriteData<5>((void*)0x414280, 0x90); //remove Sonic Voice
@@ -237,7 +239,7 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	WriteData<5>((void*)0x41560d, 0x90); //remove knux play voice
 	WriteData<5>((void*)0x41562a, 0x90); //remove knux victory boss voice
 	WriteData<5>((void*)0x41567e, 0x90); //remove Amy play voice
-	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big
+	WriteData<5>((void*)0x415776, 0x90); //remove delete sound big-
 }
 
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {

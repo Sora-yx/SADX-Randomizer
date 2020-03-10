@@ -21,6 +21,19 @@ void Cam_WV() {
 	return;
 }
 
+void FixTailsVictoryWV() {
+
+	//Prevent AI to make Tails lose when hiting the capsule if we aren't racing.
+
+	if (CurrentCharacter == Characters_Tails && !Race)
+		SetTailsRaceVictory();
+	else
+		SetOpponentRaceVictory();
+
+	return;
+}
+
+
 
 void WindyValley_Layout() {
 
@@ -73,9 +86,10 @@ void WindyValley_Layout() {
 	}
 
 	Cam_WV();
-	
+
 	return;
 }
+
 
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -83,6 +97,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 
 	WVObjects_Init(path, helperFunctions);
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
+	WriteCall((void*)0x4df390, FixTailsVictoryWV);
 
 	//Sonic
 	helperFunctions.ReplaceFile("system\\SET0200S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act1.bin");
@@ -102,8 +117,6 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	if (!Vanilla)
 		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, WV3S_StartPositions[0]);
 
 	//Tails
 	helperFunctions.ReplaceFile("system\\SET0200M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act1.bin");

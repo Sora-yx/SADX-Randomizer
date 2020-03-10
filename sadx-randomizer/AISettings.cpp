@@ -567,10 +567,10 @@ void ResultVoiceFix() {
 		case Characters_Sonic:
 			if (MetalSonicFlag == 0) {
 				if ((short)CurrentLevel < 0xf) {
-					Load_DelayedSound_SFX(0x5d7);
+					Load_DelayedSound_Voice(1840);
 				}
 				else {
-					Load_DelayedSound_SFX(0x5da);
+					Load_DelayedSound_Voice(1843);
 				}
 			}
 			else {
@@ -590,9 +590,10 @@ void ResultVoiceFix() {
 				Load_DelayedSound_SFX(0x5a8);
 			break;
 		case Characters_Amy:
-			Load_DelayedSound_SFX(0x56e);
-		case Characters_Gamma:
-			Load_DelayedSound_SFX(0x591);
+		if (CurrentLevel >= LevelIDs_Chaos0)
+			Load_DelayedSound_Voice(1735);
+		else
+			Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
 			if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || FEGammaVersion || TreasureHunting)
@@ -645,7 +646,7 @@ void AISwitch() {
 	if (CurrentCart)
 		return;
 
-	if (SonicRand == 0 && isAIActive && CurrentLevel != 15) //don't allow the swap if metal sonic / super sonic or if Chaos 0 fight (crash.)
+	if (SonicRand == 0 && isAIActive) //don't allow the swap if metal sonic / super sonic 
 	{
 		//initialize swap, taking actual character and ai information
 

@@ -31,6 +31,4 @@ void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFu
 	WriteCall((void*)0x423120, LoadCamFilePC_R); //Fix Super Form hit and death.
 	WriteCall((void*)0x55fde8, FixSuperFormDeath); // fix Death with 0 ring.
 	WriteCall((void*)0x56016f, FixPerfectChaosHit); // fix the character being stuck.
-
-
 }

@@ -129,8 +129,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0102S", "CAM0102S");
 	ReplaceCAM("CAM0104S", "CAM0104S");
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, EC1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, EC3_StartPositions[0]);
 
 	//Tails

@@ -61,8 +61,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceCAM("CAM0502S", "CAM0502S");
 	ReplaceCAM("CAM0503S", "CAM0503S");
 
-	RegisterPosition(Characters_Sonic, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Sonic, RM2_StartPositions[0]);
 	RegisterPosition(Characters_Sonic, RM3_StartPositions[0]);
 
 	//Tails
@@ -95,7 +93,6 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 	RegisterPosition(Characters_Knuckles, RM1_StartPositions[0]);
 	RegisterPosition(Characters_Knuckles, RM2_StartPositions[0]);
-	RegisterPosition(Characters_Knuckles, RM3_StartPositions[0]);
 
 	//Amy
 	ReplaceSET("SET0500A", "Amy-RM-Act1");

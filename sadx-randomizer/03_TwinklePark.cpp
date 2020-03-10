@@ -67,6 +67,8 @@ void TwinklePark_Layout() {
 			CurrentLevelLayout = Mission1;
 			break;
 		case Mission2_100Rings:
+			LoadSetFile(1, "0301");
+			break;
 		case Mission3_LostChao:
 			LoadSetFile(1, "0303"); //M3 Version
 			break;
@@ -177,7 +179,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0302S.BIN", "system\\cam\\CAM0302S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0305S.BIN", "system\\cam\\CAM0305S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, TP1_StartPositions[0]);
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, TP2S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Sonic, TP3_StartPositions[0]);
 

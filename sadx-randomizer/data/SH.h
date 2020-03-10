@@ -11,3 +11,5 @@ StartPosition SH2_StartPositions[]{
 StartPosition SH3_StartPositions[]{
 	{ 4, 2,{ 72, 26, 192 }, 270 }
 };
+
+void OTanka_LoadWithTarget_R(ObjectMaster* Trash);

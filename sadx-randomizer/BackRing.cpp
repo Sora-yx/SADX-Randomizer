@@ -8,6 +8,9 @@
 #include "StageSettings.h"
 
 
+//Back Ring Main Page, this is where the current goal of the stage is swapped with back ring, froggy, balloon etc. depending on the character.
+//This is also where the race result are checked if the player 1 lose.
+
 int RingCopy = 0; //Backring
 char TimeSecCopy = 0;
 char TimeMinCopy = 0;
@@ -27,11 +30,9 @@ extern NJS_TEXLIST GoalRingTextures;
 
 FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
 
-bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
-	return (powf(pos->x - center->x, 2) + pow(pos->y - center->y, 2) + pow(pos->z - center->z, 2)) <= pow(radius, 2);
-}
 
 bool isBackRingTextureLoaded = false;
+
 
 void BackRingObj_Display(ObjectMaster* obj) {
 	if (!MissedFrames && isBackRingTextureLoaded) {
@@ -55,60 +56,84 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 	if (!ClipSetObject(obj)) { //delete the object if we're too far away
 		ObjectMaster* play1 = GetCharacterObject(0);
+		ObjectMaster* play2 = GetCharacterObject(1);
 		EntityData1* v1 = obj->Data1;
-		LoadPVM("textures\\GOALRING", &GoalRingTextures);
+
+		LoadPVM("textures\\BACKRING", &GoalRingTextures);
+
 		isBackRingTextureLoaded = true;
 
-		if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
-		{
-			if (CurrentLevelLayout == Mission2_100Rings && Rings < 100 || CurrentLevelLayout == Mission3_LostChao)
+			if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
 			{
-				isBackRingTextureLoaded = false;
-				GetBackRing = true;
-				DisableControl();
-				DisablePause();
-				RingCopy = Rings;
-				TimeSecCopy = TimeSeconds;
-				TimeMinCopy = TimeMinutes;
-				TimeFrameCopy = TimeFrames;
-				PlayVoice_R(5001); //back ring hit SFX
-				play1->Data1->Action = 0;
-				play1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-
-				if (++obj->Data1->Index == 2)
+				if (CurrentLevelLayout == Mission2_100Rings && Rings < 100 || CurrentLevelLayout == Mission3_LostChao)
 				{
-					Delete_Cart();
+					isBackRingTextureLoaded = false;
+					GetBackRing = true;
+					DisableControl();
 					DisablePause();
-					ScreenFade_Timer = 50;
-					short sVar1;
-					sVar1 = ScreenFade_RunActive();
-					
-					ChaoSpawn = false;
-					if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
-					{
-						ChaoObj_Delete(obj);
-						GameState = 24; //fix gamma hot shelter crash
-					}
-					else
-					{
-						GameMode = GameModes_Adventure_Field;
-						GameState = 0xb;
-					}
+					RingCopy = Rings;
+					TimeSecCopy = TimeSeconds;
+					TimeMinCopy = TimeMinutes;
+					TimeFrameCopy = TimeFrames;
+					PlayVoice_R(5001); //back ring hit SFX
+					play1->Data1->Action = 0;
+					play1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 
+					if (++obj->Data1->Index == 2)
+					{
+						Delete_Cart();
+						DisablePause();
+						ScreenFade_Timer = 50;
+						short sVar1;
+						sVar1 = ScreenFade_RunActive();
+
+						ChaoSpawn = false;
+						switch (CurrentLevel)
+						{
+						case LevelIDs_HotShelter:
+							if (CurrentAct == 2)
+							{
+								ChaoObj_Delete(obj);
+								GameState = 24; //fix gamma hot shelter crash
+							}
+							else
+							{
+								GameMode = GameModes_Adventure_Field;
+								GameState = 0xb;
+							}
+							break;
+						case LevelIDs_FinalEgg:
+							if (CurrentAct == 0)
+							{
+								GameState = 0xc; //fix Final Egg position
+							}
+							else
+							{
+								GameMode = GameModes_Adventure_Field;
+								GameState = 0xB;
+							}
+							break;
+						default:
+							GameMode = GameModes_Adventure_Field;
+							GameState = 0xB;
+							break;
+						}
+
+						obj->Data1->Action = 1;
+
+						return;
+					}
+				}
+				else
+				{
+
+					LoadLevelResults();
 					obj->Data1->Action = 1;
-
 					return;
 				}
-			}
-			else
-			{
-				
-				LoadLevelResults();
-				obj->Data1->Action = 1;
-				return;
-			}
 
-		}
+			}
+		
 
 		BackRingObj_Display(obj); //run the display on unpaused frames
 	}
@@ -119,6 +144,9 @@ Trampoline Capsule_Load_T(0x46b170, 0x46b177, CheckLoadCapsule_r);
 
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
+
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -148,6 +176,9 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 		}
 	}
 
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
+
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
@@ -168,6 +199,9 @@ Trampoline Froggy_Load_T(0x4fa320, 0x4fa325, CheckLoadFroggy_r);
 //Check the current mission and replace Froggy with Back Ring.
 void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
@@ -177,6 +211,9 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 		a1->MainSub = BackRingObj_Main;
 		return;
 	}
+
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -189,6 +226,9 @@ Trampoline Balloon_Load_T(0x7a21c0, 0x7a21c6, CheckLoadBalloon_r);
 //Check the current mission and replace Balloon with Back Ring.
 void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
 		a1->Data1->Rotation.z = 15000;
@@ -198,6 +238,9 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 		a1->Data1->Rotation.x = 0xC000;
 		return;
 	}
+
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -210,6 +253,9 @@ Trampoline CasinoEmerald_Load_T(0x5dd0a0, 0x5dd0a6, CheckLoadCasinoEmerald_r);
 
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
+
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -230,6 +276,9 @@ void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
 			break;
 		}
 	}
+
+	if (CurrentCharacter != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
@@ -252,6 +301,9 @@ Trampoline WVEmerald_Load_T(0x4df3b0, 0x4df3b6, CheckLoadWVEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1) {
 
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
 		switch (CurrentCharacter)
@@ -271,6 +323,9 @@ void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1) {
 			break;
 		}
 	}
+
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
@@ -293,6 +348,9 @@ Trampoline ICEmerald_Load_T(0x4ecfa0, 0x4ecfa6, CheckLoadICEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
 		switch (CurrentCharacter)
@@ -312,6 +370,9 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 			break;
 		}
 	}
+
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
@@ -451,11 +512,6 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 }
 
 void Set_BackRing() {
-	//WriteCall((void*)0x414859, ResetTime_R); //prevent the game to reset the timer if you hit the back ring.
-	//WriteCall((void*)0x44ee0a, ResetTime_R2); //prevent the game to reset the timer if you hit the back ring.
-	//WriteCall((void*)0x44ee0f, GetRings_R); //prevent the game to reset the rings
-	//WriteCall((void*)0x416f41, Set0Rings_R); //prevent the game to reset the rings	
-	//WriteCall((void*)0x417a30, Set0Rings_R); //prevent the game to reset the rings
 
 	WriteData((ObjectFuncPtr*)0x4FA050, CheckLoadCapsule_r); // crashed plane in Emerald Coast
 	WriteData((ObjectFuncPtr*)0x4DF3F0, CheckLoadCapsule_r); // Chaos Emerald in Windy Valley
@@ -463,5 +519,4 @@ void Set_BackRing() {
 	WriteData((ObjectFuncPtr*)0x4ECFE0, CheckLoadCapsule_r); // Chaos Emerald in Ice Cap
 	WriteData((ObjectFuncPtr*)0x7B0DD3, CheckLoadCapsule_r); // ending of Lost World
 	WriteData((ObjectFuncPtr*)0x5B2523, CheckLoadCapsule_r); // ending of Final Egg
-
 }

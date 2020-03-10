@@ -167,8 +167,6 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 
 	
 	helperFunctions.RegisterStartPosition(Characters_Sonic, FE1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, FE2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, FE3_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET1000M", "Tails-FE-Act1");

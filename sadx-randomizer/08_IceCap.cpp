@@ -4,6 +4,7 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
+#include "Trampoline.h"
 
 
 
@@ -39,6 +40,15 @@ void DisableController_R() {
 	}
 }
 
+//Add rings every Checkpoint for cart speed.
+void AddRingIceCap() {
+	PlaySound(0x15, 0, 0, 0);
+
+	if (CurrentLevel == LevelIDs_IceCap && CurrentCharacter > Characters_Tails)
+		AddRings(5);
+
+	return;
+}
 
 
 void ICAct3Position() {
@@ -56,6 +66,21 @@ void ICAct3Position() {
 
 	return;
 }
+
+void FixTailsVictoryIC() {
+
+	//Prevent AI to make Tails lose when hiting the capsule if we aren't racing.
+
+	if (CurrentCharacter == Characters_Tails && !Race)
+		SetTailsRaceVictory();
+	else
+		SetOpponentRaceVictory();
+
+	return;
+}
+
+VoidFunc(FUNC0043614, 0x043614);
+
 
 void IC_Layout() {
 
@@ -127,14 +152,14 @@ void IC_Layout() {
 	return;
 }
 
-
-
 void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 
 	WriteCall((void*)0x4e92e7, IC_ReturnCharacter);
 	WriteCall((void*)0x4e9802, IC_ReturnCharacter);
+	WriteCall((void*)0x4ec065, AddRingIceCap);
+	WriteCall((void*)0x4ecf8f, FixTailsVictoryIC);
 
 	WriteData<5>((void*)0x422e66, 0x90);
 	WriteData<5>((void*)0x422e75, 0x90);
@@ -159,9 +184,7 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	helperFunctions.ReplaceFile("system\\CAM0801S.BIN", "system\\cam\\CAM0801S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0802S.BIN", "system\\cam\\CAM0802S.bin");
 	helperFunctions.ReplaceFile("system\\CAM0803S.BIN", "system\\cam\\CAM0803S.bin");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, IC1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, IC2_StartPositions[0]);
-	//helperFunctions.RegisterStartPosition(Characters_Sonic, IC3_StartPositions[0]);
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, IC4_StartPositions[0]);
 
 	//Tails

@@ -14,7 +14,16 @@ bool CreditCheck = false;
 void DeleteCustomFlag() {
 
 	if (CurrentLevel == 0 && GameMode == 12 && !DemoPlaying)
+	{
+		DeleteCreditStats();
+		ResetValueWhileLevelResult();
+		if (CustomFlag != 0 || levelCount != 0)
+		{
+			levelCount = 0;
+			TotalCount = 0;
+		}
 		CustomFlag = 0;
+	}
 
 	return SomethingAboutFlag();
 }
@@ -90,6 +99,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 11)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -102,7 +113,6 @@ void CustomFlagCheck() {
 			CreditCheck = false;
 			EventFlagArray[EventFlags_Tails_EggHornetClear] = true;
 			EventFlagArray[EventFlags_Tails_WindyValleyOpen] = true;
-			return;
 			break;
 		case 2:
 			CreditCheck = false;
@@ -132,7 +142,9 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			return;
+			CreditCheck = false;
+			if (CustomFlag >= 7)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -172,6 +184,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 7)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -199,6 +213,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 5)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -213,6 +229,7 @@ void CustomFlagCheck() {
 			break;
 		case 2:
 			EventFlagArray[EventFlags_Big_IceCapClear] = true;
+			break;
 		case 3:
 			EventFlagArray[EventFlags_Big_EmeraldCoastClear] = true;
 			break;
@@ -228,6 +245,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 6)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -261,6 +280,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 6)
+				CustomFlag = 0;
 			break;
 		}
 	}
@@ -275,6 +296,8 @@ void CustomFlagCheck() {
 			break;
 		default:
 			CreditCheck = false;
+			if (CustomFlag >= 2)
+				CustomFlag = 0;
 			break;
 		}
 	}

@@ -192,6 +192,19 @@ void FixInvisibleWall() {
 	return;
 }
 
+
+void FixTailsVictoryCAS() {
+
+	//Prevent AI to make Tails lose when hiting the capsule if we aren't racing.
+
+	if (CurrentCharacter == Characters_Tails && !Race)
+		SetTailsRaceVictory();
+	else
+		SetOpponentRaceVictory();
+
+	return;
+}
+
 void FixGoldenAndCoin() {
 
 	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
@@ -258,6 +271,9 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x5c14f5, IncreaseRings_R);
 	
 	WriteCall((void*)0x5c5906, FixShakeoffGarbageAction);
+	WriteCall((void*)0x5dd088, FixTailsVictoryCAS);
+
+	WriteCall((void*)0x5dd08d, FixRaceResult);
 
 	CasinoObjects_Init(path, helperFunctions);
 
@@ -274,8 +290,6 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0901S", "CAM0901S");
 	ReplaceCAM("CAM0906S", "CAM0906S");
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, Casino2_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET0900M", "Tails-Casino-Act1");

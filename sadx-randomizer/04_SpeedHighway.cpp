@@ -3,6 +3,7 @@
 #include "SH.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#include "Trampoline.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Speed Highway\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
@@ -15,6 +16,19 @@ void SHAct2Position() {
 		return ForcePlayerAction(0, 0x2b);
 }
 
+void CheckEggmanRaceWinner() {
+	
+	if (CurrentCharacter == Characters_Tails || !Race)
+		LoadLevelResults_r();
+
+	if (CurrentCharacter != Characters_Tails && Race)
+	{
+		if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 && RaceWinnerPlayer == 2)
+		{
+			SetAIRaceWin();
+		}
+	}
+}
 
 void CamSpeedHighway() {
 
@@ -37,6 +51,8 @@ void CamSpeedHighway() {
 	return;
 }
 
+
+
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
@@ -51,6 +67,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	WriteData<5>((void*)0x422cee, 0x90);
 
 	WriteCall((void*)0x422cfd, SpeedHighway_Layout); //SH random layout
+	WriteJump((void*)0x47d527, CheckEggmanRaceWinner);
 
 	SHObjects_Init(path, helperFunctions);
 
@@ -67,10 +84,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0402S", "CAM0402S");
 	ReplaceCAM("CAM0405S", "CAM0405S");
 
-
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SH3_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET0400M", "Tails-SH-Act1");

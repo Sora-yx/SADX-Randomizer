@@ -2,14 +2,38 @@
 #include "Utils.h"
 #include "EggViper.h"
 #include "RandomHelpers.h"
-
+#include "Trampoline.h"
 extern bool Viper;
+short curEVMove = 0;
+short limitTrick = 0;
 
-void EggViperNerfHP() {
-	BossHP2 = 5;
-	EggViperHP = 5;
-	BossHP_Stuff(600, 0x18, 5);
+//fix infinite gamma bounce on Egg Viper.
+
+void FixGammaBounce() {
+	if (CurrentCharacter == Characters_Gamma)
+		return;
+
+	EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
 }
+
+void FixGammaHitBounce() {
+	if (CurrentCharacter == Characters_Gamma)
+		return;
+
+	EggViperBounceHit();
+}
+
+
+void EggViperHPStuff() {
+
+	if (Viper && !isCriticalMode)
+	{
+		BossHP2 = 5;
+		EggViperHP = 5;
+		BossHP_Stuff(600, 0x18, 5);
+	}
+}
+
 
 void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -19,10 +43,12 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 	WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol
 	WriteCall((void*)0x580d2c, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 3 xd (final hit)
 
+	WriteCall((void*)0x57d756, PlayVoice_R);
+	
 	WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (crash fix)
 
-	if (Viper)
-		WriteCall((void*)0x57f20b, EggViperNerfHP);
+	if (Viper && !isCriticalMode)
+		WriteCall((void*)0x57f20b, EggViperHPStuff);
 
 	//Initiliaze data
 	//Sonic
@@ -51,8 +77,6 @@ void __cdecl EggViperVoice(const char* path, const HelperFunctions& helperFuncti
 
 	if (CurrentLevel == LevelIDs_EggViper)
 	{
-		//WriteData<1>((void*)0x584c7f, 0x4); //restore original
-
 		if (CurrentCharacter == Characters_Sonic)
 			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\Hahahhh_Sonic.adx"); //restore original voice
 
@@ -73,7 +97,7 @@ void __cdecl EggViperVoice(const char* path, const HelperFunctions& helperFuncti
 			WriteData<1>((void*)0x57c32f, 0x20); //Fix Egg Viper platform for Big Position Z (20 Fonctionnel)
 			WriteData<1>((void*)0x584c7f, 0x12); //fix Egg Viper softlock
 
-			WriteCall((void*)0x57f206, EggViperNerfHP);
+			WriteCall((void*)0x57f206, EggViperHPStuff);
 		}
 
 		if (CurrentCharacter == Characters_Gamma)

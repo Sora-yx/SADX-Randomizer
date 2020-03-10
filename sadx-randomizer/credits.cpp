@@ -30,6 +30,22 @@ string AISwapCountSTD = "";
 
 //Stats
 
+void DeleteCreditStats() {
+
+	RageQuit = 0;
+	JumpCount = 0;
+	ringsPB = 0;
+	chaoPB = 0;
+	animalPB = 0;
+	killPB = 0;
+	hurtsPB = 0;
+	deathsPB = 0;
+	TotalDeathsPB = 0;
+	TotalHurtsPB = 0;
+	AISwapCount = 0;
+
+}
+
 void DeathsStat() {
 	//Hook used when you lose a live
 	deathsPB++;
@@ -148,16 +164,6 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "DeaTh" },
 	{ 3, -1, 0, 0, "Mastakirby" },
 	{ 3, -1, 0, 0, "MelancholyMatoi" },
-	{ 2, -1, 0, 0, "BETA TESTERS" },
-	{ 3, -1, 0, 0, "Refrag" },
-	{ 3, -1, 0, 0, "Quaker299" },
-	{ 3, -1, 0, 0, "Yarlick" },
-	{ 3, -1, 0, 0, "MakoHNM" },
-	{ 3, -1, 0, 0, "Bloodsypher" },
-	{ 3, -1, 0, 0, "Koutasensei/Elise" },
-	{ 3, -1, 0, 0, "Astreachan" },
-	{ 3, -1, 0, 0, "GuyStreamsStuff" },
-	{ 3, -1, 0, 0, "Niczur" },
 	{ 2, -1, 0, 0, "SUPER SONIC MOD" },
 	{ 3, -1, 0, 0, "SonicFreak94" },
 	{ 2, -1, 0, 0, "CHARACTER SWAP" },
@@ -171,20 +177,20 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "Kell" },
 	{ 2, -1, 0, 0, "RANDO TEXTURES" },
 	{ 3, -1, 0, 0, "MelonSpeedruns" },
-	{ 2, -1, 0, 0, "VISUAL ARTIST" },
-	{ 3, -1, 0, 0, "Masatoshi Yasumura" },
-	{ 2, -1, 0, 0, "LEAD SYSTEM PROGRAMMER" },
-	{ 3, -1, 0, 0, "Masanobu Yamamoto" },
-	{ 2, -1, 0, 0, "PROGRAMMERS" },
-	{ 3, -1, 0, 0, "Kenichi Koshida" },
-	{ 3, -1, 0, 0, "Yoshiharu Kanai" },
-	{ 3, -1, 0, 0, "Makoto Shimoda" },
-	{ 3, -1, 0, 0, "Masashi Kitamura" },
-	{ 3, -1, 0, 0, "Takeshi Maeda" },
-	{ 3, -1, 0, 0, "Makoto Ikeda" },
-	{ 3, -1, 0, 0, "Takashi Taketa" },
-	{ 3, -1, 0, 0, "Takanori Yoshioka" },
-	{ 3, -1, 0, 0, "Hiroyuki Kikui" },
+	{ 2, -1, 0, 0, "BETA TESTERS" },
+	{ 3, -1, 0, 0, "Refrag" },
+	{ 3, -1, 0, 0, "Quaker299" },
+	{ 3, -1, 0, 0, "Yarlick" },
+	{ 3, -1, 0, 0, "MakoHNM" },
+	{ 3, -1, 0, 0, "Bloodsypher" },
+	{ 3, -1, 0, 0, "Koutasensei/Elise" },
+	{ 3, -1, 0, 0, "Astreachan" },
+	{ 3, -1, 0, 0, "GuyStreamsStuff" },
+	{ 3, -1, 0, 0, "Niczur" },
+	{ 3, -1, 0, 0, "Draxirch" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "" },
 	{ 2, -1, 0, 0, "GRAPHIC ENGINE PROGRAMMERS" },
 	{ 3, -1, 0, 0, "Yoshitaka Kawabata" },
 	{ 3, -1, 0, 0, "Shinya Matsunami" },

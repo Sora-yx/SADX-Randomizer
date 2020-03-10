@@ -132,6 +132,12 @@
     <ClCompile Include="BackRing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chaos4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CriticalMode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\ActsSettings.h">
@@ -207,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StageSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\chaos4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

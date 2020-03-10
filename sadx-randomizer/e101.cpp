@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Utils.h"
 #include "RandomHelpers.h"
+#include "Trampoline.h"
 
 extern int CurrentAI;
 
@@ -14,16 +15,29 @@ void __cdecl E101Objects_Init(const char* path, const HelperFunctions& helperFun
 	//TexLists_Obj[LevelIDs_E101] = E101ObjectTextures;
 }
 
-void E101Target()
-{
-	/*ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
-	ObjectMaster* e101 = LoadObject((LoadObj)(2), 2, E101_Main);
-	*/
 
-	return LoadE101();
+void Load_E101_R(ObjectMaster* obj);
+Trampoline Load_E101_t(0x568090, 0x568097, Load_E101_R);
+
+void Load_E101_R(ObjectMaster* obj) {
+
+	EntityData1* data1;
+
+	ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity_RegularChara);
+	//ObjectMaster* e101 = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, E101_Main);
+	toto->Data1->LoopData = (Loop*)obj;
+	toto->Data1->Scale.x = 20;
+
+	ObjectFunc(origin, Load_E101_t.Target());
+	origin(obj);
+	return;
 }
+
+
+
 
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)
 {
+
 	//E101Objects_Init(path, helperFunctions);
 }

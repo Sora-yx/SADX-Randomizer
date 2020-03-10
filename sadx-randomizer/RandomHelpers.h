@@ -10,6 +10,7 @@ bool isStageBanned(uint8_t char_id, short stage_id);
 bool isDuplicateStage(short stage_id, short prev_stage_id);
 bool isVanillaStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
+bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
@@ -111,6 +112,8 @@ int IsFastSonicAI_R();
 
 void BigLayoutHS();
 void TargetableEntity(ObjectMaster* obj);
+void TargetableEntity_RegularChara(ObjectMaster* obj);
+void TargetableEntitySmallOBJ(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
 void Chaos0_LoadWithTarget();
 void Chaos2_LoadWithTarget();
@@ -128,8 +131,7 @@ void FixInvisibleWall();
 void E101Target();
 void SetCamera();
 
-
-extern int level[22];
+extern int level[23];
 extern int AIArray[4];
 extern int AIRaceArray[6];
 extern char stage;
@@ -193,6 +195,7 @@ void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunct
 //Bosses
 void __cdecl Chaos0_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Chaos2_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl Chaos4_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -266,11 +269,16 @@ VoidFunc(SetupZero, 0x4b3eb0);
 VoidFunc(CheckLoadZero, 0x486a40);
 
 VoidFunc(EggViperCutscene, 0x431430);
+ObjectFunc(Load_Chaos4, 0x552bb0);
+VoidFunc(DeleteBubbleChaos, 0x7ae5b0);
+VoidFunc(ChaosUnderLightDelete, 0x7ad2f0);
+VoidFunc(FUN_007a1580, 0x7a1580);
+
 FunctionPointer(void, BossHP_Stuff, (int x, int y, int hp), 0x4b3cc0);
 
 DataPointer(char, BossHP, 0x3c58148);
 DataPointer(char, BossHP2, 0x3C58150);
-DataPointer(float, BossHP3, 0x3c58158);
+DataPointer(float, Life_Max, 0x3c58158);
 DataPointer(char, Emblem, 0x974AE0);
 DataPointer(unsigned char, LevelList, 0x3B2C5F8);
 DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
@@ -278,10 +286,16 @@ DataPointer(char, RNGDoor, 0x3C7457C);
 FunctionPointer(void, SetRNGAmyDoor, (), 0x5b06f);
 DataPointer(char, FirstHotShelterSwitch, 0x3c72a40);
 VoidFunc(Reset_HotShelterSwitch, 0x59a1b0);
+VoidFunc(LoadSplines, 0x49c1a0);
 
+bool isRaceLevel();
+void SetAIRaceWin();
+void replaceRacePVM();
+void FixRaceResult();
 DataPointer(char, ChaoGardenSSWarpOpen, 0x3B188BF);
 DataPointer(char, ChaoGardenECWarpOpen, 0x3B188C0);
 DataPointer(char, ChaoGardenMRWarpOpen, 0x3B188C1);
+bool BannedCriticalStage(short stage_id, uint8_t char_id);
 
 DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
@@ -309,7 +323,7 @@ int CheckMissionRequirements_r();
 void __cdecl LoadLevelResults_r();
 
 DataPointer(int, dword_3B2A304, 0x3B2A304);
-
+void DeleteCreditStats();
 
 void FinalStat();
 
@@ -317,6 +331,7 @@ void DisableTime_Zero();
 void AISwitch();
 void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
+void GotoNextLevel_RngLess(char stage, char act);
 
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
@@ -387,3 +402,4 @@ extern int deathsPB;
 extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
+extern bool isGameOver;

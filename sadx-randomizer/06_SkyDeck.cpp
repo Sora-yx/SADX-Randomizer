@@ -7,6 +7,8 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Sky Deck\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
+
+
 void Cam_SkyDeck() {
 
 	if (Mission1_Variation && CurrentAct == 0 && Race)
@@ -82,6 +84,18 @@ void SkyDeckCannonS2_LoadWithTarget(ObjectMaster* SDCanonnObj) {
 	return;
 }
 
+void FixTailsVictorySD() {
+
+	//Prevent AI to make Tails lose when hiting the capsule if we aren't racing.
+
+	if (CurrentCharacter == Characters_Tails && !Race)
+		SetTailsRaceVictory();
+	else
+		SetOpponentRaceVictory();
+
+	return;
+}
+
 
 void SkyDeck_Layout() {
 
@@ -120,7 +134,7 @@ void SkyDeck_Layout() {
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			if (CurrentCharacter == Characters_Sonic && !Vanilla || CurrentCharacter == Characters_Knuckles)
 			{
 				Race = true;
 				LoadSetFile(0, "0605"); //load Tails layout
@@ -146,7 +160,6 @@ void SkyDeck_Layout() {
 		LoadSetFile(0, "0600");
 		LoadSetFile(1, "0601");
 		LoadSetFile(2, "0604"); //Knuckles Version
-
 	}
 	else
 	{
@@ -173,6 +186,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);	
 	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
 	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
+	
+	WriteCall((void*)0x461614, FixTailsVictorySD);
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
@@ -187,9 +202,8 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceCAM("CAM0602S", "CAM0602S");
 	ReplaceCAM("CAM0603S", "CAM0603S");
 	ReplaceCAM("CAM0604S", "CAM0604S");
+
 	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SD3_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET0600M", "Tails-SD-Act1");
@@ -203,7 +217,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceCAM("CAM0602M", "CAM0602M");
 	ReplaceCAM("CAM0603M", "CAM0603M");
 	ReplaceCAM("CAM0604M", "CAM0604M");
-	helperFunctions.RegisterStartPosition(Characters_Tails, SD1_StartPositions[0]);
+	helperFunctions.RegisterStartPosition(Characters_Tails, SD1S_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Tails, SD3_StartPositions[0]);
 

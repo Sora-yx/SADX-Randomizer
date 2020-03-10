@@ -17,7 +17,7 @@ void AddRingSandHill() {
 	PlaySound(0x15, 0, 0, 0);
 
 	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
-		AddRings(10);
+		AddRings(5);
 
 	return;
 }

@@ -14,7 +14,7 @@ void SuperAuraStuff();
 void LoadTails_AI_R();
 void LoadTails_AI_Original(); //Normal AI (Tails Only)
 
-VoidFunc(EggViperBounceHit, 0x441280);
+
 
 VoidFunc(PushMSIcon, 0x425e6d);
 VoidFunc(CharSel_LoadThing, 0x512bc0);
@@ -36,7 +36,7 @@ void PlayEmeraldGrabVoice_R(ObjectMaster* a1);
 
 extern void PlayVoice_R(int a1);
 void FixAISFXJump();
-extern int level[22];
+extern int level[23];
 
 void FixAISFXSonic();
 void FixAISFXAmy();

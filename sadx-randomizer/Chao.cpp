@@ -95,10 +95,10 @@ void ChaoObj_Main(ObjectMaster* a1) {
 	uint8_t Action = a1->Data1->Action;
 	EntityData1* data = a1->Data1;
 	ChaoLeash* Leash = &ChaoMaster.ChaoHandles[a1->Data1->CharIndex];
-	
 
 	if (Action == 0) {
-		if (!CurrentLandTable) return;
+		if (!CurrentLandTable) 
+			return;
 
 		//Load the chao textures
 		LoadChaoTexlist("AL_DX_PARTS_TEX", (NJS_TEXLIST*)0x33A1340, 0);
@@ -117,7 +117,6 @@ void ChaoObj_Main(ObjectMaster* a1) {
 			ChaoManager_Load();
 		}
 
-		
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		a1->Data1->Action = 1; //Wait a frame before loading the chao
 	}
@@ -127,7 +126,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 
 		//Start position is behind the player
 		NJS_VECTOR v = a1->Data1->Position;
-		
+
 		//Load the chao
 		CurrentChao = CreateChao(chaodata, 0, CurrentChao, &v, 0);
 		chaodata->data.FlyStat = 1000;
@@ -136,7 +135,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		a1->Data1->Action = 2;
 	}
 	else if (Action == 2) {
-		
+
 		if (Chao_FinishedAnimation(CurrentChao)) { Chao_Animation(CurrentChao, 0); }
 
 		CurrentChao->Data1->Position = a1->Data1->Position;
@@ -144,7 +143,7 @@ void ChaoObj_Main(ObjectMaster* a1) {
 		//water height
 		float height = -10000000;
 		WriteData((float*)0x73C24C, height);
-		
+
 		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200))
 			Chao_CrySound();
 
@@ -153,27 +152,54 @@ void ChaoObj_Main(ObjectMaster* a1) {
 
 		switch (CurrentCharacter)
 		{
-		case Characters_Gamma:
-		case Characters_Big:
-			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
-			{
-				chaoPB++; //Chao Credit Stat
-				LoadLevelResults();
-				a1->Data1->Action = 3;
-			}
-			break;
-		default:
-			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
-			{
-				chaoPB++;
-				LoadLevelResults();
-				a1->Data1->Action = 3;
-			}
-			break;
-		}
+			case Characters_Gamma:
+			case Characters_Big:
+				if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
+				{
+					chaoPB++; //Chao Credit Stat
+
+					ObjectMaster* obj = GetCharacterObject(0);
+					EntityData1* ent;
+					ent = obj->Data1;
+
+					ent->InvulnerableTime = 0;
+					obj->Data1->Action = 0; //fix potential crash
+					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+
+					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+					{
+						obj->Data1->Action = 1; //fix victory pose
+						LoadLevelResults_r();
+						a1->Data1->Action = 3;
+						return;
+					}
+				}
+				break;
+			default:
+				if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
+				{
+					ObjectMaster* obj = GetCharacterObject(0);
+					EntityData1* ent;
+					ent = obj->Data1;
+
+					ent->InvulnerableTime = 0;
+					if (!SonicRand && !MetalSonicFlag)
+						obj->Data1->Action = 0; //fix potential crash
+					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+
+					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+					{
+						if (!SonicRand && !MetalSonicFlag)
+							obj->Data1->Action = 1; //fix victory pose
+						LoadLevelResults_r();
+						a1->Data1->Action = 3;
+						return;
+					}
+				}
+				break;
+		}	
 	}
 }
-
 
 
 void Chao_Gravity_r(ObjectMaster* obj);
@@ -435,7 +461,7 @@ bool isChaoAllowedtoSpawn(short CurLevel, short CurAct)
 	case LevelIDs_SkyDeck:
 		if (CurAct == 1)
 		{
-			pos = { -316.7368469, 50.99000168, -687.1625977 };
+			pos = { -316.7368469, 38.99000168, -687.1625977 };
 			Yrot = 0x8000;
 			ChaoSpawn = true;
 		}

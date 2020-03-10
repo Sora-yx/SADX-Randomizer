@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -101,6 +101,7 @@
     <ClCompile Include="Chao.cpp" />
     <ClCompile Include="Chaos0.cpp" />
     <ClCompile Include="Chaos2.cpp" />
+    <ClCompile Include="Chaos4.cpp" />
     <ClCompile Include="Chaos6.cpp" />
     <ClCompile Include="CharactersSettings.cpp" />
     <ClCompile Include="Common_Startup.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="data\chao.h" />
     <ClInclude Include="data\Chaos0.h" />
     <ClInclude Include="data\Chaos2.h" />
+    <ClInclude Include="data\chaos4.h" />
     <ClInclude Include="data\Chaos6.h" />
     <ClInclude Include="data\CharactersSettings.h" />
     <ClInclude Include="data\EggHornet.h" />

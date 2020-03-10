@@ -56,7 +56,7 @@ int StatsTimer = 4000;
 extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
-
+extern bool gotEV;
 
 
 extern "C" {
@@ -67,12 +67,16 @@ extern "C" {
 		HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
 		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
+		HMODULE CMMode = GetModuleHandle(L"SADX-Critical-Mode");
 
 		if (DCMod && !DCLight)
 			DCModWarningTimer = 0; //don't display the DC Warning message if Lantern Engine is missing.
 		else
 			if (DCMod || SADXFE)
 				DCModWarningTimer = 250;
+
+		if (CMMode)
+			isCriticalMode = true;
 
 		if (helperFunctions.Version < 7)
 		{
@@ -124,7 +128,6 @@ extern "C" {
 		isChaoGameplayAllowed = config->getBool("RosterAI", "isChaoGameplayAllowed", false);
 
 		Viper = config->getBool("Difficulty", "Viper", true);
-		isCriticalMode = config->getBool("Difficulty", "isCriticalMode", false);
 
 		delete config;
 
@@ -144,12 +147,12 @@ extern "C" {
 		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);
 
+		SeedCopy = Seed;
+
 		if (Seed)
 			srand(Seed);
 		else
 			srand((unsigned)time(&t));
-
-		SeedCopy = Seed;
 		
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
@@ -170,8 +173,6 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "HS: %d", ChaoSpawn);
-
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -179,7 +180,6 @@ extern "C" {
 			DisplayDebugString(NJM_LOCATION(2, 1), "Randomizer Mod Warning:");
 			DisplayDebugString(NJM_LOCATION(2, 2), "You are using the Dreamcast Conversion Mod / SADX FE,");
 			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
-
 			DCModWarningTimer--;
 		}
 
@@ -195,6 +195,7 @@ extern "C" {
 
 		//Credits stat
 		Credits_StatsDelayOnFrames();
+
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
@@ -243,6 +244,7 @@ extern "C" {
 			case LevelIDs_ECGarden:
 			case LevelIDs_MRGarden:
 			case LevelIDs_ChaoRace:
+				FixCharacterSFX();
 				LoadCharVoices();
 				break;
 			}
