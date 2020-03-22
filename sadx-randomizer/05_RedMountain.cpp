@@ -10,7 +10,7 @@
 void CamRedMountain() {
 	LoadCamFile(0, "0500");
 
-	if (CurrentLevelLayout == Mission1_Variation)
+	if (CurrentAct == 1 && (CurrentLevelLayout == Mission1_Variation || CurrentLevelLayout == Mission2_100Rings))
 	{
 		LoadCamFile(1, "0503"); //load the camera used for Gamma.
 	}
@@ -144,8 +144,8 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 }
 
 void RedMountain_Layout() {
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct == 0)
 	{
@@ -177,7 +177,6 @@ void RedMountain_Layout() {
 	if (CurrentAct == 1)
 	{
 		LoadSetFile(0, "0500");
-		LoadSetFile(1, "0501");
 		LoadSetFile(1, "0503"); //load Gamma version
 		CurrentLevelLayout = Mission1_Variation;
 	}
@@ -185,21 +184,35 @@ void RedMountain_Layout() {
 
 	if (CurrentAct == 2)
 	{
-		LoadSetFile(0, "0500");
-		LoadSetFile(1, "0501");
-		CurrentLevelLayout = Mission1_Variation;
-		TreasureHunting = true;
-		SetRNGKnuckles();
+		switch (CurrentLevelLayout)
+		{
+		default:
+		case Mission1:
+		case Mission1_Variation:
+			LoadSetFile(0, "0500");
+			LoadSetFile(1, "0501");
+			CurrentLevelLayout = Mission1_Variation;
+			TreasureHunting = true;
+			SetRNGKnuckles();
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			LoadSetFile(0, "0500");
+			LoadSetFile(1, "0501");
+			CurrentLevelLayout = Mission2_100Rings;
+			break;
+		}
 	}
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	LoadSetFile(2, "0502"); //load Knux version
 	CamRedMountain();
 	return;
+
 }
 
 void FixRMLava() {
-	if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 1)
+	if (CurrentAct == 1 && (CurrentLevelLayout == Mission1_Variation || CurrentLevelLayout == Mission2_100Rings))
 		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone
 	else
 		WriteData<1>((void*)0x6027cb, 0x74); //restore original

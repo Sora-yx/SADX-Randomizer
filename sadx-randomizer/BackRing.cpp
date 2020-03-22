@@ -33,6 +33,90 @@ FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
 
 bool isBackRingTextureLoaded = false;
 
+Sint32 GetBackRing_Rotation() {
+
+	Sint32 Yrot = 0;
+	int CurAct = CurrentAct;
+	
+	switch (CurrentLevel)
+	{
+	case LevelIDs_EmeraldCoast:
+		if (CurrentAct == 1)
+			Yrot = 19000;
+		if (CurAct == 2)
+			Yrot = 0; 
+		break;
+	case LevelIDs_WindyValley:
+		if (CurAct == 2)
+			Yrot = 0x8000;
+		break;
+	case LevelIDs_Casinopolis:
+		if (CurAct == 0)
+			Yrot = 0x8000;
+		if (CurAct == 1)
+			Yrot = 0x8000;
+		break;
+	case LevelIDs_IceCap:
+		if (CurAct == 3)
+			Yrot = 20000;
+		if (CurAct == 2)
+			Yrot = 10000;
+		break;
+	case LevelIDs_TwinklePark:
+		if (CurAct == 1 && !TPAmyVersion && !TPBigVersion)
+			Yrot = 0;
+		if (CurAct == 1 && TPBigVersion && !TPAmyVersion)
+			Yrot = 20000;
+		if (CurAct == 1 && !TPBigVersion && TPAmyVersion)
+			Yrot = 10000;
+		break;
+	case LevelIDs_SpeedHighway:
+		if (CurAct == 0)
+			Yrot = 15000;
+		if (CurAct == 2)
+			Yrot = 0x8000;
+		break;
+	case LevelIDs_RedMountain:
+		if (CurAct == 1)
+			Yrot = 10000;
+		if (CurAct == 2)
+			Yrot = 0x8000;
+		break;
+	case LevelIDs_SkyDeck:
+		if (CurAct == 0)
+			Yrot = 0x8000;
+		if (CurAct == 2)
+			Yrot = 18000;
+		break;
+	case LevelIDs_LostWorld:
+		if (CurAct == 1)
+			Yrot = 0x8000;
+		if (CurAct == 2)
+			Yrot = 17000;
+		break;
+	case LevelIDs_FinalEgg:
+		if (CurAct == 2)
+		{
+			if (!FEGammaVersion) //Sonic Version
+				Yrot = 0x8000;
+			else //Gamma Version
+				Yrot = 0x8000;
+		}
+		if (CurAct == 0 && FEAmyVersion)
+			Yrot = 17000;
+		break;
+	case LevelIDs_HotShelter:
+		if (CurAct == 2)
+			Yrot = 17000;
+		if (CurAct == 1 && HSAmyVersion)
+			Yrot = 17000;
+		if (CurAct == 0 && HSBigVersion)
+			Yrot = 18000;
+		break;
+	}
+
+	return Yrot;
+}
 
 void BackRingObj_Display(ObjectMaster* obj) {
 	if (!MissedFrames && isBackRingTextureLoaded) {
@@ -40,10 +124,11 @@ void BackRingObj_Display(ObjectMaster* obj) {
 		njPushMatrix(nullptr);
 		njTranslateV(nullptr, &obj->Data1->Position);
 		int yrot = obj->Data1->Rotation.y;
+		yrot = GetBackRing_Rotation();
 		if (yrot)
-			njRotateY(nullptr, yrot);		
+			njRotateY(nullptr, yrot);
+
 		sub_408530(&object_GoalRing);
-	
 		njPopMatrix(1);
 	}
 }
@@ -60,7 +145,9 @@ void BackRingObj_Main(ObjectMaster* obj) {
 		EntityData1* v1 = obj->Data1;
 
 		LoadPVM("textures\\BACKRING", &GoalRingTextures);
-
+		obj->Data1->Rotation.x = -1000;
+		obj->Data1->Rotation.z = -1000;
+		obj->Data1->Rotation.y = -1000;
 		isBackRingTextureLoaded = true;
 
 			if (IsPlayerInsideSphere(&v1->Position, 42) && obj->Data1->Action == 0)
@@ -114,8 +201,13 @@ void BackRingObj_Main(ObjectMaster* obj) {
 							}
 							break;
 						default:
-							GameMode = GameModes_Adventure_Field;
-							GameState = 0xB;
+							if (isTailsVersion || SHTailsVersion)
+								GameState = 0xc;
+							else
+							{
+								GameMode = GameModes_Adventure_Field;
+								GameState = 0xB;
+							}
 							break;
 						}
 
@@ -181,12 +273,9 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
 		a1->Data1->Position.y += 38;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
 		return;
 	}
 
@@ -195,18 +284,16 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 	origin(a1);
 }
 
-Trampoline Froggy_Load_T(0x4fa320, 0x4fa325, CheckLoadFroggy_r);
-//Check the current mission and replace Froggy with Back Ring.
-void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
+void Check_DisplayBackRing_Big(ObjectMaster* a1) {
+
 
 	ObjectMaster* play1 = GetCharacterObject(0);
 	EntityData1* v1 = a1->Data1;
 
+
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
 		a1->Data1->Position.y += 28;
-		a1->Data1->Rotation.x = 0xC000;
 		a1->DisplaySub = BackRingObj_Display;
 		a1->MainSub = BackRingObj_Main;
 		return;
@@ -214,6 +301,59 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
 	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
 		SetAIRaceWin();
+}
+
+void Check_DisplayBackRing_Amy(ObjectMaster* a1) {
+
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
+	if (CurrentLevelLayout >= Mission2_100Rings)
+	{
+
+		a1->Data1->Position.y += 0;
+		a1->DisplaySub = BackRingObj_Display;
+		a1->MainSub = BackRingObj_Main;
+
+		return;
+	}
+
+	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
+		SetAIRaceWin();
+
+}
+
+void Check_Display_Frog_Balloon(ObjectMaster* a1) {
+
+		switch (CurrentCharacter)
+		{
+		case Characters_Amy:
+			a1->Data1->Position.y += 37;
+			a1->MainSub = Balloon_Main;
+			Balloon_Main(a1);
+			break;
+		case Characters_Big:
+			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
+			a1->Data1->Position.y += 20;
+			a1->MainSub = OFrog;
+			OFrog(a1);
+			break;
+		}
+}
+
+
+void Check_Display_BackRing_Common(ObjectMaster* a1) {
+
+	a1->Data1->Position.y += 36;
+	a1->DisplaySub = BackRingObj_Display;
+	a1->MainSub = BackRingObj_Main;
+}
+
+Trampoline Froggy_Load_T(0x4fa320, 0x4fa325, CheckLoadFroggy_r);
+//Check the current mission and replace Froggy with Back Ring.
+void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
+
+	Check_DisplayBackRing_Big(a1);
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -226,21 +366,7 @@ Trampoline Balloon_Load_T(0x7a21c0, 0x7a21c6, CheckLoadBalloon_r);
 //Check the current mission and replace Balloon with Back Ring.
 void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
-	ObjectMaster* play1 = GetCharacterObject(0);
-	EntityData1* v1 = a1->Data1;
-
-	if (CurrentLevelLayout >= Mission2_100Rings)
-	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 0;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-		return;
-	}
-
-	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
-		SetAIRaceWin();
+	Check_DisplayBackRing_Amy(a1);
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
@@ -254,40 +380,15 @@ Trampoline CasinoEmerald_Load_T(0x5dd0a0, 0x5dd0a6, CheckLoadCasinoEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
 
-	ObjectMaster* play1 = GetCharacterObject(0);
-	EntityData1* v1 = a1->Data1;
-
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
-
-	if (CurrentCharacter != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
-		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
@@ -301,40 +402,15 @@ Trampoline WVEmerald_Load_T(0x4df3b0, 0x4df3b6, CheckLoadWVEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1) {
 
-	ObjectMaster* play1 = GetCharacterObject(0);
-	EntityData1* v1 = a1->Data1;
-
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
-
-	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
-		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
@@ -348,40 +424,15 @@ Trampoline ICEmerald_Load_T(0x4ecfa0, 0x4ecfa6, CheckLoadICEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 
-	ObjectMaster* play1 = GetCharacterObject(0);
-	EntityData1* v1 = a1->Data1;
-
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
-
-	if (play1->Data1->CharID != Characters_Tails && isRaceLevel && IsSpecificPlayerInSphere(&v1->Position, 42, 1))
-		SetAIRaceWin();
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
@@ -397,32 +448,13 @@ void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
@@ -437,32 +469,13 @@ void __cdecl CheckLWTrigger_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
@@ -477,32 +490,13 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 
 	if (CurrentLevelLayout <= Mission1_Variation)
 	{
-		switch (CurrentCharacter)
-		{
-		case Characters_Amy:
-			a1->Data1->Position.y += 37;
-			a1->MainSub = Balloon_Main;
-			Balloon_Main(a1);
-			return;
-			break;
-		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-			a1->Data1->Position.y += 20;
-			a1->MainSub = OFrog;
-			OFrog(a1);
-			return;
-			break;
-		}
+		Check_Display_Frog_Balloon(a1);
+		return;
 	}
 
 	if (CurrentLevelLayout >= Mission2_100Rings)
 	{
-		a1->Data1->Rotation.z = 15000;
-		a1->Data1->Position.y += 32;
-		a1->DisplaySub = BackRingObj_Display;
-		a1->MainSub = BackRingObj_Main;
-		a1->Data1->Rotation.x = 0xC000;
-
+		Check_Display_BackRing_Common(a1);
 		return;
 	}
 

@@ -47,12 +47,8 @@ void TriggerObjHS_Main(ObjectMaster* obj) {
 	{
 		PlayVoice_R(5004);
 		ForcePlayerAction(0, 12);
-
-		if (++obj->Data1->Index == 5)
-		{
-			ForcePlayerAction(0, 24);
-			PositionPlayer(0, 852.11, 203.63, -675.93);
-		}
+		ForcePlayerAction(0, 24);
+		PositionPlayer(0, 852.11, 203.63, -675.93);
 	}
 }
 

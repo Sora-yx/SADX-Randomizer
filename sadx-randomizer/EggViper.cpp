@@ -43,7 +43,8 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 	WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol
 	WriteCall((void*)0x580d2c, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 3 xd (final hit)
 
-	WriteCall((void*)0x57d756, PlayVoice_R);
+	if (isCriticalMode)
+		WriteCall((void*)0x57d756, PlayVoice_R);
 	
 	WriteCall((void*)0x57c4b3, FixEggViperCutscene); //Don't play Egg Viper Cutscene as Gamma. (crash fix)
 

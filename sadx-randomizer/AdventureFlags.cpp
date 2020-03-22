@@ -10,6 +10,7 @@
 using namespace std;
 extern int CustomFlag;
 bool CreditCheck = false;
+extern int musicCount;
 
 void DeleteCustomFlag() {
 
@@ -17,11 +18,16 @@ void DeleteCustomFlag() {
 	{
 		DeleteCreditStats();
 		ResetValueWhileLevelResult();
-		if (CustomFlag != 0 || levelCount != 0)
+		if (SeedCopy != 0 && (CustomFlag != 0 || levelCount != 0))
 		{
 			levelCount = 0;
 			TotalCount = 0;
+			musicCount = 0;
 		}
+
+		if (!SeedCopy && levelCount != 0)
+			Randomizer_GetNewRNG();
+
 		CustomFlag = 0;
 	}
 
@@ -31,9 +37,7 @@ void DeleteCustomFlag() {
 void AddCustomFlag() {
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SandHill && CurrentLevel != LevelIDs_TwinkleCircuit)
 	{
-		std::ofstream FlagFile("Flags.txt");
-		FlagFile << CustomFlag++;
-		FlagFile.close();
+		CustomFlag++;
 	}
 }
 

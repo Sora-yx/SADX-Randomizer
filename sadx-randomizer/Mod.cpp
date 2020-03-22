@@ -5,6 +5,9 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 #include "Utils.h"
+#include <random>
+#include <ctime>
+
 
 int Seed = 0;
 char StorySplits;
@@ -17,6 +20,8 @@ bool CustomVoices = true;
 bool RNGMusic = true;
 char SonicCD = 0;
 bool Missions = true;
+bool SA2M2 = true;
+bool SA2M3 = true;
 bool Any = true;
 bool Viper = false;
 extern bool CreditCheck;
@@ -52,11 +57,14 @@ short CurrentLevelLayout = 0;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
+extern bool gotEV;
+bool SA2Voices = false;
 
 extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
-extern bool gotEV;
+
+
 
 
 extern "C" {
@@ -102,7 +110,8 @@ extern "C" {
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		Seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
-		Missions = config->getBool("Randomizer", "Missions", true);
+		SA2M2 = config->getBool("Randomizer", "SA2M2", true);
+		SA2M3 = config->getBool("Randomizer", "SA2M3", true);
 
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
@@ -147,6 +156,7 @@ extern "C" {
 		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);
 
+
 		SeedCopy = Seed;
 
 		if (Seed)
@@ -158,9 +168,10 @@ extern "C" {
 		StartupLevels_Init(path, helperFunctions);
 		StartupAudio_Init(path, helperFunctions);
 		StartupMiscellaneous_Init(path, helperFunctions);
-
+		
 		Chao_Init();
 		ChaoGameplayCheck();
+		SA2VoicesCheck();
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();
@@ -173,6 +184,8 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+
+	//	DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", toto);
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -195,7 +208,6 @@ extern "C" {
 
 		//Credits stat
 		Credits_StatsDelayOnFrames();
-
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

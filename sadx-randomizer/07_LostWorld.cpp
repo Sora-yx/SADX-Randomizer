@@ -48,10 +48,24 @@ void LW_Layout() {
 	}
 	else
 	{
-		CurrentLevelLayout = Mission1_Variation;
-		TreasureHunting = true;
-		LoadSetFile(1, "0704"); //Knux Treasure Hunting
-		SetRNGKnuckles();
+		switch (CurrentLevelLayout)
+		{
+			isKnucklesVersion = true;
+
+		default:
+		case Mission1:
+			CurrentLevelLayout = Mission1_Variation;
+			TreasureHunting = true;
+			LoadSetFile(1, "0704"); //Knux Treasure Hunting
+			SetRNGKnuckles();
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			LoadSetFile(1, "0704"); //Knux 
+			CurrentLevelLayout = Mission2_100Rings;
+			break;
+		}
+
 	}
 
 	LoadSetFile(2, "0702");

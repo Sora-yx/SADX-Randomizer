@@ -19,7 +19,7 @@ void Cam_SkyDeck() {
 	
 	LoadCamFile(1, "0601");
 
-	if (CurrentAct == 2 && TreasureHunting)
+	if (CurrentAct == 2 && (TreasureHunting || isKnucklesVersion))
 		LoadCamFile(2, "0604"); //Knuckles Version
 	else
 		LoadCamFile(2, "0600"); //Knuckles Version
@@ -29,14 +29,17 @@ void Cam_SkyDeck() {
 //Don't change the gravity if knuckles layout.
 int Switch_Gravity() {
 
-	if (TreasureHunting)
+	if (CurrentCharacter == Characters_Knuckles && !Vanilla)
+		return (unsigned)Characters_Sonic; //Make the gravity work for Knuckles
+
+	if (TreasureHunting || isKnucklesVersion)
 		return (unsigned)Characters_Knuckles; 
 	else
 		return GetCharacterID(0);
 }
 
 //Allow Gamma to target the Sky Deck cannon
-
+//Load a targetable item on the cannon to destroy it.
 void SkyDeckCannon_LoadWithTarget(ObjectMaster* SDCanonnObj) {
 	int iVar1;
 
@@ -154,12 +157,27 @@ void SkyDeck_Layout() {
 
 	if (CurrentAct == 2)
 	{
-		TreasureHunting = true;
-		CurrentLevelLayout = Mission1_Variation;
-		SetRNGKnuckles();
-		LoadSetFile(0, "0600");
-		LoadSetFile(1, "0601");
-		LoadSetFile(2, "0604"); //Knuckles Version
+		isKnucklesVersion = true;
+
+		switch (CurrentLevelLayout)
+		{
+		default:
+		case Mission1:
+			TreasureHunting = true;
+			CurrentLevelLayout = Mission1_Variation;
+			SetRNGKnuckles();
+			LoadSetFile(0, "0600");
+			LoadSetFile(1, "0601");
+			LoadSetFile(2, "0604"); //Knuckles Version
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			LoadSetFile(0, "0600");
+			LoadSetFile(1, "0601");
+			LoadSetFile(2, "0606"); //Knuckles M2 Version
+			CurrentLevelLayout = Mission2_100Rings;
+			break;
+		}
 	}
 	else
 	{
@@ -196,6 +214,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602S", "Sonic-SD-Act3");
 	ReplaceSET("SET0604S", "Sonic-SD-Knux");
 	ReplaceSET("SET0605S", "Sonic-SD-Race");
+	ReplaceSET("SET0606S", "Sonic-SD-KnuxR");
 
 	ReplaceCAM("CAM0600S", "CAM0600S");
 	ReplaceCAM("CAM0601S", "CAM0601S");
@@ -211,6 +230,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602M", "Tails-SD-Act3");
 	ReplaceSET("SET0604M", "Tails-SD-Knux");
 	ReplaceSET("SET0605M", "Tails-SD-Race");
+	ReplaceSET("SET0606M", "Tails-SD-KnuxR");
 
 	ReplaceCAM("CAM0600M", "CAM0600M");
 	ReplaceCAM("CAM0601M", "CAM0601M");
@@ -227,6 +247,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602K", "Knux-SD-Act3");
 	ReplaceSET("SET0604K", "Knux-SD-Knux");
 	ReplaceSET("SET0605K", "Knux-SD-Race");
+	ReplaceSET("SET0606K", "Knux-SD-KnuxR");
 
 	ReplaceCAM("CAM0600K", "CAM0600K");
 	ReplaceCAM("CAM0601K", "CAM0601K");
@@ -243,6 +264,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602A", "Amy-SD-Act3");
 	ReplaceSET("SET0604A", "Amy-SD-Knux");
 	ReplaceSET("SET0605A", "Amy-SD-Race");
+	ReplaceSET("SET0606A", "Amy-SD-KnuxR");
 
 	ReplaceCAM("CAM0600A", "CAM0600A");
 	ReplaceCAM("CAM0601A", "CAM0601A");
@@ -259,6 +281,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602B", "Big-SD-Act3");
 	ReplaceSET("SET0604B", "Big-SD-Knux");
 	ReplaceSET("SET0605B", "Big-SD-Race");
+	ReplaceSET("SET0606B", "Big-SD-KnuxR");
 
 	ReplaceCAM("CAM0600B", "CAM0600B");
 	ReplaceCAM("CAM0601B", "CAM0601B");
@@ -275,6 +298,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0602E", "Gamma-SD-Act3");
 	ReplaceSET("SET0604E", "Gamma-SD-Knux");
 	ReplaceSET("SET0605E", "Gamma-SD-Race");
+	ReplaceSET("SET0606E", "Gamma-SD-KnuxR");
 
 	ReplaceCAM("CAM0600E", "CAM0600E");
 	ReplaceCAM("CAM0601E", "CAM0601E");

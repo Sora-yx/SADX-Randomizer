@@ -80,7 +80,7 @@ void TwinklePark_Layout() {
 			WriteData<1>((void*)0x7983c4, 0x7F);
 		}
 	}
-
+	
 	if (CurrentAct == 1)
 	{
 		switch (CurrentLevelLayout)

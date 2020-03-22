@@ -7,7 +7,7 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Speed Highway\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
-bool SHTailsVersion = false;
+short SHTailsVersion = 0;
 
 void SHAct2Position() {
 	if (CurrentCharacter != Characters_Sonic)
@@ -32,7 +32,7 @@ void CheckEggmanRaceWinner() {
 
 void CamSpeedHighway() {
 
-	if (CurrentLevelLayout == Mission1_Variation)
+	if (CurrentAct == 0 && SHTailsVersion)
 	{
 		LoadCamFile(0, "0403"); //Tails Camera
 	}
@@ -43,7 +43,7 @@ void CamSpeedHighway() {
 
 	LoadCamFile(1, "0401");
 
-	if (CurrentAct == 2 && TreasureHunting)
+	if (CurrentAct == 2 && (TreasureHunting || isKnucklesVersion))
 		LoadCamFile(2, "0405");
 	else
 		LoadCamFile(2, "0402");
@@ -78,6 +78,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403S", "Sonic-SH-Race");
 	ReplaceSET("SET0404S", "Sonic-SH-Chao");
 	ReplaceSET("SET0405S", "Sonic-SH-Knux");
+	ReplaceSET("SET0406S", "Sonic-SH-KnuxR");
+	ReplaceSET("SET0407S", "Sonic-SH-TR");
 
 	ReplaceCAM("CAM0400S", "CAM0400S");
 	ReplaceCAM("CAM0401S", "CAM0401S");
@@ -92,6 +94,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403M", "Tails-SH-Race");
 	ReplaceSET("SET0404M", "Tails-SH-Chao");
 	ReplaceSET("SET0405M", "Tails-SH-Knux");
+	ReplaceSET("SET0406M", "Tails-SH-KnuxR");
+	ReplaceSET("SET0407M", "Tails-SH-TR");
 
 	ReplaceCAM("CAM0400M", "CAM0400M");
 	ReplaceCAM("CAM0401M", "CAM0401M");
@@ -109,6 +113,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403K", "Knux-SH-Race");
 	ReplaceSET("SET0404K", "Knux-SH-Chao");
 	ReplaceSET("SET0405K", "Knux-SH-Knux");
+	ReplaceSET("SET0406K", "Knux-SH-KnuxR");
+	ReplaceSET("SET0407K", "Knux-SH-TR");
 
 	ReplaceCAM("CAM0400K", "CAM0400K");
 	ReplaceCAM("CAM0401K", "CAM0401K");
@@ -126,6 +132,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403A", "Amy-SH-Race");
 	ReplaceSET("SET0404A", "Amy-SH-Chao");
 	ReplaceSET("SET0405A", "Amy-SH-Knux");
+	ReplaceSET("SET0406A", "Amy-SH-KnuxR");
+	ReplaceSET("SET0407A", "Amy-SH-TR");
 
 	ReplaceCAM("CAM0400A", "CAM0400A");
 	ReplaceCAM("CAM0401A", "CAM0401A");
@@ -142,6 +150,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403B", "Big-SH-Race");
 	ReplaceSET("SET0404B", "Big-SH-Chao");
 	ReplaceSET("SET0405B", "Big-SH-Knux");
+	ReplaceSET("SET0406B", "Big-SH-KnuxR");
+	ReplaceSET("SET0407B", "Big-SH-TR");
 
 	ReplaceCAM("CAM0400B", "CAM0400B");
 	ReplaceCAM("CAM0401B", "CAM0401B");
@@ -159,6 +169,8 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0403E", "Gamma-SH-Race");
 	ReplaceSET("SET0404E", "Gamma-SH-Chao");
 	ReplaceSET("SET0405E", "Gamma-SH-Knux");
+	ReplaceSET("SET0406E", "Gamma-SH-KnuxR");
+	ReplaceSET("SET0407E", "Gamma-SH-TR");
 
 	ReplaceCAM("CAM0400E", "CAM0400E");
 	ReplaceCAM("CAM0401E", "CAM0401E");
@@ -175,82 +187,103 @@ void SpeedHighway_Layout() {
 
 	if (CurrentAct != 2)
 	{
-		switch (CurrentLevelLayout)
+		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-		case Mission1:
-		default:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			if (CurrentLevelLayout < Mission2_100Rings)
 			{
 				Race = true;
-				SHTailsVersion = true;
-				LoadSetFile(0, "0403"); //load Tails layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0400");
-				Race = false;
-				CurrentLevelLayout = Mission1;
-			}
-			break;
-		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Tails && !Vanilla) //don't load Tails version if !vanilla.
-			{
-				LoadSetFile(0, "0400"); //load Sonic Layout
-				Race = false;
-				CurrentLevelLayout = Mission1;
-			}
-			else
-			{
-				Race = true;
-				SHTailsVersion = true;
-				LoadSetFile(0, "0403"); //load Tails layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			break;
-		case Mission2_100Rings:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				Race = true;
-				SHTailsVersion = true;
+				SHTailsVersion = 1;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}
 			else
 			{
 				Race = false;
-				LoadSetFile(0, "0400"); //load Sonic Layout
+				SHTailsVersion = 1;
+				LoadSetFile(0, "0407"); //load Tails layout
+				CurrentLevelLayout = Mission2_100Rings;
 			}
-			break;
-		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				Race = true;
-				SHTailsVersion = true;
-				LoadSetFile(0, "0403"); //load Tails layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				Race = false;
-				LoadSetFile(0, "0404"); //load Chao Layout
-			}
-			break;
 		}
+
+		if (CurrentCharacter == Characters_Tails && !Vanilla) //don't load Tails version if !vanilla.
+		{
+			LoadSetFile(0, "0400"); //load Sonic Layout
+			Race = false;
+			SHTailsVersion = 0;
+
+			if (CurrentLevelLayout < Mission2_100Rings)
+				CurrentLevelLayout = Mission1_Variation;
+		}
+
+		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails || Vanilla)
+		{
+			SHTailsVersion = randomizedSets[levelCount].Layout;
+
+			if (SHTailsVersion)
+			{
+				switch (CurrentLevelLayout)
+				{
+				case Mission1:
+				default:
+				case Mission1_Variation:
+					Race = true;
+					LoadSetFile(0, "0403"); //load Tails layout
+					CurrentLevelLayout = Mission1_Variation;
+					break;
+				case Mission2_100Rings:
+				case Mission3_LostChao:
+					CurrentLevelLayout = Mission2_100Rings;
+					LoadSetFile(0, "0407"); //load Tails layout
+					break;
+				}
+			}
+			else
+			{
+				Race = false;
+
+				switch (CurrentLevelLayout)
+				{
+				case Mission1:
+				default:
+				case Mission1_Variation:
+				case Mission2_100Rings:
+					LoadSetFile(0, "0400"); //load Sonic Layout
+					break;
+				case Mission3_LostChao:
+					LoadSetFile(0, "0404"); //load Chao Layout
+					break;
+				}
+			}
+		}
+
+		if (Race)
+			SelectBarRace();
+
+		LoadSetFile(1, "0401");
 	}
-
-	if (Race)
-		SelectBarRace();
-
-	LoadSetFile(1, "0401");
 
 	if (CurrentAct == 2)
 	{
-		TreasureHunting = true;
-		CurrentLevelLayout = Mission1_Variation;
-		SetRNGKnuckles();
-		LoadSetFile(0, "0400");
-		LoadSetFile(2, "0405"); //Knuckles Version
+		switch (CurrentLevelLayout)
+		{
+		default:
+		case Mission1:
+			TreasureHunting = true;
+			isKnucklesVersion = true;
+			CurrentLevelLayout = Mission1_Variation;
+			SetRNGKnuckles();
+			LoadSetFile(0, "0400");
+			LoadSetFile(2, "0405"); //Knuckles Version
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			TreasureHunting = false;
+			isKnucklesVersion = true;
+			LoadSetFile(0, "0400");
+			LoadSetFile(2, "0406"); //Knuckles M2 Version
+			CurrentLevelLayout = Mission2_100Rings;
+			break;
+		}
 	}
 	else
 	{

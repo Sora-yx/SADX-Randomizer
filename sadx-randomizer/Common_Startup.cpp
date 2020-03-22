@@ -264,8 +264,6 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 
 
 void Set_MusicVoices() {
-	extern bool RNGVoices;
-	extern bool RNGMusic;
 
 	//if Random Voice option
 	if (RNGVoices)

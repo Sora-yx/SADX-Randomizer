@@ -759,7 +759,7 @@ void FinalStat() {
 		{
 			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.1.1 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.1.3 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);

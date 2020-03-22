@@ -24,11 +24,6 @@ std::vector<NJS_PLANE> waterlist = {};
 
 ChaoHandle ChaoMaster;
 
-bool DoesConfigExist(const std::string& file)
-{
-	std::ifstream fichier(file.c_str());
-	return !fichier.fail();
-}
 
 void __cdecl ChaoGameplayCheck() {
 

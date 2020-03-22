@@ -39,7 +39,6 @@ void DisableTimeStuff() {
 
 	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
 		GameMode = GameModes_Adventure_Field; //fix game crash
-	
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
@@ -346,13 +345,11 @@ void __cdecl LoadLevelResults_r()
 	}
 }
 
-
 void DeleteTriggerObject() {
 
 	TriggerOBJHS_Delete();
 	TriggerCasinoChao_Delete();
 }
-
 
 
 void ResetValueWhileLevelResult() {
@@ -361,6 +358,7 @@ void ResetValueWhileLevelResult() {
 	isCheckpointUsed = false;
 	isGameOver = false;
 	SonicRand = 0;
+	SHTailsVersion = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
@@ -377,7 +375,8 @@ void ResetValueWhileLevelResult() {
 	HSAmyVersion = false;
 	HSBigVersion = false;
 	CasinoTails = false;
-	
+	isKnucklesVersion = false;
+	isTailsVersion = false;
 	isCheckpointUsed = false;
 
 	RestoreRNGValueKnuckles();
@@ -442,6 +441,13 @@ void FixZeroSound2() {
 		PlaySound(0x322, 0x0, 0, 0x0);
 }
 
+void FixZeroSound3() {
+
+	if (CurrentCharacter != Characters_Amy && CurrentLevel != LevelIDs_Zero)
+		return;
+	else
+		PlaySound(0x332, 0x0, 0, 0x0);
+}
 
 
 
@@ -452,12 +458,11 @@ void Set_Zero() {
 	WriteCall((void*)0x5ae104, LoadZero); //Call Zero at Final Egg.
 	WriteCall((void*)0x4d2d12, FixZeroSound); 
 	WriteCall((void*)0x4d31ce, FixZeroSound);
+	WriteCall((void*)0x4d218c, FixZeroSound3);
 
-
+	WriteData<5>((void*)0x4d380d, 0x90); //Remove a special Zero Sound.
 	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
 }
-
-
 
 
 void Load_Cart_R() {
@@ -546,17 +551,6 @@ void Load_Cart_R() {
 		CurrentCart->SETData.SETData->SETEntry->Properties.z = 0.000000000;
 	}
 }
-
-/*
-void Cart_Main_r(ObjectMaster* obj);
-Trampoline Cart_Main_t(0x79A9E0, 0x79A9E5, Cart_Main_r);
-void Cart_Main_r(ObjectMaster* obj) {
-	obj->Data1->Action = obj->Data1->Action;
-
-	ObjectFunc(origin, Cart_Main_t.Target());
-	origin(obj);
-}
-*/
 
 
 void Delete_Cart()
@@ -787,13 +781,15 @@ void SetCamera() {
 	if (CurrentLevel >= LevelIDs_RedMountain && CurrentLevel <= LevelIDs_HotShelter)
 	{
 		FreeCam = 1;
+		camera_flags = 1;
 		SetCameraMode_(FreeCam);
 	}
 
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SpeedHighway)
 	{
 		FreeCam = 0;
-		SetCameraMode_(0);
+		camera_flags = 0;
+		SetCameraMode_(FreeCam);
 	}
 }
 
@@ -1009,21 +1005,21 @@ void FixLayout_StartPosition_R() {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_LostWorld:
-			if (CurrentAct == 1 && TreasureHunting)
+			if (CurrentAct == 1 && (TreasureHunting || isKnucklesVersion))
 				PositionPlayer(0, 7482, -2622, 908);
 			break;
 		case LevelIDs_SpeedHighway:
-			if (CurrentAct == 2 && TreasureHunting)
+			if (CurrentAct == 2 && (TreasureHunting || isKnucklesVersion))
 				PositionPlayer(0, -230, 150, -1740);
 			break;
 		case LevelIDs_SkyDeck:
-			if (CurrentAct == 2 && TreasureHunting)
+			if (CurrentAct == 2 && (TreasureHunting || isKnucklesVersion))
 				PositionPlayer(0, 674, 207, 12);
 			break;
 		case LevelIDs_WindyValley: //Gamma version
 			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
 				PositionPlayer(0, -10, -102, -10);
-			if (CurrentAct == 2 && Race)
+			if (CurrentAct == 2 && (Race || isTailsVersion))
 				PositionPlayer(0, 1093, -158, -1254);
 			break;
 		case LevelIDs_TwinklePark: //Amy version
@@ -1050,6 +1046,8 @@ void FixLayout_StartPosition_R() {
 		TimeSeconds = TimeSecCopy;
 		TimeMinutes = TimeMinCopy;
 		TimeFrames = TimeFrameCopy;
+		if (FEAmyVersion || isTailsVersion || SHTailsVersion)
+			Lives++;
 		GameMode = GameModes_Adventure_ActionStg;
 		GetBackRing = false;
 	}

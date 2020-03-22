@@ -596,7 +596,7 @@ void ResultVoiceFix() {
 			Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
-			if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || FEGammaVersion || TreasureHunting)
+			if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || FEGammaVersion || TreasureHunting)
 				Load_DelayedSound_Voice(4011);
 			else
 				Load_DelayedSound_Voice(4010);
@@ -656,11 +656,12 @@ void AISwitch() {
 			CharaSwap = GetCharacter1ID();
 
 			ObjectMaster* obj = GetCharacterObject(0);
+			char P1Action = obj->Data1->Action;
 			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
 			if (obj != nullptr && obj2 != nullptr)
 			{
-				if (obj->Data1->Action > 50 && obj->Data1->Action < 71 || obj->Data1->CharID == Characters_Tails && obj->Data1->Action >= 48) //Prevent Crash
+				if (P1Action > 15)
 					return;
 
 				short powerups = obj2->Powerups;

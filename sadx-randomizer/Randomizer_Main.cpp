@@ -3,7 +3,11 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 #include <fstream>
+#include <iostream>
 #include "RandomHelpers.h"
+#include <windows.h>
+#include <shellapi.h>
+#include <random>
 
 
 extern char GetCustomLayout;
@@ -16,6 +20,9 @@ bool TreasureHunting = false;
 int musicCount;
 extern bool isCheckpointUsed;
 extern bool CasinoTails;
+extern bool SA2Voices;
+bool isKnucklesVersion = false;
+bool isTailsVersion = false;
 
 //Credits stats
 int RageQuit = 0;
@@ -37,6 +44,10 @@ int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Ch
 int TwinkleCircuitRNG = 0;
 int level[23] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 35, 38 };
 
+short PrevLevelAndAct[100] = { };
+int8_t Prev_Chara[6] = { -1, -1, -1, -1, -1, -1 };
+short Prev_Act[100] = { };
+
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
@@ -48,14 +59,12 @@ int bannedRegularKnuckles[2] = { LevelIDs_Chaos2, LevelIDs_Chaos4 };
 int bannedRegularAmy[2] = { LevelIDs_HedgehogHammer, LevelIDs_Zero };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
+int BannedBoss[4] = { -1, -1, -1, -1 };
+
 //Few jingle that we don't want in the random music function.
 int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b };
 
-bool isEggViperRand = false;
-bool isEggWalkerRand = false;
-bool isPCRand = false;
-bool isChaos4Rand = false;
-bool gotEV = false;
+
 bool isGameOver = false;
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
@@ -64,14 +73,14 @@ struct RandomizedEntry randomizedSets[40];
 
 short prev_stage = -1;
 
-short getRandomStage(uint8_t char_id, bool AllowVanilla) {
+short getRandomStage(uint8_t char_id) {
 
 	short cur_stage = -1;
 
 	do {
 		cur_stage = level[rand() % LengthOfArray(level)];
 
-	} while (BannedCriticalStage(cur_stage, char_id) || isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || cur_stage == prev_stage || isDuplicateStage(cur_stage, prev_stage));
+	} while (cur_stage == prev_stage || isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || isDuplicateStage(cur_stage, prev_stage));
 
 	prev_stage = cur_stage;
 	return cur_stage;
@@ -117,7 +126,21 @@ bool isVanillaStageBanned(uint8_t char_id, short stage_id) {
 	return result;
 }
 
+
 bool isStageBanned(uint8_t char_id, short stage_id) {
+
+	if (isCriticalMode) {
+		switch (stage_id)
+		{
+		case LevelIDs_Zero:
+		case LevelIDs_EggViper:
+		case LevelIDs_EggWalker:
+			if (char_id >= Characters_Gamma)
+				return true;
+			break;
+		}
+	}
+
 	int* bannedStages = nullptr;
 	size_t arraySize = 0;
 
@@ -143,73 +166,51 @@ bool isStageBanned(uint8_t char_id, short stage_id) {
 //This function check if we need to rand to pick another stage or not.
 bool isDuplicateStage(short stage_id, short prev_stage_id)
 {
+	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R && prev_stage_id >= LevelIDs_Chaos0 && prev_stage_id <= LevelIDs_E101R)
+		return true;
+
 	short trick = 0;
 
 	switch (stage_id)
 	{
-	case LevelIDs_HedgehogHammer: 
+	case LevelIDs_HedgehogHammer:
 	case LevelIDs_TwinkleCircuit:
-			trick = rand() % 2;
-			if (trick >= 1)  //reduce the chance to get HH or TC
+		trick = rand() % 2;
+		if (trick)  //reduce the chance to get HH or TC
+			return true;
+		else
+			return false;
+		break;
+	case LevelIDs_Chaos4:
+		trick = rand() % 2;
+		if (trick)
+			return true;
+		break;
+	}
+
+	if (stage_id == LevelIDs_Chaos4 || stage_id >= LevelIDs_PerfectChaos && stage_id <= LevelIDs_EggViper)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (stage_id == BannedBoss[i])
 				return true;
 			else
-				return false;
-		break;
-	case LevelIDs_PerfectChaos: //Check if pc, eg and EV have been rand already, if so, then rand again to avoid duplicate.
-		if (!isPCRand)
-			isPCRand = true;
-		else
-			return true;
-		break;
-	case LevelIDs_EggWalker:
-		if (!isEggWalkerRand)
-			isEggWalkerRand = true;
-		else
-			return true;
-		break;
-	case LevelIDs_EggViper:
-		gotEV = true;
-		if (!isEggViperRand)
-			isEggViperRand = true;
-		else
-			return true;
-		break;
-	case LevelIDs_Chaos4: 
-		if (!isChaos4Rand)
-			isChaos4Rand = true;
-		else
-			return true;
-		break;
-	}
-
-	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R && prev_stage_id >= LevelIDs_Chaos0 && prev_stage_id <= LevelIDs_E101R)
-		return true;
-
-	return false;
-}
-
-bool isBossStage(short stage_id)
-{
-	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
-}
-
-bool BannedCriticalStage(short stage_id, uint8_t char_id) {
-
-	if (isCriticalMode) {
-		switch (stage_id)
-		{
-		case LevelIDs_Zero:
-		case LevelIDs_EggViper:
-		case LevelIDs_EggWalker:
-			if (char_id >= Characters_Gamma)
-				return true;
-			break;
-		default:
-			return false;
+			{
+				if (BannedBoss[i] == -1)
+				{
+					BannedBoss[i] = stage_id;
+					break;
+				}
+			}
 		}
 	}
-		
+
 	return false;
+}
+
+bool isBossStage(short stage_id) 
+{
+	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
 }
 
 
@@ -335,6 +336,7 @@ short prev_mission = -1;
 short randomMission(short stage_id) {
 	short cur_mission = -1;
 	
+	Missions = IsSA2MissionAllowed();
 
 	if (stage_id >= LevelIDs_Chaos0)
 		return 0;
@@ -344,7 +346,7 @@ short randomMission(short stage_id) {
 			cur_mission = rand() % 4;
 		else
 			cur_mission = rand() % 2;
-	} while (prev_mission == cur_mission || Missions && isDuplicateMission(cur_mission, prev_mission));
+	} while (prev_mission == cur_mission || Missions && (isDuplicateMission(cur_mission, prev_mission) || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3));
 
 	prev_mission = cur_mission;
 	return cur_mission;
@@ -352,11 +354,11 @@ short randomMission(short stage_id) {
 
 
 short prev_layout = -1;
-short randomLayout(short stage_id) {
+short randomLayout(short stage_id, short act_id) {
 
 	short cur_layout = -1;
 
-	if (stage_id == LevelIDs_TwinklePark || stage_id == LevelIDs_HotShelter || stage_id == LevelIDs_FinalEgg)
+	if (stage_id == LevelIDs_TwinklePark && act_id == 1 || stage_id == LevelIDs_HotShelter && act_id == 0 || stage_id == LevelIDs_FinalEgg || stage_id == LevelIDs_SpeedHighway && act_id == 0)
 	{
 		do {
 			cur_layout = rand() % 2;
@@ -369,7 +371,7 @@ short randomLayout(short stage_id) {
 
 int8_t prev_char = -1;
 
-uint8_t getRandomCharacter(bool allow_duplicate) {
+uint8_t getRandomCharacter() {
 	int8_t cur_char = -1;
 	size_t char_count = sizeof(character) / sizeof(character[0]);
 
@@ -495,19 +497,8 @@ void SetRandomStageAct(char stage, char act) {
 			LastLevel = CurrentLevel;
 			CurrentLevelLayout = 0;
 			GetCustomLayout = 0;
-
-			if (isCriticalMode && !gotEV && SelectedCharacter == 6)
-			{
-				if (CurrentCharacter >= Characters_Gamma || CurrentCharacter == Characters_Sonic && !Vanilla)
-					CurrentCharacter = Characters_Amy;
-				CurrentLevel = LevelIDs_EggViper;
-				CurrentAct = 0;
-			}
-			else
-			{ 
-				CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-				CurrentAct = randomizedSets[levelCount].act;
-			}
+			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
+			CurrentAct = randomizedSets[levelCount].act;
 
 			SetCamera();
 			
@@ -535,9 +526,10 @@ void SetRandomStageAct(char stage, char act) {
 
 void GoToNextLevel_hook(char stage, char act) {
 
-	if (isGameOver)
+	
+	if (isGameOver) //do not randomize stage / character
 	{
-		SetLevelAndAct(Uint8(stage), (Uint8)(act));
+		SetLevelAndAct(Uint8(stage), (Uint8)(act)); 
 		return;
 	}
 
@@ -557,7 +549,8 @@ void GoToNextLevel_hook(char stage, char act) {
 		if (isAIAllowed)
 			CurrentAI = randomizedSets[levelCount].ai_mode;
 
-		if (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0 && RNGStages) //fix mission card display
+		//fix mission card display + load stage properly
+		if (RNGStages && (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) || SelectedCharacter == 2 && EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0) 
 		{
 			CurrentVideo = 0;
 			CutsceneMode = 0;
@@ -567,26 +560,15 @@ void GoToNextLevel_hook(char stage, char act) {
 		CurrentLevelLayout = 0;
 		GetCustomLayout = 0;
 
-		if (isCriticalMode && !gotEV && SelectedCharacter == 6)
+		if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0)
 		{
-			if (CurrentCharacter >= Characters_Gamma || CurrentCharacter == Characters_Sonic && !Vanilla)
-				CurrentCharacter = Characters_Amy;
-
-			CurrentLevel = LevelIDs_EggViper;
-			CurrentAct = 0;
+			SetLevelAndAct(LevelIDs_SSGarden, 0);
 		}
 		else
 		{
-			if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0)
-			{
-				SetLevelAndAct(LevelIDs_SSGarden, 0);
-			}
-			else
-			{
-				CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-				CurrentAct = randomizedSets[levelCount].act;
-				levelCount++;
-			}
+			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
+			CurrentAct = randomizedSets[levelCount].act;
+			levelCount++;
 		}
 
 		SetCamera();
@@ -674,6 +656,9 @@ void ResetStatsValues() {
 	HSBigVersion = false;
 	CasinoTails = false;
 	isGameOver = false;
+	isKnucklesVersion = false;
+	isTailsVersion = false;
+	SHTailsVersion = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
@@ -744,10 +729,57 @@ void SetLevelAndAct_R() {
 	return;
 }
 
+
+bool DoesConfigExist(const std::string& file)
+{
+	std::ifstream fichier(file.c_str());
+	return !fichier.fail();
+}
+
+
+void SA2VoicesCheck() {
+	HMODULE SA2VoiceCheck = GetModuleHandle(L"SA2-Voices");
+
+	if (!DoesConfigExist("RandoConfig.txt") && !SA2VoiceCheck && RNGVoices)
+	{
+		std::ofstream ConfigFile("RandoConfig.txt");
+
+		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract the mod folder in your SADX mod folder to install it.)", "SADX Randomizer", MB_YESNO);
+		switch (msgboxID)
+		{
+		case IDYES:
+			ShellExecute(0, 0, L"https://mega.nz/#!bQ1RkbrZ!VvbiuBWHcEv4Ad-2cUu6vxRX4reOznzI-4vm-jnfqLY", 0, 0, SW_SHOW);
+			ConfigFile << "Sa2Voices=1";
+			ConfigFile.close();
+			Exit();
+			break;
+		case IDNO:
+		default:
+			ConfigFile << "Sa2Voices=0";
+			ConfigFile.close();
+			break;
+		}
+	}
+
+	if (SA2VoiceCheck)
+		SA2Voices = true;
+
+	return;
+}
+
 //randomize voices
 void RandomVoice() {
 	if (VoicesEnabled != 0) {
-		CurrentVoiceNumber = rand() % 2043;
+		if (SA2Voices)
+		{
+			short PickGameVoice = rand() % 2;
+			if (PickGameVoice)
+				CurrentVoiceNumber = rand() % 2727 + 7001;
+			else
+				CurrentVoiceNumber = rand() % 2043;
+		}
+		else
+			CurrentVoiceNumber = rand() % 2043;
 	}
 
 	return;
@@ -851,11 +883,10 @@ void PauseMenuFix() {
 void GameOver_R() {
 
 	isGameOver = true;
+	isCheckpointUsed = false;
 	InitializeSoundManager();
 	return;
 }
-
-extern int SeedCopy;
 
 void DisplayRandoInformation() {
 
@@ -887,50 +918,116 @@ void DisplayRandoInformation() {
 		}
 }
 
+
+
+void Reset_BannedBoss() {
+
+	for (int i = 0; i < 4; i++)
+	{
+		BannedBoss[i] = -1;
+	}
+
+}
+
+void Reset_PrevChara() {
+
+	for (int i = 0; i < 6; i++)
+	{
+		Prev_Chara[i] = -1;
+	}
+
+}
+
+void Reset_PrevLevel() {
+
+	for (int i = 0; i < 100; i++)
+	{
+		PrevLevelAndAct[i] = -1;
+		Prev_Act[i] = -1;
+	}
+
+}
+
+bool CheckPrevLevel(short stage_id, short cur_act) {
+
+	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_Zero)
+		return false;
+
+	uint16_t levelact = (((short)stage_id) << 8) | cur_act;
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (levelact == PrevLevelAndAct[i])
+			return true;
+		else
+		{
+			if (PrevLevelAndAct[i] == -1)
+			{
+				PrevLevelAndAct[i] = levelact;
+				break;
+			}
+		}
+	}
+		
+	return false;
+}
+
+
+
+
+
+void Create_NewRNG() {
+
+	for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
+
+		if (RNGCharacters)
+			randomizedSets[i].character = getRandomCharacter();
+
+		if (RNGStages)
+		{
+			randomizedSets[i].level = getRandomStage(randomizedSets[i].character);
+			randomizedSets[i].act = randomacts(randomizedSets[i]);
+		}
+
+		randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
+
+		randomizedSets[i].Layout = randomLayout(randomizedSets[i].level, randomizedSets[i].act);
+
+		if (RNGMusic)
+			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+
+		if (isAIAllowed)
+			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
+
+		randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+
+		if (randomizedSets[i].character == Characters_Sonic && RNGCharacters)
+		{
+			randomizedSets[i].sonic_mode = rand() % 2;
+			randomizedSets[i].ss_mode = rand() % 2;
+		}
+
+		
+		TotalCount++;
+	}
+}
+
+
 void Randomizer_GetNewRNG() {
 
 	ResetValueWhileLevelResult();
 	TotalCount = 0;
 	levelCount = 0;
 	split = 0;
-	isEggViperRand = false;
-	isEggWalkerRand = false;
-	isPCRand = false;
-	isChaos4Rand = false;
-	gotEV = false;
+
+	Reset_BannedBoss();
+	Reset_PrevLevel();
+	Reset_PrevChara();
 
 	if (!StorySplits)
 	{
 		split = 40;
-		for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
-			if (RNGCharacters)
-				randomizedSets[i].character = getRandomCharacter();
-
-			if (RNGStages)
-			{
-				randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-				randomizedSets[i].act = randomacts(randomizedSets[i]);
-			}
-
-			randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
-			randomizedSets[i].Layout = randomLayout(randomizedSets[i].level);
-
-			if (RNGMusic)
-				randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
-
-			if (isAIAllowed)
-				randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
-
-			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
-
-			if (randomizedSets[i].character == Characters_Sonic && RNGCharacters)
-			{
-				randomizedSets[i].sonic_mode = rand() % 2;
-				randomizedSets[i].ss_mode = rand() % 2;
-			}
-
-			TotalCount++;
-		}
+		Create_NewRNG();
 	}
 	else
 	{
@@ -938,6 +1035,7 @@ void Randomizer_GetNewRNG() {
 		Split_Init();
 	}
 }
+
 
 void Split_Init() { //speedrunner split init. Used when you start the game.
 	std::ofstream myfile("SADX_Randomizer_Splits.lss");
@@ -955,18 +1053,16 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 		split = 37;
 		myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";
 	}
-	if (StorySplits == AnyPourcent)
-	{
-		split = 21;
-		myfile << "Any%" << "</CategoryName>\n<Metadata>\n";
-	}
+
 	myfile << "<Run id = \"\" />\n";
 	myfile << "<Platform usesEmulator = \"False\">PC\</Platform>\n";
 	myfile << "<Region>\n</Region>\n<Variables>\n";
+
 	if (!SeedCopy)
 		myfile << " <Variable name=\"Seed\">Seed 0</Variable>\n";
 	else
 		myfile << "<Variable name=\"Seed\">Set Seed</Variable>\n";
+
 	myfile << "</Variables>\n";
 	myfile << "</Metadata>\n<Offset>00:00:00</Offset>\n<AttemptCount>0</AttemptCount>\n";
 	myfile << "<AttemptHistory />\n<Segments>\n";
@@ -974,35 +1070,10 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	//Segments
 
 	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
+	
+	Create_NewRNG();
 
-	for (uint32_t i = 0; i < split; i++) { //continue to generate split until we have our specific number.
-		if (RNGCharacters)
-			randomizedSets[i].character = getRandomCharacter();
-
-		if (RNGStages)
-		{
-			randomizedSets[i].level = getRandomStage(randomizedSets[i].character, Vanilla);
-			randomizedSets[i].act = randomacts(randomizedSets[i]);
-		}
-
-		randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
-		randomizedSets[i].Layout = randomLayout(randomizedSets[i].level);
-
-		if (RNGMusic)
-			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
-
-		if (isAIAllowed)
-			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
-
-		randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
-
-		if (randomizedSets[i].character == Characters_Sonic && RNGCharacters)
-		{
-			randomizedSets[i].sonic_mode = rand() % 2;
-			randomizedSets[i].ss_mode = rand() % 2;
-		}
-
-		TotalCount++;
+	for (uint32_t i = 0; i < TotalCount; i++) { //continue to generate split until we have our specific number.
 
 		myfile << "<Segment>\n";
 		myfile << "<Name>";
@@ -1016,6 +1087,8 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 		myfile << "<Icon />\n";
 		myfile << "<SplitTimes>\n<SplitTime name=\"Personal Best\" />\n</SplitTimes>\n<BestSegmentTime />\n<SegmentHistory />";
 		myfile << "</Segment>\n";
+
+
 	}
 	myfile << "</Segments>\n<AutoSplitterSettings />\n</Run>";
 	myfile.close();

@@ -25,6 +25,13 @@ int CheckMissionRequirements_r() {
 	return 1;
 }
 
+int IsSA2MissionAllowed() {
+
+	if (!SA2M2 && !SA2M3)
+		return false;
+	else
+		return true;
+}
 
 void LoadStageMissionImage_r() {
 

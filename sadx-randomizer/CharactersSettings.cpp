@@ -132,7 +132,7 @@ int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinop
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
 extern bool TPAmyVersion;
-extern bool SHTailsVersion;
+extern short SHTailsVersion;
 extern bool TreasureHunting;
 
 int GetSSLevelBanned() {

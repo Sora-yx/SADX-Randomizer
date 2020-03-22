@@ -36,8 +36,8 @@ void Load_E101_R(ObjectMaster* obj) {
 
 
 
+
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 
-	//E101Objects_Init(path, helperFunctions);
 }

@@ -39,40 +39,60 @@ void WindyValley_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
-	switch (CurrentLevelLayout)
+	if (CurrentAct != 2)
 	{
-	case Mission1:
-	case Mission2_100Rings:
-	default:
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
+		switch (CurrentLevelLayout)
 		{
-			LoadSetFile(0, "0203");
-			CurrentLevelLayout = Mission1_Variation;
+		case Mission1:
+		case Mission2_100Rings:
+		default:
+			if (CurrentCharacter == Characters_Sonic && !Vanilla)
+			{
+				LoadSetFile(0, "0203");
+				CurrentLevelLayout = Mission1_Variation;
+			}
+			else
+			{
+				LoadSetFile(0, "0200");
+			}
+			break;
+		case Mission1_Variation:
+			if (CurrentCharacter == Characters_Gamma && !Vanilla)
+			{
+				LoadSetFile(0, "0200");
+				CurrentLevelLayout = Mission1;
+			}
+			else
+			{
+				LoadSetFile(0, "0203");
+			}
+			break;
 		}
-		else
-		{
-			LoadSetFile(0, "0200");
-		}
-		break;
-	case Mission1_Variation:
-		if (CurrentCharacter == Characters_Gamma && !Vanilla)
-		{
-			LoadSetFile(0, "0200");
-			CurrentLevelLayout = Mission1;
-		}
-		else
-		{
-			LoadSetFile(0, "0203");
-		}
-		break;
 	}
 
 	LoadSetFile(1, "0201");
 
 	if (CurrentAct == 2)
 	{
+		isTailsVersion = true;
+
+		switch (CurrentLevelLayout)
+		{
+		case Mission1:
+		default:
+			Race = true;
+			break;
+		case Mission2_100Rings:
+		case Mission3_LostChao:
+			Race = false;
+			CurrentLevelLayout = Mission2_100Rings;
+			break;
+		}
+
+		LoadSetFile(0, "0200");
+		LoadSetFile(1, "0201");
 		LoadSetFile(2, "0206");
-		Race = true;
+		
 	}
 	else
 	{

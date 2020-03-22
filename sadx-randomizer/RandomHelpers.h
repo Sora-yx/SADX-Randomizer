@@ -3,17 +3,19 @@
 
 extern struct RandomizedEntry randomizedSets[40];
 
-uint8_t getRandomCharacter(bool allow_duplicate = false);
-short getRandomStage(uint8_t char_id, bool ban_regular = false);
+uint8_t getRandomCharacter();
+short getRandomStage(uint8_t char_id);
 short getRandomMusic(RandomizedEntry entry);
 bool isStageBanned(uint8_t char_id, short stage_id);
 bool isDuplicateStage(short stage_id, short prev_stage_id);
 bool isVanillaStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
+bool CheckPrevCharacter(int8_t Cur_Chara);
 bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
+
 void AIAudioFixes();
 
 void FixRMLava();
@@ -34,6 +36,8 @@ extern bool Vanilla;
 extern bool CustomVoices;
 extern int ban;
 extern bool Missions;
+extern bool SA2M2;
+extern bool SA2M3;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
@@ -43,6 +47,7 @@ extern char StorySplits;
 extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
+int IsSA2MissionAllowed();
 
 
 struct RandomizedEntry
@@ -138,6 +143,7 @@ extern char stage;
 extern char act;
 extern char SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
+extern bool RNGVoices;
 
 extern int character[6];
 extern int CharacterCopy;
@@ -152,7 +158,9 @@ extern bool isAIAllowed;
 
 extern bool TPAmyVersion;
 extern bool TPBigVersion;
-extern bool SHTailsVersion;
+extern short SHTailsVersion;
+extern bool isKnucklesVersion;
+extern bool isTailsVersion;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -226,6 +234,7 @@ void CustomFlagCheck(); //sa2 style
 void DeleteCustomFlag();
 
 void CancelResetPosition();
+void SA2VoicesCheck();
 
 void LoadZero();
 void Set_Zero();
@@ -290,12 +299,10 @@ VoidFunc(LoadSplines, 0x49c1a0);
 
 bool isRaceLevel();
 void SetAIRaceWin();
-void replaceRacePVM();
 void FixRaceResult();
 DataPointer(char, ChaoGardenSSWarpOpen, 0x3B188BF);
 DataPointer(char, ChaoGardenECWarpOpen, 0x3B188C0);
 DataPointer(char, ChaoGardenMRWarpOpen, 0x3B188C1);
-bool BannedCriticalStage(short stage_id, uint8_t char_id);
 
 DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
@@ -345,7 +352,6 @@ DataPointer(char, KnuxEmerald2, 0x3C52B48);
 DataPointer(char, KnuxCheck2, 0x3c52bd8);
 void SetRNGKnuckles();
 void RestoreRNGValueKnuckles();
-
 
 
 DataPointer(char, TCQuit, 0x3c5d518);
@@ -403,3 +409,4 @@ extern int TotalDeathsPB;
 extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
+extern int SeedCopy;

@@ -166,7 +166,7 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	ReplaceCAM("CAM1005S", "CAM1005S");
 
 	
-	helperFunctions.RegisterStartPosition(Characters_Sonic, FE1_StartPositions[0]);
+	//helperFunctions.RegisterStartPosition(Characters_Sonic, FE1_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET1000M", "Tails-FE-Act1");

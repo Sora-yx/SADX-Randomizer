@@ -23,7 +23,7 @@ void IceBomb_Load_r(ObjectMaster* obj) {
 	target->Data1->CharID = 1;
 }
 
-int Chaos6_ReturnCharacter() { //trick the game to make it think we are playing Sonic or Knuckles.
+int Chaos6_ReturnCharacter() { 
 
 	if (CurrentCharacter == Characters_Sonic && CurrentAct == 0 || CurrentCharacter == Characters_Knuckles && CurrentAct == 1 || CurrentCharacter == Characters_Big && Vanilla && CurrentAct == 0)
 		return GetCurrentCharacterID();
@@ -39,7 +39,7 @@ void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunction
 {
 	//Initiliaze data
 
-	//Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
+	//trick the game to make it think we are playing Sonic or Knuckles, Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
 	WriteCall((void*)0x55a17d, Chaos6_ReturnCharacter);
 	WriteCall((void*)0x557a5f, Chaos6_ReturnCharacter);
 	WriteCall((void*)0x557b32, Chaos6_ReturnCharacter);
