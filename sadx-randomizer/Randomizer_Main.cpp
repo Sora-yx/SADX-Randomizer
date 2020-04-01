@@ -744,11 +744,11 @@ void SA2VoicesCheck() {
 	{
 		std::ofstream ConfigFile("RandoConfig.txt");
 
-		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract the mod folder in your SADX mod folder to install it.)", "SADX Randomizer", MB_YESNO);
+		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract the mod folder in your SADX mod folder, then check it on your mod list.)", "SADX Randomizer", MB_YESNO);
 		switch (msgboxID)
 		{
 		case IDYES:
-			ShellExecute(0, 0, L"https://mega.nz/#!bQ1RkbrZ!VvbiuBWHcEv4Ad-2cUu6vxRX4reOznzI-4vm-jnfqLY", 0, 0, SW_SHOW);
+			ShellExecute(0, 0, L"https://gamebanana.com/dl/453829", 0, 0, SW_SHOW);
 			ConfigFile << "Sa2Voices=1";
 			ConfigFile.close();
 			Exit();

@@ -214,7 +214,7 @@ void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFu
 
 void CreditsNewList();
 void Credits_StatsDelayOnFrames();
-void Credits_StartupInit();
+void Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions);
 void Race_Init();
 void MissionResultCheck();
 void DisplayRandoInformation();
@@ -297,7 +297,7 @@ DataPointer(char, FirstHotShelterSwitch, 0x3c72a40);
 VoidFunc(Reset_HotShelterSwitch, 0x59a1b0);
 VoidFunc(LoadSplines, 0x49c1a0);
 
-bool isRaceLevel();
+void RaceResultCheck(ObjectMaster* a1);
 void SetAIRaceWin();
 void FixRaceResult();
 DataPointer(char, ChaoGardenSSWarpOpen, 0x3B188BF);

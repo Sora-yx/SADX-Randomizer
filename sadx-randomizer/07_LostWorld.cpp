@@ -11,7 +11,7 @@ void Cam_LW() {
 
 	LoadCamFile(0, "0700");
 
-	if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 1 && TreasureHunting)
+	if (CurrentAct == 1 && (TreasureHunting || isKnucklesVersion))
 		LoadCamFile(1, "0704");
 	else
 		LoadCamFile(1, "0701");
@@ -25,11 +25,10 @@ void Cam_LW() {
 void LW_Layout() {
 
 	LoadSetFile(0, "0700");
+	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct != 1)
 	{
-		CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-		
 		switch (CurrentLevelLayout)
 		{
 		case Mission1:
@@ -48,22 +47,22 @@ void LW_Layout() {
 	}
 	else
 	{
+		isKnucklesVersion = true;
+
 		switch (CurrentLevelLayout)
 		{
-			isKnucklesVersion = true;
-
-		default:
-		case Mission1:
-			CurrentLevelLayout = Mission1_Variation;
-			TreasureHunting = true;
-			LoadSetFile(1, "0704"); //Knux Treasure Hunting
-			SetRNGKnuckles();
-			break;
-		case Mission2_100Rings:
-		case Mission3_LostChao:
-			LoadSetFile(1, "0704"); //Knux 
-			CurrentLevelLayout = Mission2_100Rings;
-			break;
+			default:
+			case Mission1:
+				CurrentLevelLayout = Mission1_Variation;
+				TreasureHunting = true;
+				LoadSetFile(1, "0704"); //Knux Treasure Hunting
+				SetRNGKnuckles();
+				break;
+			case Mission2_100Rings:
+			case Mission3_LostChao:
+				LoadSetFile(1, "0705"); //Knux M2
+				CurrentLevelLayout = Mission2_100Rings;
+				break;
 		}
 
 	}
@@ -116,6 +115,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceSET("SET0702S", "Sonic-LW-Act3");
 	ReplaceSET("SET0703S", "Sonic-LW-Chao");
 	ReplaceSET("SET0704S", "Sonic-LW-Knux");
+	ReplaceSET("SET0705S", "Sonic-LW-KnuxR");
 
 	ReplaceCAM("CAM0700S", "CAM0700S");
 	ReplaceCAM("CAM0701S", "CAM0701S");
@@ -128,6 +128,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceSET("SET0702M", "Tails-LW-Act3");
 	ReplaceSET("SET0703M", "Tails-LW-Chao");
 	ReplaceSET("SET0704M", "Tails-LW-Knux");
+	ReplaceSET("SET0705M", "Tails-LW-KnuxR");
 
 	ReplaceCAM("CAM0700M", "CAM0700M");
 	ReplaceCAM("CAM0701M", "CAM0701M");
@@ -143,6 +144,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceSET("SET0702K", "Knux-LW-Act3");
 	ReplaceSET("SET0703K", "Knux-LW-Chao");
 	ReplaceSET("SET0704K", "Knux-LW-Knux");
+	ReplaceSET("SET0705K", "Knux-LW-KnuxR");
 
 	ReplaceCAM("CAM0700K", "CAM0700K");
 	ReplaceCAM("CAM0701K", "CAM0701K");
@@ -155,9 +157,10 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	//Amy
 	ReplaceSET("SET0700A", "Amy-LW-Act1");
 	ReplaceSET("SET0701A", "Amy-LW-Act2");
-	ReplaceSET("system\\SET0702A", "Amy-LW-Act3");
-	ReplaceSET("system\\SET0703A", "Amy-LW-Chao");
-	ReplaceSET("system\\SET0704A", "Amy-LW-Knux");
+	ReplaceSET("SET0702A", "Amy-LW-Act3");
+	ReplaceSET("SET0703A", "Amy-LW-Chao");
+	ReplaceSET("SET0704A", "Amy-LW-Knux");
+	ReplaceSET("SET0705A", "Amy-LW-KnuxR");
 
 	ReplaceCAM("CAM0700A", "CAM0700A");
 	ReplaceCAM("CAM0701A", "CAM0701A");
@@ -173,6 +176,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceSET("SET0702B", "Big-LW-Act3");
 	ReplaceSET("SET0703B", "Big-LW-Chao");
 	ReplaceSET("SET0704B", "Big-LW-Knux");
+	ReplaceSET("SET0705B", "Big-LW-KnuxR");
 
 	ReplaceCAM("CAM0700B", "CAM0700B");
 	ReplaceCAM("CAM0701B", "CAM0701B");
@@ -188,6 +192,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceSET("SET0702E", "Gamma-LW-Act3");
 	ReplaceSET("SET0703E", "Gamma-LW-Chao");
 	ReplaceSET("SET0704E", "Gamma-LW-Knux");
+	ReplaceSET("SET0705E", "Gamma-LW-KnuxR");
 
 	ReplaceCAM("CAM0700B", "CAM0700B");
 	ReplaceCAM("CAM0701B", "CAM0701B");

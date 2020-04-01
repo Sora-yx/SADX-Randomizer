@@ -29,50 +29,16 @@ int IsFastSonicAI_R() {
 }
 
 
-bool isRaceLevel() {
+void RaceResultCheck(ObjectMaster* a1) {
 
-	if (Race)
+	ObjectMaster* play1 = GetCharacterObject(0);
+	EntityData1* v1 = a1->Data1;
+
+	if (Race && !isAIActive)
 	{
-		switch (CurrentLevel)
-		{
-		case LevelIDs_WindyValley:
-			if (CurrentAct == 2)
-				return true;
-			else
-				return false;
-			break;
-		case LevelIDs_SpeedHighway:
-			if (CurrentAct == 0)
-				return true;
-			else
-				return false;
-			break;
-		case LevelIDs_IceCap:
-			if (CurrentAct == 2)
-				return true;
-			else
-				return false;
-			break;
-		case LevelIDs_SkyDeck:
-			if (CurrentAct == 0)
-				return true;
-			else
-				return false;
-			break;
-		case LevelIDs_Casinopolis:
-			if (CurrentAct == 1)
-				return true;
-			else
-				return false;
-			break;
-		default:
-			return false;
-			break;
-		}
-
+		if (play1->Data1->CharID != Characters_Tails && IsSpecificPlayerInSphere(&v1->Position, 22, 1))
+			SetAIRaceWin();
 	}
-
-	return false;
 }
 
 void SetAIRaceWin() {

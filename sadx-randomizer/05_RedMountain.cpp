@@ -55,6 +55,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502S", "Sonic-RM-Act3");
 	ReplaceSET("SET0503S", "Sonic-RM-E102");
 	ReplaceSET("SET0504S", "Sonic-RM-Chao");
+	ReplaceSET("SET0505S", "Sonic-Rm-Act3R");
 
 	ReplaceCAM("CAM0500S", "CAM0500S");
 	ReplaceCAM("CAM0501S", "CAM0501S");
@@ -69,6 +70,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502M", "Tails-RM-Act3");
 	ReplaceSET("SET0503M", "Tails-RM-E102");
 	ReplaceSET("SET0504M", "Tails-RM-Chao");
+	ReplaceSET("SET0505M", "Tails-RM-Act3R");
 
 	ReplaceCAM("CAM0500M", "CAM0500M");
 	ReplaceCAM("CAM0501M", "CAM0501M");
@@ -85,6 +87,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502K", "Knux-RM-Act3");
 	ReplaceSET("SET0503K", "Knux-RM-E102");
 	ReplaceSET("SET0504K", "Knux-RM-Chao");
+	ReplaceSET("SET0505K", "Knux-RM-Act3R");
 
 	ReplaceCAM("CAM0500K", "CAM0500K");
 	ReplaceCAM("CAM0501K", "CAM0501K");
@@ -100,6 +103,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502A", "Amy-RM-Act3");
 	ReplaceSET("SET0503A", "Amy-RM-E102");
 	ReplaceSET("SET0504A", "Amy-RM-Chao");
+	ReplaceSET("SET0505A", "Amy-RM-Act3R");
 
 	ReplaceCAM("CAM0500A", "CAM0500A");
 	ReplaceCAM("CAM0501A", "CAM0501A");
@@ -116,6 +120,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502B", "Big-RM-Act3");
 	ReplaceSET("SET0503B", "Big-RM-E102");
 	ReplaceSET("SET0504B", "Big-RM-Chao");
+	ReplaceSET("SET0505B", "Big-RM-Act3R");
 
 	ReplaceCAM("CAM0500B", "CAM0500B");
 	ReplaceCAM("CAM0501B", "CAM0501B");
@@ -132,6 +137,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0502E", "Gamma-RM-Act3");
 	ReplaceSET("SET0503E", "Gamma-RM-E102");
 	ReplaceSET("SET0504E", "Gamma-RM-Chao");
+	ReplaceSET("SET0505E", "Gamma-RM-Act3R");
 
 	ReplaceCAM("CAM0500E", "CAM0500E");
 	ReplaceCAM("CAM0501E", "CAM0501E");
@@ -184,6 +190,8 @@ void RedMountain_Layout() {
 
 	if (CurrentAct == 2)
 	{
+		isKnucklesVersion = true;
+
 		switch (CurrentLevelLayout)
 		{
 		default:
@@ -191,21 +199,23 @@ void RedMountain_Layout() {
 		case Mission1_Variation:
 			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0501");
+			LoadSetFile(2, "0502"); //load Knux version
 			CurrentLevelLayout = Mission1_Variation;
 			TreasureHunting = true;
 			SetRNGKnuckles();
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
+			TreasureHunting = false;
 			LoadSetFile(0, "0500");
 			LoadSetFile(1, "0501");
+			LoadSetFile(2, "0505"); //load Knux version
 			CurrentLevelLayout = Mission2_100Rings;
 			break;
 		}
 	}
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
-	LoadSetFile(2, "0502"); //load Knux version
 	CamRedMountain();
 	return;
 

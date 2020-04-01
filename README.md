@@ -10,7 +10,7 @@ Note about Dreamcast Conversion mod: DC mod is now fully compatible with Randomi
 Download
 --------
 
-Download the latest release from the [releases page](https://github.com/Sora-yx/SADX-Randomizer/releases).
+Download the latest release from the [releases page](https://github.com/Sora-yx/SADX-Super-Tails/releases).
 
 Installation:
 --------

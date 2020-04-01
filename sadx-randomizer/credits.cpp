@@ -4,6 +4,7 @@
 #include "Credits.h"
 using namespace std;
 #include <string.h>
+#define ReplacePVM(C, D) helperFunctions.ReplaceFile("system\\" C ".pvm", "system\\Textures\\" D ".pvmx")
 
 extern int CustomFlag;
 extern bool CreditCheck;
@@ -793,8 +794,9 @@ void FinalStat() {
 	}
 }
 
-void Credits_StartupInit() {
+void __cdecl Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions) {
 
+	ReplacePVM("ENDBG_SONIC_0", "ENDBG_SONIC_0_HD");
 	//Credits
 	WriteCall((void*)0x641aef, CreditFlag);
 	HookStats_Inits();

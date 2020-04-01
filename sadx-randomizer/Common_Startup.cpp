@@ -259,7 +259,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	WriteCall((void*)0x416b7a, TrialModeQuit_R); //Reset value and stuff properly when you Quit Trial Mode
 	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
 
-	Credits_StartupInit();
+	Credits_StartupInit(path, helperFunctions);
 }
 
 
@@ -297,7 +297,9 @@ void Set_MusicVoices() {
 
 		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
 		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
-		WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
+
+		if (!isCriticalMode)
+			WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
 		
 		WriteCall((void*)0x6ad292, RandomMusic); //Fix cutscene amy intro crash (wtf)
 	}
