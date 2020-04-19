@@ -15,7 +15,7 @@ bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
-
+bool CheckPrevLevel(short stage_id);
 void AIAudioFixes();
 
 void FixRMLava();
@@ -33,7 +33,6 @@ void RandomizeStages_Hook();
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Vanilla;
-extern bool CustomVoices;
 extern int ban;
 extern bool Missions;
 extern bool SA2M2;
@@ -48,6 +47,9 @@ extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
 int IsSA2MissionAllowed();
+HelperFunctions extern help;
+
+
 
 
 struct RandomizedEntry
@@ -133,8 +135,6 @@ ObjectFunc(SDCannonS1, 0x5f9710);
 ObjectFunc(SDCannonS2, 0x5f8e00);
 void FixInvisibleWall();
 
-void E101Target();
-void SetCamera();
 
 extern int level[23];
 extern int AIArray[4];
@@ -320,7 +320,9 @@ DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
 DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
 DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
-void AI_Init();
+
+void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config);
+void Hud_DisplayOnframe();
 int CheckTailsAI_R(void);
 int DisplayTitleCard_r();
 void LoadStageMissionImage_r();
@@ -340,7 +342,7 @@ void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
 void GotoNextLevel_RngLess(char stage, char act);
 
-
+void TestRandomCutscene();
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
@@ -356,10 +358,11 @@ void RestoreRNGValueKnuckles();
 
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
-
+DataPointer(char, SonicChaos4Flag, 0x3B188B9);
 DataPointer(char, AdventureDataChaos4, 0x3B183AA);
 DataPointer(char, AdventureDataChaos4Post, 0x3B183AE);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
+FunctionPointer(void, CameraSetEventCamera, (short a1, unsigned char a2), 0x437bf0);
 
 FunctionPointer(void, StartCutscene, (int flag), 0x4136e0);
 FunctionPointer(void, StartCutscene2, (int flag), 0x52e6c0);
@@ -398,7 +401,7 @@ void fixTCCart();
 void preventCutscene();
 
 extern int RageQuit;
-extern int JumpCount;
+extern int JumpPB;
 extern int ringsPB;
 extern int chaoPB;
 extern int animalPB;

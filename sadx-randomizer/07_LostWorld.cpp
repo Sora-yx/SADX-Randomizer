@@ -76,13 +76,18 @@ void LW_Layout() {
 bool isPlayerInWaterSlide = false;
 
 void FixLWWaterSlide() {
+	ObjectMaster* P1 = GetCharacterObject(0);
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
 		isPlayerInWaterSlide = true;
 
-	return ForcePlayerAction(0, 0x17);
+	if (CurrentCharacter == Characters_Sonic && P1->Data1->CharID == Characters_Sonic)
+		return ForcePlayerAction(0, 0x17);
+	else
+		return;
 }
 
 void FixLWWaterSlide2() {
+
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
 		isPlayerInWaterSlide = false;
 
@@ -103,6 +108,7 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	WriteData<5>((void*)0x422e34, 0x90);
 
 	WriteCall((void*)0x422e43, LW_Layout);
+	
 
 	WriteCall((void*)0x5e3408, FixLWWaterSlide2);
 	WriteCall((void*)0x5e37fa, FixLWWaterSlide);

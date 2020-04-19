@@ -14,7 +14,7 @@ void SuperAuraStuff();
 void LoadTails_AI_R();
 void LoadTails_AI_Original(); //Normal AI (Tails Only)
 
-
+void ShowActionButton();
 VoidFunc(PushMSIcon, 0x425e6d);
 VoidFunc(CharSel_LoadThing, 0x512bc0);
 

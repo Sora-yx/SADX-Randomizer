@@ -2,6 +2,7 @@
 #include "ActsSettings.h"
 #include "RandomHelpers.h"
 #include "CharactersSettings.h"
+#include "sound.h"
 #include "Trampoline.h"
 #include <fstream>
 
@@ -12,6 +13,104 @@ int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
 int CurrentAI = -1;
+
+static float ActionButtonAlpha = 0;
+static bool ActionButtonActive = false;
+
+NJS_TEXNAME Hud_Rando_TEXNAMES[4];
+NJS_TEXLIST Hud_Rando_TEXLIST = { arrayptrandlength(Hud_Rando_TEXNAMES) };
+PVMEntry Hud_Rando = { "hud_rando", &Hud_Rando_TEXLIST };
+
+enum RandoHudTextures {
+	CmnHudTex_SA2ActionBody,
+	CmnHudTex_SA2ActionButton,
+	CmnHudTex_SA2Action,
+};
+
+enum RandoHudSprites {
+
+	CmnHudSprite_SA2ActionBody,
+	CmnHudSprite_SA2ActionButton,
+	CmnHudSprite_SA2Action,
+	
+};
+
+NJS_TEXANIM	Hud_Rando_TEXANIM[]{
+	{ 0x40, 0x28, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
+	{ 0x30, 0x30, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
+	{ 0x70, 0x21, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
+};
+
+
+
+NJS_SPRITE HUD_Rando_SPRITE = { { 0, 0, 0 }, 1.0, 1.0, 0, &Hud_Rando_TEXLIST, Hud_Rando_TEXANIM };
+
+void ShowActionButton() {
+	ActionButtonActive = true;
+}
+
+void Hud_ShowActionButton() {
+	if (!IsGamePaused()) {
+		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
+			ActionButtonActive = false;
+		}
+		else
+			ShowActionButton();
+
+		if (ActionButtonActive == true) {
+			ActionButtonActive = false;
+			if (ActionButtonAlpha < 1) ActionButtonAlpha += 0.1f;
+		}
+		else if (ActionButtonAlpha <= 0) {
+			return;
+		}
+		else {
+			if (ActionButtonAlpha > 0) ActionButtonAlpha -= 0.2f;
+		}
+	}
+	else {
+		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
+		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
+
+		if (ActionButtonActive == false && ActionButtonAlpha <= 0) {
+			return;
+		}
+	}
+
+		HUD_Rando_SPRITE.p.y = 70;
+		HUD_Rando_SPRITE.p.x = 1800;
+
+		HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
+		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
+		HUD_Rando_SPRITE.sx = 1;
+
+		HUD_Rando_SPRITE.p.y = 70;
+		HUD_Rando_SPRITE.p.x = 1870;
+		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
+
+		HUD_Rando_SPRITE.p.y = 70;
+		HUD_Rando_SPRITE.p.x = 1800;
+
+		if (ActionButtonAlpha >= 1) {
+			njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2Action, -1.501, NJD_SPRITE_ALPHA);
+		}
+}
+
+
+
+void Hud_DisplayOnframe() {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+
+	if (GameState == 15 && isAIActive && isAIAllowed)
+	{
+		if (P1 != nullptr && (P1->Data1->Action == 1 || P1->Data1->Action == 2))
+			Hud_ShowActionButton();
+	}
+}
+
+
+
 
 //This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
 
@@ -685,10 +784,7 @@ void AISwitch() {
 						LoadSoundList(62);
 					else
 					{
-						if (CustomVoices)
-							PlayVoice_R(4000);
-						else
-							PlayVoice(4000);
+						PlayCustomSound(CommonSound_SonicSwap);
 						LoadSoundList(1);
 					}
 
@@ -698,16 +794,10 @@ void AISwitch() {
 						LoadSoundList(71);
 					break;
 				case Characters_Eggman:
-					if (CustomVoices)
-						PlayVoice_R(4005);
-					else
-						PlayVoice(4005);
+						PlayCustomSound(CommonSound_EggmanSwap);
 					break;
 				case Characters_Tails:
-					if (CustomVoices)
-						PlayVoice_R(4001);
-					else
-						PlayVoice(4001);
+					PlayCustomSound(CommonSound_TailsSwap);
 					LoadSoundList(1);
 					if (VoiceLanguage)
 						LoadSoundList(72);
@@ -715,10 +805,7 @@ void AISwitch() {
 						LoadSoundList(71);
 					break;
 				case Characters_Knuckles:
-					if (CustomVoices)
-						PlayVoice_R(4002);
-					else
-						PlayVoice(4002);
+					PlayCustomSound(CommonSound_KnuxSwap);
 					LoadSoundList(49);
 					if (VoiceLanguage)
 						LoadSoundList(70);
@@ -726,10 +813,7 @@ void AISwitch() {
 						LoadSoundList(69);
 					break;
 				case Characters_Amy:
-					if (CustomVoices)
-						PlayVoice_R(4003);
-					else
-						PlayVoice(4003);
+					PlayCustomSound(CommonSound_AmySwap);
 					LoadSoundList(46);
 					if (VoiceLanguage)
 						LoadSoundList(64);
@@ -833,6 +917,8 @@ void LoadTails_AI_Original() {
 	return;
 }
 
+
+
 void AIAudioFixes() {
 	WriteCall((void*)0x5cf22f, FixShowerCasino); //Prevent crash after chara swap
 
@@ -881,7 +967,7 @@ void AI_FixesOnFrames() {
 	}
 }
 
-void AI_Init() {
+void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config) {
 
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 
@@ -893,6 +979,7 @@ void AI_Init() {
 		WriteCall((void*)0x47ec62, CheckTailsAI_R);
 		WriteJump((void*)0x47db1a, AI_ResetValue);
 		AIAudioFixes();
+		helperFunctions.RegisterCommonObjectPVM(Hud_Rando);
 	}
 
 }

@@ -16,6 +16,24 @@
     <Filter Include="Source Files\Extern">
       <UniqueIdentifier>{5f73c06c-ecf3-4d29-af9d-438bec08a864}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Levels">
+      <UniqueIdentifier>{076dc3ee-24e8-4099-8dfe-0823b09826f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bosses">
+      <UniqueIdentifier>{c84bacf2-c1ae-4d61-93c5-baa0db5910e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\audio">
+      <UniqueIdentifier>{0077a616-1950-4ac4-ac70-b5646e742585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Levels">
+      <UniqueIdentifier>{ccfb8573-465f-4092-8db6-cb005d18da02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bosses">
+      <UniqueIdentifier>{3ee3d96b-983a-4c74-861e-c0ec02a625e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\audio">
+      <UniqueIdentifier>{42fb1989-ff56-40bc-b617-d742f43d7989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mod.cpp">
@@ -36,16 +54,10 @@
     <ClCompile Include="CharactersSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="01_EmeraldCoast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Common_Startup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="credits.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="02_WindyValley.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Race.cpp">
@@ -57,73 +69,13 @@
     <ClCompile Include="StageSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EggViper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="10_FinalEgg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Chao.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="12_HotShelter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EggHornet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EggWalker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Zero.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chaos6.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chaos2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chaos0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AdventureFlags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SandHill.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="09_Casino.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="03_TwinklePark.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="08_IceCap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="06_SkyDeck.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="05_RedMountain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="04_SpeedHighway.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="07_LostWorld.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PerfectChaos.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="e101.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Randomizer_Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="00_HedgehogHammer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Missions.cpp">
@@ -132,72 +84,84 @@
     <ClCompile Include="BackRing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Chaos4.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="00_HedgehogHammer.cpp">
+      <Filter>Source Files\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="CriticalMode.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="01_EmeraldCoast.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="02_WindyValley.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="03_TwinklePark.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="04_SpeedHighway.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="05_RedMountain.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="06_SkyDeck.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="07_LostWorld.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="08_IceCap.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="09_Casino.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="10_FinalEgg.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="12_HotShelter.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaos0.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaos2.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaos4.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaos6.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="e101.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="EggHornet.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="EggViper.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="EggWalker.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="Zero.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfectChaos.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
+    <ClCompile Include="SandHill.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\ActsSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\Casino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\Chaos0.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\Chaos2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\Chaos6.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\CharactersSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\EggHornet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\EggViper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\EggWalker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\EmeraldCoast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\FE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\HS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\IceCap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\LW.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\RM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\SD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\SH.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\TP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\WindyValley.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\Zero.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RandomHelpers.h">
@@ -206,17 +170,77 @@
     <ClInclude Include="data\chao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\SandHill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Credits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StageSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\chaos4.h">
+    <ClInclude Include="Cutscene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Casino.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\EggHornet.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\EggViper.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\EggWalker.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Chaos6.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Chaos2.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Chaos0.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\chaos4.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Zero.h">
+      <Filter>Header Files\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="data\EmeraldCoast.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\FE.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\HS.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\LW.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\SD.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\SH.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\SandHill.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\RM.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\IceCap.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\WindyValley.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\TP.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Header Files\audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

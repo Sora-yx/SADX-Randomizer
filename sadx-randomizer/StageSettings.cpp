@@ -36,7 +36,6 @@ extern bool CasinoTails;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-
 	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
 		GameMode = GameModes_Adventure_Field; //fix game crash
 
@@ -94,6 +93,8 @@ void DisableTimeStuff() {
 	Race = false;
 	return;
 }
+
+
 
 
 void SetResultsCamera()
@@ -687,13 +688,12 @@ void RestoreRNGValueKnuckles() {
 }
 
 bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
-	return (powf(pos->x - center->x, 2) + pow(pos->y - center->y, 2) + pow(pos->z - center->z, 2)) <= pow(radius, 2);
+	return GetDistance(center, pos) <= radius;
 }
 
 int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius) {
 	for (uint8_t player = 0; player < 8; ++player) {
-		if (!EntityData1Ptrs[player])
-			continue;
+		if (!EntityData1Ptrs[player]) continue;
 
 		NJS_VECTOR* pos = &EntityData1Ptrs[player]->Position;
 		if (IsPointInsideSphere(center, pos, radius)) {
@@ -704,13 +704,10 @@ int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius) {
 	return 0;
 }
 
-
 bool IsSpecificPlayerInSphere(NJS_VECTOR* center, float radius, uint8_t player) {
-	if (IsPlayerInsideSphere_(center, radius) == player + 1)
-		return true;
-	else
-		return false;
+	return IsPlayerInsideSphere_(center, radius) == player + 1;
 }
+
 
 
 /*Trampoline PlayEmeraldGrabVoice_T(0x474f50, 0x474f55, PlayEmeraldGrabVoice_R);
@@ -777,21 +774,6 @@ void TwinkleCircuitResult() {
 	GameState = 0x5;
 }
 
-void SetCamera() {
-	if (CurrentLevel >= LevelIDs_RedMountain && CurrentLevel <= LevelIDs_HotShelter)
-	{
-		FreeCam = 1;
-		camera_flags = 1;
-		SetCameraMode_(FreeCam);
-	}
-
-	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_SpeedHighway)
-	{
-		FreeCam = 0;
-		camera_flags = 0;
-		SetCameraMode_(FreeCam);
-	}
-}
 
 //Create an object so Gamma can hit some specific bosses.
 CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };

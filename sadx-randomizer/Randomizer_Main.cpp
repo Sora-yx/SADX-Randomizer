@@ -26,7 +26,7 @@ bool isTailsVersion = false;
 
 //Credits stats
 int RageQuit = 0;
-int JumpCount = 0;
+int JumpPB = 0;
 int ringsPB = 0;
 int chaoPB = 0;
 int animalPB = 0;
@@ -80,7 +80,7 @@ short getRandomStage(uint8_t char_id) {
 	do {
 		cur_stage = level[rand() % LengthOfArray(level)];
 
-	} while (cur_stage == prev_stage || isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || isDuplicateStage(cur_stage, prev_stage));
+	} while (CheckPrevLevel(cur_stage) || cur_stage == prev_stage || isVanillaStageBanned(char_id, cur_stage) || isStageBanned(char_id, cur_stage) || isDuplicateStage(cur_stage, prev_stage));
 
 	prev_stage = cur_stage;
 	return cur_stage;
@@ -127,6 +127,7 @@ bool isVanillaStageBanned(uint8_t char_id, short stage_id) {
 }
 
 
+
 bool isStageBanned(uint8_t char_id, short stage_id) {
 
 	if (isCriticalMode) {
@@ -135,6 +136,7 @@ bool isStageBanned(uint8_t char_id, short stage_id) {
 		case LevelIDs_Zero:
 		case LevelIDs_EggViper:
 		case LevelIDs_EggWalker:
+		case LevelIDs_Chaos6:
 			if (char_id >= Characters_Gamma)
 				return true;
 			break;
@@ -168,6 +170,7 @@ bool isDuplicateStage(short stage_id, short prev_stage_id)
 {
 	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R && prev_stage_id >= LevelIDs_Chaos0 && prev_stage_id <= LevelIDs_E101R)
 		return true;
+
 
 	short trick = 0;
 
@@ -393,6 +396,8 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 	int cur_AI = -1;
 	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
 
+	HMODULE IsSuperTailsMod = GetModuleHandle(L"super-tails");
+
 	if (char_id == Characters_Knuckles || char_id >= Characters_Gamma)
 		return -1;
 
@@ -401,7 +406,7 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 
 	do {
 		cur_AI = AIArray[rand() % ai_count];
-	} while (cur_AI == prev_AI || cur_AI == char_id);
+	} while (cur_AI == prev_AI || cur_AI == char_id || IsSuperTailsMod && (char_id == Characters_Tails && cur_AI != Characters_Sonic) || (char_id != Characters_Sonic && cur_AI == Characters_Tails));
 
 	prev_AI = cur_AI;
 	return cur_AI;
@@ -499,8 +504,6 @@ void SetRandomStageAct(char stage, char act) {
 			GetCustomLayout = 0;
 			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 			CurrentAct = randomizedSets[levelCount].act;
-
-			SetCamera();
 			
 			levelCount++;
 
@@ -526,7 +529,6 @@ void SetRandomStageAct(char stage, char act) {
 
 void GoToNextLevel_hook(char stage, char act) {
 
-	
 	if (isGameOver) //do not randomize stage / character
 	{
 		SetLevelAndAct(Uint8(stage), (Uint8)(act)); 
@@ -570,8 +572,6 @@ void GoToNextLevel_hook(char stage, char act) {
 			CurrentAct = randomizedSets[levelCount].act;
 			levelCount++;
 		}
-
-		SetCamera();
 
 		if (levelCount == TotalCount)
 			Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.
@@ -948,17 +948,20 @@ void Reset_PrevLevel() {
 
 }
 
-bool CheckPrevLevel(short stage_id, short cur_act) {
+bool CheckPrevLevel(short stage_id) {
 
-	if (stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_Zero)
-		return false;
-
-	uint16_t levelact = (((short)stage_id) << 8) | cur_act;
-
+	uint16_t levelact = stage_id;
+	short trick = 0;
 	for (int i = 0; i < 100; i++)
 	{
 		if (levelact == PrevLevelAndAct[i])
-			return true;
+		{
+			trick = rand() % 2;
+			if (trick)
+				return true;
+			else
+				return false;
+		}
 		else
 		{
 			if (PrevLevelAndAct[i] == -1)
@@ -975,8 +978,9 @@ bool CheckPrevLevel(short stage_id, short cur_act) {
 
 
 
-
 void Create_NewRNG() {
+
+	bool result = false;
 
 	for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 
@@ -988,6 +992,7 @@ void Create_NewRNG() {
 			randomizedSets[i].level = getRandomStage(randomizedSets[i].character);
 			randomizedSets[i].act = randomacts(randomizedSets[i]);
 		}
+
 
 		randomizedSets[i].MissionLayout = randomMission(randomizedSets[i].level);
 
@@ -1007,7 +1012,7 @@ void Create_NewRNG() {
 			randomizedSets[i].ss_mode = rand() % 2;
 		}
 
-		
+
 		TotalCount++;
 	}
 }

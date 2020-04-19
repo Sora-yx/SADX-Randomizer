@@ -39,3 +39,5 @@ DataPointer(char, byte_3B2A2F1, 0x3B2A2F1);
 ObjectFunc(sub_47D300, 0x47D300);
 FunctionPointer(int, sub_46A820, (), 0x46A820);
 FunctionPointer(int, sub_46A7F0, (), 0x46A7F0);
+
+float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);

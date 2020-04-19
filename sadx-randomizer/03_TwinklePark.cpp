@@ -26,7 +26,6 @@ void FixRCCharacterPosition() {
 }
 
 
-
 void TP_CAM() {
 
 	LoadCamFile(0, "0300");

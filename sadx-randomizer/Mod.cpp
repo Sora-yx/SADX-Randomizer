@@ -5,8 +5,8 @@
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
 #include "Utils.h"
-#include <random>
-#include <ctime>
+#include "sound.h"
+
 
 
 int Seed = 0;
@@ -77,6 +77,7 @@ extern "C" {
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
 		HMODULE CMMode = GetModuleHandle(L"SADX-Critical-Mode");
 
+
 		if (DCMod && !DCLight)
 			DCModWarningTimer = 0; //don't display the DC Warning message if Lantern Engine is missing.
 		else
@@ -115,7 +116,6 @@ extern "C" {
 
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
-		CustomVoices = config->getBool("SongsStuff", "CustomVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
 		SonicCD = config->getInt("SongsStuff", "SonicCD", 0);
 
@@ -137,7 +137,7 @@ extern "C" {
 		isChaoGameplayAllowed = config->getBool("RosterAI", "isChaoGameplayAllowed", false);
 
 		Viper = config->getBool("Difficulty", "Viper", true);
-
+		AI_Init(helperFunctions, config);
 		delete config;
 
 		//ban roster check
@@ -175,7 +175,7 @@ extern "C" {
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();
-		AI_Init();
+		
 
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
@@ -184,8 +184,6 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
-	//	DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", toto);
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -200,14 +198,17 @@ extern "C" {
 		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
 			DisplayRandoInformation();
 
-		//AI fixes
+		//AI Stuff
 		AI_FixesOnFrames();
+		Hud_DisplayOnframe();
 
 		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 		character_settings_onFrames();
 
 		//Credits stat
 		Credits_StatsDelayOnFrames();
+
+		Sounds_OnFrame();
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

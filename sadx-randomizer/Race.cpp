@@ -12,7 +12,7 @@ char CDSong = 0;
 char AIRace = -1;
 bool Race = false;
 extern ObjectFuncPtr charfuncs[];
-HelperFunctions extern help;
+
 
 
 

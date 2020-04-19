@@ -34,7 +34,7 @@ string AISwapCountSTD = "";
 void DeleteCreditStats() {
 
 	RageQuit = 0;
-	JumpCount = 0;
+	JumpPB = 0;
 	ringsPB = 0;
 	chaoPB = 0;
 	animalPB = 0;
@@ -47,10 +47,19 @@ void DeleteCreditStats() {
 
 }
 
+FunctionPointer(long, CanIMakePanelJump, (EntityData1* p1), 0x4b83f0);  
+
+void JumpStat(EntityData1* p1) {
+
+	JumpPB++;
+	CanIMakePanelJump(p1);
+	return;
+}
+
 void DeathsStat() {
-	//Hook used when you lose a live
+	//used when you game over
 	deathsPB++;
-	return GiveLives(0xffffffff);
+	return Set0Rings();
 }
 
 void HurtsStat() {
@@ -73,9 +82,9 @@ void AnimalStat() {
 
 void HookStats_Inits() {
 	WriteCall((void*)0x45072d, HurtsStat);
-	WriteCall((void*)0x416e7d, DeathsStat); //Trial Mode
-	WriteCall((void*)0x417a1f, DeathsStat); //Adventure Mode
-	//WriteJump((void*)0x43bfd8, JumpStat); //doesn't work for now
+	WriteCall((void*)0x416e95, DeathsStat); 
+	WriteCall((void*)0x416f94, DeathsStat); 
+	WriteCall((void*)0x43bf6b, JumpStat); 
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
 }
@@ -682,7 +691,6 @@ void CreditsNewList() {
 	//JumpCountSTD += std::to_string(JumpCount); //Doesn't work for now.
 	HurtsSTD += std::to_string(hurtsPB);
 	AISwapCountSTD += std::to_string(AISwapCount);
-
 	//Credits Stats Display
 	CreditsText_list[7].Line = DeathsSTD.c_str();
 	CreditsText_list[9].Line = RageQuitSTD.c_str();

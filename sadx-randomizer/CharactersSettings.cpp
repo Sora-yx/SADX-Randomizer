@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "ActsSettings.h"
 #include "stdafx.h"
+#include "sound.h"
 #include "data\CharactersSettings.h"
 
 char SonicRand = 0;
@@ -137,7 +138,7 @@ extern bool TreasureHunting;
 
 int GetSSLevelBanned() {
 
-	for (int i = 0; i < sizeof(SSLevel); i++)
+	for (int i = 0; i < LengthOfArray(SSLevel); i++)
 	{
 		if (CurrentLevel == SSLevel[i])
 		{
@@ -294,7 +295,7 @@ void CallStuffWhenLevelStart() {
 	if (CurrentLevel == LevelIDs_E101 && CurrentCharacter != Characters_Gamma)
 		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
-
+	ShowActionButton();
 	fixCharacterSoundAfterReset();
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
@@ -323,7 +324,7 @@ void BigWeightHook() {
 void FixRadarSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)
-		PlayVoice_R(6000);
+		PlayCustomSound(CommonSound_RadarBlink);
 	else
 		PlaySound(0x314, 0, 0, 0);
 
@@ -333,7 +334,7 @@ void FixRadarSFX() {
 void FixEmeraldGetSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)
-		PlayVoice_R(6001);
+		PlayCustomSound(CommonSound_EmeraldGet);
 	else
 		PlaySound(0x313, 0, 0, 0);
 
@@ -343,7 +344,7 @@ void FixEmeraldGetSFX() {
 void FixTikalHintSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)
-		PlayVoice_R(6002);
+		PlayCustomSound(CommonSound_TikalHint);
 	else
 		PlaySound(0x316, 0, 0, 0);
 
@@ -468,6 +469,8 @@ __declspec(naked) void SetKnucklesWinPose()
 		jmp loc_476B62
 	}
 }
+
+
 
 
 void Characters_Management() {

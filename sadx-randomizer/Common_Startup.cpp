@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 #define AddVoices(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\" A ".wma", "system\\voices\\" B ".adx")
+#define AddVoices2(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_jp\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 #define AddMusics(C, D) helperFunctions.ReplaceFile("system\\sounddata\\bgm\\wma\\" C ".wma", "system\\songs\\" D ".adx")
 
 
@@ -185,12 +186,7 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddMusics("SONIC_CD", "SONIC_CD");
 	AddMusics("SSRACING", "SSRACING");
 
-	AddVoices("4000", "SonicHereWeGo"); //Introduce Sonic Switch
-	AddVoices("4001", "TailsLeaveItToMe"); //Introduce Tails Switch
-	AddVoices("4002", "KnuxGotIt"); //Introduce Knux Switch
-	AddVoices("4003", "AmyHereWeGo"); //Introduce Amy Switch
-	AddVoices("4005", "EggmanSwap"); //Introduce Eggman Switch
-
+	//ENGLISH VOICES
 	AddVoices("4010", "BigVictory"); //Add Big Victory Stage voice
 	AddVoices("4011", "BigWouhou"); //Add Big Victory Boss / other voice
 	AddVoices("4012", "EggmanYosh"); //Add Eggman Victory voice
@@ -212,17 +208,33 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 	AddVoices("5022", "bighehe");
 	AddVoices("5023", "gammagetitem");
 
-
-	AddVoices("6000", "RadarBlink");
-	AddVoices("6001", "KnuxEmeraldGet");
-	AddVoices("6002", "TikalHint");
-
 	AddVoices("6010", "ZeroArm");
 	AddVoices("6011", "ZeroHit");
 	AddVoices("6013", "ZeroTarget");
 	AddVoices("6014", "ZeroThink");
 
 	//Use 6050 Here
+
+	//JP VOICES
+	AddVoices2("4010", "BigVictory"); //Add Big Victory Stage voice
+	AddVoices2("4011", "BigWouhou"); //Add Big Victory Boss / other voice
+	AddVoices2("4012", "EggmanYosh"); //Add Eggman Victory voice
+
+	AddVoices2("5000", "Bounce"); //Introduce Sonic bounce sfx
+	AddVoices2("5001", "BackRingHit");
+	AddVoices2("5002", "ChaoCry1");
+	AddVoices2("5003", "ChaoCry2");
+	AddVoices2("5004", "teleport");
+
+	AddVoices2("5010", "Congratulations_Sonic");
+	AddVoices2("5011.", "Congratulations_Tails");
+	AddVoices2("5012", "sCongratulations_Knux");
+	AddVoices2("5013", "Congratulations_Amy");
+
+	AddVoices2("5020", "amyyesyes");
+	AddVoices2("5021", "biggotit");
+	AddVoices2("5022", "bighehe");
+	AddVoices2("5023", "gammagetitem");
 
 	WriteCall((void*)0x45be57, PlayVoice_R);
 

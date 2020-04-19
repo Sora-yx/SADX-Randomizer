@@ -15,4 +15,3 @@ ObjectFunc(EV_Hit, 0x582bc0);
 ObjectFunc(EV_Test, 0x581f90);
 ObjectFunc(EV_DestroyAllPlatforms, 0x57faf0);
 ObjectFunc(EV_DestroyOnePlatform, 0x57fdb0);
-void EggViper_RegularLaser_r(ObjectMaster* obj);

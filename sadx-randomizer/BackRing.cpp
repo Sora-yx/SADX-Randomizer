@@ -33,6 +33,7 @@ FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
 
 bool isBackRingTextureLoaded = false;
 
+//return the current back ring rotation needed for a good display IG
 Sint32 GetBackRing_Rotation() {
 
 	Sint32 Yrot = 0;
