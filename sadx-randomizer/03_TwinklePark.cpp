@@ -6,8 +6,6 @@
 
 //Random Act function
 
-bool TPAmyVersion = false;
-bool TPBigVersion = false;
 
 void FixRollerCoaster() {
 	ObjectMaster* obj = GetCharacterObject(0);
@@ -33,7 +31,7 @@ void TP_CAM() {
 	if (CurrentAct == 0)
 		LoadCamFile(1, "0301");
 		
-	if (CurrentAct == 1 && TPAmyVersion)
+	if (CurrentAct == 1 && CurrentStageVersion == AmyTP)
 		LoadCamFile(1, "0305");
 	else
 		LoadCamFile(1, "0301");
@@ -51,9 +49,6 @@ void TwinklePark_Layout() {
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 	
-	TPAmyVersion = false;
-	TPBigVersion = false;
-
 	LoadSetFile(0, "0300");
 
 	if (CurrentAct == 0)
@@ -89,48 +84,41 @@ void TwinklePark_Layout() {
 			{
 				LoadSetFile(1, "0305"); //Amy TP version
 				CurrentLevelLayout = Mission1_Variation;
-				TPAmyVersion = true;
-				TPBigVersion = false;
+				CurrentStageVersion = AmyTP;
 				break;
 			}
 			else
 			{
 				LoadSetFile(1, "0306"); //Big TP version
-				TPBigVersion = true;
-				TPAmyVersion = false;
+				CurrentStageVersion = BigTP;
 			}
 			break;
 		case Mission1_Variation:
 		default:
 			LoadSetFile(1, "0305"); //Amy TP version
 			CurrentLevelLayout = Mission1_Variation;
-			TPAmyVersion = true;
-			TPBigVersion = false;
+			CurrentStageVersion = AmyTP;
 			break;
 		case Mission2_100Rings:
 		case Mission3_LostChao:
 			if (CurrentCharacter == Characters_Big && !Vanilla)
 			{
 				LoadSetFile(1, "0305"); //Amy TP version
-				TPAmyVersion = true;
-				TPBigVersion = false;
+				CurrentStageVersion = AmyTP;
 				break;
 			}
 			else
 			{
-				short RNGLayoutTP = randomizedSets[levelCount].Layout;
-				if (!RNGLayoutTP)
+				CurrentStageVersion = randomizedSets[levelCount].Layout;
+				if (CurrentStageVersion == BigTP)
 				{
 					LoadSetFile(1, "0306"); //Big TP version
-					TPAmyVersion = false;
-					TPBigVersion = true;
+					CurrentStageVersion = BigTP;
 				}
 				else
 				{
 					LoadSetFile(1, "0305"); //Amy TP version
-					TPAmyVersion = true;
-					TPBigVersion = false;
-	
+					CurrentStageVersion = AmyTP;
 				}
 			}
 			break;

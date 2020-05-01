@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "sound.h"
 #include "data\CharactersSettings.h"
+#include "Trampoline.h"
 
 char SonicRand = 0;
 int TransfoCount = 0;
@@ -132,9 +133,9 @@ static void SuperSonicManager_Load()
 int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
-extern bool TPAmyVersion;
-extern short SHTailsVersion;
+
 extern bool TreasureHunting;
+extern int CurrentStageVersion;
 
 int GetSSLevelBanned() {
 
@@ -145,13 +146,13 @@ int GetSSLevelBanned() {
 			switch (CurrentLevel)
 			{
 			case LevelIDs_TwinklePark:
-				if (CurrentAct == 1 && !TPAmyVersion || CurrentAct == 0)
+				if (CurrentAct == 1 && CurrentStageVersion != AmyTPCheck || CurrentAct == 0)
 					return true;
 				else
 					return false;
 				break;
 			case LevelIDs_SpeedHighway:
-				if (CurrentAct == 0 && SHTailsVersion)
+				if (CurrentAct == 0 && CurrentStageVersion != TailsSHCheck)
 					return true;
 				else
 					return false;
@@ -351,6 +352,59 @@ void FixTikalHintSFX() {
 	return;
 }
 
+
+Trampoline PlayKnuxVoice_EmeraldGet(0x474f50, 0x474f55, PlayCharaVoice_EmeraldGet);
+
+void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
+	ObjectMaster* P1 = GetCharacterObject(0);
+	int CurChar = P1->Data1->CharID;
+
+	if (P1 != nullptr)
+	{
+		switch (CurChar)
+		{
+		case Characters_Sonic:
+			if (EmeraldKnuxCheck == 1)
+				PlayVoice_R(1826);
+			if (EmeraldKnuxCheck == 2)
+				PlayVoice_R(315);
+			break;
+		case Characters_Tails:
+			if (EmeraldKnuxCheck == 1)
+				PlayVoice_R(1812);
+			if (EmeraldKnuxCheck == 2)
+				PlayVoice_R(1456);
+			break;
+		case Characters_Amy:
+			if (EmeraldKnuxCheck == 1)
+				PlayVoice_R(5020);
+			if (EmeraldKnuxCheck == 2)
+				PlayVoice_R(1737);
+			break;
+		case Characters_Gamma:
+			if (EmeraldKnuxCheck == 1 || EmeraldKnuxCheck == 2)
+				PlayVoice_R(5023);
+			break;
+		case Characters_Big:
+			if (EmeraldKnuxCheck == 1)
+				PlayVoice_R(5021);
+			if (EmeraldKnuxCheck == 2)
+				PlayVoice_R(5022);
+			break;
+		}
+	}
+
+	if (CurChar == Characters_Knuckles)
+	{
+		ObjectFunc(origin, PlayKnuxVoice_EmeraldGet.Target());
+		origin(a1);
+	}
+	else
+		CheckThingButThenDeleteObject(a1);
+
+	return;
+}
+
 void FixCharacterSFX() {
 	ObjectMaster* obj = GetCharacterObject(0);
 
@@ -515,6 +569,7 @@ void Characters_Management() {
 	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
+	
 	WriteData<1>((void*)0x61A5B8, 0x8);
 	WriteData<1>((void*)0x61a5b9, 0x74);
 	

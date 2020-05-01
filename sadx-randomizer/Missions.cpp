@@ -47,13 +47,13 @@ void LoadStageMissionImage_r() {
 
 		if (CurrentLevelLayout < Mission2_100Rings)
 		{
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && !HSBigVersion)
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && CurrentStageVersion != BigHS)
 				CurrentMission = BalloonCard; //grab ballon
 
 			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
 				CurrentMission = FroggyCard; //grab Froggy
 
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && !HSBigVersion && !TPBigVersion)
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigHS || CurrentStageVersion != BigTP))
 				CurrentMission = CapsuleCard;
 		}
 		
@@ -68,7 +68,7 @@ void LoadStageMissionImage_r() {
 				CurrentMission = E103Card;
 			break;
 		case LevelIDs_TwinklePark:
-			if (CurrentLevelLayout == Mission1 && CurrentAct == 1 && TPBigVersion)
+			if (CurrentLevelLayout == Mission1 && CurrentAct == 1 && CurrentStageVersion == BigTP)
 				CurrentMission = FroggyCard;
 			break;
 		case LevelIDs_LostWorld:
@@ -128,11 +128,11 @@ void LoadStageMissionImage_r() {
 				CurrentMission = E105Card;
 			break;
 		default:
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && !HSBigVersion)
+			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && CurrentStageVersion != BigHS)
 				CurrentMission = BalloonCard; //grab ballon
 			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
 				CurrentMission = FroggyCard; //grab Froggy
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && !HSBigVersion && !TPBigVersion)
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigHS && CurrentStageVersion != BigTP))
 				CurrentMission = CapsuleCard;
 			break;
 		}
@@ -268,38 +268,72 @@ void TitleCard_Init() {
 	help.ReplaceFile("system\\Missions.pvm", "system\\textures\\Missions.pvmx");
 }
 
-extern bool isPlayerInWaterSlide;
-ObjectMaster* test = nullptr;
-extern ObjectMaster* CurrentCart;
+
+int FlashScreenTimer = 0;
+
+void FlashScreen(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1;
+
+		if (++data->InvulnerableTime > 80) {
+
+			int color = 0x00000000;
+			ScreenFade_Color = *(NJS_COLOR*)&color;
+			CheckThingButThenDeleteObject(obj);
+		}
+		else {
+			int color = 0xFFFFFFFF;                            
+			ScreenFade_Color = *(NJS_COLOR*)&color;
+
+			if (data->InvulnerableTime < 120) {
+				if (data->InvulnerableTime < 60) {
+					data->CharID += 4;
+					ScreenFade_Color.argb.a = data->CharID;
+				}
+				else {
+					ScreenFade_Color.argb.a = 0xFF;
+				}
+			}
+			else {
+				data->CharID -= 20;
+				ScreenFade_Color.argb.a = data->CharID;
+			}
+
+			ScreenFade_DrawColor();
+		}
+}
+
+
 
 void MissionResultCheck() {
 
-		if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
-		{
-			ObjectMaster* obj = GetCharacterObject(0);
-			EntityData1* ent;
-			ent = obj->Data1;
+	if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+	{
+		ObjectMaster* p1 = GetCharacterObject(0);
+		EntityData1* ent;
+		ent = p1->Data1;
+		ObjectMaster* Flash = nullptr;
 
-			if ((ent->Status & Status_Ground) == Status_Ground && (!isPlayerInWaterSlide && TimeThing != 0))
+		if (p1->Data1->Action >= 1 && p1->Data1->Action <= 3 && TimeThing != 0) {
+
+			ent->InvulnerableTime = 0;
+			if (!SonicRand && !MetalSonicFlag)
+				ent->Action = 0; //fix potential crash
+			ent->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+
+			if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
 			{
-				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && ent->Action >= 40 && ent->Action <= 60)
-					return;
-		
-					ent->InvulnerableTime = 0;
-					if (!SonicRand && !MetalSonicFlag)
-						obj->Data1->Action = 0; //fix potential crash
-					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				if (!Flash)
+					Flash = LoadObject(LoadObj_Data1, 1, FlashScreen);
 
-					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
-					{
-						if (!SonicRand && !MetalSonicFlag)
-							obj->Data1->Action = 1; //fix victory pose
-						LoadLevelResults_r();
-						return;
-					}
-				
+				if (!SonicRand && !MetalSonicFlag)
+					p1->Data1->Action = 1; //fix victory pose
+
+				LoadLevelResults_r();
+				return;
 			}
 		}
+	}
 	
 	return;
 }

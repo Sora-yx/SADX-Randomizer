@@ -54,6 +54,7 @@ uint8_t SwapDelay = 150;
 
 int CustomFlag = 0; //Used for progression story and credits
 short CurrentLevelLayout = 0;
+int CurrentStageVersion = -1;
 
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
@@ -64,6 +65,8 @@ extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
 
+extern NJS_VECTOR pos;
+extern bool ChaoSpawnAllowed;
 
 
 
@@ -176,7 +179,6 @@ extern "C" {
 		Stages_Management();
 		RandomizeStages_Hook();
 		
-
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
 	}
@@ -184,6 +186,10 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
+		//DisplayRank(ResultGetRank());
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Chao Spawn %d", ChaoSpawnAllowed);
+
+
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{
@@ -216,7 +222,7 @@ extern "C" {
 		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
 			CustomFlagCheck(); //When loading, Check flag and credits
 
-		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9))
+		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9 || GameMode == 24))
 		{
 			//Fix UI issue
 			HudDisplayScoreOrTimer();

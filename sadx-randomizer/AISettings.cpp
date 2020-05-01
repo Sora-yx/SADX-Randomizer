@@ -13,6 +13,12 @@ int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
 int CurrentAI = -1;
+float xpos = 0;
+float ypos = 0;
+float vscale = 1.0f;
+float hzscale = 1.0f;
+float center_x = (float)HorizontalResolution / 2.0f;
+float center_y = (float)VerticalResolution / 2.0f;
 
 static float ActionButtonAlpha = 0;
 static bool ActionButtonActive = false;
@@ -28,19 +34,16 @@ enum RandoHudTextures {
 };
 
 enum RandoHudSprites {
-
 	CmnHudSprite_SA2ActionBody,
 	CmnHudSprite_SA2ActionButton,
 	CmnHudSprite_SA2Action,
-	
 };
 
 NJS_TEXANIM	Hud_Rando_TEXANIM[]{
-	{ 0x40, 0x28, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
-	{ 0x30, 0x30, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
-	{ 0x70, 0x21, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
+	{ hzscale * 0x3F, vscale * 0x2F, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
+	{ hzscale * 0x3F, vscale * 0x2F, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
+	{ hzscale * 0x6F, vscale * 0x1F, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
 };
-
 
 
 NJS_SPRITE HUD_Rando_SPRITE = { { 0, 0, 0 }, 1.0, 1.0, 0, &Hud_Rando_TEXLIST, Hud_Rando_TEXANIM };
@@ -77,38 +80,46 @@ void Hud_ShowActionButton() {
 		}
 	}
 
-		HUD_Rando_SPRITE.p.y = 70;
-		HUD_Rando_SPRITE.p.x = 1800;
 
-		HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
-		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
-		HUD_Rando_SPRITE.sx = 1;
+	vscale = (float)VerticalResolution / 480.0f;
+	hzscale = (float)HorizontalResolution / 640.0f;
+	float size_x = 0;
+	float size_y = 0;
+	size_x = 255.0f * hzscale * 0.5f;
+	size_y = 67.0f * vscale * 0.5f;
 
-		HUD_Rando_SPRITE.p.y = 70;
-		HUD_Rando_SPRITE.p.x = 1870;
-		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
+	xpos = center_x + size_x * vscale -20;
+	ypos = 67;
+	HUD_Rando_SPRITE.p.x = xpos;
+	HUD_Rando_SPRITE.p.y = ypos;
+	
 
-		HUD_Rando_SPRITE.p.y = 70;
-		HUD_Rando_SPRITE.p.x = 1800;
+	HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
+	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
+	HUD_Rando_SPRITE.sx = 1;
+	HUD_Rando_SPRITE.p.x = xpos + ypos;
+	HUD_Rando_SPRITE.p.y = ypos + 5;
 
-		if (ActionButtonAlpha >= 1) {
-			njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2Action, -1.501, NJD_SPRITE_ALPHA);
-		}
+	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
+	HUD_Rando_SPRITE.p.x = xpos - 5;
+
+
+	if (ActionButtonAlpha >= 1) {
+		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2Action, -1.501, NJD_SPRITE_ALPHA);
+	}
 }
-
 
 
 void Hud_DisplayOnframe() {
 
 	ObjectMaster* P1 = GetCharacterObject(0);
 
-	if (GameState == 15 && isAIActive && isAIAllowed)
+	if (GameState == 15 && isAIActive && isAIAllowed && SwapDelay > 149)
 	{
 		if (P1 != nullptr && (P1->Data1->Action == 1 || P1->Data1->Action == 2))
 			Hud_ShowActionButton();
 	}
 }
-
 
 
 
@@ -653,7 +664,7 @@ void FixAISFXGamma4() {
 	return;
 }
 
-extern bool FEGammaVersion;
+
 //Result Voice FIX
 void ResultVoiceFix() {
 	ObjectMaster* GetChara = GetCharacterObject(0);
@@ -695,13 +706,12 @@ void ResultVoiceFix() {
 			Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
-			if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || FEGammaVersion || TreasureHunting)
+			if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || CurrentStageVersion == GammaFE || TreasureHunting)
 				Load_DelayedSound_Voice(4011);
 			else
 				Load_DelayedSound_Voice(4010);
 			SoundManager_Delete2();
 			TreasureHunting = false;
-			FEGammaVersion = false;
 			break;
 		}
 	}

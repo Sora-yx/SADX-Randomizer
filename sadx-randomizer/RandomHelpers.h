@@ -10,7 +10,6 @@ bool isStageBanned(uint8_t char_id, short stage_id);
 bool isDuplicateStage(short stage_id, short prev_stage_id);
 bool isVanillaStageBanned(uint8_t char_id, short stage_id);
 bool isBossStage(short stage_id);
-bool CheckPrevCharacter(int8_t Cur_Chara);
 bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
@@ -19,12 +18,10 @@ bool CheckPrevLevel(short stage_id);
 void AIAudioFixes();
 
 void FixRMLava();
-
 short randomacts(RandomizedEntry entry);
 short randomMission(short stage_id);
 short getRandomAI(uint8_t char_id, short stage_id);
 short getRandomRaceAI(RandomizedEntry entry);
-short randomLayout(short CurStage);
 void Randomizer_GetNewRNG();
 void SelectBarRace();
 void TwinkleCircuitMusic();
@@ -46,10 +43,9 @@ extern char StorySplits;
 extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
+extern bool isTailsVersion;
 int IsSA2MissionAllowed();
 HelperFunctions extern help;
-
-
 
 
 struct RandomizedEntry
@@ -67,6 +63,28 @@ struct RandomizedEntry
 	short voices;
 };
 
+struct StageVersion {
+
+	short level;
+	short act;
+	short version;
+};
+
+enum CharacterStageVersion {
+
+	Normal = -1,
+	AmyTP,
+	BigTP,
+	SonicSH,
+	TailsSH,
+	SonicFE,
+	AmyFE,
+	AmyHS,
+	BigHS,
+	GammaFE,
+	AmyHSDC
+};
+
 //Mission Card Enum 0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
 enum MissionCard {
 	CapsuleCard, LostChaoCard, EmeraldKnuxCard, SonicRaceCard, FinalEggCard, FroggyCard,
@@ -76,7 +94,6 @@ enum MissionCard {
 
 void BackRingObj_Main(ObjectMaster* obj);
 
-void __cdecl BackRing_Load_r(ObjectMaster* a1);
 
 void LoadTriggerObject();
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1);
@@ -96,10 +113,11 @@ enum CurMission {
 
 enum CurSplits {
 
-	None, SonicStory, AllStories, AnyPourcent
+	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
 };
 
 extern short CurrentLevelLayout;
+extern int CurrentStageVersion;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;
@@ -107,17 +125,13 @@ extern int levelCount;
 extern bool TreasureHunting;
 extern bool isCriticalMode;
 
-extern bool HSAmyVersion;
-extern bool HSBigVersion;
-extern bool FEGammaVersion;
-extern bool FEAmyVersion;
 
 void Set_MusicVoices();
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
 
-void BigLayoutHS();
+void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
 void TargetableEntity_RegularChara(ObjectMaster* obj);
 void TargetableEntitySmallOBJ(ObjectMaster* obj);
@@ -156,11 +170,8 @@ extern int CurrentAI;
 extern bool isAIActive;
 extern bool isAIAllowed;
 
-extern bool TPAmyVersion;
-extern bool TPBigVersion;
-extern short SHTailsVersion;
+
 extern bool isKnucklesVersion;
-extern bool isTailsVersion;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -257,8 +268,6 @@ void FixRollerCoaster();
 //void RandomizerMission();
 void SHAct2Position();
 
-void ICAct3CutsceneSkip();
-void Reset_OriginalMusic();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
@@ -334,7 +343,6 @@ void __cdecl LoadLevelResults_r();
 DataPointer(int, dword_3B2A304, 0x3B2A304);
 void DeleteCreditStats();
 
-void FinalStat();
 
 void DisableTime_Zero();
 void AISwitch();
@@ -342,7 +350,7 @@ void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
 void GotoNextLevel_RngLess(char stage, char act);
 
-void TestRandomCutscene();
+
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
 DataPointer(char, TailsAdventureData, 0x3B1860E);
@@ -394,11 +402,12 @@ void FixRestart_Stuff();
 void Delete_Cart();
 void LoadCamFilePC_R();
 void ResetValueWhileLevelResult();
-void PlayRace_Music();
-void SongRace_Init();
+
 void AddRingSandHill();
 void fixTCCart();
 void preventCutscene();
+void FlashScreen(ObjectMaster* obj);
+void Chao_DeleteFiles();
 
 extern int RageQuit;
 extern int JumpPB;

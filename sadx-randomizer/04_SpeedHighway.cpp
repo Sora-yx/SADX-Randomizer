@@ -7,7 +7,6 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Speed Highway\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
-short SHTailsVersion = 0;
 
 void SHAct2Position() {
 	if (CurrentCharacter != Characters_Sonic)
@@ -32,14 +31,10 @@ void CheckEggmanRaceWinner() {
 
 void CamSpeedHighway() {
 
-	if (CurrentAct == 0 && SHTailsVersion)
-	{
+	if (CurrentAct == 0 && CurrentStageVersion == TailsSH)
 		LoadCamFile(0, "0403"); //Tails Camera
-	}
 	else
-	{
 		LoadCamFile(0, "0400");
-	}
 
 	LoadCamFile(1, "0401");
 
@@ -189,17 +184,17 @@ void SpeedHighway_Layout() {
 	{
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
+			CurrentStageVersion = TailsSH;
+
 			if (CurrentLevelLayout < Mission2_100Rings)
 			{
 				Race = true;
-				SHTailsVersion = 1;
 				LoadSetFile(0, "0403"); //load Tails layout
 				CurrentLevelLayout = Mission1_Variation;
 			}
 			else
 			{
 				Race = false;
-				SHTailsVersion = 1;
 				LoadSetFile(0, "0407"); //load Tails layout
 				CurrentLevelLayout = Mission2_100Rings;
 			}
@@ -209,7 +204,7 @@ void SpeedHighway_Layout() {
 		{
 			LoadSetFile(0, "0400"); //load Sonic Layout
 			Race = false;
-			SHTailsVersion = 0;
+			CurrentStageVersion = SonicSH;
 
 			if (CurrentLevelLayout < Mission2_100Rings)
 				CurrentLevelLayout = Mission1_Variation;
@@ -217,9 +212,9 @@ void SpeedHighway_Layout() {
 
 		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Tails || Vanilla)
 		{
-			SHTailsVersion = randomizedSets[levelCount].Layout;
+			CurrentStageVersion = randomizedSets[levelCount].Layout;
 
-			if (SHTailsVersion)
+			if (CurrentStageVersion == TailsSH)
 			{
 				switch (CurrentLevelLayout)
 				{

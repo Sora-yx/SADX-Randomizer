@@ -355,21 +355,39 @@ short randomMission(short stage_id) {
 	return cur_mission;
 }
 
+StageVersion StageLayoutArray[8]{
+
+	LevelIDs_TwinklePark, 1, 0,
+	LevelIDs_TwinklePark, 1, 1,
+	LevelIDs_SpeedHighway, 0, 0,
+	LevelIDs_SpeedHighway, 0, 1,
+	LevelIDs_FinalEgg, 0, 0,
+	LevelIDs_FinalEgg, 0, 1,
+	LevelIDs_HotShelter, 0, 0,
+	LevelIDs_HotShelter, 0, 1
+};
+
 
 short prev_layout = -1;
 short randomLayout(short stage_id, short act_id) {
 
 	short cur_layout = -1;
 
-	if (stage_id == LevelIDs_TwinklePark && act_id == 1 || stage_id == LevelIDs_HotShelter && act_id == 0 || stage_id == LevelIDs_FinalEgg || stage_id == LevelIDs_SpeedHighway && act_id == 0)
+	do {
+		cur_layout = rand() % 2;
+
+	} while (prev_layout == cur_layout);
+
+	for (Uint8 i = 0; i < LengthOfArray(StageLayoutArray); i++)
 	{
-		do {
-			cur_layout = rand() % 2;
-		} while (prev_layout == cur_layout);
+		if (stage_id == StageLayoutArray[i].level && act_id == StageLayoutArray[i].act && StageLayoutArray[i].version == cur_layout)
+		{
+			prev_layout = i;
+			return i;
+		}
 	}
 
-	prev_layout = cur_layout;
-	return cur_layout;
+	return Normal;
 }
 
 int8_t prev_char = -1;
@@ -650,21 +668,18 @@ void ResetStatsValues() {
 	isAIActive = false;
 	TreasureHunting = false;
 	ChaoSpawn = false;
-	TPAmyVersion = false;
-	TPBigVersion = false;
-	HSAmyVersion = false;
-	HSBigVersion = false;
 	CasinoTails = false;
 	isGameOver = false;
 	isKnucklesVersion = false;
 	isTailsVersion = false;
-	SHTailsVersion = 0;
+
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
 	TransfoCount = 0;
 	CurrentLevelLayout = 0;
+	CurrentStageVersion = Normal;
 	CurrentMission = 0;
 	GetCustomLayout = 0;
 	Credits_State = 0;
@@ -738,13 +753,25 @@ bool DoesConfigExist(const std::string& file)
 
 
 void SA2VoicesCheck() {
-	HMODULE SA2VoiceCheck = GetModuleHandle(L"SA2-Voices");
 
-	if (!DoesConfigExist("RandoConfig.txt") && !SA2VoiceCheck && RNGVoices)
+
+	const char* Path = "mods\\SA2 Voices\\system\\sounddata\\voice_us\\wma\\7010.adx";
+
+	if (DoesConfigExist(Path))
+		SA2Voices = true;
+
+	if (!DoesConfigExist("RandoConfig.txt") && RNGVoices)
 	{
 		std::ofstream ConfigFile("RandoConfig.txt");
 
-		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract the mod folder in your SADX mod folder, then check it on your mod list.)", "SADX Randomizer", MB_YESNO);
+		if (SA2Voices)
+		{
+			ConfigFile << "Sa2Voices=1";
+			ConfigFile.close();
+			return;
+		}
+
+		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract and install it just like a regular mod and don't forget to enable it on the mod loader.)", "SADX Randomizer", MB_YESNO);
 		switch (msgboxID)
 		{
 		case IDYES:
@@ -760,9 +787,6 @@ void SA2VoicesCheck() {
 			break;
 		}
 	}
-
-	if (SA2VoiceCheck)
-		SA2Voices = true;
 
 	return;
 }
@@ -1048,12 +1072,12 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	myfile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	myfile << "<Run version=\"1.7.0\">\n";
 	myfile << "<GameIcon />\n<GameName>Sonic Adventure DX: Randomizer</GameName>\n<CategoryName> ";
-	if (StorySplits == SonicStory)
+	if (StorySplits == SonicStorySplit)
 	{
 		split = 10;
 		myfile << "Sonic's Story" << "</CategoryName>\n<Metadata>\n";
 	}
-	if (StorySplits == AllStories)
+	if (StorySplits == AllStoriesSplit)
 	{
 		split = 37;
 		myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";

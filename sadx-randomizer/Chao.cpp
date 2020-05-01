@@ -1,29 +1,27 @@
 #include "stdafx.h"
 #include "data\chao.h"
 #include "RandomHelpers.h"
+#include "CharactersSettings.h"
 #include "Trampoline.h"
 #include <fstream>
 #include <iostream> 
 
 ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
-ObjectMaster* a2;
 ObjectMaster* chaoHint;
 
-uint8_t SelectedChao = 0;
 short ChaoCryDelay = 0;
 bool ArePvpLoaded = false;
+static bool pvploaded = false;
 extern int chaoPB;
 bool ChaoSpawn = false;
 extern bool CasinoTails;
 
-
 ObjectMaster* ChaoTP = nullptr;
 
-std::vector<NJS_PLANE> waterlist = {};
-
-ChaoHandle ChaoMaster;
-
+NJS_VECTOR pos;
+float Yrot;
+bool ChaoSpawnAllowed = false;
 
 void __cdecl ChaoGameplayCheck() {
 
@@ -47,32 +45,53 @@ void __cdecl ChaoGameplayCheck() {
 	{
 		MessageBoxA(WindowHandle, "Couldn't find Chao Gameplay Mod, make sure the mod is checked and installed.", "SADX Randomizer Error", MB_ICONERROR);
 	}
-
 }
 
 //This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
 
 int GetCurrentChaoStage_r() {
-	if (ChaoObject) return 5;
-	else return CurrentChaoStage;
+	if (ChaoObject) 
+		return 5;
+	else 
+		return CurrentChaoStage;
 }
 
-void ChaoObj_Animate(int id, int length) {
-	if (FrameCounterUnpaused % length == 0) {
-		Chao_Animation(CurrentChao, id);
+
+//Load Chao files
+void Chao_LoadFiles() {
+	float height = -10000000;
+	WriteData((float*)0x73C24C, height);
+
+	if (!pvploaded) {
+		al_confirmload_load();
+		pvploaded = LoadChaoPVPs();
 	}
+
+	ChaoManager_Load();
+	LoadChaoTexlist("AL_BODY", &ChaoTexLists[0], 0);
+	LoadChaoTexlist("AL_ICON", &ChaoTexLists[3], 0);
+	LoadChaoTexlist("AL_EYE", &ChaoTexLists[2], 0);
+	LoadChaoTexlist("AL_MOUTH", &ChaoTexLists[5], 0);
+	LoadChaoTexlist("AL_TEX_COMMON", &ChaoTexLists[1], 1u);
 }
 
-void ChaoObj_Delete(ObjectMaster* a1) {
+void ChaoTPTriggerDelete(ObjectMaster* a1) {
 
-	DeleteObject_(ChaoManager);
+	CheckThingButThenDeleteObject(a1);
+	ChaoTP = nullptr;
+}
+
+
+void Chao_DeleteFiles() {
+
+	CheckThingButThenDeleteObject(ChaoManager);
+	ChaoTPTriggerDelete(ChaoTP);
+	CheckThingButThenDeleteObject(chaoHint);
+	CheckThingButThenDeleteObject(CurrentChao);
+	CheckThingButThenDeleteObject(ChaoObject);
 	ChaoManager = nullptr;
-	DeleteObject_(ChaoTP);
-	DeleteObject_(chaoHint);
-	DeleteObject_(CurrentChao);
 	CurrentChao = nullptr;
 	ChaoObject = nullptr;
-	ChaoTP = nullptr;
 	chaoHint = nullptr;
 
 	//Release the chao textures
@@ -81,120 +100,133 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 	//reset default water height
 	float height = 0;
 	WriteData((float*)0x73C24C, height);
+
+	njReleaseTexture(&ChaoTexLists[0]);
+	njReleaseTexture(&ChaoTexLists[1]);
+	njReleaseTexture(&ChaoTexLists[2]);
+	njReleaseTexture(&ChaoTexLists[3]);
+	njReleaseTexture(&ChaoTexLists[5]);
+	ChaoSpawnAllowed = false;
+	ChaoSpawn = false;
 }
 
-ObjectMaster* ChaoCheck = nullptr;
-
-void ChaoObj_Main(ObjectMaster* a1) {
-
-	uint8_t Action = a1->Data1->Action;
-	EntityData1* data = a1->Data1;
-	ChaoLeash* Leash = &ChaoMaster.ChaoHandles[a1->Data1->CharIndex];
-
-	if (Action == 0) {
-		if (!CurrentLandTable) 
-			return;
-
-		//Load the chao textures
-		LoadChaoTexlist("AL_DX_PARTS_TEX", (NJS_TEXLIST*)0x33A1340, 0);
-		LoadChaoTexlist("AL_BODY", ChaoTexLists, 0);
-		LoadChaoTexlist("AL_jewel", &ChaoTexLists[4], 0);
-		LoadChaoTexlist("AL_ICON", &ChaoTexLists[3], 0);
-		LoadChaoTexlist("AL_EYE", &ChaoTexLists[2], 0);
-		LoadChaoTexlist("AL_MOUTH", &ChaoTexLists[5], 0);
-		LoadChaoTexlist("AL_TEX_COMMON", &ChaoTexLists[1], 1u);
-
-		//PVPs only need to be loaded once
-		if (!ArePvpLoaded) {
-			al_confirmload_load();
-			LoadChaoPVPs();
-			ArePvpLoaded = true;
-			ChaoManager_Load();
-		}
-
-		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
-		a1->Data1->Action = 1; //Wait a frame before loading the chao
+void ChaoObj_Delete(ObjectMaster* a1) {
+	if (a1->Child) {
+		DeleteObjectMaster(a1->Child);
+		a1->Child = nullptr;
 	}
-	else if (Action == 1) {
-		//We get the chao data in the savefile
-		ChaoData* chaodata = new ChaoData();
 
-		//Start position is behind the player
-		NJS_VECTOR v = a1->Data1->Position;
-
-		//Load the chao
-		CurrentChao = CreateChao(chaodata, 0, CurrentChao, &v, 0);
-		chaodata->data.FlyStat = 1000;
-		chaodata->data.FlyLevel = 50;
-
-		a1->Data1->Action = 2;
+	if (a1->Data1->LoopData) {
+		delete a1->Data1->LoopData;
+		a1->Data1->LoopData = nullptr;
 	}
-	else if (Action == 2) {
 
-		if (Chao_FinishedAnimation(CurrentChao)) { Chao_Animation(CurrentChao, 0); }
+	Chao_DeleteFiles();
+}
 
-		CurrentChao->Data1->Position = a1->Data1->Position;
 
-		//water height
-		float height = -10000000;
-		WriteData((float*)0x73C24C, height);
+void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
-		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200))
-			Chao_CrySound();
 
-		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
-			return;
-
-		switch (CurrentCharacter)
+	switch (a1->Data1->Action) {
+		case ChaoAction_Init:
 		{
-			case Characters_Gamma:
-			case Characters_Big:
-				if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 20))  //Bigger hitbox for Gamma and Big
-				{
-					chaoPB++; //Chao Credit Stat
+			if (!CurrentLandTable)
+				return;
+			//Load the chao textures
+			Chao_LoadFiles();
+	
+			a1->DisplaySub = a1->MainSub;
+			a1->DeleteSub = ChaoObj_Delete; //When you quit a level
+			a1->Data1->Action = 1; //Wait a frame before loading the chao
+		}
+		break;
+		case ChaoAction_LoadChao:
+		{
+			ChaoData* chaodata = new ChaoData();
 
-					ObjectMaster* obj = GetCharacterObject(0);
-					EntityData1* ent;
-					ent = obj->Data1;
+			//Start position is behind the player
+			NJS_VECTOR v = a1->Data1->Position;
 
-					ent->InvulnerableTime = 0;
-					obj->Data1->Action = 0; //fix potential crash
-					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+			//Load the chao
+			a1->Data1->LoopData = (Loop*)chaodata;
+			a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
+			CurrentChao = a1->Child;
+			a1->Data1->Action = 2;
 
-					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
-					{
-						obj->Data1->Action = 1; //fix victory pose
-						LoadLevelResults_r();
-						a1->Data1->Action = 3;
-						return;
-					}
+		}
+		break;
+		case ChaoAction_Hit:
+		{
+			if (GameState == 15) {
+				if (++a1->Data1->InvulnerableTime == 80) {	//Loop Cry Animation
+					Chao_SetBehavior(a1->Child, (long*)Chao_Cry(a1->Child));
+					a1->Data1->InvulnerableTime = 0;
 				}
-				break;
-			default:
-				if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 9))
+			}
+	
+			//water height
+			float height = -10000000;
+			WriteData((float*)0x73C24C, height);
+	
+			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200)) //Cry Hint
+				Chao_CrySound();
+	
+			if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
+				return;
+	
+			int HitBox = 0;
+	
+			if (GetCharacter0ID() == Characters_Big || GetCharacter0ID() == Characters_Gamma)
+				HitBox = 20;
+			else
+				HitBox = 9;
+	
+			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, HitBox))
+			{
+				ObjectMaster* P1 = GetCharacterObject(0);
+				EntityData1* ent;
+				ent = P1->Data1;
+				P1->Data1->Rotation.y = -ChaoObject->Data1->Rotation.y + 0x4000;
+				P1->Data1->Position.x += 1;
+				ent->InvulnerableTime = 0;
+				if (!SonicRand && !MetalSonicFlag)
+					P1->Data1->Action = 0; //fix potential crash
+				P1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+	
+				if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
 				{
-					ObjectMaster* obj = GetCharacterObject(0);
-					EntityData1* ent;
-					ent = obj->Data1;
-
-					ent->InvulnerableTime = 0;
 					if (!SonicRand && !MetalSonicFlag)
-						obj->Data1->Action = 0; //fix potential crash
-					obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-
-					if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
-					{
-						if (!SonicRand && !MetalSonicFlag)
-							obj->Data1->Action = 1; //fix victory pose
-						LoadLevelResults_r();
-						a1->Data1->Action = 3;
-						return;
-					}
+						P1->Data1->Action = 1; //fix victory pos
+					Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
+					LoadLevelResults_r();
+					a1->Data1->InvulnerableTime = 0;
+					a1->Data1->Action = 3;
 				}
-				break;
-		}	
+			}
+		}
+		break;
+		case ChaoAction_Free:
+		{
+			if (GameState == 15) {
+	
+				if (++a1->Data1->InvulnerableTime == 120) {
+					Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child));
+					a1->Data1->InvulnerableTime = 0;
+					return;
+				}
+			}
+			else
+			{
+				a1->Data1->Action = 4;
+				return;
+			}
+		}
+		break;
 	}
 }
+
+	
 
 
 void Chao_Gravity_r(ObjectMaster* obj);
@@ -207,11 +239,10 @@ void Chao_Gravity_r(ObjectMaster* obj) {
 }
 
 
-
 void Chao_Movements_r(ObjectMaster* obj);
 Trampoline Chao_Movements_t(0x71EFB0, 0x71EFB9, Chao_Movements_r);
 void Chao_Movements_r(ObjectMaster* obj) {
-	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing) {
+	if (CurrentLevel >= LevelIDs_SSGarden) {
 		ObjectFunc(original, Chao_Movements_t.Target());
 		original(obj);
 	}
@@ -296,12 +327,6 @@ void ChaoCryHint() {
 	}
 }
 
-void ChaoTPTriggerDelete(ObjectMaster* a1) {
-
-	DeleteObject_(ChaoTP);
-	ChaoTP = nullptr;
-}
-
 
 void ChaoTPTrigger(ObjectMaster* a1) {
 
@@ -330,254 +355,53 @@ void LoadChaoTPTrigger() {
 	}
 }
 
-NJS_VECTOR pos;
-float Yrot;
+extern bool FEGammaVersion;
 
-bool isChaoAllowedtoSpawn(short CurLevel, short CurAct) 
-{
+bool SetAndGetLostChaoPosition() {
 
-	switch (CurLevel)
-	{
-	case LevelIDs_EmeraldCoast:
-		if (CurAct == 1)
-		{
-			pos = { 3857.76, 597.395, -2896.18 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 2)
-		{
-			pos = { 6388, 0.8, 1116 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 0)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_WindyValley:
-		if (CurAct == 2)
-		{
-			pos = { 4162.019, -4484, -1800 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		else
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_Casinopolis:
-		if (CurAct == 0)
-		{
-			pos = { -361, 380, -40 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 1 && CasinoSwitch == 3 && CasinoTails)
-		{
-			pos = { -1565.96, -2205, 2654.24 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct > 1 || CurrentAct == 1 && !CasinoTails)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_IceCap:
-		if (CurAct == 1)
-		{
-			pos = { 1480.62, 573.3, -256.67 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 3)
-		{
-			pos = { 1790.85, 371.968811, 11.265 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 0 || CurAct == 2)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_TwinklePark:
-		if (CurAct == 1 && !TPAmyVersion && !TPBigVersion)
-		{
-			pos = { 520, 1330, 1630 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 1 && TPBigVersion && !TPAmyVersion)
-		{
-			pos = { 604, 338, 237 };
-			Yrot = 16000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 2 && TPAmyVersion)
-		{
-			pos = { -41.43054199, 50, 290.7596436 };
-			Yrot = 0;
-			LoadChaoTPTrigger();
-			ChaoSpawn = true;
-		}
-		if (CurAct == 0)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_SpeedHighway:
-		if (CurAct == 0)
-		{
-			pos = { 4455, -385.135, 2930.18 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		else
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_RedMountain:
-		if (CurAct == 0)
-		{
-			pos = { -3861.85, 883.96, -2974.81 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		else
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_SkyDeck:
-		if (CurAct == 1)
-		{
-			pos = { -316.7368469, 38.99000168, -687.1625977 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		else
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_LostWorld:
-		if (CurAct == 1)
-		{
-			pos = { 7410, -1965, 1316 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		else
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_FinalEgg:
-		if (CurAct == 2)
-		{
-			if (!FEGammaVersion) //Sonic Version
+	HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
+	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;
+
+		for (int i = 0; i < LengthOfArray(ChaoLevelPosition); i++) {
+			if (levelact == ChaoLevelPosition[i].LevelID && CurrentStageVersion == ChaoLevelPosition[i].version)
 			{
-				pos = { 2660.566406, -2888.049561, -943.2208862 };
-				Yrot = 0x8000;
-				ChaoCryHint();
+				pos = ChaoLevelPosition[i].Position;
+				Yrot = ChaoLevelPosition[i].YRot;
+				ChaoSpawnAllowed = true;
 				ChaoSpawn = true;
-			}
-			else //Gamma Version
-			{
-				pos = { 1939, -3174.049561, -128 };
-				Yrot = 0x8000;
-				ChaoSpawn = true;
+				if (CurrentLevel == LevelIDs_HotShelter && DCModChao && CurrentStageVersion == AmyHS) //Dreamcast Mod exception as the landtable is different.
+					pos = { 716.4085693, 428.2105103, -2952.347412 };
+				return true;
 			}
 		}
-		if (CurAct == 0 && FEAmyVersion)
-		{
-			pos = { 2945.652344, 5589.605469, -2211.165039 };
-			ChaoSpawn = true;
-		}
-		if (CurAct == 1 || CurAct == 0 && !FEAmyVersion)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	case LevelIDs_HotShelter:
-		if (CurAct == 2)
-		{
-			pos = { 2.01, 3222, -3136 };
-			Yrot = 0x8000;
-			ChaoSpawn = true;
-		}
-		if (CurAct == 1 && HSAmyVersion)
-		{
-			HMODULE DCModChao = GetModuleHandle(L"DCMods_Main");
-			if (DCModChao)
-			{
-				pos = { 716.4085693, 428.2105103, -2952.347412 };
-				Yrot = 0x8000;
-				ChaoSpawn = true;
-			}
-			else
-			{
-				pos = { 716.4085693, 677.8605957, -2952.347412 };
-				Yrot = 0x8000;
-				ChaoSpawn = true;
-			}
-		}
-
-		if (CurAct == 0 && HSBigVersion)
-		{
-			if (CurrentCharacter != Characters_Gamma)
-			{
-				pos = { -254, 0, -461 };
-				ChaoSpawn = true;
-			}
-			else
-			{
-				pos = { -278.8718262, 80, -499.0888367 };
-				ChaoSpawn = true;
-			}
-		}
-
-		if (CurAct == 0 && !HSBigVersion || CurAct == 1 && !HSAmyVersion)
-		{
-			ChaoSpawn = false;
-		}
-		break;
-	default:
-		ChaoSpawn = false;
-		break;
-	}
-
-	return ChaoSpawn;
-
-	//position for each levels
+	
+	ChaoSpawnAllowed = false;
+	ChaoSpawn = false;
+	return false;
 }
+
 
 
 void Chao_OnFrame() {
 	if (ChaoCryDelay > 0)
 		ChaoCryDelay--;
 
-	bool ChaoSpawnAllowed = isChaoAllowedtoSpawn(CurrentLevel, CurrentAct);
+	ChaoSpawnAllowed = SetAndGetLostChaoPosition();
 
 	if (!ChaoSpawnAllowed && ChaoObject != nullptr)
 	{
-		DeleteObject_(ChaoObject); //Fix wrong chao spawn act
-		DeleteObject_(ChaoTP);
-		DeleteObject_(chaoHint);
-		ChaoSpawn = false;
+		Chao_DeleteFiles();
 	}
-
-	if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
-		ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
-
-		ChaoObject->Data1->Position = pos;
-		ChaoObject->Data1->Rotation.y = Yrot;
+	else
+	{
+		if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentMission == 1 && CurrentLevel < 15) {
+			ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
+			ChaoObject->Data1->Position = pos;
+			ChaoObject->Data1->Rotation.y = Yrot;
+			ChaoSpawn = true;
+		}
 	}
 
 	return;
 }
+

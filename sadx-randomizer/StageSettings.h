@@ -41,3 +41,4 @@ FunctionPointer(int, sub_46A820, (), 0x46A820);
 FunctionPointer(int, sub_46A7F0, (), 0x46A7F0);
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
+ObjectFunc(UpdateSetDataAndDelete, 0x46C150);

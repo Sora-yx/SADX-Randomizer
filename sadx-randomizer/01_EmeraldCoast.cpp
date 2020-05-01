@@ -29,10 +29,11 @@ void EC_Cam() {
 
 }
 
+void Chao_LoadFiles();
+
 void EC_Layout() {
 
-
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
+	CurrentLevelLayout = 3; //randomizedSets[levelCount].MissionLayout;
 
 	if (CurrentAct != 2)
 	{

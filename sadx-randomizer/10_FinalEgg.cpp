@@ -6,30 +6,20 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Final Egg\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
-bool FEGammaVersion = false;
-bool FEAmyVersion = false;
 
 void CamFinalEgg() {
 	
-	if (FEAmyVersion && CurrentAct == 0)
-	{
+	if (CurrentStageVersion == AmyFE && CurrentAct == 0)
 		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
-	}
 	else
-	{
 		LoadCamFile(0, "1000"); //load the camera used for Sonic.
-	}
 
 	LoadCamFile(1, "1001");
 
-	if (CurrentAct == 2 && FEGammaVersion)
-	{
+	if (CurrentAct == 2 && CurrentStageVersion == GammaFE)
 		LoadCamFile(2, "1005");
-	}
 	else
-	{
 		LoadCamFile(2, "1002");
-	}
 
 	LoadCamFile(3, "1003");
 
@@ -38,7 +28,6 @@ void CamFinalEgg() {
 
 void FinalEgg_Layout() {
 	
-	FEGammaVersion = false;
 
 	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
@@ -49,7 +38,7 @@ void FinalEgg_Layout() {
 		//Prevent Sonic and Amy to load their vanilla stage
 		if (CurrentCharacter == Characters_Sonic && !Vanilla)
 		{
-			FEAmyVersion = true;
+			CurrentStageVersion = AmyFE;
 			
 			if (CurrentLevelLayout < Mission2_100Rings)
 			{
@@ -65,7 +54,7 @@ void FinalEgg_Layout() {
 
 		if (CurrentCharacter == Characters_Amy && !Vanilla)
 		{
-			FEAmyVersion = false;
+			CurrentStageVersion = SonicFE;
 			LoadSetFile(0, "1000"); //Load Sonic Layout
 			if (CurrentLevelLayout < Mission2_100Rings)
 				CurrentLevelLayout = Mission1_Variation;
@@ -77,25 +66,24 @@ void FinalEgg_Layout() {
 			{
 			case Mission1:
 			default:
-				FEAmyVersion = false;
+				CurrentStageVersion = SonicFE;
 				LoadSetFile(0, "1000"); //Sonic Layout
 				CurrentLevelLayout = Mission1;
 				break;
 			case Mission1_Variation:
-				FEAmyVersion = true;
+				CurrentStageVersion = AmyFE;
 				LoadSetFile(0, "1004"); //load Amy layout
 				break;
 			case Mission2_100Rings:
 			case Mission3_LostChao:
-				short RNGLayoutFE = randomizedSets[levelCount].Layout;
-				if (RNGLayoutFE)
+				CurrentStageVersion = randomizedSets[levelCount].Layout;
+				if (CurrentStageVersion == SonicFE)
 				{
-					FEAmyVersion = false;
 					LoadSetFile(0, "1000"); //Sonic Layout
 				}
 				else
 				{
-					FEAmyVersion = true;
+					CurrentStageVersion = AmyFE;
 					LoadSetFile(0, "1006"); //load Amy layout
 				}
 				break;
@@ -105,7 +93,7 @@ void FinalEgg_Layout() {
 
 	if (CurrentAct == 2)
 	{
-		FEGammaVersion = true;
+		CurrentStageVersion == GammaFE;
 		LoadSetFile(0, "1000");
 		LoadSetFile(1, "1001");
 
@@ -165,8 +153,6 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	ReplaceCAM("CAM1004S", "CAM1004S");
 	ReplaceCAM("CAM1005S", "CAM1005S");
 
-	
-	//helperFunctions.RegisterStartPosition(Characters_Sonic, FE1_StartPositions[0]);
 
 	//Tails
 	ReplaceSET("SET1000M", "Tails-FE-Act1");

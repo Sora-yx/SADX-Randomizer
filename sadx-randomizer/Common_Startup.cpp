@@ -172,6 +172,8 @@ MusicInfo MusicList_R[] = {
 
 void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions) {
 
+
+	helperFunctions.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.adx"); //Custom rando stats song
 	//Musics, Voices
 	Set_MusicVoices();
 
@@ -179,8 +181,6 @@ void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFu
 		memcpy((MusicInfo*)0x910298, MusicList_R, sizeof(MusicList_R)); //change music list
 
 	WriteCall((void*)0x4235f8, TwinkleCircuitMusic); //random music between "super sonic racing" and "twinkle circuit"
-
-	helperFunctions.ReplaceFile("system\\sounddata\\bgm\\wma\\nights_k.wma", "system\\songs\\RandoStats.mp3"); //Custom rando stats song
 	AddMusics("NIGHTS_A", "NIGHTS_A");
 	AddMusics("NIGHTS_S", "NIGHTS_S");
 	AddMusics("SONIC_CD", "SONIC_CD");

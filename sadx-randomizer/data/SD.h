@@ -89,3 +89,6 @@ DeathZone SkyDeck2DeathZones[] = {
 	{ CharacterFlags_Sonic | CharacterFlags_Tails | CharacterFlags_Knuckles | CharacterFlags_Amy | CharacterFlags_Gamma | CharacterFlags_Big, &object_01E305D0 },
 	{ 0 }
 };
+
+
+void Olever_r(ObjectMaster* obj);

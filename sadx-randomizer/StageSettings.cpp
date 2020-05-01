@@ -8,7 +8,6 @@
 #include "StageSettings.h"
 
 
-extern bool FEGammaVersion;
 extern bool RNGStages;
 extern bool GetBackRing;
 extern uint32_t TotalCount;
@@ -33,6 +32,7 @@ ObjectMaster* CurrentCart = nullptr;
 extern bool isZeroActive;
 extern bool CasinoTails;
 
+
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
@@ -46,8 +46,12 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
-	ResetValueWhileLevelResult();
-
+	if (CurrentLevel == LevelIDs_SandHill)
+	{
+		ResetValueWhileLevelResult();
+		if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
+			AddCustomFlag(); //Add a flag for story progression.
+	}
 	ringsPB += Rings; //total Rings credit stat
 
 	if (!Race && CurrentCharacter == Characters_Tails)
@@ -87,14 +91,19 @@ void DisableTimeStuff() {
 		Tails_CheckRaceResult();
 	}
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
-		AddCustomFlag(); //Add a flag for story progression.
 
 	Race = false;
 	return;
 }
 
+void ReleaseScoreTexture() {
 
+	ResetValueWhileLevelResult();
+	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
+		AddCustomFlag(); //Add a flag for story progression.
+
+	njReleaseTexture(&SCORE_RESULT_TEXLIST);
+}
 
 
 void SetResultsCamera()
@@ -201,13 +210,13 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 				case LevelIDs_HotShelter:
 					if (CurrentAct == 2 && CurrentMission == Mission1)
 						Load_DelayedSound_Voice(1773);
-					if (CurrentAct == 0 && CurrentMission == 5 && HSBigVersion)
+					if (CurrentAct == 0 && CurrentMission == 5 && CurrentStageVersion == BigHS)
 						Load_DelayedSound_Voice(1772);
 					else
 						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_TwinklePark:
-					if (CurrentAct == 1 && CurrentLevelLayout < 2 && TPBigVersion)
+					if (CurrentAct == 1 && CurrentLevelLayout < 2 && CurrentStageVersion == BigTP)
 						Load_DelayedSound_Voice(1772);
 					else
 						Load_DelayedSound_Voice(1770);
@@ -353,34 +362,37 @@ void DeleteTriggerObject() {
 }
 
 
+void RestorePuzzleBoxVanillaThing() {
+	//Restore the Amy Check for puzzle box.
+	WriteData<1>((void*)0x442249, 0xF);
+	WriteData<1>((void*)0x44224A, 0x85);
+	WriteData<1>((void*)0x44224B, 0xB3);
+	WriteData<1>((void*)0x44224C, 0x0);
+	WriteData<1>((void*)0x44224D, 0x0);
+	WriteData<1>((void*)0x44224E, 0x0);
+	return;
+}
+
 void ResetValueWhileLevelResult() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
 	isCheckpointUsed = false;
 	isGameOver = false;
 	SonicRand = 0;
-	SHTailsVersion = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
-	if (CurrentCharacter != Characters_Big)
-	{
-		TreasureHunting = false;
-		FEGammaVersion = false;
-	}
-
+	TreasureHunting = false;
+	CurrentStageVersion = Normal;
 	isPlayerInWaterSlide = false;
-	TPAmyVersion = false;
-	TPBigVersion = false;
-	HSAmyVersion = false;
-	HSBigVersion = false;
 	CasinoTails = false;
 	isKnucklesVersion = false;
 	isTailsVersion = false;
 	isCheckpointUsed = false;
 
 	RestoreRNGValueKnuckles();
+	RestorePuzzleBoxVanillaThing();
 
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
@@ -390,6 +402,7 @@ void ResetValueWhileLevelResult() {
 		DeleteTriggerObject();
 		DeleteObject_(ChaoTP);
 		Delete_Cart();
+		Chao_DeleteFiles();
 	}
 	fixTCCart();
 
@@ -418,7 +431,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentLevel == LevelIDs_FinalEgg && !FEAmyVersion || CurrentLevel == LevelIDs_TwinklePark && !TPAmyVersion) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentStageVersion != AmyFE || CurrentLevel == LevelIDs_TwinklePark && !CurrentStageVersion != AmyTP) //don't load Zero if Sonic Layout
 		return;
 
 	isZeroActive = true;
@@ -675,7 +688,8 @@ void SetRNGKnuckles() {
 		WriteData<1>((void*)0x416f08, 0x74);
 		WriteData<1>((void*)0x4153e3, 0x74);
 	}
-	
+
+	return;
 }
 
 //restore original values
@@ -685,6 +699,8 @@ void RestoreRNGValueKnuckles() {
 	WriteData<1>((void*)0x4153E1, 0x03);
 	WriteData<1>((void*)0x416f08, 0x75);
 	WriteData<1>((void*)0x4153e3, 0x75);
+
+	return;
 }
 
 bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
@@ -707,7 +723,6 @@ int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius) {
 bool IsSpecificPlayerInSphere(NJS_VECTOR* center, float radius, uint8_t player) {
 	return IsPlayerInsideSphere_(center, radius) == player + 1;
 }
-
 
 
 /*Trampoline PlayEmeraldGrabVoice_T(0x474f50, 0x474f55, PlayEmeraldGrabVoice_R);
@@ -773,6 +788,8 @@ void TwinkleCircuitResult() {
 	PauseQuitThing2();
 	GameState = 0x5;
 }
+
+
 
 
 //Create an object so Gamma can hit some specific bosses.
@@ -968,13 +985,12 @@ void preventCutscene() {
 void FixRestartCheckPoint() {
 
 	//Check if a CP has been grabbed
-	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && CurrentLevel != LevelIDs_SkyDeck && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || TPAmyVersion))
+	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && CurrentLevel != LevelIDs_SkyDeck && (TreasureHunting || CurrentLevelLayout == Mission1_Variation || CurrentStageVersion != AmyTP))
 		isCheckpointUsed = true;
 
 	return njColorBlendingMode(0, 8);
 }
 
-extern bool isBackRingTextureLoaded;
 
 //Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic and already used for a different layout.
 //Also used to call different Stuff.
@@ -1005,9 +1021,9 @@ void FixLayout_StartPosition_R() {
 				PositionPlayer(0, 1093, -158, -1254);
 			break;
 		case LevelIDs_TwinklePark: //Amy version
-			if (CurrentAct == 1 && TPAmyVersion && !TPBigVersion)
+			if (CurrentAct == 1 && CurrentStageVersion == AmyTP)
 				PositionPlayer(0, 723, 70, -358);
-			if (CurrentAct == 1 && TPBigVersion && !TPAmyVersion)
+			if (CurrentAct == 1 && CurrentStageVersion == BigTP)
 				PositionPlayer(0, 230, 80, -538);
 			break;
 		case LevelIDs_IceCap: //Race
@@ -1015,7 +1031,7 @@ void FixLayout_StartPosition_R() {
 				PositionPlayer(0, 120, 375, -40);
 			break;
 		case LevelIDs_FinalEgg: //Gamma version
-			if (CurrentAct == 2 && FEGammaVersion)
+			if (CurrentAct == 2 && CurrentStageVersion == GammaFE)
 				PositionPlayer(0, 46.5, -3240.6, -224.5);
 			break;
 		}
@@ -1028,7 +1044,7 @@ void FixLayout_StartPosition_R() {
 		TimeSeconds = TimeSecCopy;
 		TimeMinutes = TimeMinCopy;
 		TimeFrames = TimeFrameCopy;
-		if (FEAmyVersion || isTailsVersion || SHTailsVersion)
+		if (CurrentStageVersion == AmyFE| isTailsVersion || CurrentStageVersion == TailsSH)
 			Lives++;
 		GameMode = GameModes_Adventure_ActionStg;
 		GetBackRing = false;
@@ -1038,7 +1054,6 @@ void FixLayout_StartPosition_R() {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	FixRestart_Stuff();
-	isBackRingTextureLoaded = false;
 	AnimalPickup_Load_();
 
 	return;
@@ -1060,6 +1075,7 @@ void LoadTriggerObject() {
 void Stages_Management() {
 
 	WriteJump(LoadLevelResults, LoadLevelResults_r); 
+	WriteCall((void*)0x42af59, ReleaseScoreTexture);
 
 	Set_Zero();
 	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)

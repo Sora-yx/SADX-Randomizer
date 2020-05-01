@@ -5,13 +5,12 @@
 #include "ActsSettings.h"
 
 ObjectMaster* TriggerHS = nullptr;
-bool HSAmyVersion = false;
-bool HSBigVersion = false;
+
 
 
 void CamHotShelter() {
 
-	if (HSBigVersion)
+	if (CurrentStageVersion == BigHS)
 		LoadCamFile(0, "1204"); //load the camera used for Big Hot Shelter
 	else
 		LoadCamFile(0, "1200"); //load the camera used for Amy Hot Shelter
@@ -64,14 +63,10 @@ void LoadTriggerObjHS() {
 }
 
 
-
 void HotShelter_Layout() {
 
-	HSAmyVersion = false;
-	HSBigVersion = false;
-	
 
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
+	CurrentLevelLayout = 3; //randomizedSets[levelCount].MissionLayout;
 	
 		//act 1 Amy/Big Version
 	if (CurrentAct == 0)
@@ -82,8 +77,7 @@ void HotShelter_Layout() {
 			LoadSetFile(0, "1204"); //load Big version for Amy.
 			LoadSetFile(1, "1201"); 
 			LoadSetFile(2, "1202"); 
-			HSAmyVersion = false;
-			HSBigVersion = true;
+			CurrentStageVersion = BigHS;
 
 			if (CurrentLevelLayout < Mission2_100Rings)
 				CurrentLevelLayout = Mission1_Variation;
@@ -91,9 +85,7 @@ void HotShelter_Layout() {
 		if (CurrentCharacter == Characters_Big && !Vanilla) 
 		{
 			LoadSetFile(0, "1200"); //load Amy version for Big
-		
-			HSAmyVersion = true;
-			HSBigVersion = false;
+			CurrentStageVersion = AmyHS;
 
 			if (CurrentLevelLayout < Mission2_100Rings)
 			{
@@ -110,53 +102,45 @@ void HotShelter_Layout() {
 
 		if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big || Vanilla)
 		{
-			short RNGLayoutHS = randomizedSets[levelCount].Layout;
+			CurrentStageVersion = AmyHS; //randomizedSets[levelCount].Layout;
 
 			switch (CurrentLevelLayout)
 			{
 			case Mission1: //Amy Version
 			default:
-				HSAmyVersion = true;
-				HSBigVersion = false;
+				CurrentStageVersion = AmyHS;
 				LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
 				CurrentLevelLayout = Mission1;
 				break;
 			case 1: //Big Version
-				HSAmyVersion = false;
-				HSBigVersion = true;
+				CurrentStageVersion = BigHS;
 				LoadSetFile(0, "1204"); //load Big version for other characters.
 				LoadSetFile(1, "1201"); //load Big version for Amy.
 				LoadSetFile(2, "1202"); //load Big version for Amy.
 				break;
 			case Mission2_100Rings:
-				if (RNGLayoutHS)
+				if (CurrentStageVersion == AmyHS)
 				{
-					HSAmyVersion = true;
-					HSBigVersion = false;
 					LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				}
 				else
 				{
-					HSAmyVersion = false;
-					HSBigVersion = true;
+					CurrentStageVersion = BigHS;
 					LoadSetFile(0, "1204"); //load Big version
 				}
 				LoadSetFile(1, "1201");
 				LoadSetFile(2, "1202");
 				break;
 			case Mission3_LostChao:
-				if (RNGLayoutHS)
+				if (CurrentStageVersion == AmyHS)
 				{
-					HSAmyVersion = true;
-					HSBigVersion = false;
 					LoadSetFile(0, "1200"); //load Amy hot Shelter version.
 				}
 				else
 				{
-					HSAmyVersion = false;
-					HSBigVersion = true;
+					CurrentStageVersion = BigHS;
 					LoadSetFile(0, "1204"); //load Big version
 				}
 
@@ -190,14 +174,15 @@ void HotShelter_Layout() {
 	}
 
 	LoadSetFile(3, "1203");
-	BigLayoutHS();
+	CheckAndSet_HotShelterFunctions();
 	CamHotShelter();
 
 	return;
 }
 
-void BigLayoutHS() {
-	if (HSBigVersion && !HSAmyVersion) //Big Layout
+void CheckAndSet_HotShelterFunctions() {
+
+	if (CurrentStageVersion == BigHS) //Big Layout
 	{
 		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
 		 //open the door when you activate the switch. (if < 8)
@@ -208,11 +193,13 @@ void BigLayoutHS() {
 	}
 	else
 	{
-		//Restore few functions to fix HS act 1 and 2 when Amy layout.
+		//Restore Big Hot Shelter functions to Vanilla so it will fix HS act 1 and 2 when Amy layout.
 		WriteData<1>((void*)0x5aaf14, 0x94);
 		WriteData<1>((void*)0x59a3bc, 0x75);
 		WriteData<1>((void*)0x59a125, 0x07);
 		WriteData<1>((void*)0x59a126, 0x75);
+
+		WriteData<6>((void*)0x442249, 0x90); //Fix Puzzle Box drop
 	}
 }
 
@@ -458,6 +445,9 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	WriteCall((void*)0x423071, HotShelter_Layout); //HS Custom Layout
 	WriteData<1>((void*)0x5aaf12, 0x08); //Big HS Stuff
 	WriteData<1>((void*)0x59a3bb, 0x08);
+
+	
+
 
 	HSObjects_Init(path, helperFunctions);
 

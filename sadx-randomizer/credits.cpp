@@ -5,6 +5,12 @@
 using namespace std;
 #include <string.h>
 #define ReplacePVM(C, D) helperFunctions.ReplaceFile("system\\" C ".pvm", "system\\Textures\\" D ".pvmx")
+#include "sound.h"
+#include "Trampoline.h"
+
+NJS_TEXNAME Rank_Texnames[4];
+NJS_TEXLIST Rank_Texlist = { arrayptrandlength(Rank_Texnames) };
+
 
 extern int CustomFlag;
 extern bool CreditCheck;
@@ -19,6 +25,7 @@ extern int AISwapCount;
 extern int SeedCopy;
 extern char StorySplits;
 extern int StatsTimer;
+int ResultScore = 0;
 bool RandCongratsDone = false;
 
 
@@ -44,7 +51,7 @@ void DeleteCreditStats() {
 	TotalDeathsPB = 0;
 	TotalHurtsPB = 0;
 	AISwapCount = 0;
-
+	ResultScore = 0;
 }
 
 FunctionPointer(long, CanIMakePanelJump, (EntityData1* p1), 0x4b83f0);  
@@ -670,7 +677,7 @@ CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 void CreditsNewList() {
 
 	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
-	WriteCall((void*)0x640fe1, FinalStat);
+	//WriteCall((void*)0x640fe1, FinalStat);
 	WriteData<10>((void*)0x640fef, 0x90);
 	WriteData<6>((void*)0x640fe9, 0x90);
 	WriteData<6>((void*)0x640ff9, 0x90);
@@ -727,7 +734,146 @@ void credits() {
 	}
 }
 
-void FinalStat() {
+
+
+enum RankResult {
+
+	RankE,
+	RankD,
+	RankC,
+	RankB,
+	RankA
+};
+
+
+void CalcScoreFinal() {
+
+	ResultScore = 0;
+
+	//Calcul Time
+	int getHour = (SaveFile.PlayTime / 0xe10) / 60;
+	int getMin = (SaveFile.PlayTime / 0xe10) % 60;
+	int TimeBonus = 0;
+	int BonusSub = 0;
+	bool isSub1h = false;
+	bool isSub15Min = false;
+
+	TimeBonus = 3600 / getMin * 100;
+
+	for (int i = 0; i < getMin; i++)
+	{
+		TimeBonus -= 500;
+	}
+
+
+	//Reward
+
+	//Speed Bonus
+	if (getHour < 1 && StorySplits != SonicStorySplit)
+	{
+		isSub1h = true;
+		BonusSub += 5000;
+	}
+
+	if (getMin < 15 && StorySplits == SonicStorySplit)
+	{
+		isSub15Min = true;
+		BonusSub += 5000;
+	}
+	//Chao rescued bonus
+	for (int i = 0; i < chaoPB; i++)
+	{
+		BonusSub += 1000;
+	}
+	
+	for (int i = 0; i < killPB; i++)
+	{
+		BonusSub += 100;
+	}
+
+
+	//Penality
+	for (int i = 0; i < TotalDeathsPB; i++)
+	{
+		TimeBonus -= 1000;
+	}
+
+	for (int i = 0; i < TotalHurtsPB; i++)
+	{
+		TimeBonus -= 500;
+	}
+
+	//Total
+	ResultScore = TimeBonus + BonusSub;
+
+	if (ResultScore < 0)
+		ResultScore = 0;;
+}
+
+
+
+int ResultGetRank() {
+
+	if (ResultScore <= 9999)
+		return RankE;
+
+	if (ResultScore >= 10000 && ResultScore <= 19999)
+		return RankD;	
+	
+	if (ResultScore >= 20000 && ResultScore <= 29999)
+		return RankC;	
+	
+	if (ResultScore >= 30000 && ResultScore <= 39999)
+		return RankB;	
+	
+	if (ResultScore >= 40000)
+		return RankA;
+}
+
+
+void PlayVoiceRankResult(int rank, int chara) {
+
+
+	switch (chara)
+	{
+	case Characters_Sonic:
+		PlayDelayedCustomSound(CommonSound_SonicRankE + rank, 180, 0.5f);
+		break;
+	case Characters_Tails:
+		PlayDelayedCustomSound(CommonSound_TailsRankE + rank, 180, 0.5f);
+		break;
+	case Characters_Knuckles:
+		PlayDelayedCustomSound(CommonSound_KnuxRankE + rank, 180, 0.5f);
+		break;
+	case Characters_Amy:
+		PlayDelayedCustomSound(CommonSound_AmyRankE + rank, 180, 0.5f);
+		break;
+	}
+}
+
+void DisplayRank(int rank) {
+
+	float vscale = 1.0f;
+	float hzscale = 1.0f;
+	float size_x = 0;
+	float size_y = 0;
+	vscale = (float)VerticalResolution / 480.0f;
+	hzscale = (float)HorizontalResolution / 640.0f;
+
+	LoadPVM("Rank", &Rank_Texlist);
+	njSetTexture(&Rank_Texlist);
+
+	size_x = 560.0f * hzscale * 0.5f;
+	size_y = 700.0f * vscale * 0.5f;
+
+	DrawBG(rank, size_x, size_y, 1, hzscale * 0.5f, vscale * 0.5f);
+}
+
+VoidFunc(CreditManagement, 0x6408f0);
+int delay = 0;
+static Trampoline CreditManagement_t((int)CreditManagement, (int)CreditManagement + 0x5, FinalStatDisplay);
+
+void FinalStatDisplay(ObjectMaster* obj) {
 	if (Credits_Skip)
 	{
 		Credits_State = 5; //Prevent infinite black screen.
@@ -757,18 +903,34 @@ void FinalStat() {
 				PlayVoice_R(5013);
 				break;
 			default:
+			case Characters_Sonic:
 				PlayVoice_R(5010);
 				break;
 			}
 
+			LoadPVM("Rank", &Rank_Texlist);
+			CalcScoreFinal();
+			PlayDelayedCustomSound(CommonSound_Rank, 100, 0.5f);
+			int CurRank = ResultGetRank();
+			PlayVoiceRankResult(CurRank, RandomCongrats);
+			
 			RandCongratsDone = true;
 		}
 
 		if (StatsTimer)
 		{
+			float vscale = 1.0f;
+			//float hzscale = 1.0f;
+			int size_x = 15;
+			int size_y = 0;
+
+			vscale = VerticalResolution / 480;
+			int hzscale = HorizontalResolution / 640;
+
+
 			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12, 10), "RANDOMIZER 2.1.3 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12 + hzscale, 11), "RANDOMIZER 2.3 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);
@@ -777,27 +939,25 @@ void FinalStat() {
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 17), "Deaths: %d", TotalDeathsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 18), "Chao Rescued: %d", chaoPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 19), "Final Time: %d:%d", getHour, getMin);
+			DisplayDebugStringFormatted(NJM_LOCATION(12, 20), "Final Score: %d", ResultScore);
+			DisplayDebugString(NJM_LOCATION(6, 25), "Thank you for playing SADX Randomizer!");
+			if (++delay >= 100)
+				DisplayRank(ResultGetRank());
 
-			DisplayDebugString(NJM_LOCATION(6, 28), "Thank you for playing SADX Randomizer!");
+			
 		}
 
-		if (!StatsTimer && Credits_State == 2)
+		if (!StatsTimer)
 		{
-			CheckThingButThenDeleteObject(EndBG_Ptr);
-			EndBG_Ptr = 0;
-			SomethingAboutCredit = 0;
-			SoundManager_Delete2();
-			Credits_State = 5;
+			ObjectFunc(origin, CreditManagement_t.Target());
+			origin(obj);
 			RandCongratsDone = false;
 		}
 	}
 	else
 	{
-		CheckThingButThenDeleteObject(EndBG_Ptr);
-		EndBG_Ptr = 0;
-		SomethingAboutCredit = 0;
-		SoundManager_Delete2();
-		Credits_State = 5;
+		ObjectFunc(origin, CreditManagement_t.Target());
+		origin(obj);
 		RandCongratsDone = false;
 	}
 }
@@ -809,12 +969,11 @@ void __cdecl Credits_StartupInit(const char* path, const HelperFunctions& helper
 	WriteCall((void*)0x641aef, CreditFlag);
 	HookStats_Inits();
 	WriteData<2>((void*)0x641232, 0x90); //allow to skip credits.
-
 }
 
 void Credits_StatsDelayOnFrames() {
 
-	if (StatsTimer && Credits_State >= 2)
+	if (StatsTimer)
 		StatsTimer--;
 
 	if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)

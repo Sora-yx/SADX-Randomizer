@@ -4,6 +4,7 @@
 #include "ActsSettings.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#include "Trampoline.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Sky Deck\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
@@ -99,6 +100,42 @@ void FixTailsVictorySD() {
 	return;
 }
 
+
+//Prevent Big to grab and drop the lever, Although, there is probably a nicer way to do this by editing Big's grab function.
+Trampoline Olever_t(0x5f1d20, 0x5f1d28, Olever_r);
+
+void Olever_r(ObjectMaster* obj) {
+
+	
+	ObjectMaster* P1 = GetCharacterObject(0);
+	int curAction = P1->Data1->Action;
+
+	if (P1 != nullptr && P1->Data1->CharID == Characters_Big && curAction == 15 && CurrentLevel == LevelIDs_SkyDeck)
+	{
+		P1->Data1->Action = 120; //Forcing an action which doesn't exist will block the character, this will prevent Big to grab the lever.
+		P1->Data1->Action = 1;
+		P1->Data1->Status &= 0x100u; //remove the holding item status
+		obj->Data1->Action = 1;
+		obj->Data1->Status = 1600;
+		obj->Data1->field_A = 538;
+		return;
+	}
+
+	obj->Data1->Action = obj->Data1->Action;
+	ObjectFunc(origin, Olever_t.Target());
+	origin(obj);
+}
+
+void FixLeverAlarmSound() {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+	int curAction = P1->Data1->Action;
+
+	if (P1 != nullptr && P1->Data1->CharID == Characters_Big && (curAction == 15 || curAction == 1) && CurrentLevel == LevelIDs_SkyDeck)
+		return;
+
+	QueueSound_DualEntity(0x3d2, (int*)0x1041, 1, 0, 0x1e);
+}
 
 void SkyDeck_Layout() {
 
@@ -204,6 +241,7 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);	
 	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
 	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
+	WriteCall((void*)0x5f1d58, FixLeverAlarmSound);
 	
 	WriteCall((void*)0x461614, FixTailsVictorySD);
 	SDObjects_Init(path, helperFunctions);

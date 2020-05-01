@@ -30,7 +30,6 @@ void character_settings_onFrames();
 int AmyCartImprovement();
 int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
-void PlayEmeraldGrabVoice_R(ObjectMaster* a1);
 
 extern void PlayVoice_R(int a1);
 void FixAISFXJump();
@@ -51,3 +50,18 @@ int GetCharacter1ID();
 void ResultVoiceFix();
 
 void Load_Cart_R();
+DataPointer(char, EmeraldKnuxCheck, 0x3c52c04);
+void PlayCharaVoice_EmeraldGet(ObjectMaster* a1);
+
+enum CharacterStageVersion2 {
+
+	NormalCheck = -1,
+	AmyTPCheck,
+	BigTPCheck,
+	SonicSHCheck,
+	TailsSHCheck,
+	SonicFECheck,
+	AmyFECheck,
+	AmyHSCheck,
+	BigHSCheck
+};
