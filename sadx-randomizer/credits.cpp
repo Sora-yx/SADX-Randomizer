@@ -12,10 +12,22 @@ NJS_TEXNAME Rank_Texnames[4];
 NJS_TEXLIST Rank_Texlist = { arrayptrandlength(Rank_Texnames) };
 
 
+//Credits stats
+int RageQuit = 0;
+int JumpPB = 0;
+int ringsPB = 0;
+int chaoPB = 0;
+int animalPB = 0;
+int killPB = 0;
+int hurtsPB = 0;
+int deathsPB = 0;
+int TotalDeathsPB = 0;
+int TotalHurtsPB = 0;
+int AISwapCount = 0;
+
 extern int CustomFlag;
 extern bool CreditCheck;
-extern char GetCustomLayout;
-extern int CurrentMission;
+extern int CurrentMissionCard;
 //credits stats
 
 extern int TotalDeathsPB;
@@ -23,7 +35,6 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 
 extern int SeedCopy;
-extern char StorySplits;
 extern int StatsTimer;
 int ResultScore = 0;
 bool RandCongratsDone = false;
@@ -718,9 +729,9 @@ void CreditsNewList() {
 
 //Credits
 void credits() {
-	CurrentLevelLayout = 0;
-	GetCustomLayout = 0;
 	CurrentMission = 0;
+	GetCustomLayout = 0;
+	CurrentMissionCard = 0;
 	StatsTimer = 3000;
 	WriteSaveFile();
 
@@ -849,6 +860,8 @@ void PlayVoiceRankResult(int rank, int chara) {
 		PlayDelayedCustomSound(CommonSound_AmyRankE + rank, 180, 0.5f);
 		break;
 	}
+
+	return;
 }
 
 void DisplayRank(int rank) {
@@ -884,6 +897,8 @@ void FinalStatDisplay(ObjectMaster* obj) {
 	{
 		int getHour = (SaveFile.PlayTime / 0xe10) / 60;
 		int getMin = (SaveFile.PlayTime / 0xe10) % 60;
+
+		MusicList[MusicIDs_nights_k].Name = "RandoStats";
 
 		PlayMusic_R(MusicIDs_nights_k);
 
@@ -978,4 +993,6 @@ void Credits_StatsDelayOnFrames() {
 
 	if (StatsTimer && Credits_State >= 2 && ControllerPointers[0]->PressedButtons & Buttons_Start)
 		StatsTimer = 0;
+
+	return;
 }

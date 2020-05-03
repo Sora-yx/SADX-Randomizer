@@ -12,7 +12,7 @@
 
 void Cam_SkyDeck() {
 
-	if (Mission1_Variation && CurrentAct == 0 && Race)
+	if (CurrentStageVersion == TailsVersion && CurrentAct == 0 && Race)
 		LoadCamFile(0, "0603"); //Tails Camera
 	else
 		LoadCamFile(0, "0600"); //Sonic Camera
@@ -20,11 +20,61 @@ void Cam_SkyDeck() {
 	
 	LoadCamFile(1, "0601");
 
-	if (CurrentAct == 2 && (TreasureHunting || isKnucklesVersion))
+	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
 		LoadCamFile(2, "0604"); //Knuckles Version
 	else
 		LoadCamFile(2, "0600"); //Knuckles Version
 
+}
+
+
+void SkyDeck_Layout() {
+
+	switch (CurrentStageVersion)
+	{
+	case SonicVersion:
+	default:
+		LoadSetFile(0, "0600"); //load Sonic layout
+		LoadSetFile(1, "0601");
+		LoadSetFile(2, "0602");
+		break;
+	case TailsVersion:
+		if (CurrentMission < Mission2_100Rings)
+		{
+			Race = true;
+			LoadSetFile(0, "0605"); //load Tails layout
+		}
+		else
+		{
+			Race = false;
+			LoadSetFile(0, "0605"); //load Tails layout
+		}
+		LoadSetFile(1, "0601");
+		LoadSetFile(2, "0602");
+		break;
+	case KnucklesVersion:
+		LoadSetFile(0, "0600");
+		LoadSetFile(1, "0601");
+		if (CurrentMission < Mission2_100Rings)
+		{
+			SetRNGKnuckles();
+			LoadSetFile(2, "0604"); //Knuckles Version
+		}
+		else
+		{
+			LoadSetFile(2, "0606"); //Knuckles M2 Version
+		}
+
+		break;
+	}
+
+
+	if (Race)
+		SelectBarRace();
+
+	Cam_SkyDeck();
+
+	return;
 }
 
 //Don't change the gravity if knuckles layout.
@@ -33,7 +83,7 @@ int Switch_Gravity() {
 	if (CurrentCharacter == Characters_Knuckles && !Vanilla)
 		return (unsigned)Characters_Sonic; //Make the gravity work for Knuckles
 
-	if (TreasureHunting || isKnucklesVersion)
+	if (CurrentStageVersion == KnucklesVersion || isKnucklesVersion)
 		return (unsigned)Characters_Knuckles; 
 	else
 		return GetCharacterID(0);
@@ -137,95 +187,6 @@ void FixLeverAlarmSound() {
 	QueueSound_DualEntity(0x3d2, (int*)0x1041, 1, 0, 0x1e);
 }
 
-void SkyDeck_Layout() {
-
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
-	if (CurrentAct != 2)
-	{
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
-		default:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				Race = true;
-				LoadSetFile(0, "0605"); //load Tails layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				Race = false;
-				LoadSetFile(0, "0600"); //load Sonic layout
-			}
-			break;
-		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Tails && !Vanilla)
-			{
-				Race = false;
-				LoadSetFile(0, "0600"); //load Sonic layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				Race = true;
-				LoadSetFile(0, "0605"); //load Tails layout
-			}
-			break;
-		case Mission2_100Rings:
-		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla || CurrentCharacter == Characters_Knuckles)
-			{
-				Race = true;
-				LoadSetFile(0, "0605"); //load Tails layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				Race = false;
-				LoadSetFile(0, "0600");
-			}
-			break;
-		}
-	}
-
-	if (Race)
-		SelectBarRace();
-
-	if (CurrentAct == 2)
-	{
-		isKnucklesVersion = true;
-
-		switch (CurrentLevelLayout)
-		{
-		default:
-		case Mission1:
-			TreasureHunting = true;
-			CurrentLevelLayout = Mission1_Variation;
-			SetRNGKnuckles();
-			LoadSetFile(0, "0600");
-			LoadSetFile(1, "0601");
-			LoadSetFile(2, "0604"); //Knuckles Version
-			break;
-		case Mission2_100Rings:
-		case Mission3_LostChao:
-			LoadSetFile(0, "0600");
-			LoadSetFile(1, "0601");
-			LoadSetFile(2, "0606"); //Knuckles M2 Version
-			CurrentLevelLayout = Mission2_100Rings;
-			break;
-		}
-	}
-	else
-	{
-		LoadSetFile(1, "0601");
-		LoadSetFile(2, "0602");
-	}
-
-	Cam_SkyDeck();
-
-	return;
-}
 
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {

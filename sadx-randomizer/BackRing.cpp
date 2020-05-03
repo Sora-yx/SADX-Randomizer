@@ -102,7 +102,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 			int color = 0x00000000;
 			ScreenFade_Color = *(NJS_COLOR*)&color;
-			if (CurrentLevelLayout == Mission2_100Rings && Rings < 100 || CurrentLevelLayout == Mission3_LostChao)
+			if (CurrentMission == Mission2_100Rings && Rings < 100 || CurrentMission == Mission3_LostChao)
 			{
 				EnableControl();
 				GetBackRing = true;
@@ -140,7 +140,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 					}
 					break;
 				default:
-					if (isTailsVersion || CurrentStageVersion == TailsSH)
+					if (isTailsVersion || CurrentStageVersion == TailsVersion)
 						GameState = 0xc;
 					else
 					{
@@ -188,7 +188,7 @@ Trampoline Capsule_Load_T(0x46b170, 0x46b177, CheckLoadCapsule_r);
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation)
+	if (CurrentMission < Mission2_100Rings)
 	{
 		switch (CurrentCharacter)
 		{
@@ -217,7 +217,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 	}
 
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		a1->Data1->Position.y += 38;
 		a1->DisplaySub = BackRingObj_Display;
@@ -225,7 +225,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 		RaceResultCheck(a1);
 
 	//call original function (Capsule.)
@@ -238,7 +238,7 @@ void Check_DisplayBackRing_Big(ObjectMaster* a1) {
 	ObjectMaster* play1 = GetCharacterObject(0);
 	EntityData1* v1 = a1->Data1;
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		a1->Data1->Position.y += 28;
 		a1->DisplaySub = BackRingObj_Display;
@@ -246,7 +246,7 @@ void Check_DisplayBackRing_Big(ObjectMaster* a1) {
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 	{
 		RaceResultCheck(a1);
 		return;
@@ -258,7 +258,7 @@ void Check_DisplayBackRing_Amy(ObjectMaster* a1) {
 	ObjectMaster* play1 = GetCharacterObject(0);
 	EntityData1* v1 = a1->Data1;
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 
 		a1->Data1->Position.y += 0;
@@ -268,7 +268,7 @@ void Check_DisplayBackRing_Amy(ObjectMaster* a1) {
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 	{
 		RaceResultCheck(a1);
 		return;
@@ -292,7 +292,7 @@ void Check_Display_Frog_Balloon(ObjectMaster* a1) {
 			break;
 		}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 		RaceResultCheck(a1);
 }
 
@@ -310,7 +310,7 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
 	Check_DisplayBackRing_Big(a1);
 
-	if (CurrentLevelLayout <= Mission1_Variation)
+	if (CurrentMission < Mission2_100Rings)
 	{
 		ObjectFunc(origin, Froggy_Load_T.Target());
 		origin(a1);
@@ -323,7 +323,7 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
 	Check_DisplayBackRing_Amy(a1);
 
-	if (CurrentLevelLayout <= Mission1_Variation)
+	if (CurrentMission < Mission2_100Rings)
 	{
 		ObjectFunc(origin, Balloon_Load_T.Target());
 		origin(a1);
@@ -335,19 +335,19 @@ Trampoline CasinoEmerald_Load_T(0x5dd0a0, 0x5dd0a6, CheckLoadCasinoEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 		RaceResultCheck(a1);
 
 	//call original function (Emerald.)
@@ -360,19 +360,19 @@ Trampoline WVEmerald_Load_T(0x4df3b0, 0x4df3b6, CheckLoadWVEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 		RaceResultCheck(a1);
 
 	//call original function (Emerald.)
@@ -385,19 +385,19 @@ Trampoline ICEmerald_Load_T(0x4ecfa0, 0x4ecfa6, CheckLoadICEmerald_r);
 //Check the current mission and replace the capsule with a different object.
 void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;
 	}
 
-	if (Race && !isAIActive && CurrentLevelLayout <= Mission1_Variation)
+	if (Race && !isAIActive && CurrentMission < Mission2_100Rings)
 		RaceResultCheck(a1);
 
 	//call original function (Emerald.)
@@ -410,13 +410,13 @@ Trampoline CheckLoadTailsPlaneEC_t(0x4f9fb0, 0x4f9fb6, CheckLoadTailsPlaneEC_r);
 
 void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;
@@ -431,13 +431,13 @@ Trampoline CheckLWTrigger_t(0x7b0da0, 0x7b0da6, CheckLWTrigger_r);
 
 void __cdecl CheckLWTrigger_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;
@@ -452,13 +452,13 @@ Trampoline CheckFETrigger_t(0x5b24f0, 0x5b24f6, CheckFETrigger_r);
 
 void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 
-	if (CurrentLevelLayout <= Mission1_Variation && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
+	if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Amy || CurrentCharacter == Characters_Big))
 	{
 		Check_Display_Frog_Balloon(a1);
 		return;
 	}
 
-	if (CurrentLevelLayout >= Mission2_100Rings)
+	if (CurrentMission >= Mission2_100Rings)
 	{
 		Check_Display_BackRing_Common(a1);
 		return;

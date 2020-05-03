@@ -9,98 +9,38 @@
 
 void EC_Cam() {
 
-	if (Mission1_Variation)
-	{
-		if (CurrentCharacter == Characters_Gamma && !Vanilla)
-			LoadCamFile(0, "0100");
-		else
-			LoadCamFile(0, "0104");
-	}
+	if (CurrentStageVersion == GammaVersion)
+		LoadCamFile(0, "0104");
 	else
-	{
 		LoadCamFile(0, "0100");
-	}
 	
-
 	LoadCamFile(1, "0101");
 	LoadCamFile(2, "0102");
 
 	return;
-
 }
 
-void Chao_LoadFiles();
 
 void EC_Layout() {
 
-	CurrentLevelLayout = 3; //randomizedSets[levelCount].MissionLayout;
-
-	if (CurrentAct != 2)
+	switch (CurrentStageVersion)
 	{
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
-		default:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0104"); //M1 Gamma Version
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0100"); //M1 Sonic Version
-			}
-			LoadSetFile(1, "0101");
-			break;
-		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Gamma && !Vanilla)
-			{
-				LoadSetFile(0, "0100");
-				CurrentLevelLayout = Mission1;
-			}
-			else
-			{
-				LoadSetFile(0, "0104"); //M1 Gamma Version
-			}
-
-			LoadSetFile(1, "0101");
-			break;
-		case Mission2_100Rings:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0104"); //M1 Gamma Version
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0100");
-			}
-			LoadSetFile(1, "0101"); //M2
-			break;
-		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0104"); //M1 Gamma Version
-				LoadSetFile(1, "0101");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "0100");
-				LoadSetFile(1, "0103"); //M3
-			}
-
-			break;
-		}
-	}
-
-	if (CurrentAct == 2)
-	{
+	case SonicVersion:
+	default:
 		LoadSetFile(0, "0100");
-		LoadSetFile(1, "0101");
+		break;
+	case GammaVersion:
+		LoadSetFile(0, "0104"); //M1 Gamma Version
+		break;
 	}
+
+	if (CurrentMission == Mission3_LostChao && CurrentStageVersion != GammaVersion)
+		LoadSetFile(1, "0103"); //M3
+	else
+		LoadSetFile(1, "0101");
 
 	LoadSetFile(2, "0102");
+	
 	EC_Cam();
 	return;
 }
@@ -204,6 +144,7 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0101E", "CAM0101E");
 	ReplaceCAM("CAM0102E", "CAM0102E");
 	ReplaceCAM("CAM0104E", "CAM0104E");
+
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC1_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC2_StartPositions[0]);
 	helperFunctions.RegisterStartPosition(Characters_Gamma, EC3_StartPositions[0]);

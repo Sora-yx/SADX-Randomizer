@@ -10,6 +10,70 @@
 ObjectMaster* TriggerCasino = nullptr;
 bool CasinoTails = false;
 
+void Casino_Layout() {
+
+	CasinoTails = false;
+
+		switch (CurrentStageVersion)
+		{
+			case SonicVersion:
+			default:
+				if (CurrentMission < Mission2_100Rings)
+				{
+					LoadSetFile(0, "0900"); //M1
+					LoadSetFile(1, "0901"); //M1
+				}
+				if (CurrentMission == Mission2_100Rings)
+				{
+					LoadSetFile(0, "0905"); //M2
+					LoadSetFile(1, "0901"); //M2
+				}
+				if (CurrentMission == Mission3_LostChao)
+				{
+					LoadSetFile(0, "0904"); //M3
+					LoadSetFile(1, "0901"); //M3
+				}
+				LoadCamFile(0, "0900"); //Sonic Camera
+				break;
+			case TailsVersion:
+				CasinoTails = true;
+				if (CurrentMission < Mission2_100Rings)
+				{
+					Race = true;
+					LoadSetFile(0, "0900"); //M1 Race
+					LoadSetFile(1, "0908"); //M1 Race
+				}
+				else
+				{ 
+					Race = false;
+					LoadSetFile(0, "0904"); //M3
+					LoadSetFile(1, "0907"); //M3
+				}
+				LoadCamFile(0, "0900"); //Sonic Camera
+				break;
+			case KnucklesVersion:
+				SetRNGKnuckles();
+				LoadCamFile(0, "0906");
+				break;
+
+		}
+
+		LoadSetFile(2, "0902");
+		LoadSetFile(3, "0903");
+		LoadCamFile(0, "0900");
+		LoadCamFile(1, "0901");
+		LoadCamFile(2, "0902");
+		LoadCamFile(3, "0903");
+
+
+	if (Race)
+		SelectBarRace();
+
+	FixGoldenAndCoin();
+
+	return;
+}
+
 void TriggerCasinoChao_Main(ObjectMaster* obj) {
 
 	if (IsPlayerInsideSphere(&obj->Data1->Position, 25))
@@ -63,128 +127,10 @@ void FixShakeoffGarbageAction() { //This make the game crash as Tails.
 	return;
 }
 
-void Casino_Layout() {
-
-	CasinoTails = false;
-
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
-	if (CurrentAct == 1)
-	{
-		CasinoTails = true;
-
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
-		case Mission1_Variation:
-		default:
-			Race = true;
-			LoadSetFile(0, "0900"); //M1 Race
-			LoadSetFile(1, "0908"); //M1 Race
-			CurrentLevelLayout = Mission1_Variation;
-			break;
-		case Mission2_100Rings:
-			Race = false;
-			LoadSetFile(0, "0905"); //M2
-			LoadSetFile(1, "0908"); //M2
-			break;
-		case Mission3_LostChao:
-			Race = false;
-			LoadSetFile(0, "0904"); //M3
-			LoadSetFile(1, "0907"); //M3
-			break;
-		}
-
-		LoadSetFile(2, "0902");
-		LoadSetFile(3, "0903");
-		LoadCamFile(0, "0900");
-		LoadCamFile(1, "0901");
-		LoadCamFile(2, "0902");
-		LoadCamFile(3, "0903");
-	}
-
-	if (CurrentAct == 0)
-	{
-		CasinoTails = false;
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			Race = false;
-			LoadSetFile(0, "0906"); //Knux Treasure Hunting
-			LoadSetFile(1, "0901");
-			TreasureHunting = true;
-			CurrentLevelLayout = Mission1_Variation;
-		}
-		else
-		{			
-			switch (CurrentLevelLayout)
-			{
-			case Mission1:
-			default:
-				Race = false;
-				LoadSetFile(0, "0900"); //M1
-				LoadSetFile(1, "0901"); //M1
-				CurrentLevelLayout = Mission1;
-				break;
-			case Mission1_Variation:
-				if (CurrentCharacter == Characters_Knuckles && !Vanilla)
-				{
-					Race = false;
-					LoadSetFile(0, "0905"); //M2
-					LoadSetFile(1, "0901"); //M2
-					CurrentLevelLayout = Mission2_100Rings; //go to M2 instead
-				}
-				else
-				{
-					Race = false;
-					LoadSetFile(0, "0906"); //Knux Treasure Hunting
-					LoadSetFile(1, "0901");
-				}
-				break;
-			case 2:
-				Race = false;
-				LoadSetFile(0, "0905"); //M2
-				LoadSetFile(1, "0901"); //M2
-				break;
-			case 3:
-				Race = false;
-				LoadSetFile(0, "0904"); //M3
-				LoadSetFile(1, "0901"); //M3
-				break;
-			}
-		}
-	}
-
-		LoadSetFile(2, "0902");
-		LoadSetFile(3, "0903");
-
-		if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0) //Knuckles camera
-		{
-			TreasureHunting = true;
-			SetRNGKnuckles();
-			LoadCamFile(0, "0906");
-		}
-		else
-		{
-			LoadCamFile(0, "0900"); //Sonic Camera
-		}
-
-		LoadCamFile(1, "0901");
-		LoadCamFile(2, "0902");
-		LoadCamFile(3, "0903");
-	
-
-	if (Race)
-		SelectBarRace();
-
-	FixGoldenAndCoin();
-
-	return;
-}
-
 void FixInvisibleWall() {
 
 	//if Sonic layout, add an invisible wall, if not, return.
-	if (CurrentLevelLayout != 1)
+	if (CurrentMission != 1)
 	{
 		LoadObject((LoadObj)2, 6, InvisibleWallCasino);
 	}
@@ -208,7 +154,7 @@ void FixTailsVictoryCAS() {
 void FixGoldenAndCoin() {
 
 	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
-	if (CurrentLevelLayout == 1 && CurrentAct == 0)
+	if (CurrentMission == 1 && CurrentAct == 0)
 	{
 		WriteData<1>((void*)0x5c4425, 0x74); //Coin position
 
@@ -226,11 +172,9 @@ void FixGoldenAndCoin() {
 			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
 		else
 			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue*/
-
-
 	}
 
-	if (CurrentAct == 0 && !TreasureHunting)
+	if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
 	{
 		if (CurrentCharacter == Characters_Gamma)
 			WriteData<1>((void*)0x5D118B, 0x2); //Fix gamma pinball teleportation
@@ -240,8 +184,6 @@ void FixGoldenAndCoin() {
 
 	return;
 }
-
-
 
 
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)

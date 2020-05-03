@@ -98,12 +98,14 @@
     <ClCompile Include="AdventureFlags.cpp" />
     <ClCompile Include="AISettings.cpp" />
     <ClCompile Include="BackRing.cpp" />
+    <ClCompile Include="Cart_Common.cpp" />
     <ClCompile Include="Chao.cpp" />
     <ClCompile Include="Chaos0.cpp" />
     <ClCompile Include="Chaos2.cpp" />
     <ClCompile Include="Chaos4.cpp" />
     <ClCompile Include="Chaos6.cpp" />
     <ClCompile Include="CharactersSettings.cpp" />
+    <ClCompile Include="Common_Functions.cpp" />
     <ClCompile Include="Common_Startup.cpp" />
     <ClCompile Include="credits.cpp" />
     <ClCompile Include="e101.cpp" />
@@ -112,9 +114,11 @@
     <ClCompile Include="EggWalker.cpp" />
     <ClCompile Include="Missions.cpp" />
     <ClCompile Include="mod.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="PerfectChaos.cpp" />
     <ClCompile Include="Race.cpp" />
     <ClCompile Include="Randomizer_Main.cpp" />
+    <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="SandHill.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="StageSettings.cpp" />
@@ -123,6 +127,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Voices.cpp" />
     <ClCompile Include="Zero.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +141,7 @@
     <ClInclude Include="data\chaos4.h" />
     <ClInclude Include="data\Chaos6.h" />
     <ClInclude Include="data\CharactersSettings.h" />
+    <ClInclude Include="data\Common.h" />
     <ClInclude Include="data\EggHornet.h" />
     <ClInclude Include="data\EggViper.h" />
     <ClInclude Include="data\EggWalker.h" />

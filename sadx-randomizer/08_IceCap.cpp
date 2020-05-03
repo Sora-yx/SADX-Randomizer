@@ -7,6 +7,69 @@
 #include "Trampoline.h"
 
 
+//VoidFunc(FUNC0043614, 0x043614);
+void IC_Layout() {
+
+	if (CurrentStageVersion != BigVersion)
+	{
+		if (CurrentCharacter > Characters_Tails)
+		{
+			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
+			WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
+			WriteCall((void*)0x4e95dc, Delete_Cart); //Fix Delete Cart at the end of Ice Cap
+
+			WriteCall((void*)0x4e9de1, DisableController_R);
+			WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
+
+			WriteData<1>((void*)0x798306, 0x84); //Jump auto in the cart
+			WriteData<1>((void*)0x7983c4, 0x7F);	
+		}
+		else //restore original values
+		{
+			WriteCall((void*)0x4e9415, DisableTimeThing);
+			WriteCall((void*)0x4e9de1, DisableController_R);
+			WriteData<1>((void*)0x4E9DE0, 0x04);
+			WriteCall((void*)0x4eda00, DisableController);
+		}
+	}
+
+
+	LoadSetFile(0, "0800"); //M1
+	LoadSetFile(1, "0801"); //M1
+
+	switch (CurrentStageVersion)
+	{
+		case SonicVersion:
+		default:
+			LoadSetFile(2, "0802"); //Tails Race
+			break;
+		case TailsVersion:
+			if (CurrentMission < Mission2_100Rings)
+			{
+				Race = true;
+				LoadSetFile(2, "0804"); //Tails Race
+			}
+			else
+			{
+				Race = false;
+			}
+			break;	
+	}
+	
+	LoadSetFile(3, "0803"); 
+
+	LoadCamFile(0, "0800");
+	LoadCamFile(1, "0801");
+	LoadCamFile(2, "0802");
+	LoadCamFile(3, "0803");
+
+	if (Race)
+		SelectBarRace();
+
+	return;
+}
+
+
 
 int IC_ReturnCharacter() { //trick the game to make it think we are playing Sonic this will make spawn the Ice Cave as Big.
 
@@ -29,7 +92,7 @@ void DisableController_R() {
 		}
 	}
 	else
-	{ 
+	{
 		ObjectMaster* GetChara = GetCharacterObject(0);
 		ObjectMaster* GetAI = GetCharacterObject(1);
 
@@ -75,79 +138,6 @@ void FixTailsVictoryIC() {
 		SetTailsRaceVictory();
 	else
 		SetOpponentRaceVictory();
-
-	return;
-}
-
-VoidFunc(FUNC0043614, 0x043614);
-
-
-void IC_Layout() {
-
-	if (CurrentAct != 3)
-	{
-		if (CurrentCharacter > Characters_Tails)
-		{
-			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
-			WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
-			WriteCall((void*)0x4e95dc, Delete_Cart); //Fix Delete Cart at the end of Ice Cap
-
-			WriteCall((void*)0x4e9de1, DisableController_R);
-			WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip
-
-			WriteData<1>((void*)0x798306, 0x84); //Jump auto in the cart
-			WriteData<1>((void*)0x7983c4, 0x7F);	
-		}
-		else
-		{
-			WriteCall((void*)0x4e9415, DisableTimeThing);
-			WriteCall((void*)0x4e9de1, DisableController_R);
-			WriteData<1>((void*)0x4E9DE0, 0x04);
-			WriteCall((void*)0x4eda00, DisableController);
-		}
-	}
-
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
-	LoadSetFile(0, "0800"); //M1
-
-	switch (CurrentLevelLayout)
-	{
-	case Mission1:
-	case Mission1_Variation:
-	default:
-	case Mission2_100Rings:
-	case Mission3_LostChao:
-		LoadSetFile(1, "0801"); //M1
-
-		if (CurrentLevelLayout < Mission2_100Rings && CurrentAct == 0)
-			CurrentLevelLayout = Mission1;
-		break;
-	}
-
-	if (CurrentAct == 2)
-	{
-		Race = true;
-		LoadSetFile(2, "0804"); //Tails Race
-	}
-	else
-	{
-		Race = false;
-		LoadSetFile(2, "0802"); //M1
-	}
-	
-	LoadSetFile(3, "0803"); //M1
-
-	LoadCamFile(0, "0800");
-	LoadCamFile(1, "0801");
-	LoadCamFile(2, "0802");
-	LoadCamFile(3, "0803");
-
-	if (Race)
-	{
-		SelectBarRace();
-		CurrentLevelLayout = Mission1_Variation;
-	}
 
 	return;
 }

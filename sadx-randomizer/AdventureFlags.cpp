@@ -8,7 +8,7 @@
 #include "Credits.h"
 
 using namespace std;
-extern int CustomFlag;
+int CustomFlag = 0; //Used for progression story and credits
 bool CreditCheck = false;
 extern int musicCount;
 
@@ -46,6 +46,7 @@ void CustomFlagCheck() {
 
 	if (GameMode == 9 || GameMode == 10)
 		return;
+
 
 	if (SelectedCharacter == 0) //Sonic
 	{

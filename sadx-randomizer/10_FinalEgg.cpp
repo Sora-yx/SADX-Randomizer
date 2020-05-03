@@ -9,14 +9,14 @@
 
 void CamFinalEgg() {
 	
-	if (CurrentStageVersion == AmyFE && CurrentAct == 0)
+	if (CurrentStageVersion == AmyVersion && CurrentAct == 0)
 		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
 	else
 		LoadCamFile(0, "1000"); //load the camera used for Sonic.
 
 	LoadCamFile(1, "1001");
 
-	if (CurrentAct == 2 && CurrentStageVersion == GammaFE)
+	if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
 		LoadCamFile(2, "1005");
 	else
 		LoadCamFile(2, "1002");
@@ -27,100 +27,37 @@ void CamFinalEgg() {
 }
 
 void FinalEgg_Layout() {
-	
 
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
-
-	if (CurrentAct != 2)
+	switch (CurrentStageVersion)
 	{
-		
-		//Prevent Sonic and Amy to load their vanilla stage
-		if (CurrentCharacter == Characters_Sonic && !Vanilla)
-		{
-			CurrentStageVersion = AmyFE;
-			
-			if (CurrentLevelLayout < Mission2_100Rings)
-			{
-				LoadSetFile(0, "1004"); //Load Amy Layout
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
-				LoadSetFile(0, "1006"); //Load Amy Layout
-			}
-
-		}
-
-		if (CurrentCharacter == Characters_Amy && !Vanilla)
-		{
-			CurrentStageVersion = SonicFE;
-			LoadSetFile(0, "1000"); //Load Sonic Layout
-			if (CurrentLevelLayout < Mission2_100Rings)
-				CurrentLevelLayout = Mission1_Variation;
-		}
-
-		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Amy || Vanilla)
-		{
-			switch (CurrentLevelLayout)
-			{
-			case Mission1:
-			default:
-				CurrentStageVersion = SonicFE;
-				LoadSetFile(0, "1000"); //Sonic Layout
-				CurrentLevelLayout = Mission1;
-				break;
-			case Mission1_Variation:
-				CurrentStageVersion = AmyFE;
-				LoadSetFile(0, "1004"); //load Amy layout
-				break;
-			case Mission2_100Rings:
-			case Mission3_LostChao:
-				CurrentStageVersion = randomizedSets[levelCount].Layout;
-				if (CurrentStageVersion == SonicFE)
-				{
-					LoadSetFile(0, "1000"); //Sonic Layout
-				}
-				else
-				{
-					CurrentStageVersion = AmyFE;
-					LoadSetFile(0, "1006"); //load Amy layout
-				}
-				break;
-			}
-		}
-	}
-
-	if (CurrentAct == 2)
-	{
-		CurrentStageVersion == GammaFE;
-		LoadSetFile(0, "1000");
-		LoadSetFile(1, "1001");
-
-		switch (CurrentLevelLayout)
-		{
-			case Mission1:
-			case Mission1_Variation:
-			default:
-				LoadSetFile(2, "1005");
-				CurrentLevelLayout = Mission1_Variation;
+		case SonicVersion:
+		default:
+			CurrentStageVersion = SonicVersion;
+			LoadSetFile(0, "1000"); //Sonic Layout
+			LoadSetFile(1, "1001");
+			LoadSetFile(2, "1002");
 			break;
-			case Mission2_100Rings:
-			case Mission3_LostChao:
+		case AmyVersion:
+			if (CurrentMission < Mission3_LostChao)
+				LoadSetFile(0, "1004");
+			else
+				LoadSetFile(0, "1006");
+
+			LoadSetFile(1, "1001");
+			LoadSetFile(2, "1002");
+			break;
+		case GammaVersion:
+			LoadSetFile(0, "1000"); 
+			LoadSetFile(1, "1001");
+			if (CurrentMission < Mission2_100Rings)
+				LoadSetFile(2, "1005");
+			else
 				LoadSetFile(2, "1007");
 			break;
-		}
-
-	}
-	else
-	{
-		LoadSetFile(1, "1001");
-		LoadSetFile(2, "1002");
 	}
 
-	LoadSetFile(3, "1003");
+	LoadSetFile(3, "1003"); //Why does this even exist in the game files lol
 	CamFinalEgg();
-
 	return;
 }
 

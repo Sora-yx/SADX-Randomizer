@@ -6,7 +6,7 @@
 
 void Cam_WV() {
 
-	if (CurrentLevelLayout != Mission1_Variation)
+	if (CurrentStageVersion != GammaVersion)
 		LoadCamFile(0, "0200");
 	else
 		LoadCamFile(0, "0203");
@@ -37,73 +37,29 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
-
-	if (CurrentAct != 2)
-	{
-		switch (CurrentLevelLayout)
+		switch (CurrentStageVersion)
 		{
-		case Mission1:
-		case Mission2_100Rings:
-		default:
-			if (CurrentCharacter == Characters_Sonic && !Vanilla)
-			{
-				LoadSetFile(0, "0203");
-				CurrentLevelLayout = Mission1_Variation;
-			}
-			else
-			{
+			case SonicVersion:
+			default:
 				LoadSetFile(0, "0200");
-			}
-			break;
-		case Mission1_Variation:
-			if (CurrentCharacter == Characters_Gamma && !Vanilla)
-			{
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				break;
+			case TailsVersion:
+				Race = true;
 				LoadSetFile(0, "0200");
-				CurrentLevelLayout = Mission1;
-			}
-			else
-			{
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0206");
+				break;
+			case GammaVersion:
 				LoadSetFile(0, "0203");
-			}
-			break;
+				LoadSetFile(1, "0201");
+				LoadSetFile(2, "0202");
+				break;
 		}
-	}
-
-	LoadSetFile(1, "0201");
-
-	if (CurrentAct == 2)
-	{
-		isTailsVersion = true;
-
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
-		default:
-			Race = true;
-			break;
-		case Mission2_100Rings:
-		case Mission3_LostChao:
-			Race = false;
-			CurrentLevelLayout = Mission2_100Rings;
-			break;
-		}
-
-		LoadSetFile(0, "0200");
-		LoadSetFile(1, "0201");
-		LoadSetFile(2, "0206");
-		
-	}
-	else
-	{
-		LoadSetFile(2, "0202");
-	}
 
 	if (Race)
-	{
 		SelectBarRace();
-		CurrentLevelLayout = Mission1_Variation;
-	}
 
 	Cam_WV();
 

@@ -19,3 +19,5 @@ StartPosition IC3_StartPositions[]{
 StartPosition IC4_StartPositions[]{
 	{ 8, 3,{ 1260, 224, -38 }, 8800 }
 };
+
+void DisableController_R();

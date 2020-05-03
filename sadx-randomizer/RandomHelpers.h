@@ -4,22 +4,19 @@
 extern struct RandomizedEntry randomizedSets[40];
 
 uint8_t getRandomCharacter();
-short getRandomStage(uint8_t char_id);
+
+void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
 short getRandomMusic(RandomizedEntry entry);
-bool isStageBanned(uint8_t char_id, short stage_id);
-bool isDuplicateStage(short stage_id, short prev_stage_id);
-bool isVanillaStageBanned(uint8_t char_id, short stage_id);
+
 bool isBossStage(short stage_id);
 bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
-bool CheckPrevLevel(short stage_id);
 void AIAudioFixes();
 
 void FixRMLava();
-short randomacts(RandomizedEntry entry);
-short randomMission(short stage_id);
+short randomSA2Mission(short stage_id);
 short getRandomAI(uint8_t char_id, short stage_id);
 short getRandomRaceAI(RandomizedEntry entry);
 void Randomizer_GetNewRNG();
@@ -31,7 +28,6 @@ extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Vanilla;
 extern int ban;
-extern bool Missions;
 extern bool SA2M2;
 extern bool SA2M3;
 extern bool MetalSonic;
@@ -44,16 +40,17 @@ extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
 extern bool isTailsVersion;
-int IsSA2MissionAllowed();
+extern bool isPlayerInWaterSlide;
 HelperFunctions extern help;
 
 
 struct RandomizedEntry
 {
 	int8_t character;
+	short LevelAndActs;
 	short level;
 	short act;
-	short MissionLayout;
+	short SA2Mission;
 	short Layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
@@ -70,19 +67,31 @@ struct StageVersion {
 	short version;
 };
 
+enum StageVariation {
+
+	NormalVersion = -1,
+	SonicVersion = 0,
+	TailsVersion = 2,
+	KnucklesVersion = 3,
+	AmyVersion = 5,
+	GammaVersion,
+	BigVersion,
+	
+};
+
+struct RandomizerGenerator {
+
+	short levelAndActs;
+	short version;
+	int8_t bannedChar;
+	bool isVanilla;
+};
+
+
 enum CharacterStageVersion {
 
 	Normal = -1,
-	AmyTP,
-	BigTP,
-	SonicSH,
-	TailsSH,
-	SonicFE,
-	AmyFE,
-	AmyHS,
-	BigHS,
-	GammaFE,
-	AmyHSDC
+	BossVersion = 9
 };
 
 //Mission Card Enum 0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
@@ -94,7 +103,6 @@ enum MissionCard {
 
 void BackRingObj_Main(ObjectMaster* obj);
 
-
 void LoadTriggerObject();
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1);
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1);
@@ -105,10 +113,10 @@ void __cdecl CheckLWTrigger_r(ObjectMaster* a1);
 void __cdecl CheckFETrigger_r(ObjectMaster* a1);
 
 
-//SADX / SA2 missions. (M1 Variation is used when a character share the same level and act, but with a different level layout, ex: Amy Hot Shelter and Big Hot Shelter, same act, different version.)
+
 enum CurMission {
 
-	Mission1, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
+	SADX_Mission, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
 };
 
 enum CurSplits {
@@ -116,30 +124,31 @@ enum CurSplits {
 	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
 };
 
-extern short CurrentLevelLayout;
+extern short CurrentMission;
 extern int CurrentStageVersion;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;
 extern int levelCount;
-extern bool TreasureHunting;
 extern bool isCriticalMode;
 
+extern char GetCustomLayout;
 
-void Set_MusicVoices();
+
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
 
 void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
-void TargetableEntity_RegularChara(ObjectMaster* obj);
 void TargetableEntitySmallOBJ(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
 void Chaos0_LoadWithTarget();
 void Chaos2_LoadWithTarget();
 void Chaos6_LoadWithTarget();
 void __cdecl ChaoGameplayCheck();
+bool isSA2Mission();
+
 
 ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
@@ -164,17 +173,19 @@ extern int CharacterCopy;
 
 extern int TransfoCount;  //Super Sonic Stuff
 extern bool Vanilla;
-
-extern int CurrentMission;
+extern bool isCheckpointUsed;
+extern int CurrentMissionCard;
 extern int CurrentAI;
 extern bool isAIActive;
 extern bool isAIAllowed;
-
+extern bool LimitCustomFlag;
 
 extern bool isKnucklesVersion;
+extern bool isZeroActive;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);
-void __cdecl StartupAudio_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl StartupMusic_Init(const char* path, const HelperFunctions& helperFunctions);
+void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions);
 
 
@@ -408,6 +419,9 @@ void fixTCCart();
 void preventCutscene();
 void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
+
+
+float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
 
 extern int RageQuit;
 extern int JumpPB;

@@ -4,14 +4,49 @@
 
 // Mission Card settings, check, texture edit.
 
-int CurrentMission;
+int CurrentMissionCard;
 NJS_TEXNAME MissionsText[25];
 char GetCustomLayout;
 extern HelperFunctions help;
 
+
+bool isSA2Mission() {
+
+	if (SA2M2 || SA2M3)
+		return true;
+
+	return false;
+}
+
+bool isDuplicateMission(short curMission, short prevMission) {
+
+	if (curMission == 0 && prevMission == 1 || prevMission == 0 && curMission == 1)
+		return true;
+
+	return false;
+}
+
+short prev_mission = -1;
+
+short randomSA2Mission(short stage_id) {
+	short cur_mission = -1;
+
+	if (stage_id >= LevelIDs_Chaos0)
+		return SADX_Mission;
+
+	do {
+		 //SA2 missions 100 Rings, Lost Chao 
+			cur_mission = rand() % 2 + 2;
+	} while (prev_mission == cur_mission || (isDuplicateMission(cur_mission, prev_mission) || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3));
+
+	prev_mission = cur_mission;
+	return cur_mission;
+}
+
+
 int CheckMissionRequirements_r() {
 
-	GetCustomLayout = CurrentLevelLayout;
+	GetCustomLayout = CurrentMission;
 
 	if (CurrentLevel > LevelIDs_Chaos0)
 		return 0;
@@ -25,115 +60,138 @@ int CheckMissionRequirements_r() {
 	return 1;
 }
 
-int IsSA2MissionAllowed() {
 
-	if (!SA2M2 && !SA2M3)
-		return false;
-	else
-		return true;
+void PauseMenuFix() {
+	//Display Current Mission Information
+	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel < LevelIDs_Chaos0)
+	{
+		SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
+
+		if (CurrentStageVersion == KnucklesVersion)
+			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M1 (Treasure Hunting)");
+
+		if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
+			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M1 (Beat the Stage)");
+
+		if (CurrentMission == Mission2_100Rings)
+			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M2 (100 Rings)");
+
+		if (CurrentMission == Mission3_LostChao)
+			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M3 (Lost Chao)");
+	}
+
+	//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
+	if (GameMode != GameModes_Trial && RNGStages)
+	{
+		if (PauseSelection == 3)
+			GameMode = GameModes_Adventure_Field;
+		else
+			GameMode = GameModes_Adventure_ActionStg;
+	}
 }
+
 
 void LoadStageMissionImage_r() {
 
 	GetCustomLayout = 0;
-	CurrentMission = 0;
+	CurrentMissionCard = 0;
 
 	if (GetLevelType == 0) { //Mission card check here
 
 		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= 42)
 			return;
 
-		GetCustomLayout = CurrentLevelLayout;
+		GetCustomLayout = CurrentMission;
 
-		if (CurrentLevelLayout < Mission2_100Rings)
+		if (CurrentMission < Mission2_100Rings)
 		{
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && CurrentStageVersion != BigHS)
-				CurrentMission = BalloonCard; //grab ballon
+			if (CurrentCharacter == Characters_Amy && CurrentMission < Mission2_100Rings && CurrentStageVersion != BigVersion)
+				CurrentMissionCard = BalloonCard; //grab ballon
 
-			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
-				CurrentMission = FroggyCard; //grab Froggy
+			if (CurrentCharacter == Characters_Big && CurrentMission < Mission2_100Rings)
+				CurrentMissionCard = FroggyCard; //grab Froggy
 
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigHS || CurrentStageVersion != BigTP))
-				CurrentMission = CapsuleCard;
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigVersion))
+				CurrentMissionCard = CapsuleCard;
 		}
 		
 		switch (CurrentLevel)
 		{
 		case LevelIDs_EmeraldCoast:
-			if (CurrentAct == 2 && CurrentLevelLayout <= Mission1_Variation || CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation)
-				CurrentMission = FroggyCard; //Catch Froggy if Big or Gamma layout.
+			if (CurrentStageVersion == BigVersion || CurrentStageVersion == GammaVersion)
+				CurrentMissionCard = FroggyCard; //Catch Froggy if Big or Gamma layout.
 			break;	
 		case LevelIDs_WindyValley:
-			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0 && (CurrentCharacter == Characters_Gamma))
-				CurrentMission = E103Card;
+			if (CurrentStageVersion == GammaVersion && (CurrentCharacter == Characters_Gamma))
+				CurrentMissionCard = E103Card;
 			break;
 		case LevelIDs_TwinklePark:
-			if (CurrentLevelLayout == Mission1 && CurrentAct == 1 && CurrentStageVersion == BigTP)
-				CurrentMission = FroggyCard;
+			if (CurrentMission == SADX_Mission && CurrentStageVersion == BigVersion)
+				CurrentMissionCard = FroggyCard;
 			break;
 		case LevelIDs_LostWorld:
-			if (!CurrentLevelLayout)
-				CurrentMission = LostWorldCard; //Go to the center of the ruin.
+			if (!CurrentMission)
+				CurrentMissionCard = LostWorldCard; //Go to the center of the ruin.
 			 if (CurrentCharacter == Characters_Amy)
-				CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
-			if (TreasureHunting && CurrentAct == 1)
-				CurrentMission = EmeraldKnuxCard;
+				CurrentMissionCard = BalloonCard; //grab balon if Amy regardless of the mission.
+			if (CurrentStageVersion == KnucklesVersion && CurrentAct == 1)
+				CurrentMissionCard = EmeraldKnuxCard;
 			break;
 		case LevelIDs_FinalEgg:
 			if (CurrentAct != 2)
 			{
-				if (CurrentLevelLayout == Mission1_Variation && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
-					CurrentMission = CapsuleCard; //capsule
+				if (CurrentStageVersion == SonicVersion && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+					CurrentMissionCard = CapsuleCard; //capsule
 
-				if (CurrentLevelLayout == Mission1)
-					CurrentMission = FinalEggCard; //Go to the center of the base.
+				if (CurrentMission == SADX_Mission)
+					CurrentMissionCard = FinalEggCard; //Go to the center of the base.
 
 				if (CurrentCharacter == Characters_Amy)
-					CurrentMission = BalloonCard; //grab balon if Amy regardless of the mission.
+					CurrentMissionCard = BalloonCard; //grab balon if Amy regardless of the mission.
 			}
 			else
 			{
-				if (CurrentAct == 2 && CurrentLevelLayout == Mission1_Variation)
-					CurrentMission = SonicDollCard;
+				if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
+					CurrentMissionCard = SonicDollCard;
 			}
 			break;
 		case LevelIDs_RedMountain:
-			if (CurrentAct == 2 && TreasureHunting)
-				CurrentMission = EmeraldKnuxCard;
-			if (CurrentLevelLayout <= Mission1_Variation && CurrentAct <= 1 && (CurrentCharacter == Characters_Gamma))
-				CurrentMission = E104Card; 
+			if (CurrentAct == 2 && CurrentStageVersion == KnucklesVersion)
+				CurrentMissionCard = EmeraldKnuxCard;
+			if (CurrentMission < Mission2_100Rings && CurrentAct <= 1 && (CurrentCharacter == Characters_Gamma))
+				CurrentMissionCard = E104Card; 
 			break;
 		case LevelIDs_SpeedHighway:
 			if (Race && CurrentAct == 0)
-				CurrentMission = MissileRaceCard; //Eggman Race
-			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 2 && TreasureHunting)
-				CurrentMission = EmeraldKnuxCard;
+				CurrentMissionCard = MissileRaceCard; //Eggman Race
+			if (CurrentMission < Mission2_100Rings && CurrentAct == 2 && CurrentStageVersion == KnucklesVersion)
+				CurrentMissionCard = EmeraldKnuxCard;
 			break;
 		case LevelIDs_SkyDeck:
-			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 2)
-				CurrentMission = EmeraldKnuxCard;
+			if (CurrentMission < Mission2_100Rings && CurrentAct == 2)
+				CurrentMissionCard = EmeraldKnuxCard;
 			break;
 		case LevelIDs_IceCap:
-			if (CurrentAct == 3 && CurrentLevelLayout <= Mission1_Variation)
-				CurrentMission = FroggyCard;  //Froggy
+			if (CurrentAct == 3 && CurrentMission < Mission2_100Rings)
+				CurrentMissionCard = FroggyCard;  //Froggy
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct == 0 && CurrentLevelLayout == Mission1_Variation && TreasureHunting)
-				CurrentMission = EmeraldKnuxCard;
+			if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
+				CurrentMissionCard = EmeraldKnuxCard;
 			break;
 		case LevelIDs_HotShelter:
-			if (CurrentLevelLayout == Mission1_Variation && CurrentAct == 0)
-				CurrentMission = FroggyCard; //Froggy
-			if (CurrentLevelLayout == Mission1 && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
-				CurrentMission = E105Card;
+			if (CurrentStageVersion == BigVersion && CurrentAct == 0)
+				CurrentMissionCard = FroggyCard; //Froggy
+			if (CurrentStageVersion == GammaVersion && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
+				CurrentMissionCard = E105Card;
 			break;
 		default:
-			if (CurrentCharacter == Characters_Amy && CurrentLevelLayout < Mission2_100Rings && CurrentStageVersion != BigHS)
-				CurrentMission = BalloonCard; //grab ballon
-			if (CurrentCharacter == Characters_Big && CurrentLevelLayout < Mission2_100Rings)
-				CurrentMission = FroggyCard; //grab Froggy
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigHS && CurrentStageVersion != BigTP))
-				CurrentMission = CapsuleCard;
+			if (CurrentCharacter == Characters_Amy && CurrentMission < Mission2_100Rings && CurrentStageVersion != BigVersion)
+				CurrentMissionCard = BalloonCard; //grab ballon
+			if (CurrentCharacter == Characters_Big && CurrentMission < Mission2_100Rings)
+				CurrentMissionCard = FroggyCard; //grab Froggy
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigVersion))
+				CurrentMissionCard = CapsuleCard;
 			break;
 		}
 
@@ -142,19 +200,19 @@ void LoadStageMissionImage_r() {
 			switch (AIRace)
 			{
 			case Characters_Eggman:
-				CurrentMission = EggmanRaceCard;
+				CurrentMissionCard = EggmanRaceCard;
 				break;
 			case Characters_Tails:
-				CurrentMission = TailsRaceCard;
+				CurrentMissionCard = TailsRaceCard;
 				break;
 			case Characters_Knuckles:
-				CurrentMission = KnuxRaceCard;
+				CurrentMissionCard = KnuxRaceCard;
 				break;
 			case Characters_Tikal:
-				CurrentMission = TikalRaceCard;
+				CurrentMissionCard = TikalRaceCard;
 				break;
 			case Characters_Amy:
-				CurrentMission = AmyRaceCard;
+				CurrentMissionCard = AmyRaceCard;
 				break;
 			case Characters_Gamma:
 				CurrentMission = GammaRaceCard;
@@ -195,7 +253,7 @@ void StageMissionImage_result() {
 	if (GetLevelType == 0) { //do the mission check here
 			//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
 
-		GetCustomLayout = CurrentLevelLayout;
+		GetCustomLayout = CurrentMission;
 
 		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_HedgehogHammer)
 			return;
@@ -307,7 +365,7 @@ void FlashScreen(ObjectMaster* obj) {
 
 void MissionResultCheck() {
 
-	if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+	if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 	{
 		ObjectMaster* p1 = GetCharacterObject(0);
 		EntityData1* ent;

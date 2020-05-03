@@ -15,7 +15,7 @@ void __cdecl E101Objects_Init(const char* path, const HelperFunctions& helperFun
 	//TexLists_Obj[LevelIDs_E101] = E101ObjectTextures;
 }
 
-
+/*
 void Load_E101_R(ObjectMaster* obj);
 Trampoline Load_E101_t(0x568090, 0x568097, Load_E101_R);
 
@@ -33,7 +33,7 @@ void Load_E101_R(ObjectMaster* obj) {
 	return;
 }
 
-
+*/
 
 
 

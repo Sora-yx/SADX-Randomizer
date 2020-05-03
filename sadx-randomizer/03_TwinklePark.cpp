@@ -31,7 +31,7 @@ void TP_CAM() {
 	if (CurrentAct == 0)
 		LoadCamFile(1, "0301");
 		
-	if (CurrentAct == 1 && CurrentStageVersion == AmyTP)
+	if (CurrentAct == 1 && CurrentStageVersion == AmyVersion)
 		LoadCamFile(1, "0305");
 	else
 		LoadCamFile(1, "0301");
@@ -46,19 +46,17 @@ void TP_CAM() {
 void TwinklePark_Layout() {
 
 	fixTCCart();
-
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 	
 	LoadSetFile(0, "0300");
 
-	if (CurrentAct == 0)
+	if (CurrentStageVersion == SonicVersion)
 	{
-		switch (CurrentLevelLayout)
+		switch (CurrentMission)
 		{
 		default:
-		case Mission1_Variation:
+		case SADX_Mission:
 			LoadSetFile(1, "0301");
-			CurrentLevelLayout = Mission1;
+			CurrentMission = SADX_Mission;
 			break;
 		case Mission2_100Rings:
 			LoadSetFile(1, "0301");
@@ -74,56 +72,14 @@ void TwinklePark_Layout() {
 			WriteData<1>((void*)0x7983c4, 0x7F);
 		}
 	}
+
 	
-	if (CurrentAct == 1)
-	{
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
-			if (CurrentCharacter == Characters_Big && !Vanilla)
-			{
-				LoadSetFile(1, "0305"); //Amy TP version
-				CurrentLevelLayout = Mission1_Variation;
-				CurrentStageVersion = AmyTP;
-				break;
-			}
-			else
-			{
-				LoadSetFile(1, "0306"); //Big TP version
-				CurrentStageVersion = BigTP;
-			}
-			break;
-		case Mission1_Variation:
-		default:
-			LoadSetFile(1, "0305"); //Amy TP version
-			CurrentLevelLayout = Mission1_Variation;
-			CurrentStageVersion = AmyTP;
-			break;
-		case Mission2_100Rings:
-		case Mission3_LostChao:
-			if (CurrentCharacter == Characters_Big && !Vanilla)
-			{
-				LoadSetFile(1, "0305"); //Amy TP version
-				CurrentStageVersion = AmyTP;
-				break;
-			}
-			else
-			{
-				CurrentStageVersion = randomizedSets[levelCount].Layout;
-				if (CurrentStageVersion == BigTP)
-				{
-					LoadSetFile(1, "0306"); //Big TP version
-					CurrentStageVersion = BigTP;
-				}
-				else
-				{
-					LoadSetFile(1, "0305"); //Amy TP version
-					CurrentStageVersion = AmyTP;
-				}
-			}
-			break;
-		}
-	}
+	if (CurrentStageVersion == AmyVersion)
+		LoadSetFile(1, "0305"); //Amy TP version
+
+	if (CurrentStageVersion == BigVersion)
+		LoadSetFile(1, "0306"); //Big TP version
+
 
 	LoadSetFile(2, "0302");
 	TP_CAM();

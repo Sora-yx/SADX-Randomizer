@@ -11,7 +11,7 @@ void Cam_LW() {
 
 	LoadCamFile(0, "0700");
 
-	if (CurrentAct == 1 && (TreasureHunting || isKnucklesVersion))
+	if (CurrentAct == 1 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
 		LoadCamFile(1, "0704");
 	else
 		LoadCamFile(1, "0701");
@@ -21,50 +21,29 @@ void Cam_LW() {
 }
 
 
-
 void LW_Layout() {
 
 	LoadSetFile(0, "0700");
-	CurrentLevelLayout = randomizedSets[levelCount].MissionLayout;
 
-	if (CurrentAct != 1)
+	switch (CurrentStageVersion)
 	{
-		switch (CurrentLevelLayout)
-		{
-		case Mission1:
+		case SonicVersion:
 		default:
-		case Mission1_Variation:
-			LoadSetFile(1, "0701"); //M1
-			CurrentLevelLayout = Mission1;
+			if (CurrentMission < Mission3_LostChao)
+				LoadSetFile(1, "0701"); //M1
+			else
+				LoadSetFile(1, "0703");
 			break;
-		case Mission2_100Rings:
-			LoadSetFile(1, "0701");
-			break;
-		case Mission3_LostChao:
-			LoadSetFile(1, "0703");
-			break;
-		}
-	}
-	else
-	{
-		isKnucklesVersion = true;
-
-		switch (CurrentLevelLayout)
-		{
-			default:
-			case Mission1:
-				CurrentLevelLayout = Mission1_Variation;
-				TreasureHunting = true;
+		case KnucklesVersion:
+			isKnucklesVersion = true;
+			if (CurrentMission < Mission2_100Rings)
+			{
 				LoadSetFile(1, "0704"); //Knux Treasure Hunting
 				SetRNGKnuckles();
-				break;
-			case Mission2_100Rings:
-			case Mission3_LostChao:
-				LoadSetFile(1, "0705"); //Knux M2
-				CurrentLevelLayout = Mission2_100Rings;
-				break;
-		}
-
+			}
+			else
+				LoadSetFile(1, "0705");
+			break;
 	}
 
 	LoadSetFile(2, "0702");
@@ -77,7 +56,7 @@ bool isPlayerInWaterSlide = false;
 
 void FixLWWaterSlide() {
 	ObjectMaster* P1 = GetCharacterObject(0);
-	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMissionCard == RingsCard)
 		isPlayerInWaterSlide = true;
 
 	if (CurrentCharacter == Characters_Sonic && P1->Data1->CharID == Characters_Sonic)
@@ -88,7 +67,7 @@ void FixLWWaterSlide() {
 
 void FixLWWaterSlide2() {
 
-	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMission == RingsCard)
+	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMissionCard == RingsCard)
 		isPlayerInWaterSlide = false;
 
 	return ForcePlayerAction(0, 0x18);

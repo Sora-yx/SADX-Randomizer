@@ -4,7 +4,7 @@ void SetGammaTimer();  //force to 6 min instead of 3
 void BigWeightHook(); //force to 2000g
 
 extern int CurrentAI;
-extern short CurrentLevelLayout;
+extern short CurrentMission;
 
 void AllUpgrades();
 void FixCharacterSFX();

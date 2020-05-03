@@ -20,7 +20,7 @@ extern bool isAIAllowed;
 extern bool AmySpeed;
 extern bool BigSpeed;
 extern bool IceCapCutsceneSkip;
-extern int CurrentMission;
+extern int CurrentMissionCard;
 extern bool Race;
 extern bool isCriticalMode;
 
@@ -41,7 +41,7 @@ int SetAmyWinPose() {
 	switch (CurrentCharacter)
 	{
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission <= 9 && CurrentMission != 3 || CurrentLevelLayout >= 2)
+		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2)
 			return 42;
 		else
 			return 32;
@@ -134,7 +134,6 @@ int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinop
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
 
-extern bool TreasureHunting;
 extern int CurrentStageVersion;
 
 int GetSSLevelBanned() {
@@ -158,7 +157,7 @@ int GetSSLevelBanned() {
 					return false;
 				break;
 			case LevelIDs_Casinopolis:
-				if (CurrentAct == 0 && TreasureHunting)
+				if (CurrentAct == 0 && CurrentStageVersion == 3)
 					return false;
 				else
 					return true;

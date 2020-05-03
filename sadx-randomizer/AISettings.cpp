@@ -192,7 +192,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			}
 			break;
 		case LevelIDs_Casinopolis:
-			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentLevelLayout < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
+			if (CurrentAct >= 1 || CurrentAct == 0 && CurrentMission < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
 			{
 				isAIActive = false;
 				return 0;
@@ -260,7 +260,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				return 0;
 			}
 
-			if (CurrentAct < 2 && !TreasureHunting && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) 
+			if (CurrentAct < 2 && CurrentStageVersion != KnucklesVersion && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy))
 			{
 				isAIActive = false;
 				return 0;
@@ -622,7 +622,6 @@ void FixAISFXAmy8() { //spin dash noise when you press B
 	PlaySound(0x509, 0, 0, 0);
 }
 
-bool isZeroActive = false;
 
 void FixAISFXGamma() { 
 
@@ -706,12 +705,11 @@ void ResultVoiceFix() {
 			Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
-			if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentLevelLayout >= Mission2_100Rings || CurrentStageVersion == GammaFE || TreasureHunting)
+			if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings || CurrentStageVersion == GammaVersion && CurrentLevel == LevelIDs_FinalEgg || CurrentStageVersion == KnucklesVersion)
 				Load_DelayedSound_Voice(4011);
 			else
 				Load_DelayedSound_Voice(4010);
 			SoundManager_Delete2();
-			TreasureHunting = false;
 			break;
 		}
 	}
@@ -749,7 +747,7 @@ void AISwitch() {
 		if (CurrentLevel > 14 && CurrentLevel < 26)
 			return;
 
-	if (Rings >= 100 && CurrentLevelLayout == Mission2_100Rings || TreasureHunting && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+	if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 		return;
 
 	if (CurrentCart)

@@ -8,7 +8,6 @@
 #include "sound.h"
 
 
-
 int Seed = 0;
 char StorySplits;
 bool RNGCharacters = true;
@@ -19,7 +18,6 @@ bool RNGVoices = true;
 bool CustomVoices = true;
 bool RNGMusic = true;
 char SonicCD = 0;
-bool Missions = true;
 bool SA2M2 = true;
 bool SA2M3 = true;
 bool Any = true;
@@ -52,13 +50,8 @@ uint32_t TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 bool isAIAllowed = true;
 uint8_t SwapDelay = 150;
 
-int CustomFlag = 0; //Used for progression story and credits
-short CurrentLevelLayout = 0;
-int CurrentStageVersion = -1;
-
 int DCModWarningTimer = 0;
 int StatsTimer = 4000;
-extern bool gotEV;
 bool SA2Voices = false;
 
 extern CollisionInfo* oldcol;
@@ -69,6 +62,14 @@ extern NJS_VECTOR pos;
 extern bool ChaoSpawnAllowed;
 
 
+
+uint16_t levelactTest = 0; 
+short levelactTest2 = 0;
+short levelactTest3 = 0;
+
+short* ptr = &levelactTest2;
+short* ptr2 = &levelactTest3;
+short chara = 0;
 
 extern "C" {
 
@@ -169,7 +170,8 @@ extern "C" {
 		
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
-		StartupAudio_Init(path, helperFunctions);
+		StartupMusic_Init(path, helperFunctions);
+		StartupVoices_Init(path, helperFunctions);
 		StartupMiscellaneous_Init(path, helperFunctions);
 		
 		Chao_Init();
@@ -186,8 +188,10 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-		//DisplayRank(ResultGetRank());
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Chao Spawn %d", ChaoSpawnAllowed);
+
+
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Result Level %d", levelactTest2);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur Result Act %d", levelactTest3);
 
 
 		//Display DC Conversion warning
@@ -213,7 +217,7 @@ extern "C" {
 
 		//Credits stat
 		Credits_StatsDelayOnFrames();
-
+		
 		Sounds_OnFrame();
 
 		if (GameState == 16)  //Pause Menu
@@ -232,14 +236,14 @@ extern "C" {
 			if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
 				SwapDelay++;
 
-			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && SwapDelay >= 150 && ControlEnabled)
+			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 				AISwitch();
 
 			//Rings Mission 2 and Treasure Hunting Check
 			MissionResultCheck();
 
 			//Chao Mission 3 Check
-			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMission == LostChaoCard)
+			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMissionCard == LostChaoCard)
 				Chao_OnFrame();
 
 			LoadTriggerObject();
