@@ -3,11 +3,6 @@
 
 extern struct RandomizedEntry randomizedSets[40];
 
-uint8_t getRandomCharacter();
-
-void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
-short getRandomMusic(RandomizedEntry entry);
-
 bool isBossStage(short stage_id);
 bool isDuplicateMission(short curMission, short prevMission);
 void SetRandomStageAct(char stage, char act);
@@ -27,6 +22,7 @@ void RandomizeStages_Hook();
 extern bool RNGCharacters;
 extern bool RNGStages;
 extern bool Vanilla;
+extern bool DupliCheck;
 extern int ban;
 extern bool SA2M2;
 extern bool SA2M3;
@@ -101,6 +97,24 @@ enum MissionCard {
 	BigRaceCard, GammaRaceCard, EggmanRaceCard, TikalRaceCard, MSRaceCard, E103Card, E104Card, E105Card, EmeraldCasinoCard, EmeraldICCard, EmeraldWVCard, SonicDollCard
 };
 
+enum CurMission {
+
+	SADX_Mission, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
+};
+
+enum CurSplits {
+
+	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
+};
+
+
+
+uint8_t getRandomCharacter();
+bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
+bool isDuplicateStage(RandomizerGenerator* generated);
+void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
+short getRandomMusic(RandomizedEntry entry);
+
 void BackRingObj_Main(ObjectMaster* obj);
 
 void LoadTriggerObject();
@@ -114,15 +128,6 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1);
 
 
 
-enum CurMission {
-
-	SADX_Mission, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
-};
-
-enum CurSplits {
-
-	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
-};
 
 extern short CurrentMission;
 extern int CurrentStageVersion;
@@ -149,7 +154,7 @@ void Chaos6_LoadWithTarget();
 void __cdecl ChaoGameplayCheck();
 bool isSA2Mission();
 
-
+int GetCharaProgression();
 ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
 ObjectFunc(InvisibleWallCasino, 0x5d03a0);

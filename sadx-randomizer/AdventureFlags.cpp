@@ -12,6 +12,54 @@ int CustomFlag = 0; //Used for progression story and credits
 bool CreditCheck = false;
 extern int musicCount;
 
+int GetCharaProgression() {
+
+	if (!CustomFlag)
+	{
+		ChaoGardenSSWarpOpen = 1;
+		ChaoGardenECWarpOpen = 1;
+		ChaoGardenMRWarpOpen = 1;
+
+		switch (SelectedCharacter)
+		{
+		case 0:
+			if (EventFlagArray[EventFlags_Sonic_Chaos0Clear] == 0)
+				return 0;
+			break;
+		case 1:
+			if (EventFlagArray[EventFlags_Tails_EggHornetClear] == 0)
+				return 0;
+			break;
+		case 2:
+			if (EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0)
+				return 0;
+			break;
+		case 3:
+			if (EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0)
+				return 0;
+			break;
+		case 4:
+			if (EventFlagArray[EventFlags_Big_TwinkleParkClear] == 0)
+				return 0;
+			break;
+		case 5:
+			if (EventFlagArray[EventFlags_Gamma_FinalEggClear] == 0 && isChaoGameplayAllowed)
+				return 0;
+			break;
+		case 6:
+			if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 0 && isChaoGameplayAllowed)
+				return 0;
+			break;
+		default:
+			return 1;
+			break;
+		}
+	}
+
+	return 1;
+}
+
+
 void DeleteCustomFlag() {
 
 	if (CurrentLevel == 0 && GameMode == 12 && !DemoPlaying)

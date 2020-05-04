@@ -25,6 +25,7 @@ bool Viper = false;
 extern bool CreditCheck;
 bool isCriticalMode = false;
 bool isChaoGameplayAllowed = false;
+bool DupliCheck = true;
 
 //Character settings
 bool AmySpeed = true;
@@ -61,8 +62,6 @@ time_t t;
 extern NJS_VECTOR pos;
 extern bool ChaoSpawnAllowed;
 
-
-
 uint16_t levelactTest = 0; 
 short levelactTest2 = 0;
 short levelactTest3 = 0;
@@ -80,7 +79,6 @@ extern "C" {
 		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
 		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
 		HMODULE CMMode = GetModuleHandle(L"SADX-Critical-Mode");
-
 
 		if (DCMod && !DCLight)
 			DCModWarningTimer = 0; //don't display the DC Warning message if Lantern Engine is missing.
@@ -112,6 +110,7 @@ extern "C" {
 		StorySplits = config->getInt("Randomizer", "StorySplits", 0); //speedrunners splits
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
+		DupliCheck = config->getBool("Randomizer", "DupliCheck", true);
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		Seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
@@ -121,7 +120,6 @@ extern "C" {
 		//Songs Settings
 		RNGVoices = config->getBool("SongsStuff", "RNGVoices", true);
 		RNGMusic = config->getBool("SongsStuff", "RNGMusic", true);
-		SonicCD = config->getInt("SongsStuff", "SonicCD", 0);
 
 		//Characters Settings
 		AmySpeed = config->getBool("CharactersStuff", "AmySpeed", true);
@@ -176,7 +174,6 @@ extern "C" {
 		
 		Chao_Init();
 		ChaoGameplayCheck();
-		SA2VoicesCheck();
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();
@@ -188,10 +185,8 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-
-
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Result Level %d", levelactTest2);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur Result Act %d", levelactTest3);
+	/*	DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Result Level %d", levelactTest2);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur Result Act %d", levelactTest3);*/
 
 
 		//Display DC Conversion warning

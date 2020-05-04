@@ -391,3 +391,69 @@ void fixTCCart() {
 	return;
 }
 
+
+
+void ResetStatsValues() {
+	LimitCustomFlag = false;
+	isZeroActive = false;
+	isAIActive = false;
+	ChaoSpawn = false;
+	CasinoTails = false;
+	isGameOver = false;
+	isKnucklesVersion = false;
+	isTailsVersion = false;
+
+	KnuxCheck = 0;
+	KnuxCheck2 = 0; //fix trial crash
+	CurrentAI = 0;
+	SonicRand = 0;
+	TransfoCount = 0;
+	CurrentMission = 0;
+	CurrentStageVersion = Normal;
+	CurrentMissionCard = 0;
+	GetCustomLayout = 0;
+	Credits_State = 0;
+	RageQuit++;
+	ringsPB += Rings; //total Rings credit stat
+	Race = false;
+	RandCongratsDone = false;
+	isPlayerInWaterSlide = false;
+	isCheckpointUsed = false;
+	fixTCCart();
+
+	if (CurrentLevel != 0)
+		Delete_Cart();
+
+	RestoreRNGValueKnuckles();
+}
+
+//cancel the reset position at 0 after quitting a stage.
+void CancelResetPosition() {
+	NextAct = LastAct;
+	NextLevel = LastLevel;
+
+	ResetStatsValues();
+	GameMode = GameModes_Adventure_Field;
+	return;
+}
+
+void SoftReset_R() {
+
+	if (LevelCopy != 0 && Credits_State == 0)
+		ResetStatsValues();
+
+	if (LevelCopy != 0)
+	{
+		GameMode = GameModes_Adventure_Field;
+		PauseQuitThing2(); //Delete stuff correctly.
+	}
+
+	return FUN_00412ad0();
+}
+
+void TrialModeQuit_R() {
+	if (LevelCopy != 0 && Credits_State == 0)
+		ResetStatsValues();
+
+	return FUN_00425b00();
+}

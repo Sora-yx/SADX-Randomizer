@@ -29,9 +29,10 @@ bool isDuplicateMission(short curMission, short prevMission) {
 short prev_mission = -1;
 
 short randomSA2Mission(short stage_id) {
+
 	short cur_mission = -1;
 
-	if (stage_id >= LevelIDs_Chaos0)
+	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission())
 		return SADX_Mission;
 
 	do {

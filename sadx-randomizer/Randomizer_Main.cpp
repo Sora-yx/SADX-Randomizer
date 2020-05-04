@@ -83,10 +83,21 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
 	{LevelAndActIDs_SandHill, NormalVersion, Characters_Sonic || Characters_Tails},
-};									
+};		
 
-bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
-bool isDuplicateStage(RandomizerGenerator* generated);
+RandomizerGenerator RandoBannedCombination[9]{
+
+	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Gamma },
+	{LevelAndActIDs_Chaos0, BossVersion, Characters_Gamma},
+	{LevelAndActIDs_Chaos2, BossVersion, Characters_Gamma},
+	{LevelAndActIDs_Chaos4, BossVersion, Characters_Gamma },
+	{LevelAndActIDs_Chaos6, BossVersion, Characters_Gamma },
+	{LevelAndActIDs_Chaos6Two, BossVersion, Characters_Gamma },
+	{LevelAndActIDs_PerfectChaos, BossVersion, Characters_Gamma || Characters_Big },
+	{LevelAndActIDs_EggViper, BossVersion, Characters_Big },
+	{LevelAndActIDs_Zero, BossVersion, Characters_Gamma},
+};
+
 
 void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
@@ -96,7 +107,7 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (isStageBanned(generated, Char_id) || isDuplicateStage(generated));
+	} while (isStageBanned(generated, Char_id) || DupliCheck && isDuplicateStage(generated));
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs &0xf;
@@ -110,13 +121,19 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 	short curVersion = generated->version;
 	short curLevel = generated->levelAndActs;
 
-	if (!Vanilla && curVersion == char_id || generated->bannedChar == char_id && curVersion == BossVersion)
+	if (!Vanilla && (curVersion == char_id || curLevel == LevelAndActIDs_TwinkleCircuit1) || generated->bannedChar == char_id && curVersion == BossVersion)
 		return true;
+
+	for (uint8_t i = 0; i < LengthOfArray(RandoBannedCombination); i++)
+	{
+		if (curLevel == RandoBannedCombination[i].levelAndActs && char_id == RandoBannedCombination[i].bannedChar)
+			return true;
+	}
 
 	if (curLevel >= LevelAndActIDs_TwinkleCircuit1 && curLevel <= LevelAndActIDs_TwinkleCircuit6)
 	{
-		int trick = rand() % 2;
-		if (trick)
+		int trick = rand() % 3;
+		if (trick > 0)
 			return true;
 	}
 	
@@ -197,53 +214,6 @@ short getRandomRaceAI(RandomizedEntry entry) {
 	return cur_RaceAI;
 }
 
-
-int GetCharaProgression() {
-
-	if (!CustomFlag)
-	{
-		ChaoGardenSSWarpOpen = 1;
-		ChaoGardenECWarpOpen = 1;
-		ChaoGardenMRWarpOpen = 1;
-
-		switch (SelectedCharacter)
-		{
-		case 0:
-			if (EventFlagArray[EventFlags_Sonic_Chaos0Clear] == 0)
-				return 0;
-			break;
-		case 1:
-			if (EventFlagArray[EventFlags_Tails_EggHornetClear] == 0)
-				return 0;
-			break;
-		case 2:
-			if (EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0)
-				return 0;
-			break;
-		case 3:
-			if (EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0)
-				return 0;
-			break;
-		case 4:
-			if (EventFlagArray[EventFlags_Big_TwinkleParkClear] == 0)
-				return 0;
-			break;
-		case 5:
-			if (EventFlagArray[EventFlags_Gamma_FinalEggClear] == 0 && isChaoGameplayAllowed)
-				return 0;
-			break;
-		case 6:
-			if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 0 && isChaoGameplayAllowed)
-				return 0;
-			break;
-		default: 
-			return 1;
-			break;
-		}
-	}
-
-	return 1;
-}
 
 int levelCount;
 
@@ -354,130 +324,6 @@ void GoToNextLevel_hook(char stage, char act) {
 	return GoToNextLevel();
 }
 
-extern ObjectMaster* TriggerOBJ;
-extern ObjectMaster* TriggerHS;
-extern bool LimitCustomFlag;
-
-
-void GotoNextLevel_RngLess(char stage, char act) {
-
-	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
-	{
-		if (RNGCharacters && IsAdventureComplete(6))
-		{
-			CurrentCharacter = randomizedSets[levelCount].character;
-
-			if (SuperSonic != true)
-				SonicRand = randomizedSets[levelCount].ss_mode;
-
-			if (MetalSonic != true)
-				MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
-		}
-
-		if (isAIAllowed)
-			CurrentAI = randomizedSets[levelCount].ai_mode;
-
-		levelCount++;
-	}
-
-	if (levelCount == TotalCount)
-		Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.
-
-	return GoToNextLevel();
-}
-
-void SetNextLevel_RngLess(char stage, char act) {
-
-	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
-	{
-		if (RNGCharacters)
-		{
-			CurrentCharacter = randomizedSets[levelCount].character;
-
-			if (SuperSonic != true)
-				SonicRand = randomizedSets[levelCount].ss_mode;
-
-			if (MetalSonic != true)
-				MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
-		}
-
-		if (isAIAllowed)
-			CurrentAI = randomizedSets[levelCount].ai_mode;
-
-		levelCount++;
-	}
-
-	if (levelCount == TotalCount)
-		Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.
-
-	return SetLevelAndAct(0x1a, 3);
-}
-
-
-void ResetStatsValues() {
-	LimitCustomFlag = false;
-	isZeroActive = false;
-	isAIActive = false;
-	ChaoSpawn = false;
-	CasinoTails = false;
-	isGameOver = false;
-	isKnucklesVersion = false;
-	isTailsVersion = false;
-
-	KnuxCheck = 0;
-	KnuxCheck2 = 0; //fix trial crash
-	CurrentAI = 0;
-	SonicRand = 0;
-	TransfoCount = 0;
-	CurrentMission = 0;
-	CurrentStageVersion = Normal;
-	CurrentMissionCard = 0;
-	GetCustomLayout = 0;
-	Credits_State = 0;
-	RageQuit++;
-	ringsPB += Rings; //total Rings credit stat
-	Race = false;
-	RandCongratsDone = false;
-	isPlayerInWaterSlide = false;
-	isCheckpointUsed = false;
-	fixTCCart();
-
-	if (CurrentLevel != 0)
-		Delete_Cart();
-
-	RestoreRNGValueKnuckles();
-}
-
-//cancel the reset position at 0 after quitting a stage.
-void CancelResetPosition() {
-	NextAct = LastAct;
-	NextLevel = LastLevel;
-
-	ResetStatsValues();
-	GameMode = GameModes_Adventure_Field;
-	return;
-}
-
-void SoftReset_R() {
-
-	if (LevelCopy != 0 && Credits_State == 0)
-		ResetStatsValues();
-
-	if (LevelCopy != 0)
-	{
-		GameMode = GameModes_Adventure_Field;
-		PauseQuitThing2(); //Delete stuff correctly.
-	}
-
-	return FUN_00412ad0();
-}
-
-void TrialModeQuit_R() {
-	if (LevelCopy != 0 && Credits_State == 0)
-		ResetStatsValues();
-
-	return FUN_00425b00();
-}
 
 //Fix Trial Mode
 void SetLevelAndAct_R() {
@@ -545,7 +391,6 @@ void Create_NewRNG() {
 		if (RNGStages)
 			getRandomStage(&randomizedSets[i], randomizedSets[i].character);
 
-		if (isSA2Mission())
 			randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
 		 
 		if (RNGMusic)
@@ -670,11 +515,5 @@ void RandomizeStages_Hook() {
 		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		WriteCall((void*)0x417bed, GameOver_R);
 		WriteCall((void*)0x41717d, GameOver_R);
-	}
-	else
-	{
-		WriteCall((void*)0x41709d, GotoNextLevel_RngLess); //hook "Go to next level"
-		WriteCall((void*)0x417b47, GotoNextLevel_RngLess); //GameStateHandler_Adventure hook after movie cutscene
-		WriteCall((void*)0x41348f, SetNextLevel_RngLess); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
 	}
 }

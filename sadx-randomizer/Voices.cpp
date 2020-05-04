@@ -45,9 +45,11 @@ bool DoesConfigExist(const std::string& file)
 
 void SA2VoicesCheck() {
 
+	HMODULE IsSA2Voices = GetModuleHandle(L"SA2-Voices");
+
 	const char* Path = "mods\\SA2 Voices\\system\\sounddata\\voice_us\\wma\\7010.adx";
 
-	if (DoesConfigExist(Path))
+	if (DoesConfigExist("RandoConfig.txt") || IsSA2Voices)
 		SA2Voices = true;
 
 	if (!DoesConfigExist("RandoConfig.txt") && RNGVoices)
@@ -136,7 +138,10 @@ void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperF
 	WriteCall((void*)0x45be57, PlayVoice_R);
 
 	if (RNGVoices)
+	{
 		WriteCall((void*)0x42571d, RandomVoice);
+		SA2VoicesCheck();
+	}
 
 	if (isAIAllowed)
 	{
