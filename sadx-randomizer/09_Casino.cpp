@@ -130,10 +130,8 @@ void FixShakeoffGarbageAction() { //This make the game crash as Tails.
 void FixInvisibleWall() {
 
 	//if Sonic layout, add an invisible wall, if not, return.
-	if (CurrentMission != 1)
-	{
+	if (CurrentStageVersion == SonicVersion)
 		LoadObject((LoadObj)2, 6, InvisibleWallCasino);
-	}
 
 	return;
 }
@@ -154,7 +152,7 @@ void FixTailsVictoryCAS() {
 void FixGoldenAndCoin() {
 
 	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
-	if (CurrentMission == 1 && CurrentAct == 0)
+	if (CurrentStageVersion == KnucklesVersion && CurrentAct == 0)
 	{
 		WriteData<1>((void*)0x5c4425, 0x74); //Coin position
 

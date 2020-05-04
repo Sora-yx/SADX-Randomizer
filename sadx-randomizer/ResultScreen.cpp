@@ -189,7 +189,7 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_HotShelter:
-					if (CurrentAct == 2 && CurrentMissionCard == SADX_Mission)
+					if (CurrentAct == 2 && CurrentMission == SADX_Mission)
 						Load_DelayedSound_Voice(1773);
 					if (CurrentAct == 0 && CurrentMissionCard == 5 && CurrentStageVersion == BigVersion)
 						Load_DelayedSound_Voice(1772);

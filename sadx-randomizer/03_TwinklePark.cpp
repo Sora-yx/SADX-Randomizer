@@ -46,34 +46,34 @@ void TP_CAM() {
 void TwinklePark_Layout() {
 
 	fixTCCart();
-	
+
 	LoadSetFile(0, "0300");
 
 	if (CurrentStageVersion == SonicVersion)
 	{
 		switch (CurrentMission)
 		{
-		default:
-		case SADX_Mission:
-			LoadSetFile(1, "0301");
-			CurrentMission = SADX_Mission;
-			break;
-		case Mission2_100Rings:
-			LoadSetFile(1, "0301");
-			break;
-		case Mission3_LostChao:
-			LoadSetFile(1, "0303"); //M3 Version
-			break;
+			default:
+			case SADX_Mission:
+				LoadSetFile(1, "0301");
+				CurrentMission = SADX_Mission;
+				break;
+			case Mission2_100Rings:
+				LoadSetFile(1, "0301");
+				break;
+			case Mission3_LostChao:
+				LoadSetFile(1, "0303"); //M3 Version
+				break;
 		}
 
 		if (CurrentCharacter >= Characters_Gamma)
 		{
-			WriteData<1>((void*)0x798306, 0x84); 
+			WriteData<1>((void*)0x798306, 0x84);
 			WriteData<1>((void*)0x7983c4, 0x7F);
 		}
 	}
 
-	
+
 	if (CurrentStageVersion == AmyVersion)
 		LoadSetFile(1, "0305"); //Amy TP version
 

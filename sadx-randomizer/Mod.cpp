@@ -185,8 +185,11 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-	/*	DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Result Level %d", levelactTest2);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur Result Act %d", levelactTest3);*/
+		if (GameState == 15)
+		{
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Mission %d", CurrentMission);
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur StageVer %d", CurrentStageVersion);
+		}
 
 
 		//Display DC Conversion warning
@@ -238,7 +241,7 @@ extern "C" {
 			MissionResultCheck();
 
 			//Chao Mission 3 Check
-			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMissionCard == LostChaoCard)
+			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMission == Mission3_LostChao)
 				Chao_OnFrame();
 
 			LoadTriggerObject();

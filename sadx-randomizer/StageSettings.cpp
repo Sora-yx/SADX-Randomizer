@@ -23,7 +23,7 @@ void LoadLevelFiles_R() {
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_HotShelter)
 	{
 		CurrentMission = randomizedSets[levelCount].SA2Mission;
-		CurrentStageVersion = randomizedSets[levelCount].Layout;
+		CurrentStageVersion = AmyVersion;//randomizedSets[levelCount].Layout;
 	}
 
 	return LoadLevelFiles();
@@ -49,7 +49,7 @@ void LoadZero() {
 	if (CurrentLevel == LevelIDs_TwinklePark)
 		SetCameraControlEnabled(1);
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentStageVersion != AmyVersion || CurrentLevel == LevelIDs_TwinklePark && !CurrentStageVersion != AmyVersion) //don't load Zero if Sonic Layout
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentStageVersion != AmyVersion || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion != AmyVersion) //don't load Zero if Sonic Layout
 		return;
 
 	isZeroActive = true;
