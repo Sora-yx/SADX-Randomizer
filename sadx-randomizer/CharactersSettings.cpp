@@ -134,7 +134,7 @@ int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinop
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
 
-extern int CurrentStageVersion;
+extern int8_t CurrentStageVersion;
 
 int GetSSLevelBanned() {
 
@@ -145,13 +145,13 @@ int GetSSLevelBanned() {
 			switch (CurrentLevel)
 			{
 			case LevelIDs_TwinklePark:
-				if (CurrentAct == 1 && CurrentStageVersion != AmyTPCheck || CurrentAct == 0)
+				if (CurrentAct == 1 && CurrentStageVersion != Characters_Amy || CurrentAct == 0)
 					return true;
 				else
 					return false;
 				break;
 			case LevelIDs_SpeedHighway:
-				if (CurrentAct == 0 && CurrentStageVersion != TailsSHCheck)
+				if (CurrentAct == 0 && CurrentStageVersion != Characters_Tails)
 					return true;
 				else
 					return false;

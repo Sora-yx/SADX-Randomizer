@@ -47,7 +47,7 @@ struct RandomizedEntry
 	short level;
 	short act;
 	short SA2Mission;
-	short Layout;
+	uint8_t Layout;
 	char sonic_mode; //Metal Sonic
 	char ss_mode; //Super Sonic
 	int ai_mode; //AI following you
@@ -78,9 +78,8 @@ enum StageVariation {
 struct RandomizerGenerator {
 
 	short levelAndActs;
-	short version;
+	int8_t version;
 	int8_t bannedChar;
-	bool isVanilla;
 };
 
 
@@ -130,7 +129,7 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1);
 
 
 extern short CurrentMission;
-extern int CurrentStageVersion;
+extern int8_t CurrentStageVersion;
 extern int CustomFlag;
 extern bool Race;
 extern char AIRace;

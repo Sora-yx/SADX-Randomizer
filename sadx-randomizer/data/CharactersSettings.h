@@ -53,15 +53,3 @@ void Load_Cart_R();
 DataPointer(char, EmeraldKnuxCheck, 0x3c52c04);
 void PlayCharaVoice_EmeraldGet(ObjectMaster* a1);
 
-enum CharacterStageVersion2 {
-
-	NormalCheck = -1,
-	AmyTPCheck,
-	BigTPCheck,
-	SonicSHCheck,
-	TailsSHCheck,
-	SonicFECheck,
-	AmyFECheck,
-	AmyHSCheck,
-	BigHSCheck
-};

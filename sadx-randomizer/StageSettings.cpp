@@ -20,11 +20,7 @@ bool isZeroActive;
 
 void LoadLevelFiles_R() {
 
-	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_HotShelter)
-	{
-		CurrentMission = randomizedSets[levelCount].SA2Mission;
-		CurrentStageVersion = AmyVersion;//randomizedSets[levelCount].Layout;
-	}
+
 
 	return LoadLevelFiles();
 }
@@ -472,9 +468,6 @@ void LoadTriggerObject() {
 
 
 void Stages_Management() {
-
-	WriteCall((void*)0x4152c9, LoadLevelFiles_R);
-	WriteCall((void*)0x415308, LoadLevelFiles_R);
 
 	WriteJump(LoadLevelResults, LoadLevelResults_r); 
 	WriteCall((void*)0x42af59, ReleaseScoreTexture);

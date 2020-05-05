@@ -359,7 +359,7 @@ void ResetValueWhileLevelResult() {
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
-	CurrentStageVersion = Normal;
+	CurrentStageVersion = 0;
 	isPlayerInWaterSlide = false;
 	CasinoTails = false;
 	isKnucklesVersion = false;
@@ -409,7 +409,7 @@ void ResetStatsValues() {
 	SonicRand = 0;
 	TransfoCount = 0;
 	CurrentMission = 0;
-	CurrentStageVersion = Normal;
+	CurrentStageVersion = 0;
 	CurrentMissionCard = 0;
 	GetCustomLayout = 0;
 	Credits_State = 0;

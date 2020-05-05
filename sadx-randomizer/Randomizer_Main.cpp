@@ -24,7 +24,7 @@ bool isKnucklesVersion = false;
 bool isTailsVersion = false;
 bool SA2Mission = false;
 short CurrentMission = 0;
-int CurrentStageVersion = -1;
+int8_t CurrentStageVersion = 0;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
@@ -76,13 +76,13 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_EggWalker, BossVersion, Characters_Tails},
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
-	{LevelAndActIDs_TwinkleCircuit1, NormalVersion,},
+	{LevelAndActIDs_TwinkleCircuit1, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit2, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit3, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit4, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
-	{LevelAndActIDs_SandHill, NormalVersion, Characters_Sonic || Characters_Tails},
+	{LevelAndActIDs_SandHill, SonicVersion, Characters_Tails},
 };		
 
 RandomizerGenerator RandoBannedCombination[9]{
@@ -107,56 +107,91 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (isStageBanned(generated, Char_id) || DupliCheck && isDuplicateStage(generated));
+	} while (DupliCheck && isDuplicateStage(generated) || isStageBanned(generated, Char_id));
 
 	entry->level = generated->levelAndActs >> 8;
-	entry->act = generated->levelAndActs &0xf;
+	entry->act = generated->levelAndActs & 0xf;
 	entry->Layout = generated->version;
-
 	return;
 }
 
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 {
+	std::ofstream myfile("RandoDebug.txt", std::ios_base::app);
+	myfile << "\n";
 	short curVersion = generated->version;
 	short curLevel = generated->levelAndActs;
+	short curSingleLevel = generated->levelAndActs >> 8;
+	short curAct = generated->levelAndActs & 0xF;
+	short curChar = char_id;
 
-	if (!Vanilla && (curVersion == char_id || curLevel == LevelAndActIDs_TwinkleCircuit1) || generated->bannedChar == char_id && curVersion == BossVersion)
+	if (!Vanilla && (curVersion == char_id || curLevel == LevelAndActIDs_TwinkleCircuit1 || curVersion == BossVersion && char_id == generated->bannedChar))
+	{
+		myfile << "Banned Stage: " << curSingleLevel;
+		myfile << " CurAct: " << curAct;
+		myfile << " CurChar: " << curChar;
+		myfile << " CurVersion: " << curVersion;
+	
 		return true;
+	}
 
-	for (uint8_t i = 0; i < LengthOfArray(RandoBannedCombination); i++)
+
+	/*for (uint8_t i = 0; i < LengthOfArray(RandoBannedCombination); i++)
 	{
 		if (curLevel == RandoBannedCombination[i].levelAndActs && char_id == RandoBannedCombination[i].bannedChar)
 			return true;
-	}
+	}*/
 
 	if (curLevel >= LevelAndActIDs_TwinkleCircuit1 && curLevel <= LevelAndActIDs_TwinkleCircuit6)
 	{
 		int trick = rand() % 3;
+
 		if (trick > 0)
 			return true;
 	}
-	
+	myfile << "Not Banned Stage" << curSingleLevel;
+	myfile << " CurAct: " << curAct;
+	myfile << " CurChar: " << curChar;
+	myfile << " CurVersion: " << curVersion;
+	myfile.close();
 	return false;
 }
 
-vector<short> DuplicateStages;
+
+vector<RandomizerGenerator> DuplicateStages;
+RandomizerGenerator StructDupli;
 
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
+	std::ofstream myfile("VectorDebug.txt", std::ios_base::app);
+	myfile << "\n";
+
 	short curLevelAndActID = generated->levelAndActs;
-	short curLevel = ConvertLevelActsIDtoLevel(generated->levelAndActs);
+	short curVersion = generated->version;
+	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
 
-	for (short stage: DuplicateStages)  {
+	for (RandomizerGenerator stage: DuplicateStages)  {
 
-		if (curLevelAndActID == stage)
+		if (curLevelAndActID == stage.levelAndActs && curVersion == stage.version || DuplicateStages.back().levelAndActs >> 8 == curLevel)
+		{
+			myfile << "Prevous Stage: " << curLevel;
+			myfile << " Previous Version: " << curVersion;
 			return true;
+		}
 
-		if (DuplicateStages.back() >> 8 == curLevel || generated->version == BossVersion && DuplicateStages.back() >> 8 >= LevelIDs_Chaos0 && DuplicateStages.back() >> 8 <= LevelIDs_E101R)
+		if (curVersion == BossVersion && DuplicateStages.back().version == BossVersion)
+		{
+			myfile << "Previous Level was already a Boss: " << curLevel;
 			return true;
+		}
 	}
-
-	DuplicateStages.push_back(curLevelAndActID);
+	
+	myfile << "Added Level: " << curLevel;
+	myfile << " Added Version: " << curVersion;
+	StructDupli.levelAndActs = curLevelAndActID;
+	StructDupli.version = curVersion;
+	DuplicateStages.push_back(StructDupli);
+	myfile.close();
 	return false;
 }
 
@@ -256,7 +291,9 @@ void SetRandomStageAct(char stage, char act) {
 			GetCustomLayout = 0;
 			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 			CurrentAct = randomizedSets[levelCount].act;
-
+			CurrentMission = randomizedSets[levelCount].SA2Mission;
+			CurrentStageVersion = randomizedSets[levelCount].Layout;
+		
 			levelCount++;
 
 			if (levelCount == TotalCount)
@@ -312,6 +349,8 @@ void GoToNextLevel_hook(char stage, char act) {
 		{
 			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
 			CurrentAct = randomizedSets[levelCount].act;
+			CurrentMission = randomizedSets[levelCount].SA2Mission;
+			CurrentStageVersion = randomizedSets[levelCount].Layout;
 			levelCount++;
 		}
 
@@ -389,7 +428,9 @@ void Create_NewRNG() {
 			randomizedSets[i].character = getRandomCharacter();
 
 		if (RNGStages)
+		{
 			getRandomStage(&randomizedSets[i], randomizedSets[i].character);
+		}
 
 			randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
 		 

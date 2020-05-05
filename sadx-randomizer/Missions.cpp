@@ -30,15 +30,15 @@ short prev_mission = -1;
 
 short randomSA2Mission(short stage_id) {
 
-	short cur_mission = -1;
+	short cur_mission = 0;
 
 	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission())
 		return SADX_Mission;
 
 	do {
-		 //SA2 missions 100 Rings, Lost Chao 
-			cur_mission = rand() % 2 + 2;
-	} while (prev_mission == cur_mission || (isDuplicateMission(cur_mission, prev_mission) || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3));
+		//SA2 missions 100 Rings, Lost Chao 
+		cur_mission = rand() % 4;
+	} while (prev_mission == cur_mission || cur_mission == 1 || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3);
 
 	prev_mission = cur_mission;
 	return cur_mission;
@@ -139,22 +139,18 @@ void LoadStageMissionImage_r() {
 					CurrentMissionCard = EmeraldKnuxCard;
 				break;
 			case LevelIDs_FinalEgg:
-				if (CurrentAct != 2)
-				{
-					if (CurrentStageVersion == SonicVersion && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+					if (CurrentStageVersion == AmyVersion && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
 						CurrentMissionCard = CapsuleCard; //capsule
 
-					if (CurrentMission == SADX_Mission)
+					if (CurrentStageVersion == SonicVersion)
 						CurrentMissionCard = FinalEggCard; //Go to the center of the base.
 
 					if (CurrentCharacter == Characters_Amy)
 						CurrentMissionCard = BalloonCard; //grab balon if Amy regardless of the mission.
-				}
-				else
-				{
+		
 					if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
 						CurrentMissionCard = SonicDollCard;
-				}
+		
 				break;
 			case LevelIDs_RedMountain:
 				if (CurrentAct == 2 && CurrentStageVersion == KnucklesVersion)
@@ -371,9 +367,10 @@ void MissionResultCheck() {
 		ObjectMaster* p1 = GetCharacterObject(0);
 		EntityData1* ent;
 		ent = p1->Data1;
+		int curAction = ent->Action;
 		ObjectMaster* Flash = nullptr;
 
-		if (p1->Data1->Action >= 1 && p1->Data1->Action <= 3 && TimeThing != 0) {
+		if (TimeThing != 0 && (curAction >= 1 && curAction <= 3 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
 
 			ent->InvulnerableTime = 0;
 			if (!SonicRand && !MetalSonicFlag)
