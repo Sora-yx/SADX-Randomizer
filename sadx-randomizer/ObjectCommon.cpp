@@ -317,8 +317,6 @@ void MysticMelody_Main(ObjectMaster* obj) {
 
 		
 
-
-
 void LoadTriggerObject() {
 
 	if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
@@ -332,7 +330,7 @@ void LoadTriggerObject() {
 }
 
 void Load_ObjectsCommon() {
-
+	LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 	MysticMelody = LoadObjectModel("MysticMelody");
 	MMPlatform = LoadObjectModel("MM-Platform");
 }

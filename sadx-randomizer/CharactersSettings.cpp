@@ -220,8 +220,6 @@ void SuperSonic_TransformationCheck() {
 				{
 					data1->Status &= ~Status_LightDash;
 					ForcePlayerAction(0, 46);
-					njReleaseTexture(&SONIC_TEXLIST);
-					LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 					njSetTexture(&SUPERSONIC_TEXLIST);
 					PlayVoice(3001);
 					data2->Upgrades |= Upgrades_SuperSonic;

@@ -4,7 +4,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "CharactersSettings.h"
-#include "Trampoline.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Ice Cap\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 void IC_Layout() {
@@ -160,84 +161,81 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	ICObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0810S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814S.BIN", "system\\levels\\Ice Cap\\Sonic-IC-T.bin");
+	ReplaceSET("SET0810S", "Sonic-IC-Act1");
+	ReplaceSET("SET0811S", "Sonic-IC-Act2");
+	ReplaceSET("SET0812S", "Sonic-IC-Act3");
+	ReplaceSET("SET0813S", "Sonic-IC-Big");
+	ReplaceSET("SET0814S", "Sonic-IC-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0800S.BIN", "system\\cam\\CAM0800S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801S.BIN", "system\\cam\\CAM0801S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802S.BIN", "system\\cam\\CAM0802S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803S.BIN", "system\\cam\\CAM0803S.bin");
+	ReplaceCAM("CAM0800S", "CAM0800S");
+	ReplaceCAM("CAM0801S", "CAM0801S");
+	ReplaceCAM("CAM0802S", "CAM0802S");
+	ReplaceCAM("CAM0803S", "CAM0803S");
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0810M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813M.BIN", "system\\levels\\Ice Cap\\Tails-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814M.BIN", "system\\levels\\Ice Cap\\Tails-IC-T.bin");
+	ReplaceSET("SET0810M", "Tails-IC-Act1");
+	ReplaceSET("SET0811M", "Tails-IC-Act2");
+	ReplaceSET("SET0812M", "Tails-IC-Act3");
+	ReplaceSET("SET0813M", "Tails-IC-Big");
+	ReplaceSET("SET0814M", "Tails-IC-T");
 
 
-	helperFunctions.ReplaceFile("system\\CAM0800M.BIN", "system\\cam\\CAM0800M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801M.BIN", "system\\cam\\CAM0801M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802M.BIN", "system\\cam\\CAM0802M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803M.BIN", "system\\cam\\CAM0803M.bin");
+	ReplaceCAM("CAM0800M", "CAM0800M");
+	ReplaceCAM("CAM0801M", "CAM0801M");
+	ReplaceCAM("CAM0802M", "CAM0802M");
+	ReplaceCAM("CAM0803M", "CAM0803M");
 
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0810K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813K.BIN", "system\\levels\\Ice Cap\\Knux-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814K.BIN", "system\\levels\\Ice Cap\\Knux-IC-T.bin");
+	ReplaceSET("SET0810K", "Knux-IC-Act1");
+	ReplaceSET("SET0811K", "Knux-IC-Act2");
+	ReplaceSET("SET0812K", "Knux-IC-Act3");
+	ReplaceSET("SET0813K", "Knux-IC-Big");
+	ReplaceSET("SET0814K", "Knux-IC-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0800K.BIN", "system\\cam\\CAM0800K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801K.BIN", "system\\cam\\CAM0801K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802K.BIN", "system\\cam\\CAM0802K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803K.BIN", "system\\cam\\CAM0803K.bin");
+	ReplaceCAM("CAM0800K", "CAM0800K");
+	ReplaceCAM("CAM0801K", "CAM0801K");
+	ReplaceCAM("CAM0802K", "CAM0802K");
+	ReplaceCAM("CAM0803K", "CAM0803K");
 
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0810A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813A.BIN", "system\\levels\\Ice Cap\\Amy-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814A.BIN", "system\\levels\\Ice Cap\\Amy-IC-T.bin");
+	ReplaceSET("SET0810A", "Amy-IC-Act1");
+	ReplaceSET("SET0811A", "Amy-IC-Act2");
+	ReplaceSET("SET0812A", "Amy-IC-Act3");
+	ReplaceSET("SET0813A", "Amy-IC-Big");
+	ReplaceSET("SET0814A", "Amy-IC-T");
 
-
-
-	helperFunctions.ReplaceFile("system\\CAM0800A.BIN", "system\\cam\\CAM0800A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801A.BIN", "system\\cam\\CAM0801A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802A.BIN", "system\\cam\\CAM0802A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803A.BIN", "system\\cam\\CAM0803A.bin");
+	ReplaceCAM("CAM0800A", "CAM0800A");
+	ReplaceCAM("CAM0801A", "CAM0801A");
+	ReplaceCAM("CAM0802A", "CAM0802A");
+	ReplaceCAM("CAM0803A", "CAM0803A");
 
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0810B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812B.BIN", "system\\levels\\Ice Cap\\Big-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813B.BIN", "system\\levels\\Ice Cap\\Big-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814B.BIN", "system\\levels\\Ice Cap\\Big-IC-T.bin");
+	ReplaceSET("SET0810B", "Big-IC-Act1");
+	ReplaceSET("SET0811B", "Big-IC-Act2");
+	ReplaceSET("SET0812B", "Big-IC-Act3");
+	ReplaceSET("SET0813B", "Big-IC-Big");
+	ReplaceSET("SET0814B", "Big-IC-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0800B.BIN", "system\\cam\\CAM0800B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801B.BIN", "system\\cam\\CAM0801B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802B.BIN", "system\\cam\\CAM0802B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803B.BIN", "system\\cam\\CAM0803B.bin");
+	ReplaceCAM("CAM0800B", "CAM0800B");
+	ReplaceCAM("CAM0801B", "CAM0801B");
+	ReplaceCAM("CAM0802B", "CAM0802B");
+	ReplaceCAM("CAM0803B", "CAM0803B");
 
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0810E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0811E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0812E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0813E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-Big.bin");
-	helperFunctions.ReplaceFile("system\\SET0814E.BIN", "system\\levels\\Ice Cap\\Gamma-IC-T.bin");
+	ReplaceSET("SET0810E", "Gamma-IC-Act1");
+	ReplaceSET("SET0811E", "Gamma-IC-Act2");
+	ReplaceSET("SET0812E", "Gamma-IC-Act3");
+	ReplaceSET("SET0813E", "Gamma-IC-Big");
+	ReplaceSET("SET0814E", "Gamma-IC-T");
 
-	helperFunctions.ReplaceFile("system\\CAM0800E.BIN", "system\\cam\\CAM0800E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0801E.BIN", "system\\cam\\CAM0801E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0802E.BIN", "system\\cam\\CAM0802E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0803E.BIN", "system\\cam\\CAM0803E.bin");
-
+	ReplaceCAM("CAM0800E", "CAM0800E");
+	ReplaceCAM("CAM0801E", "CAM0801E");
+	ReplaceCAM("CAM0802E", "CAM0802E");
+	ReplaceCAM("CAM0803E", "CAM0803E");
 }
 
 ObjectListEntry IceCapObjectList_list[] = {

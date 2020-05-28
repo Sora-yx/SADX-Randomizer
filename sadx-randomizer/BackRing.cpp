@@ -206,8 +206,10 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 		RaceResultCheck(a1);
 
 	//call original function (Capsule.)
-	ObjectFunc(origin, Capsule_Load_T.Target());
-	origin(a1);
+	if (CurrentMission != KnucklesVersion && CurrentMission < Mission2_100Rings) {
+		ObjectFunc(origin, Capsule_Load_T.Target());
+		origin(a1);
+	}
 }
 
 void Check_DisplayBackRing_Big(ObjectMaster* a1) {

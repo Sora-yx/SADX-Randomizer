@@ -3,6 +3,8 @@
 #include "HS.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hot Shelter\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerHS = nullptr;
 
@@ -473,79 +475,72 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	WriteCall((void*)0x423071, HotShelter_Layout); //HS Custom Layout
 	WriteData<1>((void*)0x5aaf12, 0x08); //Big HS Stuff
 	WriteData<1>((void*)0x59a3bb, 0x08);
- 
 
 	HSObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET1210S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213S.BIN", "system\\levels\\Hot Shelter\\Sonic-HS-Act4.bin");
+	ReplaceSET("SET1210S", "Sonic-HS-Act1");
+	ReplaceSET("SET1211S", "Sonic-HS-Act2");
+	ReplaceSET("SET1212S", "Sonic-HS-Act3");
+	ReplaceSET("SET1213S", "Sonic-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200S.bin", "system\\cam\\CAM1200S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201S.bin", "system\\cam\\CAM1201S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202S.bin", "system\\cam\\CAM1202S.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204S.bin", "system\\cam\\CAM1204S.bin");
+	ReplaceCAM("CAM1200S", "CAM1200S");
+	ReplaceCAM("CAM1201S", "CAM1201S");
+	ReplaceCAM("CAM1202S", "CAM1202S");
+	ReplaceCAM("CAM1204S", "CAM1204S");
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET1210M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213M.BIN", "system\\levels\\Hot Shelter\\Tails-HS-Act4.bin");
+	ReplaceSET("SET1210M", "Tails-HS-Act1");
+	ReplaceSET("SET1211M", "Tails-HS-Act2");
+	ReplaceSET("SET1212M", "Tails-HS-Act3");
+	ReplaceSET("SET1213M", "Tails-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200M.bin", "system\\cam\\CAM1200M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201M.bin", "system\\cam\\CAM1201M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202M.bin", "system\\cam\\CAM1202M.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204M.bin", "system\\cam\\CAM1204M.bin");
+	ReplaceCAM("CAM1200M", "CAM1200M");
+	ReplaceCAM("CAM1201M", "CAM1201M");
+	ReplaceCAM("CAM1202M", "CAM1202M");
+	ReplaceCAM("CAM1204M", "CAM1204M");
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET1210K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213K.BIN", "system\\levels\\Hot Shelter\\Knux-HS-Act4.bin");
+	ReplaceSET("SET1210K", "Knux-HS-Act1");
+	ReplaceSET("SET1211K", "Knux-HS-Act2");
+	ReplaceSET("SET1212K", "Knux-HS-Act3");
+	ReplaceSET("SET1213K", "Knux-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200K.bin", "system\\cam\\CAM1200K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201K.bin", "system\\cam\\CAM1201K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202K.bin", "system\\cam\\CAM1202K.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204K.bin", "system\\cam\\CAM1204K.bin");
+	ReplaceCAM("CAM1200K", "CAM1200K");
+	ReplaceCAM("CAM1201K", "CAM1201K");
+	ReplaceCAM("CAM1202K", "CAM1202K");
+	ReplaceCAM("CAM1204K", "CAM1204K");
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET1210A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213A.BIN", "system\\levels\\Hot Shelter\\Amy-HS-Act4.bin");
+	ReplaceSET("SET1210A", "Amy-HS-Act1");
+	ReplaceSET("SET1211A", "Amy-HS-Act2");
+	ReplaceSET("SET1212A", "Amy-HS-Act3");
+	ReplaceSET("SET1213A", "Amy-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200A.bin", "system\\cam\\CAM1200A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201A.bin", "system\\cam\\CAM1201A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202A.bin", "system\\cam\\CAM1202A.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204A.bin", "system\\cam\\CAM1204A.bin");
+	ReplaceCAM("CAM1200A", "CAM1200A");
+	ReplaceCAM("CAM1201A", "CAM1201A");
+	ReplaceCAM("CAM1202A", "CAM1202A");
+	ReplaceCAM("CAM1204A", "CAM1204A");
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET1210B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213B.BIN", "system\\levels\\Hot Shelter\\Big-HS-Act4.bin");
+	ReplaceSET("SET1210B", "Big-HS-Act1");
+	ReplaceSET("SET1211B", "Big-HS-Act2");
+	ReplaceSET("SET1212B", "Big-HS-Act3");
+	ReplaceSET("SET1213B", "Big-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200B.bin", "system\\cam\\CAM1200B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201B.bin", "system\\cam\\CAM1201B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202B.bin", "system\\cam\\CAM1202B.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204B.bin", "system\\cam\\CAM1204B.bin");
+	ReplaceCAM("CAM1200B", "CAM1200B");
+	ReplaceCAM("CAM1201B", "CAM1201B");
+	ReplaceCAM("CAM1202B", "CAM1202B");
+	ReplaceCAM("CAM1204B", "CAM1204B");
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET1210E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET1211E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET1212E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET1213E.BIN", "system\\levels\\Hot Shelter\\Gamma-HS-Act4.bin");
+	ReplaceSET("SET1210E", "Gamma-HS-Act1");
+	ReplaceSET("SET1211E", "Gamma-HS-Act2");
+	ReplaceSET("SET1212E", "Gamma-HS-Act3");
+	ReplaceSET("SET1213E", "Gamma-HS-Act4");
 
-
-	helperFunctions.ReplaceFile("system\\CAM1200E.bin", "system\\cam\\CAM1200E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1201E.bin", "system\\cam\\CAM1201E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1202E.bin", "system\\cam\\CAM1202E.bin");
-	helperFunctions.ReplaceFile("system\\CAM1204E.bin", "system\\cam\\CAM1204E.bin");
+	ReplaceCAM("CAM1200E", "CAM1200E");
+	ReplaceCAM("CAM1201E", "CAM1201E");
+	ReplaceCAM("CAM1202E", "CAM1202E");
+	ReplaceCAM("CAM1204E", "CAM1204E");
 }

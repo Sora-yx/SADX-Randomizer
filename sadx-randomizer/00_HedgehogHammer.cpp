@@ -5,7 +5,6 @@
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hedgehog Hammer\\" B ".bin")
 
 
-
 void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data

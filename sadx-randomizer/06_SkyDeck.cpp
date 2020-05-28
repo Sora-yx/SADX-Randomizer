@@ -32,6 +32,8 @@ void SkyDeck_Layout() {
 
 	Load_ObjectsCommon();
 
+	CurrentStageVersion = KnucklesVersion;
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
@@ -169,16 +171,6 @@ void Olever_r(ObjectMaster* obj) {
 	origin(obj);
 }
 
-void FixLeverAlarmSound() {
-
-	ObjectMaster* P1 = GetCharacterObject(0);
-	int curAction = P1->Data1->Action;
-
-	if (P1 != nullptr && P1->Data1->CharID == Characters_Big && (curAction == 15 || curAction == 1) && CurrentLevel == LevelIDs_SkyDeck)
-		return;
-
-	QueueSound_DualEntity(0x3d2, (int*)0x1041, 1, 0, 0x1e);
-}
 
 
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -195,7 +187,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);	
 	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
 	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
-	WriteCall((void*)0x5f1d58, FixLeverAlarmSound);
 	
 	WriteCall((void*)0x461614, FixTailsVictorySD);
 	SDObjects_Init(path, helperFunctions);

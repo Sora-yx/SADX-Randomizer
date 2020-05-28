@@ -23,7 +23,7 @@ void EC_Cam() {
 
 void EC_Layout() {
 
-	CurrentStageVersion = SonicVersion;
+	CurrentStageVersion = BigVersion;
 	CurrentMission = 3;
 
 	Load_ObjectsCommon();

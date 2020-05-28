@@ -277,7 +277,7 @@ void preventCutscene() {
 }
 
 
-SetLevelPosition PlayerStartPosition[64]{
+SetLevelPosition PlayerStartPosition[52]{
 
 	{ AmyVersion, LevelAndActIDs_HedgehogHammer, { -55, 0, -31 }, 0 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { -9, 16, 4 }, 0x6000},
@@ -331,19 +331,6 @@ SetLevelPosition PlayerStartPosition[64]{
 	{ BigVersion, LevelAndActIDs_HotShelter1, -278.8718262, 80, -499.0888367, 0x8000 }, 
 	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, 
 	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
-
-	{ SonicVersion, LevelAndActIDs_Chaos0, { 268, 0, 377 }, 0 },
-	{ KnucklesVersion, LevelAndActIDs_Chaos2, { -36, 30, -101 }, 0 },
-	{ TailsVersion, LevelAndActIDs_Chaos4, { -36, 30, -101 }, 0 },
-	{ SonicVersion, LevelAndActIDs_Chaos6, { 0, 744, -568 }, 0 },
-	{ KnucklesVersion, LevelAndActIDs_Chaos6Two, { 0, 744, -568 }, 0 },
-	{ SonicVersion, LevelIDs_PerfectChaos, { -16, 150, -667 }, 0xB92C },
-	{ SonicVersion, LevelIDs_EggHornet, { 812, 140, 839 }, 0 },
-	{ TailsVersion, LevelAndActIDs_EggWalker, { -480, 19, 1000 }, 0 },
-	{ SonicVersion, LevelAndActIDs_EggViper, { 260, 50, 0 }, 0 },
-	{ SonicVersion, LevelAndActIDs_Zero, { -131, 745, -385 }, 0 },
-	{ SonicVersion, LevelAndActIDs_E101, { 70, 0, 65 }, 0xA000 },
-	{ SonicVersion, LevelAndActIDs_E101R, { -131, 745, -385 }, 0 },
 };
 
 
