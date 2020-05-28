@@ -5,6 +5,7 @@ extern struct RandomizedEntry randomizedSets[40];
 
 bool isBossStage(short stage_id);
 bool isDuplicateMission(short curMission, short prevMission);
+uint8_t GetRandomSonicTransfo(uint8_t char_id);
 void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
@@ -49,8 +50,7 @@ struct RandomizedEntry
 	short act;
 	short SA2Mission;
 	uint8_t Layout;
-	char sonic_mode; //Metal Sonic
-	char ss_mode; //Super Sonic
+	uint8_t sonic_transfo; //Metal Sonic
 	int ai_mode; //AI following you
 	int ai_race; //Tails race AI
 	short music;

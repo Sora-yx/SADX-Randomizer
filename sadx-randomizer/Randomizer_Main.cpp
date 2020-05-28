@@ -191,6 +191,7 @@ bool isBossStage(short stage_id)
 }
 
 
+
 int8_t prev_char = -1;
 
 uint8_t getRandomCharacter() {
@@ -229,6 +230,7 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 	return cur_AI;
 }
 
+
 short getRandomRaceAI(RandomizedEntry entry) {
 	int8_t cur_RaceAI = -1;
 	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
@@ -239,8 +241,23 @@ short getRandomRaceAI(RandomizedEntry entry) {
 }
 
 
-int levelCount;
+uint8_t prev_Sanic = -1;
+uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 
+	int8_t cur_Sanic = -1;
+
+	if (char_id == Characters_Sonic) {
+		do {
+
+			cur_Sanic = rand() % 3;
+		} while (cur_Sanic == prev_Sanic || MetalSonic && cur_Sanic == 1 || SuperSonic && cur_Sanic == 2);
+	}
+
+	prev_Sanic = cur_Sanic;
+	return cur_Sanic;
+}
+
+int levelCount;
 
 void SetRandomStageAct(char stage, char act) {
 
@@ -267,11 +284,10 @@ void SetRandomStageAct(char stage, char act) {
 				UnloadCharTextures(CurCharacter());
 				CurrentCharacter = randomizedSets[levelCount].character;
 
-				if (SuperSonic != true)
-					SonicRand = randomizedSets[levelCount].ss_mode;
+				SonicRand = randomizedSets[levelCount].sonic_transfo;
 
-				if (MetalSonic != true)
-					MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
+				if (SonicRand == 1)
+					MetalSonicFlag = SonicRand;
 			}
 
 			if (isAIAllowed)
@@ -288,7 +304,7 @@ void SetRandomStageAct(char stage, char act) {
 			levelCount++;
 
 			if (levelCount == TotalCount)
-				Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.
+				Randomizer_GetNewRNG(); //reroll once the player reached 40 stages.
 
 			return;
 		}
@@ -314,11 +330,11 @@ void GoToNextLevel_hook(char stage, char act) {
 			UnloadCharTextures(CurCharacter());
 			CurrentCharacter = randomizedSets[levelCount].character;
 
-			if (SuperSonic != true)
-				SonicRand = randomizedSets[levelCount].ss_mode;
+			SonicRand = randomizedSets[levelCount].sonic_transfo;
 
-			if (MetalSonic != true)
-				MetalSonicFlag = randomizedSets[levelCount].sonic_mode;
+			if (SonicRand == 1)
+				MetalSonicFlag = SonicRand;
+
 		}
 
 		if (isAIAllowed)
@@ -418,7 +434,10 @@ void Create_NewRNG() {
 	for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
 
 		if (RNGCharacters)
+		{
 			randomizedSets[i].character = getRandomCharacter();
+			randomizedSets[i].sonic_transfo = GetRandomSonicTransfo(randomizedSets[i].character);
+		}
 
 		if (RNGStages)
 		{
@@ -434,13 +453,7 @@ void Create_NewRNG() {
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
 			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
-
-		if (randomizedSets[i].character == Characters_Sonic && RNGCharacters)
-		{
-			randomizedSets[i].sonic_mode = rand() % 2;
-			randomizedSets[i].ss_mode = rand() % 2;
-		}
-
+		
 		TotalCount++;
 	}
 }

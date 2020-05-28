@@ -195,14 +195,14 @@ void SuperSonic_TransformationCheck() {
 
 	bool isLevelBanned = GetSSLevelBanned();
 
-	if (isLevelBanned || MetalSonicFlag == 1 && SonicRand == 1)
+	if (isLevelBanned || MetalSonicFlag == 1)
 	{
 		SonicRand = 0;
 		return;
 	}
 	else
 	{
-		if (SonicRand == 1 && !MetalSonicFlag)
+		if (SonicRand == 2 && !MetalSonicFlag)
 		{
 			static Uint8 last_action[8] = {};
 			if (!Rings)
