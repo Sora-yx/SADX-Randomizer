@@ -13,6 +13,7 @@ bool CasinoTails = false;
 void Casino_Layout() {
 
 	CasinoTails = false;
+	//CurrentStageVersion = KnucklesVersion;
 	Load_ObjectsCommon();
 
 		switch (CurrentStageVersion)
@@ -43,7 +44,6 @@ void Casino_Layout() {
 
 		LoadSetFile(2, "0902");
 		LoadSetFile(3, "0903");
-		LoadCamFile(0, "0900");
 		LoadCamFile(1, "0901");
 		LoadCamFile(2, "0902");
 		LoadCamFile(3, "0903");
