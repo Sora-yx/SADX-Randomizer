@@ -22,35 +22,35 @@ void CamRedMountain() {
 
 void RedMountain_Layout() {
 
+	CurrentStageVersion = GammaVersion;
+	CurrentMission = 3;
+	Load_ObjectsCommon();
+
 		switch (CurrentStageVersion)
 		{
 			default:
 			case SonicVersion:
-				if (CurrentMission < Mission3_LostChao)
-					LoadSetFile(0, "0500");
-				else
-					LoadSetFile(0, "0504");
-	
-					LoadSetFile(1, "0501");
-					LoadSetFile(2, "0502");
+					LoadSetFile(0, "0510");
+					LoadSetFile(1, "0511");
+					LoadSetFile(2, "0512");
 				break;
 			case GammaVersion:
-				LoadSetFile(0, "0500");
-				LoadSetFile(1, "0503"); //load Gamma version
-				LoadSetFile(2, "0502");
+				LoadSetFile(0, "0510");
+				LoadSetFile(1, "0513"); //load Gamma version
+				LoadSetFile(2, "0512");
 				break;
 			case KnucklesVersion:
 				isKnucklesVersion = true;
-				LoadSetFile(0, "0500");
-				LoadSetFile(1, "0501");
+				LoadSetFile(0, "0510");
+				LoadSetFile(1, "0511");
 				if (CurrentMission < Mission3_LostChao)
 				{
 					SetRNGKnuckles();
-					LoadSetFile(2, "0502");
+					LoadSetFile(2, "0512");
 				}
 				else
 				{
-					LoadSetFile(2, "0505"); //load Knux version
+					LoadSetFile(2, "0514"); //load Knux version
 				}
 				break;
 		}
@@ -168,7 +168,33 @@ ObjectListEntry RedMountainObjectList_list[] = {
 	{ 2, 2, 0, 0, 0, (ObjectFuncPtr)0x7A1AA0, "O TIKAL" } /* "O TIKAL" */,
 	{ 15, 3, 0, 0, 0, (ObjectFuncPtr)0x4C07D0, "O ItemBoxAir" } /* "O ItemBoxAir" */,
 	{ 6, 3, 1, 250000, 0, (ObjectFuncPtr)0x6042A0, "O BPOLE" } /* "O BPOLE" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" }, /* "O FROG" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
+};
+
+PVMEntry RedMountainObjectTextures[] = {
+	{ "OBJ_MOUNTAIN", (TexList*)0x24208A8 },
+	{ "MOUNTAIN_E104", (TexList*)0x2499328 },
+	{ "OUM", (TexList*)0x9334EC },
+	{ "YOUGAN_ANIM", (TexList*)0x2486018 },
+	{ "SUPI_SUPI", (TexList*)0x96F518 },
+	{ "MOUNTAIN_MEXPLOSION", (TexList*)0x2498810 },
+	{ "MOUNTAIN_STEAM", (TexList*)0x24986A0 },
+	{ "TUBA", (TexList*)0x92F2BC },
+	{ "E_SARU", (TexList*)0x962560 },
+	{ "LION", (TexList*)0x944094 },
+	{ "MOGU", (TexList*)0x93ECEC },
+	{ "ZOU", (TexList*)0x94160C },
+	{ "MOUNTAIN_CARRIER", (TexList*)0x24984D4 },
+	{ "CHAOS_LIFEGAUGE", (TexList*)0x974000 },
+	{ "UNI_C_UNIBODY", (TexList*)0x96DC48 },
+	{ "GORI", (TexList*)0x945964 },
+	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ "E_BOMB", (TexList*)0x96B464 },
+	{ NULL, (TexList*)0x973FB0 },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ 0 }
 };
 
 ObjectList RedMountainObjectList = { arraylengthandptrT(RedMountainObjectList_list, int) };
@@ -179,6 +205,7 @@ DataArray(DeathZone*, RedMountainDeathZones3, 0x24C0128, 3); //killplane pointer
 void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist and fix killplane
 	ObjLists[LevelIDs_RedMountain * 8 + 1] = &RedMountainObjectList;
+	TexLists_Obj[LevelIDs_RedMountain] = RedMountainObjectTextures;
 	RedMountainDeathZones[0] = RedMountain1DeathZones;
 	RedMountainDeathZones[2] = RedMountain3DeathZones;
 }
@@ -209,101 +236,80 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	RMObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0500S", "Sonic-RM-Act1");
-	ReplaceSET("SET0501S", "Sonic-RM-Act2");
-	ReplaceSET("SET0502S", "Sonic-RM-Act3");
-	ReplaceSET("SET0503S", "Sonic-RM-E102");
-	ReplaceSET("SET0504S", "Sonic-RM-Chao");
-	ReplaceSET("SET0505S", "Sonic-Rm-Act3R");
+	ReplaceSET("SET0510S", "Sonic-RM-Act1");
+	ReplaceSET("SET0511S", "Sonic-RM-Act2");
+	ReplaceSET("SET0512S", "Sonic-RM-Act3");
+	ReplaceSET("SET0513S", "Sonic-RM-E102");
+	ReplaceSET("SET0514S", "Sonic-Rm-Act3R");
 
 	ReplaceCAM("CAM0500S", "CAM0500S");
 	ReplaceCAM("CAM0501S", "CAM0501S");
 	ReplaceCAM("CAM0502S", "CAM0502S");
 	ReplaceCAM("CAM0503S", "CAM0503S");
 
-	RegisterPosition(Characters_Sonic, RM3_StartPositions[0]);
 
 	//Tails
-	ReplaceSET("SET0500M", "Tails-RM-Act1");
-	ReplaceSET("SET0501M", "Tails-RM-Act2");
-	ReplaceSET("SET0502M", "Tails-RM-Act3");
-	ReplaceSET("SET0503M", "Tails-RM-E102");
-	ReplaceSET("SET0504M", "Tails-RM-Chao");
-	ReplaceSET("SET0505M", "Tails-RM-Act3R");
+	ReplaceSET("SET0510M", "Tails-RM-Act1");
+	ReplaceSET("SET0511M", "Tails-RM-Act2");
+	ReplaceSET("SET0512M", "Tails-RM-Act3");
+	ReplaceSET("SET0513M", "Tails-RM-E102");
+	ReplaceSET("SET0514M", "Tails-RM-Act3R");
 
 	ReplaceCAM("CAM0500M", "CAM0500M");
 	ReplaceCAM("CAM0501M", "CAM0501M");
 	ReplaceCAM("CAM0502M", "CAM0502M");
 	ReplaceCAM("CAM0503M", "CAM0503M");
 
-	RegisterPosition(Characters_Tails, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Tails, RM2_StartPositions[0]);
-	RegisterPosition(Characters_Tails, RM3_StartPositions[0]);
 
 	//Knuckles
-	ReplaceSET("SET0500K", "Knux-RM-Act1");
-	ReplaceSET("SET0501K", "Knux-RM-Act2");
-	ReplaceSET("SET0502K", "Knux-RM-Act3");
-	ReplaceSET("SET0503K", "Knux-RM-E102");
-	ReplaceSET("SET0504K", "Knux-RM-Chao");
-	ReplaceSET("SET0505K", "Knux-RM-Act3R");
+	ReplaceSET("SET0510K", "Knux-RM-Act1");
+	ReplaceSET("SET0511K", "Knux-RM-Act2");
+	ReplaceSET("SET0512K", "Knux-RM-Act3");
+	ReplaceSET("SET0513K", "Knux-RM-E102");
+	ReplaceSET("SET0514K", "Knux-RM-Act3R");
 
 	ReplaceCAM("CAM0500K", "CAM0500K");
 	ReplaceCAM("CAM0501K", "CAM0501K");
 	ReplaceCAM("CAM0502K", "CAM0502K");
 	ReplaceCAM("CAM0503K", "CAM0503K");
 
-	RegisterPosition(Characters_Knuckles, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Knuckles, RM2_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0500A", "Amy-RM-Act1");
-	ReplaceSET("SET0501A", "Amy-RM-Act2");
-	ReplaceSET("SET0502A", "Amy-RM-Act3");
-	ReplaceSET("SET0503A", "Amy-RM-E102");
-	ReplaceSET("SET0504A", "Amy-RM-Chao");
-	ReplaceSET("SET0505A", "Amy-RM-Act3R");
+	ReplaceSET("SET0510A", "Amy-RM-Act1");
+	ReplaceSET("SET0511A", "Amy-RM-Act2");
+	ReplaceSET("SET0512A", "Amy-RM-Act3");
+	ReplaceSET("SET0513A", "Amy-RM-E102");
+	ReplaceSET("SET0514A", "Amy-RM-Act3R");
 
 	ReplaceCAM("CAM0500A", "CAM0500A");
 	ReplaceCAM("CAM0501A", "CAM0501A");
 	ReplaceCAM("CAM0502A", "CAM0502A");
 	ReplaceCAM("CAM0503A", "CAM0503A");
 
-	RegisterPosition(Characters_Amy, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Amy, RM2_StartPositions[0]);
-	RegisterPosition(Characters_Amy, RM3_StartPositions[0]);
 
 	//Big
-	ReplaceSET("SET0500B", "Big-RM-Act1");
-	ReplaceSET("SET0501B", "Big-RM-Act2");
-	ReplaceSET("SET0502B", "Big-RM-Act3");
-	ReplaceSET("SET0503B", "Big-RM-E102");
-	ReplaceSET("SET0504B", "Big-RM-Chao");
-	ReplaceSET("SET0505B", "Big-RM-Act3R");
+	ReplaceSET("SET0510B", "Big-RM-Act1");
+	ReplaceSET("SET0511B", "Big-RM-Act2");
+	ReplaceSET("SET0512B", "Big-RM-Act3");
+	ReplaceSET("SET0513B", "Big-RM-E102");
+	ReplaceSET("SET0514B", "Big-RM-Act3R");
 
 	ReplaceCAM("CAM0500B", "CAM0500B");
 	ReplaceCAM("CAM0501B", "CAM0501B");
 	ReplaceCAM("CAM0502B", "CAM0502B");
 	ReplaceCAM("CAM0503B", "CAM0503B");
 
-	RegisterPosition(Characters_Big, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Big, RM2_StartPositions[0]);
-	RegisterPosition(Characters_Big, RM3_StartPositions[0]);
 
 	//Gamma
-	ReplaceSET("SET0500E", "Gamma-RM-Act1");
-	ReplaceSET("SET0501E", "Gamma-RM-Act2");
-	ReplaceSET("SET0502E", "Gamma-RM-Act3");
-	ReplaceSET("SET0503E", "Gamma-RM-E102");
-	ReplaceSET("SET0504E", "Gamma-RM-Chao");
-	ReplaceSET("SET0505E", "Gamma-RM-Act3R");
+	ReplaceSET("SET0510E", "Gamma-RM-Act1");
+	ReplaceSET("SET0511E", "Gamma-RM-Act2");
+	ReplaceSET("SET0512E", "Gamma-RM-Act3");
+	ReplaceSET("SET0513E", "Gamma-RM-E102");
+	ReplaceSET("SET0514E", "Gamma-RM-Act3R");
 
 	ReplaceCAM("CAM0500E", "CAM0500E");
 	ReplaceCAM("CAM0501E", "CAM0501E");
 	ReplaceCAM("CAM0502E", "CAM0502E");
 	ReplaceCAM("CAM0503E", "CAM0503E");
 
-	RegisterPosition(Characters_Gamma, RM1_StartPositions[0]);
-	RegisterPosition(Characters_Gamma, RM2_StartPositions[0]);
-	RegisterPosition(Characters_Gamma, RM3_StartPositions[0]);
 }

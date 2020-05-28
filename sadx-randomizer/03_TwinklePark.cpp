@@ -4,7 +4,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-//Random Act function
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Twinkle Park\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 void FixRollerCoaster() {
@@ -46,43 +47,34 @@ void TP_CAM() {
 void TwinklePark_Layout() {
 
 	fixTCCart();
+	Load_ObjectsCommon();
 
-	LoadSetFile(0, "0300");
+	CurrentStageVersion = BigVersion;
+	CurrentMission = 0;
 
-	if (CurrentStageVersion == SonicVersion)
+	LoadSetFile(0, "0310");
+
+	const char* curVer = "0311"; //Sonic Version
+
+	switch (CurrentStageVersion)
 	{
-		switch (CurrentMission)
-		{
-			default:
-			case SADX_Mission:
-				LoadSetFile(1, "0301");
-				CurrentMission = SADX_Mission;
-				break;
-			case Mission2_100Rings:
-				LoadSetFile(1, "0301");
-				break;
-			case Mission3_LostChao:
-				LoadSetFile(1, "0303"); //M3 Version
-				break;
-		}
-
-		if (CurrentCharacter >= Characters_Gamma)
-		{
-			WriteData<1>((void*)0x798306, 0x84);
-			WriteData<1>((void*)0x7983c4, 0x7F);
-		}
+		case AmyVersion:
+			curVer = "0313";
+			break;
+		case BigVersion:
+			curVer = "0314";
+			break;
 	}
 
-
-	if (CurrentStageVersion == AmyVersion)
-		LoadSetFile(1, "0305"); //Amy TP version
-
-	if (CurrentStageVersion == BigVersion)
-		LoadSetFile(1, "0306"); //Big TP version
-
-
-	LoadSetFile(2, "0302");
+	LoadSetFile(1, curVer);
+	LoadSetFile(2, "0312");
 	TP_CAM();
+
+	if (CurrentCharacter >= Characters_Gamma)
+	{
+		WriteData<1>((void*)0x798306, 0x84);
+		WriteData<1>((void*)0x7983c4, 0x7F);
+	}
 
 	return;
 }
@@ -94,7 +86,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
 	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
 	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
-	
 	
 	WriteCall((void*)0x61dd82, FixRCCharacterPosition); 
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
@@ -110,109 +101,83 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	TPObjects_Init(path, helperFunctions);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0300S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Act3.bin");
+	ReplaceSET("SET0310S", "Sonic-TP-Act1");
+	ReplaceSET("SET0311S", "Sonic-TP-Act2");
+	ReplaceSET("SET0312S", "Sonic-TP-Act3");
+	ReplaceSET("SET0313S", "Sonic-TP-Amy");
+	ReplaceSET("SET0314S", "Sonic-TP-Big");
 
-	helperFunctions.ReplaceFile("system\\SET0303S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0305S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Amy.bin");
-	helperFunctions.ReplaceFile("system\\SET0306S.BIN", "system\\levels\\Twinkle Park\\Sonic-TP-Big.bin");
+	ReplaceCAM("CAM0300S", "CAM0300S");
+	ReplaceCAM("CAM0301S", "CAM0301S");
+	ReplaceCAM("CAM0302S", "CAM0302S");
+	ReplaceCAM("CAM0305S", "CAM0305S");
 
-	helperFunctions.ReplaceFile("system\\CAM0300S.BIN", "system\\cam\\CAM0300S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301S.BIN", "system\\cam\\CAM0301S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302S.BIN", "system\\cam\\CAM0302S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305S.BIN", "system\\cam\\CAM0305S.bin");
-
-	helperFunctions.RegisterStartPosition(Characters_Sonic, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, TP3_StartPositions[0]);
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0300M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0306M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Big.bin");
+	ReplaceSET("SET0310M", "Tails-TP-Act1");
+	ReplaceSET("SET0311M", "Tails-TP-Act2");
+	ReplaceSET("SET0312M", "Tails-TP-Act3");
+	ReplaceSET("SET0313M", "Tails-TP-Big");
+	ReplaceSET("SET0314M", "Tails-TP-Amy");
 
-	helperFunctions.ReplaceFile("system\\SET0303M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0305M.BIN", "system\\levels\\Twinkle Park\\Tails-TP-Amy.bin");
+	ReplaceCAM("CAM0300M", "CAM0300M");
+	ReplaceCAM("CAM0301M", "CAM0301M");
+	ReplaceCAM("CAM0302M", "CAM0302M");
+	ReplaceCAM("CAM0305M", "CAM0305M");
 
-	helperFunctions.ReplaceFile("system\\CAM0300M.BIN", "system\\cam\\CAM0300M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301M.BIN", "system\\cam\\CAM0301M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302M.BIN", "system\\cam\\CAM0302M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305M.BIN", "system\\cam\\CAM0305M.bin");
-	helperFunctions.RegisterStartPosition(Characters_Tails, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, TP3_StartPositions[0]);
 
 	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0300K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Act3.bin");
+	ReplaceSET("SET0310K", "Knux-TP-Act1");
+	ReplaceSET("SET0311K", "Knux-TP-Act2");
+	ReplaceSET("SET0312K", "Knux-TP-Act3");
+	ReplaceSET("SET0313K", "Knux-TP-Amy");
+	ReplaceSET("SET0314K", "Knux-TP-Big");
 
+	ReplaceCAM("CAM0300K", "CAM0300K");
+	ReplaceCAM("CAM0301K", "CAM0301K");
+	ReplaceCAM("CAM0302K", "CAM0302K");
+	ReplaceCAM("CAM0305K", "CAM0305K");
 
-	helperFunctions.ReplaceFile("system\\SET0303K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0305K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Amy.bin");
-	helperFunctions.ReplaceFile("system\\SET0306K.BIN", "system\\levels\\Twinkle Park\\Knux-TP-Big.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0300K.BIN", "system\\cam\\CAM0300K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301K.BIN", "system\\cam\\CAM0301K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302K.BIN", "system\\cam\\CAM0302K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305K.BIN", "system\\cam\\CAM0305K.bin");
-
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, TP3_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0300A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Act3.bin");
+	ReplaceSET("SET0310A", "Amy-TP-Act1");
+	ReplaceSET("SET0311A", "Amy-TP-Act2");
+	ReplaceSET("SET0312A", "Amy-TP-Act3");
+	ReplaceSET("SET0313A", "Amy-TP-Amy");
+	ReplaceSET("SET0314A", "Amy-TP-Big");
 
-	helperFunctions.ReplaceFile("system\\SET0303A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Chao.bin");
-	//helperFunctions.ReplaceFile("system\\SET0304A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-ActSpecial.bin"); //not ready yet
-	helperFunctions.ReplaceFile("system\\SET0306A.BIN", "system\\levels\\Twinkle Park\\Amy-TP-Big.bin");
+	ReplaceCAM("CAM0300A", "CAM0300A");
+	ReplaceCAM("CAM0301A", "CAM0301A");
+	ReplaceCAM("CAM0302A", "CAM0302A");
+	ReplaceCAM("CAM0305A", "CAM0305A");
 
-	helperFunctions.ReplaceFile("system\\CAM0300A.BIN", "system\\cam\\CAM0300A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301A.BIN", "system\\cam\\CAM0301A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302A.BIN", "system\\cam\\CAM0302A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305A.BIN", "system\\cam\\CAM0305A.bin");
-	helperFunctions.RegisterStartPosition(Characters_Amy, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, TP3_StartPositions[0]);
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0300B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Act3.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0303B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0305B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Amy.bin");
-	helperFunctions.ReplaceFile("system\\SET0306B.BIN", "system\\levels\\Twinkle Park\\Big-TP-Big.bin");
+	ReplaceSET("SET0310B", "Big-TP-Act1");
+	ReplaceSET("SET0311B", "Big-TP-Act2");
+	ReplaceSET("SET0312B", "Big-TP-Act3");
+	ReplaceSET("SET0313B", "Big-TP-Amy");
+	ReplaceSET("SET0314B", "Big-TP-Big");
 
 
-	helperFunctions.ReplaceFile("system\\CAM0300B.BIN", "system\\cam\\CAM0300B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301B.BIN", "system\\cam\\CAM0301B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302B.BIN", "system\\cam\\CAM0302B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305B.BIN", "system\\cam\\CAM0305B.bin");
-	helperFunctions.RegisterStartPosition(Characters_Big, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, TP3_StartPositions[0]);
+	ReplaceCAM("CAM0300B", "CAM0300B");
+	ReplaceCAM("CAM0301B", "CAM0301B");
+	ReplaceCAM("CAM0302B", "CAM0302B");
+	ReplaceCAM("CAM0305B", "CAM0305B");
+
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0300E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0301E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0302E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Act3.bin");
+	ReplaceSET("SET0310E", "Gamma-TP-Act1");
+	ReplaceSET("SET0311E", "Gamma-TP-Act2");
+	ReplaceSET("SET0312E", "Gamma-TP-Act3");
+	ReplaceSET("SET0313E", "Gamma-TP-Amy");
+	ReplaceSET("SET0314E", "Gamma-TP-Big");
 
-	helperFunctions.ReplaceFile("system\\SET0303E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Chao.bin");
-	helperFunctions.ReplaceFile("system\\SET0305E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Amy.bin");
-	helperFunctions.ReplaceFile("system\\SET0306E.BIN", "system\\levels\\Twinkle Park\\Gamma-TP-Big.bin");
+	ReplaceCAM("CAM0300E", "CAM0300E");
+	ReplaceCAM("CAM0301E", "CAM0301E");
+	ReplaceCAM("CAM0302E", "CAM0302E");
+	ReplaceCAM("CAM0305E", "CAM0305E");
 
-	helperFunctions.ReplaceFile("system\\CAM0300E.BIN", "system\\cam\\CAM0300E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0301E.BIN", "system\\cam\\CAM0301E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0302E.BIN", "system\\cam\\CAM0302E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0305E.BIN", "system\\cam\\CAM0305E.bin");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, TP1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, TP2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, TP3_StartPositions[0]);
 }
 
 
@@ -310,7 +275,8 @@ ObjectListEntry TwinkleParkObjectList_list[] = {
 	{ 2, 2, 0, 0, 0, (ObjectFuncPtr)0x7A8E50, "O BUBBLE" } /* "O BUBBLE" */,
 	{ 2, 4, 0, 0, 0, (ObjectFuncPtr)0x7A8A60, "O BUBBLES" } /* "O BUBBLES" */,
 	{ 2, 3, 1, 360000, 0, (ObjectFuncPtr)0x61EEE0, "O DOOR MIRROR" } /* "O DOOR MIRROR" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" }, /* "O FROG" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" } //Mystic Melody
 };
 
 PVMEntry TwinkleParkObjectTextures[] = {
@@ -327,6 +293,7 @@ PVMEntry TwinkleParkObjectTextures[] = {
 	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
 	{ "E_BOMB", (TexList*)0x96B464 },
 	{ "big_kaeru", (TexList*)0x91D780 },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };
 

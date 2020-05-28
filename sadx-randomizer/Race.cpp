@@ -14,9 +14,8 @@ bool Race = false;
 extern ObjectFuncPtr charfuncs[];
 
 
-
-
 void AIRaceLoad_R() {
+
 	LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[AIRace]);
 }
 
@@ -33,7 +32,8 @@ void RaceResultCheck(ObjectMaster* a1) {
 
 	ObjectMaster* play1 = GetCharacterObject(0);
 	EntityData1* v1 = a1->Data1;
-
+	MILESRACE_TEXLIST.nbTexture = 20;
+	
 	if (Race && !isAIActive)
 	{
 		if (play1->Data1->CharID != Characters_Tails && IsSpecificPlayerInSphere(&v1->Position, 22, 1))
@@ -76,11 +76,11 @@ void CheckRace() {
 	switch (CurrentLevel)
 	{
 	case LevelIDs_WindyValley:
-		if (CurrentMission == 1 && CurrentAct == 2)
+		if (CurrentMission < 2 && CurrentAct == 2)
 			isAIActive = false;
 		break;
 	case LevelIDs_SpeedHighway:
-		if (CurrentMission == 1 && CurrentAct == 0)
+		if (CurrentMission < 2 && CurrentAct == 0)
 		{
 			isAIActive = false;
 			Race = true;
@@ -89,7 +89,7 @@ void CheckRace() {
 		}
 		break;
 	case LevelIDs_SkyDeck:
-		if (CurrentMission == 1 && CurrentAct == 0)
+		if (CurrentMission < 2 && CurrentAct == 0)
 			isAIActive = false;
 		break;
 	case LevelIDs_IceCap:

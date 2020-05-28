@@ -30,39 +30,32 @@ void Cam_SkyDeck() {
 
 void SkyDeck_Layout() {
 
+	Load_ObjectsCommon();
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		LoadSetFile(0, "0600"); //load Sonic layout
-		LoadSetFile(1, "0601");
-		LoadSetFile(2, "0602");
+		LoadSetFile(0, "0610"); //load Sonic layout
+		LoadSetFile(1, "0611");
+		LoadSetFile(2, "0612");
 		break;
 	case TailsVersion:
-		if (CurrentMission < Mission2_100Rings)
-		{
-			Race = true;
-			LoadSetFile(0, "0605"); //load Tails layout
-		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0605"); //load Tails layout
-		}
-		LoadSetFile(1, "0601");
-		LoadSetFile(2, "0602");
+		LoadSetFile(0, "0613"); //load Tails layout
+		LoadSetFile(1, "0611");
+		LoadSetFile(2, "0612");
 		break;
 	case KnucklesVersion:
-		LoadSetFile(0, "0600");
-		LoadSetFile(1, "0601");
+		LoadSetFile(0, "0610");
+		LoadSetFile(1, "0611");
 		if (CurrentMission < Mission2_100Rings)
 		{
 			SetRNGKnuckles();
-			LoadSetFile(2, "0604"); //Knuckles Version
+			LoadSetFile(2, "0614"); //Knuckles Version
 		}
 		else
 		{
-			LoadSetFile(2, "0606"); //Knuckles M2 Version
+			LoadSetFile(2, "0615"); //Knuckles M2 Version
 		}
 
 		break;
@@ -208,12 +201,12 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0600S", "Sonic-SD-Act1");
-	ReplaceSET("SET0601S", "Sonic-SD-Act2");
-	ReplaceSET("SET0602S", "Sonic-SD-Act3");
-	ReplaceSET("SET0604S", "Sonic-SD-Knux");
-	ReplaceSET("SET0605S", "Sonic-SD-Race");
-	ReplaceSET("SET0606S", "Sonic-SD-KnuxR");
+	ReplaceSET("SET0610S", "Sonic-SD-Act1");
+	ReplaceSET("SET0611S", "Sonic-SD-Act2");
+	ReplaceSET("SET0612S", "Sonic-SD-Act3");
+	ReplaceSET("SET0613S", "Sonic-SD-Race");
+	ReplaceSET("SET0614S", "Sonic-SD-Knux");
+	ReplaceSET("SET0615S", "Sonic-SD-KnuxR");
 
 	ReplaceCAM("CAM0600S", "CAM0600S");
 	ReplaceCAM("CAM0601S", "CAM0601S");
@@ -221,92 +214,77 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceCAM("CAM0603S", "CAM0603S");
 	ReplaceCAM("CAM0604S", "CAM0604S");
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, SD1S_StartPositions[0]);
 
 	//Tails
-	ReplaceSET("SET0600M", "Tails-SD-Act1");
-	ReplaceSET("SET0601M", "Tails-SD-Act2");
-	ReplaceSET("SET0602M", "Tails-SD-Act3");
-	ReplaceSET("SET0604M", "Tails-SD-Knux");
-	ReplaceSET("SET0605M", "Tails-SD-Race");
-	ReplaceSET("SET0606M", "Tails-SD-KnuxR");
+	ReplaceSET("SET0610M", "Tails-SD-Act1");
+	ReplaceSET("SET0611M", "Tails-SD-Act2");
+	ReplaceSET("SET0612M", "Tails-SD-Act3");
+	ReplaceSET("SET0613M", "Tails-SD-Race");
+	ReplaceSET("SET0614M", "Tails-SD-Knux");
+	ReplaceSET("SET0615M", "Tails-SD-KnuxR");
+	
 
 	ReplaceCAM("CAM0600M", "CAM0600M");
 	ReplaceCAM("CAM0601M", "CAM0601M");
 	ReplaceCAM("CAM0602M", "CAM0602M");
 	ReplaceCAM("CAM0603M", "CAM0603M");
 	ReplaceCAM("CAM0604M", "CAM0604M");
-	helperFunctions.RegisterStartPosition(Characters_Tails, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, SD3_StartPositions[0]);
 
 	//Knuckles
-	ReplaceSET("SET0600K", "Knux-SD-Act1");
-	ReplaceSET("SET0601K", "Knux-SD-Act2");
-	ReplaceSET("SET0602K", "Knux-SD-Act3");
-	ReplaceSET("SET0604K", "Knux-SD-Knux");
-	ReplaceSET("SET0605K", "Knux-SD-Race");
-	ReplaceSET("SET0606K", "Knux-SD-KnuxR");
+	ReplaceSET("SET0610K", "Knux-SD-Act1");
+	ReplaceSET("SET0611K", "Knux-SD-Act2");
+	ReplaceSET("SET0612K", "Knux-SD-Act3");
+	ReplaceSET("SET0613K", "Knux-SD-Race");
+	ReplaceSET("SET0614K", "Knux-SD-Knux");
+	ReplaceSET("SET0615K", "Knux-SD-KnuxR");
 
 	ReplaceCAM("CAM0600K", "CAM0600K");
 	ReplaceCAM("CAM0601K", "CAM0601K");
 	ReplaceCAM("CAM0602K", "CAM0602K");
 	ReplaceCAM("CAM0603K", "CAM0603K");
 	ReplaceCAM("CAM0604K", "CAM0604K");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SD3_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0600A", "Amy-SD-Act1");
-	ReplaceSET("SET0601A", "Amy-SD-Act2");
-	ReplaceSET("SET0602A", "Amy-SD-Act3");
-	ReplaceSET("SET0604A", "Amy-SD-Knux");
-	ReplaceSET("SET0605A", "Amy-SD-Race");
-	ReplaceSET("SET0606A", "Amy-SD-KnuxR");
+	ReplaceSET("SET0610A", "Amy-SD-Act1");
+	ReplaceSET("SET0611A", "Amy-SD-Act2");
+	ReplaceSET("SET0612A", "Amy-SD-Act3");
+	ReplaceSET("SET0613A", "Amy-SD-Race");
+	ReplaceSET("SET0614A", "Amy-SD-Knux");
+	ReplaceSET("SET0615A", "Amy-SD-KnuxR");
 
 	ReplaceCAM("CAM0600A", "CAM0600A");
 	ReplaceCAM("CAM0601A", "CAM0601A");
 	ReplaceCAM("CAM0602A", "CAM0602A");
 	ReplaceCAM("CAM0603A", "CAM0603A");
 	ReplaceCAM("CAM0604A", "CAM0604A");
-	helperFunctions.RegisterStartPosition(Characters_Amy, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, SD3_StartPositions[0]);
 
 	//Big
-	ReplaceSET("SET0600B", "Big-SD-Act1");
-	ReplaceSET("SET0601B", "Big-SD-Act2");
-	ReplaceSET("SET0602B", "Big-SD-Act3");
-	ReplaceSET("SET0604B", "Big-SD-Knux");
-	ReplaceSET("SET0605B", "Big-SD-Race");
-	ReplaceSET("SET0606B", "Big-SD-KnuxR");
+	ReplaceSET("SET0610B", "Big-SD-Act1");
+	ReplaceSET("SET0611B", "Big-SD-Act2");
+	ReplaceSET("SET0612B", "Big-SD-Act3");
+	ReplaceSET("SET0613B", "Big-SD-Race");
+	ReplaceSET("SET0614B", "Big-SD-Knux");
+	ReplaceSET("SET0615B", "Big-SD-KnuxR");
 
 	ReplaceCAM("CAM0600B", "CAM0600B");
 	ReplaceCAM("CAM0601B", "CAM0601B");
 	ReplaceCAM("CAM0602B", "CAM0602B");
 	ReplaceCAM("CAM0603B", "CAM0603B");
 	ReplaceCAM("CAM0604B", "CAM0604B");
-	helperFunctions.RegisterStartPosition(Characters_Big, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, SD3_StartPositions[0]);
 
 	//Gamma
-	ReplaceSET("SET0600E", "Gamma-SD-Act1");
-	ReplaceSET("SET0601E", "Gamma-SD-Act2");
-	ReplaceSET("SET0602E", "Gamma-SD-Act3");
-	ReplaceSET("SET0604E", "Gamma-SD-Knux");
-	ReplaceSET("SET0605E", "Gamma-SD-Race");
-	ReplaceSET("SET0606E", "Gamma-SD-KnuxR");
+	ReplaceSET("SET0610E", "Gamma-SD-Act1");
+	ReplaceSET("SET0611E", "Gamma-SD-Act2");
+	ReplaceSET("SET0612E", "Gamma-SD-Act3");
+	ReplaceSET("SET0613E", "Gamma-SD-Race");
+	ReplaceSET("SET0614E", "Gamma-SD-Knux");
+	ReplaceSET("SET0615E", "Gamma-SD-KnuxR");
 
 	ReplaceCAM("CAM0600E", "CAM0600E");
 	ReplaceCAM("CAM0601E", "CAM0601E");
 	ReplaceCAM("CAM0602E", "CAM0602E");
 	ReplaceCAM("CAM0603E", "CAM0603E");
 	ReplaceCAM("CAM0604E", "CAM0604E");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SD1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SD2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SD3_StartPositions[0]);
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {
@@ -447,7 +425,27 @@ ObjectListEntry SkyDeckObjectList_list[] = {
 	{ 2, 2, 0, 0, 0, (ObjectFuncPtr)0x7A9C60, "O HINT" } /* "O HINT" */,
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x5F02B0, "HOMING" } /* "HOMING" */,
 	{ 2, 3, 1, 1440000, 0, (ObjectFuncPtr)0x5F2860, "O_SIGNAL" } /* "O_SIGNAL" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" }, /* "O FROG" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
+};
+
+PVMEntry SkyDeckObjectTextures[] = {
+	{ "OBJ_SKYDECK", (TexList*)0x214BE40 },
+	{ "E_AIRCRAFT", (TexList*)0x9620F0 },
+	{ "OUM", (TexList*)0x9334EC },
+	{ "KUJA", (TexList*)0x93142C },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "SUPI_SUPI", (TexList*)0x96F518 },
+	{ "TUBA", (TexList*)0x92F2BC },
+	{ "LION", (TexList*)0x944094 },
+	{ "AIR_SIGNAL", (TexList*)0x96236C },
+	{ "SUKA", (TexList*)0x94789C },
+	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ NULL, (TexList*)0x214B41C },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ 0 }
 };
 
 ObjectList SkyDeckObjectList = { arraylengthandptrT(SkyDeckObjectList_list, int) };
@@ -458,6 +456,7 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 	//Change the objectlist
 
 	ObjLists[LevelIDs_SkyDeck * 8 + 2] = &SkyDeckObjectList;
+	TexLists_Obj[LevelIDs_SkyDeck] = SkyDeckObjectTextures;
 	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
 	SkyDeckDeathZones[1] = SkyDeck2DeathZones;
 }

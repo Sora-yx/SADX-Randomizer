@@ -2,6 +2,7 @@
 #include "RandomHelpers.h"
 #include "CharactersSettings.h"
 #include "StageSettings.h"
+#include "Utils.h"
 
 
 extern bool RandCongratsDone;
@@ -84,6 +85,7 @@ void ReleaseScoreTexture() {
 		AddCustomFlag(); //Add a flag for story progression.
 
 	njReleaseTexture(&SCORE_RESULT_TEXLIST);
+	return;
 }
 
 
@@ -352,7 +354,6 @@ void RestorePuzzleBoxVanillaThing() {
 void ResetValueWhileLevelResult() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
-	isCheckpointUsed = false;
 	isGameOver = false;
 	SonicRand = 0;
 	KnuxCheck = 0;
@@ -364,23 +365,26 @@ void ResetValueWhileLevelResult() {
 	CasinoTails = false;
 	isKnucklesVersion = false;
 	isTailsVersion = false;
-	isCheckpointUsed = false;
+	MMPlatformEnabled = false;
 
 	RestoreRNGValueKnuckles();
 	RestorePuzzleBoxVanillaThing();
+	Delete_ObjectsCommon();
+	njReleaseTexture(&SUPERSONIC_TEXLIST);
+	njReleaseTexture(&EGGROB_TEXLIST);
 
 	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
-
+		
 	if (CurrentLevel != 0)
 	{
 		DeleteTriggerObject();
-		DeleteObject_(ChaoTP);
+		CheckThingButThenDeleteObject(ChaoTP);
 		Delete_Cart();
 		Chao_DeleteFiles();
 	}
+	
 	fixTCCart();
-
 	return;
 }
 
@@ -402,7 +406,7 @@ void ResetStatsValues() {
 	isGameOver = false;
 	isKnucklesVersion = false;
 	isTailsVersion = false;
-
+	MMPlatformEnabled = false;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
@@ -418,12 +422,14 @@ void ResetStatsValues() {
 	Race = false;
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
-	isCheckpointUsed = false;
+	//isCheckpointUsed = false;
 	fixTCCart();
 
 	if (CurrentLevel != 0)
 		Delete_Cart();
 
+	njReleaseTexture(&SUPERSONIC_TEXLIST);
+	njReleaseTexture(&EGGROB_TEXLIST);
 	RestoreRNGValueKnuckles();
 }
 

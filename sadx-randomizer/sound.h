@@ -41,6 +41,8 @@ enum CustomSounds {
 	CommonSound_BackRing = 5000,
 	CommonSound_RadarBlink = 6000,
 	CommonSound_TikalHint,
-	CommonSound_EmeraldGet
-	
+	CommonSound_EmeraldGet,
+	CommonSound_MysticMelody,
+	CommonSound_MM_Platform,	
+	CommonSound_MM_Warp,
 };

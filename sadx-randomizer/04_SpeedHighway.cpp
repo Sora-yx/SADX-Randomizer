@@ -28,45 +28,38 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
+	CurrentStageVersion = TailsVersion;
+	Load_ObjectsCommon();
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		if (CurrentMission < Mission3_LostChao)
-			LoadSetFile(0, "0400"); //load Sonic Layout
-		else
-			LoadSetFile(0, "0404"); //load Chao Layout
-
-		LoadSetFile(1, "0401");
-		LoadSetFile(2, "0402");
+		LoadSetFile(0, "0410"); //load Sonic Layout
+		LoadSetFile(1, "0411");
+		LoadSetFile(2, "0412");
 		break;
 	case TailsVersion:
-		if (CurrentMission < Mission2_100Rings)
-		{
-			Race = true;
-			LoadSetFile(0, "0403"); 
-		}
-		else
-		{
-			Race = false;
-			LoadSetFile(0, "0407");
-		}
-		LoadSetFile(1, "0401"); 
-		LoadSetFile(2, "0402"); 
+		LoadSetFile(0, "0413"); 
+		LoadSetFile(1, "0411"); 
+		LoadSetFile(2, "0412"); 
 		break;
 	case KnucklesVersion:
-		LoadSetFile(0, "0400");
-		LoadSetFile(1, "0401");
+		LoadSetFile(0, "0410");
+		LoadSetFile(1, "0411");
 		isKnucklesVersion = true;
 		if (CurrentMission < Mission2_100Rings)
 		{
 			SetRNGKnuckles();
-			LoadSetFile(2, "0405"); //Knuckles Version
+			LoadSetFile(2, "0414"); //Knuckles Version
 		}
 		else
-			LoadSetFile(2, "0406"); //Knuckles M2 Version
+			LoadSetFile(2, "0415"); //Knuckles M2 Version
 		break;
 	}
+
+	if (Race)
+		SelectBarRace();
 
 	CamSpeedHighway();
 	return;
@@ -77,6 +70,7 @@ void SHAct2Position() {
 		return PositionPlayer(0, 10, -10000, 10);
 	else
 		return ForcePlayerAction(0, 0x2b);
+
 }
 
 void CheckEggmanRaceWinner() {
@@ -210,7 +204,26 @@ ObjectListEntry SpeedHighwayObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x614CE0, "O GCLIGHT" } /* "O GCLIGHT" */,
 	{ 15, 3, 1, 2250000, 0, (ObjectFuncPtr)0x4C07D0, "O ItemBoxAir" } /* "O ItemBoxAir" */,
 	{ 2, 3, 1, 3240000, 0, (ObjectFuncPtr)0x614380, "MISSILE" } /* "MISSILE" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" }, /* "O FROG" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
+};
+
+PVMEntry SpeedHighwayObjectTextures[] = {
+	{ "OBJ_HIGHWAY", (TexList*)0x26703F0 },
+	{ "OBJ_HIGHWAY2", (TexList*)0x26706AC },
+	{ "NISEPAT", (TexList*)0x970F8C },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "SUPI_SUPI", (TexList*)0x96F518 },
+	{ "TUBA", (TexList*)0x92F2BC },
+	{ "KOAR", (TexList*)0x9359B4 },
+	{ "WARA", (TexList*)0x93852C },
+	{ "USA", (TexList*)0x93CF74 },
+	{ "BANB", (TexList*)0x93A8BC },
+	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ 0 }
 };
 
 ObjectList SpeedHighwayObjectList = { arraylengthandptrT(SpeedHighwayObjectList_list, int) };
@@ -218,7 +231,10 @@ ObjectList SpeedHighwayObjectList = { arraylengthandptrT(SpeedHighwayObjectList_
 void __cdecl SHObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_SpeedHighway * 8 + 2] = &SpeedHighwayObjectList;
+	TexLists_Obj[LevelIDs_SpeedHighway] = SpeedHighwayObjectTextures;
 }
+
+
 
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -239,14 +255,12 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	SHObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0400S", "Sonic-SH-Act1");
-	ReplaceSET("SET0401S", "Sonic-SH-Act2");
-	ReplaceSET("SET0402S", "Sonic-SH-Act3");
-	ReplaceSET("SET0403S", "Sonic-SH-Race");
-	ReplaceSET("SET0404S", "Sonic-SH-Chao");
-	ReplaceSET("SET0405S", "Sonic-SH-Knux");
-	ReplaceSET("SET0406S", "Sonic-SH-KnuxR");
-	ReplaceSET("SET0407S", "Sonic-SH-TR");
+	ReplaceSET("SET0410S", "Sonic-SH-Act1");
+	ReplaceSET("SET0411S", "Sonic-SH-Act2");
+	ReplaceSET("SET0412S", "Sonic-SH-Act3");
+	ReplaceSET("SET0413S", "Sonic-SH-Race");
+	ReplaceSET("SET0414S", "Sonic-SH-Knux");
+	ReplaceSET("SET0415S", "Sonic-SH-KnuxR");
 
 	ReplaceCAM("CAM0400S", "CAM0400S");
 	ReplaceCAM("CAM0401S", "CAM0401S");
@@ -255,95 +269,72 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 
 
 	//Tails
-	ReplaceSET("SET0400M", "Tails-SH-Act1");
-	ReplaceSET("SET0401M", "Tails-SH-Act2");
-	ReplaceSET("SET0402M", "Tails-SH-Act3");
-	ReplaceSET("SET0403M", "Tails-SH-Race");
-	ReplaceSET("SET0404M", "Tails-SH-Chao");
-	ReplaceSET("SET0405M", "Tails-SH-Knux");
-	ReplaceSET("SET0406M", "Tails-SH-KnuxR");
-	ReplaceSET("SET0407M", "Tails-SH-TR");
+	ReplaceSET("SET0410M", "Tails-SH-Act1");
+	ReplaceSET("SET0411M", "Tails-SH-Act2");
+	ReplaceSET("SET0412M", "Tails-SH-Act3");
+	ReplaceSET("SET0413M", "Tails-SH-Race");
+	ReplaceSET("SET0414M", "Tails-SH-Knux");
+	ReplaceSET("SET0415M", "Tails-SH-KnuxR");
 
 	ReplaceCAM("CAM0400M", "CAM0400M");
 	ReplaceCAM("CAM0401M", "CAM0401M");
 	ReplaceCAM("CAM0402M", "CAM0402M");
 	ReplaceCAM("CAM0405M", "CAM0405M");
 
-	helperFunctions.RegisterStartPosition(Characters_Tails, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, SH3_StartPositions[0]);
 
 	//Knuckles
-	ReplaceSET("SET0400K", "Knux-SH-Act1");
-	ReplaceSET("SET0401K", "Knux-SH-Act2");
-	ReplaceSET("SET0402K", "Knux-SH-Act3");
-	ReplaceSET("SET0403K", "Knux-SH-Race");
-	ReplaceSET("SET0404K", "Knux-SH-Chao");
-	ReplaceSET("SET0405K", "Knux-SH-Knux");
-	ReplaceSET("SET0406K", "Knux-SH-KnuxR");
-	ReplaceSET("SET0407K", "Knux-SH-TR");
+	ReplaceSET("SET0410K", "Knux-SH-Act1");
+	ReplaceSET("SET0411K", "Knux-SH-Act2");
+	ReplaceSET("SET0412K", "Knux-SH-Act3");
+	ReplaceSET("SET0413K", "Knux-SH-Race");
+	ReplaceSET("SET0414K", "Knux-SH-Knux");
+	ReplaceSET("SET0415K", "Knux-SH-KnuxR");
 
 	ReplaceCAM("CAM0400K", "CAM0400K");
 	ReplaceCAM("CAM0401K", "CAM0401K");
 	ReplaceCAM("CAM0402K", "CAM0402K");
 	ReplaceCAM("CAM0405K", "CAM0405K");
 
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, SH3_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0400A", "Amy-SH-Act1");
-	ReplaceSET("SET0401A", "Amy-SH-Act2");
-	ReplaceSET("SET0402A", "Amy-SH-Act3");
-	ReplaceSET("SET0403A", "Amy-SH-Race");
-	ReplaceSET("SET0404A", "Amy-SH-Chao");
-	ReplaceSET("SET0405A", "Amy-SH-Knux");
-	ReplaceSET("SET0406A", "Amy-SH-KnuxR");
-	ReplaceSET("SET0407A", "Amy-SH-TR");
+	ReplaceSET("SET0410A", "Amy-SH-Act1");
+	ReplaceSET("SET0411A", "Amy-SH-Act2");
+	ReplaceSET("SET0412A", "Amy-SH-Act3");
+	ReplaceSET("SET0413A", "Amy-SH-Race");
+	ReplaceSET("SET0414A", "Amy-SH-Knux");
+	ReplaceSET("SET0415A", "Amy-SH-KnuxR");
 
 	ReplaceCAM("CAM0400A", "CAM0400A");
 	ReplaceCAM("CAM0401A", "CAM0401A");
 	ReplaceCAM("CAM0402A", "CAM0402A");
 	ReplaceCAM("CAM0405A", "CAM0405A");
-	helperFunctions.RegisterStartPosition(Characters_Amy, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, SH3_StartPositions[0]);
+
 
 	//Big
-	ReplaceSET("SET0400B", "Big-SH-Act1");
-	ReplaceSET("SET0401B", "Big-SH-Act2");
-	ReplaceSET("SET0402B", "Big-SH-Act3");
-	ReplaceSET("SET0403B", "Big-SH-Race");
-	ReplaceSET("SET0404B", "Big-SH-Chao");
-	ReplaceSET("SET0405B", "Big-SH-Knux");
-	ReplaceSET("SET0406B", "Big-SH-KnuxR");
-	ReplaceSET("SET0407B", "Big-SH-TR");
+	ReplaceSET("SET0410B", "Big-SH-Act1");
+	ReplaceSET("SET0411B", "Big-SH-Act2");
+	ReplaceSET("SET0412B", "Big-SH-Act3");
+	ReplaceSET("SET0413B", "Big-SH-Race");
+	ReplaceSET("SET0414B", "Big-SH-Knux");
+	ReplaceSET("SET0415B", "Big-SH-KnuxR");
 
 	ReplaceCAM("CAM0400B", "CAM0400B");
 	ReplaceCAM("CAM0401B", "CAM0401B");
 	ReplaceCAM("CAM0402B", "CAM0402B");
 	ReplaceCAM("CAM0405B", "CAM0405B");
 
-	helperFunctions.RegisterStartPosition(Characters_Big, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, SH3_StartPositions[0]);
 
 	//Gamma
-	ReplaceSET("SET0400E", "Gamma-SH-Act1");
-	ReplaceSET("SET0401E", "Gamma-SH-Act2");
-	ReplaceSET("SET0402E", "Gamma-SH-Act3");
-	ReplaceSET("SET0403E", "Gamma-SH-Race");
-	ReplaceSET("SET0404E", "Gamma-SH-Chao");
-	ReplaceSET("SET0405E", "Gamma-SH-Knux");
-	ReplaceSET("SET0406E", "Gamma-SH-KnuxR");
-	ReplaceSET("SET0407E", "Gamma-SH-TR");
+	ReplaceSET("SET0410E", "Gamma-SH-Act1");
+	ReplaceSET("SET0411E", "Gamma-SH-Act2");
+	ReplaceSET("SET0412E", "Gamma-SH-Act3");
+	ReplaceSET("SET0413E", "Gamma-SH-Race");
+	ReplaceSET("SET0414E", "Gamma-SH-Knux");
+	ReplaceSET("SET0415E", "Gamma-SH-KnuxR");
 
 	ReplaceCAM("CAM0400E", "CAM0400E");
 	ReplaceCAM("CAM0401E", "CAM0401E");
 	ReplaceCAM("CAM0402E", "CAM0402E");
 	ReplaceCAM("CAM0405E", "CAM0405E");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SH1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SH2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, SH3_StartPositions[0]);
+
 }

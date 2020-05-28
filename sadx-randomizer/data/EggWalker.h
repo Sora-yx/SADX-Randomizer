@@ -11,3 +11,5 @@ void EggWalker_LoadWithTarget_R();
 ObjectFunc(EW_Bomb, 0x57a110);
 void EggWalker_BigJump_r(ObjectMaster* obj);
 
+DataPointer(char, EWDamageCheck, 0x3C6CC98);
+DataPointer(char, EWHit, 0x3c6cc9c);

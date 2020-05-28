@@ -22,17 +22,11 @@ extern bool ChaoSpawn;
 
 //back ring Model and Display Stuff
 extern NJS_MODEL_SADX model_0;
-
 extern NJS_OBJECT object_GoalRing;
-
 extern NJS_TEXNAME GoalRingTexNames[4];
-
 extern NJS_TEXLIST GoalRingTextures;
 
 FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
-
-
-bool isBackRingTextureLoaded = false;
 
 
 void BackRingObj_Display(ObjectMaster* obj) {
@@ -47,7 +41,7 @@ void BackRingObj_Display(ObjectMaster* obj) {
 	}
 }
 
-extern ObjectMaster* AIRaceOBJ;
+
 void ChaoObj_Delete(ObjectMaster* a1);
 
 enum BackRing_Actions {
@@ -55,6 +49,7 @@ enum BackRing_Actions {
 	BackRing_Seek,
 	BackRing_Setting
 };
+
 
 //ran every UNpaused frame
 void BackRingObj_Main(ObjectMaster* obj) {
@@ -98,7 +93,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 			obj->Data1->Position.y += 10;
 		}
 
-		if (++data->InvulnerableTime > 80) {
+		if (++data->InvulnerableTime > 70) {
 
 			int color = 0x00000000;
 			ScreenFade_Color = *(NJS_COLOR*)&color;
@@ -114,40 +109,24 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 				SoundManager_Delete2();
 				ChaoSpawn = false;
-				switch (CurrentLevel)
+				if (isTailsVersion || CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
+					GameState = 0xc;
+				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
 				{
-				case LevelIDs_HotShelter:
-					if (CurrentAct == 2)
-					{
-						ChaoObj_Delete(obj);
-						GameState = 24; //fix gamma hot shelter crash
-					}
-					else
-					{
-						GameMode = GameModes_Adventure_Field;
-						GameState = 0xb;
-					}
-					break;
-				case LevelIDs_FinalEgg:
-					if (CurrentAct == 0)
-					{
-						GameState = 0xc; //fix Final Egg position
-					}
-					else
-					{
-						GameMode = GameModes_Adventure_Field;
-						GameState = 0xB;
-					}
-					break;
-				default:
-					if (isTailsVersion || CurrentStageVersion == TailsVersion)
-						GameState = 0xc;
-					else
-					{
-						GameMode = GameModes_Adventure_Field;
-						GameState = 0xB;
-					}
-					break;
+					GameState = 24; //fix gamma hot shelter crash
+				}
+				if (CurrentLevel == LevelIDs_RedMountain && CurrentStageVersion == GammaVersion)
+				{
+					InitializeSoundManager();
+					data->Action = 1;
+					EnablePause();
+					PlayMusic(MusicIDs_RedMountainRedHotSkull);
+					EntityData1Ptrs[0]->Position = { -78, 831, 1919 };
+				}
+				else
+				{
+					GameMode = GameModes_Adventure_Field;
+					GameState = 0xB;
 				}
 			}
 			else
@@ -180,8 +159,6 @@ void BackRingObj_Main(ObjectMaster* obj) {
 	}		
 }
 	
-
-
 
 Trampoline Capsule_Load_T(0x46b170, 0x46b177, CheckLoadCapsule_r);
 
@@ -315,6 +292,20 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 		ObjectFunc(origin, Froggy_Load_T.Target());
 		origin(a1);
 	}
+}
+
+
+Trampoline Froggy_Main_T((int)Froggy_Main, (int)Froggy_Main + 0x5, CheckLoadBig_Froggy_r);
+//Check the current mission and replace Froggy with Back Ring.
+void __cdecl CheckLoadBig_Froggy_r(ObjectMaster* a1) {
+
+	if (CurrentMission < Mission2_100Rings && GetCharacter0ID() == Characters_Big)
+	{
+		ObjectFunc(origin, Froggy_Load_T.Target());
+		origin(a1);
+	}
+	else
+		return;
 }
 
 Trampoline Balloon_Load_T(0x7a21c0, 0x7a21c6, CheckLoadBalloon_r);

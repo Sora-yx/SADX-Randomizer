@@ -23,30 +23,30 @@ void Cam_LW() {
 
 void LW_Layout() {
 
-	LoadSetFile(0, "0700");
+	Load_ObjectsCommon();
+	LoadSetFile(0, "0710");
+
+	CurrentStageVersion = KnucklesVersion;
 
 	switch (CurrentStageVersion)
 	{
 		case SonicVersion:
 		default:
-			if (CurrentMission < Mission3_LostChao)
-				LoadSetFile(1, "0701"); //M1
-			else
-				LoadSetFile(1, "0703");
+				LoadSetFile(1, "0711"); 
 			break;
 		case KnucklesVersion:
 			isKnucklesVersion = true;
 			if (CurrentMission < Mission2_100Rings)
 			{
-				LoadSetFile(1, "0704"); //Knux Treasure Hunting
+				LoadSetFile(1, "0713"); //Knux Treasure Hunting
 				SetRNGKnuckles();
 			}
 			else
-				LoadSetFile(1, "0705");
+				LoadSetFile(1, "0714");
 			break;
 	}
 
-	LoadSetFile(2, "0702");
+	LoadSetFile(2, "0712");
 	Cam_LW();
 
 	return;
@@ -88,19 +88,17 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 
 	WriteCall((void*)0x422e43, LW_Layout);
 	
-
 	WriteCall((void*)0x5e3408, FixLWWaterSlide2);
 	WriteCall((void*)0x5e37fa, FixLWWaterSlide);
 	
 	LWObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0700S", "Sonic-LW-Act1");
-	ReplaceSET("SET0701S", "Sonic-LW-Act2");
-	ReplaceSET("SET0702S", "Sonic-LW-Act3");
-	ReplaceSET("SET0703S", "Sonic-LW-Chao");
-	ReplaceSET("SET0704S", "Sonic-LW-Knux");
-	ReplaceSET("SET0705S", "Sonic-LW-KnuxR");
+	ReplaceSET("SET0710S", "Sonic-LW-Act1");
+	ReplaceSET("SET0711S", "Sonic-LW-Act2");
+	ReplaceSET("SET0712S", "Sonic-LW-Act3");
+	ReplaceSET("SET0713S", "Sonic-LW-Knux");
+	ReplaceSET("SET0714S", "Sonic-LW-KnuxR");
 
 	ReplaceCAM("CAM0700S", "CAM0700S");
 	ReplaceCAM("CAM0701S", "CAM0701S");
@@ -108,84 +106,64 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	ReplaceCAM("CAM0704S", "CAM0704S");
 
 	//Tails
-	ReplaceSET("SET0700M", "Tails-LW-Act1");
-	ReplaceSET("SET0701M", "Tails-LW-Act2");
-	ReplaceSET("SET0702M", "Tails-LW-Act3");
-	ReplaceSET("SET0703M", "Tails-LW-Chao");
-	ReplaceSET("SET0704M", "Tails-LW-Knux");
-	ReplaceSET("SET0705M", "Tails-LW-KnuxR");
+	ReplaceSET("SET0710M", "Tails-LW-Act1");
+	ReplaceSET("SET0711M", "Tails-LW-Act2");
+	ReplaceSET("SET0712M", "Tails-LW-Act3");
+	ReplaceSET("SET0713M", "Tails-LW-Knux");
+	ReplaceSET("SET0714M", "Tails-LW-KnuxR");
 
 	ReplaceCAM("CAM0700M", "CAM0700M");
 	ReplaceCAM("CAM0701M", "CAM0701M");
 	ReplaceCAM("CAM0702M", "CAM0702M");
 	ReplaceCAM("CAM0704M", "CAM0704M");
-	helperFunctions.RegisterStartPosition(Characters_Tails, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, LW3_StartPositions[0]);
 
 	//Knuckles
-	ReplaceSET("SET0700K", "Knux-LW-Act1");
-	ReplaceSET("SET0701K", "Knux-LW-Act2");
-	ReplaceSET("SET0702K", "Knux-LW-Act3");
-	ReplaceSET("SET0703K", "Knux-LW-Chao");
-	ReplaceSET("SET0704K", "Knux-LW-Knux");
-	ReplaceSET("SET0705K", "Knux-LW-KnuxR");
+	ReplaceSET("SET0710K", "Knux-LW-Act1");
+	ReplaceSET("SET0711K", "Knux-LW-Act2");
+	ReplaceSET("SET0712K", "Knux-LW-Act3");
+	ReplaceSET("SET0713K", "Knux-LW-Knux");
+	ReplaceSET("SET0714K", "Knux-LW-KnuxR");
 
 	ReplaceCAM("CAM0700K", "CAM0700K");
 	ReplaceCAM("CAM0701K", "CAM0701K");
 	ReplaceCAM("CAM0702K", "CAM0702K");
 	ReplaceCAM("CAM0704K", "CAM0704K");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, LW3_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0700A", "Amy-LW-Act1");
-	ReplaceSET("SET0701A", "Amy-LW-Act2");
-	ReplaceSET("SET0702A", "Amy-LW-Act3");
-	ReplaceSET("SET0703A", "Amy-LW-Chao");
-	ReplaceSET("SET0704A", "Amy-LW-Knux");
-	ReplaceSET("SET0705A", "Amy-LW-KnuxR");
+	ReplaceSET("SET0710A", "Amy-LW-Act1");
+	ReplaceSET("SET0711A", "Amy-LW-Act2");
+	ReplaceSET("SET0712A", "Amy-LW-Act3");
+	ReplaceSET("SET0713A", "Amy-LW-Knux");
+	ReplaceSET("SET0714A", "Amy-LW-KnuxR");
 
 	ReplaceCAM("CAM0700A", "CAM0700A");
 	ReplaceCAM("CAM0701A", "CAM0701A");
 	ReplaceCAM("CAM0702A", "CAM0702A");
 	ReplaceCAM("CAM0704A", "CAM0704A");
-	helperFunctions.RegisterStartPosition(Characters_Amy, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, LW3_StartPositions[0]);
 
 	//Big
-	ReplaceSET("SET0700B", "Big-LW-Act1");
-	ReplaceSET("SET0701B", "Big-LW-Act2");
-	ReplaceSET("SET0702B", "Big-LW-Act3");
-	ReplaceSET("SET0703B", "Big-LW-Chao");
-	ReplaceSET("SET0704B", "Big-LW-Knux");
-	ReplaceSET("SET0705B", "Big-LW-KnuxR");
+	ReplaceSET("SET0710B", "Big-LW-Act1");
+	ReplaceSET("SET0711B", "Big-LW-Act2");
+	ReplaceSET("SET0712B", "Big-LW-Act3");
+	ReplaceSET("SET0713B", "Big-LW-Knux");
+	ReplaceSET("SET0714B", "Big-LW-KnuxR");
 
 	ReplaceCAM("CAM0700B", "CAM0700B");
 	ReplaceCAM("CAM0701B", "CAM0701B");
 	ReplaceCAM("CAM0702B", "CAM0702B");
 	ReplaceCAM("CAM0704B", "CAM0704B");
-	helperFunctions.RegisterStartPosition(Characters_Big, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, LW3_StartPositions[0]);
 
 	//Gamma
-	ReplaceSET("SET0700E", "Gamma-LW-Act1");
-	ReplaceSET("SET0701E", "Gamma-LW-Act2");
-	ReplaceSET("SET0702E", "Gamma-LW-Act3");
-	ReplaceSET("SET0703E", "Gamma-LW-Chao");
-	ReplaceSET("SET0704E", "Gamma-LW-Knux");
-	ReplaceSET("SET0705E", "Gamma-LW-KnuxR");
+	ReplaceSET("SET0710E", "Gamma-LW-Act1");
+	ReplaceSET("SET0711E", "Gamma-LW-Act2");
+	ReplaceSET("SET0712E", "Gamma-LW-Act3");
+	ReplaceSET("SET0713E", "Gamma-LW-Knux");
+	ReplaceSET("SET0714E", "Gamma-LW-KnuxR");
 
 	ReplaceCAM("CAM0700B", "CAM0700B");
 	ReplaceCAM("CAM0701B", "CAM0701B");
 	ReplaceCAM("CAM0702B", "CAM0702B");
 	ReplaceCAM("CAM0704B", "CAM0704B");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, LW1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, LW2_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, LW3_StartPositions[0]);
 }
 
 ObjectListEntry LostWorldObjectList_list[] = {
@@ -275,7 +253,24 @@ ObjectListEntry LostWorldObjectList_list[] = {
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x5E62D0, "O BROOBJ " } /* "O BROOBJ " */,
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x7B0DA0, "O CLROBJ " } /* "O CLROBJ " */,
 	{ 2, 0, 1, 1000000, 0, (ObjectFuncPtr)0x4D4E10, "NO WATER" } /* "NO WATER" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " }, /* "O FROG " */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
+};
+
+PVMEntry LostWorldObjectTextures[] = {
+	{ "OBJ_RUIN", (TexList*)0x1FF84BC },
+	{ "OBJ_RUIN2", (TexList*)0x1FF86CC },
+	{ "E_LEON", (TexList*)0x9599F4 },
+	{ "PEN", (TexList*)0x92D39C },
+	{ "E_SNAKE", (TexList*)0x94E640 },
+	{ "LION", (TexList*)0x944094 },
+	{ "MOGU", (TexList*)0x93ECEC },
+	{ "ZOU", (TexList*)0x94160C },
+	{ "UNI_C_UNIBODY", (TexList*)0x96DC48 },
+	{ "GORI", (TexList*)0x945964 },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ 0 }
 };
 
 ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, int) };
@@ -283,5 +278,6 @@ ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, 
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_LostWorld * 8 + 2] = &LostWorldObjectList;
+	TexLists_Obj[LevelIDs_LostWorld] = LostWorldObjectTextures;
 }
 

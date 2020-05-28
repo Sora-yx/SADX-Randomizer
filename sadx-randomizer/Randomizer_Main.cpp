@@ -10,14 +10,13 @@
 #include <vector> 
 using namespace std;
 
-
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 struct RandomizedEntry randomizedSets[40];
 short prev_stage = -1;
 bool isGameOver = false;
 
 extern bool RandCongratsDone;
-extern bool isCheckpointUsed;
+//extern bool isCheckpointUsed;
 extern bool CasinoTails;
 extern bool SA2Voices;
 bool isKnucklesVersion = false;
@@ -30,49 +29,52 @@ int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Ch
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
 int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
 
+//Banned level list, there is few stage impossible to beat, depending on the character.
+int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
+int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 RandomizerGenerator RandoStageArray[50]{
 
-	{LevelAndActIDs_HedgehogHammer, AmyVersion },
-	{LevelAndActIDs_EmeraldCoast1, SonicVersion },
-	{LevelAndActIDs_EmeraldCoast1, GammaVersion },
-	{LevelAndActIDs_EmeraldCoast3, BigVersion },
-	{LevelAndActIDs_WindyValley1, SonicVersion},
-	{LevelAndActIDs_WindyValley1, GammaVersion},
-	{LevelAndActIDs_WindyValley3, TailsVersion},
-	{LevelAndActIDs_Casinopolis1, SonicVersion},
-	{LevelAndActIDs_Casinopolis1, KnucklesVersion },
-	{LevelAndActIDs_Casinopolis2, TailsVersion},
-	{LevelAndActIDs_IceCap1, SonicVersion},
-	{LevelAndActIDs_IceCap3, TailsVersion},
-	{LevelAndActIDs_IceCap4, BigVersion	},
-	{LevelAndActIDs_TwinklePark1, SonicVersion },
-	{LevelAndActIDs_TwinklePark2, AmyVersion },
-	{LevelAndActIDs_TwinklePark2, BigVersion},
-	{LevelAndActIDs_SpeedHighway1, SonicVersion },
-	{LevelAndActIDs_SpeedHighway1, TailsVersion },
-	{LevelAndActIDs_SpeedHighway3, KnucklesVersion },
-	{LevelAndActIDs_RedMountain1, SonicVersion},
-	{LevelAndActIDs_RedMountain2, GammaVersion },
-	{LevelAndActIDs_RedMountain3, KnucklesVersion },
-	{LevelAndActIDs_SkyDeck1, SonicVersion},
-	{LevelAndActIDs_SkyDeck1, TailsVersion},
-	{LevelAndActIDs_SkyDeck3, KnucklesVersion },
-	{LevelAndActIDs_LostWorld1, SonicVersion},
-	{LevelAndActIDs_LostWorld2, KnucklesVersion },
-	{LevelAndActIDs_FinalEgg1, SonicVersion },
-	{LevelAndActIDs_FinalEgg1, AmyVersion },
-	{LevelAndActIDs_FinalEgg3, GammaVersion  },
-	{LevelAndActIDs_HotShelter1, AmyVersion },
-	{LevelAndActIDs_HotShelter1, BigVersion },
-	{LevelAndActIDs_HotShelter3, GammaVersion },
+	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
+	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
+	{LevelAndActIDs_EmeraldCoast1, GammaVersion, Characters_Gamma },
+	{LevelAndActIDs_EmeraldCoast3, BigVersion, Characters_Big },
+	{LevelAndActIDs_WindyValley1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_WindyValley1, GammaVersion, Characters_Gamma},
+	{LevelAndActIDs_WindyValley3, TailsVersion, Characters_Tails},
+	{LevelAndActIDs_Casinopolis1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_Casinopolis1, KnucklesVersion, Characters_Knuckles },
+	{LevelAndActIDs_Casinopolis2, TailsVersion, Characters_Tails},
+	{LevelAndActIDs_IceCap1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_IceCap3, TailsVersion, Characters_Tails},
+	{LevelAndActIDs_IceCap4, BigVersion, Characters_Big},
+	{LevelAndActIDs_TwinklePark1, SonicVersion, Characters_Sonic },
+	{LevelAndActIDs_TwinklePark2, AmyVersion, Characters_Amy },
+	{LevelAndActIDs_TwinklePark2, BigVersion, Characters_Big },
+	{LevelAndActIDs_SpeedHighway1, SonicVersion, Characters_Sonic },
+	{LevelAndActIDs_SpeedHighway1, TailsVersion, Characters_Tails },
+	{LevelAndActIDs_SpeedHighway3, KnucklesVersion, Characters_Knuckles },
+	{LevelAndActIDs_RedMountain1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_RedMountain2, GammaVersion, Characters_Gamma },
+	{LevelAndActIDs_RedMountain3, KnucklesVersion, Characters_Knuckles },
+	{LevelAndActIDs_SkyDeck1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_SkyDeck1, TailsVersion, Characters_Tails},
+	{LevelAndActIDs_SkyDeck3, KnucklesVersion, Characters_Knuckles },
+	{LevelAndActIDs_LostWorld1, SonicVersion, Characters_Sonic},
+	{LevelAndActIDs_LostWorld2, KnucklesVersion, Characters_Knuckles },
+	{LevelAndActIDs_FinalEgg1, SonicVersion, Characters_Sonic },
+	{LevelAndActIDs_FinalEgg1, AmyVersion, Characters_Amy },
+	{LevelAndActIDs_FinalEgg3, GammaVersion, Characters_Gamma,},
+	{LevelAndActIDs_HotShelter1, AmyVersion, Characters_Amy },
+	{LevelAndActIDs_HotShelter1, BigVersion, Characters_Big },
+	{LevelAndActIDs_HotShelter3, GammaVersion, Characters_Gamma },
 	{LevelAndActIDs_Chaos0, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos2, BossVersion, Characters_Knuckles },
-	{LevelAndActIDs_Chaos4, BossVersion, Characters_Sonic || Characters_Tails || Characters_Knuckles },
+	{LevelAndActIDs_Chaos4, BossVersion, Characters_Sonic  },
 	{LevelAndActIDs_Chaos6, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos6Two, BossVersion, Characters_Knuckles },
 	{LevelAndActIDs_PerfectChaos, BossVersion, Characters_Sonic },
-	{LevelAndActIDs_EggHornet, BossVersion, Characters_Sonic || Characters_Tails },
+	{LevelAndActIDs_EggHornet, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_EggWalker, BossVersion, Characters_Tails},
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
@@ -82,21 +84,8 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_TwinkleCircuit4, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
-	{LevelAndActIDs_SandHill, SonicVersion, Characters_Tails},
+	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
 };		
-
-RandomizerGenerator RandoBannedCombination[9]{
-
-	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Gamma },
-	{LevelAndActIDs_Chaos0, BossVersion, Characters_Gamma},
-	{LevelAndActIDs_Chaos2, BossVersion, Characters_Gamma},
-	{LevelAndActIDs_Chaos4, BossVersion, Characters_Gamma },
-	{LevelAndActIDs_Chaos6, BossVersion, Characters_Gamma },
-	{LevelAndActIDs_Chaos6Two, BossVersion, Characters_Gamma },
-	{LevelAndActIDs_PerfectChaos, BossVersion, Characters_Gamma || Characters_Big },
-	{LevelAndActIDs_EggViper, BossVersion, Characters_Big },
-	{LevelAndActIDs_Zero, BossVersion, Characters_Gamma},
-};
 
 
 void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
@@ -117,43 +106,28 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 {
-	std::ofstream myfile("RandoDebug.txt", std::ios_base::app);
-	myfile << "\n";
-	short curVersion = generated->version;
+
 	short curLevel = generated->levelAndActs;
 	short curSingleLevel = generated->levelAndActs >> 8;
 	short curAct = generated->levelAndActs & 0xF;
+	uint8_t curBannedChar = generated->bannedChar;
 	short curChar = char_id;
 
-	if (!Vanilla && (curVersion == char_id || curLevel == LevelAndActIDs_TwinkleCircuit1 || curVersion == BossVersion && char_id == generated->bannedChar))
+	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsBig); i++)
 	{
-		myfile << "Banned Stage: " << curSingleLevel;
-		myfile << " CurAct: " << curAct;
-		myfile << " CurChar: " << curChar;
-		myfile << " CurVersion: " << curVersion;
-	
+		if (curSingleLevel == bannedLevelsBig[i] && char_id == Characters_Big)
+			return true;
+	}
+
+	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
+	{
+		if (curSingleLevel == bannedLevelsGamma[i] && char_id == Characters_Gamma)
+			return true;
+	}
+
+	if (!Vanilla && curBannedChar == curChar)
 		return true;
-	}
 
-
-	/*for (uint8_t i = 0; i < LengthOfArray(RandoBannedCombination); i++)
-	{
-		if (curLevel == RandoBannedCombination[i].levelAndActs && char_id == RandoBannedCombination[i].bannedChar)
-			return true;
-	}*/
-
-	if (curLevel >= LevelAndActIDs_TwinkleCircuit1 && curLevel <= LevelAndActIDs_TwinkleCircuit6)
-	{
-		int trick = rand() % 3;
-
-		if (trick > 0)
-			return true;
-	}
-	myfile << "Not Banned Stage" << curSingleLevel;
-	myfile << " CurAct: " << curAct;
-	myfile << " CurChar: " << curChar;
-	myfile << " CurVersion: " << curVersion;
-	myfile.close();
 	return false;
 }
 
@@ -161,6 +135,7 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 vector<RandomizerGenerator> DuplicateStages;
 RandomizerGenerator StructDupli;
 
+int TCCount = 0;
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
 	std::ofstream myfile("VectorDebug.txt", std::ios_base::app);
@@ -170,27 +145,41 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 	short curVersion = generated->version;
 	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
 
+
 	for (RandomizerGenerator stage: DuplicateStages)  {
 
-		if (curLevelAndActID == stage.levelAndActs && curVersion == stage.version || DuplicateStages.back().levelAndActs >> 8 == curLevel)
+		if (DuplicateStages.size() != 0 && curVersion == BossVersion && DuplicateStages.back().version == BossVersion)
+		{
+			myfile << "Previous Level was already a Boss: " << curLevel;
+			return true;
+		}
+
+		if (DuplicateStages.size() >= 40) //Prevent infinite loop.
+		{
+			myfile << "STOOOOOOP";
+			return false;
+		}
+
+		if (DuplicateStages.size() != 0 && (curLevelAndActID == stage.levelAndActs && curVersion == stage.version || DuplicateStages.back().levelAndActs >> 8 == curLevel))
 		{
 			myfile << "Prevous Stage: " << curLevel;
 			myfile << " Previous Version: " << curVersion;
 			return true;
 		}
-
-		if (curVersion == BossVersion && DuplicateStages.back().version == BossVersion)
-		{
-			myfile << "Previous Level was already a Boss: " << curLevel;
-			return true;
-		}
 	}
-	
+
+	if (TCCount < 2 && curLevel == LevelIDs_TwinkleCircuit)
+		TCCount++;
+
+	if (TCCount >= 2 && curLevel == LevelIDs_TwinkleCircuit)
+		return true;
+
 	myfile << "Added Level: " << curLevel;
 	myfile << " Added Version: " << curVersion;
 	StructDupli.levelAndActs = curLevelAndActID;
 	StructDupli.version = curVersion;
 	DuplicateStages.push_back(StructDupli);
+
 	myfile.close();
 	return false;
 }
@@ -252,6 +241,7 @@ short getRandomRaceAI(RandomizedEntry entry) {
 
 int levelCount;
 
+
 void SetRandomStageAct(char stage, char act) {
 
 	if (isGameOver)
@@ -274,6 +264,7 @@ void SetRandomStageAct(char stage, char act) {
 		{
 			if (RNGCharacters)
 			{
+				UnloadCharTextures(CurCharacter());
 				CurrentCharacter = randomizedSets[levelCount].character;
 
 				if (SuperSonic != true)
@@ -306,6 +297,8 @@ void SetRandomStageAct(char stage, char act) {
 	return SetLevelAndAct(Uint8(stage), (Uint8)(act));
 }
 
+
+
 void GoToNextLevel_hook(char stage, char act) {
 
 	if (isGameOver) //do not randomize stage / character
@@ -318,6 +311,7 @@ void GoToNextLevel_hook(char stage, char act) {
 	{
 		if (RNGCharacters)
 		{
+			UnloadCharTextures(CurCharacter());
 			CurrentCharacter = randomizedSets[levelCount].character;
 
 			if (SuperSonic != true)
@@ -384,7 +378,6 @@ void SetLevelAndAct_R() {
 void GameOver_R() {
 
 	isGameOver = true;
-	isCheckpointUsed = false;
 	InitializeSoundManager();
 	return;
 }

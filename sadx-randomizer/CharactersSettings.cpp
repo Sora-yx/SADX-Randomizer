@@ -30,6 +30,7 @@ void character_settings_onFrames() {
 	{
 		if (AmySpeed)
 			PhysicsArray[Characters_Amy].MaxAccel = 5;
+
 		if (BigSpeed)
 			PhysicsArray[Characters_Big].MaxAccel = 5;
 	}
@@ -99,6 +100,7 @@ void LoadCharacter_r()
 
 
 
+
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
 void SuperAuraStuff() {
 	TimeThing = 0;
@@ -106,6 +108,7 @@ void SuperAuraStuff() {
 	if (CurrentCharacter != Characters_Sonic)
 	{
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+		njSetTexture(&SUPERSONIC_TEXLIST);
 		CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
 		CharObj2Ptrs[0]->Powerups |= Powerups_Invincibility;
 		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
@@ -120,7 +123,7 @@ static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
 {
 	if (TransfoCount < 1)
 	{
-		DeleteObject_(_this);
+		CheckThingButThenDeleteObject(_this);
 		return;
 	}
 }
@@ -204,35 +207,34 @@ void SuperSonic_TransformationCheck() {
 			static Uint8 last_action[8] = {};
 			if (!Rings)
 				Rings = 1;
-			for (int i = 0; i < 8; i++)
-			{
-				EntityData1* data1 = EntityData1Ptrs[i];
-				CharObj2* data2 = CharObj2Ptrs[i];
+
+				EntityData1* data1 = EntityData1Ptrs[0];
+				CharObj2* data2 = CharObj2Ptrs[0];
 
 				bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-				bool action = !transformation ? (last_action[i] == 8 && data1->Action == 12) : (last_action[i] == 82 && data1->Action == 78);
+				bool action = !transformation ? (last_action[0] == 8 && data1->Action == 12) : (last_action[0] == 82 && data1->Action == 78);
 
 				//Super Sonic Transformation (Credit: SonicFreak94).
 
 				if (!transformation)
 				{
 					data1->Status &= ~Status_LightDash;
-					ForcePlayerAction(i, 46);
+					ForcePlayerAction(0, 46);
+					njReleaseTexture(&SONIC_TEXLIST);
 					LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+					njSetTexture(&SUPERSONIC_TEXLIST);
 					PlayVoice(3001);
 					data2->Upgrades |= Upgrades_SuperSonic;
 					PlayMusic(MusicIDs_ThemeOfSuperSonic);
 
 					if (!TransfoCount++)
-					{
 						SuperSonicManager_Load();
-					}
 				}
 
 				SuperSonicFlag = TransfoCount > 0;
 				return;
-			}
 		}
+		
 	}
 }
 
@@ -292,8 +294,6 @@ void CallStuffWhenLevelStart() {
 	else
 		SuperSonic_TransformationCheck();
 
-	if (CurrentLevel == LevelIDs_E101 && CurrentCharacter != Characters_Gamma)
-		LoadPVM("E102EFFECT", &E102_EFF_TEXLIST);
 
 	ShowActionButton();
 	fixCharacterSoundAfterReset();

@@ -4,6 +4,9 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
+#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Windy Valley\\" B ".bin")
+#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+
 void Cam_WV() {
 
 	if (CurrentStageVersion != GammaVersion)
@@ -37,24 +40,26 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
+	Load_ObjectsCommon();
+
 		switch (CurrentStageVersion)
 		{
 			case SonicVersion:
 			default:
-				LoadSetFile(0, "0200");
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
+				LoadSetFile(0, "0210");
+				LoadSetFile(1, "0211");
+				LoadSetFile(2, "0212");
 				break;
 			case TailsVersion:
 				Race = true;
-				LoadSetFile(0, "0200");
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0206");
+				LoadSetFile(0, "0210");
+				LoadSetFile(1, "0211");
+				LoadSetFile(2, "0213");
 				break;
 			case GammaVersion:
-				LoadSetFile(0, "0203");
-				LoadSetFile(1, "0201");
-				LoadSetFile(2, "0202");
+				LoadSetFile(0, "0214");
+				LoadSetFile(1, "0211");
+				LoadSetFile(2, "0212");
 				break;
 		}
 
@@ -70,119 +75,89 @@ void WindyValley_Layout() {
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
+	
 	WVObjects_Init(path, helperFunctions);
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 	WriteCall((void*)0x4df390, FixTailsVictoryWV);
 
 	//Sonic
-	helperFunctions.ReplaceFile("system\\SET0200S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-E102.bin");
+	ReplaceSET("SET0210S", "Sonic-WV-Act1");
+	ReplaceSET("SET0211S", "Sonic-WV-Act2");
+	ReplaceSET("SET0212S", "Sonic-WV-Act3");
+	ReplaceSET("SET0213S", "Sonic-WV-Race");
+	ReplaceSET("SET0214S", "Sonic-WV-E102");
 
-	helperFunctions.ReplaceFile("system\\SET0205S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
-	helperFunctions.ReplaceFile("system\\SET0206S.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Race.bin"); //MS Race
-
-	helperFunctions.ReplaceFile("system\\CAM0200S.BIN", "system\\cam\\CAM0200S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201S.BIN", "system\\cam\\CAM0201S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202S.BIN", "system\\cam\\CAM0202S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203S.BIN", "system\\cam\\CAM0203S.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206S.BIN", "system\\cam\\CAM0206S.bin");
-
-	if (!Vanilla)
-		helperFunctions.RegisterStartPosition(Characters_Sonic, WV1_StartPositions[0]);
-
+	ReplaceCAM("CAM0200S", "CAM0200S");
+	ReplaceCAM("CAM0201S", "CAM0201S");
+	ReplaceCAM("CAM0202S", "CAM0202S");
+	ReplaceCAM("CAM0203S", "CAM0203S");
+	ReplaceCAM("CAM0206S", "CAM0206S");
 
 	//Tails
-	helperFunctions.ReplaceFile("system\\SET0200M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202M.BIN", "system\\levels\\Windy Valley\\Tails-WV-Act3.bin");
+	ReplaceSET("SET0210M", "Tails-WV-Act1");
+	ReplaceSET("SET0211M", "Tails-WV-Act2");
+	ReplaceSET("SET0212M", "Tails-WV-Act3");
+	ReplaceSET("SET0213M", "Tails-WV-Race");
+	ReplaceSET("SET0214M", "Tails-WV-E102");
 
-	helperFunctions.ReplaceFile("system\\SET0203M.BIN", "system\\levels\\Windy Valley\\Tails-WV-E102.bin");
-	helperFunctions.ReplaceFile("system\\SET0205M.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
+	ReplaceCAM("CAM0200M", "CAM0200M");
+	ReplaceCAM("CAM0201M", "CAM0201M");
+	ReplaceCAM("CAM0202M", "CAM0202M");
+	ReplaceCAM("CAM0203M", "CAM0203M");
+	ReplaceCAM("CAM0206M", "CAM0206M");
 
-	helperFunctions.ReplaceFile("system\\CAM0200M.BIN", "system\\cam\\CAM0200M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201M.BIN", "system\\cam\\CAM0201M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202M.BIN", "system\\cam\\CAM0202M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203M.BIN", "system\\cam\\CAM0203M.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206M.BIN", "system\\cam\\CAM0206M.bin");
-	helperFunctions.RegisterStartPosition(Characters_Tails, WV1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, WV3S_StartPositions[0]);
+	//Knuckles								
+	ReplaceSET("SET0210K", "Knux-WV-Act1");
+	ReplaceSET("SET0211K", "Knux-WV-Act2");
+	ReplaceSET("SET0212K", "Knux-WV-Act3");
+	ReplaceSET("SET0213K", "Knux-WV-E102");
+	ReplaceSET("SET0214K", "Knux-WV-Race");
+										
+	ReplaceCAM("CAM0200K", "CAM0200K");
+	ReplaceCAM("CAM0201K", "CAM0201K");
+	ReplaceCAM("CAM0202K", "CAM0202K");
+	ReplaceCAM("CAM0203K", "CAM0203K");
+	ReplaceCAM("CAM0206K", "CAM0206K");
 
-	//Knuckles
-	helperFunctions.ReplaceFile("system\\SET0200K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203K.BIN", "system\\levels\\Windy Valley\\Knux-WV-E102.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0205K.BIN", "system\\levels\\Windy Valley\\Sonic-WV-Chao.bin"); //Chao
-	helperFunctions.ReplaceFile("system\\SET0206K.BIN", "system\\levels\\Windy Valley\\Knux-WV-Race.bin"); //race
-
-	helperFunctions.ReplaceFile("system\\CAM0200K.BIN", "system\\cam\\CAM0200K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201K.BIN", "system\\cam\\CAM0201K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202K.BIN", "system\\cam\\CAM0202K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203K.BIN", "system\\cam\\CAM0203K.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206K.BIN", "system\\cam\\CAM0206K.bin");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, WV3S_StartPositions[0]);
 
 	//Amy
-	helperFunctions.ReplaceFile("system\\SET0200A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Act3.bin");
+	ReplaceSET("SET0210A", "Amy-WV-Act1");
+	ReplaceSET("SET0211A", "Amy-WV-Act2");
+	ReplaceSET("SET0212A", "Amy-WV-Act3");
+	ReplaceSET("SET0213A", "Amy-WV-E102");
+	ReplaceSET("SET0214A", "Amy-WV-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0203A.BIN", "system\\levels\\Windy Valley\\Amy-WV-E102.bin");
-
-	helperFunctions.ReplaceFile("system\\SET0205A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Chao.bin"); //Chao
-	helperFunctions.ReplaceFile("system\\SET0206A.BIN", "system\\levels\\Windy Valley\\Amy-WV-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0200A.BIN", "system\\cam\\CAM0200A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201A.BIN", "system\\cam\\CAM0201A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202A.BIN", "system\\cam\\CAM0202A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203A.BIN", "system\\cam\\CAM0203A.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206A.BIN", "system\\cam\\CAM0206A.bin");
-	helperFunctions.RegisterStartPosition(Characters_Amy, WV1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, WV3S_StartPositions[0]);
+	ReplaceCAM("CAM0200A", "CAM0200A");
+	ReplaceCAM("CAM0201A", "CAM0201A");
+	ReplaceCAM("CAM0202A", "CAM0202A");
+	ReplaceCAM("CAM0203A", "CAM0203A");
+	ReplaceCAM("CAM0206A", "CAM0206A");
 
 	//Big
-	helperFunctions.ReplaceFile("system\\SET0200B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202B.BIN", "system\\levels\\Windy Valley\\Big-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203B.BIN", "system\\levels\\Windy Valley\\Big-WV-E102.bin");
+	ReplaceSET("SET0210B", "Big-WV-Act1");
+	ReplaceSET("SET0211B", "Big-WV-Act2");
+	ReplaceSET("SET0212B", "Big-WV-Act3");
+	ReplaceSET("SET0213B", "Big-WV-E102");
+	ReplaceSET("SET0214B", "Big-WV-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0205B.BIN", "system\\levels\\Windy Valley\\Big-WV-Chao.bin"); //Chao
-	helperFunctions.ReplaceFile("system\\SET0206B.BIN", "system\\levels\\Windy Valley\\Big-WV-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0200B.BIN", "system\\cam\\CAM0200B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201B.BIN", "system\\cam\\CAM0201B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202B.BIN", "system\\cam\\CAM0202B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203B.BIN", "system\\cam\\CAM0203B.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206B.BIN", "system\\cam\\CAM0206B.bin");
-	helperFunctions.RegisterStartPosition(Characters_Big, WV1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, WV3S_StartPositions[0]);
+	ReplaceCAM("CAM0200B", "CAM0200B");
+	ReplaceCAM("CAM0201B", "CAM0201B");
+	ReplaceCAM("CAM0202B", "CAM0202B");
+	ReplaceCAM("CAM0203B", "CAM0203B");
+	ReplaceCAM("CAM0206B", "CAM0206B");
 
 	//Gamma
-	helperFunctions.ReplaceFile("system\\SET0200E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act1.bin");
-	helperFunctions.ReplaceFile("system\\SET0201E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act2.bin");
-	helperFunctions.ReplaceFile("system\\SET0202E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Act3.bin");
-	helperFunctions.ReplaceFile("system\\SET0203E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-E102.bin");
+	ReplaceSET("SET0210E", "Gamma-WV-Act1");
+	ReplaceSET("SET0211E", "Gamma-WV-Act2");
+	ReplaceSET("SET0212E", "Gamma-WV-Act3");
+	ReplaceSET("SET0213E", "Gamma-WV-E102");
+	ReplaceSET("SET0214E", "Gamma-WV-Race");
 
-	helperFunctions.ReplaceFile("system\\SET0205E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Chao.bin"); //Chao
-	helperFunctions.ReplaceFile("system\\SET0206E.BIN", "system\\levels\\Windy Valley\\Gamma-WV-Race.bin");
-
-	helperFunctions.ReplaceFile("system\\CAM0200E.BIN", "system\\cam\\CAM0200E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0201E.BIN", "system\\cam\\CAM0201E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0202E.BIN", "system\\cam\\CAM0202E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0203E.BIN", "system\\cam\\CAM0203E.bin");
-	helperFunctions.ReplaceFile("system\\CAM0206E.BIN", "system\\cam\\CAM0206E.bin");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, WV1S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, WV2S_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, WV3S_StartPositions[0]);
+	ReplaceCAM("CAM0200E", "CAM0200E");
+	ReplaceCAM("CAM0201E", "CAM0201E");
+	ReplaceCAM("CAM0202E", "CAM0202E");
+	ReplaceCAM("CAM0203E", "CAM0203E");
+	ReplaceCAM("CAM0206E", "CAM0206E");
 }
 
 ObjectListEntry WindyValleyObjectList_list[] = {
@@ -266,9 +241,31 @@ ObjectListEntry WindyValleyObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x4DF3B0, "O KAOSE" } /* "O KAOSE" */,
 	{ 15, 3, 0, 0, 0, (ObjectFuncPtr)0x4C07D0, "O ItemBoxAir" } /* "O ItemBoxAir" */,
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x79F860, "O SPRING H" } /* "O SPRING H" */,
-	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" } /* "O FROG" */
+	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG" }, /* "O FROG" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
 };
 
+PVMEntry WindyValleyObjectTextures[] = {
+	{ "OBJ_WINDY", (TexList*)0xC055D4 },
+	{ "WINDY_E103", (TexList*)0xC409A4 },
+	{ "E_SAI", (TexList*)0x38C8EA8 },
+	{ "E_LEON", (TexList*)0x9599F4 },
+	{ "OUM", (TexList*)0x9334EC },
+	{ "KUJA", (TexList*)0x93142C },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "MOUNTAIN_MEXPLOSION", (TexList*)0xC3FEB0 },
+	{ "TUBA", (TexList*)0x92F2BC },
+	{ "E_SNAKE", (TexList*)0x94E640 },
+	{ "MOGU", (TexList*)0x93ECEC },
+	{ "KAOS_EME", (TexList*)0xC3FE20 },
+	{ "GOMA", (TexList*)0x92ACE4 },
+	{ "CHAOS_LIFEGAUGE", (TexList*)0x974000 },
+	{ NULL, (TexList*)0x973FB0 },
+	{ "big_kaeru", (TexList*)0x91D780 },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ 0 }
+};
 
 ObjectList WindyValleyObjectList = { arraylengthandptrT(WindyValleyObjectList_list, int) };
 
@@ -277,4 +274,5 @@ ObjectList WindyValleyObjectList = { arraylengthandptrT(WindyValleyObjectList_li
 void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_WindyValley * 8 + 2] = &WindyValleyObjectList;
+	TexLists_Obj[LevelIDs_WindyValley] = WindyValleyObjectTextures;
 }

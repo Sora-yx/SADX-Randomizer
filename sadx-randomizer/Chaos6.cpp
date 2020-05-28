@@ -6,6 +6,7 @@
 #include "Trampoline.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Chaos 6\\" B ".bin")
 
+
 void Chaos6_LoadWithTarget() {
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
 	obj->Data1->LoopData = (Loop*)LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, Chaos6_Main);

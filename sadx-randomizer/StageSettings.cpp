@@ -10,20 +10,12 @@
 extern uint32_t TotalCount;
 extern bool ChaoSpawn;
 extern char GetCustomLayout;
-bool isCheckpointUsed = false;
 extern char TimeSecCopy;
 extern char TimeMinCopy;
 extern char TimeFrameCopy;
 extern int RingCopy;
 bool isZeroActive;
 
-
-void LoadLevelFiles_R() {
-
-
-
-	return LoadLevelFiles();
-}
 
 void DeleteTriggerObject() {
 
@@ -49,7 +41,6 @@ void LoadZero() {
 		return;
 
 	isZeroActive = true;
-	LoadPVM("EGGROB", &EGGROB_TEXLIST);
 	CheckLoadZero();
 }
 
@@ -89,7 +80,8 @@ void Set_Zero() {
 	WriteCall((void*)0x4d218c, FixZeroSound3);
 
 	WriteData<5>((void*)0x4d380d, 0x90); //Remove a special Zero Sound.
-	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.
+	WriteData<6>((void*)0x4d3f4a, 0x90); //Make Zero spawn for every character.	
+	WriteData<2>((void*)0x4212c9, 0x90); //Load Zero Texture for any character.
 }
 
 
@@ -170,7 +162,7 @@ void SetRNGKnuckles() {
 
 //restore original values
 void RestoreRNGValueKnuckles() {
-
+	njReleaseTexture(&KNU_EFF_TEXLIST);
 	WriteData<1>((void*)0x416F06, 0x03);
 	WriteData<1>((void*)0x4153E1, 0x03);
 	WriteData<1>((void*)0x416f08, 0x75);
@@ -178,50 +170,6 @@ void RestoreRNGValueKnuckles() {
 
 	return;
 }
-
-/*Trampoline PlayEmeraldGrabVoice_T(0x474f50, 0x474f55, PlayEmeraldGrabVoice_R);
-//Play Custom voice when grabbing an emerald when not Knuckles.
-void PlayEmeraldGrabVoice_R(ObjectMaster* a1) {
-
-	ObjectMaster* CurChar = GetCharacterObject(0);
-	if (CurChar != nullptr)
-	{
-		switch (CurChar->Data1->CharID)
-		{
-		case Characters_Sonic:
-			if (KnuxCheck == 1)
-				PlayVoice_R(1826);
-			if (KnuxCheck == 2)
-				PlayVoice_R(315);
-			break;
-		case Characters_Tails:
-			if (KnuxCheck == 1)
-				PlayVoice_R(1812);
-			if (KnuxCheck == 2)
-				PlayVoice_R(1456);
-			break;
-		case Characters_Amy:
-			if (KnuxCheck == 1)
-				PlayVoice_R(5020);
-			if (KnuxCheck == 2)
-				PlayVoice_R(1737);
-			break;
-		case Characters_Gamma:
-			if (KnuxCheck == 1 || KnuxCheck == 2)
-				PlayVoice_R(5023);
-			break;
-		case Characters_Big:
-			if (KnuxCheck == 1)
-				PlayVoice_R(5021);
-			if (KnuxCheck == 2)
-				PlayVoice_R(5022);
-			break;
-		}
-	}
-
-	ObjectFunc(origin, PlayEmeraldGrabVoice_T.Target());
-	origin(a1);
-}*/
 
 
 void TwinkleCircuitResult() {
@@ -243,15 +191,13 @@ void TwinkleCircuitResult() {
 	GameState = 0x5;
 }
 
-
-
-
 //Create an object so Gamma can hit some specific bosses.
 CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
 
 void TargetableEntity(ObjectMaster* obj)
 {
 	EntityData1* data = obj->Data1;
+
 
 	if (data->Action == 0) {
 		AllocateObjectData2(obj, obj->Data1);
@@ -271,8 +217,11 @@ void TargetableEntity(ObjectMaster* obj)
 	else {
 		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
 
+		if (CurrentLevel == LevelIDs_Zero && boss->Data1->Action == 9)
+			return;
+
 		if (!boss || !boss->Data1) {
-			DeleteObject_(obj);
+			CheckThingButThenDeleteObject(obj);
 			return;
 		}
 
@@ -288,7 +237,7 @@ void TargetableEntity(ObjectMaster* obj)
 
 		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
 		{
-			DeleteObject_(obj);
+			CheckThingButThenDeleteObject(obj);
 
 			//if it is set, don't reload the target object
 			if (data->CharID == 1) 
@@ -304,70 +253,20 @@ void TargetableEntity(ObjectMaster* obj)
 	}
 }
 
-void TargetableEntitySmallOBJ(ObjectMaster* obj)
-{
-	EntityData1* data = obj->Data1;
-
-	if (data->Action == 0) {
-		AllocateObjectData2(obj, obj->Data1);
-
-		//if the scale is specified, temporary set the collision scale to it.
-		if (data->Scale.x) {
-			col.scale.x = data->Scale.x;
-			Collision_Init(obj, &col, 1, 2u);
-			col.scale.x = 10;
-		}
-		else {
-			Collision_Init(obj, &col, 1, 2u);
-		}
-
-		data->Action = 1;
-	}
-	else {
-		ObjectMaster* boss = (ObjectMaster*)obj->Data1->LoopData;
-
-		if (!boss || !boss->Data1) {
-			DeleteObject_(obj);
-			return;
-		}
-
-		if (EntityData1Ptrs[0]->CharID != Characters_Gamma)
-			return;
-
-		data->Position = boss->Data1->Position;
-		data->Position.y += 10;
-
-
-		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
-		{
-			DeleteObject_(obj);
-
-			//if it is set, don't reload the target object
-			if (data->CharID == 1)
-				return;
-
-			ObjectMaster* target = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntitySmallOBJ);
-			target->Data1->LoopData = (Loop*)boss;
-		}
-		else
-		{
-			AddToCollisionList(data);
-		}
-	}
-}
-
 
 
 void preventCutscene() {
+
 	switch (CurrentLevel)
 	{
 	case LevelIDs_RedMountain:
-		if (CurrentCharacter == Characters_Sonic || Characters_Tails)
+		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
 			return;
 		break;
 	case LevelIDs_EmeraldCoast:
 		if (CurrentCharacter == Characters_Tails)
 			return;
+		break;
 	case LevelIDs_HotShelter:
 		if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
 			return;
@@ -377,62 +276,84 @@ void preventCutscene() {
 	return GetLevelCutscene();
 }
 
-void FixRestartCheckPoint() {
 
-	//Check if a CP has been grabbed
-	if (!isCheckpointUsed && CurrentLevel != LevelIDs_LostWorld && CurrentLevel != LevelIDs_SkyDeck && (CurrentStageVersion == KnucklesVersion || CurrentStageVersion != AmyVersion))
-		isCheckpointUsed = true;
+SetLevelPosition PlayerStartPosition[64]{
 
-	return njColorBlendingMode(0, 8);
-}
+	{ AmyVersion, LevelAndActIDs_HedgehogHammer, { -55, 0, -31 }, 0 },
+	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { -9, 16, 4 }, 0x6000},
+	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, { -986.5f, 1145, -2856 }, 0x4000 },
+	{ BigVersion, LevelAndActIDs_EmeraldCoast3, { 6090, 30, 1000 }, 0 },
+	{ GammaVersion, LevelAndActIDs_WindyValley1, { -10, -102, -10 }, 0 },
+	{ SonicVersion, LevelAndActIDs_WindyValley1, { 42, 380, -20 }, 0 },
+	{ SonicVersion, LevelAndActIDs_WindyValley2, { 1096, 205, -1251 }, 0 },
+	{ SonicVersion, LevelAndActIDs_WindyValley3, { -2000, 1770, -985 }, 0x4000 },
+	{ TailsVersion, LevelAndActIDs_WindyValley3, { 1093, -158, -1254 }, 0 },
+	{ SonicVersion, LevelAndActIDs_TwinklePark1, { -2000, 1770, -985 }, 0x4000 },
+	{ SonicVersion, LevelAndActIDs_TwinklePark2, { 520, 975, 1620 }, 0xC000 },
+	{ AmyVersion, LevelAndActIDs_TwinklePark2, { 723, 70, -358 }, 0xC000 },
+	{ BigVersion, LevelAndActIDs_TwinklePark2, { 230, 80, -538 }, 0xC000 },
+	{ AmyVersion, LevelAndActIDs_TwinklePark3, { 75, 0, -390 }, 0x4000 },
+	{ SonicVersion, LevelAndActIDs_SpeedHighway1, { -673, -10, 5 }, 0 },
+	{ TailsVersion, LevelAndActIDs_SpeedHighway1, { -673, -10, 5 }, 0 },
+	{ SonicVersion, LevelAndActIDs_SpeedHighway2, { -50, 42, 0 }, 0 },
+	{ SonicVersion, LevelAndActIDs_SpeedHighway3, { 72, 26, 192 }, 0xC000 },
+	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, { -230, 150, -1740 }, 0x4000 },
+	{ SonicVersion, LevelAndActIDs_RedMountain1, { 18, 36, 636 }, 0 },
+	{ SonicVersion, LevelAndActIDs_RedMountain2, { -78, 831, 1919 }, 0 },
+	{ GammaVersion, LevelAndActIDs_RedMountain2, { -78, 831, 1919 }, 0 },
+	{ KnucklesVersion, LevelAndActIDs_RedMountain3, { -3147, 764, -1358 }, 0xFFFFC000 },
+	{ SonicVersion, LevelAndActIDs_SkyDeck1, {0, -387.625, 379.5}, 270},
+	{ TailsVersion, LevelAndActIDs_SkyDeck1, {0, -387.625, 379.5}, 270},
+	{ SonicVersion, LevelAndActIDs_SkyDeck2, { 327, -74, 2535 }, 0 },
+	{ SonicVersion, LevelAndActIDs_SkyDeck3, { -696, -86, 135 }, 0 },
+	{ KnucklesVersion, LevelAndActIDs_SkyDeck3, { 674, 207, 12 }, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_LostWorld1, { -264, 73, -168 }, 0 },
+	{ SonicVersion, LevelAndActIDs_LostWorld2, { 220, 73, -1423 }, 0x4000 },
+	{ KnucklesVersion, LevelAndActIDs_LostWorld2, { 7482, -2622, 908 }, 0 },
+	{ SonicVersion, LevelAndActIDs_LostWorld3,  { 270, 10, 0 }, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_IceCap1, { 1580, 84, 1074 }, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_IceCap2, { 1060, 336, 280 }, 0 },
+	{ SonicVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
+	{ TailsVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
+	{ BigVersion, LevelAndActIDs_IceCap4, { 1260, 224, -38 }, 0 },
+	{ SonicVersion, LevelAndActIDs_Casinopolis1, 0, { 0 }, 0 },
+	{ KnucklesVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_Casinopolis2, { 19, -1695, 2850 }, 0 },
+	{ TailsVersion, LevelAndActIDs_Casinopolis2, { 19, -1695, 2850 }, 0 },
+	{ SonicVersion, LevelAndActIDs_Casinopolis3, { 137, 35, 64 }, 0 },
+	{ SonicVersion, LevelAndActIDs_Casinopolis4, { -430, -205, 100 }, 0 },
+	{ SonicVersion, LevelAndActIDs_FinalEgg1, { 170, -165, 490 }, 0 },
+	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2945.652344, 5589.605469, -2211.165039, -1.681558157E-44 + 0x4000 },
+	{ SonicVersion, LevelAndActIDs_FinalEgg2, { 1060, 595, -383 }, 0xC000 },
+	{ SonicVersion, LevelAndActIDs_FinalEgg3, { 1071.7f, 240, -518 }, 0x8000 },
+	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, 
+	{ AmyVersion, LevelAndActIDs_HotShelter1, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 },
+	{ BigVersion, LevelAndActIDs_HotShelter1, -278.8718262, 80, -499.0888367, 0x8000 }, 
+	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, 
+	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
+
+	{ SonicVersion, LevelAndActIDs_Chaos0, { 268, 0, 377 }, 0 },
+	{ KnucklesVersion, LevelAndActIDs_Chaos2, { -36, 30, -101 }, 0 },
+	{ TailsVersion, LevelAndActIDs_Chaos4, { -36, 30, -101 }, 0 },
+	{ SonicVersion, LevelAndActIDs_Chaos6, { 0, 744, -568 }, 0 },
+	{ KnucklesVersion, LevelAndActIDs_Chaos6Two, { 0, 744, -568 }, 0 },
+	{ SonicVersion, LevelIDs_PerfectChaos, { -16, 150, -667 }, 0xB92C },
+	{ SonicVersion, LevelIDs_EggHornet, { 812, 140, 839 }, 0 },
+	{ TailsVersion, LevelAndActIDs_EggWalker, { -480, 19, 1000 }, 0 },
+	{ SonicVersion, LevelAndActIDs_EggViper, { 260, 50, 0 }, 0 },
+	{ SonicVersion, LevelAndActIDs_Zero, { -131, 745, -385 }, 0 },
+	{ SonicVersion, LevelAndActIDs_E101, { 70, 0, 65 }, 0xA000 },
+	{ SonicVersion, LevelAndActIDs_E101R, { -131, 745, -385 }, 0 },
+};
 
 
-//Use "Load AnimalPickup" function to fix the start position when getting a variation of a character/stage. Not using StartRegisterPosition, as it's not dynamic and already used for a different layout.
-//Also used to call different Stuff.
 
-void FixLayout_StartPosition_R() {
+Trampoline MovePlayerToStartPoint_T((int)MovePlayerToStartPoint, (int)MovePlayerToStartPoint + 0x5, MovePlayerToStartPoint_R);
 
-	if (!isCheckpointUsed || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
-	{
-		ObjectMaster* Play1 = GetCharacterObject(0);
-		switch (CurrentLevel)
-		{
-		case LevelIDs_LostWorld:
-			if (CurrentAct == 1 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
-				PositionPlayer(0, 7482, -2622, 908);
-			break;
-		case LevelIDs_SpeedHighway:
-			if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
-				PositionPlayer(0, -230, 150, -1740);
-			break;
-		case LevelIDs_SkyDeck:
-			if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
-				PositionPlayer(0, 674, 207, 12);
-			break;
-		case LevelIDs_WindyValley: //Gamma version
-			if (CurrentAct == 0 && CurrentStageVersion == GammaVersion)
-				PositionPlayer(0, -10, -102, -10);
-			if (CurrentAct == 2 && (Race || isTailsVersion))
-				PositionPlayer(0, 1093, -158, -1254);
-			break;
-		case LevelIDs_TwinklePark: //Amy version
-			if (CurrentAct == 1 && CurrentStageVersion == AmyVersion)
-				PositionPlayer(0, 723, 70, -358);
-			if (CurrentAct == 1 && CurrentStageVersion == BigVersion)
-				PositionPlayer(0, 230, 80, -538);
-			break;
-		case LevelIDs_IceCap: //Race
-			if (CurrentAct == 2 && CurrentCharacter <= Characters_Tails)
-				PositionPlayer(0, 120, 375, -40);
-			break;
-		case LevelIDs_FinalEgg: //Gamma version
-			if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
-				PositionPlayer(0, 46.5, -3240.6, -224.5);
-			break;
-		}
-	}
+void MovePlayerToStartPoint_R(EntityData1* data) {
 
-	
+	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;
+
 	if (GetBackRing && CurrentMission >= Mission2_100Rings)
 	{
 		Rings = RingCopy;
@@ -441,6 +362,8 @@ void FixLayout_StartPosition_R() {
 		TimeFrames = TimeFrameCopy;
 		if (CurrentStageVersion == AmyVersion && CurrentLevel == LevelIDs_FinalEgg || isTailsVersion || CurrentStageVersion == TailsVersion && CurrentLevel == LevelIDs_SpeedHighway)
 			Lives++;
+		ResetRestartData();
+		ResetGravity();
 		GameMode = GameModes_Adventure_ActionStg;
 		GetBackRing = false;
 	}
@@ -449,22 +372,25 @@ void FixLayout_StartPosition_R() {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	FixRestart_Stuff();
-	AnimalPickup_Load_();
 
-	return;
+	if (RestartLevel.Frame == 0 || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
+	{
+		for (uint8_t i = 0; i < LengthOfArray(PlayerStartPosition); i++)
+		{
+			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
+			{
+				EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
+				EntityData1Ptrs[0]->Rotation.y = PlayerStartPosition[i].YRot;
+				return;
+			}
+		}
+	}
+
+
+	FunctionPointer(void, original, (EntityData1 * PlayerPos), MovePlayerToStartPoint_T.Target());
+	return original(data);	
 }
 
-void LoadTriggerObject() {
-
-	if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
-		HotShelterSecretSwitch();
-
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentMission == Mission3_LostChao)
-		LoadChaoTPTrigger();
-
-	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
-		LoadRemoveCart();
-}
 
 
 void Stages_Management() {
@@ -476,9 +402,9 @@ void Stages_Management() {
 	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 	Set_BackRing();
 	Race_Init();
-	WriteCall((void*)0x415a3d, FixLayout_StartPosition_R); //Fix start position with different stage character version.
+	//WriteCall((void*)0x415a3d, FixLayout_StartPosition_R); //Fix start position with different stage character version.
 
-	WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
+	//WriteCall((void*)0x4bac10, FixRestartCheckPoint); //Fix checkpoint after editing player position.
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
 	WriteCall((void*)0x41676b, FixRestart_Stuff); 
 }

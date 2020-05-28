@@ -185,13 +185,10 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-		if (GameState == 15)
-		{
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Mission %d", CurrentMission);
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur StageVer %d", CurrentStageVersion);
-		}
 
-
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Mission %d", CurrentMission);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur StageVer %d", CurrentStageVersion);
+		
 		//Display DC Conversion warning
 		if (DCModWarningTimer && GameMode == GameModes_Menu)
 		{

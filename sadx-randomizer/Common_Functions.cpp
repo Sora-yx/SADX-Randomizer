@@ -14,6 +14,13 @@ short ConvertLevelActsIDtoAct(short act) {
 	return act & 0xf;
 }
 
+__int16 CurCharacter() {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+	if (P1 != nullptr)
+		return P1->Data1->CharID;
+}
+
 
 
 bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
@@ -46,4 +53,71 @@ bool isValueInArray(int* array, int value, int size)
 	}
 
 	return false;
+}
+
+void ForcePlayerToWhistle() {
+
+	for (int i = 0; i < 8; ++i) {
+		if (GetCharacterID(i) != Characters_Eggman && GetCharacterID(i) != Characters_Tikal) {
+
+			int id = 0;
+
+			switch (GetCharacterID(i)) {
+			case Characters_Sonic:
+				id = 74;
+				break;
+			case Characters_Tails:
+				id = 8864257;
+				break;
+			case Characters_Knuckles:
+				id = 7485441;
+				break;
+			case Characters_Amy:
+				id = 5518337;
+				break;
+			case Characters_Gamma:
+				id = 5913089;
+				break;
+			case Characters_Big:
+				id = 6829569;
+				break;
+			}
+
+
+			return ForcePlayerAction(0, id);
+		}
+	}
+}
+
+
+void FlashScreen(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1;
+
+	if (++data->InvulnerableTime > 80) {
+
+		int color = 0x00000000;
+		ScreenFade_Color = *(NJS_COLOR*)&color;
+		CheckThingButThenDeleteObject(obj);
+	}
+	else {
+		int color = 0xFFFFFFFF;
+		ScreenFade_Color = *(NJS_COLOR*)&color;
+
+		if (data->InvulnerableTime < 120) {
+			if (data->InvulnerableTime < 60) {
+				data->CharID += 4;
+				ScreenFade_Color.argb.a = data->CharID;
+			}
+			else {
+				ScreenFade_Color.argb.a = 0xFF;
+			}
+		}
+		else {
+			data->CharID -= 20;
+			ScreenFade_Color.argb.a = data->CharID;
+		}
+
+		ScreenFade_DrawColor();
+	}
 }

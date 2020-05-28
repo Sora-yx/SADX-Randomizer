@@ -2,14 +2,12 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 
-
-
 HelperFunctions help;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions)
 {
-	help = helperFunctions;
 	//Initiliaze data
+	help = helperFunctions;
 
 	HedgehogHammer_Init(path, helperFunctions);
 	EmeraldCoast_Init(path, helperFunctions);
@@ -39,12 +37,9 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 }
 
 
-
-
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen
-	
 		//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
 	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\TCAct3.BIN"); //TC act 4 fix
 	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\TCAct3.BIN");

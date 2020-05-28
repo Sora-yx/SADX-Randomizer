@@ -168,8 +168,8 @@
     <ClCompile Include="ResultScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cart_Common.cpp">
-      <Filter>Source Files\Levels</Filter>
+    <ClCompile Include="ObjectCommon.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="data\Common.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E101.h">
+      <Filter>Header Files\Bosses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

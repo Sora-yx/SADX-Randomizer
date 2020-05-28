@@ -199,7 +199,6 @@ void TwinkleCircuitMusic() {
 }
 
 
-
 void __cdecl StartupMusic_Init(const char* path, const HelperFunctions& helperFunctions) {
 
 	AddMusics("NIGHTS_A", "NIGHTS_A");

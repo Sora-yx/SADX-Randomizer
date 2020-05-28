@@ -18,6 +18,7 @@ void Randomizer_GetNewRNG();
 void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
+void MovePlayerToStartPoint_R(EntityData1* data);
 
 extern bool RNGCharacters;
 extern bool RNGStages;
@@ -76,10 +77,18 @@ enum StageVariation {
 };
 
 struct RandomizerGenerator {
-
 	short levelAndActs;
 	int8_t version;
 	int8_t bannedChar;
+};
+
+
+struct SetLevelPosition
+{
+	int8_t version;
+	int16_t LevelID;
+	NJS_VECTOR Position;
+	float YRot;
 };
 
 
@@ -107,7 +116,6 @@ enum CurSplits {
 };
 
 
-
 uint8_t getRandomCharacter();
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
@@ -124,7 +132,6 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1);
 void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1);
 void __cdecl CheckLWTrigger_r(ObjectMaster* a1);
 void __cdecl CheckFETrigger_r(ObjectMaster* a1);
-
 
 
 
@@ -145,9 +152,7 @@ int IsFastSonicAI_R();
 
 void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
-void TargetableEntitySmallOBJ(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
-void Chaos0_LoadWithTarget();
 void Chaos2_LoadWithTarget();
 void Chaos6_LoadWithTarget();
 void __cdecl ChaoGameplayCheck();
@@ -177,7 +182,7 @@ extern int CharacterCopy;
 
 extern int TransfoCount;  //Super Sonic Stuff
 extern bool Vanilla;
-extern bool isCheckpointUsed;
+//extern bool isCheckpointUsed;
 extern int CurrentMissionCard;
 extern int CurrentAI;
 extern bool isAIActive;
@@ -191,7 +196,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 void __cdecl StartupMusic_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions);
-
+__int16 CurCharacter();
 
 void Chao_Init();
 void Chao_OnFrame();
@@ -216,6 +221,7 @@ void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFuncti
 
 //Custom Object level
 
+void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl ICObjects_Init(const char* path, const HelperFunctions& helperFunctions);
@@ -237,6 +243,8 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions);
 void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFunctions);
+void Load_ObjectsCommon();
+void Delete_ObjectsCommon();
 
 void CreditsNewList();
 void Credits_StatsDelayOnFrames();
@@ -282,7 +290,13 @@ void FixRollerCoaster();
 
 //void RandomizerMission();
 void SHAct2Position();
+void MysticMelody_Main(ObjectMaster* obj);
+void PlatformMM_Main(ObjectMaster* obj);
+extern bool MMPlatformEnabled;
+extern NJS_TEXLIST SA2_OBJ_TEXLIST;
+FunctionPointer(int, PerformWhistle, (EntityData1* a1, EntityData2* a2, CharObj2* a3, int flag), 0x442570);
 
+void ForcePlayerToWhistle();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
@@ -327,7 +341,7 @@ void FixRaceResult();
 DataPointer(char, ChaoGardenSSWarpOpen, 0x3B188BF);
 DataPointer(char, ChaoGardenECWarpOpen, 0x3B188C0);
 DataPointer(char, ChaoGardenMRWarpOpen, 0x3B188C1);
-
+FunctionPointer(void, DrawObject, (NJS_OBJECT*), 0x408530);
 DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
 
@@ -378,7 +392,7 @@ DataPointer(char, KnuxCheck2, 0x3c52bd8);
 void SetRNGKnuckles();
 void RestoreRNGValueKnuckles();
 
-
+NJS_VECTOR SetPlayerAroundLostChaoPosition();
 DataPointer(char, TCQuit, 0x3c5d518);
 DataPointer(char, EventTailsData, 0x3B18809);
 DataPointer(char, SonicChaos4Flag, 0x3B188B9);
@@ -426,6 +440,7 @@ void Chao_DeleteFiles();
 
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
+FunctionPointer(void, SetPlayerNumberForGame, (unsigned short player), 0x414470);
 
 extern int RageQuit;
 extern int JumpPB;

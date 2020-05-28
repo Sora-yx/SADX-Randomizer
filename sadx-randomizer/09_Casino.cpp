@@ -13,49 +13,32 @@ bool CasinoTails = false;
 void Casino_Layout() {
 
 	CasinoTails = false;
+	Load_ObjectsCommon();
 
 		switch (CurrentStageVersion)
 		{
 			case SonicVersion:
 			default:
-				if (CurrentMission < Mission2_100Rings)
-				{
-					LoadSetFile(0, "0900"); //M1
-					LoadSetFile(1, "0901"); //M1
-				}
-				if (CurrentMission == Mission2_100Rings)
-				{
-					LoadSetFile(0, "0905"); //M2
-					LoadSetFile(1, "0901"); //M2
-				}
-				if (CurrentMission == Mission3_LostChao)
-				{
-					LoadSetFile(0, "0904"); //M3
-					LoadSetFile(1, "0901"); //M3
-				}
+				LoadSetFile(0, "0910");
+				LoadSetFile(1, "0911");
 				LoadCamFile(0, "0900"); //Sonic Camera
 				break;
 			case TailsVersion:
 				CasinoTails = true;
+				LoadSetFile(0, "0910");
+				LoadSetFile(1, "0912");
 				if (CurrentMission < Mission2_100Rings)
-				{
 					Race = true;
-					LoadSetFile(0, "0900"); //M1 Race
-					LoadSetFile(1, "0908"); //M1 Race
-				}
 				else
-				{ 
 					Race = false;
-					LoadSetFile(0, "0904"); //M3
-					LoadSetFile(1, "0907"); //M3
-				}
 				LoadCamFile(0, "0900"); //Sonic Camera
 				break;
 			case KnucklesVersion:
 				SetRNGKnuckles();
+				LoadSetFile(0, "0913");
+				LoadSetFile(1, "0911");
 				LoadCamFile(0, "0906");
 				break;
-
 		}
 
 		LoadSetFile(2, "0902");
@@ -198,10 +181,10 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x422f5a, Casino_Layout);
 	
 	WriteData<1>((void*)0x5c0595, 0x08); //make pinball working for Knuckles
-	WriteData<1>((void*)0x5c0615, 0x08); //make pinball working for Knuckles
+	WriteData<1>((void*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
 	WriteData<1>((void*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
-	WriteData<1>((void*)0x5c4424, 0x08); //Fix coin (knuckles layout)
-	WriteData<2>((void*)0x5d049e, 0x90); //Fix Invisible wall when not Sonic. (drop ring Emerald room.)
+	WriteData<1>((void*)0x5c4424, 0x08); //Add coin in the drop ring room. (knuckles layout)
+	WriteData<2>((void*)0x5d049e, 0x90); //Add Invisible wall when not Sonic. (drop ring Emerald room.)
 	
 	WriteCall((void*)0x5d04a9, FixInvisibleWall); //Add invisible wall if sonic version, otherwise remove it.
 	WriteCall((void*)0x5dacc8, FixFlipperCharacterPosition);
@@ -218,93 +201,65 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0900S", "Sonic-Casino-Act1");
-	ReplaceSET("SET0901S", "Sonic-Casino-Act2");
-	ReplaceSET("SET0904S", "Sonic-Casino-Chao");
-	ReplaceSET("SET0905S", "Sonic-Casino-Rings");
-	ReplaceSET("SET0906S", "Sonic-Casino-Knux");
-	ReplaceSET("SET0907S", "Sonic-Casino-Chao2");
-	ReplaceSET("SET0908S", "Sonic-Casino-T");
-
+	ReplaceSET("SET0910S", "Sonic-Casino-Act1");
+	ReplaceSET("SET0911S", "Sonic-Casino-Act2");
+	ReplaceSET("SET0912S", "Sonic-Casino-T");
+	ReplaceSET("SET0913S", "Sonic-Casino-Knux");
+	
 	ReplaceCAM("CAM0900S", "CAM0900S");
 	ReplaceCAM("CAM0901S", "CAM0901S");
 	ReplaceCAM("CAM0906S", "CAM0906S");
 
-
 	//Tails
-	ReplaceSET("SET0900M", "Tails-Casino-Act1");
-	ReplaceSET("SET0901M", "Tails-Casino-Act2");
-	ReplaceSET("SET0904M", "Tails-Casino-Chao");
-	ReplaceSET("SET0905M", "Tails-Casino-Rings");
-	ReplaceSET("SET0906M", "Tails-Casino-Knux");
-	ReplaceSET("SET0907M", "Tails-Casino-Chao2");
-	ReplaceSET("SET0908M", "Tails-Casino-T");
+	ReplaceSET("SET0910M", "Tails-Casino-Act1");
+	ReplaceSET("SET0911M", "Tails-Casino-Act2");
+	ReplaceSET("SET0912M", "Tails-Casino-T");
+	ReplaceSET("SET0913M", "Tails-Casino-Knux");
 
 	ReplaceCAM("CAM0900M", "CAM0900M");
 	ReplaceCAM("CAM0901M", "CAM0901M");
 	ReplaceCAM("CAM0906M", "CAM0906M");
-	helperFunctions.RegisterStartPosition(Characters_Tails, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, Casino2_StartPositions[0]);
 
 	//Knuckles
-	ReplaceSET("SET0900K", "Knux-Casino-Act1");
-	ReplaceSET("SET0901K", "Knux-Casino-Act2");
-	ReplaceSET("SET0904K", "Knux-Casino-Chao");
-	ReplaceSET("SET0905K", "Knux-Casino-Rings");
-	ReplaceSET("SET0906K", "Knux-Casino-Knux");
-	ReplaceSET("SET0907K", "Knux-Casino-Chao2");
-	ReplaceSET("SET0908K", "Knux-Casino-T");
+	ReplaceSET("SET0910K", "Knux-Casino-Act1");
+	ReplaceSET("SET0911K", "Knux-Casino-Act2");
+	ReplaceSET("SET0912K", "Knux-Casino-T");
+	ReplaceSET("SET0913K", "Knux-Casino-Knux");
+	
 
 	ReplaceCAM("CAM0900K", "CAM0900K");
 	ReplaceCAM("CAM0901K", "CAM0901K");
 	ReplaceCAM("CAM0906K", "CAM0906K");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, Casino2_StartPositions[0]);
 
 	//Amy
-	ReplaceSET("SET0900A", "Amy-Casino-Act1");
-	ReplaceSET("SET0901A", "Amy-Casino-Act2");
-	ReplaceSET("SET0904A", "Amy-Casino-Chao");
-	ReplaceSET("SET0905A", "Amy-Casino-Rings");
-	ReplaceSET("SET0906A", "Amy-Casino-Knux");
-	ReplaceSET("SET0907A", "Amy-Casino-Chao2");
-	ReplaceSET("SET0908A", "Amy-Casino-T");
+	ReplaceSET("SET0910A", "Amy-Casino-Act1");
+	ReplaceSET("SET0911A", "Amy-Casino-Act2");
+	ReplaceSET("SET0912A", "Amy-Casino-T");
+	ReplaceSET("SET0913A", "Amy-Casino-Knux");
 
 	ReplaceCAM("CAM0900A", "CAM0900A");
 	ReplaceCAM("CAM0901A", "CAM0901A");
 	ReplaceCAM("CAM0906A", "CAM0906A");
-	helperFunctions.RegisterStartPosition(Characters_Amy, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, Casino2_StartPositions[0]);
 
 	//Big
-	ReplaceSET("SET0900B", "Big-Casino-Act1");
-	ReplaceSET("SET0901B", "Big-Casino-Act2");
-	ReplaceSET("SET0904B", "Big-Casino-Chao");
-	ReplaceSET("SET0905B", "Big-Casino-Rings");
-	ReplaceSET("SET0906B", "Big-Casino-Knux");
-	ReplaceSET("SET0907B", "Big-Casino-Chao2");
-	ReplaceSET("SET0908B", "Big-Casino-T");
+	ReplaceSET("SET0910B", "Big-Casino-Act1");
+	ReplaceSET("SET0911B", "Big-Casino-Act2");
+	ReplaceSET("SET0912B", "Big-Casino-T");
+	ReplaceSET("SET0913B", "Big-Casino-Knux");
 
 	ReplaceCAM("CAM0900B", "CAM0900B");
 	ReplaceCAM("CAM0901B", "CAM0901B");
 	ReplaceCAM("CAM0906B", "CAM0906B");
-	helperFunctions.RegisterStartPosition(Characters_Big, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, Casino2_StartPositions[0]);
 
 	//Gamma
-	ReplaceSET("SET0900E", "Gamma-Casino-Act1");
-	ReplaceSET("SET0901E", "Gamma-Casino-Act2");
-	ReplaceSET("SET0904E", "Gamma-Casino-Chao");
-	ReplaceSET("SET0905E", "Gamma-Casino-Rings");
-	ReplaceSET("SET0906E", "Gamma-Casino-Knux");
-	ReplaceSET("SET0907E", "Gamma-Casino-Chao2");
-	ReplaceSET("SET0908E", "Gamma-Casino-T");
+	ReplaceSET("SET0910E", "Gamma-Casino-Act1");
+	ReplaceSET("SET0911E", "Gamma-Casino-Act2");
+	ReplaceSET("SET0912E", "Gamma-Casino-T");
+	ReplaceSET("SET0913E", "Gamma-Casino-Knux");
 
 	ReplaceCAM("CAM0900E", "CAM0900E");
 	ReplaceCAM("CAM0901E", "CAM0901E");
 	ReplaceCAM("CAM0906E", "CAM0906E");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino1_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, Casino2_StartPositions[0]);
 }
 
 
@@ -517,7 +472,9 @@ ObjectListEntry CasinopolisObjectList_list[] = {
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B0F40, "SPINA B" } /* "SPINA B" */,
 	{ 2, 3, 4, 0, 0, (ObjectFuncPtr)0x4B1090, "SPINA C" } /* "SPINA C" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */,
-	{ 14, 3, 1, 2250000, 0, (ObjectFuncPtr)0x618030, "O FLYST" } /* "O FLYST" */
+	{ 14, 3, 1, 2250000, 0, (ObjectFuncPtr)0x618030, "O FLYST" }, /* "O FLYST" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
+	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
 };
 
 ObjectList CasinopolisObjectList = { arraylengthandptrT(CasinopolisObjectList_list, int) };
@@ -537,6 +494,7 @@ PVMEntry CasinopolisObjectTextures[] = {
 	{ "OBJ_HIGHWAY", (TexList*)0x26703F0 },
 	{ "OBJ_HIGHWAY2", (TexList*)0x26706AC },
 	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };
 

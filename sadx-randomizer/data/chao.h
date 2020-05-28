@@ -14,13 +14,7 @@ enum ChaoActions {
 	ChaoAction_Free,
 };
 
-struct LostChaoPosition
-{
-	int8_t version;
-	int16_t LevelID;
-	NJS_VECTOR Position;
-	float YRot;
-};
+
 
 
 
