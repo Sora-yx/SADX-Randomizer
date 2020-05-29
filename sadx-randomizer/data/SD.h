@@ -2,22 +2,6 @@
 
 
 
-StartPosition SD1_StartPositions[]{
-	{ 6, 0,{ 0, -400, 60 }, 270 }
-};
-
-StartPosition SD1S_StartPositions[]{
-	{ 6, 0,{ 0, -387.625, 379.5 }, 270 }
-};
-
-StartPosition SD2_StartPositions[]{
-	{ 6, 1,{ 327, -74, 2535 }, 0 }
-};
-
-StartPosition SD3_StartPositions[]{
-	{ 6, 2,{ -696, -86, 135 }, 0 }
-};
-
 //Sky Deck Killplanes stuff
 
 NJS_MATERIAL matlist_01E30414[] = {

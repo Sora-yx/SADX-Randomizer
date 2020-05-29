@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "LW.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Lost World\\" B ".bin")
@@ -265,6 +264,7 @@ PVMEntry LostWorldObjectTextures[] = {
 	{ "ZOU", (TexList*)0x94160C },
 	{ "UNI_C_UNIBODY", (TexList*)0x96DC48 },
 	{ "GORI", (TexList*)0x945964 },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };

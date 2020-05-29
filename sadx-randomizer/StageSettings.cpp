@@ -17,6 +17,7 @@ extern int RingCopy;
 bool isZeroActive;
 
 
+
 void DeleteTriggerObject() {
 
 	TriggerOBJHS_Delete();
@@ -371,7 +372,6 @@ void MovePlayerToStartPoint_R(EntityData1* data) {
 	if (GameMode != 9 && GameMode != 10 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
-	FixRestart_Stuff();
 
 	if (RestartLevel.Frame == 0 || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
 	{

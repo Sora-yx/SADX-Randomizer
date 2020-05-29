@@ -22,8 +22,9 @@ void CamRedMountain() {
 
 void RedMountain_Layout() {
 
-	//CurrentStageVersion = KnucklesVersion;
-	//CurrentMission = 0;
+	CurrentStageVersion = KnucklesVersion;
+	CurrentMission = 3;
+	SonicRand = 2;
 	Load_ObjectsCommon();
 
 	LoadSetFile(0, "0510");
@@ -185,6 +186,7 @@ PVMEntry RedMountainObjectTextures[] = {
 	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
 	{ "E_BOMB", (TexList*)0x96B464 },
 	{ NULL, (TexList*)0x973FB0 },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };

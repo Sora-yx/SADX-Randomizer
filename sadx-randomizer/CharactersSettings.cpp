@@ -76,6 +76,7 @@ void AllUpgrades() {
 
 
 
+
 void CheckRace();
 
 //Hook Load Character
@@ -184,6 +185,19 @@ int GetSSLevelBanned() {
 
 	return false;
 }
+
+Trampoline LoadCharTextures_T((int)LoadCharTextures, (int)LoadCharTextures + 0x6, CheckAndLoadSuperSonic_Tex);
+
+void CheckAndLoadSuperSonic_Tex(int curChara) {
+
+	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentCharacter != Characters_Sonic && CurrentLevel == LevelIDs_PerfectChaos)
+		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+
+
+	FunctionPointer(void, original, (int curChara), LoadCharTextures_T.Target());
+	return original(curChara);
+}
+
 
 
 void SuperSonic_TransformationCheck() {

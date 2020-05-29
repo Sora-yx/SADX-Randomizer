@@ -263,7 +263,6 @@ void Check_Display_Frog_Balloon(ObjectMaster* a1) {
 			Balloon_Main(a1);
 			break;
 		case Characters_Big:
-			LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
 			a1->Data1->Position.y += 20;
 			a1->MainSub = OFrog;
 			OFrog(a1);

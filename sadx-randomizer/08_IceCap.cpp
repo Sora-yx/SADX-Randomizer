@@ -399,6 +399,7 @@ PVMEntry IceCapObjectTextures[] = {
 	{ NULL, (TexList*)0x91CBE8 },
 	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
+	{ "OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST },
 	{ 0 }
 };
 

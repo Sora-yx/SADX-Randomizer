@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "SH.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "Trampoline.h"
@@ -28,7 +27,8 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
-	CurrentStageVersion = TailsVersion;
+	CurrentStageVersion = KnucklesVersion;
+	CurrentMission = 3;
 	Load_ObjectsCommon();
 
 	const char* curVer = "0410"; 
@@ -219,6 +219,7 @@ PVMEntry SpeedHighwayObjectTextures[] = {
 	{ "BANB", (TexList*)0x93A8BC },
 	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
 	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };
@@ -227,10 +228,10 @@ ObjectList SpeedHighwayObjectList = { arraylengthandptrT(SpeedHighwayObjectList_
 
 void __cdecl SHObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	ObjLists[LevelIDs_SpeedHighway * 8 + 0] = &SpeedHighwayObjectList;
 	ObjLists[LevelIDs_SpeedHighway * 8 + 2] = &SpeedHighwayObjectList;
 	TexLists_Obj[LevelIDs_SpeedHighway] = SpeedHighwayObjectTextures;
 }
-
 
 
 void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFunctions)

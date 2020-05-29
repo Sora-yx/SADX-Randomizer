@@ -136,7 +136,6 @@
     <ClInclude Include="Credits.h" />
     <ClInclude Include="Cutscene.h" />
     <ClInclude Include="data\ActsSettings.h" />
-    <ClInclude Include="data\Casino.h" />
     <ClInclude Include="data\chao.h" />
     <ClInclude Include="data\Chaos0.h" />
     <ClInclude Include="data\Chaos2.h" />
@@ -147,17 +146,11 @@
     <ClInclude Include="data\EggHornet.h" />
     <ClInclude Include="data\EggViper.h" />
     <ClInclude Include="data\EggWalker.h" />
-    <ClInclude Include="data\EmeraldCoast.h" />
-    <ClInclude Include="data\FE.h" />
     <ClInclude Include="data\HS.h" />
     <ClInclude Include="data\IceCap.h" />
-    <ClInclude Include="data\LW.h" />
     <ClInclude Include="data\RM.h" />
     <ClInclude Include="data\SandHill.h" />
     <ClInclude Include="data\SD.h" />
-    <ClInclude Include="data\SH.h" />
-    <ClInclude Include="data\TP.h" />
-    <ClInclude Include="data\WindyValley.h" />
     <ClInclude Include="data\Zero.h" />
     <ClInclude Include="E101.h" />
     <ClInclude Include="RandomHelpers.h" />

@@ -1,17 +1,5 @@
 #pragma once
 
-StartPosition RM1_StartPositions[]{
-	{ 5, 0,{ 18, 36, 636 }, 0 }
-};
-
-StartPosition RM2_StartPositions[]{
-	{ 5, 1,{ -78, 831, 1919 }, 0 }
-};
-
-StartPosition RM3_StartPositions[]{
-	{ 5, 2,{ -3147, 764, -1358 }, -90 }
-};
-
 
 //Killplane Stuff Act 1
 

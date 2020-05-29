@@ -27,7 +27,6 @@ void Load_Cart_R() {
 	{
 		SwapDelay = 0;
 		FlagAutoPilotCart = 0; //fix that bullshit Twinkle Circuit thing.
-		LoadPVM("OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST);
 		CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
 	}
 
@@ -142,7 +141,6 @@ void FixRestart_Stuff() //Prevent the game to crash if you restart while being i
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
 	DeleteTriggerObject();
-	njReleaseTexture(&SUPERSONIC_TEXLIST);
 	Delete_Cart();
 
 	return;
@@ -331,8 +329,8 @@ void LoadTriggerObject() {
 }
 
 void Load_ObjectsCommon() {
-	LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
-	LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
+
+
 	MysticMelody = LoadObjectModel("MysticMelody");
 	MMPlatform = LoadObjectModel("MM-Platform");
 }

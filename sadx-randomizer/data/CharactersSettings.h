@@ -30,6 +30,7 @@ void character_settings_onFrames();
 int AmyCartImprovement();
 int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
+void CheckAndLoadSuperSonic_Tex(int curChara);
 
 extern void PlayVoice_R(int a1);
 void FixAISFXJump();

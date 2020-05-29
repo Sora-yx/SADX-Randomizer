@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "Casino.h"
 #include "Chao.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
@@ -496,6 +495,7 @@ PVMEntry CasinopolisObjectTextures[] = {
 	{ "OBJ_HIGHWAY", (TexList*)0x26703F0 },
 	{ "OBJ_HIGHWAY2", (TexList*)0x26706AC },
 	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };

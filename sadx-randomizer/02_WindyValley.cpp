@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "WindyValley.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 

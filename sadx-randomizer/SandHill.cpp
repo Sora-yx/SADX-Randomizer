@@ -43,9 +43,25 @@ void LoadRemoveCart() {
 	
 }
 
+
+PVMEntry SandHillObjectTextures[] = {
+	{ "OBJ_SANDBOARD", (TexList*)0x173FA94 },
+	{ "E102TIME", (TexList*)0x91D5E0 },
+	{ "EFF_SANDBOARD", (TexList*)0x173F858 },
+	{ "big_kaeru", (TexList*)0x91D780 },
+	{ "BOARD_SCORE", (TexList*)0x9BE780 },
+	{ "OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST },
+	{ 0 }
+};
+
+void __cdecl SandHillObjTex_Init(const char* path, const HelperFunctions& helperFunctions) {
+	TexLists_Obj[LevelIDs_SandHill] = SandHillObjectTextures;
+}
+
 void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 
+	SandHillObjTex_Init(path, helperFunctions);
 	WriteCall((void*)0x42377c, GetCurrentCharacterSD);
 	WriteCall((void*)0x5981d8, AddRingSandHill);
 

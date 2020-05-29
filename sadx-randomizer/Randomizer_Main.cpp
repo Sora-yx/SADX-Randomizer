@@ -16,7 +16,6 @@ short prev_stage = -1;
 bool isGameOver = false;
 
 extern bool RandCongratsDone;
-//extern bool isCheckpointUsed;
 extern bool CasinoTails;
 extern bool SA2Voices;
 bool isKnucklesVersion = false;
@@ -189,8 +188,6 @@ bool isBossStage(short stage_id)
 {
 	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
 }
-
-
 
 int8_t prev_char = -1;
 
@@ -402,8 +399,7 @@ void DisplayRandoInformation() {
 
 		SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
-		
-
+	
 		if (ban != 0)
 			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
 		else
@@ -440,9 +436,7 @@ void Create_NewRNG() {
 		}
 
 		if (RNGStages)
-		{
 			getRandomStage(&randomizedSets[i], randomizedSets[i].character);
-		}
 
 			randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
 		 
@@ -512,9 +506,12 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 
 	//Segments
 
-	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story, 37 if all stories and 21 if Any%.
+	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story and 37 if all stories.
 	
 	Create_NewRNG();
+
+	if (!RNGStages && StorySplits != 0)
+		return;
 
 	for (uint32_t i = 0; i < TotalCount; i++) { //continue to generate split until we have our specific number.
 

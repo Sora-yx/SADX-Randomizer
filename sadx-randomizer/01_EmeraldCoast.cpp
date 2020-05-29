@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "EmeraldCoast.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Emerald Coast\\" B ".bin")

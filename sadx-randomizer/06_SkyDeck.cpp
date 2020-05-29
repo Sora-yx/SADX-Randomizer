@@ -426,6 +426,7 @@ PVMEntry SkyDeckObjectTextures[] = {
 	{ "UNI_A_UNIBODY", (TexList*)0x96CB5C },
 	{ "TOGEBALL_TOGEBALL", (TexList*)0x96BC54 },
 	{ NULL, (TexList*)0x214B41C },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "FE.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Final Egg\\" B ".bin")
@@ -269,6 +268,7 @@ PVMEntry FinalEggObjectTextures[] = {
 	{ "USA", (TexList*)0x93CF74 },
 	{ "BANB", (TexList*)0x93A8BC },
 	{ "GORI", (TexList*)0x945964 },
+	{ "big_kaeru", (TexList*)0x91D780 },
 	{ "common-obj", &SA2_OBJ_TEXLIST },
 	{ 0 }
 };

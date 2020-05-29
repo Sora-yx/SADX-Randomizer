@@ -194,9 +194,6 @@
     <ClInclude Include="Cutscene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\Casino.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="data\EggHornet.h">
       <Filter>Header Files\Bosses</Filter>
     </ClInclude>
@@ -221,22 +218,10 @@
     <ClInclude Include="data\Zero.h">
       <Filter>Header Files\Bosses</Filter>
     </ClInclude>
-    <ClInclude Include="data\EmeraldCoast.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="data\FE.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="data\HS.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="data\LW.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="data\SD.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="data\SH.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
     <ClInclude Include="data\SandHill.h">
@@ -246,12 +231,6 @@
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
     <ClInclude Include="data\IceCap.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="data\WindyValley.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="data\TP.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
