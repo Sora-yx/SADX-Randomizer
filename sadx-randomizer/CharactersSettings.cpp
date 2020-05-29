@@ -107,8 +107,6 @@ void SuperAuraStuff() {
 
 	if (CurrentCharacter != Characters_Sonic)
 	{
-		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-		njSetTexture(&SUPERSONIC_TEXLIST);
 		CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
 		CharObj2Ptrs[0]->Powerups |= Powerups_Invincibility;
 		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
@@ -301,7 +299,11 @@ void CallStuffWhenLevelStart() {
 		Load_Cart_R();
 }
 
+void BigWeightHook() {
 
+	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
+	BigWeight = 1990; //meme display
+}
 
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer() {
@@ -311,13 +313,6 @@ void SetGammaTimer() {
 	return;
 }
 
-
-
-void BigWeightHook() {
-
-	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
-	BigWeight = 1990; //meme display
-}
 
 void FixRadarSFX() {
 

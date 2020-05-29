@@ -422,7 +422,6 @@ void ResetStatsValues() {
 	Race = false;
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
-	//isCheckpointUsed = false;
 	fixTCCart();
 
 	if (CurrentLevel != 0)

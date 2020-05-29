@@ -165,7 +165,7 @@ Trampoline Capsule_Load_T(0x46b170, 0x46b177, CheckLoadCapsule_r);
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
-	if (CurrentMission < Mission2_100Rings)
+	if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
 	{
 		switch (CurrentCharacter)
 		{
@@ -183,7 +183,6 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 			}
 			else
 			{
-				LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
 				a1->Data1->Position.y += 20;
 				a1->MainSub = OFrog;
 				OFrog(a1);
@@ -206,7 +205,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 		RaceResultCheck(a1);
 
 	//call original function (Capsule.)
-	if (CurrentMission != KnucklesVersion && CurrentMission < Mission2_100Rings) {
+	if (CurrentStageVersion != KnucklesVersion && CurrentMission < Mission2_100Rings) {
 		ObjectFunc(origin, Capsule_Load_T.Target());
 		origin(a1);
 	}
@@ -316,7 +315,7 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
 	Check_DisplayBackRing_Amy(a1);
 
-	if (CurrentMission < Mission2_100Rings)
+	if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
 	{
 		ObjectFunc(origin, Balloon_Load_T.Target());
 		origin(a1);
@@ -344,8 +343,10 @@ void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1) {
 		RaceResultCheck(a1);
 
 	//call original function (Emerald.)
-	ObjectFunc(origin, CasinoEmerald_Load_T.Target());
-	origin(a1);
+	if (CurrentStageVersion != KnucklesVersion) {
+		ObjectFunc(origin, CasinoEmerald_Load_T.Target());
+		origin(a1);
+	}
 }
 
 Trampoline WVEmerald_Load_T(0x4df3b0, 0x4df3b6, CheckLoadWVEmerald_r);

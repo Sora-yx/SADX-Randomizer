@@ -22,38 +22,30 @@ void CamRedMountain() {
 
 void RedMountain_Layout() {
 
-	CurrentStageVersion = GammaVersion;
-	CurrentMission = 3;
+	//CurrentStageVersion = KnucklesVersion;
+	//CurrentMission = 0;
 	Load_ObjectsCommon();
+
+	LoadSetFile(0, "0510");
+	const char* act2Version = "0511";
 
 		switch (CurrentStageVersion)
 		{
 			default:
 			case SonicVersion:
-					LoadSetFile(0, "0510");
-					LoadSetFile(1, "0511");
-					LoadSetFile(2, "0512");
+				CurrentStageVersion = SonicVersion;
 				break;
 			case GammaVersion:
-				LoadSetFile(0, "0510");
-				LoadSetFile(1, "0513"); //load Gamma version
-				LoadSetFile(2, "0512");
+				act2Version = "0513";
 				break;
 			case KnucklesVersion:
 				isKnucklesVersion = true;
-				LoadSetFile(0, "0510");
-				LoadSetFile(1, "0511");
-				if (CurrentMission < Mission3_LostChao)
-				{
-					SetRNGKnuckles();
-					LoadSetFile(2, "0512");
-				}
-				else
-				{
-					LoadSetFile(2, "0514"); //load Knux version
-				}
+				SetRNGKnuckles();
 				break;
 		}
+
+		LoadSetFile(1, act2Version); //load Gamma version
+		LoadSetFile(2, "0512");
 	
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
@@ -205,6 +197,7 @@ DataArray(DeathZone*, RedMountainDeathZones3, 0x24C0128, 3); //killplane pointer
 void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist and fix killplane
 	ObjLists[LevelIDs_RedMountain * 8 + 1] = &RedMountainObjectList;
+	ObjLists[LevelIDs_RedMountain * 8 + 2] = &RedMountainObjectList;
 	TexLists_Obj[LevelIDs_RedMountain] = RedMountainObjectTextures;
 	RedMountainDeathZones[0] = RedMountain1DeathZones;
 	RedMountainDeathZones[2] = RedMountain3DeathZones;

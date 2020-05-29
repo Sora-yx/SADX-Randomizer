@@ -33,36 +33,28 @@ void SkyDeck_Layout() {
 	Load_ObjectsCommon();
 
 	CurrentStageVersion = KnucklesVersion;
+	CurrentMission = 0;
+	const char* act1Version = "0610";
+	const char* act3Version = "0612";
 
 	switch (CurrentStageVersion)
 	{
-	case SonicVersion:
-	default:
-		LoadSetFile(0, "0610"); //load Sonic layout
-		LoadSetFile(1, "0611");
-		LoadSetFile(2, "0612");
-		break;
-	case TailsVersion:
-		LoadSetFile(0, "0613"); //load Tails layout
-		LoadSetFile(1, "0611");
-		LoadSetFile(2, "0612");
-		break;
-	case KnucklesVersion:
-		LoadSetFile(0, "0610");
-		LoadSetFile(1, "0611");
-		if (CurrentMission < Mission2_100Rings)
-		{
+		case SonicVersion:
+		default:
+			CurrentStageVersion = SonicVersion;
+			break;
+		case TailsVersion:
+			act1Version = "0613";
+			break;
+		case KnucklesVersion:
 			SetRNGKnuckles();
-			LoadSetFile(2, "0614"); //Knuckles Version
-		}
-		else
-		{
-			LoadSetFile(2, "0615"); //Knuckles M2 Version
-		}
-
-		break;
+			act3Version = "0614"; 
+			break;
 	}
 
+	LoadSetFile(0, act1Version); 
+	LoadSetFile(1, "0611");
+	LoadSetFile(2, act3Version);
 
 	if (Race)
 		SelectBarRace();
@@ -75,13 +67,13 @@ void SkyDeck_Layout() {
 //Don't change the gravity if knuckles layout.
 int Switch_Gravity() {
 
-	if (CurrentCharacter == Characters_Knuckles && !Vanilla)
+	if (CurrentCharacter == Characters_Knuckles && CurrentStageVersion == SonicVersion)
 		return (unsigned)Characters_Sonic; //Make the gravity work for Knuckles
 
 	if (CurrentStageVersion == KnucklesVersion || isKnucklesVersion)
 		return (unsigned)Characters_Knuckles; 
-	else
-		return GetCharacterID(0);
+
+	return GetCharacterID(0);
 }
 
 //Allow Gamma to target the Sky Deck cannon
@@ -197,7 +189,6 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	ReplaceSET("SET0612S", "Sonic-SD-Act3");
 	ReplaceSET("SET0613S", "Sonic-SD-Race");
 	ReplaceSET("SET0614S", "Sonic-SD-Knux");
-	ReplaceSET("SET0615S", "Sonic-SD-KnuxR");
 
 	ReplaceCAM("CAM0600S", "CAM0600S");
 	ReplaceCAM("CAM0601S", "CAM0601S");

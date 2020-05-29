@@ -264,7 +264,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			case 2:
 			{
 				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
-
+					DisableControl();
 					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
@@ -274,18 +274,16 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 3:
 				if (++obj->Data1->Index == 120) {
-					EnableControl();
+					
 					if (obj->Data1->Scale.x == 3 && CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2)
 					{
-						PlayDelayedCustomSound(CommonSound_MM_Warp, 1, 1);
-						PositionPlayer(0, 6119.38, -58.9, 2549.47);
+						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
+						PositionPlayer(0, 6153.64, 760.9485, 2379.39);
 						data->Action = 6;
 						return;
 					}
-					else
-					{
+						EnableControl();
 						data->Action = 4;
-					}
 				}
 			break;
 			case 4:
@@ -293,9 +291,12 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				if (CurPos.x != -1 && CurPos.y != -1 && CurPos.z != -1)
 				{
 					Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
-					PlayDelayedCustomSound(CommonSound_MM_Warp, 1, 1);
+					
 					if (++obj->Data1->InvulnerableTime == 5)
+					{
+						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
 						data->Action = 5;
+					}
 				}
 				else
 				{
@@ -330,6 +331,7 @@ void LoadTriggerObject() {
 }
 
 void Load_ObjectsCommon() {
+	LoadPVM("big_kaeru", &big_kaeru_TEXLIST);
 	LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 	MysticMelody = LoadObjectModel("MysticMelody");
 	MMPlatform = LoadObjectModel("MM-Platform");

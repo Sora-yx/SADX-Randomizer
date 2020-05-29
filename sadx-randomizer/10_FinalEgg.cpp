@@ -31,27 +31,26 @@ void FinalEgg_Layout() {
 	CurrentStageVersion = Characters_Gamma;
 	Load_ObjectsCommon();
 
+	const char* act1Version = "1010";
+	const char* act3Version = "1012";
+
 	switch (CurrentStageVersion)
 	{
 		case SonicVersion:
 		default:
 			CurrentStageVersion = SonicVersion;
-			LoadSetFile(0, "1010"); //Sonic Layout
-			LoadSetFile(1, "1011");
-			LoadSetFile(2, "1012");
 			break;
 		case AmyVersion:
-			LoadSetFile(0, "1013");
-			LoadSetFile(1, "1011");
-			LoadSetFile(2, "1012");
+			act1Version = "1013";
 			break;
 		case GammaVersion:
-			LoadSetFile(0, "1010"); 
-			LoadSetFile(1, "1011");
-			LoadSetFile(2, "1014");
+			act3Version = "1014";
 			break;
 	}
 
+	LoadSetFile(0, act1Version);
+	LoadSetFile(1, "1011");
+	LoadSetFile(2, act3Version);
 	LoadSetFile(3, "1003"); //Why does this even exist in the game files lol
 	CamFinalEgg();
 	return;

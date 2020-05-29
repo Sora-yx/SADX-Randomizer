@@ -21,6 +21,7 @@ void FixPerfectChaosHit() {
 
 void LoadCamFilePC_R()
 {
+	LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 	MetalSonicFlag = 0; //Prevent Metal Sonic
 	LoadCamFile(0, "1900");
 }

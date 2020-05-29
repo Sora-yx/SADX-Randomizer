@@ -31,32 +31,29 @@ void SpeedHighway_Layout() {
 	CurrentStageVersion = TailsVersion;
 	Load_ObjectsCommon();
 
+	const char* curVer = "0410"; 
+	const char* curVer2 = "0411"; 
+	const char* curVer3 = "0412"; 
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		LoadSetFile(0, "0410"); //load Sonic Layout
-		LoadSetFile(1, "0411");
-		LoadSetFile(2, "0412");
+		CurrentStageVersion = SonicVersion;
 		break;
 	case TailsVersion:
-		LoadSetFile(0, "0413"); 
-		LoadSetFile(1, "0411"); 
-		LoadSetFile(2, "0412"); 
+		curVer = "0413";
 		break;
 	case KnucklesVersion:
-		LoadSetFile(0, "0410");
-		LoadSetFile(1, "0411");
 		isKnucklesVersion = true;
-		if (CurrentMission < Mission2_100Rings)
-		{
-			SetRNGKnuckles();
-			LoadSetFile(2, "0414"); //Knuckles Version
-		}
-		else
-			LoadSetFile(2, "0415"); //Knuckles M2 Version
+		SetRNGKnuckles();
+		curVer3 = "0414";
 		break;
 	}
+
+	LoadSetFile(0, curVer); 
+	LoadSetFile(1, curVer2);
+	LoadSetFile(2, curVer3);
 
 	if (Race)
 		SelectBarRace();

@@ -165,6 +165,8 @@ ObjectFunc(InvisibleWallCasino, 0x5d03a0);
 ObjectFunc(SDCannon, 0x5f84e0);
 ObjectFunc(SDCannonS1, 0x5f9710);
 ObjectFunc(SDCannonS2, 0x5f8e00);
+ObjectFunc(TikalHintEmerald, 0x7a9020);
+void KnucklesHintMain_r(ObjectMaster* obj);
 void FixInvisibleWall();
 
 

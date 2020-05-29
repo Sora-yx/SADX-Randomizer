@@ -42,26 +42,28 @@ void WindyValley_Layout() {
 
 	Load_ObjectsCommon();
 
+	const char* act1Version = "0210";
+	const char* act3Version = "0212";
+
 		switch (CurrentStageVersion)
 		{
 			case SonicVersion:
 			default:
-				LoadSetFile(0, "0210");
-				LoadSetFile(1, "0211");
-				LoadSetFile(2, "0212");
+				CurrentStageVersion = SonicVersion;
 				break;
 			case TailsVersion:
 				Race = true;
-				LoadSetFile(0, "0210");
-				LoadSetFile(1, "0211");
-				LoadSetFile(2, "0213");
+				act3Version = "0213";
 				break;
 			case GammaVersion:
-				LoadSetFile(0, "0214");
-				LoadSetFile(1, "0211");
-				LoadSetFile(2, "0212");
+				act1Version = "0214";		
 				break;
 		}
+
+		LoadSetFile(0, act1Version);
+		LoadSetFile(1, "0211");
+		LoadSetFile(2, act3Version);
+
 
 	if (Race)
 		SelectBarRace();

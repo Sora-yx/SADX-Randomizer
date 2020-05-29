@@ -49,7 +49,7 @@ void TwinklePark_Layout() {
 	fixTCCart();
 	Load_ObjectsCommon();
 
-	CurrentStageVersion = BigVersion;
+	CurrentStageVersion = SonicVersion;
 	CurrentMission = 0;
 
 	LoadSetFile(0, "0310");
@@ -63,6 +63,9 @@ void TwinklePark_Layout() {
 			break;
 		case BigVersion:
 			curVer = "0314";
+			break;
+		default:
+			CurrentStageVersion = SonicVersion;
 			break;
 	}
 

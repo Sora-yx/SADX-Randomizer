@@ -23,7 +23,7 @@ void EC_Cam() {
 
 void EC_Layout() {
 
-	CurrentStageVersion = BigVersion;
+	CurrentStageVersion = GammaVersion;
 	CurrentMission = 3;
 
 	Load_ObjectsCommon();
@@ -32,14 +32,15 @@ void EC_Layout() {
 	{
 	case SonicVersion:
 	default:
-		LoadSetFile(0, "0110");
-		LoadSetFile(1, "0111");
+		CurrentStageVersion = SonicVersion;
+		LoadSetFile(0, "0110");	
 		break;
 	case GammaVersion:
 		LoadSetFile(0, "0113"); //M1 Gamma Version
 		break;
 	}
 	
+	LoadSetFile(1, "0111");
 	LoadSetFile(2, "0112");
 	
 	EC_Cam();
@@ -259,6 +260,7 @@ PVMEntry EmeraldCoastObjectTextures[] = {
 
 void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	ObjLists[LevelIDs_EmeraldCoast * 8 + 0] = &EmeraldCoastObjectList;
 	ObjLists[LevelIDs_EmeraldCoast * 8 + 1] = &EmeraldCoastObjectList;
 	ObjLists[LevelIDs_EmeraldCoast * 8 + 2] = &EmeraldCoastObjectList;
 	TexLists_Obj[LevelIDs_EmeraldCoast] = EmeraldCoastObjectTextures;

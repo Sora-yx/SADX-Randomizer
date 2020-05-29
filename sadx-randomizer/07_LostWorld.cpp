@@ -32,17 +32,13 @@ void LW_Layout() {
 	{
 		case SonicVersion:
 		default:
-				LoadSetFile(1, "0711"); 
+			CurrentStageVersion = SonicVersion;
+			LoadSetFile(1, "0711"); 
 			break;
 		case KnucklesVersion:
 			isKnucklesVersion = true;
-			if (CurrentMission < Mission2_100Rings)
-			{
-				LoadSetFile(1, "0713"); //Knux Treasure Hunting
-				SetRNGKnuckles();
-			}
-			else
-				LoadSetFile(1, "0714");
+			LoadSetFile(1, "0713"); //Knux Treasure Hunting
+			SetRNGKnuckles();
 			break;
 	}
 

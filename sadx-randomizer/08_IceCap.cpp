@@ -43,6 +43,7 @@ void IC_Layout() {
 	{
 		case SonicVersion:
 		default:
+			CurrentStageVersion = SonicVersion;
 			LoadSetFile(2, "0812");
 			break;
 		case TailsVersion:
