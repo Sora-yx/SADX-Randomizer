@@ -22,8 +22,8 @@ void EC_Cam() {
 
 void EC_Layout() {
 
-	CurrentStageVersion = GammaVersion;
-	CurrentMission = 3;
+	//CurrentStageVersion = GammaVersion;
+	//CurrentMission = 3;
 
 	Load_ObjectsCommon();
 
@@ -85,7 +85,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0102M", "CAM0102M");
 	ReplaceCAM("CAM0104M", "CAM0104M");
 
-
 	//Knuckles
 	ReplaceSET("SET0110K", "KnuxEC01");
 	ReplaceSET("SET0111K", "KnuxEC02");
@@ -95,7 +94,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0100K", "CAM0100K");
 	ReplaceCAM("CAM0101K", "CAM0101K");
 	ReplaceCAM("CAM0102K", "CAM0102K");
-
 	ReplaceCAM("CAM0104K", "CAM0104K");
 
 
@@ -110,7 +108,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0102A", "CAM0102A");
 	ReplaceCAM("CAM0104A", "CAM0104A");
 
-
 	//Big
 	ReplaceSET("SET0110B", "BigEC01");
 	ReplaceSET("SET0111B", "BigEC02");
@@ -121,7 +118,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0101B", "CAM0101B");
 	ReplaceCAM("CAM0102B", "CAM0102B");
 	ReplaceCAM("CAM0104B", "CAM0104B");
-
 
 	//Gamma
 	ReplaceSET("SET0110E", "GammaEC01");

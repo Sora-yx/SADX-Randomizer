@@ -51,7 +51,6 @@ uint32_t TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 bool isAIAllowed = true;
 uint8_t SwapDelay = 150;
 
-int DCModWarningTimer = 0;
 int StatsTimer = 4000;
 bool SA2Voices = false;
 
@@ -75,16 +74,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
-		HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
-		HMODULE SADXFE = GetModuleHandle(L"sadx-fixed-edition");
-		HMODULE DCLight = GetModuleHandle(L"sadx-dc-lighting");
 		HMODULE CMMode = GetModuleHandle(L"SADX-Critical-Mode");
-
-		if (DCMod && !DCLight)
-			DCModWarningTimer = 0; //don't display the DC Warning message if Lantern Engine is missing.
-		else
-			if (DCMod || SADXFE)
-				DCModWarningTimer = 250;
 
 		if (CMMode)
 			isCriticalMode = true;
@@ -158,7 +148,6 @@ extern "C" {
 		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);
 
-
 		SeedCopy = Seed;
 
 		if (Seed)
@@ -189,18 +178,8 @@ extern "C" {
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Mission %d", CurrentMission);
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Cur StageVer %d", CurrentStageVersion);
 		
-		//Display DC Conversion warning
-		if (DCModWarningTimer && GameMode == GameModes_Menu)
-		{
-			SetDebugFontSize(11.8f * (unsigned short)VerticalResolution / 480.0f);
-			DisplayDebugString(NJM_LOCATION(2, 1), "Randomizer Mod Warning:");
-			DisplayDebugString(NJM_LOCATION(2, 2), "You are using the Dreamcast Conversion Mod / SADX FE,");
-			DisplayDebugString(NJM_LOCATION(2, 3), "Make sure the Randomizer is loaded AFTER those mods!");
-			DCModWarningTimer--;
-		}
-
 		//Display Current Randomized Settings Information on Character Select Screen.
-		if (!DCModWarningTimer && GameMode == GameModes_Menu && LevelList >= 225)
+		if (GameMode == GameModes_Menu && ValueMenu >= 225)
 			DisplayRandoInformation();
 
 		//AI Stuff
@@ -223,10 +202,6 @@ extern "C" {
 
 		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9 || GameMode == 24))
 		{
-			//Fix UI issue
-			HudDisplayScoreOrTimer();
-			HudDisplayRingTimeLife_Check();
-
 			//AI Swap
 			if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
 				SwapDelay++;

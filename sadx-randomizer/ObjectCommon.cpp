@@ -196,8 +196,13 @@ bool Check_TikalMessageDisplay() {
 	case LevelIDs_FinalEgg:
 		if (CurrentAct == 2 && CurrentStageVersion == SonicVersion)
 			return true;
-		else
-			return false;
+		break;
+	case LevelIDs_HotShelter:
+		if (CurrentAct == 2)
+			return true;
+		break;
+	case LevelIDs_RedMountain:
+		return true;
 		break;
 	}
 
@@ -210,6 +215,10 @@ void Check_ObjectMysticMelody() {
 	switch (CurrentLevel)
 	{
 	case LevelIDs_EmeraldCoast:
+		if (CurrentAct == 2)
+			MMPlatformEnabled = true;
+		break;
+	case LevelIDs_SpeedHighway:
 		if (CurrentAct == 2)
 			MMPlatformEnabled = true;
 		break;
@@ -330,16 +339,21 @@ void LoadTriggerObject() {
 
 void Load_ObjectsCommon() {
 
-
-	MysticMelody = LoadObjectModel("MysticMelody");
-	MMPlatform = LoadObjectModel("MM-Platform");
+	if (CurrentLevel > 0 && CurrentLevel < 15)
+	{
+		MysticMelody = LoadObjectModel("MysticMelody");
+		MMPlatform = LoadObjectModel("MM-Platform");
+	}
 }
 
 void Delete_ObjectsCommon() {
 
-	if (MysticMelody != nullptr)
-		FreeMDL(MysticMelody);
+	if (CurrentLevel > 0 && CurrentLevel < 15)
+	{
+		if (MysticMelody != nullptr)
+			FreeMDL(MysticMelody);
 
-	if (MMPlatform != nullptr)
-		FreeMDL(MMPlatform);
+		if (MMPlatform != nullptr)
+			FreeMDL(MMPlatform);
+	}
 }

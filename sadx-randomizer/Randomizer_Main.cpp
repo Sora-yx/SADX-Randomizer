@@ -95,7 +95,7 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (DupliCheck && isDuplicateStage(generated) || isStageBanned(generated, Char_id));
+	} while (isStageBanned(generated, Char_id) || DupliCheck && isDuplicateStage(generated));
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs & 0xf;
@@ -159,13 +159,15 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 			return false;
 		}
 
-		if (DuplicateStages.size() != 0 && (curLevelAndActID == stage.levelAndActs && curVersion == stage.version || DuplicateStages.back().levelAndActs >> 8 == curLevel))
+		if (DuplicateStages.size() != 0 && (curLevelAndActID == stage.levelAndActs && curVersion == stage.version) || DuplicateStages.back().levelAndActs >> 8 == curLevel)
 		{
 			myfile << "Prevous Stage: " << curLevel;
 			myfile << " Previous Version: " << curVersion;
 			return true;
 		}
+
 	}
+
 
 	if (TCCount < 2 && curLevel == LevelIDs_TwinkleCircuit)
 		TCCount++;
@@ -377,7 +379,7 @@ void SetLevelAndAct_R() {
 	{
 		if (GameMode == GameModes_Menu)
 		{
-			if (LevelList == 14 || LevelList == 238 || LevelList == 212 || LevelList == 138 || LevelList == 257)
+			if (ValueMenu == 14 || ValueMenu == 238 || ValueMenu == 212 || ValueMenu == 138 || ValueMenu == 257)
 				SetRandomStageAct((char)CurrentLevel, (char)CurrentAct);
 			else
 				return;

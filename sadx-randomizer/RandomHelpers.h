@@ -329,7 +329,7 @@ DataPointer(char, BossHP, 0x3c58148);
 DataPointer(char, BossHP2, 0x3C58150);
 DataPointer(float, Life_Max, 0x3c58158);
 DataPointer(char, Emblem, 0x974AE0);
-DataPointer(unsigned char, LevelList, 0x3B2C5F8);
+DataPointer(unsigned char, ValueMenu, 0x3B2C5F8);
 DataPointer(unsigned char, SelectedCharacter, 0x3B2A2FD);
 DataPointer(char, RNGDoor, 0x3C7457C);
 FunctionPointer(void, SetRNGAmyDoor, (), 0x5b06f);
@@ -442,7 +442,7 @@ void Chao_DeleteFiles();
 
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
-FunctionPointer(void, SetPlayerNumberForGame, (unsigned short player), 0x414470);
+FunctionPointer(void, sNumberForGame, (unsigned short player), 0x414470);
 
 extern int RageQuit;
 extern int JumpPB;

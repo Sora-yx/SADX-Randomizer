@@ -27,7 +27,6 @@ void CamFinalEgg() {
 
 void FinalEgg_Layout() {
 
-	CurrentStageVersion = Characters_Gamma;
 	Load_ObjectsCommon();
 
 	const char* act1Version = "1010";

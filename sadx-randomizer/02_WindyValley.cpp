@@ -271,9 +271,9 @@ PVMEntry WindyValleyObjectTextures[] = {
 ObjectList WindyValleyObjectList = { arraylengthandptrT(WindyValleyObjectList_list, int) };
 
 
-
 void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	ObjLists[LevelIDs_WindyValley * 8 + 0] = &WindyValleyObjectList;
 	ObjLists[LevelIDs_WindyValley * 8 + 2] = &WindyValleyObjectList;
 	TexLists_Obj[LevelIDs_WindyValley] = WindyValleyObjectTextures;
 }

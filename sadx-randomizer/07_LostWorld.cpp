@@ -25,8 +25,6 @@ void LW_Layout() {
 	Load_ObjectsCommon();
 	LoadSetFile(0, "0710");
 
-	CurrentStageVersion = KnucklesVersion;
-
 	switch (CurrentStageVersion)
 	{
 		case SonicVersion:

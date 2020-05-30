@@ -18,9 +18,6 @@ extern bool CasinoTails;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
-		GameMode = GameModes_Adventure_Field; //fix game crash
-
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
 	else
@@ -32,7 +29,10 @@ void DisableTimeStuff() {
 	{
 		ResetValueWhileLevelResult();
 		if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
+		{
+			GameMode = GameModes_Adventure_Field; //fix game crash
 			AddCustomFlag(); //Add a flag for story progression.
+		}
 	}
 
 	ringsPB += Rings; //total Rings credit stat
@@ -81,8 +81,12 @@ void DisableTimeStuff() {
 void ReleaseScoreTexture() {
 
 	ResetValueWhileLevelResult();
+
 	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
+	{
+		GameMode = GameModes_Adventure_Field; //fix game crash
 		AddCustomFlag(); //Add a flag for story progression.
+	}
 
 	njReleaseTexture(&SCORE_RESULT_TEXLIST);
 	return;

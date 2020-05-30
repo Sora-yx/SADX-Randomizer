@@ -32,8 +32,8 @@ void SkyDeck_Layout() {
 
 	Load_ObjectsCommon();
 
-	CurrentStageVersion = KnucklesVersion;
-	CurrentMission = 0;
+	//CurrentStageVersion = KnucklesVersion;
+	//CurrentMission = 0;
 	const char* act1Version = "0610";
 	const char* act3Version = "0612";
 

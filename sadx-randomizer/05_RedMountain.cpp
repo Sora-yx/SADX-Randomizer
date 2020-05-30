@@ -22,9 +22,9 @@ void CamRedMountain() {
 
 void RedMountain_Layout() {
 
-	CurrentStageVersion = KnucklesVersion;
-	CurrentMission = 3;
-	SonicRand = 2;
+//	CurrentStageVersion = KnucklesVersion;
+//	CurrentMission = 3;
+
 	Load_ObjectsCommon();
 
 	LoadSetFile(0, "0510");

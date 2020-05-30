@@ -48,8 +48,8 @@ void TwinklePark_Layout() {
 	fixTCCart();
 	Load_ObjectsCommon();
 
-	CurrentStageVersion = SonicVersion;
-	CurrentMission = 0;
+//	CurrentStageVersion = SonicVersion;
+//	CurrentMission = 0;
 
 	LoadSetFile(0, "0310");
 

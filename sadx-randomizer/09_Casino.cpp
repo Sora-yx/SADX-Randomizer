@@ -49,7 +49,6 @@ void Casino_Layout() {
 		LoadCamFile(2, "0902");
 		LoadCamFile(3, "0903");
 
-
 	if (Race)
 		SelectBarRace();
 

@@ -27,8 +27,8 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
-	CurrentStageVersion = KnucklesVersion;
-	CurrentMission = 3;
+	//CurrentStageVersion = KnucklesVersion;
+	//CurrentMission = 3;
 	Load_ObjectsCommon();
 
 	const char* curVer = "0410"; 
