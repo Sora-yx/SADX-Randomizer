@@ -57,13 +57,7 @@ void FinalEgg_Layout() {
 void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x422f7d, 0x90);
-	WriteData<5>((void*)0x422f8c, 0x90);
-	WriteData<5>((void*)0x422f9b, 0x90);
-	WriteData<5>((void*)0x422faa, 0x90);
-	WriteData<5>((void*)0x422fb6, 0x90);
-	WriteData<5>((void*)0x422fc5, 0x90);
-	WriteData<5>((void*)0x422fd4, 0x90);
+	WriteData<72>((int*)0x422f7d, 0x90);
 
 	WriteCall((void*)0x422fe3, FinalEgg_Layout); //FE random layout
 

@@ -137,30 +137,30 @@ void FixGoldenAndCoin() {
 	//if Knuckles layout, move the coin in the emerald room and display Sonic Golden Statue, else restore the original function.
 	if (CurrentStageVersion == KnucklesVersion && CurrentAct == 0)
 	{
-		WriteData<1>((void*)0x5c4425, 0x74); //Coin position
+		WriteData<1>((char*)0x5c4425, 0x74); //Coin position
 
 		if (CurrentCharacter == Characters_Gamma)
-			WriteData<1>((void*)0x5c4232, 0x74); //don't display golden statue
+			WriteData<1>((char*)0x5c4232, 0x74); //don't display golden statue
 		else
-			WriteData<1>((void*)0x5c4232, 0x75); //display golden statue when not Sonic/Gamma
+			WriteData<1>((char*)0x5c4232, 0x75); //display golden statue when not Sonic/Gamma
 	}
 	else
 	{
-		WriteData<1>((void*)0x5c4425, 0x75); //restore original function coin position
-		WriteData<1>((void*)0x5cef47, 0x75);
+		WriteData<1>((char*)0x5c4425, 0x75); //restore original function coin position
+		WriteData<1>((char*)0x5cef47, 0x75);
 
 		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Knuckles)
-			WriteData<1>((void*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
+			WriteData<1>((char*)0x5c4232, 0x75); //don't display golden statue/ Fix Crash
 		else
-			WriteData<1>((void*)0x5c4232, 0x74); //display golden statue*/
+			WriteData<1>((char*)0x5c4232, 0x74); //display golden statue*/
 	}
 
 	if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
 	{
 		if (CurrentCharacter == Characters_Gamma)
-			WriteData<1>((void*)0x5D118B, 0x2); //Fix gamma pinball teleportation
+			WriteData<1>((char*)0x5D118B, 0x2); //Fix gamma pinball teleportation
 		else
-			WriteData<1>((void*)0x5D118B, 0x1); //Restore original function.
+			WriteData<1>((char*)0x5D118B, 0x1); //Restore original function.
 	}
 
 	return;
@@ -170,21 +170,21 @@ void FixGoldenAndCoin() {
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x422ef4, 0x90);
-	WriteData<5>((void*)0x422f03, 0x90);
-	WriteData<5>((void*)0x422f12, 0x90);
-	WriteData<5>((void*)0x422f21, 0x90);
-	WriteData<5>((void*)0x422f2d, 0x90);
-	WriteData<5>((void*)0x422f3c, 0x90);
-	WriteData<5>((void*)0x422f4b, 0x90);
+	WriteData<5>((int*)0x422ef4, 0x90);
+	WriteData<5>((int*)0x422f03, 0x90);
+	WriteData<5>((int*)0x422f12, 0x90);
+	WriteData<5>((int*)0x422f21, 0x90);
+	WriteData<5>((int*)0x422f2d, 0x90);
+	WriteData<5>((int*)0x422f3c, 0x90);
+	WriteData<5>((int*)0x422f4b, 0x90);
 
 	WriteCall((void*)0x422f5a, Casino_Layout);
 	
-	WriteData<1>((void*)0x5c0595, 0x08); //make pinball working for Knuckles
-	WriteData<1>((void*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
-	WriteData<1>((void*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
-	WriteData<1>((void*)0x5c4424, 0x08); //Add coin in the drop ring room. (knuckles layout)
-	WriteData<2>((void*)0x5d049e, 0x90); //Add Invisible wall when not Sonic. (drop ring Emerald room.)
+	WriteData<1>((char*)0x5c0595, 0x08); //make pinball working for Knuckles
+	WriteData<1>((char*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
+	WriteData<1>((char*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
+	WriteData<1>((char*)0x5c4424, 0x08); //Add coin in the drop ring room. (knuckles layout)
+	WriteData<2>((int*)0x5d049e, 0x90); //Add Invisible wall when not Sonic. (drop ring Emerald room.)
 	
 	WriteCall((void*)0x5d04a9, FixInvisibleWall); //Add invisible wall if sonic version, otherwise remove it.
 	WriteCall((void*)0x5dacc8, FixFlipperCharacterPosition);

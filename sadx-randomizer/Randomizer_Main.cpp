@@ -8,7 +8,7 @@
 #include "Common.h"
 #include <random>
 #include <vector> 
-using namespace std;
+
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 struct RandomizedEntry randomizedSets[40];
@@ -27,7 +27,7 @@ int8_t CurrentStageVersion = 0;
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
 int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
-
+string CharaString[6] = { "Sonic", "Miles", "Knux", "Amy", "Gamma", "Big" };
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
@@ -69,11 +69,11 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_HotShelter3, GammaVersion, Characters_Gamma },
 	{LevelAndActIDs_Chaos0, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos2, BossVersion, Characters_Knuckles },
-	{LevelAndActIDs_Chaos4, BossVersion, Characters_Sonic  },
+	{LevelAndActIDs_Chaos4, BossVersion, Characters_Sonic | Characters_Tails | Characters_Knuckles},
 	{LevelAndActIDs_Chaos6, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos6Two, BossVersion, Characters_Knuckles },
 	{LevelAndActIDs_PerfectChaos, BossVersion, Characters_Sonic },
-	{LevelAndActIDs_EggHornet, BossVersion, Characters_Sonic },
+	{LevelAndActIDs_EggHornet, BossVersion, Characters_Sonic | Characters_Tails },
 	{LevelAndActIDs_EggWalker, BossVersion, Characters_Tails},
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
@@ -83,7 +83,7 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_TwinkleCircuit4, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
-	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
+	{LevelAndActIDs_SandHill, TailsVersion, Characters_Sonic | Characters_Tails},
 };		
 
 
@@ -324,6 +324,8 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
+		AddCustomFlag();
+
 		if (RNGCharacters)
 		{
 			UnloadCharTextures(CurCharacter());

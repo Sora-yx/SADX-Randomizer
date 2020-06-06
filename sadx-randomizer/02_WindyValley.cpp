@@ -41,33 +41,24 @@ void WindyValley_Layout() {
 
 	Load_ObjectsCommon();
 
-	const char* act1Version = "0210";
-	const char* act3Version = "0212";
+	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
 
-		switch (CurrentStageVersion)
+		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
 		{
-			case SonicVersion:
-			default:
-				CurrentStageVersion = SonicVersion;
-				break;
-			case TailsVersion:
-				Race = true;
-				act3Version = "0213";
-				break;
-			case GammaVersion:
-				act1Version = "0214";		
-				break;
-		}
+			string Set = SetFileArray[i].SetFile;
+			string Cam = SetFileArray[i].SetCam;
+			int act = SetFileArray[i].act;
 
-		LoadSetFile(0, act1Version);
-		LoadSetFile(1, "0211");
-		LoadSetFile(2, act3Version);
+			LoadSetFile(act, Set.c_str());
+			LoadCamFile(act, Cam.c_str());
+		}
+	}
 
 
 	if (Race)
 		SelectBarRace();
 
-	Cam_WV();
+	//Cam_WV();
 
 	return;
 }
@@ -80,6 +71,7 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	WVObjects_Init(path, helperFunctions);
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 	WriteCall((void*)0x4df390, FixTailsVictoryWV);
+	WriteData<72>((int*)0x422bdf, 0x90);
 
 	//Sonic
 	ReplaceSET("SET0210S", "Sonic-WV-Act1");

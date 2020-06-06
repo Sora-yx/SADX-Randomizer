@@ -71,13 +71,9 @@ void FixLWWaterSlide2() {
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
+	WriteData<5>((int*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
 
-	WriteData<5>((void*)0x422dfb, 0x90);
-	WriteData<5>((void*)0x422e0a, 0x90);
-	WriteData<5>((void*)0x422e19, 0x90);
-	WriteData<5>((void*)0x422e25, 0x90);
-	WriteData<5>((void*)0x422e34, 0x90);
+	WriteData<72>((int*)0x422dfb, 0x90);
 
 	WriteCall((void*)0x422e43, LW_Layout);
 	

@@ -168,11 +168,7 @@ void Olever_r(ObjectMaster* obj) {
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x422d90, 0x90);
-	WriteData<5>((void*)0x422d9f, 0x90);
-	WriteData<5>((void*)0x422dae, 0x90);
-	WriteData<5>((void*)0x422dba, 0x90);
-	WriteData<5>((void*)0x422dc9, 0x90);
+	WriteData<72>((int*)0x422d90, 0x90);
 
 	WriteCall((void*)0x422dd8, SkyDeck_Layout); 
 	WriteCall((void*)0x5ecc7b, Switch_Gravity); 

@@ -2,47 +2,34 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
+#include <fstream>
+#include <iostream>
+
+
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Emerald Coast\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
-void EC_Cam() {
-
-	if (CurrentStageVersion == GammaVersion)
-		LoadCamFile(0, "0104");
-	else
-		LoadCamFile(0, "0100");
-	
-	LoadCamFile(1, "0101");
-	LoadCamFile(2, "0102");
-
-	return;
-}
-
 
 void EC_Layout() {
 
-	//CurrentStageVersion = GammaVersion;
-	//CurrentMission = 3;
 
+	CurrentStageVersion = SonicVersion;
 	Load_ObjectsCommon();
 
-	switch (CurrentStageVersion)
-	{
-	case SonicVersion:
-	default:
-		CurrentStageVersion = SonicVersion;
-		LoadSetFile(0, "0110");	
-		break;
-	case GammaVersion:
-		LoadSetFile(0, "0113"); //M1 Gamma Version
-		break;
+	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
+
+		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
+		{
+			string Set = SetFileArray[i].SetFile;
+			string Cam = SetFileArray[i].SetCam;
+			int act = SetFileArray[i].act;
+			
+			LoadSetFile(act, Set.c_str());
+			LoadCamFile(act, Cam.c_str());
+		}
 	}
-	
-	LoadSetFile(1, "0111");
-	LoadSetFile(2, "0112");
-	
-	EC_Cam();
+
 	return;
 }
 
@@ -52,16 +39,11 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ECObjects_Init(path, helperFunctions);
 	
 	//Initiliaze data
-	WriteData<5>((void*)0x4f6afa, 0x90); //Prevent the game to start the cutscene as Tails.
-	WriteData<1>((void*)0x427FCA, 0x08); //Fix EC HUD display for Tails.
+	WriteData<5>((int*)0x4f6afa, 0x90); //Prevent the game to start the cutscene as Tails.
+	WriteData<1>((char*)0x427FCA, 0x08); //Fix EC HUD display for Tails.
 
-	WriteData<5>((void*)0x422b74, 0x90);
-	WriteData<5>((void*)0x422b83, 0x90);
-	WriteData<5>((void*)0x422b92, 0x90);
-	WriteData<5>((void*)0x422b9e, 0x90);
-	WriteData<5>((void*)0x422bad, 0x90);
-
-	WriteCall((void*)0x422bbc, EC_Layout);
+	WriteData<72>((int*)0x422b74, 0x90); //Prevent the game to load its own SetFile.
+	WriteCall((void*)0x422bbc, EC_Layout); 
 
 	//Sonic
 	ReplaceSET("SET0110S", "SonicEC01");
@@ -73,6 +55,7 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0101S", "CAM0101S");
 	ReplaceCAM("CAM0102S", "CAM0102S");
 	ReplaceCAM("CAM0104S", "CAM0104S");
+
 
 	//Tails
 	ReplaceSET("SET0110M", "TailsEC01");
@@ -95,7 +78,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0101K", "CAM0101K");
 	ReplaceCAM("CAM0102K", "CAM0102K");
 	ReplaceCAM("CAM0104K", "CAM0104K");
-
 
 	//Amy
 	ReplaceSET("SET0110A", "AmyEC01");

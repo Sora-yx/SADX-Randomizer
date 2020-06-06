@@ -51,26 +51,21 @@ void TwinklePark_Layout() {
 //	CurrentStageVersion = SonicVersion;
 //	CurrentMission = 0;
 
-	LoadSetFile(0, "0310");
+	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
 
-	const char* curVer = "0311"; //Sonic Version
+		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
+		{
+			string Set = SetFileArray[i].SetFile;
+			string Cam = SetFileArray[i].SetCam;
+			int act = SetFileArray[i].act;
 
-	switch (CurrentStageVersion)
-	{
-		case AmyVersion:
-			curVer = "0313";
-			break;
-		case BigVersion:
-			curVer = "0314";
-			break;
-		default:
-			CurrentStageVersion = SonicVersion;
-			break;
+			LoadSetFile(act, Set.c_str());
+			LoadCamFile(act, Cam.c_str());
+		}
 	}
 
-	LoadSetFile(1, curVer);
-	LoadSetFile(2, "0312");
-	TP_CAM();
+
+	//TP_CAM();
 
 	if (CurrentCharacter >= Characters_Gamma)
 	{
@@ -84,19 +79,15 @@ void TwinklePark_Layout() {
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((void*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
-	WriteData<1>((void*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
-	WriteData<1>((void*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
-	WriteData<1>((void*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
+	WriteData<5>((int*)0x61cb77, 0x90); //Fix Twinkle Park Act 2 crash when not Sonic-Amy-Big
+	WriteData<1>((char*)0x61cf97, 0x08); //Allow everyone to use Amy Twinkle Park transition part 1
+	WriteData<1>((int*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
+	WriteData<1>((int*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
 	
 	WriteCall((void*)0x61dd82, FixRCCharacterPosition); 
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
 
-	WriteData<5>((void*)0x422c4a, 0x90);
-	WriteData<5>((void*)0x422c59, 0x90);
-	WriteData<5>((void*)0x422c68, 0x90);
-	WriteData<5>((void*)0x422c74, 0x90);
-	WriteData<5>((void*)0x422c83, 0x90);
+	WriteData<72>((int*)0x422c4a, 0x90);
 
 	WriteCall((void*)0x422c92, TwinklePark_Layout); //TP random layout
 
@@ -119,8 +110,8 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	ReplaceSET("SET0310M", "Tails-TP-Act1");
 	ReplaceSET("SET0311M", "Tails-TP-Act2");
 	ReplaceSET("SET0312M", "Tails-TP-Act3");
-	ReplaceSET("SET0313M", "Tails-TP-Big");
-	ReplaceSET("SET0314M", "Tails-TP-Amy");
+	ReplaceSET("SET0313M", "Tails-TP-Amy");
+	ReplaceSET("SET0314M", "Tails-TP-Big");
 
 	ReplaceCAM("CAM0300M", "CAM0300M");
 	ReplaceCAM("CAM0301M", "CAM0301M");

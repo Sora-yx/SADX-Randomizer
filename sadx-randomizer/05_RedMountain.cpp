@@ -209,23 +209,18 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 {
 	//Initiliaze data
 
-	WriteData<5>((void*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
-	WriteData<1>((void*)0x608A1A, 0x08); //Allow the Trapdoor to open when Knuckles.
-	WriteData<1>((void*)0x606bba, 0x08); //Fix the rock bridge
-	WriteData<1>((void*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
-	WriteData<1>((void*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
-	WriteData<1>((void*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
+	WriteData<5>((int*)0x601595, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain act 2.
+	WriteData<1>((char*)0x608A1A, 0x08); //Allow the Trapdoor to open when Knuckles.
+	WriteData<1>((char*)0x606bba, 0x08); //Fix the rock bridge
+	WriteData<1>((char*)0x60405f, 0x74); //Allow everyone to destroy the rocks in RM. (Gamma layout.)
+	WriteData<1>((char*)0x60405e, 0x08); //Allow everyone to destroy the rocks in RM. part 2 (Gamma layout.)
+	WriteData<1>((char*)0x6027c5, 0x08); //Fix Red Mountain Lava (Gamma layout.)
 
 	//Allow Tails to do Red Mountain
-	WriteData<5>((void*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
-	WriteData<5>((void*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
+	WriteData<5>((int*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
+	WriteData<5>((int*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
 
-	WriteData<5>((void*)0x422d20, 0x90);
-	WriteData<5>((void*)0x422d2f, 0x90);
-	WriteData<5>((void*)0x422d3e, 0x90);
-	WriteData<5>((void*)0x422d4a, 0x90);
-	WriteData<5>((void*)0x422d59, 0x90);
-
+	WriteData<72>((int*)0x422d20, 0x90);
 	WriteCall((void*)0x422d68, RedMountain_Layout); //RM random act
 
 	RMObjects_Init(path, helperFunctions);

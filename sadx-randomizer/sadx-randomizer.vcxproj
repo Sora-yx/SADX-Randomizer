@@ -113,6 +113,7 @@
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />
     <ClCompile Include="EggWalker.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Missions.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="Music.cpp" />
@@ -121,7 +122,7 @@
     <ClCompile Include="Race.cpp" />
     <ClCompile Include="Randomizer_Main.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
-    <ClCompile Include="SandHill.cpp" />
+    <ClCompile Include="38_SandHill.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="StageSettings.cpp" />
     <ClCompile Include="stdafx.cpp">

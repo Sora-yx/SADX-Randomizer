@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 extern struct RandomizedEntry randomizedSets[40];
+using namespace std;
 
 bool isBossStage(short stage_id);
 bool isDuplicateMission(short curMission, short prevMission);
@@ -20,6 +21,7 @@ void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
 void MovePlayerToStartPoint_R(EntityData1* data);
+void LoadLevelFiles_R();
 
 extern bool RNGCharacters;
 extern bool RNGStages;
@@ -31,6 +33,7 @@ extern bool SA2M3;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
+extern std::string CharaString[6];
 extern uint32_t split;
 extern uint32_t TotalCount;
 extern char StorySplits;
@@ -91,6 +94,16 @@ struct SetLevelPosition
 	float YRot;
 };
 
+struct StringSetFile
+{
+	int16_t LevelID;
+	int8_t version;
+	int8_t act;
+	const char* SetFile;
+	const char* SetFileRando;
+	const char* SetCam;
+};
+
 
 enum CharacterStageVersion {
 
@@ -121,7 +134,7 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
 void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
 short getRandomMusic(RandomizedEntry entry);
-
+extern StringSetFile SetFileArray[51];
 void BackRingObj_Main(ObjectMaster* obj);
 
 void LoadTriggerObject();

@@ -55,6 +55,22 @@ void SpeedHighway_Layout() {
 	LoadSetFile(1, curVer2);
 	LoadSetFile(2, curVer3);
 
+	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
+
+		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
+		{
+			string Set = SetFileArray[i].SetFile;
+			string Cam = SetFileArray[i].SetCam;
+			int act = SetFileArray[i].act;
+
+			LoadSetFile(act, Set.c_str());
+			LoadCamFile(act, Cam.c_str());
+		}
+	}
+
+	if (CurrentStageVersion < SonicVersion || CurrentStageVersion > KnucklesVersion)
+		CurrentStageVersion = SonicVersion;
+
 	if (Race)
 		SelectBarRace();
 
@@ -238,14 +254,10 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 {
 	//Initiliaze data
 
-	WriteData<6>((void*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
+	WriteData<6>((int*)0x61006a, 0x90); // Allow Speed Highway act 2 for every characters.
 	WriteCall((void*)0x610272, SHAct2Position); //teleport player during SH act 2.
 
-	WriteData<5>((void*)0x422cb5, 0x90);
-	WriteData<5>((void*)0x422cc4, 0x90);
-	WriteData<5>((void*)0x422cd3, 0x90);
-	WriteData<5>((void*)0x422cdf, 0x90);
-	WriteData<5>((void*)0x422cee, 0x90);
+	WriteData<72>((int*)0x422cb5, 0x90);
 
 	WriteCall((void*)0x422cfd, SpeedHighway_Layout); //SH random layout
 	WriteJump((void*)0x47d527, CheckEggmanRaceWinner);
@@ -258,7 +270,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0412S", "Sonic-SH-Act3");
 	ReplaceSET("SET0413S", "Sonic-SH-Race");
 	ReplaceSET("SET0414S", "Sonic-SH-Knux");
-	ReplaceSET("SET0415S", "Sonic-SH-KnuxR");
 
 	ReplaceCAM("CAM0400S", "CAM0400S");
 	ReplaceCAM("CAM0401S", "CAM0401S");
@@ -272,7 +283,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceSET("SET0412M", "Tails-SH-Act3");
 	ReplaceSET("SET0413M", "Tails-SH-Race");
 	ReplaceSET("SET0414M", "Tails-SH-Knux");
-	ReplaceSET("SET0415M", "Tails-SH-KnuxR");
 
 	ReplaceCAM("CAM0400M", "CAM0400M");
 	ReplaceCAM("CAM0401M", "CAM0401M");
@@ -306,8 +316,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0401A", "CAM0401A");
 	ReplaceCAM("CAM0402A", "CAM0402A");
 	ReplaceCAM("CAM0405A", "CAM0405A");
-
-
 	//Big
 	ReplaceSET("SET0410B", "Big-SH-Act1");
 	ReplaceSET("SET0411B", "Big-SH-Act2");
@@ -321,7 +329,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0402B", "CAM0402B");
 	ReplaceCAM("CAM0405B", "CAM0405B");
 
-
 	//Gamma
 	ReplaceSET("SET0410E", "Gamma-SH-Act1");
 	ReplaceSET("SET0411E", "Gamma-SH-Act2");
@@ -334,5 +341,4 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0401E", "CAM0401E");
 	ReplaceCAM("CAM0402E", "CAM0402E");
 	ReplaceCAM("CAM0405E", "CAM0405E");
-
 }

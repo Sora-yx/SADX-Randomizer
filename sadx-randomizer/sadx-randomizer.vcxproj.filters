@@ -150,9 +150,6 @@
     <ClCompile Include="PerfectChaos.cpp">
       <Filter>Source Files\Bosses</Filter>
     </ClCompile>
-    <ClCompile Include="SandHill.cpp">
-      <Filter>Source Files\Levels</Filter>
-    </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
@@ -170,6 +167,12 @@
     </ClCompile>
     <ClCompile Include="ObjectCommon.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="38_SandHill.cpp">
+      <Filter>Source Files\Levels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

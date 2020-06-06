@@ -13,8 +13,9 @@ void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helper
 	WriteCall((void*)0x624b00, HedgehogHammerTrick);
 	WriteCall((void*)0x62519c, HedgehogHammerTrick);
 
-	WriteData<1>((void*)0x62662F, 0x06);
+	WriteData<1>((char*)0x62662F, 0x06);
 	WriteCall((void*)0x626744, HedgehogHammerResult);
+
 
 	//Sonic
 	ReplaceSET("SET0000S", "Sonic-HH");

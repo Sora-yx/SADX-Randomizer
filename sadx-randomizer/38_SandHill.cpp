@@ -5,8 +5,8 @@
 
 void GetCurrentCharacterSD() {
 
-	WriteData<1>((void*)0x798306, 0x84);
-	WriteData<1>((void*)0x7983c4, 0x7F);
+	WriteData<1>((int*)0x798306, 0x84);
+	WriteData<1>((int*)0x7983c4, 0x7F);
 	LoadCamFile(1, "SBoard01");
 
 	 return;

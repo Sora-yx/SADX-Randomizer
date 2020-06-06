@@ -92,20 +92,19 @@ void CheckAndSet_HotShelterFunctions() {
 	{
 		//Make Big Hot Shelter stuff (secret door etc.) work for everyone.
 		 //open the door when you activate the switch. (if < 8)
-		WriteData<1>((void*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
-		WriteData<1>((void*)0x59a3bc, 0x74); //makes the second switch working for everyone.
-		WriteData<1>((void*)0x59a125, 0x08);
-		WriteData<1>((void*)0x59a126, 0x74);
+		WriteData<1>((int*)0x5aaf14, 0x9C); //Open the door for everyone. (from SETZ to SETL: if < 8)
+		WriteData<1>((int*)0x59a3bc, 0x74); //makes the second switch working for everyone.
+		WriteData<1>((int*)0x59a125, 0x08);
+		WriteData<1>((int*)0x59a126, 0x74);
 	}
 	else
 	{
 		//Restore Big Hot Shelter functions to Vanilla so it will fix HS act 1 and 2 when Amy layout.
-		WriteData<1>((void*)0x5aaf14, 0x94);
-		WriteData<1>((void*)0x59a3bc, 0x75);
-		WriteData<1>((void*)0x59a125, 0x07);
-		WriteData<1>((void*)0x59a126, 0x75);
-
-		WriteData<6>((void*)0x442249, 0x90); //Fix Puzzle Box drop
+		WriteData<1>((int*)0x5aaf14, 0x94);
+		WriteData<1>((int*)0x59a3bc, 0x75);
+		WriteData<1>((int*)0x59a125, 0x07);
+		WriteData<1>((int*)0x59a126, 0x75);
+		WriteData<6>((int*)0x442249, 0x90); //Fix Puzzle Box drop
 	}
 }
 
@@ -464,17 +463,17 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 {
 	//Initiliaze data
 
-	WriteData<5>((void*)0x42300b, 0x90);
-	WriteData<5>((void*)0x42301a, 0x90);
-	WriteData<5>((void*)0x423029, 0x90);
-	WriteData<5>((void*)0x423038, 0x90);
-	WriteData<5>((void*)0x423044, 0x90);
-	WriteData<5>((void*)0x423053, 0x90);
-	WriteData<5>((void*)0x423062, 0x90);
+	WriteData<5>((int*)0x42300b, 0x90);
+	WriteData<5>((int*)0x42301a, 0x90);
+	WriteData<5>((int*)0x423029, 0x90);
+	WriteData<5>((int*)0x423038, 0x90);
+	WriteData<5>((int*)0x423044, 0x90);
+	WriteData<5>((int*)0x423053, 0x90);
+	WriteData<5>((int*)0x423062, 0x90);
 
 	WriteCall((void*)0x423071, HotShelter_Layout); //HS Custom Layout
-	WriteData<1>((void*)0x5aaf12, 0x08); //Big HS Stuff
-	WriteData<1>((void*)0x59a3bb, 0x08);
+	WriteData<1>((char*)0x5aaf12, 0x08); //Big HS Stuff
+	WriteData<1>((char*)0x59a3bb, 0x08);
 
 	HSObjects_Init(path, helperFunctions);
 

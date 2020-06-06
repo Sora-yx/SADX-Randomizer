@@ -43,7 +43,8 @@ void IC_Layout() {
 	{
 		case SonicVersion:
 		default:
-			CurrentStageVersion = SonicVersion;
+			if (CurrentStageVersion != BigVersion)
+				CurrentStageVersion = SonicVersion;
 			LoadSetFile(2, "0812");
 			break;
 		case TailsVersion:
@@ -149,13 +150,13 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x4ec065, AddRingIceCap);
 	WriteCall((void*)0x4ecf8f, FixTailsVictoryIC);
 
-	WriteData<5>((void*)0x422e66, 0x90);
-	WriteData<5>((void*)0x422e75, 0x90);
-	WriteData<5>((void*)0x422e84, 0x90);
-	WriteData<5>((void*)0x422e93, 0x90);
-	WriteData<5>((void*)0x422e9f, 0x90);
-	WriteData<5>((void*)0x422eae, 0x90);
-	WriteData<5>((void*)0x422ebd, 0x90);
+	WriteData<5>((int*)0x422e66, 0x90);
+	WriteData<5>((int*)0x422e75, 0x90);
+	WriteData<5>((int*)0x422e84, 0x90);
+	WriteData<5>((int*)0x422e93, 0x90);
+	WriteData<5>((int*)0x422e9f, 0x90);
+	WriteData<5>((int*)0x422eae, 0x90);
+	WriteData<5>((int*)0x422ebd, 0x90);
 
 	WriteCall((void*)0x422ecc, IC_Layout);
 

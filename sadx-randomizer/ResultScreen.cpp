@@ -80,13 +80,7 @@ void DisableTimeStuff() {
 
 void ReleaseScoreTexture() {
 
-	ResetValueWhileLevelResult();
 
-	if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
-	{
-		GameMode = GameModes_Adventure_Field; //fix game crash
-		AddCustomFlag(); //Add a flag for story progression.
-	}
 
 	njReleaseTexture(&SCORE_RESULT_TEXLIST);
 	return;
