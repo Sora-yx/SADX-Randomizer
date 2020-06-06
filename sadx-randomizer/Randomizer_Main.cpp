@@ -282,7 +282,6 @@ void SetRandomStageAct(char stage, char act) {
 			{
 				UnloadCharTextures(CurCharacter());
 				CurrentCharacter = randomizedSets[levelCount].character;
-
 				SonicRand = randomizedSets[levelCount].sonic_transfo;
 
 				if (SonicRand == 1)
@@ -324,18 +323,15 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
-		AddCustomFlag();
-
+		
 		if (RNGCharacters)
 		{
 			UnloadCharTextures(CurCharacter());
 			CurrentCharacter = randomizedSets[levelCount].character;
-
 			SonicRand = randomizedSets[levelCount].sonic_transfo;
 
 			if (SonicRand == 1)
 				MetalSonicFlag = SonicRand;
-
 		}
 
 		if (isAIAllowed)

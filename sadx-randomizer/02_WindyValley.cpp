@@ -39,7 +39,6 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
-	Load_ObjectsCommon();
 
 	switch (CurrentStageVersion)
 	{
@@ -53,6 +52,10 @@ void WindyValley_Layout() {
 		break;
 	}
 
+	if (CurrentAct == 2)
+		CurrentStageVersion = TailsVersion;
+
+	Load_ObjectsCommon();
 	LoadSetAndCamLayout();
 
 	if (Race)

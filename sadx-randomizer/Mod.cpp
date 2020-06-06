@@ -175,7 +175,9 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "CP HIT", RestartLevel.CheckpointHit);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Stage Ver %d", CurrentStageVersion);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "levelCount %d", levelCount);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Flag Progress %d", CustomFlag);
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "RESTART", RestartLevel.anonymous_0);
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
@@ -207,8 +209,8 @@ extern "C" {
 				SwapDelay++;
 
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-				EntityData1Ptrs[0]->Position = { 5840.53, 400, 728.434 };
-				//AISwitch();
+				AISwitch();
+				//EntityData1Ptrs[0]->Position = { 5840.53, 400, 728.434 };
 
 			//Rings Mission 2 and Treasure Hunting Check
 			MissionResultCheck();

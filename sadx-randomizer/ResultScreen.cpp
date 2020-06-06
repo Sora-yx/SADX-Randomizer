@@ -25,7 +25,7 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
-	if (CurrentLevel == LevelIDs_SandHill)
+	/*if (CurrentLevel == LevelIDs_SandHill)
 	{
 		ResetValueWhileLevelResult();
 		if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages)
@@ -33,7 +33,7 @@ void DisableTimeStuff() {
 			GameMode = GameModes_Adventure_Field; //fix game crash
 			AddCustomFlag(); //Add a flag for story progression.
 		}
-	}
+	}*/
 
 	ringsPB += Rings; //total Rings credit stat
 

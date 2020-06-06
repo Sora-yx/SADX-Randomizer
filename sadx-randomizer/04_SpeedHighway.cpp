@@ -27,7 +27,7 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
-	//CurrentStageVersion = KnucklesVersion;
+	CurrentStageVersion = TailsVersion;
 	//CurrentMission = 3;
 	Load_ObjectsCommon();
 
@@ -52,7 +52,6 @@ void SpeedHighway_Layout() {
 	if (Race)
 		SelectBarRace();
 
-	CamSpeedHighway();
 	return;
 }
 
@@ -252,6 +251,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400S", "CAM0400S");
 	ReplaceCAM("CAM0401S", "CAM0401S");
 	ReplaceCAM("CAM0402S", "CAM0402S");
+	ReplaceCAM("CAM0403S", "CAM0403S");
 	ReplaceCAM("CAM0405S", "CAM0405S");
 
 
@@ -265,6 +265,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400M", "CAM0400M");
 	ReplaceCAM("CAM0401M", "CAM0401M");
 	ReplaceCAM("CAM0402M", "CAM0402M");
+	ReplaceCAM("CAM0403M", "CAM0403M");
 	ReplaceCAM("CAM0405M", "CAM0405M");
 
 
@@ -279,6 +280,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400K", "CAM0400K");
 	ReplaceCAM("CAM0401K", "CAM0401K");
 	ReplaceCAM("CAM0402K", "CAM0402K");
+	ReplaceCAM("CAM0403K", "CAM0403K");
 	ReplaceCAM("CAM0405K", "CAM0405K");
 
 
@@ -293,6 +295,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400A", "CAM0400A");
 	ReplaceCAM("CAM0401A", "CAM0401A");
 	ReplaceCAM("CAM0402A", "CAM0402A");
+	ReplaceCAM("CAM0403A", "CAM0403A");
 	ReplaceCAM("CAM0405A", "CAM0405A");
 	//Big
 	ReplaceSET("SET0410B", "Big-SH-Act1");
@@ -305,6 +308,7 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400B", "CAM0400B");
 	ReplaceCAM("CAM0401B", "CAM0401B");
 	ReplaceCAM("CAM0402B", "CAM0402B");
+	ReplaceCAM("CAM0403B", "CAM0403B");
 	ReplaceCAM("CAM0405B", "CAM0405B");
 
 	//Gamma
@@ -318,5 +322,6 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	ReplaceCAM("CAM0400E", "CAM0400E");
 	ReplaceCAM("CAM0401E", "CAM0401E");
 	ReplaceCAM("CAM0402E", "CAM0402E");
+	ReplaceCAM("CAM0403E", "CAM0403E");
 	ReplaceCAM("CAM0405E", "CAM0405E");
 }

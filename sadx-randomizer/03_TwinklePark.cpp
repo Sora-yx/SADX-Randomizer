@@ -45,22 +45,21 @@ void TP_CAM() {
 
 void TwinklePark_Layout() {
 
-	fixTCCart();
-	Load_ObjectsCommon();
-
 //	CurrentStageVersion = SonicVersion;
 //	CurrentMission = 0;
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
 
-	LoadSetAndCamLayout();
-
 	if (CurrentCharacter >= Characters_Gamma)
 	{
 		WriteData<1>((void*)0x798306, 0x84);
 		WriteData<1>((void*)0x7983c4, 0x7F);
 	}
+
+	fixTCCart();
+	Load_ObjectsCommon();
+	LoadSetAndCamLayout();
 
 	return;
 }

@@ -4,8 +4,6 @@
 #include "ActsSettings.h"
 #include <fstream>
 #include <iostream>
-
-
 #define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Emerald Coast\\" B ".bin")
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
