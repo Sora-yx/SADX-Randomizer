@@ -27,7 +27,7 @@ int8_t CurrentStageVersion = 0;
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
 int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
-string CharaString[6] = { "Sonic", "Miles", "Knux", "Amy", "Gamma", "Big" };
+
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
@@ -455,7 +455,6 @@ void Create_NewRNG() {
 
 void Randomizer_GetNewRNG() {
 
-	ResetValueWhileLevelResult();
 	TotalCount = 0;
 	levelCount = 0;
 	split = 0;

@@ -175,8 +175,8 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Stage Ver %d", CurrentStageVersion);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "levelCount %d", levelCount);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Cur Stage Ver %d", CurrentStageVersion);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "levelCount %d", levelCount);
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Flag Progress %d", CustomFlag);
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "RESTART", RestartLevel.anonymous_0);
 		
@@ -199,8 +199,8 @@ extern "C" {
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
-		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
-			CustomFlagCheck(); //When loading, Check flag and credits
+			/*if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
+				CustomFlagCheck(); //When loading, Check flag and credits*/
 
 		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9 || GameMode == 24))
 		{

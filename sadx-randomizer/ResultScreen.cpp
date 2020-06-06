@@ -3,6 +3,7 @@
 #include "CharactersSettings.h"
 #include "StageSettings.h"
 #include "Utils.h"
+#include "Trampoline.h"
 
 
 extern bool RandCongratsDone;
@@ -17,6 +18,8 @@ extern bool CasinoTails;
 
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
+
+	AddCustomFlag();
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
@@ -78,13 +81,6 @@ void DisableTimeStuff() {
 	return;
 }
 
-void ReleaseScoreTexture() {
-
-
-
-	njReleaseTexture(&SCORE_RESULT_TEXLIST);
-	return;
-}
 
 
 void SetResultsCamera()
@@ -453,6 +449,8 @@ void SoftReset_R() {
 
 	return FUN_00412ad0();
 }
+
+
 
 void TrialModeQuit_R() {
 	if (LevelCopy != 0 && Credits_State == 0)

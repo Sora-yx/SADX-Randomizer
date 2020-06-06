@@ -97,7 +97,6 @@ void AddCustomFlag() {
 		}
 	}
 
-	njReleaseTexture(&SCORE_BACK_TEXLIST);
 	return;	
 }
 

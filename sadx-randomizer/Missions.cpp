@@ -273,7 +273,8 @@ int DisplayTitleCard_r() {
 		return DisplayTitleCard();
 	}
 	else {
-		if (++TitleCardCounter > TitleCardDispTime) return 1;
+		if (++TitleCardCounter > TitleCardDispTime) 
+			return 1;
 	}
 
 	return 0;
@@ -302,7 +303,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 			TitleCardDispTime = minDispTime;
 		}
 
-		LoadPVM("textures\\RandomTitleCard", &CurrentCardTexture);
+		LoadPVM("RandomTitleCard", &CurrentCardTexture);
 		CurrentCardTexturePtr = &CurrentCardTexture;
 	}
 
@@ -320,7 +321,6 @@ void TitleCard_Init() {
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
-	help.ReplaceFile("system\\Missions.pvm", "system\\textures\\Missions.pvmx");
 }
 
 
