@@ -13,23 +13,11 @@
 
 void EC_Layout() {
 
+	if (CurrentStageVersion != GammaVersion && CurrentStageVersion != BigVersion)
+		CurrentStageVersion = SonicVersion;
 
-	CurrentStageVersion = SonicVersion;
 	Load_ObjectsCommon();
-
-	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
-
-		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
-		{
-			string Set = SetFileArray[i].SetFile;
-			string Cam = SetFileArray[i].SetCam;
-			int act = SetFileArray[i].act;
-			
-			LoadSetFile(act, Set.c_str());
-			LoadCamFile(act, Cam.c_str());
-		}
-	}
-
+	LoadSetAndCamLayout();
 	return;
 }
 

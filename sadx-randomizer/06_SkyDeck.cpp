@@ -34,32 +34,17 @@ void SkyDeck_Layout() {
 
 	//CurrentStageVersion = KnucklesVersion;
 	//CurrentMission = 0;
-	const char* act1Version = "0610";
-	const char* act3Version = "0612";
 
-	switch (CurrentStageVersion)
-	{
-		case SonicVersion:
-		default:
-			CurrentStageVersion = SonicVersion;
-			break;
-		case TailsVersion:
-			act1Version = "0613";
-			break;
-		case KnucklesVersion:
-			SetRNGKnuckles();
-			act3Version = "0614"; 
-			break;
-	}
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
+		CurrentStageVersion = SonicVersion;
 
-	LoadSetFile(0, act1Version); 
-	LoadSetFile(1, "0611");
-	LoadSetFile(2, act3Version);
+	if (CurrentStageVersion == KnucklesVersion)
+		SetRNGKnuckles();
+
+	LoadSetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();
-
-	Cam_SkyDeck();
 
 	return;
 }

@@ -31,10 +31,6 @@ void SpeedHighway_Layout() {
 	//CurrentMission = 3;
 	Load_ObjectsCommon();
 
-	const char* curVer = "0410"; 
-	const char* curVer2 = "0411"; 
-	const char* curVer3 = "0412"; 
-
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
@@ -42,34 +38,16 @@ void SpeedHighway_Layout() {
 		CurrentStageVersion = SonicVersion;
 		break;
 	case TailsVersion:
-		curVer = "0413";
+		if (CurrentMission < Mission2_100Rings)
+			Race = true;
 		break;
 	case KnucklesVersion:
 		isKnucklesVersion = true;
 		SetRNGKnuckles();
-		curVer3 = "0414";
 		break;
 	}
 
-	LoadSetFile(0, curVer); 
-	LoadSetFile(1, curVer2);
-	LoadSetFile(2, curVer3);
-
-	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
-
-		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
-		{
-			string Set = SetFileArray[i].SetFile;
-			string Cam = SetFileArray[i].SetCam;
-			int act = SetFileArray[i].act;
-
-			LoadSetFile(act, Set.c_str());
-			LoadCamFile(act, Cam.c_str());
-		}
-	}
-
-	if (CurrentStageVersion < SonicVersion || CurrentStageVersion > KnucklesVersion)
-		CurrentStageVersion = SonicVersion;
+	LoadSetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();

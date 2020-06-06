@@ -41,24 +41,22 @@ void WindyValley_Layout() {
 
 	Load_ObjectsCommon();
 
-	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
-
-		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
-		{
-			string Set = SetFileArray[i].SetFile;
-			string Cam = SetFileArray[i].SetCam;
-			int act = SetFileArray[i].act;
-
-			LoadSetFile(act, Set.c_str());
-			LoadCamFile(act, Cam.c_str());
-		}
+	switch (CurrentStageVersion)
+	{
+	case SonicVersion:
+	default:
+		CurrentStageVersion = SonicVersion;
+		break;
+	case TailsVersion:
+		if (CurrentMission < Mission2_100Rings)
+			Race = true;
+		break;
 	}
 
+	LoadSetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();
-
-	//Cam_WV();
 
 	return;
 }

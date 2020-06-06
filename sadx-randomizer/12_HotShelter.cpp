@@ -25,22 +25,12 @@ void CamHotShelter() {
 
 void HotShelter_Layout() {
 
-/*	CurrentStageVersion = GammaVersion;
-	CurrentMission = 3;*/
+	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
+		CurrentStageVersion = AmyVersion;
 
 	Load_ObjectsCommon();
-
-	if (CurrentStageVersion == BigVersion)
-		LoadSetFile(0, "1213"); //Big Version
-	else
-		LoadSetFile(0, "1210"); //Amy Version
-
-	LoadSetFile(1, "1211");
-	LoadSetFile(2, "1212");
-	LoadSetFile(3, "1203");
+	LoadSetAndCamLayout();
 	CheckAndSet_HotShelterFunctions();
-	CamHotShelter();
-
 	return;
 }
 

@@ -15,19 +15,15 @@ void Casino_Layout() {
 	//CurrentStageVersion = KnucklesVersion;
 	Load_ObjectsCommon();
 
-	const char* act1Version = "0910";
-	const char* act2Version = "0911";
-	const char* camAct1Version = "0900";
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
+		CurrentStageVersion = SonicVersion;
+
+	LoadSetAndCamLayout();
 
 		switch (CurrentStageVersion)
 		{
-			case SonicVersion:
-			default:
-				CurrentStageVersion = SonicVersion;
-				break;
 			case TailsVersion:
 				CasinoTails = true;
-				act2Version = "0912";
 				if (CurrentMission < Mission2_100Rings)
 					Race = true;
 				else
@@ -35,19 +31,9 @@ void Casino_Layout() {
 				break;
 			case KnucklesVersion:
 				SetRNGKnuckles();
-				act1Version = "0913";
-				camAct1Version = "0906";
 				break;
 		}
 
-		LoadSetFile(0, act1Version);
-		LoadSetFile(1, act2Version);
-		LoadSetFile(2, "0902");
-		LoadSetFile(3, "0903");
-		LoadCamFile(0, camAct1Version);
-		LoadCamFile(1, "0901");
-		LoadCamFile(2, "0902");
-		LoadCamFile(3, "0903");
 
 	if (Race)
 		SelectBarRace();

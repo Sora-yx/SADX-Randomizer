@@ -23,25 +23,16 @@ void Cam_LW() {
 void LW_Layout() {
 
 	Load_ObjectsCommon();
-	LoadSetFile(0, "0710");
 
-	switch (CurrentStageVersion)
+	if (CurrentStageVersion != KnucklesVersion)
+		CurrentStageVersion = SonicVersion;
+	else
 	{
-		case SonicVersion:
-		default:
-			CurrentStageVersion = SonicVersion;
-			LoadSetFile(1, "0711"); 
-			break;
-		case KnucklesVersion:
-			isKnucklesVersion = true;
-			LoadSetFile(1, "0713"); //Knux Treasure Hunting
-			SetRNGKnuckles();
-			break;
+		isKnucklesVersion = true;
+		SetRNGKnuckles();
 	}
 
-	LoadSetFile(2, "0712");
-	Cam_LW();
-
+	LoadSetAndCamLayout();
 	return;
 }
 

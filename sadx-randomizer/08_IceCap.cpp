@@ -35,33 +35,18 @@ void IC_Layout() {
 		}
 	}
 
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion)
+		CurrentStageVersion = SonicVersion;
 
-	LoadSetFile(0, "0810"); //M1
-	LoadSetFile(1, "0811"); //M1
+	LoadSetAndCamLayout();
 
-	switch (CurrentStageVersion)
-	{
-		case SonicVersion:
-		default:
-			if (CurrentStageVersion != BigVersion)
-				CurrentStageVersion = SonicVersion;
-			LoadSetFile(2, "0812");
-			break;
-		case TailsVersion:
-			LoadSetFile(2, "0814"); //Tails Race
-			if (CurrentMission < Mission2_100Rings)
-				Race = true;
-			else
-				Race = false;
-			break;	
+	if (CurrentStageVersion == TailsVersion) {
+
+		if (CurrentMission < Mission2_100Rings)
+			Race = true;
+		else
+			Race = false;
 	}
-	
-	LoadSetFile(3, "0813"); 
-
-	LoadCamFile(0, "0800");
-	LoadCamFile(1, "0801");
-	LoadCamFile(2, "0802");
-	LoadCamFile(3, "0803");
 
 	if (Race)
 		SelectBarRace();

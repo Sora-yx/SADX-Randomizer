@@ -27,30 +27,17 @@ void RedMountain_Layout() {
 
 	Load_ObjectsCommon();
 
-	LoadSetFile(0, "0510");
-	const char* act2Version = "0511";
+	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
+		CurrentStageVersion = SonicVersion;
 
-		switch (CurrentStageVersion)
-		{
-			default:
-			case SonicVersion:
-				CurrentStageVersion = SonicVersion;
-				break;
-			case GammaVersion:
-				act2Version = "0513";
-				break;
-			case KnucklesVersion:
-				isKnucklesVersion = true;
-				SetRNGKnuckles();
-				break;
-		}
+	if (CurrentStageVersion == KnucklesVersion)
+	{
+		isKnucklesVersion = true;
+		SetRNGKnuckles();
+	}
 
-		LoadSetFile(1, act2Version); //load Gamma version
-		LoadSetFile(2, "0512");
-	
-
+	LoadSetAndCamLayout();
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
-	CamRedMountain();
 	return;
 }
 
