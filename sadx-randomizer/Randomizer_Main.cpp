@@ -32,6 +32,10 @@ int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Ch
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
 int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
+//Initiliaze banned Vanilla stage (if option is enabled)
+int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
+int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
+
 RandomizerGenerator RandoStageArray[50]{
 
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
@@ -69,11 +73,11 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_HotShelter3, GammaVersion, Characters_Gamma },
 	{LevelAndActIDs_Chaos0, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos2, BossVersion, Characters_Knuckles },
-	{LevelAndActIDs_Chaos4, BossVersion, Characters_Sonic | Characters_Tails | Characters_Knuckles},
+	{LevelAndActIDs_Chaos4, BossVersion, Characters_Knuckles},
 	{LevelAndActIDs_Chaos6, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Chaos6Two, BossVersion, Characters_Knuckles },
 	{LevelAndActIDs_PerfectChaos, BossVersion, Characters_Sonic },
-	{LevelAndActIDs_EggHornet, BossVersion, Characters_Sonic | Characters_Tails },
+	{LevelAndActIDs_EggHornet, BossVersion, Characters_Tails },
 	{LevelAndActIDs_EggWalker, BossVersion, Characters_Tails},
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
@@ -83,7 +87,7 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_TwinkleCircuit4, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
-	{LevelAndActIDs_SandHill, TailsVersion, Characters_Sonic | Characters_Tails},
+	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
 };		
 
 
@@ -95,13 +99,14 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (isStageBanned(generated, Char_id) || DupliCheck && isDuplicateStage(generated));
+	} while (isStageBanned(generated, Char_id) || !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs & 0xf;
 	entry->Layout = generated->version;
 	return;
 }
+
 
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 {
@@ -129,6 +134,26 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 
 	return false;
 }
+
+
+bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
+{
+
+	short curSingleLevel = generated->levelAndActs >> 8;
+	uint8_t curBannedChar = generated->bannedChar;
+
+	if (curBannedChar == char_id)
+		return true;
+
+	for (uint8_t i = 0; i < LengthOfArray(bannedRegularSonicAndTails); i++)
+	{
+		if (curSingleLevel == bannedRegularSonicAndTails[i] && (char_id == Characters_Sonic || char_id == Characters_Tails))
+			return true;
+	}
+	
+	return false;
+}
+
 
 
 vector<RandomizerGenerator> DuplicateStages;

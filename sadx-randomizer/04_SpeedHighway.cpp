@@ -47,7 +47,7 @@ void SpeedHighway_Layout() {
 		break;
 	}
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();

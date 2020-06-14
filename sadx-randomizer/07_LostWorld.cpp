@@ -32,7 +32,7 @@ void LW_Layout() {
 		SetRNGKnuckles();
 	}
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

@@ -29,7 +29,7 @@ void HotShelter_Layout() {
 		CurrentStageVersion = AmyVersion;
 
 	Load_ObjectsCommon();
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 	CheckAndSet_HotShelterFunctions();
 	return;
 }

@@ -59,7 +59,7 @@ void TwinklePark_Layout() {
 
 	fixTCCart();
 	Load_ObjectsCommon();
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 	return;
 }

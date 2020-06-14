@@ -56,7 +56,7 @@ void WindyValley_Layout() {
 		CurrentStageVersion = TailsVersion;
 
 	Load_ObjectsCommon();
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();

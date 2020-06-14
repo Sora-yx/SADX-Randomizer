@@ -345,7 +345,7 @@ void RestorePuzzleBoxVanillaThing() {
 	return;
 }
 
-void ResetValueWhileLevelResult() {
+void ResetValueAndObjects() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
 	isGameOver = false;

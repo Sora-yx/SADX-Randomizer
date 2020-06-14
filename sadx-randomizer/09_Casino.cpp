@@ -18,7 +18,7 @@ void Casino_Layout() {
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 		switch (CurrentStageVersion)
 		{

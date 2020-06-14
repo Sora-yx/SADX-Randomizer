@@ -36,7 +36,7 @@ void RedMountain_Layout() {
 		SetRNGKnuckles();
 	}
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
 	return;
 }

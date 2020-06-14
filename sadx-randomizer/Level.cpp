@@ -166,7 +166,9 @@ StringSetFile SetFileArray[51]{
 };
 
 
-void LoadSetAndCamLayout() {
+void LoadRando_SetAndCamLayout() {
+
+	bool isLoaded = false;
 
 	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
 
@@ -175,13 +177,23 @@ void LoadSetAndCamLayout() {
 			string Set = SetFileArray[i].SetFile;
 			string Cam = SetFileArray[i].SetCam;
 			int act = SetFileArray[i].act;
-
 			LoadSetFile(act, Set.c_str());
 			LoadCamFile(act, Cam.c_str());
+			isLoaded = true;
 		}
 	}
+
+	if (!isLoaded)
+	{
+		PrintDebug("Error, couldn't load Randomizer layout");
+		LoadSetFile(0, "SET0000");
+		LoadCamFile(0, "CAM0000");
+	}
+
+	return;
 }
 
+/*
 void __cdecl RunLevelDestructor_r(int heap);
 Trampoline RunLevelDestructor_t((int)RunLevelDestructor, (int)RunLevelDestructor + 0x6, RunLevelDestructor_r);
 
@@ -196,4 +208,20 @@ void __cdecl RunLevelDestructor_r(int heap) {
 
 	FunctionPointer(void, original, (int heap), RunLevelDestructor_t.Target());
 	original(heap);
+}*/
+
+
+static void LoadLevelFiles_r();
+static Trampoline LoadLevelFiles_t((int)LoadLevelFiles, (int)LoadLevelFiles + 0x8, LoadLevelFiles_r);
+
+
+void __cdecl LoadLevelFiles_r() {
+
+	ResetValueAndObjects();
+
+	if (LevelCopy != 0 && (LastLevel < LevelIDs_StationSquare || LastLevel >= LevelIDs_TwinkleCircuit && LastLevel <= LevelIDs_SandHill))
+		CustomFlag++;
+	
+	auto original = reinterpret_cast<decltype(LoadLevelFiles_r)*>(LoadLevelFiles_t.Target());
+	original();
 }

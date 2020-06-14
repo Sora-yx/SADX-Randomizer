@@ -38,7 +38,7 @@ void IC_Layout() {
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 	if (CurrentStageVersion == TailsVersion) {
 

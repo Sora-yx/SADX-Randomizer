@@ -65,7 +65,7 @@ void DeleteCustomFlag() {
 	if (CurrentLevel == 0 && GameMode == 12 && !DemoPlaying)
 	{
 		DeleteCreditStats();
-		ResetValueWhileLevelResult();
+		ResetValueAndObjects();
 		if (SeedCopy != 0 && (CustomFlag != 0 || levelCount != 0))
 		{
 			levelCount = 0;

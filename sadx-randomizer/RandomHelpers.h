@@ -4,47 +4,6 @@
 extern struct RandomizedEntry randomizedSets[40];
 using namespace std;
 
-bool isBossStage(short stage_id);
-bool isDuplicateMission(short curMission, short prevMission);
-uint8_t GetRandomSonicTransfo(uint8_t char_id);
-void SetRandomStageAct(char stage, char act);
-void GoToNextLevel_hook(char stage, char act);
-void Split_Init();
-void AIAudioFixes();
-
-void FixRMLava();
-short randomSA2Mission(short stage_id);
-short getRandomAI(uint8_t char_id, short stage_id);
-short getRandomRaceAI(RandomizedEntry entry);
-void Randomizer_GetNewRNG();
-void SelectBarRace();
-void TwinkleCircuitMusic();
-void RandomizeStages_Hook();
-void MovePlayerToStartPoint_R(EntityData1* data);
-void LoadSetAndCamLayout();
-
-
-extern bool RNGCharacters;
-extern bool RNGStages;
-extern bool Vanilla;
-extern bool DupliCheck;
-extern int ban;
-extern bool SA2M2;
-extern bool SA2M3;
-extern bool MetalSonic;
-extern bool SuperSonic;
-extern bool banCharacter[8];
-extern std::string CharaString[6];
-extern uint32_t split;
-extern uint32_t TotalCount;
-extern char StorySplits;
-extern bool isChaoGameplayAllowed;
-extern uint8_t SwapDelay;
-extern bool ChaoSpawn;
-extern bool isTailsVersion;
-extern bool isPlayerInWaterSlide;
-HelperFunctions extern help;
-
 
 struct RandomizedEntry
 {
@@ -77,7 +36,7 @@ enum StageVariation {
 	AmyVersion = 5,
 	GammaVersion,
 	BigVersion,
-	
+
 };
 
 struct RandomizerGenerator {
@@ -130,7 +89,52 @@ enum CurSplits {
 };
 
 
+bool isBossStage(short stage_id);
+bool isDuplicateMission(short curMission, short prevMission);
+uint8_t GetRandomSonicTransfo(uint8_t char_id);
+void SetRandomStageAct(char stage, char act);
+void GoToNextLevel_hook(char stage, char act);
+void Split_Init();
+void AIAudioFixes();
+
+void FixRMLava();
+short randomSA2Mission(short stage_id);
+short getRandomAI(uint8_t char_id, short stage_id);
+short getRandomRaceAI(RandomizedEntry entry);
+void Randomizer_GetNewRNG();
+void SelectBarRace();
+void TwinkleCircuitMusic();
+void RandomizeStages_Hook();
+void MovePlayerToStartPoint_R(EntityData1* data);
+void LoadRando_SetAndCamLayout();
+
+
+extern bool RNGCharacters;
+extern bool RNGStages;
+extern bool Vanilla;
+extern bool DupliCheck;
+extern int ban;
+extern bool SA2M2;
+extern bool SA2M3;
+extern bool MetalSonic;
+extern bool SuperSonic;
+extern bool banCharacter[8];
+extern std::string CharaString[6];
+extern uint32_t split;
+extern uint32_t TotalCount;
+extern char StorySplits;
+extern bool isChaoGameplayAllowed;
+extern uint8_t SwapDelay;
+extern bool ChaoSpawn;
+extern bool isTailsVersion;
+extern bool isPlayerInWaterSlide;
+HelperFunctions extern help;
+
+
+
+
 uint8_t getRandomCharacter();
+bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id);
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
 void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
@@ -445,7 +449,7 @@ void TrialModeQuit_R();
 void FixRestart_Stuff();
 void Delete_Cart();
 void LoadCamFilePC_R();
-void ResetValueWhileLevelResult();
+void ResetValueAndObjects();
 
 void AddRingSandHill();
 void fixTCCart();

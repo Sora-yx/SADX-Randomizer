@@ -41,7 +41,7 @@ void SkyDeck_Layout() {
 	if (CurrentStageVersion == KnucklesVersion)
 		SetRNGKnuckles();
 
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 
 	if (Race)
 		SelectBarRace();

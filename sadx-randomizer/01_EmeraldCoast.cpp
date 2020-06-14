@@ -15,7 +15,7 @@ void EC_Layout() {
 		CurrentStageVersion = SonicVersion;
 
 	Load_ObjectsCommon();
-	LoadSetAndCamLayout();
+	LoadRando_SetAndCamLayout();
 	return;
 }
 
