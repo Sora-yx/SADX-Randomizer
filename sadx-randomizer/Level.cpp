@@ -158,7 +158,7 @@ StringSetFile SetFileArray[51]{
 	{ LevelIDs_FinalEgg, SonicVersion, 0, "1010", "-FE-Act1", "1000"},
 	{ LevelIDs_FinalEgg, SonicVersion, 1, "1011", "-FE-Act2", "1001"},
 	{ LevelIDs_FinalEgg, SonicVersion, 2, "1012", "-FE-Act3", "1002"},
-	{ LevelIDs_FinalEgg, GammaVersion, 2, "1014", "-FE-Gamma" "1005"},
+	{ LevelIDs_FinalEgg, GammaVersion, 2, "1014", "-FE-Gamma", "1005"},
 	{ LevelIDs_HotShelter, BigVersion, 0, "1213", "-HS-Act4", "1204"},
 	{ LevelIDs_HotShelter, AmyVersion, 0, "1210", "-HS-Act1", "1200"},
 	{ LevelIDs_HotShelter, AmyVersion, 1, "1211", "-HS-Act2", "1201"},
@@ -180,4 +180,20 @@ void LoadSetAndCamLayout() {
 			LoadCamFile(act, Cam.c_str());
 		}
 	}
+}
+
+void __cdecl RunLevelDestructor_r(int heap);
+Trampoline RunLevelDestructor_t((int)RunLevelDestructor, (int)RunLevelDestructor + 0x6, RunLevelDestructor_r);
+
+void __cdecl RunLevelDestructor_r(int heap) {
+
+	if (heap == 5)
+	{
+		ResetValueWhileLevelResult();
+		if (LevelCopy != 0 && (CurrentLevel < LevelIDs_StationSquare || CurrentLevel >= LevelIDs_TwinkleCircuit))
+			CustomFlag++;
+	}
+
+	FunctionPointer(void, original, (int heap), RunLevelDestructor_t.Target());
+	original(heap);
 }

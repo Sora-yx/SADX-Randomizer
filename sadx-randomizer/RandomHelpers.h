@@ -163,7 +163,7 @@ extern char GetCustomLayout;
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
-void AddCustomFlag();
+void CheckAndAddCustomFlag();
 void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();

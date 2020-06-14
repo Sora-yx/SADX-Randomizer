@@ -82,23 +82,6 @@ void DeleteCustomFlag() {
 	return SomethingAboutFlag();
 }
 
-void AddCustomFlag() {
-
-	if (CurrentLevel != LevelIDs_HedgehogHammer && LevelCopy != LevelIDs_HedgehogHammer)
-	{
-		ResetValueWhileLevelResult();
-
-		if (GameMode != GameModes_Trial && GameMode != GameModes_Mission && RNGStages && (LevelCopy < LevelIDs_StationSquare || LevelCopy >= LevelIDs_TwinkleCircuit))
-		{
-			if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_E101R || CurrentLevel >= LevelIDs_TwinkleCircuit && CurrentLevel <= LevelIDs_SandHill)
-				CustomFlag++;
-
-			GameMode = GameModes_Adventure_Field; //fix game crash
-		}
-	}
-
-	return;	
-}
 
 
 //SA2 Style

@@ -32,7 +32,10 @@ void FinalEgg_Layout() {
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
+	CurrentStageVersion = GammaVersion;
+	
 	LoadSetAndCamLayout();
+	
 	return;
 }
 

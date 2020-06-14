@@ -110,14 +110,17 @@ void Chao_DeleteFiles() {
 }
 
 void ChaoObj_Delete(ObjectMaster* a1) {
-	if (a1->Child) {
-		DeleteObjectMaster(a1->Child);
-		a1->Child = nullptr;
-	}
+	if (a1->Child != nullptr)
+	{
+		if (a1->Child) {
+			CheckThingButThenDeleteObject(a1->Child);
+			a1->Child = nullptr;
+		}
 
-	if (a1->Data1->LoopData) {
-		delete a1->Data1->LoopData;
-		a1->Data1->LoopData = nullptr;
+		if (a1->Data1->LoopData) {
+			delete a1->Data1->LoopData;
+			a1->Data1->LoopData = nullptr;
+		}
 	}
 
 	Chao_DeleteFiles();

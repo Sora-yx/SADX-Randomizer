@@ -19,14 +19,15 @@ extern bool CasinoTails;
 //While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
-	AddCustomFlag();
-
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
 	else
 		LastStoryFlag = 0;
 
 	TimeThing = 0;
+
+	if (GameMode == GameModes_Adventure_ActionStg)
+		GameMode = GameModes_Adventure_Field;
 
 	/*if (CurrentLevel == LevelIDs_SandHill)
 	{
@@ -75,7 +76,6 @@ void DisableTimeStuff() {
 		SetTailsRaceVictory();
 		Tails_CheckRaceResult();
 	}
-
 
 	Race = false;
 	return;
@@ -205,7 +205,7 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 						Load_DelayedSound_Voice(1770);
 					break;
 				case LevelIDs_WindyValley:
-					if (CurrentAct == 0 & CurrentStageVersion == GammaVersion)
+					if (CurrentAct == 0 && CurrentStageVersion == GammaVersion)
 						Load_DelayedSound_Voice(1775);
 					else
 						Load_DelayedSound_Voice(1770);
@@ -354,7 +354,6 @@ void ResetValueWhileLevelResult() {
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
-	CurrentStageVersion = 0;
 	isPlayerInWaterSlide = false;
 	CasinoTails = false;
 	isKnucklesVersion = false;
@@ -367,9 +366,7 @@ void ResetValueWhileLevelResult() {
 	njReleaseTexture(&SUPERSONIC_TEXLIST);
 	njReleaseTexture(&EGGROB_TEXLIST);
 
-	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter != Characters_Sonic)
-		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
-		
+
 	if (CurrentLevel != 0)
 	{
 		DeleteTriggerObject();

@@ -323,7 +323,6 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
-		
 		if (RNGCharacters)
 		{
 			UnloadCharTextures(CurCharacter());
