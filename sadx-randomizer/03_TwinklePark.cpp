@@ -46,7 +46,7 @@ void TP_CAM() {
 void TwinklePark_Layout() {
 
 //	CurrentStageVersion = SonicVersion;
-//	CurrentMission = 0;
+	CurrentMission = 2;
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;

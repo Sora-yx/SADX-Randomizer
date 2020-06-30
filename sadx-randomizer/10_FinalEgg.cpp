@@ -34,6 +34,7 @@ void FinalEgg_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
 
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

@@ -154,7 +154,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 11)
-				CustomFlag = 0;
+				CustomFlag = 9;
 			break;
 		}
 	}
@@ -198,7 +198,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 7)
-				CustomFlag = 0;
+				CustomFlag = 5;
 			break;
 		}
 	}
@@ -239,7 +239,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 7)
-				CustomFlag = 0;
+				CustomFlag = 5;
 			break;
 		}
 	}
@@ -268,7 +268,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 5)
-				CustomFlag = 0;
+				CustomFlag = 3;
 			break;
 		}
 	}
@@ -300,7 +300,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 6)
-				CustomFlag = 0;
+				CustomFlag = 4;
 			break;
 		}
 	}
@@ -335,7 +335,7 @@ void CustomFlagCheck() {
 		default:
 			CreditCheck = false;
 			if (CustomFlag >= 6)
-				CustomFlag = 0;
+				CustomFlag = 4;
 			break;
 		}
 	}
@@ -358,64 +358,3 @@ void CustomFlagCheck() {
 
 	return;
 }
-
-//SADX Style
-/*
-int CustomFlagCheckSA1_R() {
-	if (SelectedCharacter == 0) //Sonic
-	{
-		CurrentCharacter = 0;
-
-		if (NextLevel > LevelIDs_E101R && NextLevel < LevelIDs_SkyChase1)
-			return 0;
-
-		if (CustomFlag == 1 && EventFlagArray[EventFlags_Sonic_Chaos0Clear] == false)
-		{
-			EventFlagArray[EventFlags_Sonic_Chaos0Clear] = true;
-			ChaosAdventureData = 1;
-			CurrentAdventureData + 2;
-			EventTailsData = 0;
-			CutsceneFlagData();
-			SetNextLevelAndAct(26, 4);
-			return 0; //Will call original GotoNextLevel, we want the game to follow the story progression
-		}
-
-		if (CustomFlag == 2 && EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] == false)
-		{
-			EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] = true;
-			CurrentAdventureData + 2;
-			ChaosAdventureData = 1;
-			TailsAdventureData = 1;
-			SetNextLevelAndAct(26, 4);
-			StartCutsceneFlag(3);
-			return 0;
-		}
-
-		if (CustomFlag == 3 && EventFlagArray[EventFlags_Sonic_EggHornetClear] == false)
-		{
-			EventFlagArray[EventFlags_Sonic_EggHornetClear] = true;
-			EventFlagArray[EventFlags_Sonic_WindyValleyClear] = true;
-			SetNextLevelAndAct(33, 0);
-			CurrentAdventureData + 2;
-			return 0;
-		}
-
-		if (CustomFlag == 4)
-		{
-			EventFlagArray[EventFlags_Sonic_CasinopolisClear] = true;
-			SetNextLevelAndAct(26, 1);
-			return 0;
-		}
-
-		if (CustomFlag == 5)
-		{
-			EventFlagArray[EventFlags_Sonic_CasinopolisClear] = true;
-			SetNextLevelAndAct(33, 1);
-			return 0;
-		}
-
-		return 1;
-	}
-}
-
-*/

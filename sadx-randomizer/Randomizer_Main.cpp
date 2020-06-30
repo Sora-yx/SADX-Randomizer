@@ -16,9 +16,7 @@ short prev_stage = -1;
 bool isGameOver = false;
 
 extern bool RandCongratsDone;
-extern bool CasinoTails;
 extern bool SA2Voices;
-bool isKnucklesVersion = false;
 bool isTailsVersion = false;
 bool SA2Mission = false;
 short CurrentMission = 0;

@@ -20,7 +20,7 @@ void Cam_SkyDeck() {
 	
 	LoadCamFile(1, "0601");
 
-	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
+	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion))
 		LoadCamFile(2, "0604"); //Knuckles Version
 	else
 		LoadCamFile(2, "0600"); //Knuckles Version
@@ -40,7 +40,8 @@ void SkyDeck_Layout() {
 	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
 	{
 		CurrentStageVersion = KnucklesVersion;
-		SetRNGKnuckles();
+		if (CurrentMission < Mission2_100Rings)
+			SetRNGKnuckles();
 	}
 
 	if (Race)
@@ -56,7 +57,7 @@ int Switch_Gravity() {
 	if (CurrentCharacter == Characters_Knuckles && CurrentStageVersion == SonicVersion)
 		return (unsigned)Characters_Sonic; //Make the gravity work for Knuckles
 
-	if (CurrentStageVersion == KnucklesVersion || isKnucklesVersion)
+	if (CurrentStageVersion == KnucklesVersion)
 		return (unsigned)Characters_Knuckles; 
 
 	return GetCharacterID(0);

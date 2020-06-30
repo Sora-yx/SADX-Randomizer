@@ -11,7 +11,7 @@ extern char TimeMinCopy;
 extern char TimeFrameCopy;
 extern int RingCopy;
 
-SetLevelPosition PlayerStartPosition[52]{
+SetLevelPosition PlayerStartPosition[52]{ //Casino pos are hardcoded
 
 	{ AmyVersion, LevelAndActIDs_HedgehogHammer, { -55, 0, -31 }, 0 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { -9, 16, 4 }, 0x6000},
@@ -50,12 +50,6 @@ SetLevelPosition PlayerStartPosition[52]{
 	{ SonicVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
 	{ TailsVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
 	{ BigVersion, LevelAndActIDs_IceCap4, { 1260, 224, -38 }, 0 },
-	{ SonicVersion, LevelAndActIDs_Casinopolis1, 0, { 0 }, 0 },
-	{ KnucklesVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_Casinopolis2, { 19, -1695, 2850 }, 0 },
-	{ TailsVersion, LevelAndActIDs_Casinopolis2, { 19, -1695, 2850 }, 0 },
-	{ SonicVersion, LevelAndActIDs_Casinopolis3, { 137, 35, 64 }, 0 },
-	{ SonicVersion, LevelAndActIDs_Casinopolis4, { -430, -205, 100 }, 0 },
 	{ SonicVersion, LevelAndActIDs_FinalEgg1, { 170, -165, 490 }, 0 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, { 170, -165, 490 }, 0xC000 },
 	{ SonicVersion, LevelAndActIDs_FinalEgg2, { 1060, 595, -383 }, 0xC000 },
@@ -92,7 +86,7 @@ void MovePlayerToStartPoint_R(EntityData1* data) {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	int GetCP = CheckRestartLevel();
-	if ( !GetCP || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
+	if (!GetCP || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
 	{
 		for (uint8_t i = 0; i < LengthOfArray(PlayerStartPosition); i++)
 		{
@@ -151,9 +145,9 @@ StringSetFile SetFileArray[51]{
 	{ LevelIDs_IceCap, TailsVersion, 2,	"0814", "-IC-T", "0802"},
 	{ LevelIDs_IceCap, BigVersion, 3, "0813", "-IC-Big", "0803"},
 	{ LevelIDs_Casinopolis, SonicVersion, 0, "0910", "-Casino-Act1", "0900"},
-	{ LevelIDs_Casinopolis, KnucklesVersion, 0, "0913", "-Casino-Act2", "0901"},
-	{ LevelIDs_Casinopolis, SonicVersion, 1, "0911", "-Casino-T", "0901"},
-	{ LevelIDs_Casinopolis, TailsVersion, 1, "0912", "-Casino-Knux", "0906"},
+	{ LevelIDs_Casinopolis, KnucklesVersion, 0, "0913", "-Casino-Knux", "0906"},
+	{ LevelIDs_Casinopolis, SonicVersion, 1, "0911", "-Casino-Act2", "0901"},
+	{ LevelIDs_Casinopolis, TailsVersion, 1, "0912", "-Casino-T", "0907"},
 	{ LevelIDs_FinalEgg, AmyVersion, 0, "1013", "-FE-Amy", "1004"},
 	{ LevelIDs_FinalEgg, SonicVersion, 0, "1010", "-FE-Act1", "1000"},
 	{ LevelIDs_FinalEgg, SonicVersion, 1, "1011", "-FE-Act2", "1001"},
@@ -168,8 +162,6 @@ StringSetFile SetFileArray[51]{
 
 void LoadRando_SetAndCamLayout() {
 
-	bool isLoaded = false;
-
 	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
 
 		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
@@ -179,7 +171,6 @@ void LoadRando_SetAndCamLayout() {
 			int act = SetFileArray[i].act;
 			LoadSetFile(act, Set.c_str());
 			LoadCamFile(act, Cam.c_str());
-			isLoaded = true;
 		}
 	}
 

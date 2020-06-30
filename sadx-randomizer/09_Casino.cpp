@@ -7,26 +7,19 @@
 #define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerCasino = nullptr;
-bool CasinoTails = false;
 
 void Casino_Layout() {
-
-	CasinoTails = false;
-	//CurrentStageVersion = KnucklesVersion;
 
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct == 1)
-	{
 		CurrentStageVersion = TailsVersion;
-	}
 
 
 	switch (CurrentStageVersion)
 	{
 		case TailsVersion:
-			CasinoTails = true;
 			if (CurrentMission < Mission2_100Rings)
 				Race = true;
 			else
@@ -198,6 +191,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900S", "CAM0900S");
 	ReplaceCAM("CAM0901S", "CAM0901S");
 	ReplaceCAM("CAM0906S", "CAM0906S");
+	ReplaceCAM("CAM0907S", "CAM0907S");
 
 	//Tails
 	ReplaceSET("SET0910M", "Tails-Casino-Act1");
@@ -208,6 +202,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900M", "CAM0900M");
 	ReplaceCAM("CAM0901M", "CAM0901M");
 	ReplaceCAM("CAM0906M", "CAM0906M");
+	ReplaceCAM("CAM0907M", "CAM0907M");
 
 	//Knuckles
 	ReplaceSET("SET0910K", "Knux-Casino-Act1");
@@ -219,6 +214,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900K", "CAM0900K");
 	ReplaceCAM("CAM0901K", "CAM0901K");
 	ReplaceCAM("CAM0906K", "CAM0906K");
+	ReplaceCAM("CAM0907K", "CAM0907K");
 
 	//Amy
 	ReplaceSET("SET0910A", "Amy-Casino-Act1");
@@ -229,6 +225,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900A", "CAM0900A");
 	ReplaceCAM("CAM0901A", "CAM0901A");
 	ReplaceCAM("CAM0906A", "CAM0906A");
+	ReplaceCAM("CAM0907A", "CAM0907A");
 
 	//Big
 	ReplaceSET("SET0910B", "Big-Casino-Act1");
@@ -239,6 +236,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900B", "CAM0900B");
 	ReplaceCAM("CAM0901B", "CAM0901B");
 	ReplaceCAM("CAM0906B", "CAM0906B");
+	ReplaceCAM("CAM0907B", "CAM0907B");
 
 	//Gamma
 	ReplaceSET("SET0910E", "Gamma-Casino-Act1");
@@ -249,6 +247,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	ReplaceCAM("CAM0900E", "CAM0900E");
 	ReplaceCAM("CAM0901E", "CAM0901E");
 	ReplaceCAM("CAM0906E", "CAM0906E");
+	ReplaceCAM("CAM0907E", "CAM0907E");
 }
 
 

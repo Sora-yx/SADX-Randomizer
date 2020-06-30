@@ -210,7 +210,6 @@ extern bool isAIActive;
 extern bool isAIAllowed;
 extern bool LimitCustomFlag;
 
-extern bool isKnucklesVersion;
 extern bool isZeroActive;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions);

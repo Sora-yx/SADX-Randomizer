@@ -270,12 +270,16 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 2:
 			{
-				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
-					DisableControl();
-					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
-					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
-					data->Action = 3;
+				if (ControllerPointers[0]->PressedButtons & Buttons_Y)
+				{
+					if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
+						DisableControl();
+						EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+						CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
+						ForcePlayerToWhistle();
+						PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
+						data->Action = 3;
+					}
 				}
 			}
 			break;

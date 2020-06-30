@@ -791,7 +791,7 @@ void FinalStatDisplay(ObjectMaster* obj) {
 			RandCongratsDone = true;
 		}
 
-		if (StatsTimer)
+		if (!ControllerPointers[0]->PressedButtons & Buttons_Start)
 		{
 			float vscale = 1.0f;
 			//float hzscale = 1.0f;
@@ -817,13 +817,6 @@ void FinalStatDisplay(ObjectMaster* obj) {
 			DisplayDebugString(NJM_LOCATION(6, 25), "Thank you for playing SADX Randomizer!");
 
 			
-		}
-
-		if (!StatsTimer)
-		{
-			ObjectFunc(origin, CreditManagement_t.Target());
-			origin(obj);
-			RandCongratsDone = false;
 		}
 	}
 	else

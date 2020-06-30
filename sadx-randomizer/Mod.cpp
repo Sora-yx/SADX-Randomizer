@@ -189,9 +189,6 @@ extern "C" {
 		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
 		character_settings_onFrames();
 
-		//Credits stat
-		Credits_StatsDelayOnFrames();
-		
 		Sounds_OnFrame();
 
 		if (GameState == 16)  //Pause Menu

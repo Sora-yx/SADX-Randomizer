@@ -10,7 +10,7 @@ void Cam_LW() {
 
 	LoadCamFile(0, "0700");
 
-	if (CurrentAct == 1 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
+	if (CurrentAct == 1 && CurrentStageVersion == KnucklesVersion)
 		LoadCamFile(1, "0704");
 	else
 		LoadCamFile(1, "0701");
@@ -27,8 +27,8 @@ void LW_Layout() {
 		CurrentStageVersion = SonicVersion;
 	else
 	{
-		isKnucklesVersion = true;
-		SetRNGKnuckles();
+		if (CurrentMission < Mission2_100Rings)
+			SetRNGKnuckles();
 	}
 
 	LoadRando_SetAndCamLayout();

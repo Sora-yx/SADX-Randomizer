@@ -30,9 +30,15 @@ int Chaos6_ReturnCharacter() {
 		return GetCurrentCharacterID();
 
 	if (CurrentAct != 1)
+	{
+		CurrentStageVersion = SonicVersion;
 		return (unsigned int)Characters_Sonic;
+	}
 	else
+	{
+		CurrentStageVersion = KnucklesVersion;
 		return (unsigned int)Characters_Knuckles;
+	}
 }
 
 

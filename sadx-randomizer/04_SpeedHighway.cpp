@@ -16,7 +16,7 @@ void CamSpeedHighway() {
 
 	LoadCamFile(1, "0401");
 
-	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion || isKnucklesVersion))
+	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion))
 		LoadCamFile(2, "0405");
 	else
 		LoadCamFile(2, "0402");
@@ -44,10 +44,7 @@ void SpeedHighway_Layout() {
 	}
 
 	if (CurrentAct == 2)
-	{
-		isKnucklesVersion = true;
 		CurrentStageVersion = KnucklesVersion;
-	}
 
 	if (Race)
 		SelectBarRace();

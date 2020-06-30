@@ -335,7 +335,7 @@ void MissionResultCheck() {
 		int curAction = ent->Action;
 		ObjectMaster* Flash = nullptr;
 
-		if (TimeThing != 0 && (curAction >= 1 && curAction <= 3 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
+		if (TimeThing != 0 && (curAction >= 1 && curAction <= 3 || SonicRand == 1 && curAction > 74 && curAction <= 76 || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0)) {
 
 			ent->InvulnerableTime = 0;
 			if (!SonicRand && !MetalSonicFlag)

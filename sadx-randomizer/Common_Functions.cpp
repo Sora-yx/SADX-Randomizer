@@ -58,36 +58,36 @@ bool isValueInArray(int* array, int value, int size)
 void ForcePlayerToWhistle() {
 
 	for (int i = 0; i < 8; ++i) {
-		if (GetCharacterID(i) != Characters_Eggman && GetCharacterID(i) != Characters_Tikal) {
-
+		
 			int id = 0;
 
-			switch (GetCharacterID(i)) {
+			switch (GetCharacterID(i)) 
+			{
 			case Characters_Sonic:
-				id = 74;
-				break;
+				id = 0x854A01; break;
 			case Characters_Tails:
-				id = 8864257;
-				break;
+				id = 8864257; break;
 			case Characters_Knuckles:
-				id = 7485441;
-				break;
+				id = 7485441; break;
 			case Characters_Amy:
-				id = 5518337;
-				break;
+				id = 5518337; break;
 			case Characters_Gamma:
-				id = 5913089;
-				break;
+				id = 5913089; break;
 			case Characters_Big:
-				id = 6829569;
-				break;
+				id = 6829569; break;
 			}
 
+			EntityData1* ed1 = EntityData1Ptrs[i];
+			EntityData2* ed2 = EntityData2Ptrs[i];
+			CharObj2* co2 = CharObj2Ptrs[i];
 
-			return ForcePlayerAction(0, id);
+			int curLevel = CurrentLevel;
+			CurrentLevel = LevelIDs_SSGarden;
+			PerformWhistle(ed1, ed2, co2, id);
+			CurrentLevel = curLevel;
 		}
-	}
 }
+
 
 
 void FlashScreen(ObjectMaster* obj) {
