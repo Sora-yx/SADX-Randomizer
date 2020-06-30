@@ -11,10 +11,13 @@
 
 void EC_Layout() {
 
-	if (CurrentStageVersion != GammaVersion && CurrentStageVersion != BigVersion)
+
+	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
-	Load_ObjectsCommon();
+	if (CurrentAct == 2)
+		CurrentStageVersion = BigVersion;
+
 	LoadRando_SetAndCamLayout();
 	return;
 }

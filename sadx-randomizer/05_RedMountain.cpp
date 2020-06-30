@@ -25,19 +25,19 @@ void RedMountain_Layout() {
 //	CurrentStageVersion = KnucklesVersion;
 //	CurrentMission = 3;
 
-	Load_ObjectsCommon();
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
-	if (CurrentStageVersion == KnucklesVersion)
+	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
 	{
+		CurrentStageVersion = KnucklesVersion;
 		isKnucklesVersion = true;
 		SetRNGKnuckles();
 	}
 
-	LoadRando_SetAndCamLayout();
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

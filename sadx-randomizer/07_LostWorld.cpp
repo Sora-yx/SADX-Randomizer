@@ -22,9 +22,8 @@ void Cam_LW() {
 
 void LW_Layout() {
 
-	Load_ObjectsCommon();
 
-	if (CurrentStageVersion != KnucklesVersion)
+	if (CurrentStageVersion != KnucklesVersion || CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else
 	{
@@ -33,6 +32,7 @@ void LW_Layout() {
 	}
 
 	LoadRando_SetAndCamLayout();
+
 	return;
 }
 

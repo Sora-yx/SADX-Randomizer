@@ -27,9 +27,6 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
-	CurrentStageVersion = TailsVersion;
-	//CurrentMission = 3;
-	Load_ObjectsCommon();
 
 	switch (CurrentStageVersion)
 	{
@@ -42,16 +39,20 @@ void SpeedHighway_Layout() {
 			Race = true;
 		break;
 	case KnucklesVersion:
-		isKnucklesVersion = true;
 		SetRNGKnuckles();
 		break;
 	}
 
-	LoadRando_SetAndCamLayout();
+	if (CurrentAct == 2)
+	{
+		isKnucklesVersion = true;
+		CurrentStageVersion = KnucklesVersion;
+	}
 
 	if (Race)
 		SelectBarRace();
 
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

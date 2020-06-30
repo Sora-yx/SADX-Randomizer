@@ -10,7 +10,6 @@
 
 void IC_Layout() {
 
-	Load_ObjectsCommon();
 
 	if (CurrentStageVersion != BigVersion)
 	{
@@ -35,10 +34,12 @@ void IC_Layout() {
 		}
 	}
 
-	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion)
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion && CurrentAct < 2)
 		CurrentStageVersion = SonicVersion;
 
-	LoadRando_SetAndCamLayout();
+	if (CurrentAct == 3)
+		CurrentStageVersion = BigVersion;
+
 
 	if (CurrentStageVersion == TailsVersion) {
 
@@ -50,6 +51,8 @@ void IC_Layout() {
 
 	if (Race)
 		SelectBarRace();
+
+	LoadRando_SetAndCamLayout();
 
 	return;
 }

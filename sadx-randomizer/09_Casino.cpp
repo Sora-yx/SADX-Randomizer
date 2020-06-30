@@ -13,33 +13,36 @@ void Casino_Layout() {
 
 	CasinoTails = false;
 	//CurrentStageVersion = KnucklesVersion;
-	Load_ObjectsCommon();
 
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 
-	LoadRando_SetAndCamLayout();
+	if (CurrentAct == 1)
+	{
+		CurrentStageVersion = TailsVersion;
+	}
 
-		switch (CurrentStageVersion)
-		{
-			case TailsVersion:
-				CasinoTails = true;
-				if (CurrentMission < Mission2_100Rings)
-					Race = true;
-				else
-					Race = false;
-				break;
-			case KnucklesVersion:
-				SetRNGKnuckles();
-				break;
-		}
+
+	switch (CurrentStageVersion)
+	{
+		case TailsVersion:
+			CasinoTails = true;
+			if (CurrentMission < Mission2_100Rings)
+				Race = true;
+			else
+				Race = false;
+			break;
+		case KnucklesVersion:
+			SetRNGKnuckles();
+			break;
+	}
 
 
 	if (Race)
 		SelectBarRace();
 
 	FixGoldenAndCoin();
-
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

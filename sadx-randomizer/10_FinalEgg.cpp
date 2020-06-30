@@ -27,12 +27,13 @@ void CamFinalEgg() {
 
 void FinalEgg_Layout() {
 
-	Load_ObjectsCommon();
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
-	LoadRando_SetAndCamLayout();
+	if (CurrentAct == 2)
+		CurrentStageVersion = GammaVersion;
+
 	return;
 }
 

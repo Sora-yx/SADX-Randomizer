@@ -83,6 +83,12 @@ void DeleteCustomFlag() {
 }
 
 
+void AddCustomFlag() {
+
+	CustomFlag++;
+	return StartLevelCutscene(1);
+}
+
 
 //SA2 Style
 void CustomFlagCheck() {

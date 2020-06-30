@@ -39,7 +39,6 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
-
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
@@ -55,11 +54,10 @@ void WindyValley_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = TailsVersion;
 
-	Load_ObjectsCommon();
-	LoadRando_SetAndCamLayout();
-
 	if (Race)
 		SelectBarRace();
+
+	LoadRando_SetAndCamLayout();
 
 	return;
 }

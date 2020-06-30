@@ -51,6 +51,9 @@ void TwinklePark_Layout() {
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
 
+	if (CurrentAct == 1 && CurrentStageVersion != BigVersion)
+		CurrentStageVersion = AmyVersion; 
+
 	if (CurrentCharacter >= Characters_Gamma)
 	{
 		WriteData<1>((void*)0x798306, 0x84);
@@ -58,9 +61,7 @@ void TwinklePark_Layout() {
 	}
 
 	fixTCCart();
-	Load_ObjectsCommon();
 	LoadRando_SetAndCamLayout();
-
 	return;
 }
 

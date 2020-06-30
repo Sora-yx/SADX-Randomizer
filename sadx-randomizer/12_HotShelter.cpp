@@ -28,9 +28,11 @@ void HotShelter_Layout() {
 	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = AmyVersion;
 
-	Load_ObjectsCommon();
-	LoadRando_SetAndCamLayout();
+	if (CurrentAct == 2)
+		CurrentStageVersion = GammaVersion;
+
 	CheckAndSet_HotShelterFunctions();
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

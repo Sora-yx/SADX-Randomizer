@@ -30,22 +30,23 @@ void Cam_SkyDeck() {
 
 void SkyDeck_Layout() {
 
-	Load_ObjectsCommon();
 
 	//CurrentStageVersion = KnucklesVersion;
 	//CurrentMission = 0;
 
-	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion && CurrentAct < 2)
 		CurrentStageVersion = SonicVersion;
 
-	if (CurrentStageVersion == KnucklesVersion)
+	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
+	{
+		CurrentStageVersion = KnucklesVersion;
 		SetRNGKnuckles();
-
-	LoadRando_SetAndCamLayout();
+	}
 
 	if (Race)
 		SelectBarRace();
 
+	LoadRando_SetAndCamLayout();
 	return;
 }
 

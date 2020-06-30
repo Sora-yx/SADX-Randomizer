@@ -107,6 +107,7 @@ void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
 void MovePlayerToStartPoint_R(EntityData1* data);
 void LoadRando_SetAndCamLayout();
+void AddCustomFlag();
 
 
 extern bool RNGCharacters;
