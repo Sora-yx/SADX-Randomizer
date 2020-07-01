@@ -57,41 +57,37 @@ bool isValueInArray(int* array, int value, int size)
 
 void ForcePlayerToWhistle() {
 
-	for (int i = 0; i < 8; ++i) {
-		
-			int id = 0;
+	int id = 0;
 
-			switch (GetCharacterID(i)) 
-			{
-			case Characters_Sonic:
-				id = 0x854A01; 
-				break;
-			case Characters_Tails:
-				id = 8864257; 
-				break;
-			case Characters_Knuckles:
-				id = 7485441; 
-				break;
-			case Characters_Amy:
-				id = 5518337; 
-				break;
-			case Characters_Gamma:
-				id = 5913089; 
-				break;
-			case Characters_Big:
-				id = 6829569; 
-				break;
-			}
+	switch (CurCharacter()) {
+	case Characters_Sonic:
+		id = 0x854A01;
+		break;
+	case Characters_Tails:
+		id = 8864257;
+		break;
+	case Characters_Knuckles:
+		id = 7485441;
+		break;
+	case Characters_Amy:
+		id = 5518337;
+		break;
+	case Characters_Gamma:
+		id = 5913089;
+		break;
+	case Characters_Big:
+		id = 6829569;
+		break;
+	}
 
-			EntityData1* ed1 = EntityData1Ptrs[i];
-			EntityData2* ed2 = EntityData2Ptrs[i];
-			CharObj2* co2 = CharObj2Ptrs[i];
+	EntityData1* ed1 = EntityData1Ptrs[0];
+	EntityData2* ed2 = EntityData2Ptrs[0];
+	CharObj2* co2 = CharObj2Ptrs[0];
 
-			int curLevel = CurrentLevel;
-			CurrentLevel = LevelIDs_SSGarden;
-			PerformWhistle(ed1, ed2, co2, id);
-			CurrentLevel = curLevel;
-		}
+	int curLevel = CurrentLevel;
+	CurrentLevel = LevelIDs_SSGarden;
+	PerformWhistle(ed1, ed2, co2, id);
+	CurrentLevel = curLevel;
 }
 
 

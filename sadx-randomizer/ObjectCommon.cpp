@@ -280,37 +280,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 							EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 							CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 		
-							int id = 0;
-
-							switch (CurCharacter()) {
-							case Characters_Sonic: 
-								id = 0x854A01; 
-								break;
-							case Characters_Tails: 
-								id = 8864257; 
-								break;
-							case Characters_Knuckles: 
-								id = 7485441; 
-								break;
-							case Characters_Amy: 
-								id = 5518337; 
-								break;
-							case Characters_Gamma: 
-								id = 5913089; 
-								break;
-							case Characters_Big: 
-								id = 6829569; 
-								break;
-							}
-
-							EntityData1* ed1 = EntityData1Ptrs[0];
-							EntityData2* ed2 = EntityData2Ptrs[0];
-							CharObj2* co2 = CharObj2Ptrs[0];
-
-							int curLevel = CurrentLevel;
-							CurrentLevel = LevelIDs_SSGarden;
-							PerformWhistle(ed1, ed2, co2, id);
-							CurrentLevel = curLevel;
+							ForcePlayerToWhistle();
 
 							PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
 							data->Action = 3;
