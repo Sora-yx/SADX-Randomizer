@@ -18,6 +18,9 @@ void EC_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = BigVersion;
 
+	CurrentStageVersion = GammaVersion;
+	CurrentMission = 3;
+
 	LoadRando_SetAndCamLayout();
 	return;
 }

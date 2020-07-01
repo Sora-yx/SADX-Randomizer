@@ -43,6 +43,7 @@ NJS_TEXANIM	Hud_Rando_TEXANIM[]{
 	{ hzscale * 0x3F, vscale * 0x2F, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
 	{ hzscale * 0x3F, vscale * 0x2F, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
 	{ hzscale * 0x6F, vscale * 0x1F, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
+	{ hzscale * 0x6F, vscale * 0x1F, 0x35, 0x8, 0, 0, 0x100, 0x100, 3, 0x20 },
 };
 
 
@@ -52,7 +53,7 @@ void ShowActionButton() {
 	ActionButtonActive = true;
 }
 
-void Hud_ShowActionButton() {
+void Hud_ShowSwapButton() {
 	if (!IsGamePaused()) {
 		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
 			ActionButtonActive = false;
@@ -110,6 +111,66 @@ void Hud_ShowActionButton() {
 }
 
 
+void Hud_ShowActionButton() {
+	if (!IsGamePaused()) {
+		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
+			ActionButtonActive = false;
+		}
+		else
+			ShowActionButton();
+
+		if (ActionButtonActive == true) {
+			ActionButtonActive = false;
+			if (ActionButtonAlpha < 1) ActionButtonAlpha += 0.1f;
+		}
+		else if (ActionButtonAlpha <= 0) {
+			return;
+		}
+		else {
+			if (ActionButtonAlpha > 0) ActionButtonAlpha -= 0.2f;
+		}
+	}
+	else {
+		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
+		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
+
+		if (ActionButtonActive == false && ActionButtonAlpha <= 0) {
+			return;
+		}
+	}
+
+
+	vscale = (float)VerticalResolution / 480.0f;
+	hzscale = (float)HorizontalResolution / 640.0f;
+	float size_x = 0;
+	float size_y = 0;
+	size_x = 255.0f * hzscale * 0.5f;
+	size_y = 67.0f * vscale * 0.5f;
+
+	xpos = center_x + size_x * vscale - 20;
+	ypos = 67;
+	HUD_Rando_SPRITE.p.x = xpos;
+	HUD_Rando_SPRITE.p.y = ypos;
+
+
+	HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
+	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
+	HUD_Rando_SPRITE.sx = 1;
+	HUD_Rando_SPRITE.p.x = xpos + ypos;
+	HUD_Rando_SPRITE.p.y = ypos + 5;
+
+	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
+	HUD_Rando_SPRITE.p.x = xpos - 5;
+
+
+	if (ActionButtonAlpha >= 1) {
+		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, 3, -1.501, NJD_SPRITE_ALPHA);
+	}
+}
+
+
+
+
 void Hud_DisplayOnframe() {
 
 	ObjectMaster* P1 = GetCharacterObject(0);
@@ -117,7 +178,7 @@ void Hud_DisplayOnframe() {
 	if (GameState == 15 && isAIActive && isAIAllowed && SwapDelay > 149)
 	{
 		if (P1 != nullptr && (P1->Data1->Action == 1 || P1->Data1->Action == 2))
-			Hud_ShowActionButton();
+			Hud_ShowSwapButton();
 	}
 }
 

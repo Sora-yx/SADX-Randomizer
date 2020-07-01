@@ -362,7 +362,9 @@ SetLevelPosition PlayerAroundChaoPosition[22] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
-
+	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },
+	{ AmyVersion, LevelAndActIDs_HotShelter2, 1060.4085693, 750.8605957, -2952.347412 },
+	{ GammaVersion, LevelAndActIDs_HotShelter3, -1302.44, 3378.13, -3116.41 },
 };
 
 NJS_VECTOR SetPlayerAroundLostChaoPosition() {
@@ -374,7 +376,7 @@ NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 		if (levelact == PlayerAroundChaoPosition[i].LevelID && CurrentStageVersion == PlayerAroundChaoPosition[i].version)
 		{
 			if (CurrentLevel == LevelIDs_HotShelter && DCModChao && CurrentStageVersion == AmyVersion) //Dreamcast Mod exception, as the landtable is different.
-				return { 716.4085693, 428.2105103, -2952.347412 };
+				return { 1060.4085693, 528.2105103, -2952.347412 };
 			else
 				return PlayerAroundChaoPosition[i].Position;
 		}
@@ -407,7 +409,7 @@ SetLevelPosition ChaoLevelPosition[24]{
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2945.652344, 5589.605469, -2211.165039, -1.681558157E-44 + 0x4000 },
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
 	{ SonicVersion, LevelAndActIDs_FinalEgg3, 2659.293457, -2888.063965, -946.1408081, 0x8000 }, //Sonic Version
-	{ BigVersion, LevelAndActIDs_HotShelter1, -278.8718262, 80, -499.0888367, 0x8000 }, //Big Version 
+	{ BigVersion, LevelAndActIDs_HotShelter1, -157.615, 418.875, -271.49, 0x8000 }, //Big Version 
 	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, //Amy version SADX VANILLA
 	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
 };

@@ -31,6 +31,8 @@ void HotShelter_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
 
+	CurrentMission = 3;
+
 	CheckAndSet_HotShelterFunctions();
 	LoadRando_SetAndCamLayout();
 	return;
@@ -393,7 +395,7 @@ ObjectListEntry HotShelter3ObjectList_list[] = {
 	{ 6, 3, 0, 0, 0, (ObjectFuncPtr)0x5A4D70, "O CARGOSTART" } /* "O CARGOSTART" */,
 	{ 2, 2, 0, 0, 0, (ObjectFuncPtr)0x5A4990, "E E105" } /* "E E105" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */,
-	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0, "KNUDAI" }, /* "KNUDAI" */
+	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
 	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }
 };
 

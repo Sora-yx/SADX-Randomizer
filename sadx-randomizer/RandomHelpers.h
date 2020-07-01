@@ -316,6 +316,8 @@ extern NJS_TEXLIST SA2_OBJ_TEXLIST;
 FunctionPointer(int, PerformWhistle, (EntityData1* a1, EntityData2* a2, CharObj2* a3, int flag), 0x442570);
 
 void ForcePlayerToWhistle();
+void Hud_ShowSwapButton();
+void Hud_ShowActionButton();
 
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
