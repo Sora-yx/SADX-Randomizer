@@ -175,6 +175,8 @@ extern "C" {
 		if (GameMode == GameModes_Menu && ValueMenu >= 225)
 			DisplayRandoInformation();
 
+		CheckAndDisplayWarningLayoutError();
+
 		//AI Stuff
 		AI_FixesOnFrames();
 		Hud_DisplayOnframe();

@@ -3,7 +3,6 @@
 extern struct RandomizedEntry randomizedSets[40];
 extern std::string modpath;
 
-
 struct RandomizedEntry
 {
 	int8_t character;
@@ -477,3 +476,4 @@ extern int SeedCopy;
 extern RandomizerGenerator RandoStageArray[50];
 bool isRandoLevel();
 void LayoutFunctionInit();
+void CheckAndDisplayWarningLayoutError();

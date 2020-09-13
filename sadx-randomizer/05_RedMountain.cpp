@@ -2,7 +2,7 @@
 #include "RM.h"
 
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 void CamRedMountain() {
 	LoadCamFile(0, "0500");
@@ -20,7 +20,7 @@ void CamRedMountain() {
 void RedMountain_Layout() {
 
 //	CurrentStageVersion = KnucklesVersion;
-	CurrentMission = 3;
+	//CurrentMission = 3;
 
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
@@ -215,10 +215,10 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	AddLevelLayout("Red Mountain\\", "RM1", helperFunctions);
 	AddLevelLayout("Red Mountain\\", "RM2", helperFunctions);
 	AddLevelLayout("Red Mountain\\", "RM3", helperFunctions);
-	AddLevelLayout("Red Mountain\\", "RME", helperFunctions);
+	AddLevelLayout("Red Mountain\\", "RMG", helperFunctions);
 
-	AddCam("CAM0500S", "CAM0500S");
-	AddCam("CAM0501S", "CAM0501S");
-	AddCam("CAM0502S", "CAM0502S");
-	AddCam("CAM0503S", "CAM0503S");
+	AddCam("C0500");
+	AddCam("C0501");
+	AddCam("C0502");
+	AddCam("C0503");
 }

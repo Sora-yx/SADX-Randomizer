@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "HS.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 ObjectMaster* TriggerHS = nullptr;
 
@@ -21,6 +21,8 @@ void CamHotShelter() {
 
 
 void HotShelter_Layout() {
+
+	CurrentStageVersion = BigVersion;
 
 	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = AmyVersion;
@@ -469,11 +471,10 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	AddLevelLayout("Hot Shelter\\", "HS0", helperFunctions);
 	AddLevelLayout("Hot Shelter\\", "HS1", helperFunctions);
 	AddLevelLayout("Hot Shelter\\", "HS2", helperFunctions);
-	AddLevelLayout("Hot Shelter\\", "HSA", helperFunctions);
 	AddLevelLayout("Hot Shelter\\", "HSB", helperFunctions);
 
-	AddCam("CAM1200S", "CAM1200S");
-	AddCam("CAM1201S", "CAM1201S");
-	AddCam("CAM1202S", "CAM1202S");
-	AddCam("CAM1204S", "CAM1204S");
+	AddCam("C1200");
+	AddCam("C1201");
+	AddCam("C1202");
+	AddCam("C1203");
 }

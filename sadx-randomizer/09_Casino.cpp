@@ -1,10 +1,12 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 ObjectMaster* TriggerCasino = nullptr;
 
 void Casino_Layout() {
+
+	//CurrentStageVersion = KnucklesVersion;
 
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
@@ -144,51 +146,6 @@ void FixGoldenAndCoin() {
 }
 
 
-void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
-{
-	//Initiliaze data
-	WriteData<5>((int*)0x422ef4, 0x90);
-	WriteData<5>((int*)0x422f03, 0x90);
-	WriteData<5>((int*)0x422f12, 0x90);
-	WriteData<5>((int*)0x422f21, 0x90);
-	WriteData<5>((int*)0x422f2d, 0x90);
-	WriteData<5>((int*)0x422f3c, 0x90);
-	WriteData<5>((int*)0x422f4b, 0x90);
-
-	WriteCall((void*)0x422f5a, Casino_Layout);
-	
-	WriteData<1>((char*)0x5c0595, 0x08); //make pinball working for Knuckles
-	WriteData<1>((char*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
-	WriteData<1>((char*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
-	WriteData<1>((char*)0x5c4424, 0x08); //Add coin in the drop ring room. (knuckles layout)
-	WriteData<2>((int*)0x5d049e, 0x90); //Add Invisible wall when not Sonic. (drop ring Emerald room.)
-	
-	WriteCall((void*)0x5d04a9, FixInvisibleWall); //Add invisible wall if sonic version, otherwise remove it.
-	WriteCall((void*)0x5dacc8, FixFlipperCharacterPosition);
-	WriteCall((void*)0x5d6914, FixFlipperCharacterPosition);
-	WriteCall((void*)0x5d6997, FixFlipperCharacterPosition);
-	WriteCall((void*)0x5da671, FixFlipperCharacterPosition);
-	WriteCall((void*)0x5c14f5, IncreaseRings_R);
-	
-	WriteCall((void*)0x5c5906, FixShakeoffGarbageAction);
-	WriteCall((void*)0x5dd088, FixTailsVictoryCAS);
-
-	WriteCall((void*)0x5dd08d, FixRaceResult);
-
-	CasinoObjects_Init(path, helperFunctions);
-
-	AddLevelLayout("Casinopolis\\", "Cas0", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "Cas1", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "Cas2", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "Cas3", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "CasM", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "CasK", helperFunctions);
-	
-	AddCam("CAM0900S", "CAM0900S");
-	AddCam("CAM0901S", "CAM0901S");
-	AddCam("CAM0906S", "CAM0906S");
-	AddCam("CAM0907S", "CAM0907S");
-}
 
 
 
@@ -434,4 +391,51 @@ void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperF
 	ObjLists[LevelIDs_Casinopolis * 8 + 0] = &CasinopolisObjectList;
 	ObjLists[LevelIDs_Casinopolis * 8 + 1] = &CasinopolisObjectList;
 	TexLists_Obj[LevelIDs_Casinopolis] = CasinopolisObjectTextures;
+}
+
+void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
+{
+	//Initiliaze data
+	WriteData<5>((int*)0x422ef4, 0x90);
+	WriteData<5>((int*)0x422f03, 0x90);
+	WriteData<5>((int*)0x422f12, 0x90);
+	WriteData<5>((int*)0x422f21, 0x90);
+	WriteData<5>((int*)0x422f2d, 0x90);
+	WriteData<5>((int*)0x422f3c, 0x90);
+	WriteData<5>((int*)0x422f4b, 0x90);
+
+	WriteCall((void*)0x422f5a, Casino_Layout);
+
+	WriteData<1>((char*)0x5c0595, 0x08); //make pinball working for Knuckles
+	WriteData<1>((char*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
+	WriteData<1>((char*)0x5C0695, 0x08); //Allow Knuckles to leave the garbage. (why is this checked anyway?)
+	WriteData<1>((char*)0x5c4424, 0x08); //Add coin in the drop ring room. (knuckles layout)
+	WriteData<2>((int*)0x5d049e, 0x90); //Add Invisible wall when not Sonic. (drop ring Emerald room.)
+
+	WriteCall((void*)0x5d04a9, FixInvisibleWall); //Add invisible wall if sonic version, otherwise remove it.
+	WriteCall((void*)0x5dacc8, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5d6914, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5d6997, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5da671, FixFlipperCharacterPosition);
+	WriteCall((void*)0x5c14f5, IncreaseRings_R);
+
+	WriteCall((void*)0x5c5906, FixShakeoffGarbageAction);
+	WriteCall((void*)0x5dd088, FixTailsVictoryCAS);
+
+	WriteCall((void*)0x5dd08d, FixRaceResult);
+
+	CasinoObjects_Init(path, helperFunctions);
+
+	AddLevelLayout("Casinopolis\\", "Cas0", helperFunctions);
+	AddLevelLayout("Casinopolis\\", "Cas1", helperFunctions);
+	AddLevelLayout("Casinopolis\\", "Cas2", helperFunctions);
+	AddLevelLayout("Casinopolis\\", "Cas3", helperFunctions);
+	AddLevelLayout("Casinopolis\\", "CasM", helperFunctions);
+	AddLevelLayout("Casinopolis\\", "CasK", helperFunctions);
+
+	AddCam("C0900");
+	AddCam("C0901");
+	AddCam("C0903");
+	AddCam("C0904"); //Miles act 2
+	AddCam("C0905"); //Knuckles
 }

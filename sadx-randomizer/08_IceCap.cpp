@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "IceCap.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void IC_Layout() {
@@ -30,6 +30,8 @@ void IC_Layout() {
 		}
 	}
 
+
+	//CurrentStageVersion = TailsVersion;
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion && CurrentAct < 2)
 		CurrentStageVersion = SonicVersion;
 
@@ -55,13 +57,19 @@ void IC_Layout() {
 
 
 int IC_ReturnCharacter() { //trick the game to make it think we are playing Sonic this will make spawn the Ice Cave as Big.
-
-	if (CurrentCharacter != Characters_Big)
-		return GetCurrentCharacterID();
+	if (CurrentStageVersion == Characters_Big)
+		return (unsigned int)Characters_Big;
 	else
 		return (unsigned int)Characters_Sonic;
 }
 
+int IC_ReturnCharacter2() { //trick the game 
+	if (CurrentStageVersion == SonicVersion)
+		return (unsigned int)Characters_Big;
+
+	if (CurrentStageVersion == TailsVersion)
+		return (unsigned int)Characters_Tails;
+}
 
 //Prevent the game to disable control for cutscene skip Ice Cap act 3 (Cart thing.)
 
@@ -125,37 +133,7 @@ void FixTailsVictoryIC() {
 	return;
 }
 
-void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
-{
-	//Initiliaze data
-	WriteCall((void*)0x4e92e7, IC_ReturnCharacter);
-	WriteCall((void*)0x4e9802, IC_ReturnCharacter);
-	WriteCall((void*)0x4ec065, AddRingIceCap);
-	WriteCall((void*)0x4ecf8f, FixTailsVictoryIC);
 
-	WriteData<5>((int*)0x422e66, 0x90);
-	WriteData<5>((int*)0x422e75, 0x90);
-	WriteData<5>((int*)0x422e84, 0x90);
-	WriteData<5>((int*)0x422e93, 0x90);
-	WriteData<5>((int*)0x422e9f, 0x90);
-	WriteData<5>((int*)0x422eae, 0x90);
-	WriteData<5>((int*)0x422ebd, 0x90);
-
-	WriteCall((void*)0x422ecc, IC_Layout);
-
-	ICObjects_Init(path, helperFunctions);
-
-	AddLevelLayout("Ice Cap\\", "IC0", helperFunctions);
-	AddLevelLayout("Ice Cap\\", "IC1", helperFunctions);
-	AddLevelLayout("Ice Cap\\", "IC2", helperFunctions);
-	AddLevelLayout("Ice Cap\\", "IC3", helperFunctions);
-	AddLevelLayout("Ice Cap\\", "ICM", helperFunctions);
-
-	AddCam("CAM0800S", "CAM0800S");
-	AddCam("CAM0801S", "CAM0801S");
-	AddCam("CAM0802S", "CAM0802S");
-	AddCam("CAM0803S", "CAM0803S");
-}
 
 ObjectListEntry IceCapObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,
@@ -326,4 +304,39 @@ void __cdecl ICObjects_Init(const char* path, const HelperFunctions& helperFunct
 	ObjLists[LevelIDs_IceCap * 8 + 2] = &IceCapObjectList;
 	ObjLists[LevelIDs_IceCap * 8 + 3] = &IceCapObjectList;
 	TexLists_Obj[LevelIDs_IceCap] = IceCapObjectTextures;
+}
+
+void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunctions)
+{
+	//Initiliaze data
+	WriteCall((void*)0x4e92e7, IC_ReturnCharacter);
+	WriteCall((void*)0x4e9802, IC_ReturnCharacter);
+
+	WriteCall((void*)0x4e97a0, IC_ReturnCharacter2); //TEST ATM
+	WriteCall((void*)0x4e97a9, IC_ReturnCharacter2);
+	WriteCall((void*)0x4ec065, AddRingIceCap);
+	WriteCall((void*)0x4ecf8f, FixTailsVictoryIC);
+
+	WriteData<5>((int*)0x422e66, 0x90);
+	WriteData<5>((int*)0x422e75, 0x90);
+	WriteData<5>((int*)0x422e84, 0x90);
+	WriteData<5>((int*)0x422e93, 0x90);
+	WriteData<5>((int*)0x422e9f, 0x90);
+	WriteData<5>((int*)0x422eae, 0x90);
+	WriteData<5>((int*)0x422ebd, 0x90);
+
+	WriteCall((void*)0x422ecc, IC_Layout);
+
+	ICObjects_Init(path, helperFunctions);
+
+	AddLevelLayout("Ice Cap\\", "IC0", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC1", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC2", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC3", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "ICM", helperFunctions);
+
+	AddCam("C0800");
+	AddCam("C0801");
+	AddCam("C0802");
+	AddCam("C0803");
 }

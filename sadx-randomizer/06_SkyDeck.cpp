@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SD.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 
@@ -26,21 +26,33 @@ void Cam_SkyDeck() {
 void SkyDeck_Layout() {
 
 
-	//CurrentStageVersion = KnucklesVersion;
+	CurrentStageVersion = TailsVersion;
 	//CurrentMission = 0;
 
-	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion && CurrentAct < 2)
-		CurrentStageVersion = SonicVersion;
-
-	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
-	{
+	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
+
+
+	switch (CurrentStageVersion)
+	{
+	case SonicVersion:
+	default:
+		CurrentStageVersion = SonicVersion;
+		break;
+	case TailsVersion:
+		if (CurrentMission < Mission2_100Rings) {
+			Race = true;
+			SelectBarRace();
+		}
+		break;
+	case KnucklesVersion:
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
+		break;
+
 	}
 
-	if (Race)
-		SelectBarRace();
+
 
 	return;
 }
@@ -165,11 +177,11 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	AddLevelLayout("Sky Deck\\", "SDM", helperFunctions);
 	AddLevelLayout("Sky Deck\\", "SDK", helperFunctions);
 
-	AddCam("CAM0600S", "CAM0600S");
-	AddCam("CAM0601S", "CAM0601S");
-	AddCam("CAM0602S", "CAM0602S");
-	AddCam("CAM0603S", "CAM0603S");
-	AddCam("CAM0604S", "CAM0604S");
+	AddCam("C0600");
+	AddCam("C0601");
+	AddCam("C0602");
+	AddCam("C0603");
+	AddCam("C0604");
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {

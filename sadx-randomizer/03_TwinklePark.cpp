@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void FixRollerCoaster() {
@@ -41,6 +41,7 @@ void TP_CAM() {
 
 void TwinklePark_Layout() {
 
+	//CurrentStageVersion = BigVersion;
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
@@ -81,10 +82,11 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	AddLevelLayout("Twinkle Park\\", "TPA", helperFunctions);
 	AddLevelLayout("Twinkle Park\\", "TPB", helperFunctions);
 
-	AddCam("CAM0300S", "CAM0300S");
-	AddCam("CAM0301S", "CAM0301S");
-	AddCam("CAM0302S", "CAM0302S");
-	AddCam("CAM0305S", "CAM0305S");
+	AddCam("C0300");
+	AddCam("C0301");
+	AddCam("C0302");
+	AddCam("C0303");
+	AddCam("C0304");
 }
 
 

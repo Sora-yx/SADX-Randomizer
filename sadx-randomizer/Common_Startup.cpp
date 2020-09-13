@@ -38,9 +38,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen
-		//help.ReplaceFile("system\\CON_REGULAR.pvm", "system\\textures\\CON_REGULAR_E.PVMX"); //Test
-	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\Sets\\TCAct3.BIN"); //TC act 4 fix
-	helperFunctions.ReplaceFile("system\\SETMCART03E.BIN", "system\\Sets\\TCAct3.BIN");
+	helperFunctions.ReplaceFile("system\\SETMCART03S.BIN", "system\\Sets\\SETMCART03S.BIN"); //TC act 4 fix
 	WriteCall((void*)0x44B0A4, CheckDeleteAnimThing); 
 
 	//Random Title Card + Missions

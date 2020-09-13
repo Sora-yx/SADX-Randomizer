@@ -7,7 +7,7 @@
 
 void EC_Layout() {
 
-	CurrentStageVersion = SonicVersion;
+	//CurrentStageVersion = GammaVersion;
 
 	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
@@ -35,7 +35,7 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	AddLevelLayout("Emerald Coast\\", "EC0", helperFunctions);
 	AddLevelLayout("Emerald Coast\\", "EC1", helperFunctions);
 	AddLevelLayout("Emerald Coast\\", "EC2", helperFunctions);
-	AddLevelLayout("Emerald Coast\\", "ECG", helperFunctions);
+	AddLevelLayout("Emerald Coast\\", "ECE", helperFunctions);
 
 	AddCam("C0100");
 	AddCam("C0101");

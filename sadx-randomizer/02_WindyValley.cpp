@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 void Cam_WV() {
 
@@ -35,26 +35,23 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
-	const char* curCam = "CAM020";
+	if (CurrentAct == 2)
+		CurrentStageVersion = TailsVersion;
+
+	//CurrentStageVersion = GammaVersion;
 
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		CurrentStageVersion = SonicVersion;
+		if (CurrentStageVersion != GammaVersion)
+			CurrentStageVersion = SonicVersion;
 		break;
 	case TailsVersion:
-		curCam = "CAM0206";
 		if (CurrentMission < Mission2_100Rings)
 			Race = true;
 		break;
-	case GammaVersion:
-		curCam = "CAM0203";
-		break;
 	}
-
-	if (CurrentAct == 2)
-		CurrentStageVersion = TailsVersion;
 
 	if (Race)
 		SelectBarRace();
@@ -78,11 +75,11 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	AddLevelLayout("Windy Valley\\", "WVG", helperFunctions);
 	AddLevelLayout("Windy Valley\\", "WVM", helperFunctions);
 
-	AddCam("CAM0200S", "CAM0200S");
-	AddCam("CAM0201S", "CAM0201S");
-	AddCam("CAM0202S", "CAM0202S");
-	AddCam("CAM0203S", "CAM0203S");
-	AddCam("CAM0206S", "CAM0206S");
+	AddCam("C0200");
+	AddCam("C0201");
+	AddCam("C0202");
+	AddCam("C0203");
+	AddCam("C0204");
 }
 
 ObjectListEntry WindyValleyObjectList_list[] = {

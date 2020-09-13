@@ -182,7 +182,7 @@ void PlatformMM_Main(ObjectMaster* obj) {
 
 
 const char* const TikalLostChao_message[] = {
-	"	The Lost Chao you are looking for is close around. \n",
+	"	The Lost Chao you are looking for\nis close around. \n",
 	NULL,
 };
 

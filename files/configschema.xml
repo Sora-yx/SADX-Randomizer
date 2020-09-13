@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<ConfigSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonicretro.org">
+	<Groups>
+	<Group name="Randomizer" display="1. Randomizer Settings">
+      <Property name="Seed" display="Randomizer Seed" type="int" defaultvalue="0">
+        <HelpText>Set a specific value (between -2147483647 and 2147483647) to get a specific RNG, or 0 for full random.</HelpText>
+      </Property>
+	        <Property name="StorySplits" type="Splits" display="Speedrunner Splits" defaultvalue="0">
+        <HelpText>Select which story you would like splits for. (Note: The splits are generated in the root of your SADX folder as soon as you clic on "Save and Play".)</HelpText>
+			</Property>
+			<Property name="RNGCharacters" display="Randomize Characters" type="bool" defaultvalue="True">
+				<HelpText>When enabled, characters will be random. (Note: This has no effect if you disable "Randomize Stages".)</HelpText>
+			</Property>	
+			<Property name="RNGStages" display="Randomize Stages" type="bool" defaultvalue="True">
+				<HelpText>When enabled, stages will always be random.</HelpText>
+			</Property>	
+			<Property name="DupliCheck" display="Avoid Duplicate" type="bool" defaultvalue="True">
+				<HelpText>When enabled, Randomizer will try to avoid the same combinations.</HelpText>
+			</Property>	
+				<Property name="SA2M2" display="Allow SA2 Mission 100 Rings" type="bool" defaultvalue="True">
+				<HelpText>Allow the randomizer to add custom SA2 mission. (Collect 100 rings).</HelpText>
+			</Property>
+				<Property name="SA2M3" display="Allow SA2 Mission Lost Chao" type="bool" defaultvalue="True">
+				<HelpText>Allow the randomizer to add custom SA2 mission. (Lost Chao).</HelpText>
+			</Property>
+			<Property name="Upgrade" display="Have All Upgrades" type="bool" defaultvalue="True">
+				<HelpText>Have all upgrades. [Highly Recommended]</HelpText>
+			</Property>
+			<Property name="Vanilla" display="Allow Vanilla combination" type="bool" defaultvalue="False">
+				<HelpText>Allow vanilla stage character combination.</HelpText>
+			</Property>	
+		</Group>
+		
+	<Group name="SongsStuff" display="2. Audio Settings">
+			<Property name="RNGVoices" display="Randomize Voices" type="bool" defaultvalue="True">
+			<HelpText>Randomize Voices.... "Did you insert a memory card?". (Note: Special Rando custom voices won't be randomized.)</HelpText>
+		</Property>
+			<Property name="RNGMusic" display="Randomize Music" type="bool" defaultvalue="True">
+				<HelpText>Randomize music... wanna hear that Chao sad music?</HelpText>
+			</Property>
+		</Group>
+		
+		    <Group name="CharactersStuff" display="3. Characters Settings">
+			<Property name="AmySpeed" display="Amy Acceleration" type="bool" defaultvalue="True">
+			<HelpText>Increase Amy's maximum acceleration [Highly Recommended].</HelpText>
+			</Property>
+			<Property name="BigSpeed" display="Big Acceleration" type="bool" defaultvalue="True">
+			<HelpText>Increase Big's maximum acceleration [Highly Recommended].</HelpText>
+			</Property>
+		</Group>
+		
+	<Group name="Roster" display="4. Disable Characters">
+      <Property name="Sonic" type="bool" defaultvalue="False">
+        <HelpText>Ban Sonic from the roster. (Note: if you ban Sonic, you won't get Metal Sonic or Super Sonic either.)</HelpText>
+      </Property>
+	  <Property name="Tails" type="bool" defaultvalue="False">
+        <HelpText>Ban Tails from the roster.</HelpText>
+      </Property>
+	  <Property name="Knuckles" type="bool" defaultvalue="False">
+        <HelpText>Ban Knuckles from the roster.</HelpText>
+	  </Property>
+	  <Property name="Amy" type="bool" defaultvalue="False">
+        <HelpText>Ban Amy from the roster.</HelpText>
+	  </Property>
+	  <Property name="Big" type="bool" defaultvalue="False">
+        <HelpText>Ban Big from the roster.</HelpText>
+	  </Property>
+	  <Property name="Gamma" display="E-102 Gamma" type="bool" defaultvalue="False">
+        <HelpText>Ban E-102 Gamma from the roster.</HelpText>
+      </Property>
+	  	  <Property name="MetalSonic" display="Metal Sonic" type="bool" defaultvalue="False">
+        <HelpText>Ban Metal Sonic from the roster.</HelpText>
+      </Property>
+	  	  <Property name="SuperSonic" display="Super Sonic" type="bool" defaultvalue="False">
+        <HelpText>Ban Super Sonic from the roster.</HelpText>
+      </Property>
+	    </Group>
+		
+			<Group name="RosterAI" display="5. AI Settings">
+      <Property name="isAIAllowed" display="Allow Random AI" type="bool" defaultvalue="True">
+        <HelpText>Allow a random AI to follow you. (note: AI won't spawn during few specific places.)</HelpText>
+		 </Property>
+		       <Property name="isChaoGameplayAllowed" display="Allow Chao Gameplay" type="bool" defaultvalue="False">
+        <HelpText>[CHAO GAMEPLAY MOD REQUIRED] When enabled, your Chao will follow and protect you. (note: Rando will send you to the chao garden.)</HelpText>
+		 </Property>
+			    </Group>
+							<Group name="Difficulty" display="6. Difficulty">
+		       <Property name="Viper" display="Lower Egg Viper Health" type="bool" defaultvalue="True">
+        <HelpText>Reduces Egg Viper HP. (Note: This has no effect with Critical Mode enabled.)</HelpText>
+		 </Property>
+			    </Group>
+		</Groups>
+		
+	<Enums>
+		<Enum name="Characters">
+      <EnumMember name="Random" />
+			<EnumMember name="Sonic" />
+			<EnumMember name="Tails" />
+			<EnumMember name="Knuckles" />
+			<EnumMember name="Amy" />
+			<EnumMember name="Big" />
+			<EnumMember name="Gamma" />
+			<EnumMember name="Metal Sonic" />
+			<EnumMember name="Super Sonic" />
+		</Enum>
+				    <Enum name="StoryChoice">
+      <EnumMember name="0" display="SADX" />
+      <EnumMember name="1" display="SA2" />
+    </Enum>
+		    <Enum name="Splits">
+      <EnumMember name="0" display="None" />
+      <EnumMember name="1" display="Sonic's Story" />
+      <EnumMember name="2" display="All Stories" />
+    </Enum>
+			   <Enum name="CDMusic">
+      <EnumMember name="0" display="EU/JP" />
+      <EnumMember name="1" display="USA" />
+    </Enum>
+	</Enums>
+</ConfigSchema>

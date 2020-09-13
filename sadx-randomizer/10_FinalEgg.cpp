@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void CamFinalEgg() {
@@ -24,6 +24,7 @@ void CamFinalEgg() {
 
 void FinalEgg_Layout() {
 
+	//CurrentStageVersion = AmyVersion;
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
@@ -44,13 +45,13 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	AddLevelLayout("Final Egg\\", "FE1", helperFunctions);
 	AddLevelLayout("Final Egg\\", "FE2", helperFunctions);
 	AddLevelLayout("Final Egg\\", "FEA", helperFunctions);
-	AddLevelLayout("Final Egg\\", "FEE", helperFunctions);
+	AddLevelLayout("Final Egg\\", "FEG", helperFunctions);
 
-	AddCam("CAM1000S", "CAM1000S");
-	AddCam("CAM1001S", "CAM1001S");
-	AddCam("CAM1002S", "CAM1002S");
-	AddCam("CAM1004S", "CAM1004S");
-	AddCam("CAM1005S", "CAM1005S");
+	AddCam("C1000");
+	AddCam("C1001");
+	AddCam("C1002");
+	AddCam("C1003");
+	AddCam("C1004");
 }
 
 ObjectListEntry FinalEggObjectList_list[] = {

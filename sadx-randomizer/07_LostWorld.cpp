@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void Cam_LW() {
@@ -19,16 +19,15 @@ void Cam_LW() {
 
 void LW_Layout() {
 
-
 	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else
 	{
+		CurrentStageVersion = KnucklesVersion;
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
 	}
 
-	CurrentStageVersion = KnucklesVersion;
 
 	return;
 }
@@ -54,12 +53,18 @@ void FixLWWaterSlide2() {
 	return ForcePlayerAction(0, 0x18);
 }
 
+int FixLWMusic() {
+	if (CurrentStageVersion == KnucklesVersion)
+		return Characters_Knuckles;
+	else
+		return 8;
+}
 
 
 void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<5>((int*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
+	WriteCall((void*)0x5e16c2, FixLWMusic); //Fix Lost World Act 2 music as Knuckles.
 
 
 	WriteCall((void*)0x422e43, LW_Layout);
@@ -74,10 +79,10 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	AddLevelLayout("Lost World\\", "LW2", helperFunctions);
 	AddLevelLayout("Lost World\\", "LWK", helperFunctions);
 
-	AddCam("CAM0700S", "CAM0700S");
-	AddCam("CAM0701S", "CAM0701S");
-	AddCam("CAM0702S", "CAM0702S");
-	AddCam("CAM0704S", "CAM0704S");
+	AddCam("C0700");
+	AddCam("C0701");
+	AddCam("C0702");
+	AddCam("C0703");
 }
 
 ObjectListEntry LostWorldObjectList_list[] = {

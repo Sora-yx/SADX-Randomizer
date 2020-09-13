@@ -61,7 +61,7 @@ void FixRaceResult() {
 
 void CheckRace() {
 
-	if (CurrentCharacter == Characters_Tails && !Vanilla)
+	if (CurrentCharacter == Characters_Tails && !Vanilla || CurrentStageVersion != TailsVersion)
 	{
 		Race = false;
 		return;

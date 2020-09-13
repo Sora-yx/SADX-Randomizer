@@ -1,12 +1,12 @@
 #include "stdafx.h"
 
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hedgehog Hammer\\" B ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
 
 
 void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	
+
 	WriteCall((void*)0x626a34, HedgehogHammerTrick);
 	WriteCall((void*)0x624b00, HedgehogHammerTrick);
 	WriteCall((void*)0x62519c, HedgehogHammerTrick);
@@ -15,18 +15,7 @@ void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helper
 	WriteCall((void*)0x626744, HedgehogHammerResult);
 
 
-	//Sonic
-	AddSet("SET0000S", "Sonic-HH");
-	//Tails
-	AddSet("SET0000M", "Tails-HH");
-	//Knuckles
-	AddSet("SET0000K", "Knux-HH");
-	//Amy
-	AddSet("SET0000A", "Amy-HH");
-	//Big
-	AddSet("SET0000B", "Big-HH");
-	//Gamma
-	AddSet("SET0000E", "Gamma-HH");
+	AddSet("SET0000S", "HH");
 }
 
 int HedgehogHammerTrick() {

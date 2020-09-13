@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void CamSpeedHighway() {
@@ -22,6 +22,8 @@ void CamSpeedHighway() {
 
 
 void SpeedHighway_Layout() {
+
+	CurrentStageVersion = KnucklesVersion;
 
 	switch (CurrentStageVersion)
 	{
@@ -237,10 +239,9 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	AddLevelLayout("Speed Highway\\", "SHM", helperFunctions);
 	AddLevelLayout("Speed Highway\\", "SHK", helperFunctions);
 
-	AddCam("CAM0400S", "CAM0400S");
-	AddCam("CAM0401S", "CAM0401S");
-	AddCam("CAM0402S", "CAM0402S");
-	AddCam("CAM0403S", "CAM0403S");
-	AddCam("CAM0405S", "CAM0405S");
-
+	AddCam("C0400");
+	AddCam("C0401");
+	AddCam("C0402");
+	AddCam("C0403");
+	AddCam("C0404");
 }

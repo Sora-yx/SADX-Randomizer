@@ -105,5 +105,5 @@ void __cdecl Zero_Init(const char* path, const HelperFunctions& helperFunctions)
 
 	//Sonic
 
-	helperFunctions.ReplaceFile("system\\SETZEROS.bin", "system\\levels\\Zero\\Sonic-Zero.bin");
+	helperFunctions.ReplaceFile("system\\SETZEROS.bin", "system\\levels\\SETZEROS.bin");
 }
