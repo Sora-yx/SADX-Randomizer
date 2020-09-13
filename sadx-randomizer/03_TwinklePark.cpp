@@ -1,9 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
 
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Twinkle Park\\" A ".bin")
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -79,83 +75,16 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	TPObjects_Init(path, helperFunctions);
 
 	//Sonic
-	AddSet("SET0310S", "Sonic-TP-Act1");
-	AddSet("SET0311S", "Sonic-TP-Act2");
-	AddSet("SET0312S", "Sonic-TP-Act3");
-	AddSet("SET0313S", "Sonic-TP-Amy");
-	AddSet("SET0314S", "Sonic-TP-Big");
+	AddLevelLayout("Twinkle Park\\", "TP0", helperFunctions);
+	AddLevelLayout("Twinkle Park\\", "TP1", helperFunctions);
+	AddLevelLayout("Twinkle Park\\", "TP2", helperFunctions);
+	AddLevelLayout("Twinkle Park\\", "TPA", helperFunctions);
+	AddLevelLayout("Twinkle Park\\", "TPB", helperFunctions);
 
 	AddCam("CAM0300S", "CAM0300S");
 	AddCam("CAM0301S", "CAM0301S");
 	AddCam("CAM0302S", "CAM0302S");
 	AddCam("CAM0305S", "CAM0305S");
-
-
-	//Tails
-	AddSet("SET0310M", "Tails-TP-Act1");
-	AddSet("SET0311M", "Tails-TP-Act2");
-	AddSet("SET0312M", "Tails-TP-Act3");
-	AddSet("SET0313M", "Tails-TP-Amy");
-	AddSet("SET0314M", "Tails-TP-Big");
-
-	AddCam("CAM0300M", "CAM0300M");
-	AddCam("CAM0301M", "CAM0301M");
-	AddCam("CAM0302M", "CAM0302M");
-	AddCam("CAM0305M", "CAM0305M");
-
-
-	//Knuckles
-	AddSet("SET0310K", "Knux-TP-Act1");
-	AddSet("SET0311K", "Knux-TP-Act2");
-	AddSet("SET0312K", "Knux-TP-Act3");
-	AddSet("SET0313K", "Knux-TP-Amy");
-	AddSet("SET0314K", "Knux-TP-Big");
-
-	AddCam("CAM0300K", "CAM0300K");
-	AddCam("CAM0301K", "CAM0301K");
-	AddCam("CAM0302K", "CAM0302K");
-	AddCam("CAM0305K", "CAM0305K");
-
-
-	//Amy
-	AddSet("SET0310A", "Amy-TP-Act1");
-	AddSet("SET0311A", "Amy-TP-Act2");
-	AddSet("SET0312A", "Amy-TP-Act3");
-	AddSet("SET0313A", "Amy-TP-Amy");
-	AddSet("SET0314A", "Amy-TP-Big");
-
-	AddCam("CAM0300A", "CAM0300A");
-	AddCam("CAM0301A", "CAM0301A");
-	AddCam("CAM0302A", "CAM0302A");
-	AddCam("CAM0305A", "CAM0305A");
-
-
-	//Big
-	AddSet("SET0310B", "Big-TP-Act1");
-	AddSet("SET0311B", "Big-TP-Act2");
-	AddSet("SET0312B", "Big-TP-Act3");
-	AddSet("SET0313B", "Big-TP-Amy");
-	AddSet("SET0314B", "Big-TP-Big");
-
-
-	AddCam("CAM0300B", "CAM0300B");
-	AddCam("CAM0301B", "CAM0301B");
-	AddCam("CAM0302B", "CAM0302B");
-	AddCam("CAM0305B", "CAM0305B");
-
-
-	//Gamma
-	AddSet("SET0310E", "Gamma-TP-Act1");
-	AddSet("SET0311E", "Gamma-TP-Act2");
-	AddSet("SET0312E", "Gamma-TP-Act3");
-	AddSet("SET0313E", "Gamma-TP-Amy");
-	AddSet("SET0314E", "Gamma-TP-Big");
-
-	AddCam("CAM0300E", "CAM0300E");
-	AddCam("CAM0301E", "CAM0301E");
-	AddCam("CAM0302E", "CAM0302E");
-	AddCam("CAM0305E", "CAM0305E");
-
 }
 
 

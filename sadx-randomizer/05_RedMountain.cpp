@@ -1,11 +1,8 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "RM.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Red Mountain\\" A ".bin")
+
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
-#define RegisterPosition(E, F) helperFunctions.RegisterStartPosition( E , F )
 
 void CamRedMountain() {
 	LoadCamFile(0, "0500");
@@ -214,75 +211,14 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 
 	RMObjects_Init(path, helperFunctions);
 
-	//Sonic
-	AddSet("SET0510S", "Sonic-RM-Act1");
-	AddSet("SET0511S", "Sonic-RM-Act2");
-	AddSet("SET0512S", "Sonic-RM-Act3");
-	AddSet("SET0513S", "Sonic-RM-E102");
+	AddLevelLayout("Red Mountain\\", "RM0", helperFunctions);
+	AddLevelLayout("Red Mountain\\", "RM1", helperFunctions);
+	AddLevelLayout("Red Mountain\\", "RM2", helperFunctions);
+	AddLevelLayout("Red Mountain\\", "RM3", helperFunctions);
+	AddLevelLayout("Red Mountain\\", "RME", helperFunctions);
 
 	AddCam("CAM0500S", "CAM0500S");
 	AddCam("CAM0501S", "CAM0501S");
 	AddCam("CAM0502S", "CAM0502S");
 	AddCam("CAM0503S", "CAM0503S");
-
-
-	//Tails
-	AddSet("SET0510M", "Tails-RM-Act1");
-	AddSet("SET0511M", "Tails-RM-Act2");
-	AddSet("SET0512M", "Tails-RM-Act3");
-	AddSet("SET0513M", "Tails-RM-E102");
-
-	AddCam("CAM0500M", "CAM0500M");
-	AddCam("CAM0501M", "CAM0501M");
-	AddCam("CAM0502M", "CAM0502M");
-	AddCam("CAM0503M", "CAM0503M");
-
-
-	//Knuckles
-	AddSet("SET0510K", "Knux-RM-Act1");
-	AddSet("SET0511K", "Knux-RM-Act2");
-	AddSet("SET0512K", "Knux-RM-Act3");
-	AddSet("SET0513K", "Knux-RM-E102");
-
-	AddCam("CAM0500K", "CAM0500K");
-	AddCam("CAM0501K", "CAM0501K");
-	AddCam("CAM0502K", "CAM0502K");
-	AddCam("CAM0503K", "CAM0503K");
-
-
-	//Amy
-	AddSet("SET0510A", "Amy-RM-Act1");
-	AddSet("SET0511A", "Amy-RM-Act2");
-	AddSet("SET0512A", "Amy-RM-Act3");
-	AddSet("SET0513A", "Amy-RM-E102");
-
-	AddCam("CAM0500A", "CAM0500A");
-	AddCam("CAM0501A", "CAM0501A");
-	AddCam("CAM0502A", "CAM0502A");
-	AddCam("CAM0503A", "CAM0503A");
-
-
-	//Big
-	AddSet("SET0510B", "Big-RM-Act1");
-	AddSet("SET0511B", "Big-RM-Act2");
-	AddSet("SET0512B", "Big-RM-Act3");
-	AddSet("SET0513B", "Big-RM-E102");
-
-	AddCam("CAM0500B", "CAM0500B");
-	AddCam("CAM0501B", "CAM0501B");
-	AddCam("CAM0502B", "CAM0502B");
-	AddCam("CAM0503B", "CAM0503B");
-
-
-	//Gamma
-	AddSet("SET0510E", "Gamma-RM-Act1");
-	AddSet("SET0511E", "Gamma-RM-Act2");
-	AddSet("SET0512E", "Gamma-RM-Act3");
-	AddSet("SET0513E", "Gamma-RM-E102");
-
-	AddCam("CAM0500E", "CAM0500E");
-	AddCam("CAM0501E", "CAM0501E");
-	AddCam("CAM0502E", "CAM0502E");
-	AddCam("CAM0503E", "CAM0503E");
-
 }

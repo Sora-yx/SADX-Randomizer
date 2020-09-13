@@ -1,9 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
 
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Windy Valley\\" A ".bin")
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 void Cam_WV() {

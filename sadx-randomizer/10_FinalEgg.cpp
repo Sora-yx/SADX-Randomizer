@@ -1,8 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Final Egg\\" A ".bin")
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -43,89 +40,17 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 
 	WriteCall((void*)0x422fe3, FinalEgg_Layout); //FE random layout
 
-	//Sonic
-						
-	AddSet("SET1010S", "Sonic-FE-Act1");
-	AddSet("SET1011S", "Sonic-FE-Act2");
-	AddSet("SET1012S", "Sonic-FE-Act3");
-	AddSet("SET1013S", "Sonic-FE-Amy");
-	AddSet("SET1014S", "Sonic-FE-Gamma");
+	AddLevelLayout("Final Egg\\", "FE0", helperFunctions);
+	AddLevelLayout("Final Egg\\", "FE1", helperFunctions);
+	AddLevelLayout("Final Egg\\", "FE2", helperFunctions);
+	AddLevelLayout("Final Egg\\", "FEA", helperFunctions);
+	AddLevelLayout("Final Egg\\", "FEE", helperFunctions);
 
 	AddCam("CAM1000S", "CAM1000S");
 	AddCam("CAM1001S", "CAM1001S");
 	AddCam("CAM1002S", "CAM1002S");
 	AddCam("CAM1004S", "CAM1004S");
 	AddCam("CAM1005S", "CAM1005S");
-
-
-	//Tails
-	AddSet("SET1010M", "Tails-FE-Act1");
-	AddSet("SET1011M", "Tails-FE-Act2");
-	AddSet("SET1012M", "Tails-FE-Act3");
-	AddSet("SET1013M", "Tails-FE-Amy");
-	AddSet("SET1014M", "Tails-FE-Gamma");
-
-	AddCam("CAM1000M", "CAM1000M");
-	AddCam("CAM1001M", "CAM1001M");
-	AddCam("CAM1002M", "CAM1002M");
-	AddCam("CAM1004M", "CAM1004M");
-	AddCam("CAM1005M", "CAM1005M");
-
-	//Knuckles
-	AddSet("SET1010K", "Knux-FE-Act1");
-	AddSet("SET1011K", "Knux-FE-Act2");
-	AddSet("SET1012K", "Knux-FE-Act3");
-	AddSet("SET1013K", "Knux-FE-Amy");
-	AddSet("SET1014K", "Knux-FE-Gamma");
-
-
-	AddCam("CAM1000K", "CAM1000K");
-	AddCam("CAM1001K", "CAM1001K");
-	AddCam("CAM1002K", "CAM1002K");
-	AddCam("CAM1004K", "CAM1004K");
-	AddCam("CAM1005K", "CAM1005K");
-
-	//Amy
-	AddSet("SET1010A", "Amy-FE-Act1");
-	AddSet("SET1011A", "Amy-FE-Act2");
-	AddSet("SET1012A", "Amy-FE-Act3");
-	AddSet("SET1013A", "Amy-FE-Amy");
-	AddSet("SET1014A", "Amy-FE-Gamma");
-
-
-	AddCam("CAM1000A", "CAM1000A");
-	AddCam("CAM1001A", "CAM1001A");
-	AddCam("CAM1002A", "CAM1002A");
-	AddCam("CAM1004A", "CAM1004A");
-	AddCam("CAM1005A", "CAM1005A");
-
-	//Big
-	AddSet("SET1010B", "Big-FE-Act1");
-	AddSet("SET1011B", "Big-FE-Act2");
-	AddSet("SET1012B", "Big-FE-Act3");
-	AddSet("SET1013B", "Big-FE-Amy");
-	AddSet("SET1014B", "Big-FE-Gamma");
-
-
-	AddCam("CAM1000B", "CAM1000B");
-	AddCam("CAM1001B", "CAM1001B");
-	AddCam("CAM1002B", "CAM1002B");
-	AddCam("CAM1004B", "CAM1004B");
-	AddCam("CAM1005B", "CAM1005B");
-
-	//Gamma
-	AddSet("SET1010E", "Gamma-FE-Act1");
-	AddSet("SET1011E", "Gamma-FE-Act2");
-	AddSet("SET1012E", "Gamma-FE-Act3");
-	AddSet("SET1013E", "Gamma-FE-Amy");
-	AddSet("SET1014E", "Gamma-FE-Gamma");
-
-
-	AddCam("CAM1000E", "CAM1000E");
-	AddCam("CAM1001E", "CAM1001E");
-	AddCam("CAM1002E", "CAM1002E");
-	AddCam("CAM1004E", "CAM1004E");
-	AddCam("CAM1005E", "CAM1005E");
 }
 
 ObjectListEntry FinalEggObjectList_list[] = {

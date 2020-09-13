@@ -1,9 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "Trampoline.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Speed Highway\\" A ".bin")
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -235,11 +231,11 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	SHObjects_Init(path, helperFunctions);
 
 	//Sonic
-	AddSet("SET0410S", "Sonic-SH-Act1");
-	AddSet("SET0411S", "Sonic-SH-Act2");
-	AddSet("SET0412S", "Sonic-SH-Act3");
-	AddSet("SET0413S", "Sonic-SH-Race");
-	AddSet("SET0414S", "Sonic-SH-Knux");
+	AddLevelLayout("Speed Highway\\", "SH0", helperFunctions);
+	AddLevelLayout("Speed Highway\\", "SH1", helperFunctions);
+	AddLevelLayout("Speed Highway\\", "SH2", helperFunctions);
+	AddLevelLayout("Speed Highway\\", "SHM", helperFunctions);
+	AddLevelLayout("Speed Highway\\", "SHK", helperFunctions);
 
 	AddCam("CAM0400S", "CAM0400S");
 	AddCam("CAM0401S", "CAM0401S");
@@ -247,74 +243,4 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	AddCam("CAM0403S", "CAM0403S");
 	AddCam("CAM0405S", "CAM0405S");
 
-
-	//Tails
-	AddSet("SET0410M", "Tails-SH-Act1");
-	AddSet("SET0411M", "Tails-SH-Act2");
-	AddSet("SET0412M", "Tails-SH-Act3");
-	AddSet("SET0413M", "Tails-SH-Race");
-	AddSet("SET0414M", "Tails-SH-Knux");
-
-	AddCam("CAM0400M", "CAM0400M");
-	AddCam("CAM0401M", "CAM0401M");
-	AddCam("CAM0402M", "CAM0402M");
-	AddCam("CAM0403M", "CAM0403M");
-	AddCam("CAM0405M", "CAM0405M");
-
-
-	//Knuckles
-	AddSet("SET0410K", "Knux-SH-Act1");
-	AddSet("SET0411K", "Knux-SH-Act2");
-	AddSet("SET0412K", "Knux-SH-Act3");
-	AddSet("SET0413K", "Knux-SH-Race");
-	AddSet("SET0414K", "Knux-SH-Knux");
-	AddSet("SET0415K", "Knux-SH-KnuxR");
-
-	AddCam("CAM0400K", "CAM0400K");
-	AddCam("CAM0401K", "CAM0401K");
-	AddCam("CAM0402K", "CAM0402K");
-	AddCam("CAM0403K", "CAM0403K");
-	AddCam("CAM0405K", "CAM0405K");
-
-
-	//Amy
-	AddSet("SET0410A", "Amy-SH-Act1");
-	AddSet("SET0411A", "Amy-SH-Act2");
-	AddSet("SET0412A", "Amy-SH-Act3");
-	AddSet("SET0413A", "Amy-SH-Race");
-	AddSet("SET0414A", "Amy-SH-Knux");
-	AddSet("SET0415A", "Amy-SH-KnuxR");
-
-	AddCam("CAM0400A", "CAM0400A");
-	AddCam("CAM0401A", "CAM0401A");
-	AddCam("CAM0402A", "CAM0402A");
-	AddCam("CAM0403A", "CAM0403A");
-	AddCam("CAM0405A", "CAM0405A");
-	//Big
-	AddSet("SET0410B", "Big-SH-Act1");
-	AddSet("SET0411B", "Big-SH-Act2");
-	AddSet("SET0412B", "Big-SH-Act3");
-	AddSet("SET0413B", "Big-SH-Race");
-	AddSet("SET0414B", "Big-SH-Knux");
-	AddSet("SET0415B", "Big-SH-KnuxR");
-
-	AddCam("CAM0400B", "CAM0400B");
-	AddCam("CAM0401B", "CAM0401B");
-	AddCam("CAM0402B", "CAM0402B");
-	AddCam("CAM0403B", "CAM0403B");
-	AddCam("CAM0405B", "CAM0405B");
-
-	//Gamma
-	AddSet("SET0410E", "Gamma-SH-Act1");
-	AddSet("SET0411E", "Gamma-SH-Act2");
-	AddSet("SET0412E", "Gamma-SH-Act3");
-	AddSet("SET0413E", "Gamma-SH-Race");
-	AddSet("SET0414E", "Gamma-SH-Knux");
-	AddSet("SET0415E", "Gamma-SH-KnuxR");
-
-	AddCam("CAM0400E", "CAM0400E");
-	AddCam("CAM0401E", "CAM0401E");
-	AddCam("CAM0402E", "CAM0402E");
-	AddCam("CAM0403E", "CAM0403E");
-	AddCam("CAM0405E", "CAM0405E");
 }

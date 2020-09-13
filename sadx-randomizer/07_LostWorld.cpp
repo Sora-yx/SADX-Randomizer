@@ -1,8 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Lost World\\" A ".bin")
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -72,77 +69,15 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	
 	LWObjects_Init(path, helperFunctions);
 
-	//Sonic
-	AddSet("SET0710S", "Sonic-LW-Act1");
-	AddSet("SET0711S", "Sonic-LW-Act2");
-	AddSet("SET0712S", "Sonic-LW-Act3");
-	AddSet("SET0713S", "Sonic-LW-Knux");
-	AddSet("SET0714S", "Sonic-LW-KnuxR");
+	AddLevelLayout("Lost World\\", "LW0", helperFunctions);
+	AddLevelLayout("Lost World\\", "LW1", helperFunctions);
+	AddLevelLayout("Lost World\\", "LW2", helperFunctions);
+	AddLevelLayout("Lost World\\", "LWK", helperFunctions);
 
 	AddCam("CAM0700S", "CAM0700S");
 	AddCam("CAM0701S", "CAM0701S");
 	AddCam("CAM0702S", "CAM0702S");
 	AddCam("CAM0704S", "CAM0704S");
-
-	//Tails
-	AddSet("SET0710M", "Tails-LW-Act1");
-	AddSet("SET0711M", "Tails-LW-Act2");
-	AddSet("SET0712M", "Tails-LW-Act3");
-	AddSet("SET0713M", "Tails-LW-Knux");
-	AddSet("SET0714M", "Tails-LW-KnuxR");
-
-	AddCam("CAM0700M", "CAM0700M");
-	AddCam("CAM0701M", "CAM0701M");
-	AddCam("CAM0702M", "CAM0702M");
-	AddCam("CAM0704M", "CAM0704M");
-
-	//Knuckles
-	AddSet("SET0710K", "Knux-LW-Act1");
-	AddSet("SET0711K", "Knux-LW-Act2");
-	AddSet("SET0712K", "Knux-LW-Act3");
-	AddSet("SET0713K", "Knux-LW-Knux");
-	AddSet("SET0714K", "Knux-LW-KnuxR");
-
-	AddCam("CAM0700K", "CAM0700K");
-	AddCam("CAM0701K", "CAM0701K");
-	AddCam("CAM0702K", "CAM0702K");
-	AddCam("CAM0704K", "CAM0704K");
-
-	//Amy
-	AddSet("SET0710A", "Amy-LW-Act1");
-	AddSet("SET0711A", "Amy-LW-Act2");
-	AddSet("SET0712A", "Amy-LW-Act3");
-	AddSet("SET0713A", "Amy-LW-Knux");
-	AddSet("SET0714A", "Amy-LW-KnuxR");
-
-	AddCam("CAM0700A", "CAM0700A");
-	AddCam("CAM0701A", "CAM0701A");
-	AddCam("CAM0702A", "CAM0702A");
-	AddCam("CAM0704A", "CAM0704A");
-
-	//Big
-	AddSet("SET0710B", "Big-LW-Act1");
-	AddSet("SET0711B", "Big-LW-Act2");
-	AddSet("SET0712B", "Big-LW-Act3");
-	AddSet("SET0713B", "Big-LW-Knux");
-	AddSet("SET0714B", "Big-LW-KnuxR");
-
-	AddCam("CAM0700B", "CAM0700B");
-	AddCam("CAM0701B", "CAM0701B");
-	AddCam("CAM0702B", "CAM0702B");
-	AddCam("CAM0704B", "CAM0704B");
-
-	//Gamma
-	AddSet("SET0710E", "Gamma-LW-Act1");
-	AddSet("SET0711E", "Gamma-LW-Act2");
-	AddSet("SET0712E", "Gamma-LW-Act3");
-	AddSet("SET0713E", "Gamma-LW-Knux");
-	AddSet("SET0714E", "Gamma-LW-KnuxR");
-
-	AddCam("CAM0700B", "CAM0700B");
-	AddCam("CAM0701B", "CAM0701B");
-	AddCam("CAM0702B", "CAM0702B");
-	AddCam("CAM0704B", "CAM0704B");
 }
 
 ObjectListEntry LostWorldObjectList_list[] = {

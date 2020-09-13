@@ -1,11 +1,6 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "SD.h"
-#include "ActsSettings.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "Trampoline.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Sky Deck\\" A ".bin")
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -164,85 +159,17 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	WriteCall((void*)0x461614, FixTailsVictorySD);
 	SDObjects_Init(path, helperFunctions);
 
-	//Sonic
-	AddSet("SET0610S", "Sonic-SD-Act1");
-	AddSet("SET0611S", "Sonic-SD-Act2");
-	AddSet("SET0612S", "Sonic-SD-Act3");
-	AddSet("SET0613S", "Sonic-SD-Race");
-	AddSet("SET0614S", "Sonic-SD-Knux");
+	AddLevelLayout("Sky Deck\\", "SD0", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SD1", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SD2", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SDM", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SDK", helperFunctions);
 
 	AddCam("CAM0600S", "CAM0600S");
 	AddCam("CAM0601S", "CAM0601S");
 	AddCam("CAM0602S", "CAM0602S");
 	AddCam("CAM0603S", "CAM0603S");
 	AddCam("CAM0604S", "CAM0604S");
-
-
-	//Tails
-	AddSet("SET0610M", "Tails-SD-Act1");
-	AddSet("SET0611M", "Tails-SD-Act2");
-	AddSet("SET0612M", "Tails-SD-Act3");
-	AddSet("SET0613M", "Tails-SD-Race");
-	AddSet("SET0614M", "Tails-SD-Knux");
-	
-
-	AddCam("CAM0600M", "CAM0600M");
-	AddCam("CAM0601M", "CAM0601M");
-	AddCam("CAM0602M", "CAM0602M");
-	AddCam("CAM0603M", "CAM0603M");
-	AddCam("CAM0604M", "CAM0604M");
-
-	//Knuckles
-	AddSet("SET0610K", "Knux-SD-Act1");
-	AddSet("SET0611K", "Knux-SD-Act2");
-	AddSet("SET0612K", "Knux-SD-Act3");
-	AddSet("SET0613K", "Knux-SD-Race");
-	AddSet("SET0614K", "Knux-SD-Knux");
-
-	AddCam("CAM0600K", "CAM0600K");
-	AddCam("CAM0601K", "CAM0601K");
-	AddCam("CAM0602K", "CAM0602K");
-	AddCam("CAM0603K", "CAM0603K");
-	AddCam("CAM0604K", "CAM0604K");
-
-	//Amy
-	AddSet("SET0610A", "Amy-SD-Act1");
-	AddSet("SET0611A", "Amy-SD-Act2");
-	AddSet("SET0612A", "Amy-SD-Act3");
-	AddSet("SET0613A", "Amy-SD-Race");
-	AddSet("SET0614A", "Amy-SD-Knux");
-
-	AddCam("CAM0600A", "CAM0600A");
-	AddCam("CAM0601A", "CAM0601A");
-	AddCam("CAM0602A", "CAM0602A");
-	AddCam("CAM0603A", "CAM0603A");
-	AddCam("CAM0604A", "CAM0604A");
-
-	//Big
-	AddSet("SET0610B", "Big-SD-Act1");
-	AddSet("SET0611B", "Big-SD-Act2");
-	AddSet("SET0612B", "Big-SD-Act3");
-	AddSet("SET0613B", "Big-SD-Race");
-	AddSet("SET0614B", "Big-SD-Knux");
-
-	AddCam("CAM0600B", "CAM0600B");
-	AddCam("CAM0601B", "CAM0601B");
-	AddCam("CAM0602B", "CAM0602B");
-	AddCam("CAM0603B", "CAM0603B");
-	AddCam("CAM0604B", "CAM0604B");
-
-	//Gamma
-	AddSet("SET0610E", "Gamma-SD-Act1");
-	AddSet("SET0611E", "Gamma-SD-Act2");
-	AddSet("SET0612E", "Gamma-SD-Act3");
-	AddSet("SET0613E", "Gamma-SD-Race");
-	AddSet("SET0614E", "Gamma-SD-Knux");
-
-	AddCam("CAM0600E", "CAM0600E");
-	AddCam("CAM0601E", "CAM0601E");
-	AddCam("CAM0602E", "CAM0602E");
-	AddCam("CAM0603E", "CAM0603E");
-	AddCam("CAM0604E", "CAM0604E");
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {

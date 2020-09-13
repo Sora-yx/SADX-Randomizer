@@ -1,10 +1,6 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "IceCap.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "CharactersSettings.h"
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Ice Cap\\" A ".bin")
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
@@ -149,82 +145,16 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 
 	ICObjects_Init(path, helperFunctions);
 
-	//Sonic
-	AddSet("SET0810S", "Sonic-IC-Act1");
-	AddSet("SET0811S", "Sonic-IC-Act2");
-	AddSet("SET0812S", "Sonic-IC-Act3");
-	AddSet("SET0813S", "Sonic-IC-Big");
-	AddSet("SET0814S", "Sonic-IC-T");
+	AddLevelLayout("Ice Cap\\", "IC0", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC1", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC2", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "IC3", helperFunctions);
+	AddLevelLayout("Ice Cap\\", "ICM", helperFunctions);
 
 	AddCam("CAM0800S", "CAM0800S");
 	AddCam("CAM0801S", "CAM0801S");
 	AddCam("CAM0802S", "CAM0802S");
 	AddCam("CAM0803S", "CAM0803S");
-
-	//Tails
-	AddSet("SET0810M", "Tails-IC-Act1");
-	AddSet("SET0811M", "Tails-IC-Act2");
-	AddSet("SET0812M", "Tails-IC-Act3");
-	AddSet("SET0813M", "Tails-IC-Big");
-	AddSet("SET0814M", "Tails-IC-T");
-
-
-	AddCam("CAM0800M", "CAM0800M");
-	AddCam("CAM0801M", "CAM0801M");
-	AddCam("CAM0802M", "CAM0802M");
-	AddCam("CAM0803M", "CAM0803M");
-
-
-	//Knuckles
-	AddSet("SET0810K", "Knux-IC-Act1");
-	AddSet("SET0811K", "Knux-IC-Act2");
-	AddSet("SET0812K", "Knux-IC-Act3");
-	AddSet("SET0813K", "Knux-IC-Big");
-	AddSet("SET0814K", "Knux-IC-T");
-
-	AddCam("CAM0800K", "CAM0800K");
-	AddCam("CAM0801K", "CAM0801K");
-	AddCam("CAM0802K", "CAM0802K");
-	AddCam("CAM0803K", "CAM0803K");
-
-
-	//Amy
-	AddSet("SET0810A", "Amy-IC-Act1");
-	AddSet("SET0811A", "Amy-IC-Act2");
-	AddSet("SET0812A", "Amy-IC-Act3");
-	AddSet("SET0813A", "Amy-IC-Big");
-	AddSet("SET0814A", "Amy-IC-T");
-
-	AddCam("CAM0800A", "CAM0800A");
-	AddCam("CAM0801A", "CAM0801A");
-	AddCam("CAM0802A", "CAM0802A");
-	AddCam("CAM0803A", "CAM0803A");
-
-
-	//Big
-	AddSet("SET0810B", "Big-IC-Act1");
-	AddSet("SET0811B", "Big-IC-Act2");
-	AddSet("SET0812B", "Big-IC-Act3");
-	AddSet("SET0813B", "Big-IC-Big");
-	AddSet("SET0814B", "Big-IC-T");
-
-	AddCam("CAM0800B", "CAM0800B");
-	AddCam("CAM0801B", "CAM0801B");
-	AddCam("CAM0802B", "CAM0802B");
-	AddCam("CAM0803B", "CAM0803B");
-
-
-	//Gamma
-	AddSet("SET0810E", "Gamma-IC-Act1");
-	AddSet("SET0811E", "Gamma-IC-Act2");
-	AddSet("SET0812E", "Gamma-IC-Act3");
-	AddSet("SET0813E", "Gamma-IC-Big");
-	AddSet("SET0814E", "Gamma-IC-T");
-
-	AddCam("CAM0800E", "CAM0800E");
-	AddCam("CAM0801E", "CAM0801E");
-	AddCam("CAM0802E", "CAM0802E");
-	AddCam("CAM0803E", "CAM0803E");
 }
 
 ObjectListEntry IceCapObjectList_list[] = {

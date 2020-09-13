@@ -1,8 +1,7 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include <fstream>
-#include <iostream>
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Emerald Coast\\" A ".bin")
+
+
+
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
