@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "data\chao.h"
-#include "RandomHelpers.h"
-#include "CharactersSettings.h"
-#include "Trampoline.h"
 #include <fstream>
 #include <iostream> 
 
@@ -362,6 +359,8 @@ SetLevelPosition PlayerAroundChaoPosition[22] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
+	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
+	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },
 	{ AmyVersion, LevelAndActIDs_HotShelter2, 1060.4085693, 750.8605957, -2952.347412 },
 	{ GammaVersion, LevelAndActIDs_HotShelter3, -1302.44, 3378.13, -3116.41 },
@@ -386,7 +385,7 @@ NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 }
 
 
-SetLevelPosition ChaoLevelPosition[24]{
+SetLevelPosition ChaoLevelPosition[25] {
 
 	{ GammaVersion, LevelAndActIDs_EmeraldCoast1, 1599, 114.75, 840, 0x0 - 0x4000 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, 3857.76, 596.395, -2896.18, 0x8000 },
@@ -402,7 +401,8 @@ SetLevelPosition ChaoLevelPosition[24]{
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
 	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
-	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
+	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
 	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1761.775, 71.5, -1862.41, 5.479076996E-43 + 0x4000 },
 	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },

@@ -5,8 +5,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "Trampoline.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Sky Deck\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Sky Deck\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 
@@ -47,7 +47,6 @@ void SkyDeck_Layout() {
 	if (Race)
 		SelectBarRace();
 
-	LoadRando_SetAndCamLayout();
 	return;
 }
 
@@ -155,7 +154,6 @@ void Olever_r(ObjectMaster* obj) {
 void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteData<72>((int*)0x422d90, 0x90);
 
 	WriteCall((void*)0x422dd8, SkyDeck_Layout); 
 	WriteCall((void*)0x5ecc7b, Switch_Gravity); 
@@ -167,89 +165,84 @@ void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctio
 	SDObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0610S", "Sonic-SD-Act1");
-	ReplaceSET("SET0611S", "Sonic-SD-Act2");
-	ReplaceSET("SET0612S", "Sonic-SD-Act3");
-	ReplaceSET("SET0613S", "Sonic-SD-Race");
-	ReplaceSET("SET0614S", "Sonic-SD-Knux");
+	AddSet("SET0610S", "Sonic-SD-Act1");
+	AddSet("SET0611S", "Sonic-SD-Act2");
+	AddSet("SET0612S", "Sonic-SD-Act3");
+	AddSet("SET0613S", "Sonic-SD-Race");
+	AddSet("SET0614S", "Sonic-SD-Knux");
 
-	ReplaceCAM("CAM0600S", "CAM0600S");
-	ReplaceCAM("CAM0601S", "CAM0601S");
-	ReplaceCAM("CAM0602S", "CAM0602S");
-	ReplaceCAM("CAM0603S", "CAM0603S");
-	ReplaceCAM("CAM0604S", "CAM0604S");
+	AddCam("CAM0600S", "CAM0600S");
+	AddCam("CAM0601S", "CAM0601S");
+	AddCam("CAM0602S", "CAM0602S");
+	AddCam("CAM0603S", "CAM0603S");
+	AddCam("CAM0604S", "CAM0604S");
 
 
 	//Tails
-	ReplaceSET("SET0610M", "Tails-SD-Act1");
-	ReplaceSET("SET0611M", "Tails-SD-Act2");
-	ReplaceSET("SET0612M", "Tails-SD-Act3");
-	ReplaceSET("SET0613M", "Tails-SD-Race");
-	ReplaceSET("SET0614M", "Tails-SD-Knux");
-	ReplaceSET("SET0615M", "Tails-SD-KnuxR");
+	AddSet("SET0610M", "Tails-SD-Act1");
+	AddSet("SET0611M", "Tails-SD-Act2");
+	AddSet("SET0612M", "Tails-SD-Act3");
+	AddSet("SET0613M", "Tails-SD-Race");
+	AddSet("SET0614M", "Tails-SD-Knux");
 	
 
-	ReplaceCAM("CAM0600M", "CAM0600M");
-	ReplaceCAM("CAM0601M", "CAM0601M");
-	ReplaceCAM("CAM0602M", "CAM0602M");
-	ReplaceCAM("CAM0603M", "CAM0603M");
-	ReplaceCAM("CAM0604M", "CAM0604M");
+	AddCam("CAM0600M", "CAM0600M");
+	AddCam("CAM0601M", "CAM0601M");
+	AddCam("CAM0602M", "CAM0602M");
+	AddCam("CAM0603M", "CAM0603M");
+	AddCam("CAM0604M", "CAM0604M");
 
 	//Knuckles
-	ReplaceSET("SET0610K", "Knux-SD-Act1");
-	ReplaceSET("SET0611K", "Knux-SD-Act2");
-	ReplaceSET("SET0612K", "Knux-SD-Act3");
-	ReplaceSET("SET0613K", "Knux-SD-Race");
-	ReplaceSET("SET0614K", "Knux-SD-Knux");
-	ReplaceSET("SET0615K", "Knux-SD-KnuxR");
+	AddSet("SET0610K", "Knux-SD-Act1");
+	AddSet("SET0611K", "Knux-SD-Act2");
+	AddSet("SET0612K", "Knux-SD-Act3");
+	AddSet("SET0613K", "Knux-SD-Race");
+	AddSet("SET0614K", "Knux-SD-Knux");
 
-	ReplaceCAM("CAM0600K", "CAM0600K");
-	ReplaceCAM("CAM0601K", "CAM0601K");
-	ReplaceCAM("CAM0602K", "CAM0602K");
-	ReplaceCAM("CAM0603K", "CAM0603K");
-	ReplaceCAM("CAM0604K", "CAM0604K");
+	AddCam("CAM0600K", "CAM0600K");
+	AddCam("CAM0601K", "CAM0601K");
+	AddCam("CAM0602K", "CAM0602K");
+	AddCam("CAM0603K", "CAM0603K");
+	AddCam("CAM0604K", "CAM0604K");
 
 	//Amy
-	ReplaceSET("SET0610A", "Amy-SD-Act1");
-	ReplaceSET("SET0611A", "Amy-SD-Act2");
-	ReplaceSET("SET0612A", "Amy-SD-Act3");
-	ReplaceSET("SET0613A", "Amy-SD-Race");
-	ReplaceSET("SET0614A", "Amy-SD-Knux");
-	ReplaceSET("SET0615A", "Amy-SD-KnuxR");
+	AddSet("SET0610A", "Amy-SD-Act1");
+	AddSet("SET0611A", "Amy-SD-Act2");
+	AddSet("SET0612A", "Amy-SD-Act3");
+	AddSet("SET0613A", "Amy-SD-Race");
+	AddSet("SET0614A", "Amy-SD-Knux");
 
-	ReplaceCAM("CAM0600A", "CAM0600A");
-	ReplaceCAM("CAM0601A", "CAM0601A");
-	ReplaceCAM("CAM0602A", "CAM0602A");
-	ReplaceCAM("CAM0603A", "CAM0603A");
-	ReplaceCAM("CAM0604A", "CAM0604A");
+	AddCam("CAM0600A", "CAM0600A");
+	AddCam("CAM0601A", "CAM0601A");
+	AddCam("CAM0602A", "CAM0602A");
+	AddCam("CAM0603A", "CAM0603A");
+	AddCam("CAM0604A", "CAM0604A");
 
 	//Big
-	ReplaceSET("SET0610B", "Big-SD-Act1");
-	ReplaceSET("SET0611B", "Big-SD-Act2");
-	ReplaceSET("SET0612B", "Big-SD-Act3");
-	ReplaceSET("SET0613B", "Big-SD-Race");
-	ReplaceSET("SET0614B", "Big-SD-Knux");
-	ReplaceSET("SET0615B", "Big-SD-KnuxR");
+	AddSet("SET0610B", "Big-SD-Act1");
+	AddSet("SET0611B", "Big-SD-Act2");
+	AddSet("SET0612B", "Big-SD-Act3");
+	AddSet("SET0613B", "Big-SD-Race");
+	AddSet("SET0614B", "Big-SD-Knux");
 
-	ReplaceCAM("CAM0600B", "CAM0600B");
-	ReplaceCAM("CAM0601B", "CAM0601B");
-	ReplaceCAM("CAM0602B", "CAM0602B");
-	ReplaceCAM("CAM0603B", "CAM0603B");
-	ReplaceCAM("CAM0604B", "CAM0604B");
+	AddCam("CAM0600B", "CAM0600B");
+	AddCam("CAM0601B", "CAM0601B");
+	AddCam("CAM0602B", "CAM0602B");
+	AddCam("CAM0603B", "CAM0603B");
+	AddCam("CAM0604B", "CAM0604B");
 
 	//Gamma
-	ReplaceSET("SET0610E", "Gamma-SD-Act1");
-	ReplaceSET("SET0611E", "Gamma-SD-Act2");
-	ReplaceSET("SET0612E", "Gamma-SD-Act3");
-	ReplaceSET("SET0613E", "Gamma-SD-Race");
-	ReplaceSET("SET0614E", "Gamma-SD-Knux");
-	ReplaceSET("SET0615E", "Gamma-SD-KnuxR");
+	AddSet("SET0610E", "Gamma-SD-Act1");
+	AddSet("SET0611E", "Gamma-SD-Act2");
+	AddSet("SET0612E", "Gamma-SD-Act3");
+	AddSet("SET0613E", "Gamma-SD-Race");
+	AddSet("SET0614E", "Gamma-SD-Knux");
 
-	ReplaceCAM("CAM0600E", "CAM0600E");
-	ReplaceCAM("CAM0601E", "CAM0601E");
-	ReplaceCAM("CAM0602E", "CAM0602E");
-	ReplaceCAM("CAM0603E", "CAM0603E");
-	ReplaceCAM("CAM0604E", "CAM0604E");
+	AddCam("CAM0600E", "CAM0600E");
+	AddCam("CAM0601E", "CAM0601E");
+	AddCam("CAM0602E", "CAM0602E");
+	AddCam("CAM0603E", "CAM0603E");
+	AddCam("CAM0604E", "CAM0604E");
 }
 
 ObjectListEntry SkyDeckObjectList_list[] = {

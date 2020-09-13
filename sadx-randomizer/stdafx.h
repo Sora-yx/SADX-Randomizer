@@ -12,5 +12,16 @@
 
 #include <SADXModLoader.h>
 #include "LandTableInfo.h"
+#include "Trampoline.h"
 #include "ModelInfo.h"
 #include "IniFile.hpp"
+
+#include "RandomHelpers.h"
+#include "CharactersSettings.h"
+#include "Credits.h"
+#include "ActsSettings.h"
+#include "Common.h"
+#include "StageSettings.h"
+#include "utils.h"
+
+#include "sound.h"

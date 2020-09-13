@@ -1,10 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "data\CharactersSettings.h"
-#include "Utils.h"
-#include "Trampoline.h"
-#include "StageSettings.h"
 
 extern char SonicCD;
 extern bool Mission;

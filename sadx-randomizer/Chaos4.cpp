@@ -34,12 +34,7 @@ void __cdecl Chaos4_Init(const char* path, const HelperFunctions& helperFunction
 	//Initiliaze data;
 	WriteData<2>((void*)0x5525f9, 0x90); //Reduce Chaos 4 HP for everyone.
 
-	//Amy
-	helperFunctions.RegisterStartPosition(Characters_Amy, Chaos4_StartPositions[0]);
 
-	//Big
-	helperFunctions.RegisterStartPosition(Characters_Big, Chaos4_StartPositions[0]);
-
-	//Gamma
-	helperFunctions.RegisterStartPosition(Characters_Gamma, Chaos4_StartPositions[0]);
+	for (int i = 4; i < 8; i++)
+		helperFunctions.RegisterStartPosition(i, Chaos4_StartPositions[0]);
 }

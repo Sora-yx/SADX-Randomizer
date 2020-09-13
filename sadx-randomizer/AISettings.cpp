@@ -1,9 +1,4 @@
 #include "stdafx.h"
-#include "ActsSettings.h"
-#include "RandomHelpers.h"
-#include "CharactersSettings.h"
-#include "sound.h"
-#include "Trampoline.h"
 #include <fstream>
 
 bool isAIActive = false;
@@ -280,10 +275,6 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 						return 0;
 				}
 				break;
-				default:
-				{
-					break;
-				}
 			}
 		}
 	}

@@ -3,8 +3,8 @@
 #include "Chao.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Casinopolis\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Casinopolis\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerCasino = nullptr;
 
@@ -35,7 +35,6 @@ void Casino_Layout() {
 		SelectBarRace();
 
 	FixGoldenAndCoin();
-	LoadRando_SetAndCamLayout();
 	return;
 }
 
@@ -183,71 +182,71 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	CasinoObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0910S", "Sonic-Casino-Act1");
-	ReplaceSET("SET0911S", "Sonic-Casino-Act2");
-	ReplaceSET("SET0912S", "Sonic-Casino-T");
-	ReplaceSET("SET0913S", "Sonic-Casino-Knux");
+	AddSet("SET0910S", "Sonic-Casino-Act1");
+	AddSet("SET0911S", "Sonic-Casino-Act2");
+	AddSet("SET0912S", "Sonic-Casino-T");
+	AddSet("SET0913S", "Sonic-Casino-Knux");
 	
-	ReplaceCAM("CAM0900S", "CAM0900S");
-	ReplaceCAM("CAM0901S", "CAM0901S");
-	ReplaceCAM("CAM0906S", "CAM0906S");
-	ReplaceCAM("CAM0907S", "CAM0907S");
+	AddCam("CAM0900S", "CAM0900S");
+	AddCam("CAM0901S", "CAM0901S");
+	AddCam("CAM0906S", "CAM0906S");
+	AddCam("CAM0907S", "CAM0907S");
 
 	//Tails
-	ReplaceSET("SET0910M", "Tails-Casino-Act1");
-	ReplaceSET("SET0911M", "Tails-Casino-Act2");
-	ReplaceSET("SET0912M", "Tails-Casino-T");
-	ReplaceSET("SET0913M", "Tails-Casino-Knux");
+	AddSet("SET0910M", "Tails-Casino-Act1");
+	AddSet("SET0911M", "Tails-Casino-Act2");
+	AddSet("SET0912M", "Tails-Casino-T");
+	AddSet("SET0913M", "Tails-Casino-Knux");
 
-	ReplaceCAM("CAM0900M", "CAM0900M");
-	ReplaceCAM("CAM0901M", "CAM0901M");
-	ReplaceCAM("CAM0906M", "CAM0906M");
-	ReplaceCAM("CAM0907M", "CAM0907M");
+	AddCam("CAM0900M", "CAM0900M");
+	AddCam("CAM0901M", "CAM0901M");
+	AddCam("CAM0906M", "CAM0906M");
+	AddCam("CAM0907M", "CAM0907M");
 
 	//Knuckles
-	ReplaceSET("SET0910K", "Knux-Casino-Act1");
-	ReplaceSET("SET0911K", "Knux-Casino-Act2");
-	ReplaceSET("SET0912K", "Knux-Casino-T");
-	ReplaceSET("SET0913K", "Knux-Casino-Knux");
+	AddSet("SET0910K", "Knux-Casino-Act1");
+	AddSet("SET0911K", "Knux-Casino-Act2");
+	AddSet("SET0912K", "Knux-Casino-T");
+	AddSet("SET0913K", "Knux-Casino-Knux");
 	
 
-	ReplaceCAM("CAM0900K", "CAM0900K");
-	ReplaceCAM("CAM0901K", "CAM0901K");
-	ReplaceCAM("CAM0906K", "CAM0906K");
-	ReplaceCAM("CAM0907K", "CAM0907K");
+	AddCam("CAM0900K", "CAM0900K");
+	AddCam("CAM0901K", "CAM0901K");
+	AddCam("CAM0906K", "CAM0906K");
+	AddCam("CAM0907K", "CAM0907K");
 
 	//Amy
-	ReplaceSET("SET0910A", "Amy-Casino-Act1");
-	ReplaceSET("SET0911A", "Amy-Casino-Act2");
-	ReplaceSET("SET0912A", "Amy-Casino-T");
-	ReplaceSET("SET0913A", "Amy-Casino-Knux");
+	AddSet("SET0910A", "Amy-Casino-Act1");
+	AddSet("SET0911A", "Amy-Casino-Act2");
+	AddSet("SET0912A", "Amy-Casino-T");
+	AddSet("SET0913A", "Amy-Casino-Knux");
 
-	ReplaceCAM("CAM0900A", "CAM0900A");
-	ReplaceCAM("CAM0901A", "CAM0901A");
-	ReplaceCAM("CAM0906A", "CAM0906A");
-	ReplaceCAM("CAM0907A", "CAM0907A");
+	AddCam("CAM0900A", "CAM0900A");
+	AddCam("CAM0901A", "CAM0901A");
+	AddCam("CAM0906A", "CAM0906A");
+	AddCam("CAM0907A", "CAM0907A");
 
 	//Big
-	ReplaceSET("SET0910B", "Big-Casino-Act1");
-	ReplaceSET("SET0911B", "Big-Casino-Act2");
-	ReplaceSET("SET0912B", "Big-Casino-T");
-	ReplaceSET("SET0913B", "Big-Casino-Knux");
+	AddSet("SET0910B", "Big-Casino-Act1");
+	AddSet("SET0911B", "Big-Casino-Act2");
+	AddSet("SET0912B", "Big-Casino-T");
+	AddSet("SET0913B", "Big-Casino-Knux");
 
-	ReplaceCAM("CAM0900B", "CAM0900B");
-	ReplaceCAM("CAM0901B", "CAM0901B");
-	ReplaceCAM("CAM0906B", "CAM0906B");
-	ReplaceCAM("CAM0907B", "CAM0907B");
+	AddCam("CAM0900B", "CAM0900B");
+	AddCam("CAM0901B", "CAM0901B");
+	AddCam("CAM0906B", "CAM0906B");
+	AddCam("CAM0907B", "CAM0907B");
 
 	//Gamma
-	ReplaceSET("SET0910E", "Gamma-Casino-Act1");
-	ReplaceSET("SET0911E", "Gamma-Casino-Act2");
-	ReplaceSET("SET0912E", "Gamma-Casino-T");
-	ReplaceSET("SET0913E", "Gamma-Casino-Knux");
+	AddSet("SET0910E", "Gamma-Casino-Act1");
+	AddSet("SET0911E", "Gamma-Casino-Act2");
+	AddSet("SET0912E", "Gamma-Casino-T");
+	AddSet("SET0913E", "Gamma-Casino-Knux");
 
-	ReplaceCAM("CAM0900E", "CAM0900E");
-	ReplaceCAM("CAM0901E", "CAM0901E");
-	ReplaceCAM("CAM0906E", "CAM0906E");
-	ReplaceCAM("CAM0907E", "CAM0907E");
+	AddCam("CAM0900E", "CAM0900E");
+	AddCam("CAM0901E", "CAM0901E");
+	AddCam("CAM0906E", "CAM0906E");
+	AddCam("CAM0907E", "CAM0907E");
 }
 
 

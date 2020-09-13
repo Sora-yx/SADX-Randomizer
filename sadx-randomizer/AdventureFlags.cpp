@@ -1,11 +1,8 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <string.h>
-#include "RandomHelpers.h"
-#include "Credits.h"
+
 
 using namespace std;
 int CustomFlag = 0; //Used for progression story and credits

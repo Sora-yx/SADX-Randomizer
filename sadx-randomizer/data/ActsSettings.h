@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+
 
 //Major function of random acts, depending on the characters and the stages.
  //void randomacts();
@@ -22,7 +22,6 @@ void CamSpeedHighway();
 void CamRedMountain();
 void CamFinalEgg();
 void CamHotShelter();
-void EC_Cam();
 void Cam_WV();
 void Cam_SkyDeck();
 void Cam_LW();
@@ -31,7 +30,6 @@ void TP_CAM();
 int HedgehogHammerTrick();
 void FixGoldenAndCoin();
 int Chaos6_ReturnCharacter();
-void Chaos6_Layout(); 
 int Switch_Gravity();
 void LoadTriggerObjHS();
 void TriggerObjHS_Main(ObjectMaster* obj);

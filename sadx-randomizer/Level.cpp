@@ -11,7 +11,7 @@ extern char TimeMinCopy;
 extern char TimeFrameCopy;
 extern int RingCopy;
 
-SetLevelPosition PlayerStartPosition[52]{ //Casino pos are hardcoded
+SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 
 	{ AmyVersion, LevelAndActIDs_HedgehogHammer, { -55, 0, -31 }, 0 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { -9, 16, 4 }, 0x6000},
@@ -92,7 +92,7 @@ void MovePlayerToStartPoint_R(EntityData1* data) {
 		{
 			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
 			{
-				EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
+				 EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
 				EntityData1Ptrs[0]->Rotation.y = PlayerStartPosition[i].YRot;
 				return;
 			}
@@ -104,89 +104,144 @@ void MovePlayerToStartPoint_R(EntityData1* data) {
 	return original(data);
 }
 
-StringSetFile SetFileArray[51]{
 
-	{ LevelIDs_HedgehogHammer, AmyVersion, 0, "0000", "-HH" "0000" },
-	{ LevelIDs_EmeraldCoast, GammaVersion, 0, "0113", "ECG", "0104"},
-	{ LevelIDs_EmeraldCoast, SonicVersion, 0, "0110", "EC01", "0100"},
-	{ LevelIDs_EmeraldCoast, SonicVersion, 1, "0111", "EC02", "0101"},
-	{ LevelIDs_EmeraldCoast, BigVersion, 2, "0112", "EC03", "0102"},
-	{ LevelIDs_WindyValley, GammaVersion, 0, "0214", "-WV-E102", "0203"},
-	{ LevelIDs_WindyValley, SonicVersion, 0, "0210", "-WV-Act1", "0200"},
-	{ LevelIDs_WindyValley, SonicVersion, 1, "0211", "-WV-Act2", "0201"},
-	{ LevelIDs_WindyValley, SonicVersion, 2, "0212", "-WV-Act3", "0202"},
-	{ LevelIDs_WindyValley, TailsVersion, 2, "0213", "-WV-Race", "0206"},
-	{ LevelIDs_TwinklePark, SonicVersion, 0, "0310", "-TP-Act1", "0300"},
-	{ LevelIDs_TwinklePark, SonicVersion, 1, "0311", "-TP-Act2", "0301"},
-	{ LevelIDs_TwinklePark, AmyVersion,	1, "0313", "-TP-Amy",  "0301"},
-	{ LevelIDs_TwinklePark, BigVersion,	1, "0314", "-TP-Big",  "0301"},
-	{ LevelIDs_TwinklePark, AmyVersion,	2, "0312", "-TP-Act3", "0305"},
-	{ LevelIDs_SpeedHighway, SonicVersion, 0, "0410", "-SH-Act1", "0400" },
-	{ LevelIDs_SpeedHighway, TailsVersion, 0, "0413", "-SH-Race", "0403"},
-	{ LevelIDs_SpeedHighway, SonicVersion, 1, "0411", "-SH-Act2", "0401"},
-	{ LevelIDs_SpeedHighway, SonicVersion, 2, "0412", "-SH-Act3", "0402"},
-	{ LevelIDs_SpeedHighway, KnucklesVersion, 2, "0414", "-SH-Knux2", "0405"},
-	{ LevelIDs_RedMountain, SonicVersion, 0, "0510", "-RM-Act1", "0500" },
-	{ LevelIDs_RedMountain, SonicVersion, 1, "0511", "-RM-Act2", "0501"},
-	{ LevelIDs_RedMountain, GammaVersion, 1, "0513", "-RM-E102", "0503"},
-	{ LevelIDs_RedMountain, KnucklesVersion, 2, "0512", "-RM-Act3", "0502"},
-	{ LevelIDs_SkyDeck, SonicVersion, 0, "0610", "-SD-Act1", "0600"},
-	{ LevelIDs_SkyDeck, TailsVersion, 0, "0613", "-SD-Race", "0603" },
-	{ LevelIDs_SkyDeck, SonicVersion, 1, "0611", "-SD-Act2", "0601"},
-	{ LevelIDs_SkyDeck, SonicVersion, 2, "0612", "-SD-Act3", "0602"},
-	{ LevelIDs_SkyDeck, KnucklesVersion, 2, "0614", "-SD-Knux", "0604"},
-	{ LevelIDs_LostWorld, SonicVersion, 0, "0710", "-LW-Act1", "0700"},
-	{ LevelIDs_LostWorld, SonicVersion, 1, "0711", "-LW-Act2", "0701"},
-	{ LevelIDs_LostWorld, KnucklesVersion, 1, "0713", "-LW-Knux", "0704"},
-	{ LevelIDs_LostWorld, SonicVersion, 2, "0712", "-LW-Act3", "0702"},
-	{ LevelIDs_IceCap, SonicVersion, 0, "0810", "-IC-Act1", "0800" },
-	{ LevelIDs_IceCap, SonicVersion, 1,	"0811", "-IC-Act2", "0801" },
-	{ LevelIDs_IceCap, SonicVersion, 2,	"0812", "-IC-Act3", "0802" },
-	{ LevelIDs_IceCap, TailsVersion, 2,	"0814", "-IC-T", "0802"},
-	{ LevelIDs_IceCap, BigVersion, 3, "0813", "-IC-Big", "0803"},
-	{ LevelIDs_Casinopolis, SonicVersion, 0, "0910", "-Casino-Act1", "0900"},
-	{ LevelIDs_Casinopolis, KnucklesVersion, 0, "0913", "-Casino-Knux", "0906"},
-	{ LevelIDs_Casinopolis, SonicVersion, 1, "0911", "-Casino-Act2", "0901"},
-	{ LevelIDs_Casinopolis, TailsVersion, 1, "0912", "-Casino-T", "0907"},
-	{ LevelIDs_FinalEgg, AmyVersion, 0, "1013", "-FE-Amy", "1004"},
-	{ LevelIDs_FinalEgg, SonicVersion, 0, "1010", "-FE-Act1", "1000"},
-	{ LevelIDs_FinalEgg, SonicVersion, 1, "1011", "-FE-Act2", "1001"},
-	{ LevelIDs_FinalEgg, SonicVersion, 2, "1012", "-FE-Act3", "1002"},
-	{ LevelIDs_FinalEgg, GammaVersion, 2, "1014", "-FE-Gamma", "1005"},
-	{ LevelIDs_HotShelter, BigVersion, 0, "1213", "-HS-Act4", "1204"},
-	{ LevelIDs_HotShelter, AmyVersion, 0, "1210", "-HS-Act1", "1200"},
-	{ LevelIDs_HotShelter, AmyVersion, 1, "1211", "-HS-Act2", "1201"},
-	{ LevelIDs_HotShelter, GammaVersion, 2, "1212", "-HS-Act3", "1202"},
+
+
+/*StringLevelLayout SetCamFileArray[51]{
+
+	{ LevelIDs_EmeraldCoast, GammaVersion,  "ECG", {"C0104", "C0101", "C0102", nullptr}},
+	{ LevelIDs_EmeraldCoast, SonicVersion,  "EC", {"C0100", "C0101", "C0102", nullptr}},
+	{ LevelIDs_WindyValley, GammaVersion,  "WVG", {"C0203", "C0201", "C0202", nullptr} },
+	{ LevelIDs_WindyValley, SonicVersion,  "WV", {"C0200", "C0201", "C0202", nullptr}},
+	{ LevelIDs_WindyValley, TailsVersion,  "WVM", {"C0200", "C0201", "C0206", nullptr} },
+	{ LevelIDs_TwinklePark, SonicVersion,  "TP", {"C0300", "C0301", "C0302", nullptr}},
+	{ LevelIDs_SpeedHighway, SonicVersion,  "SH", {"C0400", "C0401", "C0402", nullptr}},
+	{ LevelIDs_SpeedHighway, TailsVersion,  "SHM", {"C0403", "C0401", "C0402", nullptr}},
+	{ LevelIDs_SpeedHighway, KnucklesVersion, "SHK", {"C0400", "C0401", "C0404", nullptr}},
+	{ LevelIDs_RedMountain, SonicVersion, "RM", {"C0500", "C0501", "C0502", nullptr}},
+	{ LevelIDs_RedMountain, GammaVersion, "RMG", {"C0500", "C0503", "C0502", nullptr}},
+	{ LevelIDs_SkyDeck, SonicVersion, "SD", {"C0600", "C0601", "C0602", nullptr}},
+	{ LevelIDs_SkyDeck, TailsVersion, "SDM", {"C0603", "C0601", "C0602", nullptr}},
+	{ LevelIDs_SkyDeck, KnucklesVersion, "SDK", {"C0600", "C0601", "C0604", nullptr}},
+	{ LevelIDs_LostWorld, SonicVersion, "LW", {"C0700", "C0701", "C0702", nullptr}},
+	{ LevelIDs_LostWorld, KnucklesVersion, "LWK", {"C0700", "C0703", "C0702", nullptr}},
+	{ LevelIDs_IceCap, SonicVersion, "IC", {"C0800", "C0801", "C0802", "C0803"}},
+	{ LevelIDs_Casinopolis, SonicVersion, "CAS", {"C0900", "C0901", "C0902", "C0903"}},
+	{ LevelIDs_Casinopolis, KnucklesVersion, "CASK", {"C0904", "C0901", "C0902", "C0903"}},
+	{ LevelIDs_Casinopolis, TailsVersion, "CASM", {"C0900", "C0905", "C0902", "C0903"}},
+	{ LevelIDs_FinalEgg, AmyVersion, "FEA", {"C1003", "C1001", "C1002", nullptr}},
+	{ LevelIDs_FinalEgg, SonicVersion, "FE", {"C1000", "C1001", "C1002", nullptr}},
+	{ LevelIDs_FinalEgg, GammaVersion, "FEG", { "C1000", "C1001", "C1004", nullptr}},
+	{ LevelIDs_HotShelter, BigVersion, "HSB", {"C1203", "C1001", "C1002", nullptr}},
+	{ LevelIDs_HotShelter, AmyVersion, "HSA", {"C1200", "C1201", "C1202", nullptr}},
+};*/
+
+StringLevelLayout SetCamFileArray[51]{
+
+	{ LevelIDs_HedgehogHammer, AmyVersion, 0, "HH", "C0000"},
+	{ LevelIDs_EmeraldCoast, GammaVersion, 0, "ECG", "C0103" },
+	{ LevelIDs_EmeraldCoast, SonicVersion, 0, "EC0", "C0100", },
+	{ LevelIDs_EmeraldCoast, SonicVersion, 1, "EC1", "C0101", },
+	{ LevelIDs_EmeraldCoast, BigVersion, 2, "EC2", "C0112", },
+	{ LevelIDs_WindyValley, GammaVersion, 0, "WVG", "C0203"},
+	{ LevelIDs_WindyValley, SonicVersion, 0, "WV0", "C0200"},
+	{ LevelIDs_WindyValley, SonicVersion, 1, "WV1", "C0201"},
+	{ LevelIDs_WindyValley, SonicVersion, 2, "WV2", "C0202"},
+	{ LevelIDs_WindyValley, TailsVersion, 2, "WVM", "C0204"},
+	{ LevelIDs_TwinklePark, SonicVersion, 0, "TP0", "C0300"},
+	{ LevelIDs_TwinklePark, SonicVersion, 1, "TP1", "C0301"},
+	{ LevelIDs_TwinklePark, AmyVersion,	1, "TPA", "C0303"},
+	{ LevelIDs_TwinklePark, BigVersion,	1, "TPB", "0304"},
+	{ LevelIDs_TwinklePark, AmyVersion,	2, "TP2", "0302"},
+	{ LevelIDs_SpeedHighway, SonicVersion, 0, "0410"},
+	{ LevelIDs_SpeedHighway, TailsVersion, 0, "0413"},
+	{ LevelIDs_SpeedHighway, SonicVersion, 1, "0411"},
+	{ LevelIDs_SpeedHighway, SonicVersion, 2, "0412",},
+	{ LevelIDs_SpeedHighway, KnucklesVersion, 2, "0414",},
+	{ LevelIDs_RedMountain, SonicVersion, 0, "0510",},
+	{ LevelIDs_RedMountain, SonicVersion, 1, "0511",},
+	{ LevelIDs_RedMountain, GammaVersion, 1, "0513",},
+	{ LevelIDs_RedMountain, KnucklesVersion, 2, "0512", },
+	{ LevelIDs_SkyDeck, SonicVersion, 0, "0610", },
+	{ LevelIDs_SkyDeck, TailsVersion, 0, "0613",  },
+	{ LevelIDs_SkyDeck, SonicVersion, 1, "0611",  },
+	{ LevelIDs_SkyDeck, SonicVersion, 2, "0612",  },
+	{ LevelIDs_SkyDeck, KnucklesVersion, 2, "0614", },
+	{ LevelIDs_LostWorld, SonicVersion, 0, "0710", },
+	{ LevelIDs_LostWorld, SonicVersion, 1, "0711", },
+	{ LevelIDs_LostWorld, KnucklesVersion, 1, "0713", },
+	{ LevelIDs_LostWorld, SonicVersion, 2, "0712",  },
+	{ LevelIDs_IceCap, SonicVersion, 0, "0810",  },
+	{ LevelIDs_IceCap, SonicVersion, 1,	"0811",   },
+	{ LevelIDs_IceCap, SonicVersion, 2,	"0812",  },
+	{ LevelIDs_IceCap, TailsVersion, 2,	"0814"},
+	{ LevelIDs_IceCap, BigVersion, 3, "0813",},
+	{ LevelIDs_Casinopolis, SonicVersion, 0, "0910"},
+	{ LevelIDs_Casinopolis, KnucklesVersion, 0, "0913"},
+	{ LevelIDs_Casinopolis, SonicVersion, 1, "0911" },
+	{ LevelIDs_Casinopolis, TailsVersion, 1, "0912"},
+	{ LevelIDs_FinalEgg, AmyVersion, 0, "1013", "-FE-Amy"},
+	{ LevelIDs_FinalEgg, SonicVersion, 0, "1010"},
+	{ LevelIDs_FinalEgg, SonicVersion, 1, "1011"},
+	{ LevelIDs_FinalEgg, SonicVersion, 2, "1012"},
+	{ LevelIDs_FinalEgg, GammaVersion, 2, "1014"},
+	{ LevelIDs_HotShelter, BigVersion, 0, "1213"},
+	{ LevelIDs_HotShelter, AmyVersion, 0, "1210"},
+	{ LevelIDs_HotShelter, AmyVersion, 1, "1211"},
+	{ LevelIDs_HotShelter, GammaVersion, 2, "1212"},
 };
 
 
-void LoadRando_SetAndCamLayout() {
+void __cdecl RandoLoad_SetCamFiles() {
 
-	for (uint8_t i = 0; i < LengthOfArray(SetFileArray); i++) {
-
-		if (CurrentLevel == SetFileArray[i].LevelID && CurrentStageVersion == SetFileArray[i].version)
+	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++)
+	{
+		if (CurrentLevel == SetCamFileArray[i].LevelID && CurrentStageVersion == SetCamFileArray[i].version)
 		{
-			string Set = SetFileArray[i].SetFile;
-			string Cam = SetFileArray[i].SetCam;
-			int act = SetFileArray[i].act;
-			LoadSetFile(act, Set.c_str());
-			LoadCamFile(act, Cam.c_str());
+			std::string lvl = SetCamFileArray[i].SetFileName;
+			std::string cam = SetCamFileArray[i].CamFileName;
+			lvl = CharIDStrings[CurrentCharacter] + lvl + ".bin";
+			cam = cam + ".bin";
+			int act = SetCamFileArray[i].act;
+			LoadFileWithMalloc(lvl.c_str(), (LPVOID*)&SetFiles[act]);
+			LoadFileWithMalloc(cam.c_str(), (LPVOID*)&CamData[act]);
 		}
 	}
 
-	return;
+	
 }
 
 
-static void LoadLevelFiles_r();
-static Trampoline LoadLevelFiles_t((int)LoadLevelFiles, (int)LoadLevelFiles + 0x8, LoadLevelFiles_r);
-
-
-void __cdecl LoadLevelFiles_r() {
+void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
 
 	ResetValueAndObjects(); //Unload rando stuff
 	Load_ObjectsCommon();
 	
-	auto original = reinterpret_cast<decltype(LoadLevelFiles_r)*>(LoadLevelFiles_t.Target());
-	original();
+	if (!isHeroesMod() && !isSA2Mod() && isRandoLevel())
+	{
+		ReleaseSetFile();
+		ReleaseCamFile();
+		RandoLoad_SetCamFiles();
+	} 
+
+	SetCurrentCamData(curLevel);
+	SetCurrentSetData(curLevel);
+}
+
+
+void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions) {
+	for (int i = 0; i < 8; i++) {
+		std::string path = "system\\";
+		std::string path2 = "system\\sets\\" + FolderName;
+		std::string bin = LevelName + ".bin";
+		std::string lvl = path + CharIDStrings[i] + bin;
+		std::string lvl2 = path2 + CharIDStrings[i] + bin;
+		helperFunctions.ReplaceFile(lvl.c_str(), lvl2.c_str());
+	}
+}
+
+
+void LayoutFunctionInit() {
+	WriteData<5>((void*)0x4237b4, 0x90); //remove "SetCurrentCamData" from LoadLevelFiles, we will manually call it later.
+	WriteCall((void*)0x4237ba, LoadLevelFiles_r);
 }

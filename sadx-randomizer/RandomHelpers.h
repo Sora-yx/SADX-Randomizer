@@ -1,8 +1,7 @@
 #pragma once
-#include "stdafx.h"
 
 extern struct RandomizedEntry randomizedSets[40];
-using namespace std;
+extern std::string modpath;
 
 
 struct RandomizedEntry
@@ -54,14 +53,13 @@ struct SetLevelPosition
 	float YRot;
 };
 
-struct StringSetFile
+struct StringLevelLayout
 {
 	int16_t LevelID;
 	int8_t version;
 	int8_t act;
-	const char* SetFile;
-	const char* SetFileRando;
-	const char* SetCam;
+	const char* SetFileName;
+	const char* CamFileName;
 };
 
 
@@ -106,9 +104,8 @@ void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
 void MovePlayerToStartPoint_R(EntityData1* data);
-void LoadRando_SetAndCamLayout();
 void AddCustomFlag();
-
+void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions);
 
 extern bool RNGCharacters;
 extern bool RNGStages;
@@ -120,7 +117,6 @@ extern bool SA2M3;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
-extern std::string CharaString[6];
 extern uint32_t split;
 extern uint32_t TotalCount;
 extern char StorySplits;
@@ -130,6 +126,7 @@ extern bool ChaoSpawn;
 extern bool isTailsVersion;
 extern bool isPlayerInWaterSlide;
 HelperFunctions extern help;
+extern bool isChaoHintEnabled;
 
 
 
@@ -138,9 +135,7 @@ uint8_t getRandomCharacter();
 bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id);
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
-void getRandomStage(short* cur_stagePtr, short* cur_actPtr, uint8_t cur_Char);
 short getRandomMusic(RandomizedEntry entry);
-extern StringSetFile SetFileArray[51];
 void BackRingObj_Main(ObjectMaster* obj);
 
 void LoadTriggerObject();
@@ -314,6 +309,8 @@ void PlatformMM_Main(ObjectMaster* obj);
 extern bool MMPlatformEnabled;
 extern NJS_TEXLIST SA2_OBJ_TEXLIST;
 FunctionPointer(int, PerformWhistle, (EntityData1* a1, EntityData2* a2, CharObj2* a3, int flag), 0x442570);
+bool isHeroesMod();
+bool isSA2Mod();
 
 void ForcePlayerToWhistle();
 void Hud_ShowSwapButton();
@@ -476,3 +473,7 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
+
+extern RandomizerGenerator RandoStageArray[50];
+bool isRandoLevel();
+void LayoutFunctionInit();

@@ -1,12 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "ActsSettings.h"
-#include "CharactersSettings.h"
 #include <fstream>
-#include "RandomHelpers.h"
-#include "Trampoline.h"
-#include "StageSettings.h"
-#include "sound.h"
 
 #define BackRingSize 34
 //Back Ring Main Page, this is where the current goal of the stage is swapped with back ring, froggy, balloon etc. depending on the character.
@@ -460,6 +453,21 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 	//call original function
 	ObjectFunc(origin, CheckFETrigger_t.Target());
 	origin(a1);
+}
+
+void E104Enemy_Main_R(ObjectMaster* obj);
+Trampoline E104_t((int)E104Enemy_Main, (int)E104Enemy_Main + 0x8, E104Enemy_Main_R);
+
+void E104Enemy_Main_R(ObjectMaster* obj) {
+
+	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
+	{
+		Check_Display_BackRing_Common(obj);
+		return;
+	}
+
+	ObjectFunc(origin, E104_t.Target());
+	origin(obj);
 }
 
 void Set_BackRing() {

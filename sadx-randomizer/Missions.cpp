@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
 
 
 // Mission Card settings, check, texture edit.
@@ -32,7 +31,7 @@ short randomSA2Mission(short stage_id) {
 
 	short cur_mission = 0;
 
-	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission())
+	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission() || isHeroesMod())
 		return SADX_Mission;
 
 	do {

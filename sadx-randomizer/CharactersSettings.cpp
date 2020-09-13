@@ -1,9 +1,5 @@
-#include "Utils.h"
-#include "ActsSettings.h"
 #include "stdafx.h"
-#include "sound.h"
-#include "data\CharactersSettings.h"
-#include "Trampoline.h"
+
 
 char SonicRand = 0;
 int TransfoCount = 0;

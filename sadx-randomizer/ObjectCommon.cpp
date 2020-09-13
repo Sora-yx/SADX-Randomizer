@@ -1,8 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "StageSettings.h"
-#include "Utils.h"
-#include "sound.h"
 
 NJS_TEXNAME SA2_OBJ_TEXNAMES[41];
 NJS_TEXLIST SA2_OBJ_TEXLIST = { arrayptrandlength(SA2_OBJ_TEXNAMES) };
@@ -23,6 +19,7 @@ void Load_Cart_R() {
 			return;
 
 	Delete_Cart();
+
 	if (!CurrentCart)
 	{
 		SwapDelay = 0;
@@ -185,11 +182,14 @@ void PlatformMM_Main(ObjectMaster* obj) {
 
 
 const char* const TikalLostChao_message[] = {
-	"	The Lost Chao you are looking for is up ahead. \n",
+	"	The Lost Chao you are looking for is close around. \n",
 	NULL,
 };
 
 bool Check_TikalMessageDisplay() {
+
+	if (CurrentMission != Mission3_LostChao || !isChaoHintEnabled)
+		return false;
 
 	switch (CurrentLevel)
 	{
@@ -216,6 +216,10 @@ void Check_ObjectMysticMelody() {
 	{
 	case LevelIDs_EmeraldCoast:
 		if (CurrentAct == 2)
+			MMPlatformEnabled = true;
+		break;
+	case LevelIDs_RedMountain:
+		if (CurrentAct == 1)
 			MMPlatformEnabled = true;
 		break;
 	case LevelIDs_SpeedHighway:
@@ -259,7 +263,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 1:
 			{
-				if (IsPlayerInsideSphere(&obj->Data1->Position, 100)) {
+				if (IsPlayerInsideSphere(&obj->Data1->Position, 160)) {
 					if (getChar >= Characters_Gamma)
 						size = 35;
 					if (Check_TikalMessageDisplay())
@@ -271,7 +275,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			case 2:
 			{
 		
-					if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
+					if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || curAction == 2  || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
 						Hud_ShowActionButton();
 
 						if (ControllerPointers[0]->PressedButtons & Buttons_Y)
@@ -279,15 +283,13 @@ void MysticMelody_Main(ObjectMaster* obj) {
 							DisableControl();
 							EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 							CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
-		
+
 							ForcePlayerToWhistle();
 
 							PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
 							data->Action = 3;
-							
-	
+						}
 					}
-				}
 			}
 			break;
 			case 3:
@@ -301,7 +303,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 						return;
 					}
 						EnableControl();
-						data->Action = 4;
+						if (CurrentMission == 3)
+							data->Action = 4;
+						else
+							data->Action = 6;
 				}
 			break;
 			case 4:

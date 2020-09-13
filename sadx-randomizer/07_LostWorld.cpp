@@ -2,8 +2,8 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Lost World\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Lost World\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 void Cam_LW() {
@@ -23,7 +23,7 @@ void Cam_LW() {
 void LW_Layout() {
 
 
-	if (CurrentStageVersion != KnucklesVersion || CurrentAct != 1)
+	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else
 	{
@@ -31,7 +31,7 @@ void LW_Layout() {
 			SetRNGKnuckles();
 	}
 
-	LoadRando_SetAndCamLayout();
+	CurrentStageVersion = KnucklesVersion;
 
 	return;
 }
@@ -64,7 +64,6 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	//Initiliaze data
 	WriteData<5>((int*)0x5e16c2, 0x90); //Fix Lost World Act 2 music as Knuckles.
 
-	WriteData<72>((int*)0x422dfb, 0x90);
 
 	WriteCall((void*)0x422e43, LW_Layout);
 	
@@ -74,76 +73,76 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 	LWObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0710S", "Sonic-LW-Act1");
-	ReplaceSET("SET0711S", "Sonic-LW-Act2");
-	ReplaceSET("SET0712S", "Sonic-LW-Act3");
-	ReplaceSET("SET0713S", "Sonic-LW-Knux");
-	ReplaceSET("SET0714S", "Sonic-LW-KnuxR");
+	AddSet("SET0710S", "Sonic-LW-Act1");
+	AddSet("SET0711S", "Sonic-LW-Act2");
+	AddSet("SET0712S", "Sonic-LW-Act3");
+	AddSet("SET0713S", "Sonic-LW-Knux");
+	AddSet("SET0714S", "Sonic-LW-KnuxR");
 
-	ReplaceCAM("CAM0700S", "CAM0700S");
-	ReplaceCAM("CAM0701S", "CAM0701S");
-	ReplaceCAM("CAM0702S", "CAM0702S");
-	ReplaceCAM("CAM0704S", "CAM0704S");
+	AddCam("CAM0700S", "CAM0700S");
+	AddCam("CAM0701S", "CAM0701S");
+	AddCam("CAM0702S", "CAM0702S");
+	AddCam("CAM0704S", "CAM0704S");
 
 	//Tails
-	ReplaceSET("SET0710M", "Tails-LW-Act1");
-	ReplaceSET("SET0711M", "Tails-LW-Act2");
-	ReplaceSET("SET0712M", "Tails-LW-Act3");
-	ReplaceSET("SET0713M", "Tails-LW-Knux");
-	ReplaceSET("SET0714M", "Tails-LW-KnuxR");
+	AddSet("SET0710M", "Tails-LW-Act1");
+	AddSet("SET0711M", "Tails-LW-Act2");
+	AddSet("SET0712M", "Tails-LW-Act3");
+	AddSet("SET0713M", "Tails-LW-Knux");
+	AddSet("SET0714M", "Tails-LW-KnuxR");
 
-	ReplaceCAM("CAM0700M", "CAM0700M");
-	ReplaceCAM("CAM0701M", "CAM0701M");
-	ReplaceCAM("CAM0702M", "CAM0702M");
-	ReplaceCAM("CAM0704M", "CAM0704M");
+	AddCam("CAM0700M", "CAM0700M");
+	AddCam("CAM0701M", "CAM0701M");
+	AddCam("CAM0702M", "CAM0702M");
+	AddCam("CAM0704M", "CAM0704M");
 
 	//Knuckles
-	ReplaceSET("SET0710K", "Knux-LW-Act1");
-	ReplaceSET("SET0711K", "Knux-LW-Act2");
-	ReplaceSET("SET0712K", "Knux-LW-Act3");
-	ReplaceSET("SET0713K", "Knux-LW-Knux");
-	ReplaceSET("SET0714K", "Knux-LW-KnuxR");
+	AddSet("SET0710K", "Knux-LW-Act1");
+	AddSet("SET0711K", "Knux-LW-Act2");
+	AddSet("SET0712K", "Knux-LW-Act3");
+	AddSet("SET0713K", "Knux-LW-Knux");
+	AddSet("SET0714K", "Knux-LW-KnuxR");
 
-	ReplaceCAM("CAM0700K", "CAM0700K");
-	ReplaceCAM("CAM0701K", "CAM0701K");
-	ReplaceCAM("CAM0702K", "CAM0702K");
-	ReplaceCAM("CAM0704K", "CAM0704K");
+	AddCam("CAM0700K", "CAM0700K");
+	AddCam("CAM0701K", "CAM0701K");
+	AddCam("CAM0702K", "CAM0702K");
+	AddCam("CAM0704K", "CAM0704K");
 
 	//Amy
-	ReplaceSET("SET0710A", "Amy-LW-Act1");
-	ReplaceSET("SET0711A", "Amy-LW-Act2");
-	ReplaceSET("SET0712A", "Amy-LW-Act3");
-	ReplaceSET("SET0713A", "Amy-LW-Knux");
-	ReplaceSET("SET0714A", "Amy-LW-KnuxR");
+	AddSet("SET0710A", "Amy-LW-Act1");
+	AddSet("SET0711A", "Amy-LW-Act2");
+	AddSet("SET0712A", "Amy-LW-Act3");
+	AddSet("SET0713A", "Amy-LW-Knux");
+	AddSet("SET0714A", "Amy-LW-KnuxR");
 
-	ReplaceCAM("CAM0700A", "CAM0700A");
-	ReplaceCAM("CAM0701A", "CAM0701A");
-	ReplaceCAM("CAM0702A", "CAM0702A");
-	ReplaceCAM("CAM0704A", "CAM0704A");
+	AddCam("CAM0700A", "CAM0700A");
+	AddCam("CAM0701A", "CAM0701A");
+	AddCam("CAM0702A", "CAM0702A");
+	AddCam("CAM0704A", "CAM0704A");
 
 	//Big
-	ReplaceSET("SET0710B", "Big-LW-Act1");
-	ReplaceSET("SET0711B", "Big-LW-Act2");
-	ReplaceSET("SET0712B", "Big-LW-Act3");
-	ReplaceSET("SET0713B", "Big-LW-Knux");
-	ReplaceSET("SET0714B", "Big-LW-KnuxR");
+	AddSet("SET0710B", "Big-LW-Act1");
+	AddSet("SET0711B", "Big-LW-Act2");
+	AddSet("SET0712B", "Big-LW-Act3");
+	AddSet("SET0713B", "Big-LW-Knux");
+	AddSet("SET0714B", "Big-LW-KnuxR");
 
-	ReplaceCAM("CAM0700B", "CAM0700B");
-	ReplaceCAM("CAM0701B", "CAM0701B");
-	ReplaceCAM("CAM0702B", "CAM0702B");
-	ReplaceCAM("CAM0704B", "CAM0704B");
+	AddCam("CAM0700B", "CAM0700B");
+	AddCam("CAM0701B", "CAM0701B");
+	AddCam("CAM0702B", "CAM0702B");
+	AddCam("CAM0704B", "CAM0704B");
 
 	//Gamma
-	ReplaceSET("SET0710E", "Gamma-LW-Act1");
-	ReplaceSET("SET0711E", "Gamma-LW-Act2");
-	ReplaceSET("SET0712E", "Gamma-LW-Act3");
-	ReplaceSET("SET0713E", "Gamma-LW-Knux");
-	ReplaceSET("SET0714E", "Gamma-LW-KnuxR");
+	AddSet("SET0710E", "Gamma-LW-Act1");
+	AddSet("SET0711E", "Gamma-LW-Act2");
+	AddSet("SET0712E", "Gamma-LW-Act3");
+	AddSet("SET0713E", "Gamma-LW-Knux");
+	AddSet("SET0714E", "Gamma-LW-KnuxR");
 
-	ReplaceCAM("CAM0700B", "CAM0700B");
-	ReplaceCAM("CAM0701B", "CAM0701B");
-	ReplaceCAM("CAM0702B", "CAM0702B");
-	ReplaceCAM("CAM0704B", "CAM0704B");
+	AddCam("CAM0700B", "CAM0700B");
+	AddCam("CAM0701B", "CAM0701B");
+	AddCam("CAM0702B", "CAM0702B");
+	AddCam("CAM0704B", "CAM0704B");
 }
 
 ObjectListEntry LostWorldObjectList_list[] = {

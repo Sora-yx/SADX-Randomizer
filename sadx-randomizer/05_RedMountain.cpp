@@ -3,8 +3,8 @@
 #include "RM.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Red Mountain\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Red Mountain\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 #define RegisterPosition(E, F) helperFunctions.RegisterStartPosition( E , F )
 
 void CamRedMountain() {
@@ -23,7 +23,7 @@ void CamRedMountain() {
 void RedMountain_Layout() {
 
 //	CurrentStageVersion = KnucklesVersion;
-//	CurrentMission = 3;
+	CurrentMission = 3;
 
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
@@ -40,7 +40,6 @@ void RedMountain_Layout() {
 	}
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.
-	LoadRando_SetAndCamLayout();
 	return;
 }
 
@@ -188,6 +187,7 @@ DataArray(DeathZone*, RedMountainDeathZones3, 0x24C0128, 3); //killplane pointer
 
 void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist and fix killplane
+	ObjLists[LevelIDs_RedMountain * 8 + 0] = &RedMountainObjectList;
 	ObjLists[LevelIDs_RedMountain * 8 + 1] = &RedMountainObjectList;
 	ObjLists[LevelIDs_RedMountain * 8 + 2] = &RedMountainObjectList;
 	TexLists_Obj[LevelIDs_RedMountain] = RedMountainObjectTextures;
@@ -210,86 +210,79 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<5>((int*)0x601570, 0x90); //Hook GetCurrentCharacterID when you enter at Red Mountain Act 1.
 	WriteData<5>((int*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
 
-	WriteData<72>((int*)0x422d20, 0x90);
 	WriteCall((void*)0x422d68, RedMountain_Layout); //RM random act
 
 	RMObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0510S", "Sonic-RM-Act1");
-	ReplaceSET("SET0511S", "Sonic-RM-Act2");
-	ReplaceSET("SET0512S", "Sonic-RM-Act3");
-	ReplaceSET("SET0513S", "Sonic-RM-E102");
-	ReplaceSET("SET0514S", "Sonic-Rm-Act3R");
+	AddSet("SET0510S", "Sonic-RM-Act1");
+	AddSet("SET0511S", "Sonic-RM-Act2");
+	AddSet("SET0512S", "Sonic-RM-Act3");
+	AddSet("SET0513S", "Sonic-RM-E102");
 
-	ReplaceCAM("CAM0500S", "CAM0500S");
-	ReplaceCAM("CAM0501S", "CAM0501S");
-	ReplaceCAM("CAM0502S", "CAM0502S");
-	ReplaceCAM("CAM0503S", "CAM0503S");
+	AddCam("CAM0500S", "CAM0500S");
+	AddCam("CAM0501S", "CAM0501S");
+	AddCam("CAM0502S", "CAM0502S");
+	AddCam("CAM0503S", "CAM0503S");
 
 
 	//Tails
-	ReplaceSET("SET0510M", "Tails-RM-Act1");
-	ReplaceSET("SET0511M", "Tails-RM-Act2");
-	ReplaceSET("SET0512M", "Tails-RM-Act3");
-	ReplaceSET("SET0513M", "Tails-RM-E102");
-	ReplaceSET("SET0514M", "Tails-RM-Act3R");
+	AddSet("SET0510M", "Tails-RM-Act1");
+	AddSet("SET0511M", "Tails-RM-Act2");
+	AddSet("SET0512M", "Tails-RM-Act3");
+	AddSet("SET0513M", "Tails-RM-E102");
 
-	ReplaceCAM("CAM0500M", "CAM0500M");
-	ReplaceCAM("CAM0501M", "CAM0501M");
-	ReplaceCAM("CAM0502M", "CAM0502M");
-	ReplaceCAM("CAM0503M", "CAM0503M");
+	AddCam("CAM0500M", "CAM0500M");
+	AddCam("CAM0501M", "CAM0501M");
+	AddCam("CAM0502M", "CAM0502M");
+	AddCam("CAM0503M", "CAM0503M");
 
 
 	//Knuckles
-	ReplaceSET("SET0510K", "Knux-RM-Act1");
-	ReplaceSET("SET0511K", "Knux-RM-Act2");
-	ReplaceSET("SET0512K", "Knux-RM-Act3");
-	ReplaceSET("SET0513K", "Knux-RM-E102");
-	ReplaceSET("SET0514K", "Knux-RM-Act3R");
+	AddSet("SET0510K", "Knux-RM-Act1");
+	AddSet("SET0511K", "Knux-RM-Act2");
+	AddSet("SET0512K", "Knux-RM-Act3");
+	AddSet("SET0513K", "Knux-RM-E102");
 
-	ReplaceCAM("CAM0500K", "CAM0500K");
-	ReplaceCAM("CAM0501K", "CAM0501K");
-	ReplaceCAM("CAM0502K", "CAM0502K");
-	ReplaceCAM("CAM0503K", "CAM0503K");
+	AddCam("CAM0500K", "CAM0500K");
+	AddCam("CAM0501K", "CAM0501K");
+	AddCam("CAM0502K", "CAM0502K");
+	AddCam("CAM0503K", "CAM0503K");
 
 
 	//Amy
-	ReplaceSET("SET0510A", "Amy-RM-Act1");
-	ReplaceSET("SET0511A", "Amy-RM-Act2");
-	ReplaceSET("SET0512A", "Amy-RM-Act3");
-	ReplaceSET("SET0513A", "Amy-RM-E102");
-	ReplaceSET("SET0514A", "Amy-RM-Act3R");
+	AddSet("SET0510A", "Amy-RM-Act1");
+	AddSet("SET0511A", "Amy-RM-Act2");
+	AddSet("SET0512A", "Amy-RM-Act3");
+	AddSet("SET0513A", "Amy-RM-E102");
 
-	ReplaceCAM("CAM0500A", "CAM0500A");
-	ReplaceCAM("CAM0501A", "CAM0501A");
-	ReplaceCAM("CAM0502A", "CAM0502A");
-	ReplaceCAM("CAM0503A", "CAM0503A");
+	AddCam("CAM0500A", "CAM0500A");
+	AddCam("CAM0501A", "CAM0501A");
+	AddCam("CAM0502A", "CAM0502A");
+	AddCam("CAM0503A", "CAM0503A");
 
 
 	//Big
-	ReplaceSET("SET0510B", "Big-RM-Act1");
-	ReplaceSET("SET0511B", "Big-RM-Act2");
-	ReplaceSET("SET0512B", "Big-RM-Act3");
-	ReplaceSET("SET0513B", "Big-RM-E102");
-	ReplaceSET("SET0514B", "Big-RM-Act3R");
+	AddSet("SET0510B", "Big-RM-Act1");
+	AddSet("SET0511B", "Big-RM-Act2");
+	AddSet("SET0512B", "Big-RM-Act3");
+	AddSet("SET0513B", "Big-RM-E102");
 
-	ReplaceCAM("CAM0500B", "CAM0500B");
-	ReplaceCAM("CAM0501B", "CAM0501B");
-	ReplaceCAM("CAM0502B", "CAM0502B");
-	ReplaceCAM("CAM0503B", "CAM0503B");
+	AddCam("CAM0500B", "CAM0500B");
+	AddCam("CAM0501B", "CAM0501B");
+	AddCam("CAM0502B", "CAM0502B");
+	AddCam("CAM0503B", "CAM0503B");
 
 
 	//Gamma
-	ReplaceSET("SET0510E", "Gamma-RM-Act1");
-	ReplaceSET("SET0511E", "Gamma-RM-Act2");
-	ReplaceSET("SET0512E", "Gamma-RM-Act3");
-	ReplaceSET("SET0513E", "Gamma-RM-E102");
-	ReplaceSET("SET0514E", "Gamma-RM-Act3R");
+	AddSet("SET0510E", "Gamma-RM-Act1");
+	AddSet("SET0511E", "Gamma-RM-Act2");
+	AddSet("SET0512E", "Gamma-RM-Act3");
+	AddSet("SET0513E", "Gamma-RM-E102");
 
-	ReplaceCAM("CAM0500E", "CAM0500E");
-	ReplaceCAM("CAM0501E", "CAM0501E");
-	ReplaceCAM("CAM0502E", "CAM0502E");
-	ReplaceCAM("CAM0503E", "CAM0503E");
+	AddCam("CAM0500E", "CAM0500E");
+	AddCam("CAM0501E", "CAM0501E");
+	AddCam("CAM0502E", "CAM0502E");
+	AddCam("CAM0503E", "CAM0503E");
 
 }

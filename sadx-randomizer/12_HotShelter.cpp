@@ -3,8 +3,8 @@
 #include "HS.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hot Shelter\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Hot Shelter\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 ObjectMaster* TriggerHS = nullptr;
 
@@ -31,10 +31,8 @@ void HotShelter_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
 
-	CurrentMission = 3;
-
 	CheckAndSet_HotShelterFunctions();
-	LoadRando_SetAndCamLayout();
+
 	return;
 }
 
@@ -472,68 +470,68 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	HSObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET1210S", "Sonic-HS-Act1");
-	ReplaceSET("SET1211S", "Sonic-HS-Act2");
-	ReplaceSET("SET1212S", "Sonic-HS-Act3");
-	ReplaceSET("SET1213S", "Sonic-HS-Act4");
+	AddSet("SET1210S", "Sonic-HS-Act1");
+	AddSet("SET1211S", "Sonic-HS-Act2");
+	AddSet("SET1212S", "Sonic-HS-Act3");
+	AddSet("SET1213S", "Sonic-HS-Act4");
 
-	ReplaceCAM("CAM1200S", "CAM1200S");
-	ReplaceCAM("CAM1201S", "CAM1201S");
-	ReplaceCAM("CAM1202S", "CAM1202S");
-	ReplaceCAM("CAM1204S", "CAM1204S");
+	AddCam("CAM1200S", "CAM1200S");
+	AddCam("CAM1201S", "CAM1201S");
+	AddCam("CAM1202S", "CAM1202S");
+	AddCam("CAM1204S", "CAM1204S");
 
 	//Tails
-	ReplaceSET("SET1210M", "Tails-HS-Act1");
-	ReplaceSET("SET1211M", "Tails-HS-Act2");
-	ReplaceSET("SET1212M", "Tails-HS-Act3");
-	ReplaceSET("SET1213M", "Tails-HS-Act4");
+	AddSet("SET1210M", "Tails-HS-Act1");
+	AddSet("SET1211M", "Tails-HS-Act2");
+	AddSet("SET1212M", "Tails-HS-Act3");
+	AddSet("SET1213M", "Tails-HS-Act4");
 
-	ReplaceCAM("CAM1200M", "CAM1200M");
-	ReplaceCAM("CAM1201M", "CAM1201M");
-	ReplaceCAM("CAM1202M", "CAM1202M");
-	ReplaceCAM("CAM1204M", "CAM1204M");
+	AddCam("CAM1200M", "CAM1200M");
+	AddCam("CAM1201M", "CAM1201M");
+	AddCam("CAM1202M", "CAM1202M");
+	AddCam("CAM1204M", "CAM1204M");
 
 	//Knuckles
-	ReplaceSET("SET1210K", "Knux-HS-Act1");
-	ReplaceSET("SET1211K", "Knux-HS-Act2");
-	ReplaceSET("SET1212K", "Knux-HS-Act3");
-	ReplaceSET("SET1213K", "Knux-HS-Act4");
+	AddSet("SET1210K", "Knux-HS-Act1");
+	AddSet("SET1211K", "Knux-HS-Act2");
+	AddSet("SET1212K", "Knux-HS-Act3");
+	AddSet("SET1213K", "Knux-HS-Act4");
 
-	ReplaceCAM("CAM1200K", "CAM1200K");
-	ReplaceCAM("CAM1201K", "CAM1201K");
-	ReplaceCAM("CAM1202K", "CAM1202K");
-	ReplaceCAM("CAM1204K", "CAM1204K");
+	AddCam("CAM1200K", "CAM1200K");
+	AddCam("CAM1201K", "CAM1201K");
+	AddCam("CAM1202K", "CAM1202K");
+	AddCam("CAM1204K", "CAM1204K");
 
 	//Amy
-	ReplaceSET("SET1210A", "Amy-HS-Act1");
-	ReplaceSET("SET1211A", "Amy-HS-Act2");
-	ReplaceSET("SET1212A", "Amy-HS-Act3");
-	ReplaceSET("SET1213A", "Amy-HS-Act4");
+	AddSet("SET1210A", "Amy-HS-Act1");
+	AddSet("SET1211A", "Amy-HS-Act2");
+	AddSet("SET1212A", "Amy-HS-Act3");
+	AddSet("SET1213A", "Amy-HS-Act4");
 
-	ReplaceCAM("CAM1200A", "CAM1200A");
-	ReplaceCAM("CAM1201A", "CAM1201A");
-	ReplaceCAM("CAM1202A", "CAM1202A");
-	ReplaceCAM("CAM1204A", "CAM1204A");
+	AddCam("CAM1200A", "CAM1200A");
+	AddCam("CAM1201A", "CAM1201A");
+	AddCam("CAM1202A", "CAM1202A");
+	AddCam("CAM1204A", "CAM1204A");
 
 	//Big
-	ReplaceSET("SET1210B", "Big-HS-Act1");
-	ReplaceSET("SET1211B", "Big-HS-Act2");
-	ReplaceSET("SET1212B", "Big-HS-Act3");
-	ReplaceSET("SET1213B", "Big-HS-Act4");
+	AddSet("SET1210B", "Big-HS-Act1");
+	AddSet("SET1211B", "Big-HS-Act2");
+	AddSet("SET1212B", "Big-HS-Act3");
+	AddSet("SET1213B", "Big-HS-Act4");
 
-	ReplaceCAM("CAM1200B", "CAM1200B");
-	ReplaceCAM("CAM1201B", "CAM1201B");
-	ReplaceCAM("CAM1202B", "CAM1202B");
-	ReplaceCAM("CAM1204B", "CAM1204B");
+	AddCam("CAM1200B", "CAM1200B");
+	AddCam("CAM1201B", "CAM1201B");
+	AddCam("CAM1202B", "CAM1202B");
+	AddCam("CAM1204B", "CAM1204B");
 
 	//Gamma
-	ReplaceSET("SET1210E", "Gamma-HS-Act1");
-	ReplaceSET("SET1211E", "Gamma-HS-Act2");
-	ReplaceSET("SET1212E", "Gamma-HS-Act3");
-	ReplaceSET("SET1213E", "Gamma-HS-Act4");
+	AddSet("SET1210E", "Gamma-HS-Act1");
+	AddSet("SET1211E", "Gamma-HS-Act2");
+	AddSet("SET1212E", "Gamma-HS-Act3");
+	AddSet("SET1213E", "Gamma-HS-Act4");
 
-	ReplaceCAM("CAM1200E", "CAM1200E");
-	ReplaceCAM("CAM1201E", "CAM1201E");
-	ReplaceCAM("CAM1202E", "CAM1202E");
-	ReplaceCAM("CAM1204E", "CAM1204E");
+	AddCam("CAM1200E", "CAM1200E");
+	AddCam("CAM1201E", "CAM1201E");
+	AddCam("CAM1202E", "CAM1202E");
+	AddCam("CAM1204E", "CAM1204E");
 }

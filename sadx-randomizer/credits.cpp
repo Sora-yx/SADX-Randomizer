@@ -1,12 +1,8 @@
-#include "SADXModLoader.h"
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "Credits.h"
+
 using namespace std;
 #include <string.h>
 #define ReplacePVM(C, D) helperFunctions.ReplaceFile("system\\" C ".pvm", "system\\Textures\\" D ".pvmx")
-#include "sound.h"
-#include "Trampoline.h"
 
 NJS_TEXNAME Rank_Texnames[4];
 NJS_TEXLIST Rank_Texlist = { arrayptrandlength(Rank_Texnames) };

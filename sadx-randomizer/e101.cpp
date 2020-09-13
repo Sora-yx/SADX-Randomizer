@@ -44,7 +44,7 @@ void Load_E101_R(ObjectMaster* obj) {
 void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 
-	helperFunctions.RegisterStartPosition(Characters_Sonic, E101_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, E101_StartPositions[0]);
+	for (int i = 0; i < 8; i++)
+		helperFunctions.RegisterStartPosition(i, E101_StartPositions[0]);
 
 }

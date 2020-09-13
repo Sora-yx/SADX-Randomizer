@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hedgehog Hammer\\" B ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Hedgehog Hammer\\" B ".bin")
 
 
 void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -18,17 +18,17 @@ void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helper
 
 
 	//Sonic
-	ReplaceSET("SET0000S", "Sonic-HH");
+	AddSet("SET0000S", "Sonic-HH");
 	//Tails
-	ReplaceSET("SET0000M", "Tails-HH");
+	AddSet("SET0000M", "Tails-HH");
 	//Knuckles
-	ReplaceSET("SET0000K", "Knux-HH");
+	AddSet("SET0000K", "Knux-HH");
 	//Amy
-	ReplaceSET("SET0000A", "Amy-HH");
+	AddSet("SET0000A", "Amy-HH");
 	//Big
-	ReplaceSET("SET0000B", "Big-HH");
+	AddSet("SET0000B", "Big-HH");
 	//Gamma
-	ReplaceSET("SET0000E", "Gamma-HH");
+	AddSet("SET0000E", "Gamma-HH");
 }
 
 int HedgehogHammerTrick() {

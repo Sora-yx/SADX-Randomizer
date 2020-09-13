@@ -1,9 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "CharactersSettings.h"
-#include "StageSettings.h"
-#include "Utils.h"
-#include "Trampoline.h"
 
 
 extern bool RandCongratsDone;

@@ -1,12 +1,8 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <fstream>
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "CharactersSettings.h"
-#include "Utils.h"
-#include "sound.h"
 
+std::string modpath;
 
 int Seed = 0;
 char StorySplits;
@@ -26,6 +22,7 @@ extern bool CreditCheck;
 bool isCriticalMode = false;
 bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
+bool isChaoHintEnabled = true;
 
 //Character settings
 bool AmySpeed = true;
@@ -84,16 +81,10 @@ extern "C" {
 			MessageBox(WindowHandle,
 				L"Please update SADX Mod Loader. Randomizer mod requires API version 7 or newer.",
 				L"Randomizer Error", MB_OK | MB_ICONERROR);
-			Exit();
 			return;
 		}
 
-		HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
-		if (HeroesMod) {
-			MessageBoxA(WindowHandle, "Warning: Heroes mod is not compatible with SADX Randomizer.", "SADX Randomizer", MB_ICONERROR);
-			Exit();
-			return;
-		}
+		help = helperFunctions;
 
 		//Ini file Configuration
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
@@ -154,7 +145,9 @@ extern "C" {
 			srand(Seed);
 		else
 			srand((unsigned)time(&t));
-		
+
+		modpath = path;
+
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
 		StartupMusic_Init(path, helperFunctions);
@@ -204,8 +197,8 @@ extern "C" {
 				SwapDelay++;
 
 			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-				AISwitch();
-				//EntityData1Ptrs[0]->Position = { 5840.53, 400, 728.434 };
+				AISwitch();			
+
 
 			//Rings Mission 2 and Treasure Hunting Check
 			MissionResultCheck();

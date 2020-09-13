@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "Utils.h"
 
 D3DMATRIX WorldMatrixBackup;
 

@@ -1,25 +1,9 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "EggWalker.h"
-#include "RandomHelpers.h"
-#include "Trampoline.h"
-
 
 
 void __cdecl EggWalker_Init(const char* path, const HelperFunctions& helperFunctions)
 {
-	//Initiliaze data
-	//Sonic
-	helperFunctions.RegisterStartPosition(Characters_Sonic, EW_StartPositions[0]);
-
-	//Knuckles
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, EW_StartPositions[0]);
-
-	//Amy
-	helperFunctions.RegisterStartPosition(Characters_Amy, EW_StartPositions[0]);
-
-	//Big
-	helperFunctions.RegisterStartPosition(Characters_Big, EW_StartPositions[0]);
-	//Gamma
-	helperFunctions.RegisterStartPosition(Characters_Gamma, EW_StartPositions[0]);
+	for (int i = 0; i < 8; i++)
+		helperFunctions.RegisterStartPosition(i, EW_StartPositions[0]);
 }

@@ -1,14 +1,10 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "ActsSettings.h"
-#include "CharactersSettings.h"
 #include <fstream>
 #include <iostream>
-#include "RandomHelpers.h"
-#include "Common.h"
-#include <random>
 #include <vector> 
 
+using std::string;
+using std::vector;
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
 struct RandomizedEntry randomizedSets[40];

@@ -43,20 +43,6 @@ void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunct
 	WriteData<5>((void*)0x571ffa, 0x90);
 	WriteData<5>((void*)0x571fed, 0x90);
 
-	//Sonic
-	helperFunctions.RegisterStartPosition(Characters_Sonic, EH_StartPositions[0]);
-
-	//Tails
-	helperFunctions.RegisterStartPosition(Characters_Tails, EH_StartPositions[0]);
-
-	//Knuckles
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, EH_StartPositions[0]);
-
-	//Amy
-	helperFunctions.RegisterStartPosition(Characters_Amy, EH_StartPositions[0]);
-
-	//Big
-	helperFunctions.RegisterStartPosition(Characters_Big, EH_StartPositions[0]);
-	//Gamma
-	helperFunctions.RegisterStartPosition(Characters_Gamma, EH_StartPositions[0]);
+	for (int i = 0; i < 8; i++)
+		helperFunctions.RegisterStartPosition(i, EH_StartPositions[0]);
 }

@@ -51,23 +51,8 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 	if (Viper && !isCriticalMode)
 		WriteCall((void*)0x57f20b, EggViperHPStuff);
 
-	//Initiliaze data
-	//Sonic
-	helperFunctions.RegisterStartPosition(Characters_Sonic, EV_StartPositions[0]);
-
-	//Tails
-	helperFunctions.RegisterStartPosition(Characters_Tails, EV_StartPositions[0]);
-
-	//Knuckles
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, EV_StartPositions[0]);
-
-	//Amy
-	helperFunctions.RegisterStartPosition(Characters_Amy, EV_StartPositions[0]);
-
-	//Big
-	helperFunctions.RegisterStartPosition(Characters_Big, EV_StartPositions[0]);
-	//Gamma
-	helperFunctions.RegisterStartPosition(Characters_Gamma, EV_StartPositions[0]);
+	for (int i = 0; i < 8; i++)
+		helperFunctions.RegisterStartPosition(i, EV_StartPositions[0]);
 }
 
 

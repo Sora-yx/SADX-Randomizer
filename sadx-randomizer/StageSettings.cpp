@@ -1,12 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "ActsSettings.h"
-#include "CharactersSettings.h"
 #include <fstream>
-#include "RandomHelpers.h"
-#include "Trampoline.h"
-#include "StageSettings.h"
-
 
 bool isZeroActive;
 

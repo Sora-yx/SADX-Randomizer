@@ -3,8 +3,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Windy Valley\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Windy Valley\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 void Cam_WV() {
 
@@ -39,6 +39,8 @@ void FixTailsVictoryWV() {
 
 void WindyValley_Layout() {
 
+	const char* curCam = "CAM020";
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
@@ -46,8 +48,12 @@ void WindyValley_Layout() {
 		CurrentStageVersion = SonicVersion;
 		break;
 	case TailsVersion:
+		curCam = "CAM0206";
 		if (CurrentMission < Mission2_100Rings)
 			Race = true;
+		break;
+	case GammaVersion:
+		curCam = "CAM0203";
 		break;
 	}
 
@@ -56,8 +62,6 @@ void WindyValley_Layout() {
 
 	if (Race)
 		SelectBarRace();
-
-	LoadRando_SetAndCamLayout();
 
 	return;
 }
@@ -70,86 +74,19 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	WVObjects_Init(path, helperFunctions);
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 	WriteCall((void*)0x4df390, FixTailsVictoryWV);
-	WriteData<72>((int*)0x422bdf, 0x90);
 
 	//Sonic
-	ReplaceSET("SET0210S", "Sonic-WV-Act1");
-	ReplaceSET("SET0211S", "Sonic-WV-Act2");
-	ReplaceSET("SET0212S", "Sonic-WV-Act3");
-	ReplaceSET("SET0213S", "Sonic-WV-Race");
-	ReplaceSET("SET0214S", "Sonic-WV-E102");
+	AddLevelLayout("Windy Valley\\", "WV0", helperFunctions);
+	AddLevelLayout("Windy Valley\\", "WV1", helperFunctions);
+	AddLevelLayout("Windy Valley\\", "WV2", helperFunctions);
+	AddLevelLayout("Windy Valley\\", "WVG", helperFunctions);
+	AddLevelLayout("Windy Valley\\", "WVM", helperFunctions);
 
-	ReplaceCAM("CAM0200S", "CAM0200S");
-	ReplaceCAM("CAM0201S", "CAM0201S");
-	ReplaceCAM("CAM0202S", "CAM0202S");
-	ReplaceCAM("CAM0203S", "CAM0203S");
-	ReplaceCAM("CAM0206S", "CAM0206S");
-
-	//Tails
-	ReplaceSET("SET0210M", "Tails-WV-Act1");
-	ReplaceSET("SET0211M", "Tails-WV-Act2");
-	ReplaceSET("SET0212M", "Tails-WV-Act3");
-	ReplaceSET("SET0213M", "Tails-WV-Race");
-	ReplaceSET("SET0214M", "Tails-WV-E102");
-
-	ReplaceCAM("CAM0200M", "CAM0200M");
-	ReplaceCAM("CAM0201M", "CAM0201M");
-	ReplaceCAM("CAM0202M", "CAM0202M");
-	ReplaceCAM("CAM0203M", "CAM0203M");
-	ReplaceCAM("CAM0206M", "CAM0206M");
-
-	//Knuckles								
-	ReplaceSET("SET0210K", "Knux-WV-Act1");
-	ReplaceSET("SET0211K", "Knux-WV-Act2");
-	ReplaceSET("SET0212K", "Knux-WV-Act3");
-	ReplaceSET("SET0213K", "Knux-WV-E102");
-	ReplaceSET("SET0214K", "Knux-WV-Race");
-										
-	ReplaceCAM("CAM0200K", "CAM0200K");
-	ReplaceCAM("CAM0201K", "CAM0201K");
-	ReplaceCAM("CAM0202K", "CAM0202K");
-	ReplaceCAM("CAM0203K", "CAM0203K");
-	ReplaceCAM("CAM0206K", "CAM0206K");
-
-
-	//Amy
-	ReplaceSET("SET0210A", "Amy-WV-Act1");
-	ReplaceSET("SET0211A", "Amy-WV-Act2");
-	ReplaceSET("SET0212A", "Amy-WV-Act3");
-	ReplaceSET("SET0213A", "Amy-WV-E102");
-	ReplaceSET("SET0214A", "Amy-WV-Race");
-
-	ReplaceCAM("CAM0200A", "CAM0200A");
-	ReplaceCAM("CAM0201A", "CAM0201A");
-	ReplaceCAM("CAM0202A", "CAM0202A");
-	ReplaceCAM("CAM0203A", "CAM0203A");
-	ReplaceCAM("CAM0206A", "CAM0206A");
-
-	//Big
-	ReplaceSET("SET0210B", "Big-WV-Act1");
-	ReplaceSET("SET0211B", "Big-WV-Act2");
-	ReplaceSET("SET0212B", "Big-WV-Act3");
-	ReplaceSET("SET0213B", "Big-WV-E102");
-	ReplaceSET("SET0214B", "Big-WV-Race");
-
-	ReplaceCAM("CAM0200B", "CAM0200B");
-	ReplaceCAM("CAM0201B", "CAM0201B");
-	ReplaceCAM("CAM0202B", "CAM0202B");
-	ReplaceCAM("CAM0203B", "CAM0203B");
-	ReplaceCAM("CAM0206B", "CAM0206B");
-
-	//Gamma
-	ReplaceSET("SET0210E", "Gamma-WV-Act1");
-	ReplaceSET("SET0211E", "Gamma-WV-Act2");
-	ReplaceSET("SET0212E", "Gamma-WV-Act3");
-	ReplaceSET("SET0213E", "Gamma-WV-E102");
-	ReplaceSET("SET0214E", "Gamma-WV-Race");
-
-	ReplaceCAM("CAM0200E", "CAM0200E");
-	ReplaceCAM("CAM0201E", "CAM0201E");
-	ReplaceCAM("CAM0202E", "CAM0202E");
-	ReplaceCAM("CAM0203E", "CAM0203E");
-	ReplaceCAM("CAM0206E", "CAM0206E");
+	AddCam("CAM0200S", "CAM0200S");
+	AddCam("CAM0201S", "CAM0201S");
+	AddCam("CAM0202S", "CAM0202S");
+	AddCam("CAM0203S", "CAM0203S");
+	AddCam("CAM0206S", "CAM0206S");
 }
 
 ObjectListEntry WindyValleyObjectList_list[] = {

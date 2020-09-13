@@ -4,7 +4,7 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 #include "Trampoline.h"
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Chaos 6\\" B ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\Sets\\Chaos 6\\" B ".bin")
 
 
 void Chaos6_LoadWithTarget() {
@@ -57,38 +57,35 @@ void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x559d3a, Chaos6_ReturnCharacter);  //Display Chaos 6 life gauge while using anoter character than what the game expects, and fix camera issue.
 	
 	//Sonic
-	ReplaceSET("SET1800S", "Sonic-Chaos6-S");
-	ReplaceSET("SET1801S", "Sonic-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Sonic, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Sonic, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800S", "Sonic-Chaos6-S");
+	AddSet("SET1801S", "Sonic-Chaos6-K");
+
+	for (int i = 0; i < 8; i++) {
+		helperFunctions.RegisterStartPosition(i, Chaos6_StartPositions[0]);
+		helperFunctions.RegisterStartPosition(i, Chaos6_StartPositions_K[0]);
+	}
+	
 
 	//Tails
-	ReplaceSET("SET1800M", "Tails-Chaos6-S");
-	ReplaceSET("SET1801M", "Tails-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Tails, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Tails, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800M", "Tails-Chaos6-S");
+	AddSet("SET1801M", "Tails-Chaos6-K");
 
 	//Knuckles
-	ReplaceSET("SET1800K", "Knux-Chaos6-S");
-	ReplaceSET("SET1801K", "Knux-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Knuckles, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800K", "Knux-Chaos6-S");
+	AddSet("SET1801K", "Knux-Chaos6-K");
+
 
 	//Amy
-	ReplaceSET("SET1800A", "Amy-Chaos6-S");
-	ReplaceSET("SET1801A", "Amy-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Amy, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Amy, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800A", "Amy-Chaos6-S");
+	AddSet("SET1801A", "Amy-Chaos6-K");
+
 
 	//Big
-	ReplaceSET("SET1800B", "Big-Chaos6-S");
-	ReplaceSET("SET1801B", "Big-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Big, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Big, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800B", "Big-Chaos6-S");
+	AddSet("SET1801B", "Big-Chaos6-K");
 
 	//Gamma
-	ReplaceSET("SET1800E", "Gamma-Chaos6-S");
-	ReplaceSET("SET1801E", "Gamma-Chaos6-K");
-	helperFunctions.RegisterStartPosition(Characters_Gamma, Chaos6_StartPositions[0]);
-	helperFunctions.RegisterStartPosition(Characters_Gamma, Chaos6_StartPositions_K[0]);
+	AddSet("SET1800E", "Gamma-Chaos6-S");
+	AddSet("SET1801E", "Gamma-Chaos6-K");
+
 }

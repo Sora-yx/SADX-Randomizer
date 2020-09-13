@@ -3,8 +3,8 @@
 #include "RandomHelpers.h"
 #include "ActsSettings.h"
 
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Twinkle Park\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Twinkle Park\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
 
 
 void FixRollerCoaster() {
@@ -32,7 +32,7 @@ void TP_CAM() {
 		LoadCamFile(1, "0301");
 		
 	if (CurrentAct == 1 && CurrentStageVersion == AmyVersion)
-		LoadCamFile(1, "0305");
+		LoadCamFile(1, "0303");
 	else
 		LoadCamFile(1, "0301");
 
@@ -45,8 +45,6 @@ void TP_CAM() {
 
 void TwinklePark_Layout() {
 
-//	CurrentStageVersion = SonicVersion;
-	CurrentMission = 2;
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
@@ -60,8 +58,8 @@ void TwinklePark_Layout() {
 		WriteData<1>((void*)0x7983c4, 0x7F);
 	}
 
+
 	fixTCCart();
-	LoadRando_SetAndCamLayout();
 	return;
 }
 
@@ -76,89 +74,87 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteCall((void*)0x61dd82, FixRCCharacterPosition); 
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
 
-	WriteData<72>((int*)0x422c4a, 0x90);
-
 	WriteCall((void*)0x422c92, TwinklePark_Layout); //TP random layout
 
 	TPObjects_Init(path, helperFunctions);
 
 	//Sonic
-	ReplaceSET("SET0310S", "Sonic-TP-Act1");
-	ReplaceSET("SET0311S", "Sonic-TP-Act2");
-	ReplaceSET("SET0312S", "Sonic-TP-Act3");
-	ReplaceSET("SET0313S", "Sonic-TP-Amy");
-	ReplaceSET("SET0314S", "Sonic-TP-Big");
+	AddSet("SET0310S", "Sonic-TP-Act1");
+	AddSet("SET0311S", "Sonic-TP-Act2");
+	AddSet("SET0312S", "Sonic-TP-Act3");
+	AddSet("SET0313S", "Sonic-TP-Amy");
+	AddSet("SET0314S", "Sonic-TP-Big");
 
-	ReplaceCAM("CAM0300S", "CAM0300S");
-	ReplaceCAM("CAM0301S", "CAM0301S");
-	ReplaceCAM("CAM0302S", "CAM0302S");
-	ReplaceCAM("CAM0305S", "CAM0305S");
+	AddCam("CAM0300S", "CAM0300S");
+	AddCam("CAM0301S", "CAM0301S");
+	AddCam("CAM0302S", "CAM0302S");
+	AddCam("CAM0305S", "CAM0305S");
 
 
 	//Tails
-	ReplaceSET("SET0310M", "Tails-TP-Act1");
-	ReplaceSET("SET0311M", "Tails-TP-Act2");
-	ReplaceSET("SET0312M", "Tails-TP-Act3");
-	ReplaceSET("SET0313M", "Tails-TP-Amy");
-	ReplaceSET("SET0314M", "Tails-TP-Big");
+	AddSet("SET0310M", "Tails-TP-Act1");
+	AddSet("SET0311M", "Tails-TP-Act2");
+	AddSet("SET0312M", "Tails-TP-Act3");
+	AddSet("SET0313M", "Tails-TP-Amy");
+	AddSet("SET0314M", "Tails-TP-Big");
 
-	ReplaceCAM("CAM0300M", "CAM0300M");
-	ReplaceCAM("CAM0301M", "CAM0301M");
-	ReplaceCAM("CAM0302M", "CAM0302M");
-	ReplaceCAM("CAM0305M", "CAM0305M");
+	AddCam("CAM0300M", "CAM0300M");
+	AddCam("CAM0301M", "CAM0301M");
+	AddCam("CAM0302M", "CAM0302M");
+	AddCam("CAM0305M", "CAM0305M");
 
 
 	//Knuckles
-	ReplaceSET("SET0310K", "Knux-TP-Act1");
-	ReplaceSET("SET0311K", "Knux-TP-Act2");
-	ReplaceSET("SET0312K", "Knux-TP-Act3");
-	ReplaceSET("SET0313K", "Knux-TP-Amy");
-	ReplaceSET("SET0314K", "Knux-TP-Big");
+	AddSet("SET0310K", "Knux-TP-Act1");
+	AddSet("SET0311K", "Knux-TP-Act2");
+	AddSet("SET0312K", "Knux-TP-Act3");
+	AddSet("SET0313K", "Knux-TP-Amy");
+	AddSet("SET0314K", "Knux-TP-Big");
 
-	ReplaceCAM("CAM0300K", "CAM0300K");
-	ReplaceCAM("CAM0301K", "CAM0301K");
-	ReplaceCAM("CAM0302K", "CAM0302K");
-	ReplaceCAM("CAM0305K", "CAM0305K");
+	AddCam("CAM0300K", "CAM0300K");
+	AddCam("CAM0301K", "CAM0301K");
+	AddCam("CAM0302K", "CAM0302K");
+	AddCam("CAM0305K", "CAM0305K");
 
 
 	//Amy
-	ReplaceSET("SET0310A", "Amy-TP-Act1");
-	ReplaceSET("SET0311A", "Amy-TP-Act2");
-	ReplaceSET("SET0312A", "Amy-TP-Act3");
-	ReplaceSET("SET0313A", "Amy-TP-Amy");
-	ReplaceSET("SET0314A", "Amy-TP-Big");
+	AddSet("SET0310A", "Amy-TP-Act1");
+	AddSet("SET0311A", "Amy-TP-Act2");
+	AddSet("SET0312A", "Amy-TP-Act3");
+	AddSet("SET0313A", "Amy-TP-Amy");
+	AddSet("SET0314A", "Amy-TP-Big");
 
-	ReplaceCAM("CAM0300A", "CAM0300A");
-	ReplaceCAM("CAM0301A", "CAM0301A");
-	ReplaceCAM("CAM0302A", "CAM0302A");
-	ReplaceCAM("CAM0305A", "CAM0305A");
+	AddCam("CAM0300A", "CAM0300A");
+	AddCam("CAM0301A", "CAM0301A");
+	AddCam("CAM0302A", "CAM0302A");
+	AddCam("CAM0305A", "CAM0305A");
 
 
 	//Big
-	ReplaceSET("SET0310B", "Big-TP-Act1");
-	ReplaceSET("SET0311B", "Big-TP-Act2");
-	ReplaceSET("SET0312B", "Big-TP-Act3");
-	ReplaceSET("SET0313B", "Big-TP-Amy");
-	ReplaceSET("SET0314B", "Big-TP-Big");
+	AddSet("SET0310B", "Big-TP-Act1");
+	AddSet("SET0311B", "Big-TP-Act2");
+	AddSet("SET0312B", "Big-TP-Act3");
+	AddSet("SET0313B", "Big-TP-Amy");
+	AddSet("SET0314B", "Big-TP-Big");
 
 
-	ReplaceCAM("CAM0300B", "CAM0300B");
-	ReplaceCAM("CAM0301B", "CAM0301B");
-	ReplaceCAM("CAM0302B", "CAM0302B");
-	ReplaceCAM("CAM0305B", "CAM0305B");
+	AddCam("CAM0300B", "CAM0300B");
+	AddCam("CAM0301B", "CAM0301B");
+	AddCam("CAM0302B", "CAM0302B");
+	AddCam("CAM0305B", "CAM0305B");
 
 
 	//Gamma
-	ReplaceSET("SET0310E", "Gamma-TP-Act1");
-	ReplaceSET("SET0311E", "Gamma-TP-Act2");
-	ReplaceSET("SET0312E", "Gamma-TP-Act3");
-	ReplaceSET("SET0313E", "Gamma-TP-Amy");
-	ReplaceSET("SET0314E", "Gamma-TP-Big");
+	AddSet("SET0310E", "Gamma-TP-Act1");
+	AddSet("SET0311E", "Gamma-TP-Act2");
+	AddSet("SET0312E", "Gamma-TP-Act3");
+	AddSet("SET0313E", "Gamma-TP-Amy");
+	AddSet("SET0314E", "Gamma-TP-Big");
 
-	ReplaceCAM("CAM0300E", "CAM0300E");
-	ReplaceCAM("CAM0301E", "CAM0301E");
-	ReplaceCAM("CAM0302E", "CAM0302E");
-	ReplaceCAM("CAM0305E", "CAM0305E");
+	AddCam("CAM0300E", "CAM0300E");
+	AddCam("CAM0301E", "CAM0301E");
+	AddCam("CAM0302E", "CAM0302E");
+	AddCam("CAM0305E", "CAM0305E");
 
 }
 

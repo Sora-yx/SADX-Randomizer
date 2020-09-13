@@ -1,29 +1,25 @@
 #include "stdafx.h"
 #include "Utils.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
 #include <fstream>
 #include <iostream>
-#define ReplaceSET(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\levels\\Emerald Coast\\" B ".bin")
-#define ReplaceCAM(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" D ".bin")
-
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\Emerald Coast\\" A ".bin")
+#define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
 void EC_Layout() {
 
+	CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = BigVersion;
-
-	CurrentStageVersion = GammaVersion;
-	CurrentMission = 3;
-
-	LoadRando_SetAndCamLayout();
+	
 	return;
 }
+
+
 
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -34,76 +30,18 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	WriteData<5>((int*)0x4f6afa, 0x90); //Prevent the game to start the cutscene as Tails.
 	WriteData<1>((char*)0x427FCA, 0x08); //Fix EC HUD display for Tails.
 
-	WriteData<72>((int*)0x422b74, 0x90); //Prevent the game to load its own SetFile.
 	WriteCall((void*)0x422bbc, EC_Layout); 
 
-	//Sonic
-	ReplaceSET("SET0110S", "SonicEC01");
-	ReplaceSET("SET0111S", "SonicEC02");
-	ReplaceSET("SET0112S", "SonicEC03");
-	ReplaceSET("SET0113S", "SonicECG");
+	
+	AddLevelLayout("Emerald Coast\\", "EC0", helperFunctions);
+	AddLevelLayout("Emerald Coast\\", "EC1", helperFunctions);
+	AddLevelLayout("Emerald Coast\\", "EC2", helperFunctions);
+	AddLevelLayout("Emerald Coast\\", "ECG", helperFunctions);
 
-	ReplaceCAM("CAM0100S", "CAM0100S");
-	ReplaceCAM("CAM0101S", "CAM0101S");
-	ReplaceCAM("CAM0102S", "CAM0102S");
-	ReplaceCAM("CAM0104S", "CAM0104S");
-
-
-	//Tails
-	ReplaceSET("SET0110M", "TailsEC01");
-	ReplaceSET("SET0111M", "TailsEC02");
-	ReplaceSET("SET0112M", "TailsEC03");
-	ReplaceSET("SET0113M", "TailsECG");
-
-	ReplaceCAM("CAM0100M", "CAM0100M");
-	ReplaceCAM("CAM0101M", "CAM0101M");
-	ReplaceCAM("CAM0102M", "CAM0102M");
-	ReplaceCAM("CAM0104M", "CAM0104M");
-
-	//Knuckles
-	ReplaceSET("SET0110K", "KnuxEC01");
-	ReplaceSET("SET0111K", "KnuxEC02");
-	ReplaceSET("SET0112K", "KnuxEC03");
-	ReplaceSET("SET0113K", "KnuxECG");
-
-	ReplaceCAM("CAM0100K", "CAM0100K");
-	ReplaceCAM("CAM0101K", "CAM0101K");
-	ReplaceCAM("CAM0102K", "CAM0102K");
-	ReplaceCAM("CAM0104K", "CAM0104K");
-
-	//Amy
-	ReplaceSET("SET0110A", "AmyEC01");
-	ReplaceSET("SET0111A", "AmyEC02");
-	ReplaceSET("SET0112A", "AmyEC03");
-	ReplaceSET("SET0113A", "AmyECG");
-
-	ReplaceCAM("CAM0100A", "CAM0100A");
-	ReplaceCAM("CAM0101A", "CAM0101A");
-	ReplaceCAM("CAM0102A", "CAM0102A");
-	ReplaceCAM("CAM0104A", "CAM0104A");
-
-	//Big
-	ReplaceSET("SET0110B", "BigEC01");
-	ReplaceSET("SET0111B", "BigEC02");
-	ReplaceSET("SET0112B", "BigEC03");
-	ReplaceSET("SET0113B", "BigECG");
-
-	ReplaceCAM("CAM0100B", "CAM0100B");
-	ReplaceCAM("CAM0101B", "CAM0101B");
-	ReplaceCAM("CAM0102B", "CAM0102B");
-	ReplaceCAM("CAM0104B", "CAM0104B");
-
-	//Gamma
-	ReplaceSET("SET0110E", "GammaEC01");
-	ReplaceSET("SET0111E", "GammaEC02");
-	ReplaceSET("SET0112E", "GammaEC03");
-	ReplaceSET("SET0113E", "GammaECG");
-
-	ReplaceCAM("CAM0100E", "CAM0100E");
-	ReplaceCAM("CAM0101E", "CAM0101E");
-	ReplaceCAM("CAM0102E", "CAM0102E");
-	ReplaceCAM("CAM0104E", "CAM0104E");
-
+	AddCam("C0100");
+	AddCam("C0101");
+	AddCam("C0102");
+	AddCam("C0103");
 }
 
 ObjectListEntry EmeraldCoastObjectList_list[] = {

@@ -1,7 +1,4 @@
 #include "stdafx.h"
-#include "Trampoline.h"
-#include"RandomHelpers.h"
-#include "Common.h"
 
 
 short ConvertLevelActsIDtoLevel(short level) {
@@ -122,4 +119,32 @@ void FlashScreen(ObjectMaster* obj) {
 
 		ScreenFade_DrawColor();
 	}
+}
+
+bool isHeroesMod() {
+	HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
+	if (HeroesMod)
+		return true;
+
+	return false;
+}
+
+bool isSA2Mod() {
+	HMODULE HeroesMod = GetModuleHandle(L"sadx-sa2-mod");
+	if (HeroesMod)
+		return true;
+
+	return false;
+}
+
+bool isRandoLevel() {
+	for (int i = 0; i < LengthOfArray(RandoStageArray); i++)
+	{
+		int level = ConvertLevelActsIDtoLevel(RandoStageArray[i].levelAndActs);
+
+		if (level == CurrentLevel)
+			return true;
+	}
+
+	return false;
 }
