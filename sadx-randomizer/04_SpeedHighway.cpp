@@ -23,8 +23,6 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
-	CurrentStageVersion = KnucklesVersion;
-
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:

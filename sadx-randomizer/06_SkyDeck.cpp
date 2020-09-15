@@ -26,7 +26,7 @@ void Cam_SkyDeck() {
 void SkyDeck_Layout() {
 
 
-	CurrentStageVersion = TailsVersion;
+	//CurrentStageVersion = TailsVersion;
 	//CurrentMission = 0;
 
 	if (CurrentAct == 2)

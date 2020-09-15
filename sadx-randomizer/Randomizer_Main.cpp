@@ -124,9 +124,6 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 			return true;
 	}
 
-	if (!Vanilla && curBannedChar == curChar)
-		return true;
-
 	return false;
 }
 
@@ -145,6 +142,9 @@ bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
 		if (curSingleLevel == bannedRegularSonicAndTails[i] && (char_id == Characters_Sonic || char_id == Characters_Tails))
 			return true;
 	}
+
+	if (char_id == curBannedChar)
+		return true;
 	
 	return false;
 }

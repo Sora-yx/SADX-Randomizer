@@ -22,7 +22,7 @@ void CamHotShelter() {
 
 void HotShelter_Layout() {
 
-	CurrentStageVersion = BigVersion;
+	//CurrentStageVersion = BigVersion;
 
 	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = AmyVersion;
