@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
 #include <shellapi.h>
 #include <fstream>
 #include <iostream>
@@ -8,19 +7,36 @@
 #define AddVoices2(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_jp\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 extern bool SA2Voices;
 
+static Trampoline* PlayVoice_t = nullptr;
+
 //randomize voices
-void RandomVoice() {
+
+extern int VoiceID;
+
+static void __cdecl PlayVoice_r(int a1)
+{
+	a1 = rand() % 2043;
+	VoiceID = a1;
+	auto original = reinterpret_cast<decltype(PlayVoice_r)*>(PlayVoice_t->Target());
+	original(a1);
+}
+
+
+void PlayRandomVoice(int a1) {
 	if (VoicesEnabled != 0) {
 		if (SA2Voices)
 		{
 			short PickGameVoice = rand() % 2;
 			if (PickGameVoice)
-				CurrentVoiceNumber = rand() % 2727 + 7001;
+				a1 = rand() % 2727 + 7001;
 			else
-				CurrentVoiceNumber = rand() % 2043;
+				a1 = rand() % 2043;
 		}
 		else
-			CurrentVoiceNumber = rand() % 2043;
+			a1 = rand() % 2043;
+
+		CurrentVoiceNumber = a1;
+		VoiceID = a1;
 	}
 
 	return;
@@ -49,7 +65,7 @@ void SA2VoicesCheck() {
 
 	const char* Path = "mods\\SA2 Voices\\system\\sounddata\\voice_us\\wma\\7010.adx";
 
-	if (DoesConfigExist("RandoConfig.txt") || IsSA2Voices)
+	if (IsSA2Voices && RNGVoices)
 		SA2Voices = true;
 
 	if (!DoesConfigExist("RandoConfig.txt") && RNGVoices)
@@ -63,7 +79,7 @@ void SA2VoicesCheck() {
 			return;
 		}
 
-		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would like to download them for more variety? (Once the download is complete, simply extract and install it just like a regular mod and don't forget to enable it on the mod loader.)", "SADX Randomizer", MB_YESNO);
+		int msgboxID = MessageBoxA(WindowHandle, "It looks like you have the Randomized Voices option enabled, but you don't have the Sonic Adventure 2 voices, would you like to download them? (Once the download is complete, simply extract and install it just like a regular mod and don't forget to enable it on the mod loader.)", "SADX Randomizer", MB_YESNO);
 		switch (msgboxID)
 		{
 		case IDYES:
@@ -139,7 +155,7 @@ void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperF
 
 	if (RNGVoices)
 	{
-		WriteCall((void*)0x42571d, RandomVoice);
+		PlayVoice_t = new Trampoline((int)PlayVoice, (int)PlayVoice + 0x5, PlayVoice_r);
 		SA2VoicesCheck();
 	}
 

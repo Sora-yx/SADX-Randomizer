@@ -109,6 +109,7 @@
     <ClCompile Include="Common_Functions.cpp" />
     <ClCompile Include="Common_Startup.cpp" />
     <ClCompile Include="credits.cpp" />
+    <ClCompile Include="Cutscene.cpp" />
     <ClCompile Include="e101.cpp" />
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />
@@ -129,6 +130,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="subtitles.cpp" />
+    <ClCompile Include="TreasureHunting.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Voices.cpp" />
     <ClCompile Include="Zero.cpp" />
@@ -158,6 +161,7 @@
     <ClInclude Include="sound.h" />
     <ClInclude Include="StageSettings.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="subtitles.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

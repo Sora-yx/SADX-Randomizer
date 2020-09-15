@@ -23,6 +23,7 @@ bool isCriticalMode = false;
 bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
 bool isChaoHintEnabled = true;
+bool RNGCutscene = true;
 
 //Character settings
 bool AmySpeed = true;
@@ -57,13 +58,8 @@ time_t t;
 
 extern NJS_VECTOR pos;
 extern bool ChaoSpawnAllowed;
+extern bool isCutsceneAllowed;
 
-uint16_t levelactTest = 0; 
-short levelactTest2 = 0;
-short levelactTest3 = 0;
-
-short* ptr = &levelactTest2;
-short* ptr2 = &levelactTest3;
 short chara = 0;
 
 extern "C" {
@@ -92,6 +88,7 @@ extern "C" {
 		RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		DupliCheck = config->getBool("Randomizer", "DupliCheck", true);
+		RNGCutscene = config->getBool("Randomizer", "RNGCutscene", true);
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		Seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);
@@ -168,7 +165,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Flag Progress %d", CustomFlag);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Flag Progress %d", CustomFlag);
 
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
@@ -185,6 +182,7 @@ extern "C" {
 		character_settings_onFrames();
 
 		Sounds_OnFrame();
+		PlayRandomCutscene_OnFrames();
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

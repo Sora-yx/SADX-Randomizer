@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "subtitles.h"
 HelperFunctions help;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -35,6 +35,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 }
 
 
+
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen
@@ -51,6 +52,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	WriteCall((void*)0x42af3b, AddCustomFlag);
 	
 
+	WriteCall((void*)0x42fb75, DoSomethingRelatedToText_r);
 	Credits_StartupInit(path, helperFunctions);
 }
 

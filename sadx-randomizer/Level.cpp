@@ -181,7 +181,7 @@ void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
 
 	Load_ObjectsCommon();
 	
-	if (!isHeroesMod() && !isSA2Mod() && isRandoLevel() && CurrentLevel > LevelIDs_HedgehogHammer && CurrentLevel < LevelIDs_Chaos0)
+	if (isRandoLevel() && CurrentLevel > LevelIDs_HedgehogHammer && CurrentLevel < LevelIDs_Chaos0)
 	{
 		for (int i = 0; i < LengthOfArray(SetCamFileArray); i++) //FailSafe, if layout doesn't exist, simply let SADX load the stage (vanilla).
 		{
@@ -225,7 +225,7 @@ void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperF
 
 
 void CheckAndDisplayWarningLayoutError() {
-	if (!CharObj2Ptrs[0]|| isSetLoaded)
+	if (!CharObj2Ptrs[0]|| isSetLoaded || !IsIngame())
 		return;
 
 	DisplayDebugStringFormatted(NJM_LOCATION(2, 6), "WARNING: The Set file from Level %d", CurrentLevel);

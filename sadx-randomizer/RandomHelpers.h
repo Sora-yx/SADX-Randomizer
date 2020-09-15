@@ -16,6 +16,10 @@ struct RandomizedEntry
 	int ai_race; //Tails race AI
 	short music;
 	short voices;
+	int cutsceneID;
+	int8_t cutsceneChara;
+	int cutsceneLevel;
+	int cutsceneAct;
 };
 
 struct StageVersion {
@@ -116,6 +120,7 @@ extern bool SA2M3;
 extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
+extern bool RNGCutscene;
 extern uint32_t split;
 extern uint32_t TotalCount;
 extern char StorySplits;
@@ -145,7 +150,10 @@ void __cdecl CheckLoadICEmerald_r(ObjectMaster* a1);
 void __cdecl CheckLoadTailsPlaneEC_r(ObjectMaster* a1);
 void __cdecl CheckLWTrigger_r(ObjectMaster* a1);
 void __cdecl CheckFETrigger_r(ObjectMaster* a1);
-
+void PlayRandomCutscene_OnFrames();
+void getRandomCutscene(RandomizedEntry* entry);
+bool CheckAndPlayRandomCutscene();
+void set_event_flags(long cutsceneID);
 
 
 extern short CurrentMission;
@@ -162,7 +170,6 @@ extern char GetCustomLayout;
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
-void CheckAndAddCustomFlag();
 void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
@@ -269,9 +276,10 @@ void DisplayRandoInformation();
 
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
-void RandomVoice();
+void PlayRandomVoice(int a1);
 void RandomMusic();
 void Stages_Management();
+
 
 void PlayMusic_R(MusicIDs song);
 void PlayVoice_R(int a1);
@@ -418,7 +426,7 @@ DataPointer(char, AdventureDataChaos4Post, 0x3B183AE);
 FunctionPointer(void, StartCutsceneFlag, (int event), 0x630590);
 FunctionPointer(void, CameraSetEventCamera, (short a1, unsigned char a2), 0x437bf0);
 
-FunctionPointer(void, StartCutscene, (int flag), 0x4136e0);
+FunctionPointer(void, StartCutscene, (long flag), 0x4136e0);
 FunctionPointer(void, StartCutscene2, (int flag), 0x52e6c0);
 VoidFunc(FUN_0042ce20, 0x42ce20); //Called with Delete Tails AI
 
@@ -446,8 +454,8 @@ void SoftReset_R();
 void TrialModeQuit_R();
 void FixRestart_Stuff();
 void Delete_Cart();
-void LoadCamFilePC_R();
 void ResetValueAndObjects();
+void Init_TreasureHunting();
 
 void AddRingSandHill();
 void fixTCCart();

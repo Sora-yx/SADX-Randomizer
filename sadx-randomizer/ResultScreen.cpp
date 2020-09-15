@@ -4,7 +4,7 @@
 extern bool RandCongratsDone;
 bool IceCapCutsceneSkip = false;
 extern ObjectMaster* CurAI;
-
+extern bool isCutsceneAllowed;
 extern ObjectMaster* ChaoTP;
 
 
@@ -66,7 +66,7 @@ SetLevelPosition PlayerEndPosition[52]{ //Used for M2 and Bosses
 
 
 
-//While load result: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
+//While load LevelResult: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
@@ -76,11 +76,14 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
+	if (RNGCutscene)
+		isCutsceneAllowed = true;
+
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
 	{
 		for (int i = 0; i < LengthOfArray(PlayerEndPosition); i++)
 		{
-			if (CurrentMission == Mission2_100Rings && CurrentLevel == PlayerEndPosition[i].LevelID >> 8 && CurrentStageVersion == PlayerEndPosition[i].version || CurrentLevel == PlayerEndPosition[i].LevelID >> 8  && CurrentLevel == LevelIDs_EggHornet || CurrentLevel == LevelIDs_Chaos6 || CurrentLevel == LevelIDs_Zero)
+			if (CurrentMission == Mission2_100Rings && CurrentLevel == PlayerEndPosition[i].LevelID >> 8 && CurrentStageVersion == PlayerEndPosition[i].version)
 			{
 				ForcePlayerAction(0, 24);
 				EntityData1Ptrs[0]->Position = PlayerEndPosition[i].Position;
@@ -406,6 +409,8 @@ void ResetValueAndObjects() {
 	isGameOver = false;
 	SonicRand = 0;
 	KnuxCheck = 0;
+	CurrentMission = 0;
+	GetCustomLayout = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;

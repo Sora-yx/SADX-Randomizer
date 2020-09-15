@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector> 
+#include "Cutscene.h"
 
 using std::string;
 using std::vector;
@@ -275,7 +276,31 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 	return cur_Sanic;
 }
 
+
+
+
 int levelCount;
+
+void SetInfoNextRandomStage(char stage) {
+	if (RNGCharacters)
+	{
+		CurrentCharacter = randomizedSets[levelCount].character;
+		SonicRand = randomizedSets[levelCount].sonic_transfo;
+
+		if (SonicRand == 1)
+			MetalSonicFlag = SonicRand;
+	}
+
+	if (isAIAllowed)
+		CurrentAI = randomizedSets[levelCount].ai_mode;
+
+	LastLevel = CurrentLevel;
+	CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
+	CurrentAct = randomizedSets[levelCount].act;
+	CurrentMission = randomizedSets[levelCount].SA2Mission;
+	CurrentStageVersion = randomizedSets[levelCount].Layout;
+	levelCount++;
+}
 
 void SetRandomStageAct(char stage, char act) {
 
@@ -297,28 +322,12 @@ void SetRandomStageAct(char stage, char act) {
 	{
 		if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 		{
-			if (RNGCharacters)
-			{
-				UnloadCharTextures(CurCharacter());
-				CurrentCharacter = randomizedSets[levelCount].character;
-				SonicRand = randomizedSets[levelCount].sonic_transfo;
 
-				if (SonicRand == 1)
-					MetalSonicFlag = SonicRand;
-			}
+			if (!CheckAndPlayRandomCutscene())
+				SetInfoNextRandomStage(stage);
+			else
+				return;
 
-			if (isAIAllowed)
-				CurrentAI = randomizedSets[levelCount].ai_mode;
-
-			LastLevel = CurrentLevel;
-			CurrentMission = 0;
-			GetCustomLayout = 0;
-			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-			CurrentAct = randomizedSets[levelCount].act;
-			CurrentMission = randomizedSets[levelCount].SA2Mission;
-			CurrentStageVersion = randomizedSets[levelCount].Layout;
-		
-			levelCount++;
 
 			if (levelCount == TotalCount)
 				Randomizer_GetNewRNG(); //reroll once the player reached 40 stages.
@@ -342,19 +351,6 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
-		if (RNGCharacters)
-		{
-			UnloadCharTextures(CurCharacter());
-			CurrentCharacter = randomizedSets[levelCount].character;
-			SonicRand = randomizedSets[levelCount].sonic_transfo;
-
-			if (SonicRand == 1)
-				MetalSonicFlag = SonicRand;
-		}
-
-		if (isAIAllowed)
-			CurrentAI = randomizedSets[levelCount].ai_mode;
-
 		//fix mission card display + load stage properly
 		if (RNGStages && (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) || SelectedCharacter == 2 && EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0) 
 		{
@@ -362,22 +358,12 @@ void GoToNextLevel_hook(char stage, char act) {
 			CutsceneMode = 0;
 		}
 
-		LastLevel = CurrentLevel;
-		CurrentMission = 0;
-		GetCustomLayout = 0;
-
 		if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0)
-		{
 			SetLevelAndAct(LevelIDs_SSGarden, 0);
-		}
+		else if (!CheckAndPlayRandomCutscene())
+			SetInfoNextRandomStage(stage);
 		else
-		{
-			CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-			CurrentAct = randomizedSets[levelCount].act;
-			CurrentMission = randomizedSets[levelCount].SA2Mission;
-			CurrentStageVersion = randomizedSets[levelCount].Layout;
-			levelCount++;
-		}
+			return;
 
 		if (levelCount == TotalCount)
 			Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.
@@ -465,6 +451,9 @@ void Create_NewRNG() {
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
 			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+
+		if (RNGCutscene)
+			getRandomCutscene(&randomizedSets[i]);
 		
 		TotalCount++;
 	}

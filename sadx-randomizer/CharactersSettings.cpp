@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 
+//Manage characters stuff, improve and fixes some stuff
+
 char SonicRand = 0;
 int TransfoCount = 0;
 bool BounceLoaded;
@@ -8,10 +10,6 @@ bool BounceLoaded;
 extern bool CreditCheck;
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
-bool BounceActive = false;
-extern bool RNGCharacters;
-extern bool GetBackRing;
-extern bool isAIAllowed;
 
 extern bool AmySpeed;
 extern bool BigSpeed;
@@ -324,88 +322,8 @@ void SetGammaTimer() {
 }
 
 
-void FixRadarSFX() {
-
-	if (CurrentCharacter != Characters_Knuckles)
-		PlayCustomSound(CommonSound_RadarBlink);
-	else
-		PlaySound(0x314, 0, 0, 0);
-
-	return;
-}
-
-void FixEmeraldGetSFX() {
-
-	if (CurrentCharacter != Characters_Knuckles)
-		PlayCustomSound(CommonSound_EmeraldGet);
-	else
-		PlaySound(0x313, 0, 0, 0);
-
-	return;
-}
-
-void FixTikalHintSFX() {
-
-	if (CurrentCharacter != Characters_Knuckles)
-		PlayCustomSound(CommonSound_TikalHint);
-	else
-		PlaySound(0x316, 0, 0, 0);
-
-	return;
-}
 
 
-Trampoline PlayKnuxVoice_EmeraldGet(0x474f50, 0x474f55, PlayCharaVoice_EmeraldGet);
-
-void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
-	ObjectMaster* P1 = GetCharacterObject(0);
-	int CurChar = P1->Data1->CharID;
-
-	if (P1 != nullptr)
-	{
-		switch (CurChar)
-		{
-		case Characters_Sonic:
-			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(1826);
-			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(315);
-			break;
-		case Characters_Tails:
-			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(1812);
-			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(1456);
-			break;
-		case Characters_Amy:
-			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(5020);
-			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(1737);
-			break;
-		case Characters_Gamma:
-			if (EmeraldKnuxCheck == 1 || EmeraldKnuxCheck == 2)
-				PlayVoice_R(5023);
-			break;
-		case Characters_Big:
-			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(5021);
-			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(5022);
-			break;
-		}
-	}
-
-	if (CurChar == Characters_Knuckles)
-	{
-		ObjectFunc(origin, PlayKnuxVoice_EmeraldGet.Target());
-		origin(a1);
-	}
-	else
-		CheckThingButThenDeleteObject(a1);
-
-	return;
-}
 
 void FixCharacterSFX() {
 	ObjectMaster* obj = GetCharacterObject(0);
@@ -488,63 +406,14 @@ int GetCharacter1ID() //AI ID
 	return GetCharacterID(1);
 }
 
-int __cdecl SetSonicWinPose_i()
-{
-	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
-		return 75;
-	else
-		return 47;
-}
-
-const int loc_4961DD = 0x4961DD;
-__declspec(naked) void SetSonicWinPose()
-{
-	__asm
-	{
-		call SetSonicWinPose_i
-		mov word ptr[esi + 124h], ax
-		jmp loc_4961DD
-	}
-}
-
-int __cdecl SetKnucklesWinPose_i()
-{
-	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
-		return 39;
-	else
-		return 84;
-}
-
-const int loc_476B62 = 0x476B62;
-__declspec(naked) void SetKnucklesWinPose()
-{
-	__asm
-	{
-		call SetKnucklesWinPose_i
-		mov word ptr[edi + 124h], ax
-		jmp loc_476B62
-	}
-}
-
 
 
 
 void Characters_Management() {
+
+
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 
-	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
-	WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
-	WriteCall((void*)0x4D682F, GetCharacter0ID); // ''
-	WriteCall((void*)0x4D69AF, GetCharacter0ID); // ''
-	WriteCall((void*)0x425E62, GetCharacter0ID); // fix life icon
-
-	WriteCall((void*)0x4D677C, GetCharacter0ID); // fix item boxes for Gamma
-	WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
-	WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
-	WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
-
-	WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
-	WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
 
@@ -552,8 +421,7 @@ void Characters_Management() {
 	WriteCall((void*)0x4E9686, GetCharacter0ID); // fix ice cap snowboard 2
 	WriteCall((void*)0x597B1C, GetCharacter0ID); // fix sand hill snowboard
 
-	WriteJump((void*)0x4961D4, SetSonicWinPose);
-	WriteJump((void*)0x476B59, SetKnucklesWinPose);
+
 
 	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
 	WriteData<5>((void*)0x478937, 0x90);
@@ -561,24 +429,13 @@ void Characters_Management() {
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
 
-	WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
-	WriteData<6>((void*)0x4764CC, 0x90u); // make Tikal hints work when not Knuckles
-	WriteData<6>((void*)0x4a31f0, 0x90u); // Display the emerald grab when not Knuckles.
-	WriteCall((void*)0x4762a6, FixRadarSFX);
-	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
-	WriteCall((void*)0x7a907f, FixTikalHintSFX);
-	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
-	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
-	
-	WriteData<1>((void*)0x61A5B8, 0x8);
-	WriteData<1>((void*)0x61a5b9, 0x74);
 	
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 	
 	if (!isCriticalMode)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
+
+	Init_TreasureHunting();
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
