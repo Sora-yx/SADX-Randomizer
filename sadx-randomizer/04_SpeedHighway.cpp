@@ -23,6 +23,10 @@ void CamSpeedHighway() {
 
 void SpeedHighway_Layout() {
 
+	//CurrentStageVersion = TailsVersion;
+	if (CurrentAct == 2)
+		CurrentStageVersion = KnucklesVersion;
+
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
@@ -38,8 +42,7 @@ void SpeedHighway_Layout() {
 		break;
 	}
 
-	if (CurrentAct == 2)
-		CurrentStageVersion = KnucklesVersion;
+
 
 	if (Race)
 		SelectBarRace();

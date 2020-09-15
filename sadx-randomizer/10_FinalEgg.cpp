@@ -35,8 +35,7 @@ void FinalEgg_Layout() {
 	return;
 }
 
-void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions)
-{
+void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Initiliaze data
 
 	WriteCall((void*)0x422fe3, FinalEgg_Layout); //FE random layout
