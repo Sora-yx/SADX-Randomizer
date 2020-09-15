@@ -26,8 +26,7 @@ void RaceResultCheck(ObjectMaster* a1) {
 
 	ObjectMaster* play1 = GetCharacterObject(0);
 	EntityData1* v1 = a1->Data1;
-	MILESRACE_TEXLIST.nbTexture = 20;
-	
+
 	if (Race && !isAIActive)
 	{
 		if (play1->Data1->CharID != Characters_Tails && IsSpecificPlayerInSphere(&v1->Position, 22, 1))
