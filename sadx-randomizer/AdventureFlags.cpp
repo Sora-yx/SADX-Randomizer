@@ -47,9 +47,6 @@ int GetCharaProgression() {
 			if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 0 && isChaoGameplayAllowed)
 				return 0;
 			break;
-		default:
-			return 1;
-			break;
 		}
 	}
 

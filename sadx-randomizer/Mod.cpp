@@ -165,7 +165,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Flag Progress %d", CustomFlag);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur CUtscene Flag %d", randomizedSets[levelCount].cutsceneID);
 
 		
 		//Display Current Randomized Settings Information on Character Select Screen.

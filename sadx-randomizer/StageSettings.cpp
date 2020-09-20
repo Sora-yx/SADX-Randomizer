@@ -250,20 +250,22 @@ void TargetableEntity(ObjectMaster* obj)
 
 void preventCutscene() {
 
-	switch (CurrentLevel)
-	{
-	case LevelIDs_RedMountain:
-		if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
-			return;
-		break;
-	case LevelIDs_EmeraldCoast:
-		if (CurrentCharacter == Characters_Tails)
-			return;
-		break;
-	case LevelIDs_HotShelter:
-		if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
-			return;
-		break;
+	if (RNGStages) {
+		switch (CurrentLevel)
+		{
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
+				return;
+			break;
+		case LevelIDs_EmeraldCoast:
+			if (CurrentCharacter == Characters_Tails)
+				return;
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
+				return;
+			break;
+		}
 	}
 
 	return GetLevelCutscene();

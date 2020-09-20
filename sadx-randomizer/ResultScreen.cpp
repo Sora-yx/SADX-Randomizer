@@ -71,8 +71,6 @@ void DisableTimeStuff() {
 
 	if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 		LastStoryFlag = 1;
-	else
-		LastStoryFlag = 0;
 
 	TimeThing = 0;
 

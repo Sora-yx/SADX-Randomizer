@@ -50,7 +50,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	WriteCall((void*)0x416b7a, TrialModeQuit_R); //Reset value and stuff properly when you Quit Trial Mode
 	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
 	WriteCall((void*)0x42af3b, AddCustomFlag);
-	
+
 
 	WriteCall((void*)0x42fb75, DoSomethingRelatedToText_r);
 	Credits_StartupInit(path, helperFunctions);

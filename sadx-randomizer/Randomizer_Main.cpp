@@ -310,9 +310,7 @@ void SetRandomStageAct(char stage, char act) {
 		return;
 	}
 
-	int FlagProgress = GetCharaProgression();
-
-	if (!FlagProgress)
+	if (!GetCharaProgression())
 	{
 		CustomFlag = 0;
 		if (isChaoGameplayAllowed && CurrentLevel == 0 && CurrentCharacter == Characters_Gamma) //we don't want the game to play gamma cutscene

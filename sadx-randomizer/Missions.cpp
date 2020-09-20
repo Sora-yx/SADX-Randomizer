@@ -317,6 +317,7 @@ void TitleCard_Init() {
 		WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
 		WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
 	}
+
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);

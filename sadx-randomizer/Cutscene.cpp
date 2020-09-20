@@ -2,6 +2,7 @@
 #include "Cutscene.h"
 
 bool isCutsceneAllowed = false;
+ObjectMaster* cutscene = nullptr;
 
 //Fix Event flag for cutscenes Credits: PKR
 
@@ -19,6 +20,7 @@ void set_event_flags(long cutsceneID)
 	{
 	case 80:
 	case 81:
+	case 208:
 		SetTimeOfDay_Night();
 		break;
 	case 64:
@@ -76,10 +78,9 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[139] = {
+CutsceneLevelData CutsceneList[138] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
-	{ 0x002, 15, 0, 0, 0 }, //Sonic defeats Chaos 0
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
 	{ 0x006, 26, 4, 0, 1 }, //Sonic and Tails poolside
 	{ 0x007, 33, 0, 0, 2 }, //Sonic faces off with the Egg Hornet
@@ -99,7 +100,6 @@ CutsceneLevelData CutsceneList[139] = {
 	{ 0x01E, 33, 2, 0, 12 }, //Sonic prepares to enter Lost World
 	{ 0x022, 34, 2, 0, 13 }, //Sonic listens to Tikal in the Past
 	{ 0x023, 33, 2, 0, 14 }, //Sonic sees Eggman heading to his base
-	{ 0x024, 22, 0, 0, 14 }, //Sonic's Final Battle with Eggman
 	{ 0x026, 33, 0, 0, 1 }, //Sonic's Outro
 	{ 0x028, 33, 0, 0, 5 }, //Sonic vs. Knuckles
 	{ 0x029, 29, 0, 0, 10 }, //Tornado 2 lands on the Egg Carrier
@@ -143,7 +143,6 @@ CutsceneLevelData CutsceneList[139] = {
 	{ 0x06D, 26, 3, 5, 5 }, //Hunt to find Birdie's family
 	{ 0x06E, 33, 2, 5, 6 }, //Amy discovers the Egg Base
 	{ 0x070, 33, 3, 5, 7 }, //Amy and Birdie head back to the Egg Carrier
-	{ 0x071, 23, 0, 5, 8 }, //Zero confronts Amy
 	{ 0x072, 29, 0, 5, 8 }, //Amy's Outro
 	{ 0x075, 26, 1, 5, 2 }, //Amy's kidnapped to the Mystic Ruins
 	//Knuckles events
@@ -153,7 +152,6 @@ CutsceneLevelData CutsceneList[139] = {
 	{ 0x085, 34, 0, 3, 2 }, //Tikal's Crisis
 	{ 0x086, 26, 1, 3, 2 }, //Knuckles returns from the Past
 	{ 0x087, 26, 4, 3, 3 }, //Knuckles and Chaos 2 face off
-	{ 0x088, 16, 0, 3, 3 }, //Eggman tricks Knuckles
 	{ 0x089, 33, 0, 3, 3 }, //Knuckles goes after Sonic
 	{ 0x08A, 33, 0, 3, 4 }, //Knuckles vs. Sonic
 	{ 0x08B, 33, 0, 3, 4 }, //Chaos 4 emerges
@@ -172,7 +170,6 @@ CutsceneLevelData CutsceneList[139] = {
 	{ 0x0A0, 26, 4, 3, 1 }, //Knuckles follows Eggman in Station Square hotel
 	//Gamma events
 	{ 0x0B0, 33, 3, 6, 0 }, //Gamma Intro
-	{ 0x0B1, 33, 3, 6, 1 }, //Gamma Enters Final Egg
 	{ 0x0B2, 33, 3, 6, 1 }, //Gamma Exits Final Egg
 	{ 0x0B3, 33, 3, 6, 1 }, //Useless machine
 	{ 0x0B4, 33, 3, 6, 1 }, //Gamma's Fight with Beta
@@ -201,9 +198,7 @@ CutsceneLevelData CutsceneList[139] = {
 	{ 0x0DD, 32, 1, 7, 5 }, //Big returns and is ready to leave the Egg Carrier
 	{ 0x0E0, 29, 0, 7, 6 }, //Big finds the Tornado 2 and leaves
 	{ 0x0E2, 33, 2, 7, 7 }, //Big Outro
-	{ 0x0E3, 26, 3, 7, 1 }, //Big sees Froggy heading to the beach
 	//Last Story
-	{ 0x0F0, 33, 2, 0, 0 }, //Tornado 2 Flash scene
 	{ 0x0F2, 33, 2, 0, 1 }, //Eggman heading to the Mystic Ruins base
 	{ 0x0F3, 33, 1, 0, 1 }, //Knuckles at the Master Emerald
 	{ 0x0F4, 33, 0, 0, 1 }, //Tails runs to Sonic
@@ -247,6 +242,21 @@ bool CheckAndPlayRandomCutscene() {
 	return false;
 }
 
+DataPointer(float, flt_3B18244, 0x3B18244);
+DataPointer(int, dword_3B28114, 0x3B28114);
+ObjectFunc(SeqTaskFadeIn, 0x412fe0);
+FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
+VoidFunc(EventCutscene_Exec2, 0x431430);
+
+void PlayRandomCutscene(long flag) {
+	flt_3B18244 = 0;
+	EventCutscene_Load2(flag);
+	EventCutscene_Exec2();
+	LoadObject(LoadObj_Data1, 5, SeqTaskFadeIn);
+	return;
+	//dword_3B28114 = 0;
+}
+
 void CutsceneManager(ObjectMaster* obj) {
 	if (!CharObj2Ptrs[0] || !IsIngame())
 		return;
@@ -256,7 +266,7 @@ void CutsceneManager(ObjectMaster* obj) {
 	switch (data->Action)
 	{
 	case 0:
-		StartCutscene(randomizedSets[levelCount].cutsceneID);
+		PlayRandomCutscene(randomizedSets[levelCount].cutsceneID);
 		data->Action = 1;
 		break;
 	case 1:
@@ -267,6 +277,7 @@ void CutsceneManager(ObjectMaster* obj) {
 		if (ControlEnabled) {
 			if (++data->Index == 30) {
 				CutsceneMode = 0;
+				LastStoryFlag = 0;
 				GameState = 0x9;
 				CheckThingButThenDeleteObject(obj);
 			}
@@ -281,7 +292,10 @@ void PlayRandomCutscene_OnFrames() {
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && IsIngame()) {
 		if (isCutsceneAllowed) {
-			LoadObject((LoadObj)2, 1, CutsceneManager);
+			if (cutscene)
+				DeleteObjectMaster(cutscene);
+			
+			cutscene = LoadObject((LoadObj)2, 1, CutsceneManager);
 			isCutsceneAllowed = false;
 		}
 	}
@@ -299,3 +313,4 @@ void getRandomCutscene(RandomizedEntry* entry) {
 	entry->cutsceneAct = generated->act;
 	return;
 }
+
