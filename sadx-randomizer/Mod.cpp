@@ -47,7 +47,6 @@ uint32_t TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 
 //AI
 bool isAIAllowed = true;
-uint8_t SwapDelay = 150;
 
 int StatsTimer = 4000;
 bool SA2Voices = false;
@@ -165,50 +164,22 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur CUtscene Flag %d", randomizedSets[levelCount].cutsceneID);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur CUtscene Flag %d", randomizedSets[levelCount].cutsceneID);
 
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
-		if (GameMode == GameModes_Menu && ValueMenu >= 225)
+		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
 			DisplayRandoInformation();
 
 		CheckAndDisplayWarningLayoutError();
-
-		//AI Stuff
-		AI_FixesOnFrames();
-		Hud_DisplayOnframe();
-
-		// Increase Amy and Big MaxAccel so they can complete stages they are not meant to.
-		character_settings_onFrames();
-
 		Sounds_OnFrame();
-		PlayRandomCutscene_OnFrames();
+		LevelOnFrames();
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
-			if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
-				CustomFlagCheck(); //When loading, Check flag and credits*/
-
-		if (GameState == 15 && (GameMode == 5 || GameMode == 4 || GameMode ==  9 || GameMode == 24))
-		{
-			//AI Swap
-			if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
-				SwapDelay++;
-
-			if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-				AISwitch();			
-
-
-			//Rings Mission 2 and Treasure Hunting Check
-			MissionResultCheck();
-
-			//Chao Mission 3 Check
-			if (CurrentLevel < LevelIDs_Chaos0 && CurrentMission == Mission3_LostChao)
-				Chao_OnFrame();
-
-			LoadTriggerObject();
-		}
+		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
+			CustomFlagCheck(); //When loading, Check flag and credits*/
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

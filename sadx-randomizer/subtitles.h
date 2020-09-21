@@ -3,7 +3,8 @@
 
 typedef unsigned short  word;
 
-struct SubtitleThing { //idk ask SADX, most of the variables here are incorrect, but using this struct with the function does work fine ig so...
+
+struct SubtitleThing { //idk, ask SADX, most of the variables here are incorrect, but using this struct with the function does work fine ig so...
     char field_0;
     char gap1;
     word px;
@@ -30,5 +31,6 @@ struct SubtitleThing { //idk ask SADX, most of the variables here are incorrect,
 };
 
 
-
+FunctionPointer(void, DoSomethingRelatedToText, (SubtitleThing* a1, const char* a2), 0x40e570);
 void DoSomethingRelatedToText_r(SubtitleThing* a1, const char* a2);
+void Init_Subtitles();

@@ -9,6 +9,7 @@ extern char TimeFrameCopy;
 extern int RingCopy;
 static Trampoline* MovePlayerToStartPoint_t = nullptr;
 static Trampoline* RunLevelDestructor_t = nullptr;
+static Trampoline* LoadLevelObject_t = nullptr;
 bool isSetLoaded = false;
 
 SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
@@ -102,6 +103,15 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 	return original(data);
 }
 
+void __cdecl LoadLevelObject_r() {
+	if (isRandoLevel()) {
+		Load_ObjectsCommon();
+		LoadTriggerObject();
+	}
+
+	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
+	original();
+}
 
 
 StringLevelLayout SetCamFileArray[51] {
@@ -178,8 +188,6 @@ void __cdecl RandoLoad_SetCamFiles() {
 
 
 void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
-
-	Load_ObjectsCommon();
 	
 	if (isRandoLevel() && CurrentLevel > LevelIDs_HedgehogHammer && CurrentLevel < LevelIDs_Chaos0)
 	{
@@ -234,9 +242,8 @@ void CheckAndDisplayWarningLayoutError() {
 }
 
 void __cdecl RunLevelDestructor_r(int heap) {
-	if (heap == 0) {
+	if (heap == 0)
 		ResetValueAndObjects(); //Unload rando stuff
-	}
 
 	FunctionPointer(void, original, (int heap), RunLevelDestructor_t->Target());
 	return original(heap);
@@ -248,6 +255,18 @@ void LayoutFunctionInit() {
 
 	MovePlayerToStartPoint_t = new Trampoline((int)MovePlayerToStartPoint, (int)MovePlayerToStartPoint + 0x6, MovePlayerToStartPoint_r);
 	RunLevelDestructor_t = new Trampoline((int)RunLevelDestructor, (int)RunLevelDestructor + 0x6, RunLevelDestructor_r);
+	LoadLevelObject_t = new Trampoline((int)LoadLevelObject, (int)LoadLevelObject + 0x7, LoadLevelObject_r);
 }
 
+void LevelOnFrames() {
+	if (!CharObj2Ptrs[0] || !IsIngame())
+		return;
 
+	AI_FixesOnFrames();
+	AISwapOnFrames();
+	MissionResultCheck();
+	Chao_OnFrame();
+	character_settings_onFrames();
+	Hud_DisplayOnframe();
+	PlayRandomCutscene_OnFrames();
+}

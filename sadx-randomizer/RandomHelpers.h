@@ -462,6 +462,9 @@ void fixTCCart();
 void preventCutscene();
 void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
+void AISwapOnFrames();
+void LevelOnFrames();
+void subtitlesCountdownFrames();
 
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);

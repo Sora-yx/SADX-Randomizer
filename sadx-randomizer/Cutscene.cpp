@@ -23,11 +23,17 @@ void set_event_flags(long cutsceneID)
 	case 208:
 		SetTimeOfDay_Night();
 		break;
+	case 35:
 	case 64:
 	case 66:
 		SetTimeOfDay_Evening();
 		break;
+	case 157:
+	case 159:
+		SetTimeOfDay_Day();
+		break;
 	case 110:
+		SetTimeOfDay_Night();
 		SetEventFlag((EventFlags)FLAG_AMY_MR_ENTRANCE_FINALEGG); //Open Final Egg for Amy
 		break;
 	case 114:
@@ -242,11 +248,6 @@ bool CheckAndPlayRandomCutscene() {
 	return false;
 }
 
-DataPointer(float, flt_3B18244, 0x3B18244);
-DataPointer(int, dword_3B28114, 0x3B28114);
-ObjectFunc(SeqTaskFadeIn, 0x412fe0);
-FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
-VoidFunc(EventCutscene_Exec2, 0x431430);
 
 void PlayRandomCutscene(long flag) {
 	flt_3B18244 = 0;
@@ -290,7 +291,7 @@ void PlayRandomCutscene_OnFrames() {
 	if (!CharObj2Ptrs[0] || !RNGCutscene)
 		return;
 
-	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && IsIngame()) {
+	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
 		if (isCutsceneAllowed) {
 			if (cutscene)
 				DeleteObjectMaster(cutscene);

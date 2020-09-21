@@ -2,6 +2,7 @@
 #include <fstream>
 
 bool isAIActive = false;
+uint8_t SwapDelay = 150;
 extern bool CreditCheck;
 int FlagAI = 0;
 int AISwap = 0;
@@ -666,7 +667,7 @@ extern ObjectMaster* CurrentCart;
 
 void AISwitch() {
 
-	if (!isAIAllowed || CurrentAI == CurrentCharacter)
+	if (!isAIAllowed || CurrentAI == CurrentCharacter || !EntityData1Ptrs[1])
 	{
 		isAIActive = false;
 		return;
@@ -938,6 +939,16 @@ __declspec(naked) void SetKnucklesWinPose()
 		mov word ptr[edi + 124h], ax
 		jmp loc_476B62
 	}
+}
+
+
+//AI Swap
+void AISwapOnFrames() {
+	if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
+		SwapDelay++;
+
+	if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
+		AISwitch();
 }
 
 

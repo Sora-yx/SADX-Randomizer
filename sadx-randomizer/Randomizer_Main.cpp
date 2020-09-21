@@ -301,7 +301,7 @@ void SetInfoNextRandomStage(char stage) {
 	CurrentStageVersion = randomizedSets[levelCount].Layout;
 	levelCount++;
 }
-
+extern bool isCutsceneAllowed;
 void SetRandomStageAct(char stage, char act) {
 
 	if (isGameOver)
@@ -313,26 +313,28 @@ void SetRandomStageAct(char stage, char act) {
 	if (!GetCharaProgression())
 	{
 		CustomFlag = 0;
-		if (isChaoGameplayAllowed && CurrentLevel == 0 && CurrentCharacter == Characters_Gamma) //we don't want the game to play gamma cutscene
+		if (isChaoGameplayAllowed && CurrentLevel == 0 && CurrentCharacter == Characters_Gamma) { //we don't want the game to play gamma cutscene
 			SetLevelAndAct(LevelIDs_SSGarden, 0);
-	}
-	else
-	{
-		if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
-		{
-
-			if (!CheckAndPlayRandomCutscene())
-				SetInfoNextRandomStage(stage);
-			else
-				return;
-
-
-			if (levelCount == TotalCount)
-				Randomizer_GetNewRNG(); //reroll once the player reached 40 stages.
-
 			return;
 		}
+
+		isCutsceneAllowed = true;
 	}
+
+	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
+	{
+
+		if (!CheckAndPlayRandomCutscene())
+			SetInfoNextRandomStage(stage);
+		else
+			return;
+
+		if (levelCount == TotalCount)
+			Randomizer_GetNewRNG(); //reroll once the player reached 40 stages.
+
+		return;
+	}
+	
 
 	return SetLevelAndAct(Uint8(stage), (Uint8)(act));
 }

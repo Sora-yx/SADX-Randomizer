@@ -341,3 +341,8 @@ DataPointer(AdventureData_*, CurrentAdventureData_, 0x3B0EF4C);
 DataPointer(SceneSelectData_*, CurrentSceneSelectData, 0x03B18A08);
 DataArray(AdventureData, Stories, 0x3B183A8, 8);
 
+DataPointer(float, flt_3B18244, 0x3B18244);
+DataPointer(int, dword_3B28114, 0x3B28114);
+ObjectFunc(SeqTaskFadeIn, 0x412fe0);
+FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
+VoidFunc(EventCutscene_Exec2, 0x431430);
