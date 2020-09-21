@@ -17,6 +17,9 @@
 			<Property name="DupliCheck" display="Avoid Duplicate" type="bool" defaultvalue="True">
 				<HelpText>When enabled, Randomizer will try to avoid the same combinations.</HelpText>
 			</Property>	
+				<Property name="RNGCutscene" display="Randomize Cutscenes" type="bool" defaultvalue="True">
+				<HelpText>When enabled, a random cutscene will play after completed a stage or boss. (Note: This has no effect if you disable "Randomize Stages".)</HelpText>
+			</Property>	
 				<Property name="SA2M2" display="Allow SA2 Mission 100 Rings" type="bool" defaultvalue="True">
 				<HelpText>Allow the randomizer to add custom SA2 mission. (Collect 100 rings).</HelpText>
 			</Property>
