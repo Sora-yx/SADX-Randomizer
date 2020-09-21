@@ -9,8 +9,8 @@ int EventDayTime[7] = {
 	11, 21, 57, 98, 157, 159, 249
 };
 
-int EventNightTime[4] = {
-	80, 81, 110, 208
+int EventNightTime[5] = {
+	80, 81, 110, 208, 75
 };
 
 int EventEveningTime[4] = {
@@ -252,6 +252,8 @@ CutsceneLevelData CutsceneList[132] = {
 bool CheckAndPlayRandomCutscene() {
 	if (isCutsceneAllowed && RNGCutscene)
 	{
+		MetalSonicFlag = 0;
+		SonicRand = 0;
 		GameMode = GameModes_Adventure_Field;
 		LastLevel = CurrentLevel;
 		LastAct = CurrentAct;
@@ -304,7 +306,7 @@ void CutsceneManager(ObjectMaster* obj) {
 }
 
 void PlayRandomCutscene_OnFrames() {
-	if (!CharObj2Ptrs[0] || !RNGCutscene)
+	if (!CharObj2Ptrs[0] || !RNGCutscene || IsAdventureComplete(CurrentCharacter))
 		return;
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
@@ -316,6 +318,8 @@ void PlayRandomCutscene_OnFrames() {
 			isCutsceneAllowed = false;
 		}
 	}
+
+	return;
 }
 
 

@@ -109,85 +109,51 @@ void LoadStageMissionImage_r() {
 			if (CurrentCharacter == Characters_Big && CurrentMission < Mission2_100Rings)
 				CurrentMissionCard = FroggyCard; //grab Froggy
 
-			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && CurrentStageVersion != BigVersion)
+			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
 				CurrentMissionCard = CapsuleCard;
+
+			if (CurrentMission == SADX_Mission && CurrentStageVersion == BigVersion)
+				CurrentMissionCard = FroggyCard;
+
+			if (CurrentMission == SADX_Mission && CurrentStageVersion == KnucklesVersion)
+				CurrentMissionCard = EmeraldKnuxCard;
 		}
-		
+
 		switch (CurrentLevel)
 		{
 			case LevelIDs_EmeraldCoast:
-				if (CurrentStageVersion == BigVersion || CurrentStageVersion == GammaVersion)
+				if (CurrentStageVersion == GammaVersion)
 					CurrentMissionCard = FroggyCard; //Catch Froggy if Big or Gamma layout.
 				break;	
 			case LevelIDs_WindyValley:
 				if (CurrentStageVersion == GammaVersion && (CurrentCharacter == Characters_Gamma))
 					CurrentMissionCard = E103Card;
 				break;
-			case LevelIDs_TwinklePark:
-				if (CurrentMission == SADX_Mission && CurrentStageVersion == BigVersion)
-					CurrentMissionCard = FroggyCard;
-				break;
 			case LevelIDs_LostWorld:
-				if (!CurrentMission)
+				if (CurrentStageVersion != KnucklesVersion && !CurrentMission && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
 					CurrentMissionCard = LostWorldCard; //Go to the center of the ruin.
-				 if (CurrentCharacter == Characters_Amy)
-					CurrentMissionCard = BalloonCard; //grab balon if Amy regardless of the mission.
-				if (CurrentStageVersion == KnucklesVersion && CurrentAct == 1)
-					CurrentMissionCard = EmeraldKnuxCard;
 				break;
 			case LevelIDs_FinalEgg:
-					if (CurrentStageVersion == AmyVersion && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
-						CurrentMissionCard = CapsuleCard; //capsule
-
 					if (CurrentStageVersion == SonicVersion)
 						CurrentMissionCard = FinalEggCard; //Go to the center of the base.
 
-					if (CurrentCharacter == Characters_Amy)
-						CurrentMissionCard = BalloonCard; //grab balon if Amy regardless of the mission.
-		
 					if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
-						CurrentMissionCard = SonicDollCard;
-		
+						CurrentMissionCard = SonicDollCard;	
 				break;
 			case LevelIDs_RedMountain:
-				if (CurrentAct == 2 && CurrentStageVersion == KnucklesVersion)
-					CurrentMissionCard = EmeraldKnuxCard;
 				if (CurrentMission < Mission2_100Rings && CurrentAct <= 1 && (CurrentCharacter == Characters_Gamma))
 					CurrentMissionCard = E104Card; 
 				break;
 			case LevelIDs_SpeedHighway:
 				if (Race && CurrentAct == 0)
 					CurrentMissionCard = MissileRaceCard; //Eggman Race
-				if (CurrentMission < Mission2_100Rings && CurrentAct == 2 && CurrentStageVersion == KnucklesVersion)
-					CurrentMissionCard = EmeraldKnuxCard;
-				break;
-			case LevelIDs_SkyDeck:
-				if (CurrentMission < Mission2_100Rings && CurrentAct == 2)
-					CurrentMissionCard = EmeraldKnuxCard;
-				break;
-			case LevelIDs_IceCap:
-				if (CurrentAct == 3 && CurrentMission < Mission2_100Rings)
-					CurrentMissionCard = FroggyCard;  //Froggy
-				break;
-			case LevelIDs_Casinopolis:
-				if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
-					CurrentMissionCard = EmeraldKnuxCard;
 				break;
 			case LevelIDs_HotShelter:
-				if (CurrentStageVersion == BigVersion && CurrentAct == 0)
-					CurrentMissionCard = FroggyCard; //Froggy
 				if (CurrentStageVersion == GammaVersion && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
 					CurrentMissionCard = E105Card;
 				break;
-			default:
-				if (CurrentCharacter == Characters_Amy && CurrentMission < Mission2_100Rings && CurrentStageVersion != BigVersion)
-					CurrentMissionCard = BalloonCard; //grab ballon
-				if (CurrentCharacter == Characters_Big && CurrentMission < Mission2_100Rings)
-					CurrentMissionCard = FroggyCard; //grab Froggy
-				if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big && (CurrentStageVersion != BigVersion))
-					CurrentMissionCard = CapsuleCard;
-				break;
 		}
+
 
 		if (GetCustomLayout == Mission2_100Rings) //100 Rings
 			CurrentMissionCard = RingsCard;
@@ -226,7 +192,6 @@ void LoadStageMissionImage_r() {
 			}
 		}
 
-
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
 		LoadPVM("Missions", &StageMissionTexlist);
@@ -263,19 +228,12 @@ void StageMissionImage_result() {
 	}
 }
 
-int DisplayTitleCard_r() {
-	if (GetLevelType == 0) {
-		return DisplayTitleCard();
-	}
-	else {
-		if (++TitleCardCounter > TitleCardDispTime) 
-			return 1;
-	}
-
-	return 0;
-}
 
 int LoadTitleCardTexture_r(int minDispTime) {
+
+	if (!isRandoLevel())
+		return LoadTitleCardTexture(minDispTime);
+
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
 	ScreenTextureVer();
@@ -287,13 +245,14 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	TitleCardStuff = 2;
 	TitleCardStuff2 = 0;
 
-	if (CurrentLevel > 14 && CurrentLevel < 40) {
+	if (CurrentLevel > 14 && CurrentLevel < 39) {
+		TitleCardDispTime = minDispTime;
 		GetLevelType = 1;
 	}
 	else {
 		GetLevelType = 0;
 
-		TitleCardDispTime = 180;
+		TitleCardDispTime = 90;
 		if (minDispTime) {
 			TitleCardDispTime = minDispTime;
 		}
@@ -311,7 +270,7 @@ void TitleCard_Init() {
 	if (RNGStages)
 	{
 		WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
-		WriteJump(j_DisplayTitleCard, DisplayTitleCard_r);
+		//WriteCall((void*)0x47e276, Check_DisplayLevelCard);
 	}
 
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);

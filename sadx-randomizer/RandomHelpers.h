@@ -106,7 +106,6 @@ void Randomizer_GetNewRNG();
 void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
-void MovePlayerToStartPoint_R(EntityData1* data);
 void AddCustomFlag();
 void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions);
 
@@ -386,7 +385,6 @@ DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config);
 void Hud_DisplayOnframe();
 int CheckTailsAI_R(void);
-int DisplayTitleCard_r();
 void LoadStageMissionImage_r();
 int LoadTitleCardTexture_r(int minDispTime);
 void StageMissionImage_result();
@@ -401,8 +399,6 @@ void DisableTime_Zero();
 void AISwitch();
 void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
-void GotoNextLevel_RngLess(char stage, char act);
-
 
 DataPointer(char, ChaosAdventureData, 0x3B1860A);
 
@@ -463,7 +459,6 @@ void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
 void AISwapOnFrames();
 void LevelOnFrames();
-void subtitlesCountdownFrames();
 
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
