@@ -1,5 +1,20 @@
 #pragma once
 
+enum CutsceneFlag {
+	SonicIntro = 1,
+	SonicOutro = 0x26,
+	TailsIntro = 0x30,
+	TailsOutro = 0x52,
+	AmyIntro = 0x60,
+	AmyOutro = 0x72,
+	KnuxIntro = 0x80,
+	KnuxOutro = 0x9F,
+	GammaIntro = 0x0B0,
+	BigIntro = 0x0D0,
+	BigOutri = 0x0E2
+
+};
+
 enum EventFlag
 {
 	SSVAR_EGG_ON = 0x40,
@@ -327,7 +342,7 @@ struct CutsceneLevelData
 };
 
 
-
+FunctionPointer(void, EV_Wait, (int time), 0x4314d0);
 FunctionPointer(void, StopMusicAndLoadNextMenu, (int a1), 0x505B40);
 FunctionPointer(void, SeqRun, (), 0x412AC0);
 FunctionPointer(void, SeqSetPlayer, (__int16 character), 0x413380);
@@ -345,4 +360,6 @@ DataPointer(float, flt_3B18244, 0x3B18244);
 DataPointer(int, dword_3B28114, 0x3B28114);
 ObjectFunc(SeqTaskFadeIn, 0x412fe0);
 FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
+FunctionPointer(void, EV_InitPlayer, (int player), 0x431780);
 VoidFunc(EventCutscene_Exec2, 0x431430);
+void Init_RandomCutscene();

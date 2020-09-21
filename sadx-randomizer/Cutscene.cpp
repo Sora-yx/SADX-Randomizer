@@ -17,6 +17,8 @@ int EventEveningTime[4] = {
 	17, 35, 64, 66
 };
 
+
+
 //Fix Event flag for cutscenes 
 
 void set_event_flags(long cutsceneID)
@@ -98,7 +100,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[138] = { //TO DO fix Outro softlock.
+CutsceneLevelData CutsceneList[132] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -291,7 +293,6 @@ void CutsceneManager(ObjectMaster* obj) {
 	case 2:
 		if (ControlEnabled) {
 			if (++data->Index == 30) {
-				//SetInfoNextRandomStage(randomizedSets[levelCount].level);
 				CutsceneMode = 0;
 				LastStoryFlag = 0;
 				GameState = 0x9;
@@ -330,3 +331,28 @@ void getRandomCutscene(RandomizedEntry* entry) {
 	return;
 }
 
+void EV_GetCharObj_r(int player) { //SADX Doesn't give you control back after outro cutscene, but we need it for rando progression.
+	EnableControl();
+	ForcePlayerAction(0, 0x18);
+	GetCharacterObject(player);
+	return;
+}
+
+
+void EV2_r(int player) { //Force Outro cutscene to Enable Control when they are over, because SADX originally doesn't.
+	EnableControl();
+	ForcePlayerAction(0, 0x18);
+	EV_Wait(player);
+	return;
+}
+
+void Init_RandomCutscene() {
+	if (RNGCutscene) {
+		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
+		WriteCall((void*)0x685392, EV2_r); //Knux outro		
+		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
+		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
+		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
+		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro			
+	}
+}

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "subtitles.h"
+
 HelperFunctions help;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -52,6 +53,7 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	WriteCall((void*)0x42af3b, AddCustomFlag);
 
 	Init_Subtitles();
+	Init_RandomCutscene();
 	Credits_StartupInit(path, helperFunctions);
 }
 

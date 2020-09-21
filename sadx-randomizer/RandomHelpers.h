@@ -97,7 +97,7 @@ void SetRandomStageAct(char stage, char act);
 void GoToNextLevel_hook(char stage, char act);
 void Split_Init();
 void AIAudioFixes();
-
+void PlayRandomCutscene(long flag);
 void FixRMLava();
 short randomSA2Mission(short stage_id);
 short getRandomAI(uint8_t char_id, short stage_id);

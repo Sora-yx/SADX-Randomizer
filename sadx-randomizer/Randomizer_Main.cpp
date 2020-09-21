@@ -18,8 +18,8 @@ short CurrentMission = 0;
 int8_t CurrentStageVersion = 0;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
-int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
-int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
+
+
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
@@ -224,38 +224,6 @@ uint8_t getRandomCharacter() {
 	return cur_char;
 }
 
-int prev_AI = -1;
-
-//AI following you
-short getRandomAI(uint8_t char_id, short stage_id) {
-	int cur_AI = -1;
-	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
-
-	HMODULE IsSuperTailsMod = GetModuleHandle(L"super-tails");
-
-	if (char_id == Characters_Knuckles || char_id >= Characters_Gamma)
-		return -1;
-
-	if (stage_id >= LevelIDs_EggWalker || stage_id == LevelIDs_PerfectChaos || stage_id == LevelIDs_Chaos0)
-		return -1;
-
-	do {
-		cur_AI = AIArray[rand() % ai_count];
-	} while (cur_AI == prev_AI || cur_AI == char_id || IsSuperTailsMod && (char_id == Characters_Tails && cur_AI != Characters_Sonic) || (char_id != Characters_Sonic && cur_AI == Characters_Tails));
-
-	prev_AI = cur_AI;
-	return cur_AI;
-}
-
-
-short getRandomRaceAI(RandomizedEntry entry) {
-	int8_t cur_RaceAI = -1;
-	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
-
-	cur_RaceAI = AIRaceArray[rand() % ai_Racecount];
-
-	return cur_RaceAI;
-}
 
 
 uint8_t prev_Sanic = -1;

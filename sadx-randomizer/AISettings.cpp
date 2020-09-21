@@ -19,6 +19,8 @@ float center_y = (float)VerticalResolution / 2.0f;
 static float ActionButtonAlpha = 0;
 static bool ActionButtonActive = false;
 
+int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
+
 NJS_TEXNAME Hud_Rando_TEXNAMES[4];
 NJS_TEXLIST Hud_Rando_TEXLIST = { arrayptrandlength(Hud_Rando_TEXNAMES) };
 PVMEntry Hud_Rando = { "hud_rando", &Hud_Rando_TEXLIST };
@@ -950,6 +952,33 @@ void AISwapOnFrames() {
 	if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 		AISwitch();
 }
+
+
+
+int prev_AI = -1;
+
+//AI following you
+short getRandomAI(uint8_t char_id, short stage_id) {
+	int cur_AI = -1;
+	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
+
+	HMODULE IsSuperTailsMod = GetModuleHandle(L"super-tails");
+
+	if (char_id == Characters_Knuckles || char_id >= Characters_Gamma)
+		return -1;
+
+	if (stage_id >= LevelIDs_EggWalker || stage_id == LevelIDs_PerfectChaos || stage_id == LevelIDs_Chaos0)
+		return -1;
+
+	do {
+		cur_AI = AIArray[rand() % ai_count];
+	} while (cur_AI == prev_AI || cur_AI == char_id || IsSuperTailsMod && (char_id == Characters_Tails && cur_AI != Characters_Sonic) || (char_id != Characters_Sonic && cur_AI == Characters_Tails));
+
+	prev_AI = cur_AI;
+	return cur_AI;
+}
+
+
 
 
 void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config) {

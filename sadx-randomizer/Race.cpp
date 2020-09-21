@@ -7,6 +7,7 @@ char AIRace = -1;
 bool Race = false;
 extern ObjectFuncPtr charfuncs[];
 
+int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
 
 void AIRaceLoad_R() {
 
@@ -216,6 +217,14 @@ void SelectBarRace() {
 	return;
 }
 
+short getRandomRaceAI(RandomizedEntry entry) {
+	int8_t cur_RaceAI = -1;
+	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
+
+	cur_RaceAI = AIRaceArray[rand() % ai_Racecount];
+
+	return cur_RaceAI;
+}
 
 
 void Race_Init() {

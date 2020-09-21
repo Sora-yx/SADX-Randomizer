@@ -163,10 +163,10 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur Rando Mission %d", randomizedSets[levelCount].SA2Mission);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Cur Mission %d", CurrentMission);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 6), "lev Count %d", levelCount);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur Cutscene  %d", randomizedSets[levelCount].cutsceneID);
 
+		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
+			//PlayRandomCutscene(TailsOutro);
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])

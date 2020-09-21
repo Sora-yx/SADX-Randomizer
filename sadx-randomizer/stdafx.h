@@ -23,5 +23,6 @@
 #include "Common.h"
 #include "StageSettings.h"
 #include "utils.h"
+#include "Cutscene.h"
 
 #include "sound.h"

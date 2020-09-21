@@ -725,6 +725,7 @@ void CreditsNewList() {
 
 //Credits
 void credits() {
+	DisableControl();
 	CurrentMission = 0;
 	GetCustomLayout = 0;
 	CurrentMissionCard = 0;
