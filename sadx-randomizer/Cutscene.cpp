@@ -4,36 +4,50 @@
 bool isCutsceneAllowed = false;
 ObjectMaster* cutscene = nullptr;
 
-//Fix Event flag for cutscenes Credits: PKR
+
+int EventDayTime[7] = {
+	11, 21, 57, 98, 157, 159, 249
+};
+
+int EventNightTime[4] = {
+	80, 81, 110, 208
+};
+
+int EventEveningTime[4] = {
+	17, 35, 64, 66
+};
+
+//Fix Event flag for cutscenes 
 
 void set_event_flags(long cutsceneID)
 {
 	SeqRun();
 
-	if (cutsceneID >= 240 && cutsceneID <= 255) 
-		LastStoryFlag = 1;
-	else if (cutsceneID == 355) 
+	if (cutsceneID >= 240 && cutsceneID <= 255 || cutsceneID == 355) 
 		LastStoryFlag = 1;
 
 
-	switch (cutsceneID)
+	for (int i = 0; i < 7; i++) //fix time of day
 	{
-	case 80:
-	case 81:
-	case 208:
-		SetTimeOfDay_Night();
-		break;
-	case 35:
-	case 64:
-	case 66:
-		SetTimeOfDay_Evening();
-		break;
-	case 157:
-	case 159:
-		SetTimeOfDay_Day();
-		break;
-	case 110:
-		SetTimeOfDay_Night();
+		if (EventDayTime[i] == cutsceneID) {
+			SetTimeOfDay_Day();
+			break;
+		}
+
+		if (EventNightTime[i] == cutsceneID) {
+			SetTimeOfDay_Night();
+			break;
+		}
+
+		if (EventEveningTime[i] == cutsceneID) {
+			SetTimeOfDay_Evening();
+			break;
+		}
+	}
+
+	switch (cutsceneID)  //Credits: PKR
+	{
+	case 110: 
 		SetEventFlag((EventFlags)FLAG_AMY_MR_ENTRANCE_FINALEGG); //Open Final Egg for Amy
 		break;
 	case 114:
@@ -84,7 +98,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[138] = {
+CutsceneLevelData CutsceneList[138] = { //TO DO fix Outro softlock.
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -277,6 +291,7 @@ void CutsceneManager(ObjectMaster* obj) {
 	case 2:
 		if (ControlEnabled) {
 			if (++data->Index == 30) {
+				//SetInfoNextRandomStage(randomizedSets[levelCount].level);
 				CutsceneMode = 0;
 				LastStoryFlag = 0;
 				GameState = 0x9;

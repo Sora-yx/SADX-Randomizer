@@ -31,7 +31,7 @@ short randomSA2Mission(short stage_id) {
 
 	short cur_mission = 0;
 
-	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission() || isHeroesMod())
+	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission() || isHeroesMod() || isSA2Mod())
 		return SADX_Mission;
 
 	do {
@@ -93,8 +93,6 @@ void PauseMenuFix() {
 
 void LoadStageMissionImage_r() {
 
-	GetCustomLayout = 0;
-	CurrentMissionCard = 0;
 
 	if (GetLevelType == 0) { //Mission card check here
 
@@ -191,7 +189,13 @@ void LoadStageMissionImage_r() {
 				break;
 		}
 
-		if (Race && (CurrentLevel == LevelIDs_SkyDeck || CurrentLevel == LevelIDs_Casinopolis || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 2))
+		if (GetCustomLayout == Mission2_100Rings) //100 Rings
+			CurrentMissionCard = RingsCard;
+
+		if (GetCustomLayout == Mission3_LostChao) //Lost Chao
+			CurrentMissionCard = LostChaoCard;
+
+		if (Race && CurrentStageVersion == TailsVersion)
 		{
 			switch (AIRace)
 			{
@@ -222,14 +226,6 @@ void LoadStageMissionImage_r() {
 			}
 		}
 
-		if (!Race)
-		{
-			if (GetCustomLayout == Mission2_100Rings) //100 Rings
-				CurrentMissionCard = RingsCard;
-
-			if (GetCustomLayout == Mission3_LostChao) //Lost Chao
-				CurrentMissionCard = LostChaoCard;
-		}
 
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);

@@ -127,7 +127,6 @@ extern char StorySplits;
 extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
-extern bool isTailsVersion;
 extern bool isPlayerInWaterSlide;
 HelperFunctions extern help;
 extern bool isChaoHintEnabled;
@@ -155,7 +154,7 @@ void getRandomCutscene(RandomizedEntry* entry);
 bool CheckAndPlayRandomCutscene();
 void set_event_flags(long cutsceneID);
 
-
+void SetInfoNextRandomStage(char stage);
 extern short CurrentMission;
 extern int8_t CurrentStageVersion;
 extern int CustomFlag;

@@ -102,7 +102,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 				SoundManager_Delete2();
 				ChaoSpawn = false;
-				if (isTailsVersion || CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
+				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
 					GameState = 0xc;
 				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
 				{

@@ -407,13 +407,10 @@ void ResetValueAndObjects() {
 	isGameOver = false;
 	SonicRand = 0;
 	KnuxCheck = 0;
-	CurrentMission = 0;
-	GetCustomLayout = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;
 	GetBackRing = false;
 	isPlayerInWaterSlide = false;
-	isTailsVersion = false;
 	MMPlatformEnabled = false;
 
 	RestoreRNGValueKnuckles();
@@ -450,17 +447,12 @@ void ResetStatsValues() {
 	isAIActive = false;
 	ChaoSpawn = false;
 	isGameOver = false;
-	isTailsVersion = false;
 	MMPlatformEnabled = false;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
 	TransfoCount = 0;
-	CurrentMission = 0;
-	CurrentStageVersion = 0;
-	CurrentMissionCard = 0;
-	GetCustomLayout = 0;
 	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat

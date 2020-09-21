@@ -73,7 +73,7 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		TimeSeconds = TimeSecCopy;
 		TimeMinutes = TimeMinCopy;
 		TimeFrames = TimeFrameCopy;
-		if (CurrentStageVersion == AmyVersion && CurrentLevel == LevelIDs_FinalEgg || isTailsVersion || CurrentStageVersion == TailsVersion && CurrentLevel == LevelIDs_SpeedHighway)
+		if (CurrentStageVersion == AmyVersion && CurrentLevel == LevelIDs_FinalEgg || CurrentStageVersion == TailsVersion)
 			Lives++;
 		ResetRestartData();
 		ResetGravity();

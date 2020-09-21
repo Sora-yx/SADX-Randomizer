@@ -303,7 +303,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 						return;
 					}
 						EnableControl();
-						if (CurrentMission == 3)
+						if (CurrentMission == Mission3_LostChao)
 							data->Action = 4;
 						else
 							data->Action = 6;

@@ -14,8 +14,6 @@ bool isGameOver = false;
 
 extern bool RandCongratsDone;
 extern bool SA2Voices;
-bool isTailsVersion = false;
-bool SA2Mission = false;
 short CurrentMission = 0;
 int8_t CurrentStageVersion = 0;
 
@@ -276,9 +274,6 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 	return cur_Sanic;
 }
 
-
-
-
 int levelCount;
 
 void SetInfoNextRandomStage(char stage) {
@@ -301,6 +296,7 @@ void SetInfoNextRandomStage(char stage) {
 	CurrentStageVersion = randomizedSets[levelCount].Layout;
 	levelCount++;
 }
+
 extern bool isCutsceneAllowed;
 void SetRandomStageAct(char stage, char act) {
 
@@ -324,7 +320,8 @@ void SetRandomStageAct(char stage, char act) {
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
 
-		if (!CheckAndPlayRandomCutscene())
+		bool toto = CheckAndPlayRandomCutscene();
+		if (!toto)
 			SetInfoNextRandomStage(stage);
 		else
 			return;
@@ -358,12 +355,15 @@ void GoToNextLevel_hook(char stage, char act) {
 			CutsceneMode = 0;
 		}
 
-		if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0)
+		if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0) {
 			SetLevelAndAct(LevelIDs_SSGarden, 0);
-		else if (!CheckAndPlayRandomCutscene())
-			SetInfoNextRandomStage(stage);
-		else
 			return;
+		}
+
+		bool toto = CheckAndPlayRandomCutscene();
+
+		if (!toto)
+			SetInfoNextRandomStage(stage);
 
 		if (levelCount == TotalCount)
 			Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.

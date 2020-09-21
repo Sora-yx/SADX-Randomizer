@@ -76,7 +76,6 @@ extern "C" {
 			MessageBox(WindowHandle,
 				L"Please update SADX Mod Loader. Randomizer mod requires API version 7 or newer.",
 				L"Randomizer Error", MB_OK | MB_ICONERROR);
-			return;
 		}
 
 		help = helperFunctions;
@@ -160,11 +159,13 @@ extern "C" {
 		Randomizer_GetNewRNG();
 	}
 
-
+	extern int levelCount;
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur CUtscene Flag %d", randomizedSets[levelCount].cutsceneID);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur Rando Mission %d", randomizedSets[levelCount].SA2Mission);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Cur Mission %d", CurrentMission);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 6), "lev Count %d", levelCount);
 
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
