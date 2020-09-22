@@ -166,7 +166,7 @@ extern "C" {
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur Cutscene  %d", randomizedSets[levelCount].cutsceneID);
 
 		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-			//PlayRandomCutscene(TailsOutro);
+			//PlayRandomCutscene(13);
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])

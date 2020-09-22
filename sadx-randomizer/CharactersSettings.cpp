@@ -13,7 +13,6 @@ extern ObjectFuncPtr charfuncs[];
 
 extern bool AmySpeed;
 extern bool BigSpeed;
-extern bool IceCapCutsceneSkip;
 extern int CurrentMissionCard;
 extern bool Race;
 extern bool isCriticalMode;

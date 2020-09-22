@@ -2,15 +2,14 @@
 #include "Cutscene.h"
 
 bool isCutsceneAllowed = false;
-ObjectMaster* cutscene = nullptr;
 
 
-int EventDayTime[7] = {
-	11, 21, 57, 98, 157, 159, 249
+int EventDayTime[8] = {
+	6, 11, 21, 57, 98, 157, 159, 249
 };
 
-int EventNightTime[5] = {
-	80, 81, 110, 208, 75
+int EventNightTime[6] = {
+	80, 81, 110, 197, 208, 75
 };
 
 int EventEveningTime[4] = {
@@ -100,7 +99,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[132] = {
+CutsceneLevelData CutsceneList[131] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -149,7 +148,6 @@ CutsceneLevelData CutsceneList[132] = {
 	{ 0x051, 26, 1, 2, 11 }, //Egg Walker defeated, Station Square saved
 	{ 0x052, 33, 0, 2, 0 }, //Tails Outro
 	{ 0x054, 29, 1, 2, 8 }, //Gonna land on the Egg Carrier
-	{ 0x055, 38, 0, 2, 6 }, //Cutscene with Froggy after Sand Hill
 	{ 0x056, 26, 1, 2, 3 }, //Tails and Sonic awake after being gassed
 	//Amy events
 	{ 0x060, 26, 0, 5, 0 }, //Amy's intro
@@ -277,7 +275,7 @@ void PlayRandomCutscene(long flag) {
 }
 
 void CutsceneManager(ObjectMaster* obj) {
-	if (!CharObj2Ptrs[0] || !IsIngame())
+	if (!CharObj2Ptrs[0])
 		return;
 
 	EntityData1* data = obj->Data1;
@@ -289,14 +287,17 @@ void CutsceneManager(ObjectMaster* obj) {
 		data->Action = 1;
 		break;
 	case 1:
-		if (++data->InvulnerableTime == 100)
+		if (++data->InvulnerableTime == 100) {
+			data->Index = 0;
 			data->Action = 2;
+		}
 		break;
 	case 2:
 		if (ControlEnabled) {
-			if (++data->Index == 30) {
+			if (++data->Index == 40) {
 				CutsceneMode = 0;
 				LastStoryFlag = 0;
+				FreeLandTable(CurrentLevel, CurrentAct);
 				GameState = 0x9;
 				CheckThingButThenDeleteObject(obj);
 			}
@@ -306,15 +307,15 @@ void CutsceneManager(ObjectMaster* obj) {
 }
 
 void PlayRandomCutscene_OnFrames() {
-	if (!CharObj2Ptrs[0] || !RNGCutscene || IsAdventureComplete(CurrentCharacter))
-		return;
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
+
+		if (!CharObj2Ptrs[0] || !RNGCutscene || !isCutsceneAllowed)
+			return;
+
 		if (isCutsceneAllowed) {
-			if (cutscene)
-				DeleteObjectMaster(cutscene);
-			
-			cutscene = LoadObject((LoadObj)2, 1, CutsceneManager);
+
+			ObjectMaster* cutscene = LoadObject((LoadObj)2, 1, CutsceneManager);
 			isCutsceneAllowed = false;
 		}
 	}

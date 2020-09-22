@@ -2,7 +2,6 @@
 
 
 extern bool RandCongratsDone;
-bool IceCapCutsceneSkip = false;
 extern ObjectMaster* CurAI;
 extern bool isCutsceneAllowed;
 extern ObjectMaster* ChaoTP;
@@ -74,7 +73,7 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
-	if (RNGCutscene)
+	if (RNGCutscene && !IsAdventureComplete(SelectedCharacter))
 		isCutsceneAllowed = true;
 
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)

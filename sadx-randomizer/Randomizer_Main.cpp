@@ -242,7 +242,7 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 
 int levelCount;
 
-void SetInfoNextRandomStage(char stage) {
+void SetInfoNextRandomStage(char Stage, char Act) {
 	if (RNGCharacters)
 	{
 		CurrentCharacter = randomizedSets[levelCount].character;
@@ -256,8 +256,8 @@ void SetInfoNextRandomStage(char stage) {
 		CurrentAI = randomizedSets[levelCount].ai_mode;
 
 	LastLevel = CurrentLevel;
-	CurrentLevel = RNGStages ? randomizedSets[levelCount].level : stage;
-	CurrentAct = randomizedSets[levelCount].act;
+	CurrentLevel = RNGStages ? randomizedSets[levelCount].level : Stage;
+	CurrentAct = RNGStages ? randomizedSets[levelCount].act : Act;
 	CurrentMission = randomizedSets[levelCount].SA2Mission;
 	CurrentStageVersion = randomizedSets[levelCount].Layout;
 	levelCount++;
@@ -286,9 +286,9 @@ void SetRandomStageAct(char stage, char act) {
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
 
-		bool toto = CheckAndPlayRandomCutscene();
-		if (!toto)
-			SetInfoNextRandomStage(stage);
+		bool isCutscene = CheckAndPlayRandomCutscene();
+		if (!isCutscene)
+			SetInfoNextRandomStage(stage, act);
 		else
 			return;
 
@@ -326,10 +326,10 @@ void GoToNextLevel_hook(char stage, char act) {
 			return;
 		}
 
-		bool toto = CheckAndPlayRandomCutscene();
+		bool isCutscene = CheckAndPlayRandomCutscene();
 
-		if (!toto)
-			SetInfoNextRandomStage(stage);
+		if (!isCutscene)
+			SetInfoNextRandomStage(stage, act);
 
 		if (levelCount == TotalCount)
 			Randomizer_GetNewRNG(); //reroll once the 40 stages have been beated.

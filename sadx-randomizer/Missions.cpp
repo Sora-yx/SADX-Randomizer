@@ -5,9 +5,11 @@
 
 int CurrentMissionCard;
 NJS_TEXNAME MissionsText[25];
+NJS_TEXNAME TitleCard[8];
+static NJS_TEXLIST TitleCardTex = { arrayptrandlength(TitleCard) };
 char GetCustomLayout;
 //extern HelperFunctions help;
-
+static Trampoline* LoadTitleCardTexture_t = nullptr;
 
 bool isSA2Mission() {
 
@@ -228,11 +230,26 @@ void StageMissionImage_result() {
 	}
 }
 
+int DisplayTitleCard_r() {
+	if (GetLevelType == 0) {
+		return DisplayTitleCard();
+	}
+	else {
+		if (++TitleCardCounter > TitleCardDispTime)
+			return 1;
+	}
+
+	return 0;
+}
+
 
 int LoadTitleCardTexture_r(int minDispTime) {
 
-	if (!isRandoLevel())
-		return LoadTitleCardTexture(minDispTime);
+	if (!isRandoLevel() || CurrentLevel > 14) {
+		CurrentCardTexturePtr = &CurrentCardTexture;
+		FunctionPointer(int, original, (int minDispTime), LoadTitleCardTexture_t->Target());
+		return original(minDispTime);
+	}
 
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -245,22 +262,16 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	TitleCardStuff = 2;
 	TitleCardStuff2 = 0;
 
-	if (CurrentLevel > 14 && CurrentLevel < 39) {
+	GetLevelType = 0;
+
+	TitleCardDispTime = 90;
+	if (minDispTime)
 		TitleCardDispTime = minDispTime;
-		GetLevelType = 1;
-	}
-	else {
-		GetLevelType = 0;
 
-		TitleCardDispTime = 90;
-		if (minDispTime) {
-			TitleCardDispTime = minDispTime;
-		}
+	LoadPVM("RandomTitleCard", &TitleCardTex);
+	CurrentCardTexturePtr = &TitleCardTex;
 
-		LoadPVM("RandomTitleCard", &CurrentCardTexture);
-		CurrentCardTexturePtr = &CurrentCardTexture;
-	}
-
+	
 	return 1;
 }
 
@@ -268,10 +279,8 @@ int LoadTitleCardTexture_r(int minDispTime) {
 void TitleCard_Init() {
 
 	if (RNGStages)
-	{
-		WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
-		//WriteCall((void*)0x47e276, Check_DisplayLevelCard);
-	}
+		LoadTitleCardTexture_t = new Trampoline((int)LoadTitleCardTexture, (int)LoadTitleCardTexture + 0x5, LoadTitleCardTexture_r);
+		//WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
 
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
