@@ -5,24 +5,6 @@
 
 
 
-void Cam_SkyDeck() {
-
-	if (CurrentStageVersion == TailsVersion && CurrentAct == 0 && Race)
-		LoadCamFile(0, "0603"); //Tails Camera
-	else
-		LoadCamFile(0, "0600"); //Sonic Camera
-	
-	
-	LoadCamFile(1, "0601");
-
-	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion))
-		LoadCamFile(2, "0604"); //Knuckles Version
-	else
-		LoadCamFile(2, "0600"); //Knuckles Version
-
-}
-
-
 void SkyDeck_Layout() {
 
 
@@ -43,10 +25,7 @@ void SkyDeck_Layout() {
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
 		break;
-
 	}
-
-
 
 	return;
 }

@@ -2,43 +2,6 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-
-void FixRollerCoaster() {
-	ObjectMaster* obj = GetCharacterObject(0);
-	if (obj != nullptr)
-		obj->Data1->Action = 28; //force the character to leave the RC
-}
-
-void FixRCCharacterPosition() {
-	ObjectMaster* obj = GetCharacterObject(0);
-
-	if (obj != nullptr)
-		ForcePlayerAction(0, 18);
-
-	PlaySound(0x4d,0,0,0);
-	return;
-}
-
-
-void TP_CAM() {
-
-	LoadCamFile(0, "0300");
-
-	if (CurrentAct == 0)
-		LoadCamFile(1, "0301");
-		
-	if (CurrentAct == 1 && CurrentStageVersion == AmyVersion)
-		LoadCamFile(1, "0303");
-	else
-		LoadCamFile(1, "0301");
-
-	LoadCamFile(2, "0302");
-
-	return;
-
-}
-
-
 void TwinklePark_Layout() {
 
 	//CurrentStageVersion = BigVersion;
@@ -59,6 +22,23 @@ void TwinklePark_Layout() {
 	fixTCCart();
 	return;
 }
+
+void FixRollerCoaster() {
+	ObjectMaster* obj = GetCharacterObject(0);
+	if (obj != nullptr)
+		obj->Data1->Action = 28; //force the character to leave the RC
+}
+
+void FixRCCharacterPosition() {
+	ObjectMaster* obj = GetCharacterObject(0);
+
+	if (obj != nullptr)
+		ForcePlayerAction(0, 18);
+
+	PlaySound(0x4d, 0, 0, 0);
+	return;
+}
+
 
 void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFunctions)
 {

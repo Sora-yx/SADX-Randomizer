@@ -3,25 +3,6 @@
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
-void CamFinalEgg() {
-	
-	if (CurrentStageVersion == AmyVersion && CurrentAct == 0)
-		LoadCamFile(0, "1004"); //load the camera used for Amy Final Egg.
-	else
-		LoadCamFile(0, "1000"); //load the camera used for Sonic.
-
-	LoadCamFile(1, "1001");
-
-	if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
-		LoadCamFile(2, "1005");
-	else
-		LoadCamFile(2, "1002");
-
-	LoadCamFile(3, "1003");
-
-	return;
-}
-
 void FinalEgg_Layout() {
 
 	//CurrentStageVersion = AmyVersion;

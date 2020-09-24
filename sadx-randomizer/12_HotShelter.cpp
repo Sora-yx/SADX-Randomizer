@@ -5,21 +5,6 @@
 
 ObjectMaster* TriggerHS = nullptr;
 
-void CamHotShelter() {
-
-	if (CurrentStageVersion == BigVersion)
-		LoadCamFile(0, "1204"); //load the camera used for Big Hot Shelter
-	else
-		LoadCamFile(0, "1200"); //load the camera used for Amy Hot Shelter
-
-	LoadCamFile(1, "1201");
-	LoadCamFile(2, "1202");
-	LoadCamFile(3, "1203");
-
-	return;
-}
-
-
 void HotShelter_Layout() {
 
 	//CurrentStageVersion = BigVersion;

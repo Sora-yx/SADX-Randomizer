@@ -2,22 +2,6 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-void Cam_WV() {
-
-	if (CurrentStageVersion != GammaVersion)
-		LoadCamFile(0, "0200");
-	else
-		LoadCamFile(0, "0203");
-
-	LoadCamFile(1, "0201");
-
-	if (Race && CurrentAct == 2)
-		LoadCamFile(2, "0206");
-	else
-		LoadCamFile(2, "0202");
-
-	return;
-}
 
 void FixTailsVictoryWV() {
 

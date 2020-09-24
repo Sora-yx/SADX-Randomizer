@@ -2,25 +2,6 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-
-void CamSpeedHighway() {
-
-	if (CurrentAct == 0 && CurrentStageVersion == TailsVersion)
-		LoadCamFile(0, "0403"); //Tails Camera
-	else
-		LoadCamFile(0, "0400");
-
-	LoadCamFile(1, "0401");
-
-	if (CurrentAct == 2 && (CurrentStageVersion == KnucklesVersion))
-		LoadCamFile(2, "0404");
-	else
-		LoadCamFile(2, "0402");
-
-	return;
-}
-
-
 void SpeedHighway_Layout() {
 
 	//CurrentStageVersion = TailsVersion;

@@ -4,15 +4,11 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-void CamRedMountain() {
-	LoadCamFile(0, "0500");
-
+void FixRMLava() {
 	if (CurrentStageVersion == GammaVersion)
-		LoadCamFile(1, "0503"); //load the camera used for Gamma.
+		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone
 	else
-		LoadCamFile(1, "0501"); //load the camera used for Sonic.
-
-	LoadCamFile(2, "0502");
+		WriteData<1>((void*)0x6027cb, 0x74); //restore original
 
 	return;
 }
@@ -40,14 +36,6 @@ void RedMountain_Layout() {
 	return;
 }
 
-void FixRMLava() {
-	if (CurrentStageVersion == GammaVersion)
-		WriteData<1>((void*)0x6027cb, 0x75); //fix Red Mountain Lava for everyone
-	else
-		WriteData<1>((void*)0x6027cb, 0x74); //restore original
-
-	return;
-}
 
 ObjectListEntry RedMountainObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,

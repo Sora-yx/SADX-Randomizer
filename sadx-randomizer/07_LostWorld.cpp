@@ -3,20 +3,6 @@
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
-void Cam_LW() {
-
-	LoadCamFile(0, "0700");
-
-	if (CurrentAct == 1 && CurrentStageVersion == KnucklesVersion)
-		LoadCamFile(1, "0704");
-	else
-		LoadCamFile(1, "0701");
-
-	LoadCamFile(2, "0702");
-	return;
-}
-
-
 void LW_Layout() {
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
@@ -27,7 +13,6 @@ void LW_Layout() {
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
 	}
-
 
 	return;
 }
