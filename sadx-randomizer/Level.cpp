@@ -171,7 +171,7 @@ StringLevelLayout SetCamFileArray[51] {
 
 void __cdecl RandoLoad_SetCamFiles() {
 
-	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++)
+	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++) //FailSafe, if layout doesn't exist, simply let SADX load the stage (vanilla).
 	{
 		if (CurrentLevel == SetCamFileArray[i].LevelID && CurrentStageVersion == SetCamFileArray[i].version)
 		{
@@ -184,6 +184,8 @@ void __cdecl RandoLoad_SetCamFiles() {
 			LoadFileWithMalloc(cam.c_str(), (LPVOID*)&CamData[act]);
 		}
 	}
+
+	return;
 }
 
 
@@ -195,8 +197,10 @@ void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
 		{
 			if (CurrentLevel == SetCamFileArray[i].LevelID && CurrentStageVersion == SetCamFileArray[i].version) 
 			{
-				ReleaseSetFile();
-				ReleaseCamFile();
+				if (CurrentLevel != LevelIDs_Casinopolis) {
+					ReleaseSetFile();
+					ReleaseCamFile();
+				}
 				RandoLoad_SetCamFiles();
 				isSetLoaded = true;
 				break;
@@ -206,14 +210,6 @@ void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
 
 	if (!isRandoLevel() || CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0)
 		isSetLoaded = true;
-
-	if (CurrentLevel == LevelIDs_Casinopolis)
-	{
-		LoadSetFile(2, "0902");
-		LoadCamFile(2, "0902");
-		LoadSetFile(3, "0903");
-		LoadCamFile(3, "0903");
-	}
 
 	SetCurrentCamData(curLevel);
 	SetCurrentSetData(curLevel);

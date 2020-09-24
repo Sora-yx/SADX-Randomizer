@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include "Cas.h"
 
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\")
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
@@ -355,7 +357,6 @@ PVMEntry CasinopolisObjectTextures[] = {
 };
 
 
-
 void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 	ObjLists[LevelIDs_Casinopolis * 8 + 0] = &CasinopolisObjectList;
@@ -363,18 +364,12 @@ void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperF
 	TexLists_Obj[LevelIDs_Casinopolis] = CasinopolisObjectTextures;
 }
 
-void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions)
-{
-	//Initiliaze data
-	WriteData<5>((int*)0x422ef4, 0x90);
-	WriteData<5>((int*)0x422f03, 0x90);
-	WriteData<5>((int*)0x422f12, 0x90);
-	WriteData<5>((int*)0x422f21, 0x90);
-	WriteData<5>((int*)0x422f2d, 0x90);
-	WriteData<5>((int*)0x422f3c, 0x90);
-	WriteData<5>((int*)0x422f4b, 0x90);
+void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions) {
 
-	WriteCall((void*)0x422f5a, Casino_Layout);
+	WriteData<5>((void*)0x422ef4, 0x90);	
+	WriteData<5>((void*)0x422f2d, 0x90);	
+	WriteData<5>((void*)0x422f3c, 0x90);
+	WriteCall((void*)0x422f03, Casino_Layout);
 
 	WriteData<1>((char*)0x5c0595, 0x08); //make pinball working for Knuckles
 	WriteData<1>((char*)0x5c0615, 0x08); //make pinball working for Knuckles part 2
@@ -398,14 +393,15 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 
 	AddLevelLayout("Casinopolis\\", "Cas0", helperFunctions);
 	AddLevelLayout("Casinopolis\\", "Cas1", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "Cas2", helperFunctions);
-	AddLevelLayout("Casinopolis\\", "Cas3", helperFunctions);
 	AddLevelLayout("Casinopolis\\", "CasM", helperFunctions);
 	AddLevelLayout("Casinopolis\\", "CasK", helperFunctions);
 
 	AddCam("C0900");
 	AddCam("C0901");
-	AddCam("C0903");
 	AddCam("C0904"); //Miles act 2
 	AddCam("C0905"); //Knuckles
+
+
+	for (int i = 0; i < 8; i++) //Fix AI Race Position
+		helperFunctions.RegisterStartPosition(i, Cas_StartPositions[0]);
 }

@@ -263,5 +263,8 @@
     <ClInclude Include="subtitles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cas.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
