@@ -97,8 +97,8 @@ void CheckAndLoadRaceOpponent() {
 
 
 	//Make the Texture race bar icon matches the characters
-
-	WriteData<1>((char*)0x91bfec, AIRaceIconArray[AIRace]); //Change Opponent texture ID
+	if (AIRace >= 0) //FailSafe
+		WriteData<1>((char*)0x91bfec, AIRaceIconArray[AIRace]); //Change Opponent texture ID
 
 	if (CurrentCharacter == Characters_Sonic && MetalSonicFlag == 1)
 		WriteData<1>((char*)0x91c000, 17);
