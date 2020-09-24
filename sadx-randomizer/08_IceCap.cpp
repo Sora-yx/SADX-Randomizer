@@ -38,19 +38,6 @@ void IC_Layout() {
 	if (CurrentAct == 3)
 		CurrentStageVersion = BigVersion;
 
-
-	if (CurrentStageVersion == TailsVersion) {
-
-		if (CurrentMission < Mission2_100Rings)
-			Race = true;
-		else
-			Race = false;
-	}
-
-	if (Race)
-		SelectBarRace();
-
-
 	return;
 }
 

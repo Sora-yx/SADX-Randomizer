@@ -2,7 +2,6 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-ObjectMaster* TriggerCasino = nullptr;
 
 void Casino_Layout() {
 
@@ -15,47 +14,15 @@ void Casino_Layout() {
 		CurrentStageVersion = TailsVersion;
 
 
-	switch (CurrentStageVersion)
-	{
-		case TailsVersion:
-			if (CurrentMission < Mission2_100Rings)
-				Race = true;
-			else
-				Race = false;
-			break;
-		case KnucklesVersion:
-			SetRNGKnuckles();
-			break;
-	}
+	if (CurrentStageVersion == KnucklesVersion)
+		SetRNGKnuckles();
 
-
-	if (Race)
-		SelectBarRace();
 
 	FixGoldenAndCoin();
 	return;
 }
 
-void TriggerCasinoChao_Main(ObjectMaster* obj) {
 
-	if (IsPlayerInsideSphere(&obj->Data1->Position, 25))
-	{
-		PlayVoice_R(5004);
-		ForcePlayerAction(0, 12);
-
-		if (++obj->Data1->Index == 5)
-		{
-			ForcePlayerAction(0, 24);
-			PositionPlayer(0, -1541.241, 70.75, 2636.955);
-		}
-	}
-}
-
-void TriggerCasinoChao_Delete()
-{
-	DeleteObject_(TriggerCasino);
-	TriggerCasino = nullptr;
-}
 
 
 void FixFlipperCharacterPosition() {

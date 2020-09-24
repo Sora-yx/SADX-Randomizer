@@ -33,19 +33,11 @@ void SpeedHighway_Layout() {
 	default:
 		CurrentStageVersion = SonicVersion;
 		break;
-	case TailsVersion:
-		if (CurrentMission < Mission2_100Rings)
-			Race = true;
-		break;
 	case KnucklesVersion:
 		SetRNGKnuckles();
 		break;
 	}
 
-
-
-	if (Race)
-		SelectBarRace();
 
 	return;
 }

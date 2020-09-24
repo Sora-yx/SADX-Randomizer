@@ -3,6 +3,7 @@
 
 // Mission Card settings, check, texture edit.
 
+short CurrentMission = 0;
 int CurrentMissionCard;
 NJS_TEXNAME MissionsText[25];
 NJS_TEXNAME TitleCard[8];
@@ -163,7 +164,7 @@ void LoadStageMissionImage_r() {
 		if (GetCustomLayout == Mission3_LostChao) //Lost Chao
 			CurrentMissionCard = LostChaoCard;
 
-		if (Race && CurrentStageVersion == TailsVersion)
+		if (Race && CurrentStageVersion == TailsVersion && CurrentLevel != LevelIDs_SpeedHighway)
 		{
 			switch (AIRace)
 			{

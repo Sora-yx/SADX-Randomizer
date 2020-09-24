@@ -13,10 +13,8 @@ bool Vanilla = false;
 bool RNGVoices = true;
 bool CustomVoices = true;
 bool RNGMusic = true;
-char SonicCD = 0;
 bool SA2M2 = true;
 bool SA2M3 = true;
-bool Any = true;
 bool Viper = false;
 extern bool CreditCheck;
 bool isCriticalMode = false;
@@ -163,7 +161,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Cur Cutscene  %d", randomizedSets[levelCount].cutsceneID);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Current Cutscene: %d", randomizedSets[levelCount].cutsceneID);
 
 		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 			//PlayRandomCutscene(13);

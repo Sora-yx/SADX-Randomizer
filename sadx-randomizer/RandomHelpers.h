@@ -321,6 +321,7 @@ void ForcePlayerToWhistle();
 void Hud_ShowSwapButton();
 void Hud_ShowActionButton();
 
+FunctionPointer(void, KillPlayer, (uint8_t ID), 0x440CD0);
 VoidFunc(PauseQuitDisplay, 0x415450);
 VoidFunc(E101ShootThing, 0x567ac0);
 VoidFunc(Tails_CheckRaceResult, 0x461560);
@@ -440,7 +441,6 @@ VoidFunc(Knuckles_SetRNG, 0x475840);
 void ICAct3Position();
 void LoadChaoTPTrigger();
 void ChaoTPTrigger(ObjectMaster* a1);
-void TriggerCasinoChao_Main(ObjectMaster* obj);
 void TriggerOBJHS_Delete();
 void LoadRemoveCart();
 VoidFunc(PauseQuitThing2, 0x413f70);

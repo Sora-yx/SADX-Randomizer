@@ -53,9 +53,6 @@ void WindyValley_Layout() {
 		break;
 	}
 
-	if (Race)
-		SelectBarRace();
-
 	return;
 }
 

@@ -70,7 +70,7 @@ void AllUpgrades() {
 
 
 
-void CheckRace();
+void CheckAndLoadRaceOpponent();
 
 //Hook Load Character
 void LoadCharacter_r()
@@ -83,7 +83,7 @@ void LoadCharacter_r()
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-	CheckRace();
+	CheckAndLoadRaceOpponent();
 
 	AllUpgrades();
 	EmeraldRadar_R();
@@ -225,7 +225,6 @@ void SuperSonic_TransformationCheck() {
 				{
 					data1->Status &= ~Status_LightDash;
 					ForcePlayerAction(0, 46);
-					//njSetTexture(&SUPERSONIC_TEXLIST);
 					PlayVoice(3001);
 					data2->Upgrades |= Upgrades_SuperSonic;
 					PlayMusic(MusicIDs_ThemeOfSuperSonic);

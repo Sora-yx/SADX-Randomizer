@@ -39,12 +39,6 @@ void SkyDeck_Layout() {
 	default:
 		CurrentStageVersion = SonicVersion;
 		break;
-	case TailsVersion:
-		if (CurrentMission < Mission2_100Rings) {
-			Race = true;
-			SelectBarRace();
-		}
-		break;
 	case KnucklesVersion:
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();

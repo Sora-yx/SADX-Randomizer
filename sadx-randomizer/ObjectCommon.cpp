@@ -365,7 +365,6 @@ void Load_ObjectsCommon() {
 void DeleteTriggerObject() {
 
 	TriggerOBJHS_Delete();
-	TriggerCasinoChao_Delete();
 }
 
 void Delete_ObjectsCommon() {

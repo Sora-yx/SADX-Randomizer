@@ -94,14 +94,7 @@ void AnimalStat() {
 	return;
 }
 
-void HookStats_Inits() {
-	WriteCall((void*)0x45072d, HurtsStat);
-	WriteCall((void*)0x416e95, DeathsStat); 
-	WriteCall((void*)0x416f94, DeathsStat); 
-	WriteCall((void*)0x43bf6b, JumpStat); 
-	WriteCall((void*)0x4d88ca, KillStat);
-	WriteCall((void*)0x4d7977, AnimalStat);
-}
+
 
 //Credits
 
@@ -682,14 +675,6 @@ CreditsList CreditsText = { arrayptrandlengthT(CreditsText_list, int) };
 
 //Initiliaze Credits
 void CreditsNewList() {
-
-	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
-	//WriteCall((void*)0x640fe1, FinalStat);
-	WriteData<10>((void*)0x640fef, 0x90);
-	WriteData<6>((void*)0x640fe9, 0x90);
-	WriteData<6>((void*)0x640ff9, 0x90);
-	WriteData<5>((void*)0x640fff, 0x90);
-
 	DeathsSTD = "";
 	JumpCountSTD = "";
 	RageQuitSTD = "";
@@ -747,7 +732,14 @@ void credits() {
 VoidFunc(CreditManagement, 0x6408f0);
 int delay = 0;
 
-static Trampoline CreditManagement_t((int)CreditManagement, (int)CreditManagement + 0x5, FinalStatDisplay);
+void EndCreditsStuff() {
+	CheckThingButThenDeleteObject(EndBG_Ptr);
+	EndBG_Ptr = 0;
+	SomethingAboutCredit = 0;
+	SoundManager_Delete2();
+	Credits_State = 5;
+	RandCongratsDone = false;
+}
 
 void FinalStatDisplay(ObjectMaster* obj) {
 	if (Credits_Skip)
@@ -812,24 +804,40 @@ void FinalStatDisplay(ObjectMaster* obj) {
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 19), "Final Time: %d:%d", getHour, getMin);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 20), "Final Score: %d", ResultScore);
 			DisplayDebugString(NJM_LOCATION(6, 25), "Thank you for playing SADX Randomizer!");
-
-			
+		}
+		else {
+			EndCreditsStuff();
 		}
 	}
-	else
-	{
-		ObjectFunc(origin, CreditManagement_t.Target());
-		origin(obj);
-		RandCongratsDone = false;
+	else {
+		EndCreditsStuff();
 	}
+	return;
+}
+
+void HookStats_Inits() {
+
 }
 
 void __cdecl Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions) {
 
 	//Credits
 	WriteCall((void*)0x641aef, CreditFlag);
-	HookStats_Inits();
+	//Setup the final Stats, remove some value needed to makes the game progress after the final ending background, we will manually call them after the final stats.
+	WriteData<10>((void*)0x640fef, 0x90);
+	WriteData<6>((void*)0x640fe9, 0x90);
+	WriteData<6>((void*)0x640ff9, 0x90);
+	WriteData<5>((void*)0x640fff, 0x90);
 	WriteData<2>((void*)0x641232, 0x90); //allow to skip credits.
+
+	//stats
+	WriteCall((void*)0x640fe1, FinalStatDisplay);
+	WriteCall((void*)0x45072d, HurtsStat);
+	WriteCall((void*)0x416e95, DeathsStat);
+	WriteCall((void*)0x416f94, DeathsStat);
+	WriteCall((void*)0x43bf6b, JumpStat);
+	WriteCall((void*)0x4d88ca, KillStat);
+	WriteCall((void*)0x4d7977, AnimalStat);
 }
 
 void Credits_StatsDelayOnFrames() {

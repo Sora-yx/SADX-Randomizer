@@ -11,10 +11,6 @@ using std::vector;
 struct RandomizedEntry randomizedSets[40];
 short prev_stage = -1;
 bool isGameOver = false;
-
-extern bool RandCongratsDone;
-extern bool SA2Voices;
-short CurrentMission = 0;
 int8_t CurrentStageVersion = 0;
 
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };

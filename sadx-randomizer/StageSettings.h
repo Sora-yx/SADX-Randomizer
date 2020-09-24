@@ -1,13 +1,5 @@
 #pragma once
 void Set_BackRing();
-void BackRing();
-void BackRing2();
-
-void ResetTime_R();
-void FixLayout_StartPosition_R();
-void FixRestartCheckPoint();
-
-void TriggerCasinoChao_Delete();
 
 ObjectFunc(EggHornet_Load, 0x572230);
 void __cdecl CheckLoadBalloon_r(ObjectMaster* a1);
@@ -41,6 +33,5 @@ FunctionPointer(int, sub_46A7F0, (), 0x46A7F0);
 
 ObjectFunc(UpdateSetDataAndDelete, 0x46C150);
 
-void ReleaseScoreTexture();
 
 extern bool GetBackRing;

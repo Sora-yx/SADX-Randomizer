@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Cutscene.h"
 
 bool isCutsceneAllowed = false;
 
