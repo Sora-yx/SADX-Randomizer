@@ -88,7 +88,7 @@ void CheckAndLoadRaceOpponent() {
 			if (CurrentCharacter == Characters_Sonic)
 				AIRace = Characters_Tails;
 			else
-					AIRace = Characters_Sonic;
+				AIRace = Characters_Sonic;
 		}
 
 		if (CurrentCharacter == Characters_Big && (AIRace == Characters_Knuckles || AIRace == Characters_Amy))

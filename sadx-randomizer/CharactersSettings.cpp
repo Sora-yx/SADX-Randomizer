@@ -73,8 +73,10 @@ void AllUpgrades() {
 void CheckAndLoadRaceOpponent();
 
 //Hook Load Character
-void LoadCharacter_r()
-{
+void LoadCharacter_r() {
+
+	CheckAndLoadRaceOpponent();
+
 	if (isAIAllowed)
 		LoadTails_AI_R();
 	else
@@ -83,7 +85,7 @@ void LoadCharacter_r()
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-	CheckAndLoadRaceOpponent();
+
 
 	AllUpgrades();
 	EmeraldRadar_R();

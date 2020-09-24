@@ -26,7 +26,6 @@ void Casino_Layout() {
 
 
 
-
 void FixFlipperCharacterPosition() {
 
 	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)

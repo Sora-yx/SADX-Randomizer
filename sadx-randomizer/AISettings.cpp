@@ -826,7 +826,7 @@ void AISwitch() {
 void LoadTails_AI_R() {
 	if (CreditCheck != true)
 	{
-		if (Race == false && isAIAllowed)
+		if (!Race && CurrentStageVersion != TailsVersion && isAIAllowed)
 		{
 			ObjectMaster* obj;
 			obj = GetCharacterObject(0);
