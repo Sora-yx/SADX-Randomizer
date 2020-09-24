@@ -7,6 +7,8 @@ void Casino_Layout() {
 
 	//CurrentStageVersion = KnucklesVersion;
 
+	//CurrentMission = 2;
+
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 

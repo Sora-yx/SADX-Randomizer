@@ -67,7 +67,7 @@ void FixRaceResult() {
 void CheckAndLoadRaceOpponent() {
 
 	//If we aren't racing, return
-	if (CurrentCharacter == Characters_Tails && !Vanilla || CurrentStageVersion != TailsVersion) {
+	if (CurrentCharacter == Characters_Tails && !Vanilla || CurrentStageVersion != TailsVersion || CurrentMission >= Mission1_Variation) {
 		Race = false;
 		return;
 	}

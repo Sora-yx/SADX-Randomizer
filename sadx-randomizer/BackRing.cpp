@@ -52,7 +52,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 	switch (data->Action) {
 	case BackRing_Init:
-		LoadPVM("textures\\BACKRING", &GoalRingTextures);
+		LoadPVM("BACKRING", &GoalRingTextures);
 		obj->DisplaySub = BackRingObj_Display;
 		data->Scale.x = 1;
 		data->Action = BackRing_Seek;
