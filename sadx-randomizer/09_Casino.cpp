@@ -48,8 +48,10 @@ void IncreaseRings_R() { //increase the amount of ring get in the pinball to mak
 
 void FixShakeoffGarbageAction() { //This make the game crash as Tails.
 
-	ObjectMaster* P1 = GetCharacterObject(0);
-	if (P1 != nullptr && P1->Data1->CharID != Characters_Sonic)
+	if (!EntityData1Ptrs[0])
+		return;
+
+	if (EntityData1Ptrs[0]->CharID != Characters_Sonic)
 		return;
 	else
 		ForcePlayerAction(0, 0x2a);

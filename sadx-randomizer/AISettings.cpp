@@ -170,12 +170,13 @@ void Hud_ShowActionButton() {
 
 
 void Hud_DisplayOnframe() {
+	if (!CharObj2Ptrs[0] || GameState != 15)
+		return;
 
-	ObjectMaster* P1 = GetCharacterObject(0);
-
-	if (GameState == 15 && isAIActive && isAIAllowed && SwapDelay > 149)
+	if (isAIActive && isAIAllowed && SwapDelay > 149)
 	{
-		if (P1 != nullptr && (P1->Data1->Action == 1 || P1->Data1->Action == 2))
+		int action = EntityData1Ptrs[0]->Action;
+		if (action == 1 || action == 2)
 			Hud_ShowSwapButton();
 	}
 }
@@ -669,154 +670,144 @@ extern ObjectMaster* CurrentCart;
 
 void AISwitch() {
 
-	if (!isAIAllowed || CurrentAI == CurrentCharacter || !EntityData1Ptrs[1])
+	//FailSafe to prevent funny crash
+	if (!isAIAllowed || CurrentAI == CurrentCharacter || !EntityData1Ptrs[1] || !isAIActive || SonicRand != 0 || CurrentCharacter > 5 && CurrentAI > 5)
 	{
 		isAIActive = false;
 		return;
 	}
 
-
-	if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
-		return;
-
-	if (CurrentCart)
+	if (CurrentCart || !CharObj2Ptrs[0] || Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		return;
 
 
-	if (SonicRand == 0 && isAIActive) //don't allow the swap if metal sonic / super sonic 
+	//initialize swap, taking actual character and ai information
+
+	AISwap = GetCharacter0ID();
+	CharaSwap = GetCharacter1ID();
+
+	ObjectMaster* obj = GetCharacterObject(0);
+	char P1Action = obj->Data1->Action;
+	CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
+
+
+	if (P1Action > 20)
+		return;
+
+	short powerups = obj2->Powerups;
+	short jumptime = obj2->JumpTime;
+	short underwatertime = obj2->UnderwaterTime;
+	float loopdist = obj2->LoopDist;
+	NJS_VECTOR speed = obj2->Speed;
+	ObjectMaster* heldobj = obj2->ObjectHeld;
+
+	AISwapCount++; //Credit stat
+	//Display Character swap.
+	obj->DeleteSub(obj);
+	obj->MainSub = charfuncs[CharaSwap];
+	obj->Data1->CharID = (char)CharaSwap;
+
+	//Play voice switch
+	switch (obj->Data1->CharID)
 	{
-		//initialize swap, taking actual character and ai information
-
-		if (CurrentCharacter <= 5 && CurrentAI <= 5)
+	case Characters_Sonic:
+		if (MetalSonicFlag)
+			LoadSoundList(62);
+		else
 		{
-			AISwap = GetCharacter0ID();
-			CharaSwap = GetCharacter1ID();
-
-			ObjectMaster* obj = GetCharacterObject(0);
-			char P1Action = obj->Data1->Action;
-			CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
-
-			if (obj != nullptr && obj2 != nullptr)
-			{
-				if (P1Action > 15)
-					return;
-
-				short powerups = obj2->Powerups;
-				short jumptime = obj2->JumpTime;
-				short underwatertime = obj2->UnderwaterTime;
-				float loopdist = obj2->LoopDist;
-				NJS_VECTOR speed = obj2->Speed;
-				ObjectMaster* heldobj = obj2->ObjectHeld;
-
-				AISwapCount++; //Credit stat
-				//Display Character swap.
-				obj->DeleteSub(obj);
-				obj->MainSub = charfuncs[CharaSwap];
-				obj->Data1->CharID = (char)CharaSwap;
-
-				//Play voice switch
-				switch (obj->Data1->CharID)
-				{
-				case Characters_Sonic:
-					if (MetalSonicFlag)
-						LoadSoundList(62);
-					else
-					{
-						PlayCustomSound(CommonSound_SonicSwap);
-						LoadSoundList(1);
-					}
-
-					if (VoiceLanguage)
-						LoadSoundList(72);
-					else
-						LoadSoundList(71);
-					break;
-				case Characters_Eggman:
-						PlayCustomSound(CommonSound_EggmanSwap);
-					break;
-				case Characters_Tails:
-					PlayCustomSound(CommonSound_TailsSwap);
-					LoadSoundList(1);
-					if (VoiceLanguage)
-						LoadSoundList(72);
-					else
-						LoadSoundList(71);
-					break;
-				case Characters_Knuckles:
-					PlayCustomSound(CommonSound_KnuxSwap);
-					LoadSoundList(49);
-					if (VoiceLanguage)
-						LoadSoundList(70);
-					else
-						LoadSoundList(69);
-					break;
-				case Characters_Amy:
-					PlayCustomSound(CommonSound_AmySwap);
-					LoadSoundList(46);
-					if (VoiceLanguage)
-						LoadSoundList(64);
-					else
-						LoadSoundList(63);
-					break;
-				}
-
-				obj->Data1->Action = 0;
-				obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-				if (!oldcol)
-				{
-					oldcol = obj->Data1->CollisionInfo;
-					obj->Data1->CollisionInfo = nullptr;
-				}
-				else
-					Collision_Free(obj);
-				
-				obj->MainSub(obj);
-				obj2 = ((EntityData2*)obj->Data2)->CharacterData;
-				obj2->Powerups = powerups;
-				obj2->JumpTime = jumptime;
-				obj2->UnderwaterTime = underwatertime;
-				obj2->LoopDist = loopdist;
-				obj2->Speed = speed;
-				obj2->ObjectHeld = heldobj;
-
-				//initialize swap, taking AI information
-				ObjectMaster* AI = GetCharacterObject(1);
-				CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
-
-				if (AI != nullptr && AI2 != nullptr)
-				{
-					short AIpowerups = AI2->Powerups;
-					short AIjumptime = AI2->JumpTime;
-					short AIunderwatertime = AI2->UnderwaterTime;
-					float AIloopdist = AI2->LoopDist;
-					NJS_VECTOR AIspeed = AI2->Speed;
-					ObjectMaster* AIheldobj = AI2->ObjectHeld;
-					//Display AI swap.
-					AI->MainSub = charfuncs[AISwap];
-					AI->Data1->CharID = (char)AISwap;
-					AI->Data1->Action = 0;
-					AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-					if (!oldcol)
-					{
-						oldcol = AI->Data1->CollisionInfo;
-						AI->Data1->CollisionInfo = nullptr;
-					}
-					else
-						Collision_Free(AI);
-					AI->MainSub(AI);
-					AI2 = ((EntityData2*)AI->Data2)->CharacterData;
-					AI2->Powerups = powerups;
-					AI2->JumpTime = jumptime;
-					AI2->UnderwaterTime = underwatertime;
-					AI2->LoopDist = loopdist;
-					AI2->Speed = speed;
-					AI2->ObjectHeld = heldobj;
-
-					SwapDelay = 0;
-				}
-			}
+			PlayCustomSound(CommonSound_SonicSwap);
+			LoadSoundList(1);
 		}
+
+		if (VoiceLanguage)
+			LoadSoundList(72);
+		else
+			LoadSoundList(71);
+		break;
+	case Characters_Eggman:
+			PlayCustomSound(CommonSound_EggmanSwap);
+		break;
+	case Characters_Tails:
+		PlayCustomSound(CommonSound_TailsSwap);
+		LoadSoundList(1);
+		if (VoiceLanguage)
+			LoadSoundList(72);
+		else
+			LoadSoundList(71);
+		break;
+	case Characters_Knuckles:
+		PlayCustomSound(CommonSound_KnuxSwap);
+		LoadSoundList(49);
+		if (VoiceLanguage)
+			LoadSoundList(70);
+		else
+			LoadSoundList(69);
+		break;
+	case Characters_Amy:
+		PlayCustomSound(CommonSound_AmySwap);
+		LoadSoundList(46);
+		if (VoiceLanguage)
+			LoadSoundList(64);
+		else
+			LoadSoundList(63);
+		break;
 	}
+
+	obj->Data1->Action = 0;
+	obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+	if (!oldcol)
+	{
+		oldcol = obj->Data1->CollisionInfo;
+		obj->Data1->CollisionInfo = nullptr;
+	}
+	else
+		Collision_Free(obj);
+	
+	obj->MainSub(obj);
+	obj2 = ((EntityData2*)obj->Data2)->CharacterData;
+	obj2->Powerups = powerups;
+	obj2->JumpTime = jumptime;
+	obj2->UnderwaterTime = underwatertime;
+	obj2->LoopDist = loopdist;
+	obj2->Speed = speed;
+	obj2->ObjectHeld = heldobj;
+
+	//initialize swap, taking AI information
+	ObjectMaster* AI = GetCharacterObject(1);
+	CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
+
+	if (AI != nullptr && AI2 != nullptr)
+	{
+		short AIpowerups = AI2->Powerups;
+		short AIjumptime = AI2->JumpTime;
+		short AIunderwatertime = AI2->UnderwaterTime;
+		float AIloopdist = AI2->LoopDist;
+		NJS_VECTOR AIspeed = AI2->Speed;
+		ObjectMaster* AIheldobj = AI2->ObjectHeld;
+		//Display AI swap.
+		AI->MainSub = charfuncs[AISwap];
+		AI->Data1->CharID = (char)AISwap;
+		AI->Data1->Action = 0;
+		AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+		if (!oldcol)
+		{
+			oldcol = AI->Data1->CollisionInfo;
+			AI->Data1->CollisionInfo = nullptr;
+		}
+		else
+			Collision_Free(AI);
+		AI->MainSub(AI);
+		AI2 = ((EntityData2*)AI->Data2)->CharacterData;
+		AI2->Powerups = powerups;
+		AI2->JumpTime = jumptime;
+		AI2->UnderwaterTime = underwatertime;
+		AI2->LoopDist = loopdist;
+		AI2->Speed = speed;
+		AI2->ObjectHeld = heldobj;
+
+		SwapDelay = 0;
+	}
+	
 
 	return;
 }

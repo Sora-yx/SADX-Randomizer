@@ -23,12 +23,14 @@ int IsFastSonicAI_R() {
 
 void RaceResultCheck(ObjectMaster* a1) {
 
-	ObjectMaster* play1 = GetCharacterObject(0);
+	if (!CharObj2Ptrs[0] || EntityData1Ptrs[0]->CharID == Characters_Tails)
+		return;
+
 	EntityData1* v1 = a1->Data1;
 
 	if (Race && !isAIActive)
 	{
-		if (play1->Data1->CharID != Characters_Tails && IsSpecificPlayerInSphere(&v1->Position, 22, 1))
+		if (IsSpecificPlayerInSphere(&v1->Position, 22, 1))
 			SetAIRaceWin();
 	}
 }

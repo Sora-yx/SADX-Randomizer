@@ -110,14 +110,13 @@ Trampoline Olever_t(0x5f1d20, 0x5f1d28, Olever_r);
 void Olever_r(ObjectMaster* obj) {
 
 	
-	ObjectMaster* P1 = GetCharacterObject(0);
-	int curAction = P1->Data1->Action;
+	int curAction = EntityData1Ptrs[0]->Action;
 
-	if (P1 != nullptr && P1->Data1->CharID == Characters_Big && curAction == 15 && CurrentLevel == LevelIDs_SkyDeck)
+	if (EntityData1Ptrs[0]->CharID == Characters_Big && curAction == 15 && CurrentLevel == LevelIDs_SkyDeck)
 	{
-		P1->Data1->Action = 120; //Forcing an action which doesn't exist will block the character, this will prevent Big to grab the lever.
-		P1->Data1->Action = 1;
-		P1->Data1->Status &= 0x100u; //remove the holding item status
+		EntityData1Ptrs[0]->Action = 120; //Forcing an action which doesn't exist will block the character, this will prevent Big to grab the lever.
+		EntityData1Ptrs[0]->Action = 1;
+		EntityData1Ptrs[0]->Status &= 0x100u; //remove the holding item status
 		obj->Data1->Action = 1;
 		obj->Data1->Status = 1600;
 		obj->Data1->field_A = 538;

@@ -65,9 +65,7 @@ void DisableController_R() {
 	if (CurrentCharacter > Characters_Tails)
 	{
 		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		{
 			return EnableController(0);
-		}
 	}
 	else
 	{
@@ -93,7 +91,6 @@ void AddRingIceCap() {
 
 
 void ICAct3Position() {
-	ObjectMaster* GetChara = GetCharacterObject(0);
 
 	if (CurrentCharacter > Characters_Tails)
 	{

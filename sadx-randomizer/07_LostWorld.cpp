@@ -20,14 +20,14 @@ void LW_Layout() {
 bool isPlayerInWaterSlide = false;
 
 void FixLWWaterSlide() {
-	ObjectMaster* P1 = GetCharacterObject(0);
+
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMissionCard == RingsCard)
 		isPlayerInWaterSlide = true;
 
-	if (CurrentCharacter == Characters_Sonic && P1->Data1->CharID == Characters_Sonic)
+	if (EntityData1Ptrs[0]->CharID == Characters_Sonic)
 		return ForcePlayerAction(0, 0x17);
-	else
-		return;
+
+	return;
 }
 
 void FixLWWaterSlide2() {

@@ -29,11 +29,11 @@ void FixRollerCoaster() {
 		obj->Data1->Action = 28; //force the character to leave the RC
 }
 
-void FixRCCharacterPosition() {
-	ObjectMaster* obj = GetCharacterObject(0);
+void FixRCCharacterAction() {
+	if (!CharObj2Ptrs[0])
+		return;
 
-	if (obj != nullptr)
-		ForcePlayerAction(0, 18);
+	ForcePlayerAction(0, 18);
 
 	PlaySound(0x4d, 0, 0, 0);
 	return;
@@ -48,7 +48,7 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<1>((int*)0x61cf99, 0x84); //Allow everyone to use Amy Twinkle Park transition part 2
 	WriteData<1>((int*)0x61dd72, 0x85); //Make Rollercoaster works when not Sonic.
 	
-	WriteCall((void*)0x61dd82, FixRCCharacterPosition); 
+	WriteCall((void*)0x61dd82, FixRCCharacterAction); 
 	WriteCall((void*)0x61dde8, FixRollerCoaster); //Fix leaving RC when not Sonic.
 
 	WriteCall((void*)0x422c92, TwinklePark_Layout); //TP random layout

@@ -2,19 +2,15 @@
 
 
 //Manage characters stuff, improve and fixes some stuff
-
 char SonicRand = 0;
 int TransfoCount = 0;
-bool BounceLoaded;
 
-extern bool CreditCheck;
+
 extern bool Upgrade;
 extern ObjectFuncPtr charfuncs[];
 
 extern bool AmySpeed;
 extern bool BigSpeed;
-extern int CurrentMissionCard;
-extern bool Race;
 extern bool isCriticalMode;
 
 
@@ -202,47 +198,44 @@ void SuperSonic_TransformationCheck() {
 
 	bool isLevelBanned = GetSSLevelBanned();
 
-	if (isLevelBanned || MetalSonicFlag == 1)
+	if (isLevelBanned || MetalSonicFlag == 1 || SonicRand != 2)
 	{
 		SonicRand = 0;
 		return;
 	}
 	else
 	{
-		if (SonicRand == 2 && !MetalSonicFlag)
-		{
-			static Uint8 last_action[8] = {};
-			if (!Rings)
-				Rings = 1;
+		static Uint8 last_action[8] = {};
+		if (!Rings)
+			Rings = 1;
 
-				EntityData1* data1 = EntityData1Ptrs[0];
-				CharObj2* data2 = CharObj2Ptrs[0];
+			EntityData1* data1 = EntityData1Ptrs[0];
+			CharObj2* data2 = CharObj2Ptrs[0];
 
-				bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-				bool action = !transformation ? (last_action[0] == 8 && data1->Action == 12) : (last_action[0] == 82 && data1->Action == 78);
+			bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
+			bool action = !transformation ? (last_action[0] == 8 && data1->Action == 12) : (last_action[0] == 82 && data1->Action == 78);
 
-				//Super Sonic Transformation (Credit: SonicFreak94).
+			//Super Sonic Transformation (Credit: SonicFreak94).
 
-				if (!transformation)
-				{
-					data1->Status &= ~Status_LightDash;
-					ForcePlayerAction(0, 46);
-					PlayVoice(3001);
-					data2->Upgrades |= Upgrades_SuperSonic;
-					PlayMusic(MusicIDs_ThemeOfSuperSonic);
+			if (!transformation)
+			{
+				data1->Status &= ~Status_LightDash;
+				ForcePlayerAction(0, 46);
+				PlayVoice(3001);
+				data2->Upgrades |= Upgrades_SuperSonic;
+				PlayMusic(MusicIDs_ThemeOfSuperSonic);
 
-					if (!TransfoCount++)
-						SuperSonicManager_Load();
-				}
+				if (!TransfoCount++)
+					SuperSonicManager_Load();
+			}
 
-				SuperSonicFlag = TransfoCount > 0;
-				return;
-		}
+			SuperSonicFlag = TransfoCount > 0;
+			return;
+		
 		
 	}
 }
 
-extern bool isAIActive;
 void fixCharacterSoundAfterReset() {
 
 	if (isAIActive)
@@ -320,9 +313,6 @@ void SetGammaTimer() {
 	TimeFrames = 0;
 	return;
 }
-
-
-
 
 
 void FixCharacterSFX() {

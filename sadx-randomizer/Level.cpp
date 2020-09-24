@@ -259,7 +259,7 @@ void LayoutFunctionInit() {
 }
 
 void LevelOnFrames() {
-	if (!CharObj2Ptrs[0] || !IsIngame())
+	if (!CharObj2Ptrs[0] || GameState != 15)
 		return;
 
 	AI_FixesOnFrames();
