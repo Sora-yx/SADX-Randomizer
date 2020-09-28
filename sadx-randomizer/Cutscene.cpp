@@ -350,6 +350,39 @@ void EV2_r(int player) { //Force Outro cutscene to Enable Control when they are 
 	return;
 }
 
+
+
+void preventCutscene() {
+
+	if (RNGStages) {
+		switch (CurrentLevel)
+		{
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
+				return;
+			break;
+		case LevelIDs_EmeraldCoast:
+			if (CurrentCharacter == Characters_Tails)
+				return;
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
+				return;
+			break;
+		}
+	}
+
+	return GetLevelCutscene();
+}
+
+int preventHotShelterCutscene(int a1) {
+	if (CurrentStageVersion == BigVersion && CurrentLevel == LevelIDs_HotShelter && isAIActive)
+		return -1;
+
+	return (int)(char)CutsceneFlagArray[a1];
+}
+
+
 void Init_RandomCutscene() {
 	if (RNGCutscene) {
 		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
@@ -359,4 +392,6 @@ void Init_RandomCutscene() {
 		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
 		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro			
 	}
+
+	WriteCall((void*)0x59a458, preventHotShelterCutscene);
 }

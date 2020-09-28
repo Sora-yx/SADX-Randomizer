@@ -665,6 +665,7 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 }
 
 CollisionInfo* oldcol = nullptr;
+CollisionInfo* oldcol2 = nullptr;
 
 extern ObjectMaster* CurrentCart;
 
@@ -691,7 +692,7 @@ void AISwitch() {
 	CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 
 
-	if (P1Action > 20)
+	if (P1Action > 21)
 		return;
 
 	short powerups = obj2->Powerups;
@@ -789,9 +790,9 @@ void AISwitch() {
 		AI->Data1->CharID = (char)AISwap;
 		AI->Data1->Action = 0;
 		AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-		if (!oldcol)
+		if (!oldcol2)
 		{
-			oldcol = AI->Data1->CollisionInfo;
+			oldcol2 = AI->Data1->CollisionInfo;
 			AI->Data1->CollisionInfo = nullptr;
 		}
 		else
@@ -804,6 +805,8 @@ void AISwitch() {
 		AI2->LoopDist = loopdist;
 		AI2->Speed = speed;
 		AI2->ObjectHeld = heldobj;
+
+		
 
 		SwapDelay = 0;
 	}

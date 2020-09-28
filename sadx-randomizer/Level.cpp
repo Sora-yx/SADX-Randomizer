@@ -91,7 +91,7 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		{
 			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
 			{
-				 EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
+				EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
 				EntityData1Ptrs[0]->Rotation.y = PlayerStartPosition[i].YRot;
 				return;
 			}
