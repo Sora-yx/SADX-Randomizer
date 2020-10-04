@@ -1,6 +1,106 @@
 #include "stdafx.h"
 
 
+void EmeraldRadar_R() {
+
+	if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
+	{
+		LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
+
+		if (CurrentCharacter != Characters_Knuckles)
+		{
+			KnuxCheck2 = 0; //fix Trial Mode Crash
+
+			switch (CurrentLevel)
+			{
+			case LevelIDs_SpeedHighway:
+				if (CurrentCharacter == Characters_Gamma && KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
+				}
+				break;
+			case LevelIDs_RedMountain:
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+				}
+				break;
+			case LevelIDs_LostWorld:
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+				}
+				break;
+			case LevelIDs_SkyDeck:
+				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35) //If diggable emeralds, rand again.
+				{
+					do {
+						Knuckles_SetRNG();
+					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
+				}
+				break;
+			}
+		}
+	}
+
+	return;
+}
+
+int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
+
+	if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
+		return Characters_Knuckles;
+
+	return 8; //Doesn't exist so the game won't load anything
+}
+
+//Set Emerald RNG when not Knuckles
+
+void SetRNGKnuckles() {
+
+	if (CurrentMission < Mission2_100Rings && CurrentStageVersion == KnucklesVersion && CurrentCharacter != Characters_Knuckles)
+	{
+		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
+		WriteData<1>((void*)0x416F06, 0x08);
+		WriteData<1>((void*)0x4153E1, 0x08);
+		WriteData<1>((void*)0x416f08, 0x74);
+		WriteData<1>((void*)0x4153e3, 0x74);
+	}
+
+	return;
+}
+
+//restore original values
+void RestoreRNGValueKnuckles() {
+	njReleaseTexture(&KNU_EFF_TEXLIST);
+	WriteData<1>((void*)0x416F06, 0x03);
+	WriteData<1>((void*)0x4153E1, 0x03);
+	WriteData<1>((void*)0x416f08, 0x75);
+	WriteData<1>((void*)0x4153e3, 0x75);
+
+	return;
+}
+
+Trampoline KnucklesHint_Main_t((int)KnucklesHint_Main, (int)KnucklesHint_Main + 0x7, KnucklesHintMain_r);
+
+void KnucklesHintMain_r(ObjectMaster* obj) {
+
+	if (CurrentMission < Mission2_100Rings)
+	{
+		ObjectFunc(origin, KnucklesHint_Main_t.Target());
+		origin(obj);
+	}
+
+	return;
+}
+
+
 void FixRadarSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)

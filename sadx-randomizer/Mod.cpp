@@ -161,7 +161,10 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 4), "Current Cutscene: %d", randomizedSets[levelCount].cutsceneID);
+		if (EntityData1Ptrs[1]) {
+			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);
+		}
+
 
 		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 			//PlayRandomCutscene(13);
