@@ -321,9 +321,6 @@ NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float 
 
 // Ninja stuff
 
-
-
-
 void SetupWorldMatrix()
 {
 	ProjectToWorldSpace();
