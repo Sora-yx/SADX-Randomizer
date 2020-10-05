@@ -22,6 +22,7 @@ bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
 bool isChaoHintEnabled = true;
 bool RNGCutscene = true;
+bool vsChat = false;
 
 //Character settings
 bool AmySpeed = true;
@@ -57,7 +58,6 @@ extern NJS_VECTOR pos;
 extern bool ChaoSpawnAllowed;
 extern bool isCutsceneAllowed;
 
-short chara = 0;
 
 extern "C" {
 
@@ -112,6 +112,8 @@ extern "C" {
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 		isChaoGameplayAllowed = config->getBool("RosterAI", "isChaoGameplayAllowed", false);
 
+		vsChat = config->getBool("SADXChat", "vsChat", false);
+
 		Viper = config->getBool("Difficulty", "Viper", true);
 		AI_Init(helperFunctions, config);
 		delete config;
@@ -152,17 +154,21 @@ extern "C" {
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();
+		InitVsChat(path);
 		
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
 	}
 
-	extern int levelCount;
+
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "vsChat: %d", vsChat);
+
 		if (EntityData1Ptrs[1]) {
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);
+		
 		}
 
 

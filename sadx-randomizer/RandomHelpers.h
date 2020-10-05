@@ -103,7 +103,6 @@ short randomSA2Mission(short stage_id);
 short getRandomAI(uint8_t char_id, short stage_id);
 short getRandomRaceAI(RandomizedEntry entry);
 void Randomizer_GetNewRNG();
-void SelectBarRace();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
 void AddCustomFlag();
@@ -127,8 +126,8 @@ extern bool isChaoGameplayAllowed;
 extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
-HelperFunctions extern help;
 extern bool isChaoHintEnabled;
+extern bool vsChat;
 
 
 
@@ -153,7 +152,6 @@ void getRandomCutscene(RandomizedEntry* entry);
 bool CheckAndPlayRandomCutscene();
 void set_event_flags(long cutsceneID);
 
-void SetInfoNextRandomStage(char stage);
 extern short CurrentMission;
 extern int8_t CurrentStageVersion;
 extern int CustomFlag;
@@ -314,12 +312,15 @@ void PlatformMM_Main(ObjectMaster* obj);
 extern bool MMPlatformEnabled;
 extern NJS_TEXLIST SA2_OBJ_TEXLIST;
 FunctionPointer(int, PerformWhistle, (EntityData1* a1, EntityData2* a2, CharObj2* a3, int flag), 0x442570);
+void InitVsChat(const char* path);
+FunctionPointer(void, GiveSpeedShoes, (EntityData1* chara), 0x441df0);
 bool isHeroesMod();
 bool isSA2Mod();
 
 void ForcePlayerToWhistle();
 void Hud_ShowSwapButton();
 void Hud_ShowActionButton();
+void RandomMadnessOnFrames();
 
 FunctionPointer(void, KillPlayer, (uint8_t ID), 0x440CD0);
 VoidFunc(PauseQuitDisplay, 0x415450);

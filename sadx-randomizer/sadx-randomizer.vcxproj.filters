@@ -183,6 +183,9 @@
     <ClCompile Include="subtitles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="twitchChat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\ActsSettings.h">

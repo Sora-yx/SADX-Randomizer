@@ -3,10 +3,12 @@ Thanks to [for helping with]:
 
 Raytwo [Code, optimization]
 
-Kell [Code, SA2 missions as well.]
+Kell [Code, SA2 missions and extra stuff]
 
-MainMemory [AI swap and different stuff]
+MainMemory [Code, AI swap and extra stuff]
 
-Prahaha [Credits stats and different stuff]
+Prahaha [Credits stats and extra stuff]
+
+SuperSonic16, CodenameGamma [Twitch vs Chat Code]
 
 and all the beta testers!

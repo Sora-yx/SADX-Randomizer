@@ -87,7 +87,19 @@
         <HelpText>[CHAO GAMEPLAY MOD REQUIRED] When enabled, your Chao will follow and protect you. (note: Rando will send you to the chao garden.)</HelpText>
 		 </Property>
 			    </Group>
-							<Group name="Difficulty" display="6. Difficulty">
+				
+				<Group name="SADXChat" display="6. SADX vs Twitch Chat">
+					<Property name="vsChat" display="Enable Twitch Chat Integration" type="bool" defaultvalue="False">
+				<HelpText>Allow Twitch chat to control your fate. (For more information, check the "README" file.)</HelpText>
+			</Property>
+						<Property name="AdminUsername" type="string">
+				<HelpText>Your username in chat, for administrative purposes.</HelpText>
+			</Property>
+			<Property name="ChannelName" display="Twitch Channel Name" type="string">
+				<HelpText>Enter the name of the Twitch channel to connect to.</HelpText>
+			</Property>
+			 </Group>
+							<Group name="Difficulty" display="7. Difficulty">
 		       <Property name="Viper" display="Lower Egg Viper Health" type="bool" defaultvalue="True">
         <HelpText>Reduces Egg Viper HP. (Note: This has no effect with Critical Mode enabled.)</HelpText>
 		 </Property>

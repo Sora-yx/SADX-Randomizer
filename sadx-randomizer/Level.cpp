@@ -265,4 +265,5 @@ void LevelOnFrames() {
 	character_settings_onFrames();
 	Hud_DisplayOnframe();
 	PlayRandomCutscene_OnFrames();
+	RandomMadnessOnFrames();
 }
