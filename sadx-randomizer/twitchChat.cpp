@@ -111,19 +111,109 @@ extern "C" {
 		if (!isVsChatPossible())
 			return;
 
-		for (int i = 0; i < 21; i++) {
-			if (SONIC_OBJECTS[i]->scl[0] == 0.5) //if character was small, let it go back to normal size
+		bool isCharacterSmall = false;
+
+		if (SONIC_OBJECTS[0]->scl[0] < 1 || MILES_OBJECTS[0]->scl[0] < 1 || KNUCKLES_OBJECTS[0]->scl[0] < 1 || AMY_OBJECTS[0]->scl[0] < 1 || E102_OBJECTS[0]->scl[0] < 1 || BIG_OBJECTS[0]->scl[0] < 1)
+			isCharacterSmall = true;
+
+
+		for (int i = 0; i < 3; i++) {
+
+			switch (EntityData1Ptrs[0]->CharID)
 			{
-				SONIC_OBJECTS[i]->scl[0] = 1;
-				SONIC_OBJECTS[i]->scl[1] = 1;
-				SONIC_OBJECTS[i]->scl[2] = 1;
+			case Characters_Sonic:
+			default:
+				if (isCharacterSmall) //bring normal size
+				{
+					SONIC_OBJECTS[0]->scl[i] = 1;
+					SONIC_OBJECTS[44]->scl[i] = 1;
+					SONIC_OBJECTS[67]->scl[i] = 1;
+					SONIC_OBJECTS[70]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 5.40000010;
+				}
+				else {
+					SONIC_OBJECTS[0]->scl[i] = 4;
+					SONIC_OBJECTS[44]->scl[i] = 4;
+					SONIC_OBJECTS[67]->scl[i] = 4;
+					SONIC_OBJECTS[68]->scl[i] = 4;
+					SONIC_OBJECTS[70]->scl[i] = 4; //Metal Sonic
+					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
+				}
+				break;
+			case Characters_Eggman:
+
+				break;
+			case Characters_Tails:
+				if (isCharacterSmall) //bring normal size
+				{
+					MILES_OBJECTS[0]->scl[i] = 1;
+					MILES_OBJECTS[1]->scl[i] = 1;
+					MILES_OBJECTS[3]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				}
+				else {
+					MILES_OBJECTS[0]->scl[i] = 4;
+					MILES_OBJECTS[1]->scl[i] = 4;
+					MILES_OBJECTS[3]->scl[i] = 4;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				}
+				break;
+			case Characters_Tikal:
+				break;
+			case Characters_Knuckles:
+				if (isCharacterSmall) //bring normal size
+				{
+					KNUCKLES_OBJECTS[0]->scl[i] = 1;
+					KNUCKLES_OBJECTS[1]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				}
+				else {
+					KNUCKLES_OBJECTS[0]->scl[i] = 4;
+					KNUCKLES_OBJECTS[1]->scl[i] = 4;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
+				}
+				break;
+			case Characters_Amy:
+				if (isCharacterSmall) { //bring normal size
+					AMY_OBJECTS[0]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 5.00000000;
+				}
+				else {
+					AMY_OBJECTS[0]->scl[i] = 4;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
+				}
+				
+				break;
+			case Characters_Gamma:
+				if (isCharacterSmall) //bring normal size
+				{
+					E102_OBJECTS[0]->scl[i] = 1;
+					E102_OBJECTS[1]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				}
+				else {
+					E102_OBJECTS[0]->scl[i] = 4;
+					E102_OBJECTS[1]->scl[i] = 4;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
+				}
+				break;
+			case Characters_Big:
+				if (isCharacterSmall) //bring normal size
+				{
+					BIG_OBJECTS[0]->scl[i] = 1;
+					BIG_OBJECTS[1]->scl[i] = 1;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				}
+				else {
+					BIG_OBJECTS[0]->scl[i] = 3;
+					BIG_OBJECTS[1]->scl[i] = 3;
+					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
+				}
+				break;
 			}
-			else {
-				SONIC_OBJECTS[i]->scl[0] = 4;
-				SONIC_OBJECTS[i]->scl[1] = 4;
-				SONIC_OBJECTS[i]->scl[2] = 4;
-			}
+
 		}
+		
 		return;
 	}
 
@@ -132,10 +222,24 @@ extern "C" {
 		if (!isVsChatPossible())
 			return;
 
-		for (int i = 0; i < 21; i++) {
-			SONIC_OBJECTS[i]->scl[0] = 0.5;
-			SONIC_OBJECTS[i]->scl[1] = 0.5;
-			SONIC_OBJECTS[i]->scl[2] = 0.5;
+		bool isCharacterBig = false;
+		if (SONIC_OBJECTS[0]->scl[0] > 1 || MILES_OBJECTS[0]->scl[0] > 1 || KNUCKLES_OBJECTS[0]->scl[0] > 1 || AMY_OBJECTS[0]->scl[0] > 1 || E102_OBJECTS[0]->scl[0] > 1 || BIG_OBJECTS[0]->scl[0] > 1)
+			isCharacterBig = true;
+
+		for (int i = 0; i < 3; i++) {
+			if (isCharacterBig) //bring normal size
+			{
+				SONIC_OBJECTS[0]->scl[i] = 1;
+				SONIC_OBJECTS[44]->scl[i] = 1;
+				SONIC_OBJECTS[67]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 5.40000010;
+			}
+			else {
+				SONIC_OBJECTS[0]->scl[i] = 0.5;
+				SONIC_OBJECTS[44]->scl[i] = 0.5;
+				SONIC_OBJECTS[67]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+			}
 		}
 		return;
 	}
@@ -193,6 +297,3 @@ void InitVsChat(const char* path)
 		SetCurrentDirectoryA(buf);
 	}
 }
-
-/*[DllImport("sadx-randomizer.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-public static extern bool isVsChatAllowed();*/
