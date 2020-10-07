@@ -20,6 +20,47 @@ void adjustObjectPosition(ObjectMaster* obj) {
 		data->Position = EntityData1Ptrs[0]->Position;
 }
 
+void RestoreCharacterSize() {
+
+	for (unsigned int i = 0; i < 3; i++) {
+
+		switch (EntityData1Ptrs[0]->CharID)
+		{
+			case Characters_Sonic:
+			default:
+				SONIC_OBJECTS[0]->scl[i] = 1;
+				SONIC_OBJECTS[44]->scl[i] = 1;
+				SONIC_OBJECTS[67]->scl[i] = 1;
+				SONIC_OBJECTS[70]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 5.40000010;
+				break;
+			case Characters_Tails:
+				MILES_OBJECTS[0]->scl[i] = 1;
+				MILES_OBJECTS[1]->scl[i] = 1;
+				MILES_OBJECTS[3]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				break;
+			case Characters_Knuckles:
+				KNUCKLES_OBJECTS[0]->scl[i] = 1;
+				KNUCKLES_OBJECTS[1]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				break;
+			case Characters_Amy:
+				AMY_OBJECTS[0]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 5.00000000;
+				break;
+			case Characters_Gamma:
+				E102_OBJECTS[0]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				break;
+			case Characters_Big:
+				BIG_OBJECTS[0]->scl[i] = 1;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				break;
+		}
+	}
+}
+
 extern "C" {
 
 	__declspec(dllexport) void SpawnSpring() {
@@ -111,107 +152,48 @@ extern "C" {
 		if (!isVsChatPossible())
 			return;
 
-		bool isCharacterSmall = false;
-
-		if (SONIC_OBJECTS[0]->scl[0] < 1 || MILES_OBJECTS[0]->scl[0] < 1 || KNUCKLES_OBJECTS[0]->scl[0] < 1 || AMY_OBJECTS[0]->scl[0] < 1 || E102_OBJECTS[0]->scl[0] < 1 || BIG_OBJECTS[0]->scl[0] < 1)
-			isCharacterSmall = true;
-
-
+		if (SONIC_OBJECTS[0]->scl[0] < 1 || MILES_OBJECTS[0]->scl[0] < 1 || KNUCKLES_OBJECTS[0]->scl[0] < 1 || AMY_OBJECTS[0]->scl[0] < 1 || E102_OBJECTS[0]->scl[0] < 1 || BIG_OBJECTS[0]->scl[0] < 1) {
+			RestoreCharacterSize();
+			return;
+		}
+		
 		for (int i = 0; i < 3; i++) {
 
 			switch (EntityData1Ptrs[0]->CharID)
 			{
 			case Characters_Sonic:
 			default:
-				if (isCharacterSmall) //bring normal size
-				{
-					SONIC_OBJECTS[0]->scl[i] = 1;
-					SONIC_OBJECTS[44]->scl[i] = 1;
-					SONIC_OBJECTS[67]->scl[i] = 1;
-					SONIC_OBJECTS[70]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 5.40000010;
-				}
-				else {
-					SONIC_OBJECTS[0]->scl[i] = 4;
-					SONIC_OBJECTS[44]->scl[i] = 4;
-					SONIC_OBJECTS[67]->scl[i] = 4;
-					SONIC_OBJECTS[68]->scl[i] = 4;
-					SONIC_OBJECTS[70]->scl[i] = 4; //Metal Sonic
-					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
-				}
-				break;
-			case Characters_Eggman:
-
+				SONIC_OBJECTS[0]->scl[i] = 4;
+				SONIC_OBJECTS[44]->scl[i] = 4;
+				SONIC_OBJECTS[67]->scl[i] = 4;
+				SONIC_OBJECTS[68]->scl[i] = 4;
+				SONIC_OBJECTS[70]->scl[i] = 4; //Metal Sonic
+				CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
 				break;
 			case Characters_Tails:
-				if (isCharacterSmall) //bring normal size
-				{
-					MILES_OBJECTS[0]->scl[i] = 1;
-					MILES_OBJECTS[1]->scl[i] = 1;
-					MILES_OBJECTS[3]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
-				}
-				else {
-					MILES_OBJECTS[0]->scl[i] = 4;
-					MILES_OBJECTS[1]->scl[i] = 4;
-					MILES_OBJECTS[3]->scl[i] = 4;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
-				}
-				break;
-			case Characters_Tikal:
+				MILES_OBJECTS[0]->scl[i] = 4;
+				MILES_OBJECTS[1]->scl[i] = 4;
+				MILES_OBJECTS[3]->scl[i] = 4;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
 				break;
 			case Characters_Knuckles:
-				if (isCharacterSmall) //bring normal size
-				{
-					KNUCKLES_OBJECTS[0]->scl[i] = 1;
-					KNUCKLES_OBJECTS[1]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
-				}
-				else {
-					KNUCKLES_OBJECTS[0]->scl[i] = 4;
-					KNUCKLES_OBJECTS[1]->scl[i] = 4;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
-				}
+				KNUCKLES_OBJECTS[0]->scl[i] = 4;
+				KNUCKLES_OBJECTS[1]->scl[i] = 4;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
 				break;
 			case Characters_Amy:
-				if (isCharacterSmall) { //bring normal size
-					AMY_OBJECTS[0]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 5.00000000;
-				}
-				else {
-					AMY_OBJECTS[0]->scl[i] = 4;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
-				}
-				
+				AMY_OBJECTS[0]->scl[i] = 4;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
 				break;
 			case Characters_Gamma:
-				if (isCharacterSmall) //bring normal size
-				{
-					E102_OBJECTS[0]->scl[i] = 1;
-					E102_OBJECTS[1]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
-				}
-				else {
-					E102_OBJECTS[0]->scl[i] = 4;
-					E102_OBJECTS[1]->scl[i] = 4;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
-				}
+				E102_OBJECTS[0]->scl[i] = 4;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
 				break;
 			case Characters_Big:
-				if (isCharacterSmall) //bring normal size
-				{
-					BIG_OBJECTS[0]->scl[i] = 1;
-					BIG_OBJECTS[1]->scl[i] = 1;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
-				}
-				else {
-					BIG_OBJECTS[0]->scl[i] = 3;
-					BIG_OBJECTS[1]->scl[i] = 3;
-					CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
-				}
+				BIG_OBJECTS[0]->scl[i] = 3;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 18.50000000;
 				break;
 			}
-
 		}
 		
 		return;
@@ -222,23 +204,46 @@ extern "C" {
 		if (!isVsChatPossible())
 			return;
 
-		bool isCharacterBig = false;
-		if (SONIC_OBJECTS[0]->scl[0] > 1 || MILES_OBJECTS[0]->scl[0] > 1 || KNUCKLES_OBJECTS[0]->scl[0] > 1 || AMY_OBJECTS[0]->scl[0] > 1 || E102_OBJECTS[0]->scl[0] > 1 || BIG_OBJECTS[0]->scl[0] > 1)
-			isCharacterBig = true;
+		if (SONIC_OBJECTS[0]->scl[0] > 1 || MILES_OBJECTS[0]->scl[0] > 1 || KNUCKLES_OBJECTS[0]->scl[0] > 1 || AMY_OBJECTS[0]->scl[0] > 1 || E102_OBJECTS[0]->scl[0] > 1 || BIG_OBJECTS[0]->scl[0] > 1) {
+			RestoreCharacterSize();
+			return;
+		}
 
 		for (int i = 0; i < 3; i++) {
-			if (isCharacterBig) //bring normal size
+
+			switch (EntityData1Ptrs[0]->CharID)
 			{
-				SONIC_OBJECTS[0]->scl[i] = 1;
-				SONIC_OBJECTS[44]->scl[i] = 1;
-				SONIC_OBJECTS[67]->scl[i] = 1;
-				CharObj2Ptrs[0]->PhysicsData.YOff = 5.40000010;
-			}
-			else {
+			case Characters_Sonic:
+			default:
 				SONIC_OBJECTS[0]->scl[i] = 0.5;
 				SONIC_OBJECTS[44]->scl[i] = 0.5;
 				SONIC_OBJECTS[67]->scl[i] = 0.5;
+				SONIC_OBJECTS[70]->scl[i] = 0.5; //Metal Sonic
 				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
+			case Characters_Tails:
+				MILES_OBJECTS[0]->scl[i] = 0.5;
+				MILES_OBJECTS[1]->scl[i] = 0.5;
+				MILES_OBJECTS[3]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
+			case Characters_Knuckles:
+				KNUCKLES_OBJECTS[0]->scl[i] = 0.5;
+				KNUCKLES_OBJECTS[1]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
+			case Characters_Amy:
+				AMY_OBJECTS[0]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
+			case Characters_Gamma:
+				E102_OBJECTS[0]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
+			case Characters_Big:
+				BIG_OBJECTS[0]->scl[i] = 0.5;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 3.0;
+				break;
 			}
 		}
 		return;
