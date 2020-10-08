@@ -98,7 +98,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[131] = {
+CutsceneLevelData CutsceneList[130] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -170,7 +170,6 @@ CutsceneLevelData CutsceneList[131] = {
 	{ 0x084, 34, 0, 3, 2 }, //Knuckles while in the Past
 	{ 0x085, 34, 0, 3, 2 }, //Tikal's Crisis
 	{ 0x086, 26, 1, 3, 2 }, //Knuckles returns from the Past
-	{ 0x087, 26, 4, 3, 3 }, //Knuckles and Chaos 2 face off
 	{ 0x089, 33, 0, 3, 3 }, //Knuckles goes after Sonic
 	{ 0x08A, 33, 0, 3, 4 }, //Knuckles vs. Sonic
 	{ 0x08B, 33, 0, 3, 4 }, //Chaos 4 emerges
@@ -292,7 +291,7 @@ void CutsceneManager(ObjectMaster* obj) {
 		}
 		break;
 	case 2:
-		if (ControlEnabled) {
+		if (!EV_MainThread_ptr) {
 			if (++data->Index == 40) {
 				CutsceneMode = 0;
 				LastStoryFlag = 0;
@@ -391,7 +390,7 @@ void Init_RandomCutscene() {
 
 	if (RNGStages) {
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
+		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
-
 	}
 }
