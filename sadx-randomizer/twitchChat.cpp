@@ -2,20 +2,12 @@
 
 int FastTimer = 0;
 
-bool isVsChatPossible() {
-	if (!CharObj2Ptrs[0] || !vsChat || GameState != 15 || CurrentLevel == LevelIDs_SkyChase1 || CurrentLevel == LevelIDs_SkyChase2 || CurrentLevel >= LevelIDs_SSGarden)
-		return false;
-
-	return true;
-}
 
 void adjustObjectPosition(ObjectMaster* obj) {
-	if (!isVsChatPossible())
-		return;
 
 	EntityData1* data = obj->Data1;
 	if (CharObj2Ptrs[0]->Speed.x >= 3 || CharObj2Ptrs[0]->Speed.z >= 3)
-		data->Position = UnitMatrix_GetPoint(&EntityData1Ptrs[0]->Position, &data->Rotation, 0.0f, 0.0f, 35.0f);
+		data->Position = UnitMatrix_GetPoint(&EntityData1Ptrs[0]->Position, &data->Rotation, 0.0f, 2.0f, 35.0f);
 	else
 		data->Position = EntityData1Ptrs[0]->Position;
 }
@@ -63,10 +55,14 @@ void RestoreCharacterSize() {
 
 extern "C" {
 
-	__declspec(dllexport) void SpawnSpring() {
-		if (!isVsChatPossible())
-			return;
+	__declspec(dllexport) signed int isVsChatPossible() {
+		if (EV_MainThread_ptr != nullptr || !CharObj2Ptrs[0] || !vsChat || GameState != 15 || CurrentLevel == LevelIDs_SkyChase1 || CurrentLevel == LevelIDs_SkyChase2 || CurrentLevel >= LevelIDs_SSGarden)
+			return false;
 
+		return true;
+	}
+
+	__declspec(dllexport) void SpawnSpring() {
 
 		ObjectMaster* spring = LoadObject((LoadObj)2, 2, SpringB_Main);
 		spring->Data1->Rotation = { rand() % 0x8000, rand() % 0x8000, rand() % 0x8000 };
@@ -77,10 +73,6 @@ extern "C" {
 	}
 
 	__declspec(dllexport) void SpawnSpeedPad() {
-		if (!isVsChatPossible())
-			return;
-
-
 		ObjectMaster* speed = LoadObject((LoadObj)3, 3, DashPanel_Main);
 		speed->Data1->Scale.x = rand() % 5 + 10 * 2.5;
 		speed->Data1->Rotation.y = rand() % 0x8000;
@@ -91,10 +83,6 @@ extern "C" {
 	}
 
 	__declspec(dllexport) void SpawnSpikeBall() {
-		if (!isVsChatPossible())
-			return;
-
-
 		ObjectMaster* spike = LoadObject((LoadObj)6, 3, SwingSpikeBall_Load);
 		spike->Data1->Rotation.y = rand() % 80 + 1000;
 		spike->Data1->Scale.x = rand() % 5 + 8 * 1.5;
@@ -105,38 +93,27 @@ extern "C" {
 	}
 
 	__declspec(dllexport) void StopPlayer() {
-		if (!isVsChatPossible())
-			return;
 		CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 		return;
 	}
 
 	__declspec(dllexport) void SuperJump() {
-		if (!isVsChatPossible())
-			return;
 		CharObj2Ptrs[0]->Speed.y = CharObj2Ptrs[0]->PhysicsData.VSpeedCap;
 		return;
 	}
 
 	__declspec(dllexport) void GottaGoFast() {
-		if (!isVsChatPossible())
-			return;
 		FastTimer = 120;
 		return;
 	}
 
 
 	__declspec(dllexport) void HurtPlayer() {
-		if (!isVsChatPossible())
-			return;
 		if (Rings > 0)
 			return HurtCharacter(0);
 	}
 
 	__declspec(dllexport) void GivePowerUP(int id) {
-		if (!isVsChatPossible())
-			return;
-
 		if (id < 0 || id > 8) //failsafe
 			id = rand() % 9;
 
@@ -149,9 +126,6 @@ extern "C" {
 	}
 
 	__declspec(dllexport) void GrowCharacter() {
-		if (!isVsChatPossible())
-			return;
-
 		if (SONIC_OBJECTS[0]->scl[0] < 1 || MILES_OBJECTS[0]->scl[0] < 1 || KNUCKLES_OBJECTS[0]->scl[0] < 1 || AMY_OBJECTS[0]->scl[0] < 1 || E102_OBJECTS[0]->scl[0] < 1 || BIG_OBJECTS[0]->scl[0] < 1) {
 			RestoreCharacterSize();
 			return;
@@ -174,7 +148,8 @@ extern "C" {
 				MILES_OBJECTS[0]->scl[i] = 4;
 				MILES_OBJECTS[1]->scl[i] = 4;
 				MILES_OBJECTS[3]->scl[i] = 4;
-				CharObj2Ptrs[0]->PhysicsData.YOff = 4.50000000;
+				CharObj2Ptrs[0]->PhysicsData.YOff = 10.50000000;
+				CharObj2Ptrs[0]->PhysicsData.CollisionSize += 10;
 				break;
 			case Characters_Knuckles:
 				KNUCKLES_OBJECTS[0]->scl[i] = 4;
@@ -201,9 +176,6 @@ extern "C" {
 
 
 	__declspec(dllexport) void ShrinkCharacter() {
-		if (!isVsChatPossible())
-			return;
-
 		if (SONIC_OBJECTS[0]->scl[0] > 1 || MILES_OBJECTS[0]->scl[0] > 1 || KNUCKLES_OBJECTS[0]->scl[0] > 1 || AMY_OBJECTS[0]->scl[0] > 1 || E102_OBJECTS[0]->scl[0] > 1 || BIG_OBJECTS[0]->scl[0] > 1) {
 			RestoreCharacterSize();
 			return;
@@ -251,9 +223,6 @@ extern "C" {
 
 
 	__declspec(dllexport) void SwapMusic(int id) {
-		if (!isVsChatPossible())
-			return;
-
 		if (id < 0 || id > 124)
 			id = rand() % 125; //failsafe
 
@@ -264,9 +233,6 @@ extern "C" {
 
 
 	__declspec(dllexport) void ManiaPlayVoice(int id) {
-		if (!isVsChatPossible())
-			return;
-
 		if (id < 0 || id > 2042) //failsafe
 			id = rand() % 2043;
 

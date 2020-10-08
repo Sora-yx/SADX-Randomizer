@@ -164,11 +164,12 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "vsChat: %d", vsChat);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CustomFlag);
+
+
 
 		if (EntityData1Ptrs[1]) {
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);
-		
 		}
 
 

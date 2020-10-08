@@ -352,17 +352,13 @@ void EV2_r(int player) { //Force Outro cutscene to Enable Control when they are 
 
 
 
-void preventCutscene() {
+void preventLevelCutscene() {
 
 	if (RNGStages) {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_RedMountain:
 			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
-				return;
-			break;
-		case LevelIDs_EmeraldCoast:
-			if (CurrentCharacter == Characters_Tails)
 				return;
 			break;
 		case LevelIDs_HotShelter:
@@ -393,5 +389,9 @@ void Init_RandomCutscene() {
 		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro			
 	}
 
-	WriteCall((void*)0x59a458, preventHotShelterCutscene);
+	if (RNGStages) {
+		WriteCall((void*)0x59a458, preventHotShelterCutscene);
+		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
+
+	}
 }

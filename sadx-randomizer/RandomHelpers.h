@@ -455,7 +455,7 @@ void Init_TreasureHunting();
 
 void AddRingSandHill();
 void fixTCCart();
-void preventCutscene();
+void preventLevelCutscene();
 void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
 void AISwapOnFrames();

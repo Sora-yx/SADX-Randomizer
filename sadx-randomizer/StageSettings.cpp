@@ -156,7 +156,7 @@ void Stages_Management() {
 	WriteJump(LoadLevelResults, LoadLevelResults_r); 
 
 	Set_Zero();
-	WriteCall((void*)0x413c9c, preventCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
+	WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 	Set_BackRing();
 	Race_Init();
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
