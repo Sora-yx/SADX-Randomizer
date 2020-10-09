@@ -68,8 +68,10 @@ void BackRingObj_Main(ObjectMaster* obj) {
 			play1->Data1->Status &= ~(Status_Attack | Status_LightDash | Status_Unknown3);
 			data->Action = BackRing_Setting;
 			PlayVoice_R(5001); //back ring hit SFX
-			play1->Data1->Action = 0;
 			DisableControl();
+			CharObj2Ptrs[0]->Speed.x = 1;
+			CharObj2Ptrs[0]->Speed.z = 1;
+			ResetGravity();
 			Delete_Cart();
 		}
 		

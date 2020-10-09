@@ -312,7 +312,6 @@ void PlayRandomCutscene_OnFrames() {
 			return;
 
 		if (isCutsceneAllowed) {
-
 			ObjectMaster* cutscene = LoadObject((LoadObj)2, 1, CutsceneManager);
 			isCutsceneAllowed = false;
 		}

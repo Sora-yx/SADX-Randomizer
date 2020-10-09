@@ -147,6 +147,7 @@ vector<RandomizerGenerator> DuplicateStages;
 RandomizerGenerator StructDupli;
 
 int TCCount = 0;
+int oldStageVersion = -1;
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
 	std::ofstream myfile("VectorDebug.txt", std::ios_base::app);
@@ -177,22 +178,24 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 			myfile << " Previous Version: " << curVersion;
 			return true;
 		}
-
 	}
-
-
-	if (TCCount < 2 && curLevel == LevelIDs_TwinkleCircuit)
-		TCCount++;
 
 	if (TCCount >= 2 && curLevel == LevelIDs_TwinkleCircuit)
 		return true;
+	else if (curLevel == LevelIDs_TwinkleCircuit)
+		TCCount++;
+
+	if (oldStageVersion == curVersion && (oldStageVersion == TailsVersion || oldStageVersion == KnucklesVersion) && DuplicateStages.size() < 40) {
+		myfile << "Same custom stage lol: " << curLevel;
+		return true;
+	}
 
 	myfile << "Added Level: " << curLevel;
 	myfile << " Added Version: " << curVersion;
 	StructDupli.levelAndActs = curLevelAndActID;
 	StructDupli.version = curVersion;
 	DuplicateStages.push_back(StructDupli);
-
+	oldStageVersion = curVersion;
 	myfile.close();
 	return false;
 }
@@ -293,7 +296,6 @@ void SetRandomStageAct(char stage, char act) {
 
 		return;
 	}
-	
 
 	return SetLevelAndAct(Uint8(stage), (Uint8)(act));
 }
@@ -429,13 +431,11 @@ void Randomizer_GetNewRNG() {
 	split = 0;
 	DuplicateStages.clear();
 
-	if (!StorySplits)
-	{
+	if (!StorySplits) {
 		split = 40;
 		Create_NewRNG();
 	}
-	else
-	{
+	else {
 		//Splits Initialization
 		Split_Init();
 	}

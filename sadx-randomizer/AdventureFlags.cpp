@@ -90,14 +90,17 @@ void CustomFlagCheck() {
 	if (GameMode == 9 || GameMode == 10)
 		return;
 
-
 	if (SelectedCharacter == 0) //Sonic
 	{
 		switch (CustomFlag)
 		{
 		case 1:
-			EventFlagArray[EventFlags_Sonic_Chaos0Clear] = true;
-			EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] = true;
+			CreditCheck = true;
+			EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
+			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
+			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
+			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
+			credits();
 			break;
 		case 2:
 			EventFlagArray[EventFlags_Sonic_EggHornetClear] = true;
@@ -146,9 +149,14 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 11)
-				CustomFlag = 9;
+			if (CustomFlag >= 11) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
+				EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
+				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
+				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
@@ -190,9 +198,14 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 7)
-				CustomFlag = 5;
+			if (CustomFlag >= 7) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Tails_SpeedHighwayClear] = true;
+				EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
+				EventFlagArray[EventFlags_TailsAdventureComplete] = true;
+				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
@@ -231,9 +244,13 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 7)
-				CustomFlag = 5;
+			if (CustomFlag >= 7) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
+				EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
+				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
@@ -260,9 +277,13 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 5)
-				CustomFlag = 3;
+			if (CustomFlag >= 5) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Amy_ZeroClear] = true;
+				EventFlagArray[EventFlags_AmyAdventureComplete] = true;
+				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
@@ -292,9 +313,13 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 6)
-				CustomFlag = 4;
+			if (CustomFlag >= 6) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
+				EventFlagArray[EventFlags_BigAdventureComplete] = true;
+				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
@@ -327,26 +352,22 @@ void CustomFlagCheck() {
 			credits();
 			break;
 		default:
-			CreditCheck = false;
-			if (CustomFlag >= 6)
-				CustomFlag = 4;
+			if (CustomFlag >= 6) {
+				CreditCheck = true;
+				EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
+				EventFlagArray[EventFlags_GammaAdventureComplete] = true;
+				EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
+				credits();
+			}
 			break;
 		}
 	}
 	if (SelectedCharacter == 6)
 	{
-		switch (CustomFlag)
-		{
-		case 1:
+		if (CustomFlag >= 1) {
 			CreditCheck = true;
 			EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
 			credits();
-			break;
-		default:
-			CreditCheck = false;
-			if (CustomFlag >= 2)
-				CustomFlag = 0;
-			break;
 		}
 	}
 

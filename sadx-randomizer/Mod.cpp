@@ -54,10 +54,6 @@ extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
 
-extern NJS_VECTOR pos;
-extern bool ChaoSpawnAllowed;
-extern bool isCutsceneAllowed;
-
 
 extern "C" {
 
@@ -166,7 +162,7 @@ extern "C" {
 
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CustomFlag);
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 
 		if (EntityData1Ptrs[1]) {
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);

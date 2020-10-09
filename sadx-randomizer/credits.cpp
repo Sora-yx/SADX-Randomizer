@@ -205,9 +205,9 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "GuyStreamsStuff" },
 	{ 3, -1, 0, 0, "Niczur" },
 	{ 3, -1, 0, 0, "Draxirch" },
-	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "" },
-	{ 3, -1, 0, 0, "" },
+	{ 3, -1, 0, 0, "TWITCH VS CHAT FEATURE" },
+	{ 3, -1, 0, 0, "SuperSonic16" },
+	{ 3, -1, 0, 0, "CodenameGamma" },
 	{ 2, -1, 0, 0, "GRAPHIC ENGINE PROGRAMMERS" },
 	{ 3, -1, 0, 0, "Yoshitaka Kawabata" },
 	{ 3, -1, 0, 0, "Shinya Matsunami" },
@@ -793,7 +793,7 @@ void FinalStatDisplay(ObjectMaster* obj) {
 
 			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12 + hzscale, 11), "RANDOMIZER 2.2 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12 + hzscale, 11), "RANDOMIZER 3.0 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);

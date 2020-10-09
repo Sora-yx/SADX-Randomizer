@@ -7,6 +7,9 @@ ObjectMaster* CurrentCart = nullptr;
 ModelInfo* MysticMelody;
 ModelInfo* MMPlatform;
 bool MMPlatformEnabled = false;
+Trampoline* dash_pannelCart_t = nullptr;
+
+
 
 void Load_Cart_R() {
 	ObjectMaster* play1 = GetCharacterObject(0);
@@ -355,8 +358,7 @@ void LoadTriggerObject() {
 
 void Load_ObjectsCommon() {
 
-	if (CurrentLevel > 0 && CurrentLevel < 15)
-	{
+	if (CurrentLevel > 0 && CurrentLevel < 15) {
 		MysticMelody = LoadObjectModel("MysticMelody");
 		MMPlatform = LoadObjectModel("MM-Platform");
 	}

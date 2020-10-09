@@ -19,7 +19,6 @@ void SpeedHighway_Layout() {
 		break;
 	}
 
-
 	return;
 }
 
