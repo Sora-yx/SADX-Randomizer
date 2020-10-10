@@ -267,6 +267,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 
 
 void DisplayTitleCard_r() {
+
 	if (!isRandoLevel()) {
 		return DisplayScreenTexture(0x4000000, HorizontalStretch * 320.00000000 + 32.00000000,
 			VerticalStretch * 240.00000000, 1.00000000);
@@ -288,8 +289,6 @@ void TitleCard_Init() {
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
-
-
 }
 
 
