@@ -231,17 +231,6 @@ void StageMissionImage_result() {
 	}
 }
 
-int DisplayTitleCard_r() {
-	if (GetLevelType == 0) {
-		return DisplayTitleCard();
-	}
-	else {
-		if (++TitleCardCounter > TitleCardDispTime)
-			return 1;
-	}
-
-	return 0;
-}
 
 
 int LoadTitleCardTexture_r(int minDispTime) {
@@ -251,6 +240,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 		FunctionPointer(int, original, (int minDispTime), LoadTitleCardTexture_t->Target());
 		return original(minDispTime);
 	}
+
 
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -272,20 +262,34 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	LoadPVM("RandomTitleCard", &TitleCardTex);
 	CurrentCardTexturePtr = &TitleCardTex;
 
-	
 	return 1;
 }
 
 
+void DisplayTitleCard_r() {
+	if (!isRandoLevel()) {
+		return DisplayScreenTexture(0x4000000, HorizontalStretch * 320.00000000 + 32.00000000,
+			VerticalStretch * 240.00000000, 1.00000000);
+	}
+
+	return DisplayScreenTexture(0x4000000 + CurrentCharacter, HorizontalStretch * 320.00000000 + 32.00000000, //Last number of "0x4000000" is the texture ID, the rest is used for the position/Flag
+		VerticalStretch * 240.00000000, 1.00000000);
+}
+
+
+
 void TitleCard_Init() {
 
-	if (RNGStages)
+	if (RNGStages) {
 		LoadTitleCardTexture_t = new Trampoline((int)LoadTitleCardTexture, (int)LoadTitleCardTexture + 0x5, LoadTitleCardTexture_r);
-		//WriteJump(j_LoadTitleCardTexture, LoadTitleCardTexture_r);
+		WriteCall((void*)0x47e276, DisplayTitleCard_r);
+	}
 
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
+
+
 }
 
 
