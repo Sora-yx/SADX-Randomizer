@@ -5,8 +5,6 @@
 
 void FinalEgg_Layout() {
 
-	CurrentMission = 3;
-
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 

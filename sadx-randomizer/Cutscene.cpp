@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 bool isCutsceneAllowed = false;
+Trampoline* LoadMRNPC_t = nullptr;
 
 
 int EventDayTime[8] = {
@@ -376,6 +377,16 @@ int preventHotShelterCutscene(int a1) {
 	return (int)(char)CutsceneFlagArray[a1];
 }
 
+void LoadMRNPC_r() {
+	if (RNGStages && RNGCutscene) {
+		if (isCutsceneAllowed || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
+			return;
+	}
+
+	auto original = reinterpret_cast<decltype(LoadMRNPC_r)*>(LoadMRNPC_t->Target());
+	original();
+}
+
 
 void Init_RandomCutscene() {
 	if (RNGCutscene) {
@@ -384,12 +395,13 @@ void Init_RandomCutscene() {
 		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
 		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
 		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
-		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro			
+		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
 	}
 
 	if (RNGStages) {
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
 		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
+		LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r);
 	}
 }
