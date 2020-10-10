@@ -95,12 +95,8 @@ void CustomFlagCheck() {
 		switch (CustomFlag)
 		{
 		case 1:
-			CreditCheck = true;
-			EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
-			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
-			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
-			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-			credits();
+			EventFlagArray[EventFlags_Sonic_Chaos0Clear] = true;
+			EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] = true;
 			break;
 		case 2:
 			EventFlagArray[EventFlags_Sonic_EggHornetClear] = true;
