@@ -21,6 +21,12 @@ extern NJS_TEXLIST GoalRingTextures;
 
 FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
 
+Trampoline* Capsule_Load_T = nullptr;
+Trampoline* Froggy_Load_T = nullptr;
+Trampoline* Froggy_Main_T = nullptr;
+Trampoline* Balloon_Load_T = nullptr;
+Trampoline* OTarget_T = nullptr;
+
 
 void BackRingObj_Display(ObjectMaster* obj) {
 	if (!MissedFrames) {
@@ -155,10 +161,11 @@ void BackRingObj_Main(ObjectMaster* obj) {
 }
 	
 
-Trampoline Capsule_Load_T(0x46b170, 0x46b177, CheckLoadCapsule_r);
-
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
+
+	if (CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 2 && CurrentStageVersion == GammaVersion && CurrentStageVersion < Mission2_100Rings)
+		return;
 
 	if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
 	{
@@ -171,18 +178,13 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 			return;
 			break;
 		case Characters_Big:
-			if (Race && CurrentLevel == LevelIDs_SkyDeck) //Force capsule here because this game is funny and let you win early if froggy spawns here for no reason.
-			{
-				ObjectFunc(origin, Capsule_Load_T.Target());
-				origin(a1);
-			}
-			else
+			if (CurrentLevel != LevelIDs_SkyDeck)
 			{
 				a1->Data1->Position.y += 20;
 				a1->MainSub = OFrog;
 				OFrog(a1);
+				return;
 			}
-			return;
 			break;
 		}
 	}
@@ -201,7 +203,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
 	//call original function (Capsule.)
 	if (CurrentStageVersion != KnucklesVersion && CurrentMission < Mission2_100Rings) {
-		ObjectFunc(origin, Capsule_Load_T.Target());
+		ObjectFunc(origin, Capsule_Load_T->Target());
 		origin(a1);
 	}
 }
@@ -276,7 +278,7 @@ void Check_Display_BackRing_Common(ObjectMaster* a1) {
 	a1->MainSub = BackRingObj_Main;
 }
 
-Trampoline Froggy_Load_T(0x4fa320, 0x4fa325, CheckLoadFroggy_r);
+
 //Check the current mission and replace Froggy with Back Ring.
 void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
@@ -284,26 +286,25 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
 	if (CurrentMission < Mission2_100Rings)
 	{
-		ObjectFunc(origin, Froggy_Load_T.Target());
+		ObjectFunc(origin, Froggy_Load_T->Target());
 		origin(a1);
 	}
 }
 
 
-Trampoline Froggy_Main_T((int)Froggy_Main, (int)Froggy_Main + 0x5, CheckLoadBig_Froggy_r);
 //Check the current mission and replace Froggy with Back Ring.
 void __cdecl CheckLoadBig_Froggy_r(ObjectMaster* a1) {
 
 	if (CurrentMission < Mission2_100Rings && GetCharacter0ID() == Characters_Big)
 	{
-		ObjectFunc(origin, Froggy_Load_T.Target());
+		ObjectFunc(origin, Froggy_Load_T->Target());
 		origin(a1);
 	}
 	else
 		return;
 }
 
-Trampoline Balloon_Load_T(0x7a21c0, 0x7a21c6, CheckLoadBalloon_r);
+
 //Check the current mission and replace Balloon with Back Ring.
 void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
@@ -311,7 +312,7 @@ void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
 
 	if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
 	{
-		ObjectFunc(origin, Balloon_Load_T.Target());
+		ObjectFunc(origin, Balloon_Load_T->Target());
 		origin(a1);
 	}
 }
@@ -472,7 +473,23 @@ void E104Enemy_Main_R(ObjectMaster* obj) {
 	origin(obj);
 }
 
+
+
+void OTarget_R(ObjectMaster* obj) { //Sonic Doll Final Egg
+
+	if (CurrentMission < Mission2_100Rings) {
+		ObjectFunc(origin, OTarget_T->Target());
+		origin(obj);
+	}
+}
+
 void Set_BackRing() {
+
+	Capsule_Load_T = new Trampoline((int)Capsule_Load, (int)Capsule_Load + 0x7, CheckLoadCapsule_r);
+	Froggy_Load_T = new Trampoline((int)OFrog, (int)OFrog + 0x5, CheckLoadFroggy_r);
+	Froggy_Main_T = new Trampoline((int)Froggy_Main, (int)Froggy_Main + 0x5, CheckLoadBig_Froggy_r);
+	Balloon_Load_T = new Trampoline((int)Balloon_Main, (int)Balloon_Main + 0x6, CheckLoadBalloon_r);
+	OTarget_T = new Trampoline((int)OTarget, (int)OTarget + 0x5, OTarget_R);
 
 	WriteData((ObjectFuncPtr*)0x4FA050, CheckLoadCapsule_r); // crashed plane in Emerald Coast
 	WriteData((ObjectFuncPtr*)0x4DF3F0, CheckLoadCapsule_r); // Chaos Emerald in Windy Valley

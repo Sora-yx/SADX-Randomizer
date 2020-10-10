@@ -428,9 +428,9 @@ DataArray(DeathZone*, HotShelterDeathZones, 0x17c45b8, 3);
 
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	ObjLists[LevelIDs_HotShelter * 8 + 0] = &HotShelter1ObjectList;
-	ObjLists[LevelIDs_HotShelter * 8 + 1] = &HotShelter2ObjectList;
-	ObjLists[LevelIDs_HotShelter * 8 + 2] = &HotShelter3ObjectList;
+	for (int i = 0; i < 2; i++)
+		ObjLists[LevelIDs_HotShelter * 8 + i] = &HotShelter1ObjectList;
+
 	TexLists_Obj[LevelIDs_HotShelter] = HotShelterObjectTextures;
 	HotShelterDeathZones[2] = HotShelter3DeathZones;
 }

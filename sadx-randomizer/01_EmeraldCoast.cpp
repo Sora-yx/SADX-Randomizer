@@ -166,8 +166,9 @@ PVMEntry EmeraldCoastObjectTextures[] = {
 
 void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	ObjLists[LevelIDs_EmeraldCoast * 8 + 0] = &EmeraldCoastObjectList;
-	ObjLists[LevelIDs_EmeraldCoast * 8 + 1] = &EmeraldCoastObjectList;
-	ObjLists[LevelIDs_EmeraldCoast * 8 + 2] = &EmeraldCoastObjectList;
+
+	for (int i = 0; i < 2; i++)
+		ObjLists[LevelIDs_EmeraldCoast * 8 + i] = &EmeraldCoastObjectList;
+
 	TexLists_Obj[LevelIDs_EmeraldCoast] = EmeraldCoastObjectTextures;
 }
