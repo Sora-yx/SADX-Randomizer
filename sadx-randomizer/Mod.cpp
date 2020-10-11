@@ -162,7 +162,7 @@ extern "C" {
 
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CustomFlag);
 
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 
 		if (EntityData1Ptrs[1]) {
 			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);
