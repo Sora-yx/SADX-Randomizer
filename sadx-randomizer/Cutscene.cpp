@@ -1,8 +1,9 @@
 #include "stdafx.h"
 
 bool isCutsceneAllowed = false;
+bool isGamePlayingCutscene = false;
 Trampoline* LoadMRNPC_t = nullptr;
-
+Trampoline* sub_413380_t = nullptr;
 
 int EventDayTime[8] = {
 	6, 11, 21, 57, 98, 157, 159, 249
@@ -272,9 +273,10 @@ void PlayRandomCutscene(long flag) {
 	return;
 	//dword_3B28114 = 0;
 }
+DataPointer(int, CutsceneID, 0x3B2C570);
 
 void CutsceneManager(ObjectMaster* obj) {
-	if (!CharObj2Ptrs[0])
+	if (!IsIngame())
 		return;
 
 	EntityData1* data = obj->Data1;
@@ -309,7 +311,7 @@ void PlayRandomCutscene_OnFrames() {
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
 
-		if (!CharObj2Ptrs[0] || !RNGCutscene || !isCutsceneAllowed)
+		if (!IsIngame() || !RNGCutscene || !isCutsceneAllowed || isGamePlayingCutscene)
 			return;
 
 		if (isCutsceneAllowed) {
@@ -387,21 +389,44 @@ void LoadMRNPC_r() {
 	original();
 }
 
+FunctionPointer(int, sub_413380, (__int16 a1), 0x413380);
+
+
+FunctionPointer(SceneSelectData*, CutsceneManagement, (int a1), 0x44eaf0);
+
+
+void preventIntroCutscene(long a1) { //prevent several cutscenes to be played at the same time lol
+
+	if (RNGStages && RNGCutscene)
+		return;
+
+	FunctionPointer(void, original, (long a1), sub_413380_t->Target());
+	return original(a1);
+}
+
 
 void Init_RandomCutscene() {
-	if (RNGCutscene) {
+	if (RNGCutscene && RNGStages) {
 		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
 		WriteCall((void*)0x685392, EV2_r); //Knux outro		
 		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
 		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
 		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
 		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
-	}
 
-	if (RNGStages) {
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
 		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
 		LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r);
+		//sub_413380_t = new Trampoline((int)sub_413380, (int)sub_413380 + 0x5, preventIntroCutscene);		
+		//sub_413380_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, preventIntroCutscene);
+
+
+		/*WriteCall((void*)0x630674, preventIntroCutscene);
+		WriteCall((void*)0x630064, preventIntroCutscene);		
+		WriteCall((void*)0x53142e, preventIntroCutscene2);	
+		WriteCall((void*)0x62fbe1, preventIntroCutscene);		
+		WriteCall((void*)0x530b67, preventIntroCutscene);		
+		WriteCall((void*)0x530d65, preventIntroCutscene);*/
 	}
 }

@@ -306,14 +306,14 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (isGameOver) //do not randomize stage / character
 	{
-		SetLevelAndAct(Uint8(stage), (Uint8)(act)); 
+		SetLevelAndAct(Uint8(stage), (Uint8)(act));
 		return;
 	}
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
 		//fix mission card display + load stage properly
-		if (RNGStages && (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) || SelectedCharacter == 2 && EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0) 
+		if (RNGStages && (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) || SelectedCharacter == 2 && EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0)
 		{
 			CurrentVideo = 0;
 			CutsceneMode = 0;
@@ -337,6 +337,7 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	return GoToNextLevel();
 }
+
 
 
 //Fix Trial Mode
@@ -505,8 +506,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 }
 
 void RandomizeStages_Hook() {
-	if (RNGStages == true)
-	{
+	if (RNGStages == true) {
 		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
 		WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 

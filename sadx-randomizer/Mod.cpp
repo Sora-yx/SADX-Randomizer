@@ -54,7 +54,7 @@ extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
 
-
+DataPointer(int, CutsceneID, 0x3B2C570);
 extern "C" {
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
@@ -160,7 +160,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CustomFlag);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CutsceneID);
 
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 

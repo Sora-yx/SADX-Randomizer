@@ -78,26 +78,33 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		ResetRestartData();
 		ResetGravity();
 		GameMode = GameModes_Adventure_ActionStg;
-		GetBackRing = false;
 	}
 
 	if (GameMode != 9 && GameMode != 10 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	int GetCP = CheckRestartLevel();
-	if (!GetCP || GetBackRing && CurrentMission >= 2) //don't change player position if a CP has been grabbed.
+	if (!GetCP) //don't change player position if a CP has been grabbed.
 	{
+		if (!GetBackRing && ActCopy == CurrentAct && CurrentLevel != LevelIDs_Casinopolis)
+			ResetTime();
+
+		GetBackRing = false;
+
+		if (CurrentCharacter == Characters_Gamma)
+			SetTime(6, 0);
+
 		for (uint8_t i = 0; i < LengthOfArray(PlayerStartPosition); i++)
 		{
 			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
 			{
+				
 				EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
 				EntityData1Ptrs[0]->Rotation.y = PlayerStartPosition[i].YRot;
 				return;
 			}
 		}
 	}
-
 
 	FunctionPointer(void, original, (EntityData1 * data), MovePlayerToStartPoint_t->Target());
 	return original(data);
@@ -255,7 +262,7 @@ void LayoutFunctionInit() {
 }
 
 void LevelOnFrames() {
-	if (!CharObj2Ptrs[0] || GameState != 15)
+	if (!CharObj2Ptrs[0])
 		return;
 
 	AI_FixesOnFrames();

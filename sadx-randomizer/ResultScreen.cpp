@@ -329,6 +329,7 @@ void RestorePuzzleBoxVanillaThing() {
 	return;
 }
 
+
 void ResetValueAndObjects() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
