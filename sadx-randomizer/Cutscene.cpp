@@ -100,7 +100,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[129] = {
+CutsceneLevelData CutsceneList[130] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -143,7 +143,7 @@ CutsceneLevelData CutsceneList[129] = {
 	{ 0x047, 33, 0, 2, 7 }, //The Tornado 2 takes flight
 	{ 0x04B, 29, 2, 2, 8 }, //Tails faces off with Gamma
 	{ 0x04C, 29, 2, 2, 9 }, //Tails departs the Egg Carrier with Amy
-	//{ 0x04D, 26, 3, 2, 10 }, //Eggman launches his missile attack
+	{ 0x04D, 26, 3, 2, 10 }, //Eggman launches his missile attack
 	{ 0x04E, 26, 3, 2, 10 }, //Tails follows Eggman after the missile
 	{ 0x050, 26, 1, 2, 11 }, //Tails takes on the Egg Walker
 	{ 0x051, 26, 1, 2, 11 }, //Egg Walker defeated, Station Square saved
