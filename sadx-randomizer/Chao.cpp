@@ -72,8 +72,10 @@ void Chao_LoadFiles() {
 
 void ChaoTPTriggerDelete(ObjectMaster* a1) {
 
-	CheckThingButThenDeleteObject(a1);
-	ChaoTP = nullptr;
+	if (a1 != nullptr) {
+		CheckThingButThenDeleteObject(a1);
+	}
+	
 }
 
 
@@ -88,6 +90,7 @@ void Chao_DeleteFiles() {
 	CurrentChao = nullptr;
 	ChaoObject = nullptr;
 	chaoHint = nullptr;
+	ChaoTP = nullptr;
 
 	//Release the chao textures
 	FreeChaoTexlists();

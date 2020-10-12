@@ -160,7 +160,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", CutsceneID);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", randomizedSets[levelCount].level);
 
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 

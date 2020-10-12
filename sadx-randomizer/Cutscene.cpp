@@ -100,7 +100,7 @@ void set_event_flags(long cutsceneID)
 
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[130] = {
+CutsceneLevelData CutsceneList[129] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -143,7 +143,7 @@ CutsceneLevelData CutsceneList[130] = {
 	{ 0x047, 33, 0, 2, 7 }, //The Tornado 2 takes flight
 	{ 0x04B, 29, 2, 2, 8 }, //Tails faces off with Gamma
 	{ 0x04C, 29, 2, 2, 9 }, //Tails departs the Egg Carrier with Amy
-	{ 0x04D, 26, 3, 2, 10 }, //Eggman launches his missile attack
+	//{ 0x04D, 26, 3, 2, 10 }, //Eggman launches his missile attack
 	{ 0x04E, 26, 3, 2, 10 }, //Tails follows Eggman after the missile
 	{ 0x050, 26, 1, 2, 11 }, //Tails takes on the Egg Walker
 	{ 0x051, 26, 1, 2, 11 }, //Egg Walker defeated, Station Square saved
@@ -276,7 +276,7 @@ void PlayRandomCutscene(long flag) {
 DataPointer(int, CutsceneID, 0x3B2C570);
 
 void CutsceneManager(ObjectMaster* obj) {
-	if (!IsIngame())
+	if (!IsIngame() || isGamePlayingCutscene)
 		return;
 
 	EntityData1* data = obj->Data1;
@@ -389,10 +389,7 @@ void LoadMRNPC_r() {
 	original();
 }
 
-FunctionPointer(int, sub_413380, (__int16 a1), 0x413380);
 
-
-FunctionPointer(SceneSelectData*, CutsceneManagement, (int a1), 0x44eaf0);
 
 
 void preventIntroCutscene(long a1) { //prevent several cutscenes to be played at the same time lol
@@ -400,33 +397,43 @@ void preventIntroCutscene(long a1) { //prevent several cutscenes to be played at
 	if (RNGStages && RNGCutscene)
 		return;
 
-	FunctionPointer(void, original, (long a1), sub_413380_t->Target());
-	return original(a1);
+	return StartCutscene(a1);
+}
+
+void preventIntroCutscene2(long a2) { //prevent several cutscenes to be played at the same time lol
+
+	if (RNGStages && RNGCutscene)
+		return;
+
+	return EventCutscene_Load2(a2);
 }
 
 
 void Init_RandomCutscene() {
-	if (RNGCutscene && RNGStages) {
-		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
-		WriteCall((void*)0x685392, EV2_r); //Knux outro		
-		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
-		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
-		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
-		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
+	if (RNGStages) {
+
 
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
 		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
-		LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r);
-		//sub_413380_t = new Trampoline((int)sub_413380, (int)sub_413380 + 0x5, preventIntroCutscene);		
-		//sub_413380_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, preventIntroCutscene);
+		
 
+		if (RNGCutscene) {
+			LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r);
 
-		/*WriteCall((void*)0x630674, preventIntroCutscene);
-		WriteCall((void*)0x630064, preventIntroCutscene);		
-		WriteCall((void*)0x53142e, preventIntroCutscene2);	
-		WriteCall((void*)0x62fbe1, preventIntroCutscene);		
-		WriteCall((void*)0x530b67, preventIntroCutscene);		
-		WriteCall((void*)0x530d65, preventIntroCutscene);*/
+			WriteCall((void*)0x630674, preventIntroCutscene);
+			WriteCall((void*)0x630064, preventIntroCutscene);
+			WriteCall((void*)0x53142e, preventIntroCutscene2);
+			WriteCall((void*)0x62fbe1, preventIntroCutscene);
+			WriteCall((void*)0x530b67, preventIntroCutscene);
+			WriteCall((void*)0x530d65, preventIntroCutscene);
+
+			WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
+			WriteCall((void*)0x685392, EV2_r); //Knux outro		
+			WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
+			WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
+			WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
+			WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
+		}
 	}
 }

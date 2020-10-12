@@ -374,9 +374,9 @@ void Delete_ObjectsCommon() {
 	if (CurrentLevel > 0 && CurrentLevel < 15)
 	{
 		if (MysticMelody != nullptr)
-			FreeMDL(MysticMelody);
+			MysticMelody = nullptr;
 
 		if (MMPlatform != nullptr)
-			FreeMDL(MMPlatform);
+			MMPlatform = nullptr;
 	}
 }

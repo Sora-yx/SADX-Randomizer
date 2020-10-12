@@ -350,6 +350,9 @@ SetLevelPosition PlayerEndPosition[50]{ //Used for M2 and Bosses
 
 void MissionResultCheck() {
 
+	if (CurrentLevel < LevelIDs_EmeraldCoast || CurrentLevel > LevelIDs_HotShelter)
+		return;
+
 	if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
 	{
 		int curAction = EntityData1Ptrs[0]->Action;

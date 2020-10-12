@@ -78,8 +78,10 @@ void DeleteCustomFlag() {
 
 
 void AddCustomFlag() {
+	
+	if (!IsAdventureComplete(SelectedCharacter))
+		CustomFlag++;
 
-	CustomFlag++;
 	return StartLevelCutscene(1);
 }
 
@@ -137,15 +139,8 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Sonic_FinalEggOpen] = true;
 			break;
 		case 10:
-			CreditCheck = true;
-			EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
-			EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
-			EventFlagArray[EventFlags_SonicAdventureComplete] = true;
-			EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-			credits();
-			break;
 		default:
-			if (CustomFlag >= 11) {
+			if (CustomFlag >= 10) {
 				CreditCheck = true;
 				EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
 				EventFlagArray[EventFlags_Sonic_EggViperClear] = true;

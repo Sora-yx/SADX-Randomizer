@@ -205,7 +205,7 @@ CreditsEntry CreditsText_list[] = {
 	{ 3, -1, 0, 0, "GuyStreamsStuff" },
 	{ 3, -1, 0, 0, "Niczur" },
 	{ 3, -1, 0, 0, "Draxirch" },
-	{ 3, -1, 0, 0, "TWITCH VS CHAT FEATURE" },
+	{ 2, -1, 0, 0, "TWITCH VS CHAT FEATURE" },
 	{ 3, -1, 0, 0, "SuperSonic16" },
 	{ 3, -1, 0, 0, "CodenameGamma" },
 	{ 2, -1, 0, 0, "GRAPHIC ENGINE PROGRAMMERS" },

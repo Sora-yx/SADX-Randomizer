@@ -246,7 +246,7 @@ void CheckAndDisplayWarningLayoutError() {
 
 void __cdecl RunLevelDestructor_r(int heap) {
 	if (heap == 0)
-		ResetValueAndObjects(); //Unload rando stuff
+		ResetValueAndObjects(); //Unload rando stuff*/
 
 	FunctionPointer(void, original, (int heap), RunLevelDestructor_t->Target());
 	return original(heap);

@@ -22,7 +22,6 @@ void DisableTimeStuff() {
 	if (GameMode == GameModes_Adventure_ActionStg)
 		GameMode = GameModes_Adventure_Field;
 
-
 	ringsPB += Rings; //total Rings credit stat
 
 	if (!Race && CurrentCharacter == Characters_Tails)
