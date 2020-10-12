@@ -2,9 +2,19 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
+void SHAddColLandTable() {
+	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 && CurrentStageVersion == SonicVersion) {
+		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
+			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
+				CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
+			}
+		}
+	}
+	return;
+}
+
 void SpeedHighway_Layout() {
 
-	//CurrentStageVersion = TailsVersion;
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
 

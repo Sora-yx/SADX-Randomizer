@@ -277,39 +277,31 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 2:
 			{
-		
-					if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || curAction == 2  || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
-						Hud_ShowActionButton();
+				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || curAction == 2  || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
+					Hud_ShowActionButton();
 
-						if (ControllerPointers[0]->PressedButtons & Buttons_Y)
-						{
-							DisableControl();
-							EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-							CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
+					if (ControllerPointers[0]->PressedButtons & Buttons_Y)
+					{
+						DisableControl();
+						EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+						CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 
-							ForcePlayerToWhistle();
+						ForcePlayerToWhistle();
 
-							PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
-							data->Action = 3;
-						}
+						PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
+						data->Action = 3;
 					}
+				}
 			}
 			break;
 			case 3:
 				if (++obj->Data1->Index == 120) {
 					
-					if (obj->Data1->Scale.x == 3 && CurrentLevel == LevelIDs_EmeraldCoast && CurrentAct == 2)
-					{
-						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
-						PositionPlayer(0, 6153.64, 760.9485, 2379.39);
+					EnableControl();
+					if (CurrentMission == Mission3_LostChao)
+						data->Action = 4;
+					else
 						data->Action = 6;
-						return;
-					}
-						EnableControl();
-						if (CurrentMission == Mission3_LostChao)
-							data->Action = 4;
-						else
-							data->Action = 6;
 				}
 			break;
 			case 4:
@@ -320,6 +312,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 					
 					if (++obj->Data1->InvulnerableTime == 5)
 					{
+						SHAddColLandTable();
 						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
 						data->Action = 5;
 					}

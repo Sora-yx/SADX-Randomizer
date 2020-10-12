@@ -358,9 +358,10 @@ void LoadChaoTPTrigger() {
 	}
 }
 
-SetLevelPosition PlayerAroundChaoPosition[9] {
+SetLevelPosition PlayerAroundChaoPosition[10] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 3653.31, -127.07, 2924.58, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
@@ -403,7 +404,7 @@ SetLevelPosition ChaoLevelPosition[25] {
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, 520, 1330, 1630, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
 	{ AmyVersion, LevelAndActIDs_TwinklePark3, -41.43054199, 50, 290.7596436, 0x0 }, //Amy Version
-	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -386.135, 2930.18, 4.479076996E-43 - 0x4000},
 	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },

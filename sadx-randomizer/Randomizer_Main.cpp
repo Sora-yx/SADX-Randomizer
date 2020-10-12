@@ -367,6 +367,7 @@ void GameOver_R() {
 void DisplayRandoInformation() {
 
 		SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
+		SetDebugFontColor(0x8e8e8e);
 		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 	
 		if (ban != 0)
