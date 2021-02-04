@@ -18,7 +18,6 @@ int EventEveningTime[4] = {
 };
 
 
-
 //Fix Event flag for cutscenes 
 
 void set_event_flags(long cutsceneID)
@@ -388,7 +387,6 @@ void LoadMRNPC_r() {
 	auto original = reinterpret_cast<decltype(LoadMRNPC_r)*>(LoadMRNPC_t->Target());
 	original();
 }
-
 
 
 

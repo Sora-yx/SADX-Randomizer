@@ -9,7 +9,6 @@ ObjectMaster* chaoHint;
 
 short ChaoCryDelay = 0;
 static bool pvploaded = false;
-extern int chaoPB;
 bool ChaoSpawn = false;
 
 ObjectMaster* ChaoTP = nullptr;

@@ -3,7 +3,7 @@
 
 char AIRace = -1;
 bool Race = false;
-extern ObjectFuncPtr charfuncs[];
+
 int AIRaceArray[6] = { Characters_Sonic, Characters_Eggman, Characters_Tails, Characters_Tikal, Characters_Amy, Characters_Gamma }; //Tails Race AI
 int AIRaceIconArray[8] = { 1, 11, 2, 12, 15, 13, 14, 16 };
 

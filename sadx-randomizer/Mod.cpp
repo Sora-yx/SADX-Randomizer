@@ -16,13 +16,11 @@ bool RNGMusic = true;
 bool SA2M2 = true;
 bool SA2M3 = true;
 bool Viper = false;
-extern bool CreditCheck;
 bool isCriticalMode = false;
 bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
 bool isChaoHintEnabled = true;
 bool RNGCutscene = true;
-bool vsChat = false;
 
 //Character settings
 bool AmySpeed = true;
@@ -50,7 +48,6 @@ bool isAIAllowed = true;
 int StatsTimer = 4000;
 bool SA2Voices = false;
 
-extern CollisionInfo* oldcol;
 int SeedCopy = 0;
 time_t t;
 
@@ -108,8 +105,6 @@ extern "C" {
 		isAIAllowed = config->getBool("RosterAI", "isAIAllowed", true);
 		isChaoGameplayAllowed = config->getBool("RosterAI", "isChaoGameplayAllowed", false);
 
-		vsChat = config->getBool("SADXChat", "vsChat", false);
-
 		Viper = config->getBool("Difficulty", "Viper", true);
 		AI_Init(helperFunctions, config);
 		delete config;
@@ -150,7 +145,6 @@ extern "C" {
 		Characters_Management();
 		Stages_Management();
 		RandomizeStages_Hook();
-		InitVsChat(path);
 		
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();

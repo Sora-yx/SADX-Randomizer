@@ -363,3 +363,4 @@ FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
 FunctionPointer(void, EV_InitPlayer, (int player), 0x431780);
 VoidFunc(EventCutscene_Exec2, 0x431430);
 void Init_RandomCutscene();
+extern bool isCutsceneAllowed;

@@ -9,8 +9,6 @@ ModelInfo* MMPlatform;
 bool MMPlatformEnabled = false;
 Trampoline* dash_pannelCart_t = nullptr;
 
-
-
 void Load_Cart_R() {
 	ObjectMaster* play1 = GetCharacterObject(0);
 

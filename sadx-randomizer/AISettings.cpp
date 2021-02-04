@@ -3,7 +3,6 @@
 
 bool isAIActive = false;
 uint8_t SwapDelay = 150;
-extern bool CreditCheck;
 int FlagAI = 0;
 int AISwap = 0;
 int CharaSwap = 0;

@@ -78,7 +78,6 @@ void SetRNGKnuckles() {
 
 //restore original values
 void RestoreRNGValueKnuckles() {
-	njReleaseTexture(&KNU_EFF_TEXLIST);
 	WriteData<1>((void*)0x416F06, 0x03);
 	WriteData<1>((void*)0x4153E1, 0x03);
 	WriteData<1>((void*)0x416f08, 0x75);

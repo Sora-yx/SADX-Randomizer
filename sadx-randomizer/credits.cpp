@@ -7,7 +7,6 @@ using namespace std;
 NJS_TEXNAME Rank_Texnames[4];
 NJS_TEXLIST Rank_Texlist = { arrayptrandlength(Rank_Texnames) };
 
-
 //Credits stats
 int RageQuit = 0;
 int JumpPB = 0;
@@ -21,17 +20,8 @@ int TotalDeathsPB = 0;
 int TotalHurtsPB = 0;
 int AISwapCount = 0;
 
-extern int CustomFlag;
-extern bool CreditCheck;
-extern int CurrentMissionCard;
+
 //credits stats
-
-extern int TotalDeathsPB;
-extern int TotalHurtsPB;
-extern int AISwapCount;
-
-extern int SeedCopy;
-extern int StatsTimer;
 int ResultScore = 0;
 bool RandCongratsDone = false;
 

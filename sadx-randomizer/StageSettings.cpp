@@ -3,7 +3,6 @@
 
 bool isZeroActive;
 
-
 void LoadZero() {
 	if (CurrentLevel == LevelIDs_HotShelter)
 		PressedSwitches_Reset();

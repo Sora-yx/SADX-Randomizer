@@ -4,28 +4,8 @@
 //Manage characters stuff, improve and fixes some stuff
 char SonicRand = 0;
 int TransfoCount = 0;
-
-
 extern bool Upgrade;
-extern ObjectFuncPtr charfuncs[];
 
-extern bool AmySpeed;
-extern bool BigSpeed;
-extern bool isCriticalMode;
-
-
-void character_settings_onFrames() {
-	if (CurrentLevel != 0)
-	{
-		if (AmySpeed)
-			PhysicsArray[Characters_Amy].MaxAccel = 5;
-
-		if (BigSpeed)
-			PhysicsArray[Characters_Big].MaxAccel = 5;
-	}
-
-	return;
-}
 
 int SetAmyWinPose() {
 	switch (CurrentCharacter)
@@ -397,8 +377,6 @@ int GetCharacter1ID() //AI ID
 }
 
 
-
-
 void Characters_Management() {
 
 
@@ -411,7 +389,13 @@ void Characters_Management() {
 	WriteCall((void*)0x4E9686, GetCharacter0ID); // fix ice cap snowboard 2
 	WriteCall((void*)0x597B1C, GetCharacter0ID); // fix sand hill snowboard
 
+	if (AmySpeed) {
+		PhysicsArray[Characters_Amy].MaxAccel = 5;
+	}
 
+	if (BigSpeed) {
+		PhysicsArray[Characters_Big].MaxAccel = 5;
+	}
 
 	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
 	WriteData<5>((void*)0x478937, 0x90);

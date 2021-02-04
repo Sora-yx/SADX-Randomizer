@@ -127,9 +127,9 @@ extern uint8_t SwapDelay;
 extern bool ChaoSpawn;
 extern bool isPlayerInWaterSlide;
 extern bool isChaoHintEnabled;
-extern bool vsChat;
-
-
+extern bool AmySpeed;
+extern bool BigSpeed;
+extern bool isCriticalMode;
 
 
 uint8_t getRandomCharacter();
@@ -158,10 +158,9 @@ extern int CustomFlag;
 extern bool Race;
 extern char AIRace;
 extern int levelCount;
-extern bool isCriticalMode;
 
 extern char GetCustomLayout;
-
+extern ObjectFuncPtr charfuncs[];
 
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
@@ -312,7 +311,6 @@ void PlatformMM_Main(ObjectMaster* obj);
 extern bool MMPlatformEnabled;
 extern NJS_TEXLIST SA2_OBJ_TEXLIST;
 FunctionPointer(int, PerformWhistle, (EntityData1* a1, EntityData2* a2, CharObj2* a3, int flag), 0x442570);
-void InitVsChat(const char* path);
 FunctionPointer(void, GiveSpeedShoes, (EntityData1* chara), 0x441df0);
 bool isHeroesMod();
 bool isSA2Mod();
@@ -320,7 +318,6 @@ bool isSA2Mod();
 void ForcePlayerToWhistle();
 void Hud_ShowSwapButton();
 void Hud_ShowActionButton();
-void RandomMadnessOnFrames();
 
 FunctionPointer(void, KillPlayer, (uint8_t ID), 0x440CD0);
 VoidFunc(PauseQuitDisplay, 0x415450);

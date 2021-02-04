@@ -3,9 +3,8 @@
 
 extern bool RandCongratsDone;
 extern ObjectMaster* CurAI;
-extern bool isCutsceneAllowed;
-extern ObjectMaster* ChaoTP;
 
+extern ObjectMaster* ChaoTP;
 
 
 //While load LevelResult: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
@@ -344,8 +343,6 @@ void ResetValueAndObjects() {
 	RestoreRNGValueKnuckles();
 	RestorePuzzleBoxVanillaThing();
 	Delete_ObjectsCommon();
-	njReleaseTexture(&SUPERSONIC_TEXLIST);
-	njReleaseTexture(&EGGROB_TEXLIST);
 
 
 	if (CurrentLevel != 0)
@@ -392,8 +389,6 @@ void ResetStatsValues() {
 	if (CurrentLevel != 0)
 		Delete_Cart();
 
-	njReleaseTexture(&SUPERSONIC_TEXLIST);
-	njReleaseTexture(&EGGROB_TEXLIST);
 	RestoreRNGValueKnuckles();
 }
 

@@ -262,7 +262,6 @@ void SetInfoNextRandomStage(char Stage, char Act) {
 	levelCount++;
 }
 
-extern bool isCutsceneAllowed;
 void SetRandomStageAct(char stage, char act) {
 
 	if (isGameOver)

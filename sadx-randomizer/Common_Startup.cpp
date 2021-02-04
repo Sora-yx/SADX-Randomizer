@@ -36,7 +36,6 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 }
 
 
-
 void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& helperFunctions) {
 
 	helperFunctions.ReplaceFile("system\\AVA_GTITLE0_E.PVM", "system\\textures\\AVA_GTITLE0_E.PVM"); //replace title screen

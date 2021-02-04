@@ -269,8 +269,6 @@ void LevelOnFrames() {
 	AISwapOnFrames();
 	MissionResultCheck();
 	Chao_OnFrame();
-	character_settings_onFrames();
 	Hud_DisplayOnframe();
 	PlayRandomCutscene_OnFrames();
-	RandomMadnessOnFrames();
 }
