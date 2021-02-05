@@ -6,44 +6,35 @@
 #define AddVoices(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 #define AddVoices2(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_jp\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 extern bool SA2Voices;
+int voiceCount;
 
 static Trampoline* PlayVoice_t = nullptr;
+extern int getCurVoice;
 
 //randomize voices
 
-extern int VoiceID;
-
-static void __cdecl PlayVoice_r(int a1)
+static void __cdecl PlayRandomVoice(int a1)
 {
+
 	a1 = rand() % 2043;
-	VoiceID = a1;
-	auto original = reinterpret_cast<decltype(PlayVoice_r)*>(PlayVoice_t->Target());
+	getCurVoice = a1;
+
+	auto original = reinterpret_cast<decltype(PlayRandomVoice)*>(PlayVoice_t->Target());
 	original(a1);
+	voiceCount++;
 }
 
 
-void PlayRandomVoice(int a1) {
-	if (VoicesEnabled != 0) {
-		if (SA2Voices)
-		{
-			short PickGameVoice = rand() % 2;
-			if (PickGameVoice)
-				a1 = rand() % 2727 + 7001;
-			else
-				a1 = rand() % 2043;
-		}
-		else
-			a1 = rand() % 2043;
 
-		CurrentVoiceNumber = a1;
-		VoiceID = a1;
-	}
+short getRandomVoices() {
 
-	return;
+	short cur_voice = rand() % 2043;
+	return cur_voice;
 }
 
 
-void PlayVoice_R(int a1) {
+
+void PlayVoice_Original(int a1) {
 
 	if (VoicesEnabled != 0) {
 		CurrentVoiceNumber = a1;
@@ -151,11 +142,11 @@ void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperF
 	AddVoices2("5022", "bighehe");
 	AddVoices2("5023", "gammagetitem");
 
-	WriteCall((void*)0x45be57, PlayVoice_R);
+	WriteCall((void*)0x45be57, PlayVoice_Original);
 
 	if (RNGVoices)
 	{
-		PlayVoice_t = new Trampoline((int)PlayVoice, (int)PlayVoice + 0x5, PlayVoice_r);
+		PlayVoice_t = new Trampoline((int)PlayVoice, (int)PlayVoice + 0x5, PlayRandomVoice);
 		SA2VoicesCheck();
 	}
 

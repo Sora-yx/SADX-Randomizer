@@ -1,5 +1,5 @@
 SADX Mod Randomizer
-V2.2.0
+V3.0
 ___________________________________________________________
 
 Welcome to SADX Randomizer.
@@ -8,8 +8,8 @@ https://discord.gg/BBrEg5K
 
 Thank you for playing SADX Rando! It's been a while since the last update! First of all, the mod has been reworked almost from scratch, with much better implementations of how the files, textures, levels and RNG are loaded. 
 Also, the code got a massive cleanup and fixes, which resulted in a reduction in the size of the mod.
-Rando has reached a point that I couldn't even dreamed of. Believe it or not, but this took a lot of hardwork to make it how it is atm. 
-I am quite satisfied with the current rendering of the mod, so updates are gonna be slower for now, since there isn't that much stuff that I would like to add anymore. 
+Rando has reached a point that I couldn't even dreamed of. Believe it or not, but this took a lot of hardwork to make it how it is at the moment.
+I am quite satisfied with the current rendering of the mod, so updates are gonna continue to be slower for now, since there isn't that much stuff that I would like to add anymore. 
 I do appreciate your support regardless and I hope you still have fun with the mod. I'm also working on other projects for SADX, including SA2 Conversion mod, for more information, you can follow me on Twitter: https://twitter.com/Sora_yxow
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -22,7 +22,7 @@ Q: Is Dreamcast Conversion Mod compatible with Randomizer?
 A: DC Mod is now fully compatible, as long as the Randomizer mod is loaded AFTER DC mod. Which means rando should be AT THE VERY END of your mod list. This is really important to avoid objects layout issue, so please, double check this.
 
 Q: Is it possible to get a character/stage combination impossible to beat?
-A: No, rando has been programmed so you cannot get impossible combination. Currently on this patch, any character can beat every action stage, including variation, this has been tested several times.
+A: No, rando has been programmed so you cannot get impossible combination. Any character can beat every action stage, including variation, this has been tested several times.
 
 Q: How does SA2 mission work?
 A: Depending on the actual stage, you can randomly get M2 (Collect 100 rings), M3 (Find Lost Chao) or M1. (Beat the stage). Keep in mind that you have more chance to get M1. Also, you can check the current mission if you open the pause menu.
@@ -36,13 +36,13 @@ A: https://youtu.be/LGBWX3QrQF8
 Q: I don't like those missions, I prefer the original SADX goals.
 A: You can disable the missions in the settings of the mod. Open the SADX mod manager, select "Randomizer" in the Mods list, then Click on "Configure..." and set "Allow SA2 Mission" to "false".
 
-Q: I sometimes hear weird music when I play Rando, like Sonic CD or peaceful music, kinda like Christmas, those aren't in SADX originally right?
+Q: Sometimes I hear weird music, like Sonic CD or peaceful music, kinda like Christmas, those aren't in SADX originally right?
 A: Those are DLCs music from Sonic Adventure 1. DLCs got scrapped in SADX, but Rando actually restore them.
 
 Q: How am I supposed to catch Froggy when I'm not playing Big the cat?
 A: When you get a Big stage, Froggy is hidden somewhere in the stage, the location isn't random, it's always the same, just like Gamma's Emerald Coast.
 
-Q: Why Froggy isn't in the same location as vanilla tho?
+Q: Why Froggy isn't in the same location as vanilla though?
 A: That wouldn't be funny. :^)
 
 Q: Are the Twinkle Circuit tracks randomized?
@@ -64,11 +64,11 @@ Q: Is there a way to disable a Character?
 A: You can disable any character in the settings of the mod. Open the SADX mod manager, select "Randomizer" in the Mods list, then Click on "Configure..." and set the character you don't want to "True". 
 
 Q: Is there a way to disable a Level/Boss?
-A: Not at the moment, however, if you get a specific stage/boss that you don't like while using rando, you can open the pause menu, select quit, and then select your character again, this will move to the next stage.
+A: Not at the moment, however, if you get a specific stage/boss that you don't like, you can open the pause menu, select quit, and then select your character again, this will move to the next stage.
 
 Q: Is there a reason why the Hub World isn't in Sadx Rando?
 A: This is mostly for technical reasons; adding the complete story of a character with cutscenes and hub world progression would be difficult and extremely time consuming to do. 
-The game has been developped to be completed in a very specific way, there is a lot of stuff which check the current story progression so the game can progress and obviously using any character in any level doesn't help.
+The game has been developped to be completed in a very specific way, there is a lot of stuff which check the current story progression so the game can progress and obviously using any character in any level doesn't help at all.
 in other word; this would need a lot of work, including editing a big part of the game code, and even with that, the result might be not good enough. Adding the hub world isn't impossible, but might be a really long term goal.
 tl;dr This is lot of work for such a small result.
 

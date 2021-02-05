@@ -396,7 +396,7 @@ void DisplayRandoInformation() {
 
 void Create_NewRNG() {
 
-	for (uint32_t i = 0; i < split; i++) { //generate 40 levels without any speedrunners splits.
+	for (uint32_t i = 0; i < segmentCount; i++) { //generate 40 levels without any speedrunners splits.
 
 		if (RNGCharacters)
 		{
@@ -408,14 +408,14 @@ void Create_NewRNG() {
 			getRandomStage(&randomizedSets[i], randomizedSets[i].character);
 
 			randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
-		 
-		if (RNGMusic)
-			randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
 
+			if (RNGMusic)
+				randomizedSets[i].music = getRandomMusic();
+		 
 		if (isAIAllowed)
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
-			randomizedSets[i].ai_race = getRandomRaceAI(randomizedSets[i]);
+			randomizedSets[i].ai_race = getRandomRaceAI();
 
 		if (RNGCutscene)
 			getRandomCutscene(&randomizedSets[i]);
@@ -429,11 +429,11 @@ void Randomizer_GetNewRNG() {
 
 	TotalCount = 0;
 	levelCount = 0;
-	split = 0;
+	segmentCount = 0;
 	DuplicateStages.clear();
 
 	if (!StorySplits) {
-		split = 40;
+		segmentCount = 40;
 		Create_NewRNG();
 	}
 	else {
@@ -451,12 +451,12 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	myfile << "<GameIcon />\n<GameName>Sonic Adventure DX: Randomizer</GameName>\n<CategoryName> ";
 	if (StorySplits == SonicStorySplit)
 	{
-		split = 10;
+		segmentCount = 10;
 		myfile << "Sonic's Story" << "</CategoryName>\n<Metadata>\n";
 	}
 	if (StorySplits == AllStoriesSplit)
 	{
-		split = 37;
+		segmentCount = 37;
 		myfile << "All Stories" << "</CategoryName>\n<Metadata>\n";
 	}
 

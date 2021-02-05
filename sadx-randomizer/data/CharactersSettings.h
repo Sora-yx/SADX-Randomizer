@@ -32,7 +32,7 @@ int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
 void CheckAndLoadSuperSonic_Tex(int curChara);
 
-extern void PlayVoice_R(int a1);
+extern void PlayVoice_Original(int a1);
 void FixAISFXJump();
 extern int level[23];
 

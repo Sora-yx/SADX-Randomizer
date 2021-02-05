@@ -116,7 +116,7 @@ void CheckAndLoadRaceOpponent() {
 }
 
 
-short getRandomRaceAI(RandomizedEntry entry) {
+short getRandomRaceAI() {
 	int8_t cur_RaceAI = -1;
 	size_t ai_Racecount = sizeof(AIRaceArray) / sizeof(AIRaceArray[0]);
 

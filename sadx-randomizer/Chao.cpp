@@ -300,9 +300,9 @@ void Chao_CrySound() {
 		cry = rand() % 2;
 
 		if (!cry)
-			PlayVoice_R(5003);
+			PlayVoice_Original(5003);
 		else
-			PlayVoice_R(5002);
+			PlayVoice_Original(5002);
 
 		//prevcry = cry;
 		ChaoCryDelay = 420;
@@ -357,13 +357,14 @@ void LoadChaoTPTrigger() {
 	}
 }
 
-SetLevelPosition PlayerAroundChaoPosition[10] {
+SetLevelPosition PlayerAroundChaoPosition[11] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 3653.31, -127.07, 2924.58, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
+	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1820, 1246 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 1517.56, -3139.29, -274.385},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },

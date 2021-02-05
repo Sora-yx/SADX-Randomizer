@@ -34,7 +34,7 @@ short randomSA2Mission(short stage_id) {
 
 	short cur_mission = 0;
 
-	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission() || isHeroesMod() || isSA2Mod())
+	if (stage_id >= LevelIDs_Chaos0 || !isSA2Mission())
 		return SADX_Mission;
 
 	do {
@@ -359,9 +359,9 @@ void MissionResultCheck() {
 		ObjectMaster* Flash = nullptr;
 
 		if (TimeThing != 0) {
-			if (curAction >= 1 && curAction <= 3 || ((EntityData1Ptrs[0]->Status & Status_Ground) == Status_Ground) || SonicRand == 1 && curAction > 74 && curAction <= 76 || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
+			if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1) || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
 
-				CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
+				CharObj2Ptrs[0]->Speed.x = 1;
 				if (CurrentLevel != LevelIDs_TwinklePark)
 					ForcePlayerAction(0, 24);
 				EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
@@ -387,7 +387,6 @@ void MissionResultCheck() {
 
 				LoadLevelResults_r();
 			}
-
 		}
 
 		return;

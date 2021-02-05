@@ -745,7 +745,7 @@ void FinalStatDisplay(ObjectMaster* obj) {
 
 		MusicList[MusicIDs_nights_k].Name = "RandoStats";
 
-		PlayMusic_R(MusicIDs_nights_k);
+		PlayMusic_Original(MusicIDs_nights_k);
 
 		if (!RandCongratsDone)
 		{
@@ -754,17 +754,17 @@ void FinalStatDisplay(ObjectMaster* obj) {
 			switch (RandomCongrats)
 			{
 			case Characters_Tails:
-				PlayVoice_R(5011);
+				PlayVoice_Original(5011);
 				break;
 			case Characters_Knuckles:
-				PlayVoice_R(5012);
+				PlayVoice_Original(5012);
 				break;
 			case Characters_Amy:
-				PlayVoice_R(5013);
+				PlayVoice_Original(5013);
 				break;
 			default:
 			case Characters_Sonic:
-				PlayVoice_R(5010);
+				PlayVoice_Original(5010);
 				break;
 			}
 			RandCongratsDone = true;

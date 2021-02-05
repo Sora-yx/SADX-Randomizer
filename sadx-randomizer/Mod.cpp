@@ -39,7 +39,7 @@ int ban = 0;
 bool banCharacter[8];
 
 //Speedruner splits
-uint32_t split = 0;
+uint32_t segmentCount = 0;
 uint32_t TotalCount = 0; //Total of Random Stage, used to reroll later in-game.
 
 //AI
@@ -51,7 +51,6 @@ bool SA2Voices = false;
 int SeedCopy = 0;
 time_t t;
 
-DataPointer(int, CutsceneID, 0x3B2C570);
 extern "C" {
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
@@ -157,10 +156,6 @@ extern "C" {
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", randomizedSets[levelCount].level);
 
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
-
-		if (EntityData1Ptrs[1]) {
-			DisplayDebugStringFormatted(NJM_LOCATION(2, 5), "Current P2: %d", EntityData1Ptrs[1]->CharID);
-		}
 
 
 		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)

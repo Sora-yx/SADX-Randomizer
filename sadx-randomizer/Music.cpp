@@ -140,7 +140,7 @@ MusicInfo MusicList_R[] = {
 
 short prev_music = -1;
 
-short getRandomMusic(RandomizedEntry entry) {
+short getRandomMusic() {
 	short cur_music = -1;
 
 	do {
@@ -164,7 +164,7 @@ void RandomMusic() {
 		if (musicCount == TotalCount)
 		{
 			for (int i = 0; i < 40; i++) { //generate 40 musics.
-				randomizedSets[i].music = getRandomMusic(randomizedSets[i]);
+				randomizedSets[i].music = getRandomMusic();
 			}
 
 			musicCount = 0;
@@ -175,7 +175,7 @@ void RandomMusic() {
 }
 
 //Used to play specific music which won't be randomized, regardless of the setting.
-void PlayMusic_R(MusicIDs song) {
+void PlayMusic_Original(MusicIDs song) {
 
 	if (Music_Enabled != 0) {
 		CurrentSong = song;

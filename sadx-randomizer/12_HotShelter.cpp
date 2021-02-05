@@ -43,7 +43,7 @@ void TriggerObjHS_Main(ObjectMaster* obj) {
 
 	if (FirstHotShelterSwitch && CurrentStageVersion == BigVersion && IsPlayerInsideSphere(&obj->Data1->Position, 25))
 	{
-		PlayVoice_R(5004);
+		PlayVoice_Original(5004);
 		ForcePlayerAction(0, 12);
 		ForcePlayerAction(0, 24);
 		PositionPlayer(0, 852.11, 203.63, -675.93);

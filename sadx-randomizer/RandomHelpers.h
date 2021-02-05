@@ -15,7 +15,6 @@ struct RandomizedEntry
 	int ai_mode; //AI following you
 	int ai_race; //Tails race AI
 	short music;
-	short voices;
 	int cutsceneID;
 	int8_t cutsceneChara;
 	int cutsceneLevel;
@@ -101,7 +100,7 @@ void PlayRandomCutscene(long flag);
 void FixRMLava();
 short randomSA2Mission(short stage_id);
 short getRandomAI(uint8_t char_id, short stage_id);
-short getRandomRaceAI(RandomizedEntry entry);
+short getRandomRaceAI();
 void Randomizer_GetNewRNG();
 void TwinkleCircuitMusic();
 void RandomizeStages_Hook();
@@ -119,7 +118,7 @@ extern bool MetalSonic;
 extern bool SuperSonic;
 extern bool banCharacter[8];
 extern bool RNGCutscene;
-extern uint32_t split;
+extern uint32_t segmentCount;
 extern uint32_t TotalCount;
 extern char StorySplits;
 extern bool isChaoGameplayAllowed;
@@ -136,7 +135,8 @@ uint8_t getRandomCharacter();
 bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id);
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
-short getRandomMusic(RandomizedEntry entry);
+short getRandomMusic();
+short getRandomVoices();
 void BackRingObj_Main(ObjectMaster* obj);
 
 void LoadTriggerObject();
@@ -276,8 +276,8 @@ void RandomMusic();
 void Stages_Management();
 
 
-void PlayMusic_R(MusicIDs song);
-void PlayVoice_R(int a1);
+void PlayMusic_Original(MusicIDs song);
+void PlayVoice_Original(int a1);
 void Chao_CrySound();
 
 void CustomFlagCheck(); //sa2 style

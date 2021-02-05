@@ -145,31 +145,31 @@ void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
 		{
 		case Characters_Sonic:
 			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(1826);
+				PlayVoice_Original(1826);
 			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(315);
+				PlayVoice_Original(315);
 			break;
 		case Characters_Tails:
 			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(1812);
+				PlayVoice_Original(1812);
 			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(1456);
+				PlayVoice_Original(1456);
 			break;
 		case Characters_Amy:
 			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(5020);
+				PlayVoice_Original(5020);
 			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(1737);
+				PlayVoice_Original(1737);
 			break;
 		case Characters_Gamma:
 			if (EmeraldKnuxCheck == 1 || EmeraldKnuxCheck == 2)
-				PlayVoice_R(5023);
+				PlayVoice_Original(5023);
 			break;
 		case Characters_Big:
 			if (EmeraldKnuxCheck == 1)
-				PlayVoice_R(5021);
+				PlayVoice_Original(5021);
 			if (EmeraldKnuxCheck == 2)
-				PlayVoice_R(5022);
+				PlayVoice_Original(5022);
 			break;
 		}
 	}

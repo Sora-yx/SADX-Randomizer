@@ -211,25 +211,25 @@ bool Check_TikalMessageDisplay() {
 	return false;
 }
 
-void Check_ObjectMysticMelody() {
+bool Check_ObjectMysticMelody() {
 
 	switch (CurrentLevel)
 	{
 	case LevelIDs_EmeraldCoast:
 		if (CurrentAct == 2)
-			MMPlatformEnabled = true;
+			return true;
 		break;
 	case LevelIDs_RedMountain:
 		if (CurrentAct == 1)
-			MMPlatformEnabled = true;
+			return true;
 		break;
 	case LevelIDs_SpeedHighway:
 		if (CurrentAct == 2)
-			MMPlatformEnabled = true;
+			return true;
 		break;
 	}
 
-	return;
+	return false;
 }
 
 
@@ -247,6 +247,7 @@ void MysticMelody_Display(ObjectMaster* obj) {
 void MysticMelody_Main(ObjectMaster* obj) {
 	if (!ClipSetObject(obj)) {
 		EntityData1* data = obj->Data1;
+		EntityData1* player = EntityData1Ptrs[0];
 		int curAction = EntityData1Ptrs[0]->Action;
 		unsigned char getChar = EntityData1Ptrs[0]->CharID;
 		int size = 25;
@@ -275,7 +276,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 2:
 			{
-				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (curAction == 1 || curAction == 2  || SonicRand == 1 && curAction > 74 && curAction <= 76)) {
+				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_Unknown1))) {
 					Hud_ShowActionButton();
 
 					if (ControllerPointers[0]->PressedButtons & Buttons_Y)
@@ -306,8 +307,8 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				NJS_VECTOR CurPos = SetPlayerAroundLostChaoPosition();
 				if (CurPos.x != -1 && CurPos.y != -1 && CurPos.z != -1)
 				{
-					Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
 					
+					MMPlatformEnabled = Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
 					if (++obj->Data1->InvulnerableTime == 5)
 					{
 						SHAddColLandTable();

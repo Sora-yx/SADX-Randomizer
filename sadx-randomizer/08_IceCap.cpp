@@ -38,6 +38,10 @@ void IC_Layout() {
 	if (CurrentAct == 3)
 		CurrentStageVersion = BigVersion;
 
+	if (CurrentAct == 2)
+		CurrentStageVersion = TailsVersion;
+
+
 	return;
 }
 
