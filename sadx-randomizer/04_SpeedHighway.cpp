@@ -2,7 +2,7 @@
 
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
-void SHAddColLandTable() {
+void CheckAndAddColLandTable() {
 	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 && CurrentStageVersion == SonicVersion) {
 		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
 			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {

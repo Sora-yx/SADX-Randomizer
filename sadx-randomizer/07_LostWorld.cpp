@@ -5,6 +5,10 @@
 
 void LW_Layout() {
 
+	CurrentStageVersion = KnucklesVersion;
+	CurrentMission = Mission3_LostChao;
+	return;
+
 	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else
@@ -50,7 +54,6 @@ void __cdecl LostWorld_Init(const char* path, const HelperFunctions& helperFunct
 {
 	//Initiliaze data
 	WriteCall((void*)0x5e16c2, FixLWMusic); //Fix Lost World Act 2 music as Knuckles.
-
 
 	WriteCall((void*)0x422e43, LW_Layout);
 	
@@ -182,6 +185,7 @@ ObjectList LostWorldObjectList = { arraylengthandptrT(LostWorldObjectList_list, 
 
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	ObjLists[LevelIDs_LostWorld * 8 + 1] = &LostWorldObjectList;
 	ObjLists[LevelIDs_LostWorld * 8 + 2] = &LostWorldObjectList;
 	TexLists_Obj[LevelIDs_LostWorld] = LostWorldObjectTextures;
 }

@@ -311,7 +311,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 					MMPlatformEnabled = Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
 					if (++obj->Data1->InvulnerableTime == 5)
 					{
-						SHAddColLandTable();
+						CheckAndAddColLandTable();
 						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
 						data->Action = 5;
 					}
@@ -320,12 +320,12 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				{
 					PlayDelayedCustomSound(CommonSound_MM_Platform, 1, 2);
 					MMPlatformEnabled = true;
-					data->Action = 6;
+					data->Action = 0;
 				}
 			break;
 			case 5:	
 				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
-				data->Action = 6;
+				data->Action = 0;
 			break;
 		}
 	

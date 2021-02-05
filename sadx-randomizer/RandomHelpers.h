@@ -481,4 +481,4 @@ bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
 NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float y, float z);
-void SHAddColLandTable();
+void CheckAndAddColLandTable();
