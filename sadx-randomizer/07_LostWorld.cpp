@@ -5,10 +5,6 @@
 
 void LW_Layout() {
 
-	CurrentStageVersion = KnucklesVersion;
-	CurrentMission = Mission3_LostChao;
-	return;
-
 	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else

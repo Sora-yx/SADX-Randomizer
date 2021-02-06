@@ -4,7 +4,7 @@
 typedef unsigned short  word;
 
 
-struct SubtitleThing { //idk, ask SADX, most of the variables here are incorrect, but using this struct with the function does work fine ig so...
+struct SubtitleThing { //idk, ask SADX, most of the variables here are incorrect, but using this struct with the function does work fine in game... so... yeah.
     char field_0;
     char gap1;
     word px;

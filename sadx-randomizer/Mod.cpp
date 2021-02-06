@@ -50,6 +50,7 @@ bool SA2Voices = false;
 
 int SeedCopy = 0;
 time_t t;
+extern int getCurVoice;
 
 extern "C" {
 
@@ -153,7 +154,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "Flag progress: %d", randomizedSets[levelCount].level);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 2), "VoiceID %d", getCurVoice);
 
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 

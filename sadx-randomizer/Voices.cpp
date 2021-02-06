@@ -6,7 +6,6 @@
 #define AddVoices(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 #define AddVoices2(A, B) helperFunctions.ReplaceFile("system\\sounddata\\voice_jp\\wma\\" A ".wma", "system\\voices\\" B ".adx")
 extern bool SA2Voices;
-int voiceCount;
 
 static Trampoline* PlayVoice_t = nullptr;
 extern int getCurVoice;
@@ -16,20 +15,11 @@ extern int getCurVoice;
 static void __cdecl PlayRandomVoice(int a1)
 {
 
-	a1 = rand() % 2043;
-	getCurVoice = a1;
+	getCurVoice = rand() % 2045;
+	a1 = getCurVoice;
 
 	auto original = reinterpret_cast<decltype(PlayRandomVoice)*>(PlayVoice_t->Target());
 	original(a1);
-	voiceCount++;
-}
-
-
-
-short getRandomVoices() {
-
-	short cur_voice = rand() % 2043;
-	return cur_voice;
 }
 
 
