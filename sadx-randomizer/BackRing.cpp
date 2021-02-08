@@ -271,7 +271,11 @@ void Check_Display_Frog_Balloon(ObjectMaster* a1) {
 
 void Check_Display_BackRing_Common(ObjectMaster* a1) {
 
-	a1->Data1->Position.y += 36;
+	if (CurrentStageVersion == GammaVersion && (CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_WindyValley))
+		a1->Data1->Position.y += 25;
+	else
+		a1->Data1->Position.y += 36;
+
 	a1->DisplaySub = BackRingObj_Display;
 	a1->MainSub = BackRingObj_Main;
 }
@@ -456,10 +460,14 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 	origin(a1);
 }
 
+ObjectFunc(E104_Main, 0x605A90);
 void E104Enemy_Main_R(ObjectMaster* obj);
-Trampoline E104_t((int)E104Enemy_Main, (int)E104Enemy_Main + 0x8, E104Enemy_Main_R);
+Trampoline E104_t((int)E104_Main, (int)E104_Main + 0x7, E104Enemy_Main_R);
 
 void E104Enemy_Main_R(ObjectMaster* obj) {
+
+	EntityData1* data1 = obj->Data1;
+	EntityData1* p1 = EntityData1Ptrs[0];
 
 	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
 	{
@@ -467,10 +475,43 @@ void E104Enemy_Main_R(ObjectMaster* obj) {
 		return;
 	}
 
+	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
+	{
+		data1->Status |= Status_Hurt;
+		if (p1->CharID < Characters_Gamma)
+			EnemyBounceThing(0, 0, 2, 0);
+	}
+
 	ObjectFunc(origin, E104_t.Target());
 	origin(obj);
 }
 
+
+ObjectFunc(E103_Main, 0x4e7e90);
+void E103Enemy_Main_R(ObjectMaster* obj);
+Trampoline E103_t((int)E103_Main, (int)E103_Main + 0x7, E103Enemy_Main_R);
+
+void E103Enemy_Main_R(ObjectMaster* obj) {
+
+	EntityData1* data1 = obj->Data1;
+	EntityData1* p1 = EntityData1Ptrs[0];
+
+	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
+	{
+		Check_Display_BackRing_Common(obj);
+		return;
+	}
+
+	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
+	{
+		data1->Status |= Status_Hurt;
+		if (p1->CharID < Characters_Gamma)
+			EnemyBounceThing(0, 0, 2, 0);
+	}
+
+	ObjectFunc(origin, E103_t.Target());
+	origin(obj);
+}
 
 
 void OTarget_R(ObjectMaster* obj) { //Sonic Doll Final Egg

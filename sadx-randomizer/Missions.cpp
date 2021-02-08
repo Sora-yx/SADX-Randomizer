@@ -106,20 +106,23 @@ void LoadStageMissionImage_r() {
 
 		if (CurrentMission < Mission2_100Rings)
 		{
-			if (CurrentCharacter == Characters_Amy && CurrentMission < Mission2_100Rings && CurrentStageVersion != BigVersion)
+			if (CurrentCharacter == Characters_Amy && CurrentStageVersion != BigVersion)
 				CurrentMissionCard = BalloonCard; //grab ballon
 
-			if (CurrentCharacter == Characters_Big && CurrentMission < Mission2_100Rings)
+			if (CurrentCharacter == Characters_Big)
 				CurrentMissionCard = FroggyCard; //grab Froggy
 
 			if (CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
 				CurrentMissionCard = CapsuleCard;
 
-			if (CurrentMission == SADX_Mission && CurrentStageVersion == BigVersion)
-				CurrentMissionCard = FroggyCard;
+			if (CurrentMission == SADX_Mission) {
 
-			if (CurrentMission == SADX_Mission && CurrentStageVersion == KnucklesVersion)
-				CurrentMissionCard = EmeraldKnuxCard;
+				if (CurrentStageVersion == BigVersion)
+					CurrentMissionCard = FroggyCard;
+
+				if (CurrentStageVersion == KnucklesVersion)
+					CurrentMissionCard = EmeraldKnuxCard;
+			}
 		}
 
 		switch (CurrentLevel)
@@ -129,7 +132,7 @@ void LoadStageMissionImage_r() {
 					CurrentMissionCard = FroggyCard; //Catch Froggy if Big or Gamma layout.
 				break;	
 			case LevelIDs_WindyValley:
-				if (CurrentStageVersion == GammaVersion && (CurrentCharacter == Characters_Gamma))
+				if (CurrentStageVersion == GammaVersion)
 					CurrentMissionCard = E103Card;
 				break;
 			case LevelIDs_LostWorld:
@@ -144,7 +147,7 @@ void LoadStageMissionImage_r() {
 						CurrentMissionCard = SonicDollCard;	
 				break;
 			case LevelIDs_RedMountain:
-				if (CurrentMission < Mission2_100Rings && CurrentAct <= 1 && (CurrentCharacter == Characters_Gamma))
+				if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Gamma) || CurrentStageVersion == GammaVersion)
 					CurrentMissionCard = E104Card; 
 				break;
 			case LevelIDs_SpeedHighway:

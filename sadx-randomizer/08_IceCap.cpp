@@ -39,7 +39,7 @@ void IC_Layout() {
 		CurrentStageVersion = BigVersion;
 
 	if (CurrentAct == 2)
-		CurrentStageVersion = TailsVersion;
+		CurrentMission = SADX_Mission;
 
 
 	return;

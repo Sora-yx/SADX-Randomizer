@@ -23,7 +23,7 @@ int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
-RandomizerGenerator RandoStageArray[50]{
+RandomizerGenerator RandoStageArray[52]{
 
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
 	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
@@ -68,6 +68,8 @@ RandomizerGenerator RandoStageArray[50]{
 	{LevelAndActIDs_EggWalker, BossVersion, Characters_Tails},
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
+	{LevelAndActIDs_E101, BossVersion, Characters_Gamma},
+	{LevelAndActIDs_E101R, BossVersion, Characters_Gamma},
 	{LevelAndActIDs_TwinkleCircuit1, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit2, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit3, NormalVersion},

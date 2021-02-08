@@ -7,3 +7,5 @@ StartPosition E101_StartPositions[]{
 StartPosition E101R_StartPositions[]{
 	{ 25, 0,{ -131, 745, -385}, 0 }
 };
+
+ObjectFunc(MK2_Main, 0x56C0B0);

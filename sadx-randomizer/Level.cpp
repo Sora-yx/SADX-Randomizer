@@ -116,6 +116,9 @@ void __cdecl LoadLevelObject_r() {
 		LoadTriggerObject();
 	}
 
+	if (CurrentCharacter != Characters_Gamma && (CurrentStageVersion == GammaVersion || CurrentLevel == LevelIDs_E101 || CurrentLevel == LevelIDs_E101R))
+		LoadCharTextures(Characters_Gamma); //fix E100 Series crash
+
 	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
 	original();
 }

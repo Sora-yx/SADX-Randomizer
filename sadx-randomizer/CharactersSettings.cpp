@@ -164,7 +164,6 @@ void CheckAndLoadSuperSonic_Tex(int curChara) {
 	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentCharacter != Characters_Sonic && CurrentLevel == LevelIDs_PerfectChaos)
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 
-
 	FunctionPointer(void, original, (int curChara), LoadCharTextures_T.Target());
 	return original(curChara);
 }
@@ -285,6 +284,7 @@ void BigWeightHook() {
 	BigWeightRecord = 2000; //force the record at 2000g so you will get B and A emblems.
 	BigWeight = 1990; //meme display
 }
+
 
 //Set Gamma's Timer to 6 min instead of 3.
 void SetGammaTimer() {

@@ -152,6 +152,8 @@ void getRandomCutscene(RandomizedEntry* entry);
 bool CheckAndPlayRandomCutscene();
 void set_event_flags(long cutsceneID);
 
+void CheckAndDrawSubTtiles();
+
 extern short CurrentMission;
 extern int8_t CurrentStageVersion;
 extern int CustomFlag;
@@ -344,6 +346,8 @@ VoidFunc(ChaosUnderLightDelete, 0x7ad2f0);
 VoidFunc(FUN_007a1580, 0x7a1580);
 
 FunctionPointer(void, BossHP_Stuff, (int x, int y, int hp), 0x4b3cc0);
+FunctionPointer(char, CameraReleaseEventCam, (), 0x436140);
+FunctionPointer(char, BigResetCamera, (), 0x48CE10);
 
 DataPointer(char, BossHP, 0x3c58148);
 DataPointer(char, BossHP2, 0x3C58150);
@@ -476,7 +480,7 @@ extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
 
-extern RandomizerGenerator RandoStageArray[50];
+extern RandomizerGenerator RandoStageArray[52];
 bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
