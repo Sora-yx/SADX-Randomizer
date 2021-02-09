@@ -17,7 +17,6 @@ int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Ch
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos0, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos };
-int bannedLevelsBig[2] = { LevelIDs_PerfectChaos , LevelIDs_EggViper };
 
 //Initiliaze banned Vanilla stage (if option is enabled)
 int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
@@ -106,11 +105,8 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 	uint8_t curBannedChar = generated->bannedChar;
 	short curChar = char_id;
 
-	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsBig); i++)
-	{
-		if (curSingleLevel == bannedLevelsBig[i] && char_id == Characters_Big)
+		if (curSingleLevel == LevelIDs_EggViper && char_id == Characters_Big)
 			return true;
-	}
 
 	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
 	{

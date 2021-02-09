@@ -14,8 +14,6 @@ void E101_Main_R(ObjectMaster* obj) {
 	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma)
 	{
 		data1->Status |= Status_Hurt;
-		if (p1->CharID < Characters_Gamma)
-			EnemyBounceThing(0, 0, 2, 0);
 	}
 
 	ObjectFunc(origin, E101_Main_t->Target());
@@ -33,8 +31,7 @@ void MK2_Main_R(ObjectMaster* obj) {
 	{
 		data1->Status |= Status_Hurt;
 		timerMK2 = 0; //failsafe
-		if (p1->CharID < Characters_Gamma)
-			EnemyBounceThing(0, 0, 2, 0);
+
 	}
 
 	if (data1->NextAction == 6 && data1->Action == 6)

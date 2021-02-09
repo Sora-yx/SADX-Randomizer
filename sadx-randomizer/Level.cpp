@@ -273,5 +273,6 @@ void LevelOnFrames() {
 	MissionResultCheck();
 	Chao_OnFrame();
 	Hud_DisplayOnframe();
+	IncreaseSpeedCharactersPerfectChaos();
 	PlayRandomCutscene_OnFrames();
 }

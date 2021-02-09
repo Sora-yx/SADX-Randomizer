@@ -176,7 +176,6 @@ void __cdecl ChaoGameplayCheck();
 bool isSA2Mission();
 
 int GetCharaProgression();
-ObjectFunc(E101_Main, 0x567fd0);
 VoidFunc(LoadE101, 0x568090);
 ObjectFunc(InvisibleWallCasino, 0x5d03a0);
 ObjectFunc(SDCannon, 0x5f84e0);
@@ -384,6 +383,8 @@ DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);
 DataPointer(NJS_TEXLIST*, CurrentCardTexturePtr, 0x3C53AC4);
 DataPointer(NJS_TEXANIM, MissionSpriteAnim, 0x917784);
 
+DataPointer(signed char, signed_char_ccsi_mode, 0x3c4abb4);
+
 
 void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config);
 void Hud_DisplayOnframe();
@@ -486,3 +487,4 @@ void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
 NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float y, float z);
 void CheckAndAddColLandTable();
+void IncreaseSpeedCharactersPerfectChaos();

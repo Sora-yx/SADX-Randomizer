@@ -20,6 +20,22 @@ void FixPerfectChaosHit() {
 }
 
 
+void IncreaseSpeedCharactersPerfectChaos() {
+	if (CurrentLevel != LevelIDs_PerfectChaos)
+		return;
+
+	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma) {
+
+		CharObj2* co2 = CharObj2Ptrs[0];
+		EntityData1* data = EntityData1Ptrs[0];
+		if (co2->Speed.x < 14.0 && GetAnalog(data, 0, 0) || data->Action == 3)
+		{
+			co2->PhysicsData.HSpeedCap = 14;
+			co2->Speed.x += 0.110;
+		}
+	}
+}
+
 
 void __cdecl PerfectChaos_Init(const char* path, const HelperFunctions& helperFunctions)
 {

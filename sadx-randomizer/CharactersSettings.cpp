@@ -71,8 +71,6 @@ void LoadCharacter_r() {
 }
 
 
-
-
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
 void SuperAuraStuff() {
 	TimeThing = 0;

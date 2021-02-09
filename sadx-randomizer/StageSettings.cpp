@@ -148,7 +148,17 @@ void TargetableEntity(ObjectMaster* obj)
 }
 
 
+void FixPlayerSoftLockE100Boss() {
 
+	CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
+	DisableControl();
+
+
+	if (CurrentLevel == LevelIDs_WindyValley)
+		//EntityData1Ptrs[0]->Position = { -2153.95, 66.7425, 2636.65 };
+
+	return;
+}
 
 void Stages_Management() {
 
@@ -159,5 +169,7 @@ void Stages_Management() {
 	Race_Init();
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
 	WriteCall((void*)0x41676b, FixRestart_Stuff); 
+
+	
 }
 

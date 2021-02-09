@@ -26,6 +26,9 @@ void DisableTimeStuff() {
 	if (!Race && CurrentCharacter == Characters_Tails)
 		SetTailsRaceVictory();
 
+	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter == Characters_Gamma)
+		restoreGammaSpeedLimit();
+
 	ObjectMaster* play1 = GetCharacterObject(0);
 	ObjectMaster* play2 = GetCharacterObject(1);
 
