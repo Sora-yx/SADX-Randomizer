@@ -138,7 +138,6 @@ void FixRestart_Stuff() //Prevent the game to crash if you restart while being i
 	if (P1 != nullptr)
 		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
 
-	DeleteTriggerObject();
 	Delete_Cart();
 
 	return;
@@ -154,7 +153,7 @@ int AmyCartImprovement() {
 
 void PlatformMM_Display(ObjectMaster* obj) {
 
-	if (!MissedFrames && MMPlatformEnabled) {
+	if (!MissedFrames && (MMPlatformEnabled || obj->Data1->Scale.x == 15)) {
 		njSetTexture(&SA2_OBJ_TEXLIST);
 		njPushMatrix(0);
 		njTranslateV(0, &obj->Data1->Position);
@@ -295,12 +294,23 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 3:
 				if (++obj->Data1->Index == 120) {
-					
 					EnableControl();
-					if (CurrentMission == Mission3_LostChao)
+					if (CurrentMission == Mission3_LostChao) {
+						EnableControl();
 						data->Action = 4;
-					else
-						data->Action = 6;
+					}
+					else {
+						if (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma && CurrentAct == 0 && CurrentStageVersion == BigVersion) {
+
+								PositionPlayer(0, 640.168, 150.123, -435.403);
+								PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
+								data->Action = 1;
+						}
+						else {
+							data->Action = 1;
+						}
+						
+					}
 				}
 			break;
 			case 4:
@@ -320,12 +330,12 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				{
 					PlayDelayedCustomSound(CommonSound_MM_Platform, 1, 2);
 					MMPlatformEnabled = true;
-					data->Action = 0;
+					data->Action = 1;
 				}
 			break;
 			case 5:	
 				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
-				data->Action = 0;
+				data->Action = 1;
 			break;
 		}
 	
@@ -336,13 +346,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 
 		
 
-void LoadTriggerObject() {
+void CheckAndLoadTriggerObject() {
 
-	if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 0)
-		HotShelterSecretSwitch();
-
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentMission == Mission3_LostChao)
-		LoadChaoTPTrigger();
+	if (!CharObj2Ptrs[0])
+		return;
 
 	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
 		LoadRemoveCart();
@@ -356,10 +363,6 @@ void Load_ObjectsCommon() {
 	}
 }
 
-void DeleteTriggerObject() {
-
-	TriggerOBJHS_Delete();
-}
 
 void Delete_ObjectsCommon() {
 

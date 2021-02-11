@@ -139,7 +139,7 @@ short getRandomMusic();
 short getRandomVoices();
 void BackRingObj_Main(ObjectMaster* obj);
 
-void LoadTriggerObject();
+void CheckAndLoadTriggerObject();
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1);
 void __cdecl CheckLoadCasinoEmerald_r(ObjectMaster* a1);
 void __cdecl CheckLoadWVEmerald_r(ObjectMaster* a1);
@@ -444,7 +444,6 @@ VoidFunc(Knuckles_SetRNG, 0x475840);
 void ICAct3Position();
 void LoadChaoTPTrigger();
 void ChaoTPTrigger(ObjectMaster* a1);
-void TriggerOBJHS_Delete();
 void LoadRemoveCart();
 VoidFunc(PauseQuitThing2, 0x413f70);
 VoidFunc(FUN_00424830, 0x424830);

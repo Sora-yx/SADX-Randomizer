@@ -2,9 +2,7 @@
 
 
 extern bool RandCongratsDone;
-extern ObjectMaster* CurAI;
 
-extern ObjectMaster* ChaoTP;
 
 
 //While load LevelResult: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
@@ -26,8 +24,6 @@ void DisableTimeStuff() {
 	if (!Race && CurrentCharacter == Characters_Tails)
 		SetTailsRaceVictory();
 
-	if (CurrentLevel == LevelIDs_PerfectChaos && CurrentCharacter == Characters_Gamma)
-		restoreGammaSpeedLimit();
 
 	ObjectMaster* play1 = GetCharacterObject(0);
 	ObjectMaster* play2 = GetCharacterObject(1);
@@ -350,8 +346,6 @@ void ResetValueAndObjects() {
 
 	if (CurrentLevel != 0)
 	{
-		DeleteTriggerObject();
-		CheckThingButThenDeleteObject(ChaoTP);
 		Delete_Cart();
 		Chao_DeleteFiles();
 	}
@@ -366,8 +360,6 @@ void fixTCCart() {
 
 	return;
 }
-
-
 
 void ResetStatsValues() {
 	LimitCustomFlag = false;
@@ -418,7 +410,6 @@ void SoftReset_R() {
 
 	return FUN_00412ad0();
 }
-
 
 
 void TrialModeQuit_R() {

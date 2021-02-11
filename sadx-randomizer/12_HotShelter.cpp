@@ -21,47 +21,6 @@ void HotShelter_Layout() {
 }
 
 
-void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
-
-	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
-		SomethingAboutHotShelterSwitch = 1;
-
-	LoadTriggerObjHS();
-
-	return;
-}
-
-void TriggerOBJHS_Delete()
-{
-	if (TriggerHS != nullptr)
-		CheckThingButThenDeleteObject(TriggerHS);
-
-	TriggerHS = nullptr;
-}
-
-void TriggerObjHS_Main(ObjectMaster* obj) {
-
-	if (FirstHotShelterSwitch && CurrentStageVersion == BigVersion && IsPlayerInsideSphere(&obj->Data1->Position, 25))
-	{
-		PlayVoice_Original(5004);
-		ForcePlayerAction(0, 12);
-		ForcePlayerAction(0, 24);
-		PositionPlayer(0, 852.11, 203.63, -675.93);
-	}
-}
-
-
-void LoadTriggerObjHS() {
-
-	if (!TriggerHS && FirstHotShelterSwitch && CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma)
-	{
-		TriggerHS = LoadObject(LoadObj_Data1, 2, TriggerObjHS_Main);
-		TriggerHS->Data1->Position = { 750, -4.9, -650 };
-		TriggerHS->Data1->Scale.x = 15;
-	}
-}
-
-
 void CheckAndSet_HotShelterFunctions() {
 
 	if (CurrentStageVersion == BigVersion) //Big Layout

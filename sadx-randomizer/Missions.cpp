@@ -204,7 +204,7 @@ void LoadStageMissionImage_r() {
 		MissionSpriteAnim.texid = CurrentMissionCard;
 
 		ObjectMaster* obj = LoadObject(LoadObj_Data1, 6, (ObjectFuncPtr)0x457B60);
-		obj->Data1->InvulnerableTime = 120;
+		obj->Data1->InvulnerableTime = 300;
 		obj->Data1->Position.x = 320.0;
 		obj->Data1->Position.y = 360.0;
 		obj->DeleteSub = FreeStageMissionImage;

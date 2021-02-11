@@ -24,9 +24,9 @@ void TwinklePark_Layout() {
 }
 
 void FixRollerCoaster() {
-	ObjectMaster* obj = GetCharacterObject(0);
-	if (obj != nullptr)
-		obj->Data1->Action = 28; //force the character to leave the RC
+
+	if (EntityData1Ptrs[0])
+		EntityData1Ptrs[0]->Action = 28; //force the character to leave the RC
 }
 
 void FixRCCharacterAction() {

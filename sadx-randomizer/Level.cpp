@@ -113,7 +113,6 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 void __cdecl LoadLevelObject_r() {
 	if (isRandoLevel()) {
 		Load_ObjectsCommon();
-		LoadTriggerObject();
 	}
 
 	if (CurrentCharacter != Characters_Gamma && (CurrentStageVersion == GammaVersion || CurrentLevel == LevelIDs_E101 || CurrentLevel == LevelIDs_E101R))
@@ -274,5 +273,6 @@ void LevelOnFrames() {
 	Chao_OnFrame();
 	Hud_DisplayOnframe();
 	IncreaseSpeedCharactersPerfectChaos();
+	CheckAndLoadTriggerObject();
 	PlayRandomCutscene_OnFrames();
 }

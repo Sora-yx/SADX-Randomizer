@@ -10,6 +10,7 @@
 enum ChaoActions {
 	ChaoAction_Init,
 	ChaoAction_LoadChao,
+	ChaoAction_CheckHit,
 	ChaoAction_Hit,
 	ChaoAction_Free,
 };

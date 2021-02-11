@@ -22,7 +22,6 @@ void WindyValley_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = TailsVersion;
 
-	CurrentStageVersion = GammaVersion;
 
 	switch (CurrentStageVersion)
 	{

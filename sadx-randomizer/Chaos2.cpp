@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Utils.h"
 #include "Chaos2.h"
-#include "RandomHelpers.h"
+
 
 void Chaos2_LoadWithTarget() {
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);

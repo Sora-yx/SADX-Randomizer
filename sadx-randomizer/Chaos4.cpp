@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "Utils.h"
 #include "Chaos4.h"
-#include "RandomHelpers.h"
-#include "Trampoline.h"
+
 
 ObjectFunc(Chaos4_Delete, 0x552750);
 

@@ -5,11 +5,13 @@
 
 void LW_Layout() {
 
+	//CurrentMission = Mission3_LostChao;
+
 	if (CurrentStageVersion != KnucklesVersion && CurrentAct != 1)
 		CurrentStageVersion = SonicVersion;
 	else
 	{
-		CurrentStageVersion = KnucklesVersion;
+		//CurrentStageVersion = KnucklesVersion;
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
 	}

@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "Utils.h"
 #include "Chaos6.h"
-#include "RandomHelpers.h"
-#include "ActsSettings.h"
-#include "Trampoline.h"
+
 #define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\Sets\\Chaos 6\\" B ".bin")
 
 

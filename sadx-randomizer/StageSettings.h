@@ -14,9 +14,6 @@ bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius);
 int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius);
 bool IsSpecificPlayerInSphere(NJS_VECTOR* center, float radius, uint8_t player);
 
-void HotShelterSecretSwitch();
-void DeleteTriggerObject();
-
 DataPointer(NJS_VECTOR, stru_3B2C6DC, 0x3B2C6DC);
 DataPointer(NJS_VECTOR, stru_3B2C6D0, 0x3B2C6D0);
 VoidFunc(sub_5919E0, 0x5919E0);

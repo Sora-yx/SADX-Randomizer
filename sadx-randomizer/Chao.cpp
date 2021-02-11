@@ -74,8 +74,20 @@ void ChaoTPTriggerDelete(ObjectMaster* a1) {
 	if (a1 != nullptr) {
 		CheckThingButThenDeleteObject(a1);
 	}
-	
+	ChaoTP = nullptr;
 }
+
+void LoadChaoTPTrigger() {
+
+	if (!ChaoTP && CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentMission == Mission3_LostChao) 
+	{
+		ChaoTP = LoadObject(LoadObj_Data1, 2, ChaoTPTrigger);
+		ChaoTP->Data1->Position = { -121, 50, 290 };
+		ChaoTP->Data1->Scale.x = 15;
+		ChaoTP->DeleteSub = ChaoTPTriggerDelete;
+	}
+}
+
 
 
 void Chao_DeleteFiles() {
@@ -127,6 +139,7 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 
 void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
+	EntityData1* data = a1->Data1;
 
 	switch (a1->Data1->Action) {
 		case ChaoAction_Init:
@@ -139,7 +152,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	
 			a1->DisplaySub = a1->MainSub;
 			a1->DeleteSub = ChaoObj_Delete; //When you quit a level
-			a1->Data1->Action = 1; //Wait a frame before loading the chao
+			data->Action = 1; //Wait a frame before loading the chao
 		}
 		break;
 		case ChaoAction_LoadChao:
@@ -154,11 +167,12 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 			a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
 			CurrentChao = a1->Child;
 			a1->Child->Data1->Rotation.y = Yrot;
-			a1->Data1->Action = 2;
+			LoadChaoTPTrigger();
+			data->Action = 2;
 
 		}
 		break;
-		case ChaoAction_Hit:
+		case ChaoAction_CheckHit:
 		{
 			if (GameState == 15) {
 				if (++a1->Data1->InvulnerableTime == 80) {	//Loop Cry Animation
@@ -186,30 +200,35 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	
 			if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, HitBox))
 			{
-				ObjectMaster* P1 = GetCharacterObject(0);
-				EntityData1* ent;
-				ent = P1->Data1;
-				P1->Data1->Rotation.y = -ChaoObject->Data1->Rotation.y + 0x4000;
-				P1->Data1->Position.x += 2;
-				ent->InvulnerableTime = 0;
-				if (!SonicRand && !MetalSonicFlag)
-					P1->Data1->Action = 0; //fix potential crash
-				P1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-	
-				if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
-				{
-					if (!SonicRand && !MetalSonicFlag)
-						P1->Data1->Action = 1; //fix victory pos
-					Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
-					a1->Child->Data1->Rotation.y = -P1->Data1->Rotation.y + 0x4000;
-					LoadLevelResults_r();
-					chaoPB++;
-					a1->Data1->InvulnerableTime = 0;
-					a1->Data1->Action = 3;
-				}
+				data->Action = ChaoAction_Hit;
 			}
 		}
 		break;
+		case ChaoAction_Hit:
+		{
+			ObjectMaster* P1 = GetCharacterObject(0);
+			EntityData1* ent;
+			ent = P1->Data1;
+			P1->Data1->Rotation.y = -ChaoObject->Data1->Rotation.y + 0x4000;
+			P1->Data1->Position.x += 2;
+			ent->InvulnerableTime = 0;
+			if (!SonicRand && !MetalSonicFlag)
+				P1->Data1->Action = 0; //fix potential crash
+			P1->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+
+			if (++ent->InvulnerableTime == 1) //wait 1 frame before loading level result
+			{
+				if (!SonicRand && !MetalSonicFlag)
+					P1->Data1->Action = 1; //fix victory pos
+				Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
+				a1->Child->Data1->Rotation.y = -P1->Data1->Rotation.y + 0x4000;
+				LoadLevelResults_r();
+				chaoPB++;
+				a1->Data1->InvulnerableTime = 0;
+				data->Action = ChaoAction_Free;
+			}
+		}
+			break;
 		case ChaoAction_Free:
 		{
 			if (GameState == 15) {
@@ -340,22 +359,10 @@ void ChaoTPTrigger(ObjectMaster* a1) {
 
 	if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, Size))
 	{
-		chaoPB++; //Chao Credit Stat
-		LoadLevelResults();
-		a1->Data1->Action = 3;
+		ChaoObject->Data1->Action = ChaoAction_Hit;
 	}
 }
 
-void LoadChaoTPTrigger() {
-
-	if (!ChaoTP)
-	{
-		ChaoTP = LoadObject(LoadObj_Data1, 2, ChaoTPTrigger);
-		ChaoTP->Data1->Position = { -121, 50, 290 };
-		ChaoTP->Data1->Scale.x = 15;
-		ChaoTP->DeleteSub = ChaoTPTriggerDelete;
-	}
-}
 
 SetLevelPosition PlayerAroundChaoPosition[11] {
 
@@ -403,7 +410,7 @@ SetLevelPosition ChaoLevelPosition[26] {
 	{ BigVersion, LevelAndActIDs_IceCap4, 1790.85, 371.968811, 11.265, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, 520, 1330, 1630, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
-	{ AmyVersion, LevelAndActIDs_TwinklePark3, -41.43054199, 50, 290.7596436, 0x0 }, //Amy Version
+	{ AmyVersion, LevelAndActIDs_TwinklePark3, -41.43054199, 50, 290.7596436, 0x0 - 0x4000  }, //Amy Version
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -386.135, 2930.18, 4.479076996E-43 - 0x4000},
 	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
@@ -411,7 +418,7 @@ SetLevelPosition ChaoLevelPosition[26] {
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
 	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1761.775, 71.5, -1862.41, 5.479076996E-43 + 0x4000 },
 	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2945.652344, 5589.605469, -2211.165039, -1.681558157E-44 + 0x4000 },
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
