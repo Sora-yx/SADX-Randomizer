@@ -351,48 +351,63 @@ SetLevelPosition PlayerEndPosition[50]{ //Used for M2 and Bosses
 };
 
 
-void MissionResultCheck() {
+ObjectMaster* MissionResultObj;
+ObjectMaster* Flash = nullptr;
 
-	if (CurrentLevel < LevelIDs_EmeraldCoast || CurrentLevel > LevelIDs_HotShelter)
-		return;
+void MissionResultCheck(ObjectMaster* obj) {
 
-	if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3 && CurrentCharacter != Characters_Knuckles)
+	EntityData1* data = obj->Data1;
+
+	switch (data->Action)
 	{
-		int curAction = EntityData1Ptrs[0]->Action;
-		ObjectMaster* Flash = nullptr;
-
-		if (TimeThing != 0) {
-			if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1) || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
-
-				CharObj2Ptrs[0]->Speed.x = 1;
+	case 0:
+		if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1) || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
+			if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+			{
+				Flash = nullptr;
 				if (CurrentLevel != LevelIDs_TwinklePark)
 					ForcePlayerAction(0, 24);
+				CharObj2Ptrs[0]->Speed.x = 1.5;
 				EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-
-				if (!Flash)
-					Flash = LoadObject(LoadObj_Data1, 1, FlashScreen);
-
-				if (!SonicRand && !MetalSonicFlag)
-					EntityData1Ptrs[0]->Action = 1; //fix victory pose
-
-				if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
-				{
-					for (int i = 0; i < LengthOfArray(PlayerEndPosition); i++)
-					{
-						if (CurrentMission == Mission2_100Rings && CurrentLevel == ConvertLevelActsIDtoLevel(PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(PlayerEndPosition[i].LevelID) && CurrentStageVersion == PlayerEndPosition[i].version)
-						{
-							EntityData1Ptrs[0]->Position = PlayerEndPosition[i].Position;
-							EntityData1Ptrs[0]->Rotation.y = PlayerEndPosition[i].YRot;
-							break;
-						}
-					}
-				}
-
-				LoadLevelResults_r();
+				data->Action = 1;
 			}
 		}
+		break;
+	case 1:
+		if (!Flash && EnableControl)
+			Flash = LoadObject(LoadObj_Data1, 1, FlashScreen);
 
-		return;
+		if ((CharObj2Ptrs[0]->Upgrades & Upgrades_SuperSonic) == 0)
+			EntityData1Ptrs[0]->Action = 0;
+
+		data->Action = 2;
+		break;
+	case 2:
+		StopMusic();
+		DisableController(0);
+		PauseEnabled = 0;
+		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
+		{
+			for (int i = 0; i < LengthOfArray(PlayerEndPosition); i++)
+			{
+				if (CurrentMission == Mission2_100Rings && CurrentLevel == ConvertLevelActsIDtoLevel(PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(PlayerEndPosition[i].LevelID) && CurrentStageVersion == PlayerEndPosition[i].version)
+				{
+					EntityData1Ptrs[0]->Position = PlayerEndPosition[i].Position;
+					EntityData1Ptrs[0]->Rotation.y = PlayerEndPosition[i].YRot;
+					break;
+				}
+			}
+		}
+		if (++data->InvulnerableTime == 85)
+			data->Action = 3;
+		break;
+	case 3:
+			LoadLevelResults_r();
+			CheckThingButThenDeleteObject(obj);
+		break;
 	}
+
+
+				
 }
 

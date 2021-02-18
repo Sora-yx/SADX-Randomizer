@@ -643,7 +643,7 @@ void ResultVoiceFix() {
 			Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
-			if (Race && CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings || CurrentStageVersion == GammaVersion && CurrentLevel == LevelIDs_FinalEgg || CurrentStageVersion == KnucklesVersion)
+			if (Race && CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings || CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_EmeraldCoast && CurrentLevel != LevelIDs_HotShelter || CurrentStageVersion == KnucklesVersion)
 				Load_DelayedSound_Voice(4011);
 			else
 				Load_DelayedSound_Voice(4010);

@@ -31,7 +31,6 @@ void MK2_Main_R(ObjectMaster* obj) {
 	{
 		data1->Status |= Status_Hurt;
 		timerMK2 = 0; //failsafe
-
 	}
 
 	if (data1->NextAction == 6 && data1->Action == 6)
@@ -53,8 +52,10 @@ void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	WriteData<1>((int*)0x56BBF4, 160); //prevent MK2 to move to the next phase, we will manually do it to give more time to the player to react for non gamma characters.
 
-	E101_Main_t = new Trampoline((int)E101_Main, (int)E101_Main + 0x5, E101_Main_R);
-	MK2Main_t = new Trampoline((int)MK2_Main, (int)MK2_Main + 0x5, MK2_Main_R);
+	if (!isCriticalMode) {
+		E101_Main_t = new Trampoline((int)E101_Main, (int)E101_Main + 0x5, E101_Main_R);
+		MK2Main_t = new Trampoline((int)MK2_Main, (int)MK2_Main + 0x5, MK2_Main_R);
+	}
 
 	for (int i = 0; i < 8; i++) {
 		helperFunctions.RegisterStartPosition(i, E101_StartPositions[0]);

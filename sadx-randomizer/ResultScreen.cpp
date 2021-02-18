@@ -222,13 +222,14 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 
 
 
-void __cdecl LoadLevelResults_r()
-{
+void __cdecl LoadLevelResults_r() {
+
 	NJS_VECTOR a1; // [sp+0h] [bp-18h]@12
 	NJS_VECTOR a2; // [sp+Ch] [bp-Ch]@12
 
 	DisableController(0);
 	PauseEnabled = 0;
+
 	if (Race && RaceWinnerPlayer == 2 && GameMode < 9)
 	{
 		GameMode = GameModes_Adventure_ActionStg; //fix Softlock race
@@ -326,7 +327,6 @@ void RestorePuzzleBoxVanillaThing() {
 	return;
 }
 
-
 void ResetValueAndObjects() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
@@ -343,13 +343,12 @@ void ResetValueAndObjects() {
 	RestorePuzzleBoxVanillaThing();
 	Delete_ObjectsCommon();
 
-
 	if (CurrentLevel != 0)
 	{
 		Delete_Cart();
 		Chao_DeleteFiles();
 	}
-	
+
 	fixTCCart();
 	return;
 }

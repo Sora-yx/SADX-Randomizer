@@ -3,7 +3,7 @@
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 void CheckAndAddColLandTable() {
-	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 && CurrentStageVersion == SonicVersion) {
+	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion == SonicVersion) {
 		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
 			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
 				CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
@@ -15,6 +15,11 @@ void CheckAndAddColLandTable() {
 
 void SpeedHighway_Layout() {
 
+	/*CurrentStageVersion = TailsVersion;
+	CurrentMission = Mission3_LostChao;*/
+
+	CurrentMission = 2;
+
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
 
@@ -22,7 +27,8 @@ void SpeedHighway_Layout() {
 	{
 	case SonicVersion:
 	default:
-		CurrentStageVersion = SonicVersion;
+		if (CurrentStageVersion != TailsVersion)
+			CurrentStageVersion = SonicVersion;
 		break;
 	case KnucklesVersion:
 		SetRNGKnuckles();

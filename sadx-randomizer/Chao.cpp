@@ -364,14 +364,17 @@ void ChaoTPTrigger(ObjectMaster* a1) {
 }
 
 
-SetLevelPosition PlayerAroundChaoPosition[11] {
+SetLevelPosition PlayerAroundChaoPosition[14] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_WindyValley3, 3608.115, -4250.02, -2132.28, 0x8000 },	
+	{ SonicVersion, LevelAndActIDs_TwinklePark2, 330.48, 942.379, -133.624, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 3653.31, -127.07, 2924.58, 0x8000 },
+	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8019, -597, 8868, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
-	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1830, 1403 },
+	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1880, 1403 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 1517.56, -3139.29, -274.385},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },
@@ -403,16 +406,16 @@ SetLevelPosition ChaoLevelPosition[26] {
 	{ GammaVersion, LevelAndActIDs_EmeraldCoast1, 1599, 114.75, 840, 0x0 - 0x4000 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, 3857.76, 596.395, -2896.18, 0x8000 },
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 6103.9, 559.725, 630.345, 0xBDAC},
-	{ SonicVersion, LevelAndActIDs_WindyValley3, 4162.019, -4484, -1800, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_WindyValley3, 3489.99, -4340.27, -2132.28, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
 	{ TailsVersion, LevelAndActIDs_Casinopolis2, -1565.96, -2205, 2654.24, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_IceCap2, 1480.62, 573.3, -256.67, 0x8000 },
 	{ BigVersion, LevelAndActIDs_IceCap4, 1790.85, 371.968811, 11.265, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_TwinklePark2, 520, 1330, 1630, 0x8000 }, //Sonic Version
+	{ SonicVersion, LevelAndActIDs_TwinklePark2, -89.1414, 830, -991.721, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
 	{ AmyVersion, LevelAndActIDs_TwinklePark3, -41.43054199, 50, 290.7596436, 0x0 - 0x4000  }, //Amy Version
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -386.135, 2930.18, 4.479076996E-43 - 0x4000},
-	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 4455, -385.135, 2930.18, 0x8000 },
+	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8570.973, -950.125, 8984.435, 0x8000 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},

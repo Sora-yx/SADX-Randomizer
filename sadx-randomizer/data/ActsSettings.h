@@ -17,19 +17,8 @@ void SkyDeck_Layout();
 void LW_Layout();
 void FinalEgg_Layout();
 
-//Camera fixs.
-void CamSpeedHighway();
-void CamRedMountain();
-void CamFinalEgg();
-void CamHotShelter();
-void Cam_WV();
-void Cam_SkyDeck();
-void Cam_LW();
-void TP_CAM();
 
 int HedgehogHammerTrick();
 void FixGoldenAndCoin();
 int Chaos6_ReturnCharacter();
 int Switch_Gravity();
-void LoadTriggerObjHS();
-void TriggerObjHS_Main(ObjectMaster* obj);

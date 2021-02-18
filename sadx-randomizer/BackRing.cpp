@@ -110,7 +110,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 				ChaoSpawn = false;
 				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
 					GameState = 0xc;
-				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
+				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 0 && CurrentStageVersion == GammaVersion)
 				{
 					GameState = 24; //fix gamma hot shelter crash
 				}
@@ -485,8 +485,6 @@ void E104Enemy_Main_R(ObjectMaster* obj) {
 	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
 	{
 		data1->Status |= Status_Hurt;
-		if (p1->CharID < Characters_Gamma)
-			EnemyBounceThing(0, 0, 2, 0);
 	}
 
 	ObjectFunc(origin, E104_t.Target());
@@ -503,7 +501,7 @@ void E103Enemy_Main_R(ObjectMaster* obj) {
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
-	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
+	if (CurrentLevel == LevelIDs_WindyValley && CurrentMission > 0)
 	{
 		Check_Display_BackRing_Common(obj);
 		return;
@@ -518,8 +516,6 @@ void E103Enemy_Main_R(ObjectMaster* obj) {
 	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
 	{
 		data1->Status |= Status_Hurt;
-		if (p1->CharID < Characters_Gamma)
-			EnemyBounceThing(0, 0, 2, 0);
 	}
 
 	ObjectFunc(origin, E103_t.Target());

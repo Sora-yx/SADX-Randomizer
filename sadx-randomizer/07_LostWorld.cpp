@@ -11,7 +11,8 @@ void LW_Layout() {
 		CurrentStageVersion = SonicVersion;
 	else
 	{
-		//CurrentStageVersion = KnucklesVersion;
+		CurrentStageVersion = KnucklesVersion;
+
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
 	}

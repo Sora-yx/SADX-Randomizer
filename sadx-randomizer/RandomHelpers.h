@@ -267,7 +267,7 @@ void CreditsNewList();
 void Credits_StatsDelayOnFrames();
 void Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions);
 void Race_Init();
-void MissionResultCheck();
+
 void DisplayRandoInformation();
 
 //void randomstage(char stage, char act);
@@ -443,6 +443,7 @@ FunctionPointer(int, CapsuleCheck, (), 0x46a820);
 VoidFunc(Knuckles_SetRNG, 0x475840);
 void ICAct3Position();
 void LoadChaoTPTrigger();
+void HotShelterSecretSwitch();
 void ChaoTPTrigger(ObjectMaster* a1);
 void LoadRemoveCart();
 VoidFunc(PauseQuitThing2, 0x413f70);
@@ -487,3 +488,4 @@ void CheckAndDisplayWarningLayoutError();
 NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float y, float z);
 void CheckAndAddColLandTable();
 void IncreaseSpeedCharactersPerfectChaos();
+void MissionResultCheck(ObjectMaster* obj);

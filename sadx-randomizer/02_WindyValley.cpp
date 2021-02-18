@@ -22,17 +22,18 @@ void WindyValley_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = TailsVersion;
 
+	if (CurrentMission == Mission3_LostChao && (CurrentStageVersion == TailsVersion || CurrentStageVersion == GammaVersion))
+	{
+		CurrentMission = Mission2_100Rings;
+	}
+
 
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		if (CurrentStageVersion != GammaVersion)
+		if (CurrentStageVersion != GammaVersion && CurrentStageVersion != TailsVersion)
 			CurrentStageVersion = SonicVersion;
-		break;
-	case TailsVersion:
-		if (CurrentMission < Mission2_100Rings)
-			Race = true;
 		break;
 	}
 

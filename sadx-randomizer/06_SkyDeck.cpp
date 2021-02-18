@@ -7,19 +7,21 @@
 
 void SkyDeck_Layout() {
 
+	/*CurrentMission = 3;
+	CurrentStageVersion = TailsVersion;*/
 
-	//CurrentStageVersion = TailsVersion;
-	//CurrentMission = 0;
+	if (CurrentMission == Mission3_LostChao && (CurrentStageVersion == TailsVersion || CurrentStageVersion == KnucklesVersion))
+		CurrentMission = Mission2_100Rings;
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
-
 
 	switch (CurrentStageVersion)
 	{
 	case SonicVersion:
 	default:
-		CurrentStageVersion = SonicVersion;
+		if (CurrentStageVersion != TailsVersion)
+			CurrentStageVersion = SonicVersion;
 		break;
 	case KnucklesVersion:
 		if (CurrentMission < Mission2_100Rings)

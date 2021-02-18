@@ -11,6 +11,11 @@ void Casino_Layout() {
 
 	//CurrentMission = 2;
 
+	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
+	{
+		CurrentMission = 0;
+	}
+
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 

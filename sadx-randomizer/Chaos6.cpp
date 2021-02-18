@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "Chaos6.h"
 
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\Sets\\Chaos 6\\" B ".bin")
+#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
 
 
 void Chaos6_LoadWithTarget() {
@@ -54,36 +54,13 @@ void __cdecl Chaos6_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x55a580, Chaos6_ReturnCharacter);
 	WriteCall((void*)0x559d3a, Chaos6_ReturnCharacter);  //Display Chaos 6 life gauge while using anoter character than what the game expects, and fix camera issue.
 	
-	//Sonic
-	AddSet("SET1800S", "Sonic-Chaos6-S");
-	AddSet("SET1801S", "Sonic-Chaos6-K");
+
 
 	for (int i = 0; i < 8; i++) {
 		helperFunctions.RegisterStartPosition(i, Chaos6_StartPositions[0]);
 		helperFunctions.RegisterStartPosition(i, Chaos6_StartPositions_K[0]);
 	}
 	
-
-	//Tails
-	AddSet("SET1800M", "Tails-Chaos6-S");
-	AddSet("SET1801M", "Tails-Chaos6-K");
-
-	//Knuckles
-	AddSet("SET1800K", "Knux-Chaos6-S");
-	AddSet("SET1801K", "Knux-Chaos6-K");
-
-
-	//Amy
-	AddSet("SET1800A", "Amy-Chaos6-S");
-	AddSet("SET1801A", "Amy-Chaos6-K");
-
-
-	//Big
-	AddSet("SET1800B", "Big-Chaos6-S");
-	AddSet("SET1801B", "Big-Chaos6-K");
-
-	//Gamma
-	AddSet("SET1800E", "Gamma-Chaos6-S");
-	AddSet("SET1801E", "Gamma-Chaos6-K");
+	helperFunctions.ReplaceFile("system\\SET1801S.bin", "system\\sets\\SET1801S.bin");
 
 }

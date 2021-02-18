@@ -78,7 +78,8 @@ RandomizerGenerator RandoStageArray[52]{
 	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
 };		
 
-
+int previousLevel = -1;
+int TCCount = 0;
 void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 	RandomizerGenerator* generated;
@@ -87,11 +88,12 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (isStageBanned(generated, Char_id) || !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
+	} while (previousLevel == generated->levelAndActs || TCCount >= 2 && generated->levelAndActs >> 8 == LevelIDs_TwinkleCircuit || isStageBanned(generated, Char_id) || !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs & 0xf;
 	entry->Layout = generated->version;
+	previousLevel = generated->levelAndActs;
 	return;
 }
 
@@ -144,7 +146,7 @@ bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
 vector<RandomizerGenerator> DuplicateStages;
 RandomizerGenerator StructDupli;
 
-int TCCount = 0;
+
 int oldStageVersion = -1;
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
@@ -164,7 +166,7 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 			return true;
 		}
 
-		if (DuplicateStages.size() >= 40) //Prevent infinite loop.
+		if (DuplicateStages.size() >= 42) //Prevent infinite loop.
 		{
 			myfile << "STOOOOOOP";
 			return false;

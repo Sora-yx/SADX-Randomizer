@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
 bool isCutsceneAllowed = false;
-bool isGamePlayingCutscene = false;
 Trampoline* LoadMRNPC_t = nullptr;
-Trampoline* sub_413380_t = nullptr;
+Trampoline* StartCutscene_t;
 
 int EventDayTime[8] = {
 	6, 11, 21, 57, 98, 157, 159, 249
@@ -272,10 +271,11 @@ void PlayRandomCutscene(long flag) {
 	return;
 	//dword_3B28114 = 0;
 }
+
 DataPointer(int, CutsceneID, 0x3B2C570);
 
 void CutsceneManager(ObjectMaster* obj) {
-	if (!IsIngame() || isGamePlayingCutscene)
+	if (!IsIngame())
 		return;
 
 	EntityData1* data = obj->Data1;
@@ -284,16 +284,13 @@ void CutsceneManager(ObjectMaster* obj) {
 	{
 	case 0:
 		PlayRandomCutscene(randomizedSets[levelCount].cutsceneID);
+		isCutsceneAllowed = false;
 		data->Action = 1;
 		break;
 	case 1:
-		if (++data->InvulnerableTime == 100) {
-			data->Index = 0;
-			data->Action = 2;
-		}
-		break;
-	case 2:
 		if (!EV_MainThread_ptr) {
+			DisableController(0);
+			PauseEnabled = 0;
 			if (++data->Index == 40) {
 				CutsceneMode = 0;
 				LastStoryFlag = 0;
@@ -306,11 +303,12 @@ void CutsceneManager(ObjectMaster* obj) {
 	}
 }
 
+
 void PlayRandomCutscene_OnFrames() {
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
 
-		if (!IsIngame() || !RNGCutscene || !isCutsceneAllowed || isGamePlayingCutscene)
+		if (!IsIngame() || !RNGCutscene || !RNGStages)
 			return;
 
 		if (isCutsceneAllowed) {
@@ -390,41 +388,37 @@ void LoadMRNPC_r() {
 
 
 
-void preventIntroCutscene(long a1) { //prevent several cutscenes to be played at the same time lol
+void StartCutscene_r(int flag) {
 
-	if (RNGStages && RNGCutscene)
-		return;
+	if (RNGCutscene && RNGStages) {
 
-	return StartCutscene(a1);
-}
+		if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
+			return;
+		}
+	}
 
-void preventIntroCutscene2(long a2) { //prevent several cutscenes to be played at the same time lol
-
-	if (RNGStages && RNGCutscene)
-		return;
-
-	return EventCutscene_Load2(a2);
+	FunctionPointer(void, original, (int flag), StartCutscene_t->Target());
+	return original(flag);
 }
 
 
 void Init_RandomCutscene() {
 	if (RNGStages) {
 
-
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
 		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
 		
-
 		if (RNGCutscene) {
-			LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r);
+			LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r); //fix dumb crash
+			StartCutscene_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, StartCutscene_r);
 
-			WriteCall((void*)0x630674, preventIntroCutscene);
+			/*WriteCall((void*)0x630674, preventIntroCutscene);
 			WriteCall((void*)0x630064, preventIntroCutscene);
 			WriteCall((void*)0x53142e, preventIntroCutscene2);
 			WriteCall((void*)0x62fbe1, preventIntroCutscene);
 			WriteCall((void*)0x530b67, preventIntroCutscene);
-			WriteCall((void*)0x530d65, preventIntroCutscene);
+			WriteCall((void*)0x530d65, preventIntroCutscene);*/
 
 			WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
 			WriteCall((void*)0x685392, EV2_r); //Knux outro		

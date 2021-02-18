@@ -10,6 +10,8 @@ void EC_Layout() {
 	//CurrentStageVersion = GammaVersion;
 	//CurrentMission = 2;
 
+	//CurrentMission = 3;
+
 	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
@@ -168,7 +170,7 @@ PVMEntry EmeraldCoastObjectTextures[] = {
 void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 		ObjLists[LevelIDs_EmeraldCoast * 8 + i] = &EmeraldCoastObjectList;
 
 	TexLists_Obj[LevelIDs_EmeraldCoast] = EmeraldCoastObjectTextures;

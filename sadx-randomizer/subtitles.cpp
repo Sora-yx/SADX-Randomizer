@@ -63,8 +63,6 @@ void DoSomethingRelatedToText_r(SubtitleThing* a1, const char* a2)
 
 
 
-
-
 void Init_Subtitles() {
 	if (RNGVoices) {
 		WriteCall((void*)0x42fb75, DoSomethingRelatedToText_r);

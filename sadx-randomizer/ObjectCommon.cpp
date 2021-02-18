@@ -353,6 +353,8 @@ void CheckAndLoadTriggerObject() {
 
 	if (CurrentLevel == LevelIDs_SandHill && CurrentCharacter > Characters_Tails)
 		LoadRemoveCart();
+
+	HotShelterSecretSwitch();
 }
 
 void Load_ObjectsCommon() {
@@ -361,6 +363,9 @@ void Load_ObjectsCommon() {
 		MysticMelody = LoadObjectModel("MysticMelody");
 		MMPlatform = LoadObjectModel("MM-Platform");
 	}
+
+	if (CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && CurrentCharacter != Characters_Knuckles)
+		LoadObject((LoadObj)2, 1, MissionResultCheck);
 }
 
 
