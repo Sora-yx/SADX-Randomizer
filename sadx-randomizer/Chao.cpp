@@ -364,11 +364,12 @@ void ChaoTPTrigger(ObjectMaster* a1) {
 }
 
 
-SetLevelPosition PlayerAroundChaoPosition[14] {
+SetLevelPosition PlayerAroundChaoPosition[15] {
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_WindyValley3, 3608.115, -4250.02, -2132.28, 0x8000 },	
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, 330.48, 942.379, -133.624, 0x8000 },
+	{ BigVersion, LevelAndActIDs_TwinklePark2, 608.112, 499.01, -55.8172, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 3653.31, -127.07, 2924.58, 0x8000 },
 	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8019, -597, 8868, 0x8000 },
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },

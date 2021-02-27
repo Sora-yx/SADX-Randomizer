@@ -7,9 +7,8 @@ ObjectMaster* TriggerHS = nullptr;
 
 void HotShelter_Layout() {
 
-	CurrentStageVersion = BigVersion;
-
-	CurrentMission = 3;
+	if (CurrentMission == Mission3_LostChao && CurrentStageVersion == BigVersion)
+		CurrentMission = 2;
 
 	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = AmyVersion;

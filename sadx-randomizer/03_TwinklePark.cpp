@@ -4,12 +4,14 @@
 
 void TwinklePark_Layout() {
 
+	/*CurrentStageVersion = BigVersion;
+	CurrentMission = Mission3_LostChao;*/
 
-	/*if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
+	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct == 1 && CurrentStageVersion != BigVersion)
-		CurrentStageVersion = AmyVersion; */
+		CurrentStageVersion = AmyVersion;
 
 	if (CurrentCharacter >= Characters_Gamma)
 	{

@@ -18,7 +18,6 @@ void SpeedHighway_Layout() {
 	/*CurrentStageVersion = TailsVersion;
 	CurrentMission = Mission3_LostChao;*/
 
-	CurrentMission = 2;
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;

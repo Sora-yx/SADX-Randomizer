@@ -955,8 +955,6 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 	int cur_AI = -1;
 	size_t ai_count = sizeof(AIArray) / sizeof(AIArray[0]);
 
-	HMODULE IsSuperTailsMod = GetModuleHandle(L"super-tails");
-
 	if (char_id == Characters_Knuckles || char_id >= Characters_Gamma)
 		return -1;
 
@@ -965,7 +963,7 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 
 	do {
 		cur_AI = AIArray[rand() % ai_count];
-	} while (cur_AI == prev_AI || cur_AI == char_id || IsSuperTailsMod && (char_id == Characters_Tails && cur_AI != Characters_Sonic) || (char_id != Characters_Sonic && cur_AI == Characters_Tails));
+	} while (cur_AI == prev_AI || cur_AI == char_id || (char_id != Characters_Sonic && cur_AI == Characters_Tails));
 
 	prev_AI = cur_AI;
 	return cur_AI;
