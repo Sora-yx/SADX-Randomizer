@@ -15,7 +15,7 @@ void FixRMLava() {
 
 void RedMountain_Layout() {
 
-	CurrentMission = Mission3_LostChao;
+	//CurrentMission = Mission3_LostChao;
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
