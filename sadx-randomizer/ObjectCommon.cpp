@@ -334,8 +334,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				}
 			break;
 			case 5:	
+				if (EntityData1Ptrs[0]->CharID >= Characters_Knuckles) 
+					EntityData1Ptrs[0]->CollisionInfo->Radius /= 2; // fix that wrong teleportation position with that dumb collision push shit thing 
+
 				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
-				//EntityData1Ptrs[0]->Position.z = EntityData1Ptrs[0]->Position.z - ->spd.z * 0.5;
 				data->Action = 1;
 			break;
 		}

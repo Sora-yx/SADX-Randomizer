@@ -488,3 +488,25 @@ NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float 
 void CheckAndAddColLandTable();
 void IncreaseSpeedCharactersPerfectChaos();
 void MissionResultCheck(ObjectMaster* obj);
+
+union taskwork_subs
+{
+	char b[4];
+	__int16 w[2];
+	int l;
+	float f;
+	void* ptr;
+};
+
+
+struct motionwk2
+{
+	taskwork_subs work;
+	NJS_POINT3 spd;
+	NJS_POINT3 acc;
+	Rotation ang_aim;
+	Rotation ang_spd;
+	float force;
+	float accel;
+	float frict;
+};
