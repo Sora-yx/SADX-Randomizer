@@ -9,7 +9,7 @@ NJS_TEXNAME MissionsText[25];
 NJS_TEXNAME TitleCard[8];
 static NJS_TEXLIST TitleCardTex = { arrayptrandlength(TitleCard) };
 char GetCustomLayout;
-//extern HelperFunctions help;
+
 static Trampoline* LoadTitleCardTexture_t = nullptr;
 
 bool isSA2Mission() {
@@ -405,9 +405,6 @@ void MissionResultCheck(ObjectMaster* obj) {
 			LoadLevelResults_r();
 			CheckThingButThenDeleteObject(obj);
 		break;
-	}
-
-
-				
+	}			
 }
 
