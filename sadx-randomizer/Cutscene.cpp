@@ -356,7 +356,7 @@ void preventLevelCutscene() {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_RedMountain:
-			if (CurrentCharacter == Characters_Sonic || CurrentCharacter == Characters_Tails)
+			if (CurrentCharacter == Characters_Sonic)
 				return;
 			break;
 		case LevelIDs_HotShelter:

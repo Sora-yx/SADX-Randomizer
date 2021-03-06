@@ -371,7 +371,6 @@ void ResetStatsValues() {
 	KnuxCheck2 = 0; //fix trial crash
 	CurrentAI = 0;
 	SonicRand = 0;
-	TransfoCount = 0;
 	Credits_State = 0;
 	RageQuit++;
 	ringsPB += Rings; //total Rings credit stat

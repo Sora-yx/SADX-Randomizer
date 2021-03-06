@@ -3,7 +3,6 @@
 
 //Manage characters stuff, improve and fixes some stuff
 char SonicRand = 0;
-int TransfoCount = 0;
 extern bool Upgrade;
 
 
@@ -61,8 +60,6 @@ void LoadCharacter_r() {
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-
-
 	AllUpgrades();
 	EmeraldRadar_R();
 	LoadCharacter();
@@ -85,21 +82,6 @@ void SuperAuraStuff() {
 	return;
 }
 
-//Initialize Super Sonic  (Credit: SonicFreak94).
-
-static void __cdecl SuperSonicManager_Main(ObjectMaster* _this)
-{
-	if (TransfoCount < 1)
-	{
-		CheckThingButThenDeleteObject(_this);
-		return;
-	}
-}
-
-static void SuperSonicManager_Load()
-{
-	ObjectMaster* obj = LoadObject(static_cast<LoadObj>(0), 2, SuperSonicManager_Main);
-}
 
 int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
@@ -159,6 +141,8 @@ Trampoline LoadCharTextures_T((int)LoadCharTextures, (int)LoadCharTextures + 0x6
 
 void CheckAndLoadSuperSonic_Tex(int curChara) {
 
+	SuperSonicFlag = 0;
+
 	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentCharacter != Characters_Sonic && CurrentLevel == LevelIDs_PerfectChaos)
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 
@@ -167,11 +151,7 @@ void CheckAndLoadSuperSonic_Tex(int curChara) {
 }
 
 
-
 void SuperSonic_TransformationCheck() {
-
-	SuperSonicFlag = 0;
-	TransfoCount = 0;
 
 	bool isLevelBanned = GetSSLevelBanned();
 
@@ -190,7 +170,6 @@ void SuperSonic_TransformationCheck() {
 			CharObj2* data2 = CharObj2Ptrs[0];
 
 			bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-			bool action = !transformation ? (last_action[0] == 8 && data1->Action == 12) : (last_action[0] == 82 && data1->Action == 78);
 
 			//Super Sonic Transformation (Credit: SonicFreak94).
 
@@ -199,17 +178,11 @@ void SuperSonic_TransformationCheck() {
 				data1->Status &= ~Status_LightDash;
 				ForcePlayerAction(0, 46);
 				PlayVoice(3001);
-				data2->Upgrades |= Upgrades_SuperSonic;
 				PlayMusic(MusicIDs_ThemeOfSuperSonic);
-
-				if (!TransfoCount++)
-					SuperSonicManager_Load();
 			}
 
-			SuperSonicFlag = TransfoCount > 0;
+			SuperSonicFlag = 1;
 			return;
-		
-		
 	}
 }
 
@@ -416,7 +389,7 @@ void Characters_Management() {
 	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart); 
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
-		//Amy Stuff
+	//Amy Stuff
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.

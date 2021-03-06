@@ -198,7 +198,6 @@ extern bool RNGVoices;
 extern int character[6];
 extern int CharacterCopy;
 
-extern int TransfoCount;  //Super Sonic Stuff
 extern bool Vanilla;
 //extern bool isCheckpointUsed;
 extern int CurrentMissionCard;

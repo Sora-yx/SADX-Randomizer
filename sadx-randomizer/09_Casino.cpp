@@ -111,13 +111,11 @@ void FixGoldenAndCoin() {
 			WriteData<1>((char*)0x5c4232, 0x74); //display golden statue*/
 	}
 
-	if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
-	{
-		if (CurrentCharacter == Characters_Gamma)
-			WriteData<1>((char*)0x5D118B, 0x2); //Fix gamma pinball teleportation
-		else
-			WriteData<1>((char*)0x5D118B, 0x1); //Restore original function.
-	}
+
+	if (CurrentCharacter == Characters_Gamma)
+		WriteData<1>((char*)0x5D118B, 0x2); //Fix gamma pinball teleportation
+	else
+		WriteData<1>((char*)0x5D118B, 0x1); //Restore original function.
 
 	return;
 }
@@ -371,8 +369,8 @@ void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperF
 
 void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunctions) {
 
-	WriteData<5>((void*)0x422ef4, 0x90);	
-	WriteData<5>((void*)0x422f2d, 0x90);	
+	WriteData<5>((void*)0x422ef4, 0x90);
+	WriteData<5>((void*)0x422f2d, 0x90);
 	WriteData<5>((void*)0x422f3c, 0x90);
 	WriteCall((void*)0x422f03, Casino_Layout);
 

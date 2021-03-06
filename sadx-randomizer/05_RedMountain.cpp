@@ -15,8 +15,6 @@ void FixRMLava() {
 
 void RedMountain_Layout() {
 
-	/*CurrentStageVersion = GammaVersion;
-	CurrentMission = 0;*/
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
