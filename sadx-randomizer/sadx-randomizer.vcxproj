@@ -83,8 +83,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\sadx-mod-loader\libmodutils\LandTableInfo.cpp" />
-    <ClCompile Include="..\sadx-mod-loader\libmodutils\ModelInfo.cpp" />
     <ClCompile Include="00_HedgehogHammer.cpp" />
     <ClCompile Include="01_EmeraldCoast.cpp" />
     <ClCompile Include="02_WindyValley.cpp" />

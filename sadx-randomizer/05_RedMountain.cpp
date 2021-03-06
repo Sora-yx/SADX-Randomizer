@@ -15,6 +15,7 @@ void FixRMLava() {
 
 void RedMountain_Layout() {
 
+	CurrentMission = Mission3_LostChao;
 
 	if (CurrentStageVersion != KnucklesVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
@@ -27,6 +28,11 @@ void RedMountain_Layout() {
 		CurrentStageVersion = KnucklesVersion;
 		if (CurrentMission < Mission2_100Rings)
 			SetRNGKnuckles();
+	}
+
+	if (CurrentStageVersion == GammaVersion && CurrentMission == Mission3_LostChao && CurrentCharacter == Characters_Gamma)
+	{
+		CurrentMission = Mission2_100Rings;
 	}
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.

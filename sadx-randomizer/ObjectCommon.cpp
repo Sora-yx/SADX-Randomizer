@@ -335,6 +335,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 			case 5:	
 				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
+				//EntityData1Ptrs[0]->Position.z = EntityData1Ptrs[0]->Position.z - ->spd.z * 0.5;
 				data->Action = 1;
 			break;
 		}

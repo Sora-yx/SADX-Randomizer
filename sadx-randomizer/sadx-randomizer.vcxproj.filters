@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Extern">
-      <UniqueIdentifier>{5f73c06c-ecf3-4d29-af9d-438bec08a864}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Levels">
       <UniqueIdentifier>{076dc3ee-24e8-4099-8dfe-0823b09826f1}</UniqueIdentifier>
     </Filter>
@@ -41,12 +38,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sadx-mod-loader\libmodutils\LandTableInfo.cpp">
-      <Filter>Source Files\Extern</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sadx-mod-loader\libmodutils\ModelInfo.cpp">
-      <Filter>Source Files\Extern</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
