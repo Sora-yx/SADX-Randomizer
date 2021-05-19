@@ -27,8 +27,12 @@ DataPointer(char, byte_3B2A2F1, 0x3B2A2F1);
 ObjectFunc(sub_47D300, 0x47D300);
 FunctionPointer(int, sub_46A820, (), 0x46A820);
 FunctionPointer(int, sub_46A7F0, (), 0x46A7F0);
-
+FunctionPointer(task*, GetE102BeamTaskPTR, (task* a1), 0x4CEFC0);
+FunctionPointer(void, E102Hit, (NJS_POINT3* a1, double a2), 0x49FB50);
+ObjectFunc(E102KillCursor, 0x4CEFE0);
+ObjectFunc(E102SetKillCursor, 0x4CF060);
 ObjectFunc(UpdateSetDataAndDelete, 0x46C150);
+
 
 
 extern bool GetBackRing;

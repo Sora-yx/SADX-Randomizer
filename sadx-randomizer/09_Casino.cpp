@@ -13,7 +13,7 @@ void Casino_Layout() {
 
 	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
 	{
-		CurrentMission = 0;
+		CurrentMission = SADX_Mission;
 	}
 
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)

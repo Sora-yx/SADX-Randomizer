@@ -257,5 +257,8 @@
     <ClInclude Include="Cas.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
+    <ClInclude Include="startup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

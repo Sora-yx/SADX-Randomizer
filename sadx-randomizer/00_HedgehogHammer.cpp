@@ -3,7 +3,7 @@
 #define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
 
 
-void __cdecl HedgehogHammer_Init(const char* path, const HelperFunctions& helperFunctions)
+void __cdecl HedgehogHammer_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 

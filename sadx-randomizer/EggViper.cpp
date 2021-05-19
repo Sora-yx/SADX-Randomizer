@@ -35,7 +35,7 @@ void EggViperHPStuff() {
 }
 
 
-void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFunctions)
+void __cdecl EggViper_Init(const HelperFunctions& helperFunctions)
 {
 
 	WriteCall((void*)0x584430, FixGammaBounce); //Fix infinite Gamma bounce on Egg Viper Fight.
@@ -57,7 +57,7 @@ void __cdecl EggViper_Init(const char* path, const HelperFunctions& helperFuncti
 
 
 
-void __cdecl EggViperVoice(const char* path, const HelperFunctions& helperFunctions)
+void __cdecl EggViperVoice(const HelperFunctions& helperFunctions)
 {
 	//remplacing "See if you can make it through here; Sonic!" voice depending on the character played.
 

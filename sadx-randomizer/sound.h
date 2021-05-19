@@ -1,7 +1,7 @@
 #pragma once
 
 #define Status_KillSound 0x4000
-HelperFunctions extern help;
+extern HelperFunctions help;
 void Sounds_OnFrame();
 
 void PlayCustomSound(int ID);

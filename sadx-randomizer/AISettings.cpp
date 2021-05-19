@@ -885,7 +885,7 @@ void AI_FixesOnFrames() {
 
 	if (!IsGamePaused() && oldcol)
 	{
-		if (HIBYTE(oldcol->Flags) & 0x80)
+		if (HIBYTE(oldcol->flag) & 0x80)
 		{
 			if (oldcol->CollisionArray)
 			{

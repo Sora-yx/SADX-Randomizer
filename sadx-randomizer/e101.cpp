@@ -48,7 +48,7 @@ void MK2_Main_R(ObjectMaster* obj) {
 
 
 
-void __cdecl E101_Init(const char* path, const HelperFunctions& helperFunctions)
+void __cdecl E101_Init(const HelperFunctions& helperFunctions)
 {
 	WriteData<1>((int*)0x56BBF4, 160); //prevent MK2 to move to the next phase, we will manually do it to give more time to the player to react for non gamma characters.
 

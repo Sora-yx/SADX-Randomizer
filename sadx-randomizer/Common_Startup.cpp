@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "subtitles.h"
 
-HelperFunctions help;
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	HedgehogHammer_Init(path, helperFunctions);
+	HedgehogHammer_Init(helperFunctions);
 	EmeraldCoast_Init(path, helperFunctions);
 	WindyValley_Init(path, helperFunctions);
 	Casino_Init(path, helperFunctions);
@@ -21,16 +20,16 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	SandHill_Init(path, helperFunctions);
 
 	//Boss
-	Chaos0_Init(path, helperFunctions);
-	Chaos2_Init(path, helperFunctions);
-	Chaos4_Init(path, helperFunctions);
-	Chaos6_Init(path, helperFunctions);
-	EggHornet_Init(path, helperFunctions);
-	EggWalker_Init(path, helperFunctions);
-	EggViper_Init(path, helperFunctions);
-	Zero_Init(path, helperFunctions);
-	PerfectChaos_Init(path, helperFunctions);
-	E101_Init(path, helperFunctions);
+	Chaos0_Init(helperFunctions);
+	Chaos2_Init(helperFunctions);
+	Chaos4_Init(helperFunctions);
+	Chaos6_Init(helperFunctions);
+	EggHornet_Init(helperFunctions);
+	EggWalker_Init(helperFunctions);
+	EggViper_Init(helperFunctions);
+	Zero_Init(helperFunctions);
+	PerfectChaos_Init();
+	E101_Init(helperFunctions);
 
 	LayoutFunctionInit(); //Set and Cam file
 }

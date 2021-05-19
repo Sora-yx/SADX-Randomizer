@@ -16,6 +16,7 @@
 #include "ModelInfo.h"
 #include "IniFile.hpp"
 
+#include "startup.h"
 #include "RandomHelpers.h"
 #include "CharactersSettings.h"
 #include "Credits.h"

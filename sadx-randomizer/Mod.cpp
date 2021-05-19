@@ -3,6 +3,7 @@
 #include <fstream>
 
 std::string modpath;
+HelperFunctions help;
 
 int Seed = 0;
 char StorySplits;
@@ -156,13 +157,13 @@ extern "C" {
 		
 		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
 
-		if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
+		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 			//EntityData1Ptrs[0]->Position = { -157.615, 418.875, -290.49 };
 		
 		//Display Current Randomized Settings Information on Character Select Screen.
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
 			DisplayRandoInformation();
-
+		
 		CheckAndDisplayWarningLayoutError();
 		Sounds_OnFrame();
 		LevelOnFrames();

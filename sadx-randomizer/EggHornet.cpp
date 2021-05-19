@@ -35,7 +35,7 @@ void EggHornet_LoadWithTarget() {
 
 
 
-void __cdecl EggHornet_Init(const char* path, const HelperFunctions& helperFunctions)
+void __cdecl EggHornet_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 	WriteJump((void*)0x572230, EggHornet_LoadWithTarget);

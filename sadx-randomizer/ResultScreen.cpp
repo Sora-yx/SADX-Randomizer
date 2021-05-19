@@ -295,7 +295,7 @@ void __cdecl LoadLevelResults_r() {
 		a2.y = 5.7132001f;
 		a2.z = -1.5176001f;
 		sub_43EC90(EntityData1Ptrs[0], &a2);
-		a1 = EntityData1Ptrs[0]->CollisionInfo->CollisionArray->origin;
+		a1 = EntityData1Ptrs[0]->CollisionInfo->CollisionArray->center;
 		stru_3B2C6DC = a1;
 		njSubVector(&a1, &a2);
 		stru_3B2C6D0 = a1;

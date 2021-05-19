@@ -65,7 +65,6 @@ void Set_Zero() {
 
 
 
-
 void TwinkleCircuitResult() {
 	TCQuit = 1;
 	DisablePause();
@@ -86,21 +85,20 @@ void TwinkleCircuitResult() {
 }
 
 //Create an object so Gamma can hit some specific bosses.
-CollisionData col = { 0, 0, 0x77, 0, 0x800400, {0, 0, 0}, { 6.0, 6.0, 0.0 }, 0, 0 };
+CollisionData col = { 0, 0, 0x77, 0, 0x800400,  { 6.0, 6.0, 6.0}, 0, 0 };
 
 void TargetableEntity(ObjectMaster* obj)
 {
 	EntityData1* data = obj->Data1;
-
-
+	
 	if (data->Action == 0) {
 		AllocateObjectData2(obj, obj->Data1);
 
 		//if the scale is specified, temporary set the collision scale to it.
 		if (data->Scale.x) {
-			col.scale.x = data->Scale.x;
+		
 			Collision_Init(obj, &col, 1, 2u);
-			col.scale.x = 6;
+
 		}
 		else {
 			Collision_Init(obj, &col, 1, 2u);
@@ -123,10 +121,7 @@ void TargetableEntity(ObjectMaster* obj)
 			return;
 
 		data->Position = boss->Data1->Position;
-		if (CurrentLevel != LevelIDs_EggWalker)
-			data->Position.y += 10;
-		else
-			data->Position.y += 45;
+		data->Position.y += 10;
 
 
 		if (OhNoImDead(obj->Data1, (ObjectData2*)obj->Data2))
@@ -147,18 +142,6 @@ void TargetableEntity(ObjectMaster* obj)
 	}
 }
 
-
-void FixPlayerSoftLockE100Boss() {
-
-	CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
-	DisableControl();
-
-
-	if (CurrentLevel == LevelIDs_WindyValley)
-		//EntityData1Ptrs[0]->Position = { -2153.95, 66.7425, 2636.65 };
-
-	return;
-}
 
 void Stages_Management() {
 
