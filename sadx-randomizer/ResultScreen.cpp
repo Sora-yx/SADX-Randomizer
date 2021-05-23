@@ -4,7 +4,6 @@
 extern bool RandCongratsDone;
 
 
-
 //While load LevelResult: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
@@ -313,7 +312,6 @@ void __cdecl LoadLevelResults_r() {
 		break;
 	}
 }
-
 
 
 void RestorePuzzleBoxVanillaThing() {

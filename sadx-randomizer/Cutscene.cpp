@@ -340,15 +340,12 @@ void EV_GetCharObj_r(int player) { //SADX Doesn't give you control back after ou
 	return;
 }
 
-
-void EV2_r(int player) { //Force Outro cutscene to Enable Control when they are over, because SADX originally doesn't.
+void EV2_r(int player) { //same as above
 	EnableControl();
 	ForcePlayerAction(0, 0x18);
 	EV_Wait(player);
 	return;
 }
-
-
 
 void preventLevelCutscene() {
 
@@ -387,7 +384,6 @@ void LoadMRNPC_r() {
 }
 
 
-
 void StartCutscene_r(int flag) {
 
 	if (RNGCutscene && RNGStages) {
@@ -412,13 +408,6 @@ void Init_RandomCutscene() {
 		if (RNGCutscene) {
 			LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r); //fix dumb crash
 			StartCutscene_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, StartCutscene_r);
-
-			/*WriteCall((void*)0x630674, preventIntroCutscene);
-			WriteCall((void*)0x630064, preventIntroCutscene);
-			WriteCall((void*)0x53142e, preventIntroCutscene2);
-			WriteCall((void*)0x62fbe1, preventIntroCutscene);
-			WriteCall((void*)0x530b67, preventIntroCutscene);
-			WriteCall((void*)0x530d65, preventIntroCutscene);*/
 
 			WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
 			WriteCall((void*)0x685392, EV2_r); //Knux outro		

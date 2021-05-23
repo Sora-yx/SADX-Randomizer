@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "Chaos6.h"
 
 #define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
@@ -21,37 +20,6 @@ int Chaos6_ReturnCharacter() {
 		return (unsigned int)Characters_Knuckles;
 	}
 }
-
-Trampoline* Chaos6_t;
-
-void Chaos6_Main_R(ObjectMaster* obj) {
-
-	EntityData1* data1 = obj->Data1;
-	task* tsk = (task*)obj;
-
-	EntityData1* data = (EntityData1*)tsk->mwp;
-	NJS_POINT3 v15;
-	ObjectMaster* chaos = obj;
-	chaoswk* cwk = (chaoswk*)obj->UnknownB_ptr;
-
-	if (obj)
-	{
-		if (data1->Action == 0)
-		{
-			AllocateObjectData2(chaos, data1);
-		}
-	}
-
-	if (cwk) {
-		if (cwk->bwk.action < 15) {
-			E102SetKillCursor(obj);
-		} 
-	}
-
-	ObjectFunc(origin, Chaos6_t->Target());
-	origin(obj);
-}
-
 
 
 void __cdecl Chaos6_Init(const HelperFunctions& helperFunctions)

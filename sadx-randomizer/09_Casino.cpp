@@ -5,8 +5,6 @@
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
-
-
 void FixFlipperCharacterPosition() {
 
 	if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
@@ -123,7 +121,6 @@ void Casino_Layout() {
 
 	//CurrentStageVersion = KnucklesVersion;
 
-	//CurrentMission = 2;
 
 	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
 	{

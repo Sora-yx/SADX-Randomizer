@@ -47,8 +47,6 @@ void FixZeroSound3() {
 		PlaySound(0x332, 0x0, 0, 0x0);
 }
 
-
-
 void Set_Zero() {
 	//Zero Stuff
 	WriteCall((void*)0x61d169, LoadZero); //Call Zero at Twinkle Park.
@@ -152,7 +150,5 @@ void Stages_Management() {
 	Race_Init();
 	WriteCall((void*)0x4169e1, FixRestart_Stuff); //Delete Cart properly after a game over.
 	WriteCall((void*)0x41676b, FixRestart_Stuff); 
-
-	
 }
 

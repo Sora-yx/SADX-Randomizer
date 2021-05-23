@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include "Utils.h"
-#include "RandomHelpers.h"
 
 void FixSuperFormDeath() {
 	if (CurrentCharacter == Characters_Sonic)

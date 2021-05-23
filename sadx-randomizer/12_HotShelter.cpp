@@ -16,7 +16,7 @@ void HotShelter_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
 
-	CheckAndSet_HotShelterFunctions();
+	CheckAndSet_HotShelterLayoutFeatures();
 
 	return;
 }
@@ -32,8 +32,7 @@ void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secr
 	return;
 }
 
-
-void CheckAndSet_HotShelterFunctions() {
+void CheckAndSet_HotShelterLayoutFeatures() {
 
 	if (CurrentStageVersion == BigVersion) //Big Layout
 	{
@@ -53,6 +52,8 @@ void CheckAndSet_HotShelterFunctions() {
 		WriteData<1>((int*)0x59a126, 0x75);
 		WriteData<6>((int*)0x442249, 0x90); //Fix Puzzle Box drop
 	}
+
+	return;
 }
 
 //Object
@@ -411,7 +412,6 @@ void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunct
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-
 	WriteData<5>((int*)0x42300b, 0x90);
 	WriteData<5>((int*)0x42301a, 0x90);
 	WriteData<5>((int*)0x423029, 0x90);

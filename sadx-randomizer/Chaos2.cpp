@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "Chaos2.h"
 
 Trampoline* Chaos2_t;

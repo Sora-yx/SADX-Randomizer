@@ -1,11 +1,7 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "EggViper.h"
-#include "RandomHelpers.h"
-#include "Trampoline.h"
+
 extern bool Viper;
-short curEVMove = 0;
-short limitTrick = 0;
 
 //fix infinite gamma bounce on Egg Viper.
 
@@ -23,7 +19,6 @@ void FixGammaHitBounce() {
 	EggViperBounceHit();
 }
 
-
 void EggViperHPStuff() {
 
 	if (Viper && !isCriticalMode)
@@ -33,7 +28,6 @@ void EggViperHPStuff() {
 		BossHP_Stuff(600, 0x18, 5);
 	}
 }
-
 
 void __cdecl EggViper_Init(const HelperFunctions& helperFunctions)
 {
@@ -55,47 +49,6 @@ void __cdecl EggViper_Init(const HelperFunctions& helperFunctions)
 		helperFunctions.RegisterStartPosition(i, EV_StartPositions[0]);
 }
 
-
-
-void __cdecl EggViperVoice(const HelperFunctions& helperFunctions)
-{
-	//remplacing "See if you can make it through here; Sonic!" voice depending on the character played.
-
-	if (CurrentLevel == LevelIDs_EggViper)
-	{
-		if (CurrentCharacter == Characters_Sonic)
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\Hahahhh_Sonic.adx"); //restore original voice
-
-		if (CurrentCharacter == Characters_Tails)
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\GiveUpTails.adx"); //"Give up now Tails"
-
-		if (CurrentCharacter == Characters_Knuckles)
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\NoUse.adx"); //"It's no use, give up."
-
-		if (CurrentCharacter == Characters_Amy)
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\GiveUpAmy_424.adx"); //"Give up now Amy" (sa2 voice)
-
-		if (CurrentCharacter == Characters_Big)
-		{
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\NoUse.adx"); //"It's no use, give up."
-			//WriteData<1>((void*)0x57c321, 0x20); //X
-			//WriteData<1>((void*)0x57c326, 0x40); //Fix Egg Viper platform for Big Position Y
-			WriteData<1>((void*)0x57c32f, 0x20); //Fix Egg Viper platform for Big Position Z (20 Fonctionnel)
-			WriteData<1>((void*)0x584c7f, 0x12); //fix Egg Viper softlock
-
-			WriteCall((void*)0x57f206, EggViperHPStuff);
-		}
-
-		if (CurrentCharacter == Characters_Gamma)
-			helperFunctions.ReplaceFile("system\\sounddata\\voice_us\\wma\\1902.wma", "system\\voices\\Useless.adx"); //"I'm so dissapointed; you useless machine!"
-	}
-}
-
-void BigEggViperPlatform() {
-	if (CurrentCharacter == Characters_Big)
-	{
-	}
-}
 
 void FixEggViperCutscene() {
 	if (CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Big)

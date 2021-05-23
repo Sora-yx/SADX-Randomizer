@@ -4,9 +4,6 @@
 
 void TwinklePark_Layout() {
 
-	CurrentStageVersion = BigVersion;
-	CurrentMission = 0;
-
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
 

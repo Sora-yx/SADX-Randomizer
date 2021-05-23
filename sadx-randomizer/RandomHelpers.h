@@ -173,7 +173,7 @@ extern ObjectFuncPtr charfuncs[];
 void TitleCard_Init();
 void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
-void CheckAndSet_HotShelterFunctions();
+void CheckAndSet_HotShelterLayoutFeatures();
 void TargetableEntity(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
 

@@ -127,37 +127,37 @@ void LoadStageMissionImage_r() {
 
 		switch (CurrentLevel)
 		{
-			case LevelIDs_EmeraldCoast:
-				if (CurrentStageVersion == GammaVersion)
-					CurrentMissionCard = FroggyCard; //Catch Froggy if Big or Gamma layout.
-				break;	
-			case LevelIDs_WindyValley:
-				if (CurrentStageVersion == GammaVersion)
-					CurrentMissionCard = E103Card;
-				break;
-			case LevelIDs_LostWorld:
-				if (CurrentStageVersion != KnucklesVersion && !CurrentMission && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
-					CurrentMissionCard = LostWorldCard; //Go to the center of the ruin.
-				break;
-			case LevelIDs_FinalEgg:
-					if (CurrentStageVersion == SonicVersion)
-						CurrentMissionCard = FinalEggCard; //Go to the center of the base.
+		case LevelIDs_EmeraldCoast:
+			if (CurrentStageVersion == GammaVersion)
+				CurrentMissionCard = FroggyCard; //Catch Froggy if Big or Gamma layout.
+			break;
+		case LevelIDs_WindyValley:
+			if (CurrentStageVersion == GammaVersion)
+				CurrentMissionCard = E103Card;
+			break;
+		case LevelIDs_LostWorld:
+			if (CurrentStageVersion != KnucklesVersion && !CurrentMission && CurrentCharacter != Characters_Amy && CurrentCharacter != Characters_Big)
+				CurrentMissionCard = LostWorldCard; //Go to the center of the ruin.
+			break;
+		case LevelIDs_FinalEgg:
+			if (CurrentStageVersion == SonicVersion)
+				CurrentMissionCard = FinalEggCard; //Go to the center of the base.
 
-					if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
-						CurrentMissionCard = SonicDollCard;	
-				break;
-			case LevelIDs_RedMountain:
-				if (CurrentMission < Mission2_100Rings && CurrentStageVersion == GammaVersion)
-					CurrentMissionCard = E104Card; 
-				break;
-			case LevelIDs_SpeedHighway:
-				if (Race && CurrentAct == 0)
-					CurrentMissionCard = MissileRaceCard; //Eggman Race
-				break;
-			case LevelIDs_HotShelter:
-				if (CurrentStageVersion == GammaVersion && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
-					CurrentMissionCard = E105Card;
-				break;
+			if (CurrentAct == 2 && CurrentStageVersion == GammaVersion)
+				CurrentMissionCard = SonicDollCard;
+			break;
+		case LevelIDs_RedMountain:
+			if (CurrentMission < Mission2_100Rings && CurrentStageVersion == GammaVersion)
+				CurrentMissionCard = E104Card;
+			break;
+		case LevelIDs_SpeedHighway:
+			if (Race && CurrentAct == 0)
+				CurrentMissionCard = MissileRaceCard; //Eggman Race
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentStageVersion == GammaVersion && CurrentAct == 2 && CurrentCharacter == Characters_Gamma)
+				CurrentMissionCard = E105Card;
+			break;
 		}
 
 
@@ -296,7 +296,7 @@ void TitleCard_Init() {
 
 
 
-SetLevelPosition PlayerEndPosition[50]{ //Used for M2 and Bosses
+SetLevelPosition PlayerEndPosition[51]{ //Used for M2 and Bosses
 
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { 3954.57, 9.5, 365.366 }, 0x6000},
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, { 5825.86, 2, -2641.14 }, 0x4000 },
@@ -306,6 +306,7 @@ SetLevelPosition PlayerEndPosition[50]{ //Used for M2 and Bosses
 	{ SonicVersion, LevelAndActIDs_WindyValley2, { -25.3528, 1800, -15.8911 }, 0 },
 	{ SonicVersion, LevelAndActIDs_WindyValley3, { 1425.96, -2619, 1021.17 }, 0x4000 },
 	{ TailsVersion, LevelAndActIDs_WindyValley3, { 1425.96, -2619, 1021.17 }, 0 },
+	{ SonicVersion, LevelAndActIDs_TwinklePark1, { -6550.75, -6616, 23180.05 }, 0x4000 },
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, { 646.891, 45.3108, -452.654 }, 1.0 },
 	{ AmyVersion, LevelAndActIDs_TwinklePark2, { 646.891, 45.3108, -452.654}, 1.0 },
 	{ BigVersion, LevelAndActIDs_TwinklePark2, { 586.078, 3, -626.673 }, 0xC000 },
@@ -361,12 +362,22 @@ void MissionResultCheck(ObjectMaster* obj) {
 	switch (data->Action)
 	{
 	case 0:
-		if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1) || CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
+		if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1)) {
+
+			if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
+				return;
+
 			if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 			{
+				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
+					ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, OCartStopper);
+					if (toto) {
+						toto->Data1->Position = EntityData1Ptrs[0]->Position;
+					}
+				}
+
 				Flash = nullptr;
-				if (CurrentLevel != LevelIDs_TwinklePark)
-					ForcePlayerAction(0, 24);
+				ForcePlayerAction(0, 24);
 				CharObj2Ptrs[0]->Speed.x = 1.5;
 				EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 				data->Action = 1;
@@ -402,9 +413,9 @@ void MissionResultCheck(ObjectMaster* obj) {
 			data->Action = 3;
 		break;
 	case 3:
-			LoadLevelResults_r();
-			CheckThingButThenDeleteObject(obj);
+		LoadLevelResults_r();
+		CheckThingButThenDeleteObject(obj);
 		break;
-	}			
+	}
 }
 

@@ -1,11 +1,5 @@
 #include "stdafx.h"
-#include "Utils.h"
 #include "data\EggHornet.h"
-#include "RandomHelpers.h"
-#include "Trampoline.h"
-
-
-
 
 
 void EggHornet_LoadWithTarget() {
@@ -30,8 +24,6 @@ void EggHornet_LoadWithTarget() {
 
 	return;
 }
-
-
 
 
 
