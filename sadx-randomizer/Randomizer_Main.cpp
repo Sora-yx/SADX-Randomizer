@@ -407,19 +407,19 @@ void Create_NewRNG() {
 		if (RNGStages)
 			getRandomStage(&randomizedSets[i], randomizedSets[i].character);
 
-			randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
+		randomizedSets[i].SA2Mission = randomSA2Mission(randomizedSets[i].level);
 
-			if (RNGMusic)
-				randomizedSets[i].music = getRandomMusic();
-		 
+		if (RNGMusic)
+			randomizedSets[i].music = getRandomMusic();
+
 		if (isAIAllowed)
 			randomizedSets[i].ai_mode = getRandomAI(randomizedSets[i].character, randomizedSets[i].level);
 
-			randomizedSets[i].ai_race = getRandomRaceAI();
+		randomizedSets[i].ai_race = getRandomRaceAI();
 
 		if (RNGCutscene)
 			getRandomCutscene(&randomizedSets[i]);
-		
+
 		TotalCount++;
 	}
 }
@@ -437,10 +437,10 @@ void Randomizer_GetNewRNG() {
 		Create_NewRNG();
 	}
 	else {
-		//Splits Initialization
 		Split_Init();
 	}
 }
+
 
 
 void Split_Init() { //speedrunner split init. Used when you start the game.
@@ -476,7 +476,7 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	//Segments
 
 	//Generate a list of random levels on boot, we are looking for 10 stages + bosses if Sonic Story and 37 if all stories.
-	
+
 	Create_NewRNG();
 
 	if (!RNGStages && StorySplits != 0)
@@ -505,23 +505,21 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 	return;
 }
 
-void RandomizeStages_Hook() {
+void RandomizeStages_Init() {
 	if (RNGStages == true) {
-		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag
-		WriteCall((void*)0x50659a, SetLevelAndAct_R); //Remove one "SetLevelAndAct" as it's called twice and Fix trial mod RNG.
 
-		WriteCall((void*)0x41709d, GoToNextLevel_hook); //hook "Go to next level"
-		WriteCall((void*)0x417b47, GoToNextLevel_hook); //GameStateHandler_Adventure hook after movie cutscene
-		//Redirect SetLevelAndAct in FUN_0x4133e0
-
-		WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data
-		WriteData<1>((void*)0x413502, 0x08);
-
+		//Hack many functions which teleport the player to the next stage to make them random.
+		WriteCall((void*)0x41709d, GoToNextLevel_hook); 
+		WriteCall((void*)0x417b47, GoToNextLevel_hook);
 		WriteCall((void*)0x41348f, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
 		WriteCall((void*)0x41342a, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
 		WriteCall((void*)0x4134a2, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
 
-		WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
+		//miscellaneous fixes because of the hack above.
+		WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data (fixes wrong warp)
+		WriteData<1>((void*)0x413502, 0x08);
+		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag, as it creates many issues with SET layout, we will manually set it.
+		WriteCall((void*)0x50659a, SetLevelAndAct_R); 
 		WriteData<1>((void*)0x4DB0B2, 0x05);
 		WriteData<5>((void*)0x4db051, 0x90);
 		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.

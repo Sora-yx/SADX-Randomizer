@@ -271,6 +271,7 @@ void LevelOnFrames() {
 	AI_FixesOnFrames();
 	AISwapOnFrames();
 	Chao_OnFrame();
+	CheckAndDisplayWarningLayoutError();
 	Hud_DisplayOnframe();
 	IncreaseSpeedCharactersPerfectChaos();
 	CheckAndLoadTriggerObject();

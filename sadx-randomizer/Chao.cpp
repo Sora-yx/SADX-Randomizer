@@ -324,6 +324,8 @@ bool DoesChaoNeedGravity(_int16 CurLevel) {
 }
 
 void Chao_Init() {
+	ChaoGameplayCheck();
+
 	//Trick the game into thinking we're in a specific chao garden
 	//Needed to change the water height
 	WriteJump((void*)0x715140, GetCurrentChaoStage_r);

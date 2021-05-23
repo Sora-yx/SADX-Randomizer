@@ -156,6 +156,7 @@
     <ClInclude Include="data\SD.h" />
     <ClInclude Include="data\Zero.h" />
     <ClInclude Include="E101.h" />
+    <ClInclude Include="level.h" />
     <ClInclude Include="RandomHelpers.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="StageSettings.h" />

@@ -25,5 +25,6 @@
 #include "StageSettings.h"
 #include "utils.h"
 #include "Cutscene.h"
+#include "level.h"
 
 #include "sound.h"

@@ -5,32 +5,6 @@
 #define AddCam(C, D) helperFunctions.ReplaceFile("system\\" C ".bin", "system\\cam\\" C ".bin")
 
 
-void Casino_Layout() {
-
-	//CurrentStageVersion = KnucklesVersion;
-
-	//CurrentMission = 2;
-
-	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
-	{
-		CurrentMission = SADX_Mission;
-	}
-
-	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
-		CurrentStageVersion = SonicVersion;
-
-	if (CurrentAct == 1)
-		CurrentStageVersion = TailsVersion;
-
-
-	if (CurrentStageVersion == KnucklesVersion)
-		SetRNGKnuckles();
-
-
-	FixGoldenAndCoin();
-	return;
-}
-
 
 
 void FixFlipperCharacterPosition() {
@@ -120,6 +94,56 @@ void FixGoldenAndCoin() {
 	return;
 }
 
+void FixCasinoSoundEffects() {
+	if (GameMode == 4 || GameMode == 5 || GameMode == 9)
+	{
+		switch (CurrentLevel)
+		{
+			//fix Casinopolis SFX when using wrong characters
+		case LevelIDs_Casinopolis:
+			FixCharacterSFX();
+			break;
+		case LevelIDs_Zero:
+			LoadSoundList(46);
+			break;
+		case LevelIDs_SSGarden:
+		case LevelIDs_ECGarden:
+		case LevelIDs_MRGarden:
+		case LevelIDs_ChaoRace:
+			FixCharacterSFX();
+			LoadCharVoices();
+			break;
+		}
+	}
+}
+
+
+
+void Casino_Layout() {
+
+	//CurrentStageVersion = KnucklesVersion;
+
+	//CurrentMission = 2;
+
+	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
+	{
+		CurrentMission = SADX_Mission;
+	}
+
+	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
+		CurrentStageVersion = SonicVersion;
+
+	if (CurrentAct == 1)
+		CurrentStageVersion = TailsVersion;
+
+
+	if (CurrentStageVersion == KnucklesVersion)
+		SetRNGKnuckles();
+
+
+	FixGoldenAndCoin();
+	return;
+}
 
 
 

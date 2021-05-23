@@ -276,8 +276,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			case 2:
 			{
 				if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_Unknown1))) {
-					Hud_ShowActionButton();
 
+					if (!isAIActive)
+						Hud_ShowActionButton();
+	
 					if (ControllerPointers[0]->PressedButtons & Buttons_Y)
 					{
 						DisableControl();

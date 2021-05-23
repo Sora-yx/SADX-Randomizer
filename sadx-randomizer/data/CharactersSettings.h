@@ -25,7 +25,7 @@ DataPointer(int, BigWeight, 0x3C52510);
 
 
 void FixVictoryTailsVoice();
-void Characters_Management();
+void Characters_Init();
 void character_settings_onFrames();
 int AmyCartImprovement();
 int KnuxRadarEmeraldCheck();

@@ -30,6 +30,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	Zero_Init(helperFunctions);
 	PerfectChaos_Init();
 	E101_Init(helperFunctions);
+	WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
 
 	LayoutFunctionInit(); //Set and Cam file
 }

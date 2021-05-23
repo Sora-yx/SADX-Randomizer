@@ -166,8 +166,6 @@ void Hud_ShowActionButton() {
 }
 
 
-
-
 void Hud_DisplayOnframe() {
 	if (!CharObj2Ptrs[0] || GameState != 15)
 		return;
@@ -181,8 +179,7 @@ void Hud_DisplayOnframe() {
 }
 
 
-
-//This is where all the AI is managed: loading and bug fixes. //Using a part of Charsel mod by MainMemory, otherwise that wouldn't be possible.
+//This is where all the AI is managed: loading and bug fixes. Using a part of Charsel code by MainMemory.
 
 ObjectFuncPtr charfuncs[] = {
 	Sonic_Main,
@@ -848,12 +845,9 @@ void LoadTails_AI_Original() {
 	return;
 }
 
-
-
 void AIAudioFixes() {
 	WriteCall((void*)0x5cf22f, FixShowerCasino); //Prevent crash after chara swap
 
-	//(there is probably a nicer way to do this, but I have no clue how)
 
 	WriteCall((void*)0x494be7, FixAISFXSonic); //fix sonic AI homing attack sound
 	WriteCall((void*)0x495eaa, FixAISFXSonic2); //fix sonic jump sound
@@ -968,8 +962,6 @@ short getRandomAI(uint8_t char_id, short stage_id) {
 	prev_AI = cur_AI;
 	return cur_AI;
 }
-
-
 
 
 void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* config) {

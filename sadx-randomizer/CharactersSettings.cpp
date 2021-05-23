@@ -330,6 +330,8 @@ void FixCharacterSFX() {
 	}
 }
 
+
+
 void FixVictoryTailsVoice() {
 	if (CurrentCharacter == Characters_Tails)
 		ResultVoiceFix();
@@ -348,7 +350,7 @@ int GetCharacter1ID() //AI ID
 }
 
 
-void Characters_Management() {
+void Characters_Init() {
 
 
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character

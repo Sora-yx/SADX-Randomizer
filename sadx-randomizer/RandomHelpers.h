@@ -109,7 +109,7 @@ short getRandomAI(uint8_t char_id, short stage_id);
 short getRandomRaceAI();
 void Randomizer_GetNewRNG();
 void TwinkleCircuitMusic();
-void RandomizeStages_Hook();
+void RandomizeStages_Init();
 void AddCustomFlag();
 void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions);
 
@@ -176,9 +176,7 @@ int IsFastSonicAI_R();
 void CheckAndSet_HotShelterFunctions();
 void TargetableEntity(ObjectMaster* obj);
 void EggHornet_LoadWithTarget();
-void Chaos2_LoadWithTarget();
-void Chaos6_LoadWithTarget();
-void __cdecl ChaoGameplayCheck();
+
 bool isSA2Mission();
 
 int GetCharaProgression();
@@ -215,17 +213,11 @@ extern bool LimitCustomFlag;
 extern bool isZeroActive;
 
 __int16 CurCharacter();
-
-
 void Chao_OnFrame();
 
 void PauseMenuFix();
 
 
-
-
-
-void Credits_StatsDelayOnFrames();
 
 
 void DisplayRandoInformation();

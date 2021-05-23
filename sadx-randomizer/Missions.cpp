@@ -147,7 +147,7 @@ void LoadStageMissionImage_r() {
 						CurrentMissionCard = SonicDollCard;	
 				break;
 			case LevelIDs_RedMountain:
-				if (CurrentMission < Mission2_100Rings && (CurrentCharacter == Characters_Gamma) || CurrentStageVersion == GammaVersion)
+				if (CurrentMission < Mission2_100Rings && CurrentStageVersion == GammaVersion)
 					CurrentMissionCard = E104Card; 
 				break;
 			case LevelIDs_SpeedHighway:

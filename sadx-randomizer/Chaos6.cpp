@@ -5,32 +5,10 @@
 #define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
 
 
-void IceBomb_Load_r(ObjectMaster* obj);
-Trampoline IceBomb_Load_t(0x55C3A0, 0x55C3A7, IceBomb_Load_r);
-
-void IceBomb_Load_r(ObjectMaster* obj) {
-
-	EntityData1* data1 = obj->Data1;
-
-	if (obj->Data1->Action == 0) {
-		//AllocateObjectData2(obj, data1);
-		obj->Data2 = AllocateObjectData2(obj, data1);
-	}
-
-	if (data1->Action <= 6 && (data1->Status & 4) == 1) {
-		E102KillCursor(obj);
-	}
-	
-
-	ObjectFunc(original, IceBomb_Load_t.Target());
-	original(obj);
-
-}
-
 int Chaos6_ReturnCharacter() { 
 
 	if (CurrentCharacter == Characters_Sonic && CurrentAct == 0 || CurrentCharacter == Characters_Knuckles && CurrentAct == 1 || CurrentCharacter == Characters_Big && Vanilla && CurrentAct == 0)
-		return GetCurrentCharacterID();
+		return (unsigned int)GetCurrentCharacterID();
 
 	if (CurrentAct != 1)
 	{
@@ -80,7 +58,7 @@ void __cdecl Chaos6_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
 
-	Chaos6_t = new Trampoline((int)Chaos6_Main, (int)Chaos6_Main + 0x8, Chaos6_Main_R);
+	//Chaos6_t = new Trampoline((int)Chaos6_Main, (int)Chaos6_Main + 0x8, Chaos6_Main_R);
 
 	//trick the game to make it think we are playing Sonic or Knuckles, Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
 	WriteCall((void*)0x55a17d, Chaos6_ReturnCharacter);

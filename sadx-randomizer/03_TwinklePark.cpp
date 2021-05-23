@@ -5,7 +5,7 @@
 void TwinklePark_Layout() {
 
 	/*CurrentStageVersion = BigVersion;
-	CurrentMission = Mission3_LostChao;*/
+	CurrentMission = 2;*/
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != BigVersion)
 		CurrentStageVersion = SonicVersion;
@@ -56,7 +56,6 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 
 	TPObjects_Init(path, helperFunctions);
 
-	//Sonic
 	AddLevelLayout("Twinkle Park\\", "TP0", helperFunctions);
 	AddLevelLayout("Twinkle Park\\", "TP1", helperFunctions);
 	AddLevelLayout("Twinkle Park\\", "TP2", helperFunctions);

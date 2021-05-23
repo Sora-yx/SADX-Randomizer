@@ -28,12 +28,6 @@ bool AmySpeed = true;
 bool BigSpeed = true;
 
 //banned character roster
-bool Sonic = false;
-bool Tails = false;
-bool Knuckles = false;
-bool Amy = false;
-bool Gamma = false;
-bool Big = false;
 bool MetalSonic = false;
 bool SuperSonic = false;
 int ban = 0;
@@ -142,10 +136,10 @@ extern "C" {
 		StartupMiscellaneous_Init(path, helperFunctions);
 		
 		Chao_Init();
-		ChaoGameplayCheck();
-		Characters_Management();
+
+		Characters_Init();
 		Stages_Management();
-		RandomizeStages_Hook();
+		RandomizeStages_Init();
 		
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
@@ -164,7 +158,7 @@ extern "C" {
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
 			DisplayRandoInformation();
 		
-		CheckAndDisplayWarningLayoutError();
+
 		Sounds_OnFrame();
 		LevelOnFrames();
 
@@ -177,26 +171,7 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-		if (GameMode == 4 || GameMode == 5 || GameMode == 9)
-		{
-			switch (CurrentLevel)
-			{
-				//fix Casinopolis SFX when using wrong characters
-			case LevelIDs_Casinopolis:
-				FixCharacterSFX();
-				break;
-			case LevelIDs_Zero:
-				LoadSoundList(46);
-				break;
-			case LevelIDs_SSGarden:
-			case LevelIDs_ECGarden:
-			case LevelIDs_MRGarden:
-			case LevelIDs_ChaoRace:
-				FixCharacterSFX();
-				LoadCharVoices();
-				break;
-			}
-		}
+		FixCasinoSoundEffects();
 	}
 
 	__declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };

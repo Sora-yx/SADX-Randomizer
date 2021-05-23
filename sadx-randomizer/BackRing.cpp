@@ -299,11 +299,12 @@ void __cdecl CheckLoadBig_Froggy_r(ObjectMaster* a1) {
 
 	if (CurrentMission < Mission2_100Rings && GetCharacter0ID() == Characters_Big)
 	{
-		ObjectFunc(origin, Froggy_Load_T->Target());
+		ObjectFunc(origin, Froggy_Main_T->Target());
 		origin(a1);
 	}
-	else
+	else {
 		return;
+	}
 }
 
 
