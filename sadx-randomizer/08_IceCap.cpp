@@ -41,7 +41,6 @@ void IC_Layout() {
 	if (CurrentAct == 2)
 		CurrentMission = SADX_Mission;
 
-
 	return;
 }
 

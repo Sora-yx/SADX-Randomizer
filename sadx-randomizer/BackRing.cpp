@@ -288,6 +288,11 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 
 	if (CurrentMission < Mission2_100Rings)
 	{
+		if (GetCharacter0ID() == Characters_Big && CurrentStageVersion == BigVersion)
+		{
+			return;
+		}
+
 		ObjectFunc(origin, Froggy_Load_T->Target());
 		origin(a1);
 	}
