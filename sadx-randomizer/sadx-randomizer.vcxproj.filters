@@ -257,9 +257,6 @@
     <ClInclude Include="sound.h">
       <Filter>Header Files\audio</Filter>
     </ClInclude>
-    <ClInclude Include="data\Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="E101.h">
       <Filter>Header Files\Bosses</Filter>
     </ClInclude>

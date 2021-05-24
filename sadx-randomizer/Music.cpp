@@ -1,12 +1,10 @@
 #include "stdafx.h"
-#include "RandomHelpers.h"
-#include "common.h"
+
 #define AddMusics(C, D) helperFunctions.ReplaceFile("system\\sounddata\\bgm\\wma\\" C ".wma", "system\\songs\\" D ".adx")
 
 //Few jingle that we don't want in the random music function.
 int bannedMusic[29] = { 0x11, 0x1A, 0x29, 0x2C, 0x2e, 0x31, 0x37, 0x38, 0x45, 0x47, 0x4B, 0x55, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x6e, 0x6f, 0x70, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b };
 int musicCount;
-
 
 //change the list of music to make more song loops, used for "random music" option.
 MusicInfo MusicList_R[] = {

@@ -22,7 +22,6 @@
 #include "Credits.h"
 #include "SADXFunctions.h"
 #include "SADXVariables.h"
-#include "Common.h"
 #include "StageSettings.h"
 #include "utils.h"
 #include "Cutscene.h"

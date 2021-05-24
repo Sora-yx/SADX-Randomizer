@@ -147,7 +147,6 @@
     <ClInclude Include="data\chaos4.h" />
     <ClInclude Include="data\Chaos6.h" />
     <ClInclude Include="data\CharactersSettings.h" />
-    <ClInclude Include="data\Common.h" />
     <ClInclude Include="data\EggHornet.h" />
     <ClInclude Include="data\EggViper.h" />
     <ClInclude Include="data\EggWalker.h" />
