@@ -105,7 +105,7 @@ extern "C" {
 		delete config;
 
 		//ban roster check
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < LengthOfArray(banCharacter); i++)
 		{
 			if (banCharacter[i] == 1)
 				ban++;
@@ -149,7 +149,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "Next Cutscene ID %d", randomizedSets[levelCount].cutsceneID);
+		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "banLevels[LevelIDs_SkyDeck] %d", banLevels[LevelIDs_SkyDeck]);
 
 		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
 			//EntityData1Ptrs[0]->Position = { -157.615, 418.875, -290.49 };
@@ -158,7 +158,6 @@ extern "C" {
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
 			DisplayRandoInformation();
 		
-
 		Sounds_OnFrame();
 		LevelOnFrames();
 

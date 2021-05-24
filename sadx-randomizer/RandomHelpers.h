@@ -431,7 +431,6 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
-
 extern RandomizerGenerator RandoStageArray[52];
 bool isRandoLevel();
 void LayoutFunctionInit();

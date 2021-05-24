@@ -76,7 +76,7 @@ RandomizerGenerator RandoStageArray[52]{
 	{LevelAndActIDs_TwinkleCircuit5, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit6, NormalVersion},
 	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
-};		
+};
 
 int previousLevel = -1;
 int TCCount = 0;
@@ -88,7 +88,8 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (previousLevel == generated->levelAndActs || TCCount >= 2 && generated->levelAndActs >> 8 == LevelIDs_TwinkleCircuit || isStageBanned(generated, Char_id) || !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
+	} while (previousLevel == generated->levelAndActs || isStageBanned(generated, Char_id)
+		|| !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs & 0xf;
@@ -107,8 +108,11 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 	uint8_t curBannedChar = generated->bannedChar;
 	short curChar = char_id;
 
-		if (curSingleLevel == LevelIDs_EggViper && char_id == Characters_Big)
-			return true;
+	if (curSingleLevel == LevelIDs_TwinkleCircuit && TCCount >= 2)
+		return true;
+
+	if (curSingleLevel == LevelIDs_EggViper && char_id == Characters_Big)
+		return true;
 
 	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
 	{
@@ -137,7 +141,7 @@ bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
 
 	if (char_id == curBannedChar)
 		return true;
-	
+
 	return false;
 }
 
@@ -158,7 +162,7 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
 
 
-	for (RandomizerGenerator stage: DuplicateStages)  {
+	for (RandomizerGenerator stage : DuplicateStages) {
 
 		if (DuplicateStages.size() != 0 && curVersion == BossVersion && DuplicateStages.back().version == BossVersion)
 		{
@@ -201,7 +205,7 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 }
 
 
-bool isBossStage(short stage_id) 
+bool isBossStage(short stage_id)
 {
 	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
 }
@@ -365,32 +369,32 @@ void GameOver_R() {
 
 void DisplayRandoInformation() {
 
-		SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
-		SetDebugFontColor(0x8e8e8e);
-		DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
-	
-		if (ban != 0)
-			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
-		else
-			DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
+	SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
+	SetDebugFontColor(0x8e8e8e);
+	DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
 
-		if (Vanilla)
-			DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Allowed");
-		else
-			DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Banned");
+	if (ban != 0)
+		DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Edited");
+	else
+		DisplayDebugString(NJM_LOCATION(2, 2), "Character Roster: Normal");
 
-		switch (StorySplits)
-		{
-		case 1:
-			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
-			break;
-		case 2:
-			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
-			break;
-		case 3:
-			DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
-			break;
-		}
+	if (Vanilla)
+		DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Allowed");
+	else
+		DisplayDebugString(NJM_LOCATION(2, 3), "Vanilla Stage: Banned");
+
+	switch (StorySplits)
+	{
+	case 1:
+		DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Sonic's Story");
+		break;
+	case 2:
+		DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: All Stories");
+		break;
+	case 3:
+		DisplayDebugString(NJM_LOCATION(2, 4), "Actual Splits: Any%");
+		break;
+	}
 }
 
 
@@ -509,7 +513,7 @@ void RandomizeStages_Init() {
 	if (RNGStages == true) {
 
 		//Hack many functions which teleport the player to the next stage to make them random.
-		WriteCall((void*)0x41709d, GoToNextLevel_hook); 
+		WriteCall((void*)0x41709d, GoToNextLevel_hook);
 		WriteCall((void*)0x417b47, GoToNextLevel_hook);
 		WriteCall((void*)0x41348f, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
 		WriteCall((void*)0x41342a, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
@@ -519,7 +523,7 @@ void RandomizeStages_Init() {
 		WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data (fixes wrong warp)
 		WriteData<1>((void*)0x413502, 0x08);
 		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag, as it creates many issues with SET layout, we will manually set it.
-		WriteCall((void*)0x50659a, SetLevelAndAct_R); 
+		WriteCall((void*)0x50659a, SetLevelAndAct_R);
 		WriteData<1>((void*)0x4DB0B2, 0x05);
 		WriteData<5>((void*)0x4db051, 0x90);
 		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
