@@ -132,31 +132,6 @@ void Olever_r(ObjectMaster* obj) {
 
 
 
-void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
-{
-	//Initiliaze data
-
-	WriteCall((void*)0x422dd8, SkyDeck_Layout); 
-	WriteCall((void*)0x5ecc7b, Switch_Gravity); 
-	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);	
-	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
-	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
-	
-	WriteCall((void*)0x461614, FixTailsVictorySD);
-	SDObjects_Init(path, helperFunctions);
-
-	AddLevelLayout("Sky Deck\\", "SD0", helperFunctions);
-	AddLevelLayout("Sky Deck\\", "SD1", helperFunctions);
-	AddLevelLayout("Sky Deck\\", "SD2", helperFunctions);
-	AddLevelLayout("Sky Deck\\", "SDM", helperFunctions);
-	AddLevelLayout("Sky Deck\\", "SDK", helperFunctions);
-
-	AddCam("C0600");
-	AddCam("C0601");
-	AddCam("C0602");
-	AddCam("C0603");
-	AddCam("C0604");
-}
 
 ObjectListEntry SkyDeckObjectList_list[] = {
 	{ 2, 3, 0, 0, 0, (ObjectFuncPtr)0x450370, "RING   " } /* "RING   " */,
@@ -331,4 +306,31 @@ void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunct
 	TexLists_Obj[LevelIDs_SkyDeck] = SkyDeckObjectTextures;
 	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
 	SkyDeckDeathZones[1] = SkyDeck2DeathZones;
+}
+
+
+void __cdecl SkyDeck_Init(const char* path, const HelperFunctions& helperFunctions)
+{
+	//Initiliaze data
+
+	WriteCall((void*)0x422dd8, SkyDeck_Layout);
+	WriteCall((void*)0x5ecc7b, Switch_Gravity);
+	WriteJump((void*)0x5f8530, SkyDeckCannon_LoadWithTarget);
+	WriteJump((void*)0x5f9760, SkyDeckCannonS1_LoadWithTarget);
+	WriteJump((void*)0x5f8e50, SkyDeckCannonS2_LoadWithTarget);
+
+	WriteCall((void*)0x461614, FixTailsVictorySD);
+	SDObjects_Init(path, helperFunctions);
+
+	AddLevelLayout("Sky Deck\\", "SD0", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SD1", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SD2", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SDM", helperFunctions);
+	AddLevelLayout("Sky Deck\\", "SDK", helperFunctions);
+
+	AddCam("C0600");
+	AddCam("C0601");
+	AddCam("C0602");
+	AddCam("C0603");
+	AddCam("C0604");
 }

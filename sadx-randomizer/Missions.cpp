@@ -419,3 +419,9 @@ void MissionResultCheck(ObjectMaster* obj) {
 	}
 }
 
+void InitMissions() {
+
+	Race_Init();
+
+	Init_TreasureHunting();
+}

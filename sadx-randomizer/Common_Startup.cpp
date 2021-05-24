@@ -32,6 +32,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	E101_Init(helperFunctions);
 	WriteCall((void*)0x4db0b3, TwinkleCircuitResult); //Twinkle Circuit Stuff
 
+	LevelFeaturesInit();
 	LayoutFunctionInit(); //Set and Cam file
 }
 

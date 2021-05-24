@@ -414,3 +414,8 @@ void TrialModeQuit_R() {
 
 	return FUN_00425b00();
 }
+
+void Result_Init() {
+
+	WriteJump(LoadLevelResults, LoadLevelResults_r);
+}

@@ -52,6 +52,7 @@ void Chao_Init();
 void CreditsNewList();
 void Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions);
 void Race_Init();
+void LevelFeaturesInit();
 
 void Load_ObjectsCommon();
 void Delete_ObjectsCommon();

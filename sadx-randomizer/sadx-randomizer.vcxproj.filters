@@ -31,6 +31,18 @@
     <Filter Include="Header Files\audio">
       <UniqueIdentifier>{42fb1989-ff56-40bc-b617-d742f43d7989}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Characters">
+      <UniqueIdentifier>{d72c49fc-6a26-4995-a69d-75f7d34a9293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\objects">
+      <UniqueIdentifier>{d1b70c03-5230-49f6-b225-c15954f0605a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\missions">
+      <UniqueIdentifier>{81dff92d-3805-435f-a314-769f7efcf790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Result">
+      <UniqueIdentifier>{6fb9e218-0af3-420f-8f19-337e1df8045c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mod.cpp">
@@ -42,16 +54,10 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CharactersSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Common_Startup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="credits.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Race.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AISettings.cpp">
@@ -67,12 +73,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Randomizer_Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Missions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BackRing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="00_HedgehogHammer.cpp">
@@ -144,20 +144,11 @@
     <ClCompile Include="sound.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
-    <ClCompile Include="Common_Functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Music.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
     <ClCompile Include="Voices.cpp">
       <Filter>Source Files\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectCommon.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Source Files\Levels</Filter>
@@ -165,20 +156,47 @@
     <ClCompile Include="38_SandHill.cpp">
       <Filter>Source Files\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="TreasureHunting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cutscene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="subtitles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SetCamFiles.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="CharactersSettings.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperSonic.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Zero-chase.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCommon.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureHunting.cpp">
+      <Filter>Source Files\missions</Filter>
+    </ClCompile>
+    <ClCompile Include="BackRing.cpp">
+      <Filter>Source Files\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScreen.cpp">
+      <Filter>Source Files\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="Race.cpp">
+      <Filter>Source Files\missions</Filter>
+    </ClCompile>
+    <ClCompile Include="Missions.cpp">
+      <Filter>Source Files\missions</Filter>
+    </ClCompile>
+    <ClCompile Include="35_TwinkleCircuit.cpp">
+      <Filter>Source Files\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data\ActsSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\CharactersSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -262,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="level.h">
       <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="SADXFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SADXVariables.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -385,3 +385,9 @@ void Delete_ObjectsCommon() {
 			MMPlatform = nullptr;
 	}
 }
+
+void ObjectCommons_Init() {
+
+	Set_BackRing();
+	Set_ZeroChase();
+}

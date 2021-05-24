@@ -205,44 +205,6 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 }
 
 
-bool isBossStage(short stage_id)
-{
-	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
-}
-
-int8_t prev_char = -1;
-
-uint8_t getRandomCharacter() {
-	int8_t cur_char = -1;
-	size_t char_count = sizeof(character) / sizeof(character[0]);
-
-	do {
-
-		cur_char = character[rand() % char_count];
-	} while (cur_char == prev_char && ban < 5 || banCharacter[cur_char]);
-
-	prev_char = cur_char;
-	return cur_char;
-}
-
-
-
-uint8_t prev_Sanic = -1;
-uint8_t GetRandomSonicTransfo(uint8_t char_id) {
-
-	int8_t cur_Sanic = -1;
-
-	if (char_id == Characters_Sonic) {
-		do {
-
-			cur_Sanic = rand() % 3;
-		} while (cur_Sanic == prev_Sanic || MetalSonic && cur_Sanic == 1 || SuperSonic && cur_Sanic == 2);
-	}
-
-	prev_Sanic = cur_Sanic;
-	return cur_Sanic;
-}
-
 int levelCount;
 
 void SetInfoNextRandomStage(char Stage, char Act) {

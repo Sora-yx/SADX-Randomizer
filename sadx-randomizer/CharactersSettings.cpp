@@ -21,7 +21,7 @@ int SetAmyWinPose() {
 	}
 }
 
-void AllUpgrades() {
+void CheckAndSetUpgrades() {
 	if (Upgrade == true)
 	{
 		EventFlagArray[EventFlags_Sonic_LightShoes] = true;
@@ -60,7 +60,7 @@ void LoadCharacter_r() {
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
-	AllUpgrades();
+	CheckAndSetUpgrades();
 	EmeraldRadar_R();
 	LoadCharacter();
 
@@ -68,123 +68,7 @@ void LoadCharacter_r() {
 }
 
 
-//Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
-void SuperAuraStuff() {
-	TimeThing = 0;
 
-	if (CurrentCharacter != Characters_Sonic)
-	{
-		CharObj2Ptrs[0]->Upgrades |= Upgrades_SuperSonic;
-		CharObj2Ptrs[0]->Powerups |= Powerups_Invincibility;
-		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
-		LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
-	}
-	return;
-}
-
-
-int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
-LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
-
-
-extern int8_t CurrentStageVersion;
-
-int GetSSLevelBanned() {
-
-	for (int i = 0; i < LengthOfArray(SSLevel); i++)
-	{
-		if (CurrentLevel == SSLevel[i])
-		{
-			switch (CurrentLevel)
-			{
-			case LevelIDs_TwinklePark:
-				if (CurrentAct == 1 && CurrentStageVersion != Characters_Amy || CurrentAct == 0)
-					return true;
-				else
-					return false;
-				break;
-			case LevelIDs_SpeedHighway:
-				if (CurrentAct == 0 && CurrentStageVersion != Characters_Tails)
-					return true;
-				else
-					return false;
-				break;
-			case LevelIDs_Casinopolis:
-				if (CurrentAct == 0 && CurrentStageVersion == 3)
-					return false;
-				else
-					return true;
-				break;
-			case LevelIDs_IceCap:
-				if (CurrentAct == 2)
-					return true;
-				else
-					return false;
-				break;
-			case LevelIDs_HotShelter:
-				if (CurrentAct < 2)
-					return true;
-				else
-					return false;
-				break;
-			default:
-				return true;
-				break;
-			}
-		}
-	}
-
-	return false;
-}
-
-Trampoline LoadCharTextures_T((int)LoadCharTextures, (int)LoadCharTextures + 0x6, CheckAndLoadSuperSonic_Tex);
-
-void CheckAndLoadSuperSonic_Tex(int curChara) {
-
-	SuperSonicFlag = 0;
-
-	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentCharacter != Characters_Sonic && CurrentLevel == LevelIDs_PerfectChaos)
-		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-
-	FunctionPointer(void, original, (int curChara), LoadCharTextures_T.Target());
-	return original(curChara);
-}
-
-
-void SuperSonic_TransformationCheck() {
-
-	bool isLevelBanned = GetSSLevelBanned();
-
-	if (isLevelBanned || MetalSonicFlag == 1 || SonicRand != 2)
-	{
-		SonicRand = 0;
-		return;
-	}
-	else
-	{
-		static Uint8 last_action[8] = {};
-		if (!Rings)
-			Rings = 1;
-
-			EntityData1* data1 = EntityData1Ptrs[0];
-			CharObj2* data2 = CharObj2Ptrs[0];
-
-			bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-
-			//Super Sonic Transformation (Credit: SonicFreak94).
-
-			if (!transformation)
-			{
-				data1->Status &= ~Status_LightDash;
-				ForcePlayerAction(0, 46);
-				PlayVoice(3001);
-				PlayMusic(MusicIDs_ThemeOfSuperSonic);
-			}
-
-			SuperSonicFlag = 1;
-			return;
-	}
-}
 
 void fixCharacterSoundAfterReset() {
 
@@ -238,8 +122,9 @@ void CallStuffWhenLevelStart() {
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
-	else
+	else {
 		SuperSonic_TransformationCheck();
+	}
 
 
 	ShowActionButton();
@@ -339,16 +224,21 @@ void FixVictoryTailsVoice() {
 		return;
 }
 
-int GetCharacter0ID() //player 1 ID
-{
-	return GetCharacterID(0);
-}
 
-int GetCharacter1ID() //AI ID
-{
-	return GetCharacterID(1);
-}
+int8_t prev_char = -1;
 
+uint8_t getRandomCharacter() {
+	int8_t cur_char = -1;
+	size_t char_count = sizeof(character) / sizeof(character[0]);
+
+	do {
+
+		cur_char = character[rand() % char_count];
+	} while (cur_char == prev_char && ban < 5 || banCharacter[cur_char]);
+
+	prev_char = cur_char;
+	return cur_char;
+}
 
 void Characters_Init() {
 
@@ -381,8 +271,6 @@ void Characters_Init() {
 	
 	if (!isCriticalMode)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
-
-	Init_TreasureHunting();
 
 	//Super Sonic Stuff
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.

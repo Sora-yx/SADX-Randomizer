@@ -1,6 +1,168 @@
 #include "stdafx.h"
 
-D3DMATRIX WorldMatrixBackup;
+
+short ConvertLevelActsIDtoLevel(short level) {
+
+	return level >> 8;
+}
+
+short ConvertLevelActsIDtoAct(short act) {
+
+	return act & 0xf;
+}
+
+__int16 CurCharacter() {
+
+	ObjectMaster* P1 = GetCharacterObject(0);
+	if (P1 != nullptr)
+		return P1->Data1->CharID;
+}
+
+
+bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
+	return GetDistance(center, pos) <= radius;
+}
+
+int IsPlayerInsideSphere_(NJS_VECTOR* center, float radius) {
+	for (uint8_t player = 0; player < 8; ++player) {
+		if (!EntityData1Ptrs[player]) continue;
+
+		NJS_VECTOR* pos = &EntityData1Ptrs[player]->Position;
+		if (IsPointInsideSphere(center, pos, radius)) {
+			return player + 1;
+		}
+	}
+
+	return 0;
+}
+
+bool IsSpecificPlayerInSphere(NJS_VECTOR* center, float radius, uint8_t player) {
+	return IsPlayerInsideSphere_(center, radius) == player + 1;
+}
+
+
+bool isValueInArray(int* array, int value, int size)
+{
+	for (int i = 0; i < size; i++) {
+		if (array[i] == value)
+			return true;
+	}
+
+	return false;
+}
+
+void ForcePlayerToWhistle() {
+
+	int id = 0;
+
+	switch (CurCharacter()) {
+	case Characters_Sonic:
+		id = 0x854A01;
+		break;
+	case Characters_Tails:
+		id = 8864257;
+		break;
+	case Characters_Knuckles:
+		id = 7485441;
+		break;
+	case Characters_Amy:
+		id = 5518337;
+		break;
+	case Characters_Gamma:
+		id = 5913089;
+		break;
+	case Characters_Big:
+		id = 6829569;
+		break;
+	}
+
+	EntityData1* ed1 = EntityData1Ptrs[0];
+	EntityData2* ed2 = EntityData2Ptrs[0];
+	CharObj2* co2 = CharObj2Ptrs[0];
+
+	int curLevel = CurrentLevel;
+	CurrentLevel = LevelIDs_SSGarden;
+	PerformWhistle(ed1, ed2, co2, id);
+	CurrentLevel = curLevel;
+}
+
+
+int GetCharacter0ID() //player 1 ID
+{
+	return GetCharacterID(0);
+}
+
+int GetCharacter1ID() //AI ID
+{
+	return GetCharacterID(1);
+}
+
+
+bool isBossStage(short stage_id)
+{
+	return stage_id >= LevelIDs_Chaos0 && stage_id <= LevelIDs_E101R;
+}
+
+
+void FlashScreen(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1;
+
+	if (++data->InvulnerableTime > 80) {
+
+		int color = 0x00000000;
+		ScreenFade_Color = *(NJS_COLOR*)&color;
+		CheckThingButThenDeleteObject(obj);
+	}
+	else {
+		int color = 0xFFFFFFFF;
+		ScreenFade_Color = *(NJS_COLOR*)&color;
+
+		if (data->InvulnerableTime < 120) {
+			if (data->InvulnerableTime < 60) {
+				data->CharID += 4;
+				ScreenFade_Color.argb.a = data->CharID;
+			}
+			else {
+				ScreenFade_Color.argb.a = 0xFF;
+			}
+		}
+		else {
+			data->CharID -= 20;
+			ScreenFade_Color.argb.a = data->CharID;
+		}
+
+		ScreenFade_DrawColor();
+	}
+}
+
+bool isHeroesMod() {
+	HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
+	if (HeroesMod)
+		return true;
+
+	return false;
+}
+
+bool isSA2Mod() {
+	HMODULE HeroesMod = GetModuleHandle(L"sadx-sa2-mod");
+	if (HeroesMod)
+		return true;
+
+	return false;
+}
+
+bool isRandoLevel() {
+	for (int i = 0; i < LengthOfArray(RandoStageArray); i++)
+	{
+		int level = ConvertLevelActsIDtoLevel(RandoStageArray[i].levelAndActs);
+
+		if (level == CurrentLevel)
+			return true;
+	}
+
+	return false;
+}
 
 // Object model file functions
 
@@ -38,31 +200,11 @@ ModelInfo* LoadObjectModel(const char* name) {
 	return LoadMDL("models", name);
 }
 
-void LoadModelListFuncPtr(const char** names, int count, ModelInfo** mdls, ModelInfo* (*func)(const char*)) {
-	for (int i = 0; i < count; ++i) {
-		mdls[i] = func(names[i]);
-	}
-}
 
 void FreeMDL(ModelInfo* pointer) {
 	PrintDebug("[SHM] Freeing model: %s... \n", pointer->getdescription().c_str());
 	delete(pointer);
 }
-
-
-// Free a list of files
-
-void FreeMDLFiles(ModelInfo** Files, int size) {
-	PrintDebug("[SHM] Freeing %s models... \n", std::to_string(size).c_str());
-
-	for (int i = 0; i < size; ++i) {
-		FreeMDL(Files[i]);
-		Files[i] = nullptr;
-	}
-
-	PrintDebug("Done. \n");
-}
-
 
 // Global display subs
 
@@ -77,27 +219,6 @@ void displaySub_Global(ObjectMaster* obj) {
 	}
 }
 
-void displaySub_ZYX(ObjectMaster* obj) {
-	if (!MissedFrames) {
-		njSetTexture(&SA2_OBJ_TEXLIST);
-		njPushMatrix(0);
-		njTranslateV(0, &obj->Data1->Position);
-		njRotateZYX(nullptr, obj->Data1->Rotation.x, obj->Data1->Rotation.y, obj->Data1->Rotation.z);
-		njDrawModel_SADX(obj->Data1->Object->basicdxmodel);
-		njPopMatrix(1u);
-	}
-}
-
-void displaySub_Multi(ObjectMaster* obj) {
-	if (!MissedFrames) {
-		njSetTexture(&SA2_OBJ_TEXLIST);
-		njPushMatrix(0);
-		njTranslateV(0, &obj->Data1->Position);
-		njRotateZYX(nullptr, obj->Data1->Rotation.x, obj->Data1->Rotation.y, obj->Data1->Rotation.z);
-		DrawObject(obj->Data1->Object);
-		njPopMatrix(1u);
-	}
-}
 
 // Global mainsubs
 
@@ -134,12 +255,6 @@ void LoadBasicObject(ObjectMaster* obj, NJS_OBJECT* model, CollisionData* col) {
 	LoadBasicObject_Set(obj, model);
 }
 
-// Load a simple sadx object with children
-void LoadBasicObjectMulti(ObjectMaster* obj, NJS_OBJECT* model) {
-	obj->MainSub = mainSub_Global;
-	obj->DisplaySub = displaySub_Multi;
-	obj->Data1->Object = model;
-}
 
 // Dyncol stuff
 
@@ -250,111 +365,3 @@ void DynCol_Delete(ObjectMaster* obj) {
 	}
 }
 
-// Load Dyncol Objects
-
-
-
-// Sphere check functions
-
-
-NJS_VECTOR GetPathPosition(NJS_VECTOR* orig, NJS_VECTOR* dest, float state) {
-	NJS_VECTOR result;
-	result.x = (dest->x - orig->x) * state + orig->x;
-	result.y = (dest->y - orig->y) * state + orig->y;
-	result.z = (dest->z - orig->z) * state + orig->z;
-
-	return result;
-}
-
-Rotation3 fPositionToRotation(NJS_VECTOR* orig, NJS_VECTOR* point) {
-	NJS_VECTOR dist = *point;
-	Rotation3 result;
-
-	njSubVector(&dist, orig);
-
-	result.x = atan2(dist.y, dist.z) * 65536.0 * -0.1591549762031479;
-	result.y = -(atan2(dist.x, dist.z) * 65536.0 * 0.1591549762031479) + 0x4000;
-
-	return result;
-}
-
-float GetGroundPositionEntity(EntityData1* data, bool rot) {
-	WriteData<5>((void*)0x49F201, 0x90);
-	WriteData<5>((void*)0x49F1C0, 0x90);
-	WriteData<5>((void*)0x49F43D, 0x90);
-
-	struct_a3 dyncolinfo;
-
-	data->Position.y += 20;
-	RunEntityIntersections(data, &dyncolinfo);
-	data->Position.y -= 20;
-
-	WriteCall((void*)0x49F201, SpawnRipples);
-	WriteCall((void*)0x49F1C0, SpawnSplashParticles);
-	WriteCall((void*)0x49F43D, (ObjectFuncPtr)0x49F0B0); //DrawCharacterShadow
-
-	if (dyncolinfo.ColFlagsB & ColFlags_Solid) {
-		if (dyncolinfo.DistanceMax > -1000000) {
-			if (rot == true) {
-				data->Rotation = { dyncolinfo.ShadowRotationX, data->Rotation.y, dyncolinfo.ShadowRotationY };
-			}
-
-			return dyncolinfo.DistanceMax;
-		}
-	}
-
-	return -1000000;
-}
-
-NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float y, float z) {
-	NJS_VECTOR point;
-
-	njPushMatrix(_nj_unit_matrix_);
-	njTranslateV(0, orig);
-	if (rot) njRotateXYZ(0, rot->x, rot->y, rot->z);
-	njTranslate(0, x, y, z);
-	njGetTranslation(_nj_current_matrix_ptr_, &point);
-	njPopMatrix(1u);
-
-	return point;
-}
-
-// Ninja stuff
-
-void SetupWorldMatrix()
-{
-	ProjectToWorldSpace();
-	WorldMatrixBackup = WorldMatrix;
-	Direct3D_SetWorldTransform();
-	memcpy(_nj_current_matrix_ptr_, &ViewMatrix, sizeof(NJS_MATRIX));
-}
-
-void njTranslateX(float f) {
-	njTranslate(nullptr, f, 0, 0);
-}
-
-void njTranslateY(float f) {
-	njTranslate(nullptr, 0, f, 0);
-}
-
-void njTranslateZ(float f) {
-	njTranslate(nullptr, 0, 0, f);
-}
-
-void njRotateZXY(Rotation3* rot) {
-	njRotateZ(0, rot->z);
-	njRotateX(0, rot->x);
-	njRotateY(0, rot->y);
-}
-
-void njScaleX(float f) {
-	njScale(nullptr, f, 1, 1);
-}
-
-void njScaleY(float f) {
-	njScale(nullptr, 1, f, 1);
-}
-
-void njScaleZ(float f) {
-	njScale(nullptr, 1, 1, f);
-}

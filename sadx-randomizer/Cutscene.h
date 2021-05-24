@@ -53,26 +53,11 @@ struct CutsceneLevelData
 	char scene_select;
 };
 
-
-FunctionPointer(void, EV_Wait, (int time), 0x4314d0);
-FunctionPointer(void, StopMusicAndLoadNextMenu, (int a1), 0x505B40);
-FunctionPointer(void, SeqRun, (), 0x412AC0);
-FunctionPointer(void, SeqSetPlayer, (__int16 character), 0x413380);
-FunctionPointer(void, SeqSetSection, (__int16 sequence), 0x4133E0);
-FunctionPointer(void, RunSceneSelect, (), 0x413870);
-DataPointer(ObjectMaster*, CurrentMenuObjectMaster_Maybe, 0x3C5E8D0);
 DataPointer(DemoData, FirstDemo, 0x913AE0);
 DataArray(DemoData, DemosArray, 0x913AE0, 6);
 DataArray(LandTable*, LandTableArray, 0x97DBE8, 193);
 DataPointer(AdventureData_*, CurrentAdventureData_, 0x3B0EF4C);
 DataPointer(SceneSelectData_*, CurrentSceneSelectData, 0x03B18A08);
 DataArray(AdventureData, Stories, 0x3B183A8, 8);
-
-DataPointer(float, flt_3B18244, 0x3B18244);
-DataPointer(int, dword_3B28114, 0x3B28114);
-ObjectFunc(SeqTaskFadeIn, 0x412fe0);
-FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
-FunctionPointer(void, EV_InitPlayer, (int player), 0x431780);
-VoidFunc(EventCutscene_Exec2, 0x431430);
 void Init_RandomCutscene();
 extern bool isCutsceneAllowed;

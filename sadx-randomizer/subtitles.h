@@ -3,7 +3,6 @@
 
 typedef unsigned short  word;
 
-
 struct SubtitleThing { //idk, ask SADX, most of the variables here are incorrect, but using this struct with the function does work fine in game... so... yeah.
     char field_0;
     char gap1;
@@ -29,7 +28,6 @@ struct SubtitleThing { //idk, ask SADX, most of the variables here are incorrect
     NJS_TEXNAME texname;
     float flags;
 };
-
 
 FunctionPointer(void, DoSomethingRelatedToText, (SubtitleThing* a1, const char* a2), 0x40e570);
 void DoSomethingRelatedToText_r(SubtitleThing* a1, const char* a2);

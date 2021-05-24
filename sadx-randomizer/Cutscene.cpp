@@ -245,6 +245,71 @@ CutsceneLevelData CutsceneList[130] = {
 
 
 
+void EV_GetCharObj_r(int player) { //SADX Doesn't give you control back after outro cutscene, but we need it for rando progression.
+	EnableControl();
+	ForcePlayerAction(0, 0x18);
+	GetCharacterObject(player);
+	return;
+}
+
+void EV2_r(int player) { //same as above
+	EnableControl();
+	ForcePlayerAction(0, 0x18);
+	EV_Wait(player);
+	return;
+}
+
+void preventLevelCutscene() {
+
+	if (RNGStages) {
+		switch (CurrentLevel)
+		{
+		case LevelIDs_RedMountain:
+			if (CurrentCharacter == Characters_Sonic)
+				return;
+			break;
+		case LevelIDs_HotShelter:
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
+				return;
+			break;
+		}
+	}
+
+	return GetLevelCutscene();
+}
+
+int preventHotShelterCutscene(int a1) {
+	if (CurrentStageVersion == BigVersion && CurrentLevel == LevelIDs_HotShelter && isAIActive)
+		return -1;
+
+	return (int)(char)CutsceneFlagArray[a1];
+}
+
+void LoadMRNPC_r() {
+	if (RNGStages && RNGCutscene) {
+		if (isCutsceneAllowed || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
+			return;
+	}
+
+	auto original = reinterpret_cast<decltype(LoadMRNPC_r)*>(LoadMRNPC_t->Target());
+	original();
+}
+
+
+void StartCutscene_r(int flag) {
+
+	if (RNGCutscene && RNGStages) {
+
+		if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
+			return;
+		}
+	}
+
+	FunctionPointer(void, original, (int flag), StartCutscene_t->Target());
+	return original(flag);
+}
+
+
 bool CheckAndPlayRandomCutscene() {
 	if (isCutsceneAllowed && RNGCutscene)
 	{
@@ -333,69 +398,6 @@ void getRandomCutscene(RandomizedEntry* entry) {
 	return;
 }
 
-void EV_GetCharObj_r(int player) { //SADX Doesn't give you control back after outro cutscene, but we need it for rando progression.
-	EnableControl();
-	ForcePlayerAction(0, 0x18);
-	GetCharacterObject(player);
-	return;
-}
-
-void EV2_r(int player) { //same as above
-	EnableControl();
-	ForcePlayerAction(0, 0x18);
-	EV_Wait(player);
-	return;
-}
-
-void preventLevelCutscene() {
-
-	if (RNGStages) {
-		switch (CurrentLevel)
-		{
-		case LevelIDs_RedMountain:
-			if (CurrentCharacter == Characters_Sonic)
-				return;
-			break;
-		case LevelIDs_HotShelter:
-			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
-				return;
-			break;
-		}
-	}
-
-	return GetLevelCutscene();
-}
-
-int preventHotShelterCutscene(int a1) {
-	if (CurrentStageVersion == BigVersion && CurrentLevel == LevelIDs_HotShelter && isAIActive)
-		return -1;
-
-	return (int)(char)CutsceneFlagArray[a1];
-}
-
-void LoadMRNPC_r() {
-	if (RNGStages && RNGCutscene) {
-		if (isCutsceneAllowed || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
-			return;
-	}
-
-	auto original = reinterpret_cast<decltype(LoadMRNPC_r)*>(LoadMRNPC_t->Target());
-	original();
-}
-
-
-void StartCutscene_r(int flag) {
-
-	if (RNGCutscene && RNGStages) {
-
-		if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past) {
-			return;
-		}
-	}
-
-	FunctionPointer(void, original, (int flag), StartCutscene_t->Target());
-	return original(flag);
-}
 
 
 void Init_RandomCutscene() {
