@@ -396,7 +396,7 @@ SetLevelPosition PlayerAroundChaoPosition[15]{
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1880, 1403 },
-	{ AmyVersion, LevelAndActIDs_FinalEgg1, 1517.56, -3139.29, -274.385},
+	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2897.51, 5810.17, -1993.62},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },
 	{ AmyVersion, LevelAndActIDs_HotShelter2, 1060.4085693, 750.8605957, -2952.347412 },
@@ -444,7 +444,7 @@ SetLevelPosition ChaoLevelPosition[26]{
 	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
-	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2945.652344, 5589.605469, -2211.165039, -1.681558157E-44 + 0x4000 },
+	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2974.897, 5663.096, -1992.15, -1.681558157E-44 + 0x4000 },
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
 	{ SonicVersion, LevelAndActIDs_FinalEgg3, 2659.293457, -2888.063965, -946.1408081, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_HotShelter1, -157.615, 418.875, -271.49, 0x8000 }, //Big Version 

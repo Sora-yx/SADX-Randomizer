@@ -226,6 +226,10 @@ bool Check_ObjectMysticMelody() {
 		if (CurrentAct == 2)
 			return true;
 		break;
+	case LevelIDs_FinalEgg:
+		if (CurrentAct == 0)
+			return true;
+		break;
 	}
 
 	return false;

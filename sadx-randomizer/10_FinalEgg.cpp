@@ -14,8 +14,6 @@ void FinalEgg_Layout() {
 	if (CurrentMission == Mission3_LostChao)
 		CurrentMission = Mission2_100Rings;
 
-	/*CurrentMission = Mission3_LostChao;
-	CurrentStageVersion = AmyVersion;*/
 
 	return;
 }

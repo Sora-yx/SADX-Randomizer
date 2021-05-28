@@ -200,19 +200,19 @@
     <ClInclude Include="data\CharactersSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RandomHelpers.h">
+    <ClInclude Include="data\RandomHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\chao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Credits.h">
+    <ClInclude Include="data\Credits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StageSettings.h">
+    <ClInclude Include="data\StageSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cutscene.h">
+    <ClInclude Include="data\Cutscene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\EggHornet.h">
@@ -266,22 +266,22 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="subtitles.h">
+    <ClInclude Include="data\subtitles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cas.h">
+    <ClInclude Include="data\Cas.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="startup.h">
+    <ClInclude Include="data\startup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="level.h">
+    <ClInclude Include="data\level.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="SADXFunctions.h">
+    <ClInclude Include="data\SADXFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SADXVariables.h">
+    <ClInclude Include="data\SADXVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
