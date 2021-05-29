@@ -140,7 +140,9 @@ extern "C" {
 		Characters_Init();
 		Stages_Management();
 		RandomizeStages_Init();
-		
+		ObjectCommons_Init();
+		InitMissions();
+
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
 	}

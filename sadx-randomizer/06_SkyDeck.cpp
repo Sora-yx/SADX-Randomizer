@@ -7,7 +7,7 @@
 
 void SkyDeck_Layout() {
 
-	/*CurrentMission = 3;
+	/*CurrentMission = 0;
 	CurrentStageVersion = TailsVersion;*/
 
 	if (CurrentMission == Mission3_LostChao && (CurrentStageVersion == TailsVersion || CurrentStageVersion == KnucklesVersion))
