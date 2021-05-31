@@ -34,6 +34,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 
 	LevelFeaturesInit();
 	LayoutFunctionInit(); //Set and Cam file
+	Result_Init();
 }
 
 

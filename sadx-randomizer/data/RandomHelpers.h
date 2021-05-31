@@ -303,7 +303,6 @@ void Init_TreasureHunting();
 
 void AddRingSandHill();
 void fixTCCart();
-void preventLevelCutscene();
 void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
 void AISwapOnFrames();

@@ -4,6 +4,19 @@
 extern bool RandCongratsDone;
 
 
+void SetAmyWinPose() {
+
+	if (EntityData1Ptrs[0]->CharID != Characters_Amy)
+		return;
+
+	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2)
+		CharObj2Ptrs[0]->AnimationThing.Index = 42;
+	else
+		CharObj2Ptrs[0]->AnimationThing.Index = 32;
+
+}
+
+
 //While load LevelResult: "fix" game crash. (There is probably a better way to do this.), restore most of the value to 0 to avoid any conflict.
 void DisableTimeStuff() {
 
@@ -152,6 +165,9 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 		case Characters_Tails:
 			sub_461560();
 			break;
+		case Characters_Amy:
+			SetAmyWinPose();
+			break;
 		case Characters_Gamma:
 			if (GetCharacter0ID() == Characters_Gamma)
 			{
@@ -200,6 +216,7 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 					Load_DelayedSound_Voice(1770);
 					break;
 				}
+				break;
 			}
 			else
 			{
@@ -273,11 +290,13 @@ void __cdecl LoadLevelResults_r() {
 		Load_DelayedSound_BGM(MusicIDs_RoundClear);
 		break;
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill || CurrentMission >= 2)
+		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill || CurrentMission >= 2) {
 			LoadObject((LoadObj)0, 3, sub_4141F0);
+		}
 		else
 		{
 			ForcePlayerAction(0, 19);
+			SetAmyWinPose();
 			sub_457D00();
 			LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
 			SoundManager_Delete2();

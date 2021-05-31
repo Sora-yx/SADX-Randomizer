@@ -6,21 +6,6 @@ char SonicRand = 0;
 extern bool Upgrade;
 
 
-int SetAmyWinPose() {
-	switch (CurrentCharacter)
-	{
-	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2)
-			return 42;
-		else
-			return 32;
-		break;
-	default:
-		return 42;
-		break;
-	}
-}
-
 void CheckAndSetUpgrades() {
 	if (Upgrade == true)
 	{
@@ -43,8 +28,6 @@ void CheckAndSetUpgrades() {
 }
 
 
-
-
 void CheckAndLoadRaceOpponent();
 
 //Hook Load Character
@@ -56,7 +39,7 @@ void LoadCharacter_r() {
 		LoadTails_AI_R();
 	else
 		LoadTails_AI_Original();
-	
+
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
@@ -116,7 +99,7 @@ void CallStuffWhenLevelStart() {
 	ObjectMaster* P1 = GetCharacterObject(0);
 	char CurChara = P1->Data1->CharID;
 	TimeThing = 1; //activate the timer of the stage.
-		
+
 	if (CurChara != Characters_Sonic)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
@@ -266,9 +249,11 @@ void Characters_Init() {
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
 
-	
+	WriteData<7>((int*)0x4879c, 0x90);
+
+
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
-	
+
 	if (!isCriticalMode)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
 
@@ -276,15 +261,18 @@ void Characters_Init() {
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
 	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.	
-	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart); 
+	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart);
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 
 	//Amy Stuff
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-	WriteCall((void*)0x4879C2, SetAmyWinPose);
-	WriteData((char*)0x4879C1, (char)0x90);
+	//WriteCall((void*)0x4879C2, SetAmyWinPose);
+	//WriteData((char*)0x4879C1, (char)0x90);
+
+	WriteJump(reinterpret_cast<void*>(0x4879c7), (void*)0x4879CE); //Always initialize Super Sonic weld data.
+
 
 	WriteCall((void*)0x79ab84, AmyCartImprovement);
 	WriteCall((void*)0x79aa78, AmyCartImprovement);

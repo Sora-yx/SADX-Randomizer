@@ -259,14 +259,24 @@ void EV2_r(int player) { //same as above
 	return;
 }
 
-void preventLevelCutscene() {
+
+void StartLevelCutscene_r(__int16 a1) {
+
+	if (a1 != 1 || !sub_413B20())
+	{
+		CutsceneMode = a1;
+	}
+}
+
+void preventLevelCutscene(__int16 a1) {
 
 	if (RNGStages) {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_RedMountain:
-			if (CurrentCharacter == Characters_Sonic)
+			if (CurrentCharacter == Characters_Sonic && CurrentAct == 1) {
 				return;
+			}
 			break;
 		case LevelIDs_HotShelter:
 			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
@@ -275,8 +285,10 @@ void preventLevelCutscene() {
 		}
 	}
 
-	return GetLevelCutscene();
+	return StartLevelCutscene_r(a1);
 }
+
+
 
 int preventHotShelterCutscene(int a1) {
 	if (CurrentStageVersion == BigVersion && CurrentLevel == LevelIDs_HotShelter && isAIActive)
@@ -400,11 +412,13 @@ void getRandomCutscene(RandomizedEntry* entry) {
 
 
 
+
 void Init_RandomCutscene() {
 	if (RNGStages) {
 
 		WriteCall((void*)0x59a458, preventHotShelterCutscene);
-		WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
+		WriteJump(StartLevelCutscene, preventLevelCutscene);
+		//WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
 		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
 		
 		if (RNGCutscene) {

@@ -149,13 +149,7 @@ extern "C" {
 
 
 	__declspec(dllexport) void __cdecl OnFrame()
-	{
-		
-		//DisplayDebugStringFormatted(NJM_LOCATION(2, 3), "banLevels[LevelIDs_SkyDeck] %d", banLevels[LevelIDs_SkyDeck]);
-
-		//if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-			//EntityData1Ptrs[0]->Position = { -157.615, 418.875, -290.49 };
-		
+	{		
 		//Display Current Randomized Settings Information on Character Select Screen.
 		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
 			DisplayRandoInformation();

@@ -395,7 +395,7 @@ SetLevelPosition PlayerAroundChaoPosition[15]{
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
-	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1880, 1403 },
+	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1580, 1403 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2897.51, 5810.17, -1993.62},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },

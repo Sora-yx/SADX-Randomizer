@@ -32,6 +32,7 @@ FunctionPointer(void, SeqSetSection, (__int16 sequence), 0x4133E0);
 ObjectFunc(SeqTaskFadeIn, 0x412fe0);
 FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
 VoidFunc(EventCutscene_Exec2, 0x431430);
+FunctionPointer(bool, sub_413B20, (), 0x413B20);
 
 //Chao Stuff
 FunctionPointer(long, Chao_Cry, (ObjectMaster* Chao), 0x75b6c0);
