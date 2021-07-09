@@ -273,11 +273,6 @@ void preventLevelCutscene(__int16 a1) {
 	if (RNGStages) {
 		switch (CurrentLevel)
 		{
-		case LevelIDs_RedMountain:
-			if (CurrentCharacter == Characters_Sonic && CurrentAct == 1) {
-				return;
-			}
-			break;
 		case LevelIDs_HotShelter:
 			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
 				return;

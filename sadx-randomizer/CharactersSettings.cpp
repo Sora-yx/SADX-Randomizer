@@ -207,6 +207,20 @@ void FixVictoryTailsVoice() {
 		return;
 }
 
+void RosterBanCheck() {
+	//ban roster check
+	for (int i = 0; i < LengthOfArray(banCharacter); i++)
+	{
+		if (banCharacter[i] == 1)
+			ban++;
+	}
+
+	if (ban >= 6)
+	{
+		MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONERROR);
+		Exit();
+	}
+}
 
 int8_t prev_char = -1;
 
@@ -254,7 +268,7 @@ void Characters_Init() {
 
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g
 
-	if (!isCriticalMode)
+	if (!isKHMod)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
 
 	//Super Sonic Stuff

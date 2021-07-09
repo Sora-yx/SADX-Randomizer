@@ -63,7 +63,7 @@ MusicInfo MusicList_R[] = {
 	{ "icecap1", 1 },
 	{ "icecap2", 1 },
 	{ "icecap3", 1 },
-	{ "invncibl", 1 },
+	{ "invncibl", 0 },
 	{ "item1", 1 },
 	{ "jingle_1", 1 },
 	{ "jingle_2", 1 },
@@ -93,7 +93,7 @@ MusicInfo MusicList_R[] = {
 	{ "skydeck2", 1 },
 	{ "sonic", 1 },
 	{ "sonic_cd", 1 },
-	{ "speedup", 1 },
+	{ "speedup", 0 },
 	{ "sprsonic", 1 },
 	{ "ssracing", 1 },
 	{ "tails", 1 },
@@ -235,7 +235,7 @@ void __cdecl StartupMusic_Init(const char* path, const HelperFunctions& helperFu
 		WriteCall((void*)0x79e4e8, RandomMusic); //Sand Hill
 		WriteCall((void*)0x54a60d, RandomMusic); //Chaos 2
 
-		if (!isCriticalMode)
+		if (!isKHMod)
 			WriteCall((void*)0x5578ad, RandomMusic); //Chaos 6
 
 		WriteCall((void*)0x6ad292, RandomMusic); //Fix cutscene amy intro crash (wtf)

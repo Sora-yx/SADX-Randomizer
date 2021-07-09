@@ -43,3 +43,5 @@ void Load_Cart_R();
 void PlayCharaVoice_EmeraldGet(ObjectMaster* a1);
 void SuperSonic_TransformationCheck();
 
+void RosterBanCheck();
+

@@ -12,33 +12,36 @@ void Chaos0_Main_R(ObjectMaster* obj) {
 	ObjectMaster* chaos = obj;
 	chaoswk* cwk = (chaoswk*)obj->UnknownB_ptr;
 
-	if (obj)
-	{
-		if (data1->Action == 0)
+
+	if (CurrentCharacter == Characters_Gamma) {
+		if (obj)
 		{
-			AllocateObjectData2(chaos, data1);
+			if (data1->Action == 0)
+			{
+				AllocateObjectData2(chaos, data1);
+			}
 		}
-	}
 
 
-	if (cwk) {
+		if (cwk) {
 
-		if (cwk->bwk.action == 11)
-		{
-			task* tsk2 = GetE102BeamTaskPTR((task*)tsk->mwp[1].work.l);
-			if (tsk)
+			if (cwk->bwk.action == 11)
 			{
-				v15.x = tsk->twp->pos.x;
-				v15.y = tsk->twp->pos.y;
-				v15.z = tsk->twp->pos.z;
+				task* tsk2 = GetE102BeamTaskPTR((task*)tsk->mwp[1].work.l);
+				if (tsk)
+				{
+					v15.x = tsk->twp->pos.x;
+					v15.y = tsk->twp->pos.y;
+					v15.z = tsk->twp->pos.z;
+				}
+				else
+				{
+					v15 = { 0.0, 0.0, 0.0 };
+				}
+				//dsPlay_oneshot(155, 0, 0, 0);
+				E102Hit(&v15, -15.0);
+				E102KillCursor((ObjectMaster*)obj);
 			}
-			else
-			{
-				v15 = { 0.0, 0.0, 0.0 };
-			}
-			//dsPlay_oneshot(155, 0, 0, 0);
-			E102Hit(&v15, -15.0);
-			E102KillCursor((ObjectMaster*)obj);
 		}
 	}
 

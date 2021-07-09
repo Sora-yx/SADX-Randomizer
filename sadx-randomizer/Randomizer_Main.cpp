@@ -22,7 +22,7 @@ int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos2, LevelIDs_
 int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
-RandomizerGenerator RandoStageArray[52]{
+RandomizerGenerator RandoStageArray[51]{
 
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
 	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
@@ -68,7 +68,7 @@ RandomizerGenerator RandoStageArray[52]{
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
 	{LevelAndActIDs_E101, BossVersion, Characters_Gamma},
-	{LevelAndActIDs_E101R, BossVersion, Characters_Gamma},
+	//{LevelAndActIDs_E101R, BossVersion, Characters_Gamma},
 	{LevelAndActIDs_TwinkleCircuit1, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit2, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit3, NormalVersion},
@@ -88,13 +88,13 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
 
-	} while (previousLevel == generated->levelAndActs || isStageBanned(generated, Char_id)
+	} while (previousLevel == generated->levelAndActs >> 8 || isStageBanned(generated, Char_id)
 		|| !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
 
 	entry->level = generated->levelAndActs >> 8;
 	entry->act = generated->levelAndActs & 0xf;
 	entry->Layout = generated->version;
-	previousLevel = generated->levelAndActs;
+	previousLevel = entry->level;
 	return;
 }
 

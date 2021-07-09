@@ -63,6 +63,7 @@ SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 };
 
 
+
 void MovePlayerToStartPoint_r(EntityData1* data) {
 
 	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;

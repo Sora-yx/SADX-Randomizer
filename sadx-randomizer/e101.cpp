@@ -10,6 +10,9 @@ void E101_Main_R(ObjectMaster* obj) {
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
+	if (!data1 || !p1)
+		return;
+
 	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma)
 	{
 		data1->Status |= Status_Hurt;
@@ -49,11 +52,13 @@ void MK2_Main_R(ObjectMaster* obj) {
 
 void __cdecl E101_Init(const HelperFunctions& helperFunctions)
 {
-	WriteData<1>((int*)0x56BBF4, 160); //prevent MK2 to move to the next phase, we will manually do it to give more time to the player to react for non gamma characters.
+	
+	WriteData<16>((int*)0x5672AE, 0x90); //fix AI breaking the fight
 
-	if (!isCriticalMode) {
+	if (!isKHMod) {
 		E101_Main_t = new Trampoline((int)E101_Main, (int)E101_Main + 0x5, E101_Main_R);
 		MK2Main_t = new Trampoline((int)MK2_Main, (int)MK2_Main + 0x5, MK2_Main_R);
+		WriteData<1>((int*)0x56BBF4, 160); //prevent MK2 to move to the next phase, we will manually do it to give more time to the player to react for non gamma characters.
 	}
 
 	for (int i = 0; i < 8; i++) {

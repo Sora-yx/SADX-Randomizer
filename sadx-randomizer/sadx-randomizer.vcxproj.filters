@@ -284,5 +284,23 @@
     <ClInclude Include="data\SADXVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LW.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="FE.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="EC.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="TP.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="SH.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="WV.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

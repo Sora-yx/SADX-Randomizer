@@ -1,7 +1,10 @@
 #include "stdafx.h"
 
-NJS_TEXNAME SA2_OBJ_TEXNAMES[41];
+NJS_TEXNAME SA2_OBJ_TEXNAMES[43];
 NJS_TEXLIST SA2_OBJ_TEXLIST = { arrayptrandlength(SA2_OBJ_TEXNAMES) };
+PVMEntry SA2_OBJ_PVM = { "common-obj", &SA2_OBJ_TEXLIST };
+PVMEntry FroggyTex = { "big_kaeru", &big_kaeru_TEXLIST };
+
 
 ObjectMaster* CurrentCart = nullptr;
 ModelInfo* MysticMelody;
@@ -394,4 +397,7 @@ void ObjectCommons_Init() {
 
 	Set_BackRing();
 	Set_ZeroChase();
+
+	help.RegisterCommonObjectPVM(SA2_OBJ_PVM);	
+	help.RegisterCommonObjectPVM(FroggyTex);
 }

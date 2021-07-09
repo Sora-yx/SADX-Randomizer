@@ -134,7 +134,7 @@ extern bool isPlayerInWaterSlide;
 extern bool isChaoHintEnabled;
 extern bool AmySpeed;
 extern bool BigSpeed;
-extern bool isCriticalMode;
+extern bool isKHMod;
 
 
 uint8_t getRandomCharacter();
@@ -324,7 +324,7 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
-extern RandomizerGenerator RandoStageArray[52];
+extern RandomizerGenerator RandoStageArray[51];
 bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();

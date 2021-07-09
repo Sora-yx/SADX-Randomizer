@@ -17,7 +17,7 @@ bool RNGMusic = true;
 bool SA2M2 = true;
 bool SA2M3 = true;
 bool Viper = false;
-bool isCriticalMode = false;
+bool isKHMod = false;
 bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
 bool isChaoHintEnabled = true;
@@ -52,10 +52,10 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
-		HMODULE CMMode = GetModuleHandle(L"SADX-Critical-Mode");
+		HMODULE KHMod = GetModuleHandle(L"sadx-kh-mod");
 
-		if (CMMode)
-			isCriticalMode = true;
+		if (KHMod)
+			isKHMod = true;
 
 		if (helperFunctions.Version < 7)
 		{
@@ -104,18 +104,7 @@ extern "C" {
 		AI_Init(helperFunctions, config);
 		delete config;
 
-		//ban roster check
-		for (int i = 0; i < LengthOfArray(banCharacter); i++)
-		{
-			if (banCharacter[i] == 1)
-				ban++;
-		}
-
-		if (ban >= 6)
-		{
-			MessageBoxA(WindowHandle, "You cannot ban all the characters.", "SADX Randomizer", MB_ICONERROR);
-			Exit();
-		}
+		RosterBanCheck();
 
 		if (!RNGStages && StorySplits != 0)
 			MessageBoxA(WindowHandle, "Failed to generate speedrunner splits, make sure the random stage option is enabled.", "SADX Randomizer Error", MB_ICONINFORMATION);

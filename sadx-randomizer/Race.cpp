@@ -14,7 +14,7 @@ void AIRaceLoad_R() {
 
 int IsFastSonicAI_R() {
 
-	if (isCriticalMode && CurrentCharacter < Characters_Amy)
+	if (isKHMod && CurrentCharacter < Characters_Amy)
 		return 1;
 	else
 		return 0;

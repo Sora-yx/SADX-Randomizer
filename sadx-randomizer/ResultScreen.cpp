@@ -33,7 +33,7 @@ void DisableTimeStuff() {
 
 	ringsPB += Rings; //total Rings credit stat
 
-	if (!Race && CurrentCharacter == Characters_Tails)
+	if (!Race && GetCharacter0ID() == Characters_Tails)
 		SetTailsRaceVictory();
 
 
@@ -44,7 +44,7 @@ void DisableTimeStuff() {
 	{
 		if (play2 != nullptr && play1 != nullptr)
 		{
-			if (CurrentCharacter != Characters_Amy)
+			if (GetCharacter0ID() != Characters_Amy)
 			{
 				play2->Data1->Position.x = play1->Data1->Position.x - 7;
 				play2->Data1->Position.y = play1->Data1->Position.y;
@@ -64,7 +64,7 @@ void DisableTimeStuff() {
 		}
 	}
 
-	if (Race && CurrentCharacter != Characters_Tails)
+	if (Race && GetCharacter0ID() != Characters_Tails)
 	{
 		SetTailsRaceVictory();
 		Tails_CheckRaceResult();
@@ -160,7 +160,7 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 	if (v1->Status & 3)
 	{
 		ForcePlayerAction(0, 19);
-		switch (CurrentCharacter)
+		switch (GetCharacter0ID())
 		{
 		case Characters_Tails:
 			sub_461560();
@@ -259,7 +259,7 @@ void __cdecl LoadLevelResults_r() {
 		sub_5919E0();
 	if (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails)
 		SetTailsRaceVictory();
-	switch (CurrentCharacter)
+	switch (GetCharacter0ID())
 	{
 	case Characters_Tails:
 		if (GetRaceWinnerPlayer() == 1)

@@ -42,7 +42,6 @@ void LoadRemoveCart() {
 	
 }
 
-
 PVMEntry SandHillObjectTextures[] = {
 	{ "OBJ_SANDBOARD", (TexList*)0x173FA94 },
 	{ "E102TIME", (TexList*)0x91D5E0 },

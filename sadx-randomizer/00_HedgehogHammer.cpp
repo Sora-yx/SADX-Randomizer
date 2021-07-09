@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#define AddSet(A, B) helperFunctions.ReplaceFile("system\\" A ".bin", "system\\sets\\" B ".bin")
-
 int HedgehogHammerTrick() {
 	return Characters_Amy;
 }
