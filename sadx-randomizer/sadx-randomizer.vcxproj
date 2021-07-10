@@ -108,6 +108,7 @@
     <ClCompile Include="Common_Startup.cpp" />
     <ClCompile Include="credits.cpp" />
     <ClCompile Include="Cutscene.cpp" />
+    <ClCompile Include="E100-series.cpp" />
     <ClCompile Include="e101.cpp" />
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />

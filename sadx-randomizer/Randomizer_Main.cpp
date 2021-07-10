@@ -154,32 +154,29 @@ RandomizerGenerator StructDupli;
 int oldStageVersion = -1;
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
-	std::ofstream myfile("VectorDebug.txt", std::ios_base::app);
-	myfile << "\n";
 
 	short curLevelAndActID = generated->levelAndActs;
 	short curVersion = generated->version;
 	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
+
+	if (ban >= 5)
+		return false;
 
 
 	for (RandomizerGenerator stage : DuplicateStages) {
 
 		if (DuplicateStages.size() != 0 && curVersion == BossVersion && DuplicateStages.back().version == BossVersion)
 		{
-			myfile << "Previous Level was already a Boss: " << curLevel;
 			return true;
 		}
 
 		if (DuplicateStages.size() >= 42) //Prevent infinite loop.
 		{
-			myfile << "STOOOOOOP";
 			return false;
 		}
 
 		if (DuplicateStages.size() != 0 && (curLevelAndActID == stage.levelAndActs && curVersion == stage.version) || DuplicateStages.back().levelAndActs >> 8 == curLevel)
 		{
-			myfile << "Prevous Stage: " << curLevel;
-			myfile << " Previous Version: " << curVersion;
 			return true;
 		}
 	}
@@ -190,17 +187,13 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 		TCCount++;
 
 	if (oldStageVersion == curVersion && (oldStageVersion == TailsVersion || oldStageVersion == KnucklesVersion) && DuplicateStages.size() < 40) {
-		myfile << "Same custom stage lol: " << curLevel;
 		return true;
 	}
 
-	myfile << "Added Level: " << curLevel;
-	myfile << " Added Version: " << curVersion;
 	StructDupli.levelAndActs = curLevelAndActID;
 	StructDupli.version = curVersion;
 	DuplicateStages.push_back(StructDupli);
 	oldStageVersion = curVersion;
-	myfile.close();
 	return false;
 }
 
@@ -215,6 +208,8 @@ void SetInfoNextRandomStage(char Stage, char Act) {
 
 		if (SonicRand == 1)
 			MetalSonicFlag = SonicRand;
+		else
+			MetalSonicFlag = 0;
 	}
 
 	if (isAIAllowed)

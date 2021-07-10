@@ -195,6 +195,9 @@
     <ClCompile Include="35_TwinkleCircuit.cpp">
       <Filter>Source Files\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="E100-series.cpp">
+      <Filter>Source Files\Bosses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\CharactersSettings.h">

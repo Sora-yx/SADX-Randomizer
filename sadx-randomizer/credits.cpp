@@ -51,14 +51,6 @@ void DeleteCreditStats() {
 	ResultScore = 0;
 }
 
-FunctionPointer(long, CanIMakePanelJump, (EntityData1* p1), 0x4b83f0);  
-
-void JumpStat(EntityData1* p1) {
-
-	JumpPB++;
-	CanIMakePanelJump(p1);
-	return;
-}
 
 void DeathsStat() {
 	//used when you game over
@@ -142,7 +134,6 @@ void CreditFlag() {
 	RandCongratsDone = false;
 	GetCurrentCharacterID();
 }
-
 
 
 CreditsEntry CreditsText_list[] = {
@@ -702,7 +693,6 @@ void CreditsNewList() {
 void credits() {
 	DisableControl();
 	CurrentMission = 0;
-	GetCustomLayout = 0;
 	CurrentMissionCard = 0;
 	StatsTimer = 3000;
 	WriteSaveFile();
@@ -825,7 +815,6 @@ void __cdecl Credits_StartupInit(const char* path, const HelperFunctions& helper
 	WriteCall((void*)0x45072d, HurtsStat);
 	WriteCall((void*)0x416e95, DeathsStat);
 	WriteCall((void*)0x416f94, DeathsStat);
-	WriteCall((void*)0x43bf6b, JumpStat);
 	WriteCall((void*)0x4d88ca, KillStat);
 	WriteCall((void*)0x4d7977, AnimalStat);
 }

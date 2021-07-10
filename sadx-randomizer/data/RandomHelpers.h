@@ -166,7 +166,6 @@ extern bool Race;
 extern char AIRace;
 extern int levelCount;
 
-extern char GetCustomLayout;
 extern ObjectFuncPtr charfuncs[];
 
 void TitleCard_Init();

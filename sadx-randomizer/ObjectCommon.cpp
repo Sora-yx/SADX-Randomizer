@@ -196,6 +196,9 @@ bool Check_TikalMessageDisplay() {
 
 	switch (CurrentLevel)
 	{
+	case LevelIDs_SpeedHighway:
+		return true;
+		break;
 	case LevelIDs_FinalEgg:
 		if (CurrentAct == 2 && CurrentStageVersion == SonicVersion)
 			return true;
@@ -266,17 +269,19 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				obj->DeleteSub = DynCol_Delete;
 				data->Object = MysticMelody->getmodel();
 				data->Position.y -= 7;
-				data->Action = 1;
+				data->Action++;
 			}
 			break;
 			case 1:
 			{
 				if (IsPlayerInsideSphere(&obj->Data1->Position, 160)) {
+					data->InvulnerableTime = 0;
+					data->Index = 0;
 					if (getChar >= Characters_Gamma)
 						size = 35;
 					if (Check_TikalMessageDisplay())
 						DisplayHintText(TikalLostChao_message, 110);
-					data->Action = 2;
+					data->Action++;
 				}
 			}
 			break;
@@ -296,13 +301,13 @@ void MysticMelody_Main(ObjectMaster* obj) {
 						ForcePlayerToWhistle();
 
 						PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
-						data->Action = 3;
+						data->Action++;
 					}
 				}
 			}
 			break;
 			case 3:
-				if (++obj->Data1->Index == 120) {
+				if (++data->Index == 120) {
 					EnableControl();
 					if (CurrentMission == Mission3_LostChao) {
 						EnableControl();
@@ -328,7 +333,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				{
 					
 					MMPlatformEnabled = Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
-					if (++obj->Data1->InvulnerableTime == 5)
+					if (++data->InvulnerableTime == 5)
 					{
 						CheckAndAddColLandTable();
 						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
@@ -346,8 +351,8 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				if (EntityData1Ptrs[0]->CharID >= Characters_Knuckles) 
 					EntityData1Ptrs[0]->CollisionInfo->colli_range /= 2; // fix that wrong teleportation position with that dumb collision push shit thing 
 
-				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
 				data->Action = 1;
+				EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
 			break;
 		}
 	

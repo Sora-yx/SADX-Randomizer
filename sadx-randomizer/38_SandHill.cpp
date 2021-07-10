@@ -67,4 +67,7 @@ void __cdecl SandHill_Init(const char* path, const HelperFunctions& helperFuncti
 	for (int i = 3; i < 8; i++)
 		helperFunctions.RegisterStartPosition(i, SandHill_StartPositions[0]);
 
+
+	WriteCall((void*)0x597B1C, GetCharacter0ID); // fix sand hill snowboard
+
 }

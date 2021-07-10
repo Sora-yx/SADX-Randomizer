@@ -3,16 +3,39 @@
 
 extern bool RandCongratsDone;
 
+void SetResultsCamera()
+{
+	switch (GetCharacter0ID())
+	{
+	case Characters_Sonic:
+	case Characters_Tails:
+		sub_469300((int*)0x919BF4, 3, 720);
+		break;
+	case Characters_Knuckles:
+		sub_469300((int*)0x91A848, 3, 720);
+		break;
+	case Characters_Amy:
+		sub_469300((int*)0x9196D0, 3, 720);
+		break;
+	case Characters_Gamma:
+		sub_469300((int*)0x91A248, 3, 720);
+		break;
+	}
+}
+
 
 void SetAmyWinPose() {
 
 	if (EntityData1Ptrs[0]->CharID != Characters_Amy)
 		return;
 
-	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2)
+	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2) {
 		CharObj2Ptrs[0]->AnimationThing.Index = 42;
-	else
+		SetResultsCamera();
+	}
+	else {
 		CharObj2Ptrs[0]->AnimationThing.Index = 32;
+	}
 
 }
 
@@ -73,29 +96,6 @@ void DisableTimeStuff() {
 	Race = false;
 	return;
 }
-
-
-
-void SetResultsCamera()
-{
-	switch (GetCharacter0ID())
-	{
-	case Characters_Sonic:
-	case Characters_Tails:
-		sub_469300((int*)0x919BF4, 3, 720);
-		break;
-	case Characters_Knuckles:
-		sub_469300((int*)0x91A848, 3, 720);
-		break;
-	case Characters_Amy:
-		sub_469300((int*)0x9196D0, 3, 720);
-		break;
-	case Characters_Gamma:
-		sub_469300((int*)0x91A248, 3, 720);
-		break;
-	}
-}
-
 
 void __cdecl sub_461560()
 {
@@ -348,7 +348,6 @@ void ResetValueAndObjects() {
 	isZeroActive = false;
 	LimitCustomFlag = false;
 	isGameOver = false;
-	SonicRand = 0;
 	KnuxCheck = 0;
 	KnuxCheck2 = 0; //fix trial crash
 	ChaoSpawn = false;

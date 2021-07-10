@@ -29,7 +29,6 @@ void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFunctions)
 {
-
 	ECObjects_Init(path, helperFunctions);
 
 	//Initiliaze data
@@ -37,7 +36,6 @@ void __cdecl EmeraldCoast_Init(const char* path, const HelperFunctions& helperFu
 	WriteData<1>((char*)0x427FCA, 0x08); //Fix EC HUD display for Tails.
 
 	WriteCall((void*)0x422bbc, EC_Layout);
-
 
 	AddLevelLayout("Emerald Coast\\", "EC0", helperFunctions);
 	AddLevelLayout("Emerald Coast\\", "EC1", helperFunctions);

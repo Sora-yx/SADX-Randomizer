@@ -4,3 +4,9 @@
 
 void FixCasinoSoundEffects();
 void Set_ZeroChase();
+void BackRing_CheckAndApply();
+void Check_Display_BackRing_Common(ObjectMaster* a1);
+extern NJS_MODEL_SADX model_0;
+extern NJS_OBJECT object_GoalRing;
+
+extern NJS_TEXLIST GoalRingTextures;

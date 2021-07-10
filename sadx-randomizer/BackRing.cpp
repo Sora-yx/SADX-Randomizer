@@ -12,13 +12,6 @@ char TimeFrameCopy = 0;
 bool GetBackRing = false;
 
 //back ring Model and Display Stuff
-extern NJS_MODEL_SADX model_0;
-extern NJS_OBJECT object_GoalRing;
-extern NJS_TEXNAME GoalRingTexNames[4];
-extern NJS_TEXLIST GoalRingTextures;
-
-FunctionPointer(void, sub_408530, (NJS_OBJECT*), 0x408530);
-
 Trampoline* Capsule_Load_T = nullptr;
 Trampoline* Froggy_Load_T = nullptr;
 Trampoline* Froggy_Main_T = nullptr;
@@ -33,20 +26,17 @@ void BackRingObj_Display(ObjectMaster* obj) {
 		njTranslateV(nullptr, &obj->Data1->Position);
 		njRotateY(nullptr, obj->Data1->Rotation.y);
 		njScale(0, obj->Data1->Scale.x, obj->Data1->Scale.x, obj->Data1->Scale.x);
-		sub_408530(&object_GoalRing);
+		DrawObject(&object_GoalRing);
 		njPopMatrix(1);
 	}
 }
 
-
-void ChaoObj_Delete(ObjectMaster* a1);
 
 enum BackRing_Actions {
 	BackRing_Init,
 	BackRing_Seek,
 	BackRing_Setting
 };
-
 
 //ran every UNpaused frame
 void BackRingObj_Main(ObjectMaster* obj) {
@@ -56,7 +46,6 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 	switch (data->Action) {
 	case BackRing_Init:
-		LoadPVM("BACKRING", &GoalRingTextures);
 		obj->DisplaySub = BackRingObj_Display;
 		data->Scale.x = 1;
 		data->Action = BackRing_Seek;
@@ -298,7 +287,6 @@ void __cdecl CheckLoadFroggy_r(ObjectMaster* a1) {
 	}
 }
 
-
 //Check the current mission and replace Froggy with Back Ring.
 void __cdecl CheckLoadBig_Froggy_r(ObjectMaster* a1) {
 
@@ -311,7 +299,6 @@ void __cdecl CheckLoadBig_Froggy_r(ObjectMaster* a1) {
 		return;
 	}
 }
-
 
 //Check the current mission and replace Balloon with Back Ring.
 void __cdecl CheckLoadBalloon_r(ObjectMaster* a1) {
@@ -466,68 +453,6 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 	origin(a1);
 }
 
-ObjectFunc(E104_Main, 0x605A90);
-void E104Enemy_Main_R(ObjectMaster* obj);
-Trampoline E104_t((int)E104_Main, (int)E104_Main + 0x7, E104Enemy_Main_R);
-
-
-void E104Enemy_Main_R(ObjectMaster* obj) {
-
-	EntityData1* data1 = obj->Data1;
-	EntityData1* p1 = EntityData1Ptrs[0];
-
-	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
-	{
-		Check_Display_BackRing_Common(obj);
-		return;
-	}
-
-	if (data1->NextAction == 2 && data1->Action == 0) 
-	{
-		if (++data1->InvulnerableTime == 380) //FailSafe, because as non gamma character you can softlock, funny game lol
-			signed_char_ccsi_mode = 1; //force the event to continue
-	}	
-
-	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
-	{
-		data1->Status |= Status_Hurt;
-	}
-
-	ObjectFunc(origin, E104_t.Target());
-	origin(obj);
-}
-
-
-ObjectFunc(E103_Main, 0x4e7e90);
-void E103Enemy_Main_R(ObjectMaster* obj);
-Trampoline E103_t((int)E103_Main, (int)E103_Main + 0x7, E103Enemy_Main_R);
-
-void E103Enemy_Main_R(ObjectMaster* obj) {
-
-	EntityData1* data1 = obj->Data1;
-	EntityData1* p1 = EntityData1Ptrs[0];
-
-	if (CurrentLevel == LevelIDs_WindyValley && CurrentMission > 0)
-	{
-		Check_Display_BackRing_Common(obj);
-		return;
-	}
-
-	if (data1->NextAction == 2 && data1->Action == 0)
-	{
-		if (++data1->InvulnerableTime == 380) //FailSafe, because as non gamma character you can softlock, funny game lol
-			signed_char_ccsi_mode = 1;
-	}
-
-	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
-	{
-		data1->Status |= Status_Hurt;
-	}
-
-	ObjectFunc(origin, E103_t.Target());
-	origin(obj);
-}
-
 
 void OTarget_R(ObjectMaster* obj) { //Sonic Doll Final Egg
 
@@ -535,6 +460,23 @@ void OTarget_R(ObjectMaster* obj) { //Sonic Doll Final Egg
 		ObjectFunc(origin, OTarget_T->Target());
 		origin(obj);
 	}
+}
+
+void BackRing_CheckAndApply() {
+	if (GetBackRing && CurrentMission >= Mission2_100Rings)
+	{
+		Rings = RingCopy;
+		TimeSeconds = TimeSecCopy;
+		TimeMinutes = TimeMinCopy;
+		TimeFrames = TimeFrameCopy;
+		if (CurrentStageVersion == AmyVersion && CurrentLevel == LevelIDs_FinalEgg || CurrentStageVersion == TailsVersion)
+			Lives++;
+		ResetRestartData();
+		ResetGravity();
+		GameMode = GameModes_Adventure_ActionStg;
+	}
+
+	return;
 }
 
 void Set_BackRing() {

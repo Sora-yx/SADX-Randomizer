@@ -56,3 +56,6 @@ FunctionPointer(int, sub_46A820, (), 0x46A820);
 FunctionPointer(int, sub_46A7F0, (), 0x46A7F0);
 FunctionPointer(task*, GetE102BeamTaskPTR, (task* a1), 0x4CEFC0);
 FunctionPointer(void, E102Hit, (NJS_POINT3* a1, double a2), 0x49FB50);
+
+ObjectFunc(E103_Main, 0x4e7e90);
+ObjectFunc(E104_Main, 0x605A90);

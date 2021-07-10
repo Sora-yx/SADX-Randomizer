@@ -45,3 +45,4 @@ void SuperSonic_TransformationCheck();
 
 void RosterBanCheck();
 
+void initSuperSonicSettings();

@@ -9,7 +9,6 @@ void FinalEgg_Layout() {
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
 
-	CurrentStageVersion = AmyVersion;
 	return;
 }
 

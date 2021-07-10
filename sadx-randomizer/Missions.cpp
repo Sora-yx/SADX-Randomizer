@@ -1,14 +1,11 @@
 #include "stdafx.h"
 
-
 // Mission Card settings, check, texture edit.
-
 short CurrentMission = 0;
 int CurrentMissionCard;
 NJS_TEXNAME MissionsText[25];
 NJS_TEXNAME TitleCard[8];
 static NJS_TEXLIST TitleCardTex = { arrayptrandlength(TitleCard) };
-char GetCustomLayout;
 
 static Trampoline* LoadTitleCardTexture_t = nullptr;
 
@@ -49,15 +46,13 @@ short randomSA2Mission(short stage_id) {
 
 int CheckMissionRequirements_r() {
 
-	GetCustomLayout = CurrentMission;
-
 	if (CurrentLevel > LevelIDs_Chaos0)
 		return 0;
 
-	if (GetCustomLayout == Mission2_100Rings) //100 Rings check
+	if (CurrentMission == Mission2_100Rings) //100 Rings check
 		return (int)(99 < (short)Rings);
 
-	if (GetCustomLayout == Mission3_LostChao) //Lost Chao
+	if (CurrentMission == Mission3_LostChao) //Lost Chao
 		return 1;
 
 	return 1;
@@ -96,13 +91,11 @@ void PauseMenuFix() {
 
 void LoadStageMissionImage_r() {
 
-
 	if (GetLevelType == 0) { //Mission card check here
 
 		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= 42)
 			return;
 
-		GetCustomLayout = CurrentMission;
 
 		if (CurrentMission < Mission2_100Rings)
 		{
@@ -161,10 +154,10 @@ void LoadStageMissionImage_r() {
 		}
 
 
-		if (GetCustomLayout == Mission2_100Rings) //100 Rings
+		if (CurrentMission == Mission2_100Rings) //100 Rings
 			CurrentMissionCard = RingsCard;
 
-		if (GetCustomLayout == Mission3_LostChao) //Lost Chao
+		if (CurrentMission == Mission3_LostChao) //Lost Chao
 			CurrentMissionCard = LostChaoCard;
 
 		if (Race && CurrentStageVersion == TailsVersion && CurrentLevel != LevelIDs_SpeedHighway)
@@ -216,8 +209,6 @@ void StageMissionImage_result() {
 	if (GetLevelType == 0) { //do the mission check here
 			//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
 
-		GetCustomLayout = CurrentMission;
-
 		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_HedgehogHammer)
 			return;
 
@@ -235,7 +226,6 @@ void StageMissionImage_result() {
 }
 
 
-
 int LoadTitleCardTexture_r(int minDispTime) {
 
 	if (!isRandoLevel() || CurrentLevel > 14) {
@@ -243,7 +233,6 @@ int LoadTitleCardTexture_r(int minDispTime) {
 		FunctionPointer(int, original, (int minDispTime), LoadTitleCardTexture_t->Target());
 		return original(minDispTime);
 	}
-
 
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -268,7 +257,6 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	return 1;
 }
 
-
 void DisplayTitleCard_r() {
 
 	if (!isRandoLevel()) {
@@ -279,8 +267,6 @@ void DisplayTitleCard_r() {
 	return DisplayScreenTexture(0x4000000 + CurrentCharacter, HorizontalStretch * 320.00000000 + 32.00000000, //Last number of "0x4000000" is the texture ID, the rest is used for the position/Flag
 		VerticalStretch * 240.00000000, 1.00000000);
 }
-
-
 
 void TitleCard_Init() {
 
@@ -293,8 +279,6 @@ void TitleCard_Init() {
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
 	WriteCall((int*)0x4284cd, CheckMissionRequirements_r);
 }
-
-
 
 SetLevelPosition PlayerEndPosition[51]{ //Used for M2 and Bosses
 
@@ -422,6 +406,6 @@ void MissionResultCheck(ObjectMaster* obj) {
 void InitMissions() {
 
 	Race_Init();
-
 	Init_TreasureHunting();
+	return;
 }

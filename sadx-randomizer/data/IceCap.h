@@ -138,6 +138,35 @@ ObjectListEntry IceCapObjectList_list[] = {
 ObjectList IceCapObjectList = { arraylengthandptrT(IceCapObjectList_list, int) };
 
 
+
+PVMEntry IceCapObjectTextures[] = {
+	{ "OBJ_ICECAP", (TexList*)0xE48F30 },
+	{ "OBJ_ICECAP2", (TexList*)0xE48F78 },
+	{ "E102TIME", (TexList*)0x91D5E0 },
+	{ "E_SAI", (TexList*)0x38C8EA8 },
+	{ "E_SNOWMAN", (TexList*)0x985990 },
+	{ "MILESRACE", (TexList*)0x91BFC0 },
+	{ "PEN", (TexList*)0x92D39C },
+	{ "E_SNAKE", (TexList*)0x94E640 },
+	{ "RAKO", (TexList*)0x949FC4 },
+	{ "MECHA", (TexList*)0x1726108 },
+	{ "MOGU", (TexList*)0x93ECEC },
+	{ "KAOS_EME", (TexList*)0xC3FE20 },
+	{ "SAKE", (TexList*)0x171BF60 },
+	{ "GOMA", (TexList*)0x92ACE4 },
+	{ "PIRANIA", (TexList*)0x1728BB8 },
+	{ "NEW_BB", (TexList*)0x17126F4 },
+	{ "HAMMER", (TexList*)0x1723CF4 },
+	{ "SAME", (TexList*)0x172AAC4 },
+	{ "UNAGI", (TexList*)0x172CD88 },
+	{ "GORI", (TexList*)0x945964 },
+	{ "BOARD_SCORE", (TexList*)0x9BE780 },
+	{ NULL, (TexList*)0x91CBE8 },
+	{ "OBJ_SHAREOBJ", &OBJ_SHAREOBJ_TEXLIST },
+	{ 0 }
+};
+
+
 StartPosition IC1_StartPositions[]{
 	{ 8, 0,{ 1580, 84, 1074 }, 8000 }
 };

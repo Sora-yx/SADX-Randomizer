@@ -1,12 +1,6 @@
 #include "stdafx.h"
 
 extern uint32_t TotalCount;
-extern bool ChaoSpawn;
-extern char GetCustomLayout;
-extern char TimeSecCopy;
-extern char TimeMinCopy;
-extern char TimeFrameCopy;
-extern int RingCopy;
 static Trampoline* MovePlayerToStartPoint_t = nullptr;
 static Trampoline* RunLevelDestructor_t = nullptr;
 static Trampoline* LoadLevelObject_t = nullptr;
@@ -68,18 +62,7 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 
 	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;
 
-	if (GetBackRing && CurrentMission >= Mission2_100Rings)
-	{
-		Rings = RingCopy;
-		TimeSeconds = TimeSecCopy;
-		TimeMinutes = TimeMinCopy;
-		TimeFrames = TimeFrameCopy;
-		if (CurrentStageVersion == AmyVersion && CurrentLevel == LevelIDs_FinalEgg || CurrentStageVersion == TailsVersion)
-			Lives++;
-		ResetRestartData();
-		ResetGravity();
-		GameMode = GameModes_Adventure_ActionStg;
-	}
+	BackRing_CheckAndApply();
 
 	if (GameMode != 9 && GameMode != 10 && CurrentLevel < LevelIDs_StationSquare && CurrentLevel > LevelIDs_Past)
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
@@ -118,6 +101,8 @@ void __cdecl LoadLevelObject_r() {
 
 	if (CurrentCharacter != Characters_Gamma && (CurrentStageVersion == GammaVersion || CurrentLevel == LevelIDs_E101 || CurrentLevel == LevelIDs_E101R))
 		LoadCharTextures(Characters_Gamma); //fix E100 Series crash
+
+	LoadPVM("BACKRING", &GoalRingTextures);
 
 	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
 	original();

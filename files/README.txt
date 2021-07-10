@@ -6,11 +6,19 @@ Welcome to SADX Randomizer.
 If you need any help, or want to leave a feedback, feel free to join the Sonic Adventure Series Randomizer Discord:
 https://discord.gg/BBrEg5K
 
-Thank you for playing SADX Rando! It's been a while since the last update! First of all, the mod has been reworked almost from scratch, with much better implementations of how the files, textures, levels and RNG are loaded. 
-Also, the code got a massive cleanup and fixes, which resulted in a reduction in the size of the mod.
-Rando has reached a point that I couldn't even dreamed of. Believe it or not, but this took a lot of hardwork to make it how it is at the moment.
-I am quite satisfied with the current rendering of the mod, so updates are gonna continue to be slower for now, since there isn't that much stuff that I would like to add anymore. 
-I do appreciate your support regardless and I hope you still have fun with the mod. I'm also working on other projects for SADX, including SA2 Conversion mod, for more information, you can follow me on Twitter: https://twitter.com/Sora_yxow
+Thank you for playing SADX Rando! It's been a while since the last update!
+
+So what's up? 
+Well, first of all, the mod has been reworked almost from scratch, with much better implementations of how the files, textures, 
+levels and RNG are loaded. Also, the code got a massive cleanup and fixes, which resulted in a reduction in the size of the mod.
+Some new features that were intended are finally here such as Randomized cutscenes and new characters/bosses combination.
+
+What about the future of the mod?
+Well, Rando has reached a point that I couldn't even dreamed of. Believe it or not, but this took a lot of hardwork to make it how it is at the moment.
+Also, I am quite satisfied with the current state of the mod, therefore this is gonna be the last major update for this project. This mod will continue to get minor updates for bug fixes here and here
+but that's all. There isn't that much stuff that I would like to add anymore and I have many other projects that I would like to take care of, so I hope you will understand that.
+I do appreciate your support regardless and I hope you still have fun with the mod. Like I said, I'm also working on other projects for SADX, 
+including SA2 Conversion mod, for more information, you can follow me on Twitter: https://twitter.com/Sora_yxow
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -68,8 +76,9 @@ A: Not at the moment, however, if you get a specific stage/boss that you don't l
 
 Q: Is there a reason why the Hub World isn't in Sadx Rando?
 A: This is mostly for technical reasons; adding the complete story of a character with cutscenes and hub world progression would be difficult and extremely time consuming to do. 
-The game has been developped to be completed in a very specific way, there is a lot of stuff which check the current story progression so the game can progress and obviously using any character in any level doesn't help at all.
-in other word; this would need a lot of work, including editing a big part of the game code, and even with that, the result might be not good enough. Adding the hub world isn't impossible, but might be a really long term goal.
+The game has been developped to be completed in a very specific way, there is a lot of stuff which check the current story progression so the game can progress and obviously using any character in any level doesn't help at all, in fact
+this breaks the progression a lot.
+In other word; this would need a lot of work, including editing a big part of the game code, and even with that, the result might be not good enough. Adding the hub world isn't impossible, but might be a really long term goal.
 tl;dr This is lot of work for such a small result.
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

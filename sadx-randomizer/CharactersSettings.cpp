@@ -51,8 +51,6 @@ void LoadCharacter_r() {
 }
 
 
-
-
 void fixCharacterSoundAfterReset() {
 
 	if (isAIActive)
@@ -245,9 +243,6 @@ void Characters_Init() {
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
 
-	WriteCall((void*)0x4E966C, GetCharacter0ID); // fix ice cap snowboard 1
-	WriteCall((void*)0x4E9686, GetCharacter0ID); // fix ice cap snowboard 2
-	WriteCall((void*)0x597B1C, GetCharacter0ID); // fix sand hill snowboard
 
 	if (AmySpeed) {
 		PhysicsArray[Characters_Amy].MaxAccel = 5;
@@ -271,21 +266,17 @@ void Characters_Init() {
 	if (!isKHMod)
 		WriteCall((void*)0x414872, SetGammaTimer); //increase Gamma's time limit by 3 minutes.
 
-	//Super Sonic Stuff
-	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
-	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
+
 	WriteCall((void*)0x4167da, CallStuffWhenLevelStart); //Call Super Sonic and other stuff when a stage start.	
 	WriteCall((void*)0x4175ad, CallStuffWhenLevelStart);
-	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
+	initSuperSonicSettings();
 
 	//Amy Stuff
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-	//WriteCall((void*)0x4879C2, SetAmyWinPose);
-	//WriteData((char*)0x4879C1, (char)0x90);
 
-	WriteJump(reinterpret_cast<void*>(0x4879c7), (void*)0x4879CE); //Always initialize Super Sonic weld data.
+
 
 
 	WriteCall((void*)0x79ab84, AmyCartImprovement);
