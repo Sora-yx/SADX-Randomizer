@@ -5,7 +5,6 @@ NJS_TEXLIST SA2_OBJ_TEXLIST = { arrayptrandlength(SA2_OBJ_TEXNAMES) };
 PVMEntry SA2_OBJ_PVM = { "common-obj", &SA2_OBJ_TEXLIST };
 PVMEntry FroggyTex = { "big_kaeru", &big_kaeru_TEXLIST };
 
-
 ObjectMaster* CurrentCart = nullptr;
 ModelInfo* MysticMelody;
 ModelInfo* MMPlatform;

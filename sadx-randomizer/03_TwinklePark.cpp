@@ -69,4 +69,5 @@ void __cdecl TwinklePark_Init(const char* path, const HelperFunctions& helperFun
 	AddCam("C0302");
 	AddCam("C0303");
 	AddCam("C0304");
+	return;
 }

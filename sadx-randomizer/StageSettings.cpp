@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include <fstream>
 
-
-
-
-
 //Create an object so Gamma can hit some specific bosses.
 CollisionData col = { 0, 0, 0x77, 0, 0x800400,  { 6.0, 6.0, 6.0}, 0, 0 };
 

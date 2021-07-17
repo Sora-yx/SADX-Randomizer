@@ -51,6 +51,9 @@ void ShowActionButton() {
 }
 
 void Hud_ShowSwapButton() {
+
+	help.PushScaleUI(uiscale::Align_Center, false, 1.0f, 1.0f);
+
 	if (!IsGamePaused()) {
 		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
 			ActionButtonActive = false;
@@ -105,6 +108,9 @@ void Hud_ShowSwapButton() {
 	if (ActionButtonAlpha >= 1) {
 		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2Action, -1.501, NJD_SPRITE_ALPHA);
 	}
+
+
+	help.PopScaleUI();
 }
 
 

@@ -56,4 +56,5 @@ void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFun
 	AddCam("C0202");
 	AddCam("C0203");
 	AddCam("C0204");
+	return;
 }
