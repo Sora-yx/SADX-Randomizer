@@ -71,28 +71,21 @@ enum CharacterStageVersion {
 	BossVersion = 9
 };
 
-//Mission Card Enum 0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
-enum MissionCard {
-	CapsuleCard, LostChaoCard, EmeraldKnuxCard, SonicRaceCard, FinalEggCard, FroggyCard,
-	LostWorldCard, MissileRaceCard, RingsCard, RescueTailsCard, BalloonCard, TailsRaceCard, KnuxRaceCard, AmyRaceCard,
-	BigRaceCard, GammaRaceCard, EggmanRaceCard, TikalRaceCard, MSRaceCard, E103Card, E104Card, E105Card, EmeraldCasinoCard, EmeraldICCard, EmeraldWVCard, SonicDollCard
+enum LevelAndActIDs_
+{
+	LevelAndActIDs_Chaos6_ = LevelIDs_Chaos6 << 8,
+	LevelAndActIDs_Chaos6Two,
 };
 
-enum CurMission {
+extern RandomizerGenerator RandoStageArray[52];
 
-	SADX_Mission, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
-};
+
 
 enum CurSplits {
 
 	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
 };
 
-enum LevelAndActIDs_
-{
-	LevelAndActIDs_Chaos6_ = LevelIDs_Chaos6 << 8,
-	LevelAndActIDs_Chaos6Two,
-};
 
 
 bool isBossStage(short stage_id);
@@ -323,7 +316,7 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
-extern RandomizerGenerator RandoStageArray[51];
+
 bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
@@ -334,3 +327,4 @@ void MissionResultCheck(ObjectMaster* obj);
 void Result_Init();
 void ObjectCommons_Init();
 void InitMissions();
+

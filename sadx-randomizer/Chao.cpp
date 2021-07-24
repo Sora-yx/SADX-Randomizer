@@ -11,8 +11,6 @@ short ChaoCryDelay = 0;
 static bool pvploaded = false;
 bool ChaoSpawn = false;
 
-ObjectMaster* ChaoTP = nullptr;
-
 NJS_VECTOR pos;
 float Yrot;
 bool ChaoSpawnAllowed = false;
@@ -69,31 +67,46 @@ void Chao_LoadFiles() {
 	LoadChaoTexlist("AL_TEX_COMMON", &ChaoTexLists[1], 1u);
 }
 
-void ChaoTPTriggerDelete(ObjectMaster* a1) {
 
-	if (a1 != nullptr) {
-		CheckThingButThenDeleteObject(a1);
-	}
-	ChaoTP = nullptr;
-}
 
-void LoadChaoTPTrigger() {
+void ChaoTPTrigger(ObjectMaster* a1) {
 
-	if (!ChaoTP && CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2 && CurrentMission == Mission3_LostChao)
+	short Size = 10;
+
+	if (CurrentCharacter >= Characters_Gamma)
+		Size = 15;
+
+	if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, Size))
 	{
-		ChaoTP = LoadObject(LoadObj_Data1, 2, ChaoTPTrigger);
-		ChaoTP->Data1->Position = { -121, 50, 290 };
-		ChaoTP->Data1->Scale.x = 15;
-		ChaoTP->DeleteSub = ChaoTPTriggerDelete;
+		ChaoObject->Data1->Action = ChaoAction_Hit;
+		a1->Data1->Action++;
 	}
 }
 
+
+void LoadChaoTPTrigger(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1;
+
+	switch (data->Action) {
+	case 0:
+		data->Position = { -121, 50, 290 };
+		data->Scale.x = 15;
+		data->Action++;
+		break;
+	case 1:
+		ChaoTPTrigger(obj);
+		break;
+	case 2:
+		CheckThingButThenDeleteObject(obj);
+		break;
+	}
+}
 
 
 void Chao_DeleteFiles() {
 
 	CheckThingButThenDeleteObject(ChaoManager);
-	ChaoTPTriggerDelete(ChaoTP);
 	CheckThingButThenDeleteObject(chaoHint);
 	CheckThingButThenDeleteObject(CurrentChao);
 	CheckThingButThenDeleteObject(ChaoObject);
@@ -101,7 +114,6 @@ void Chao_DeleteFiles() {
 	CurrentChao = nullptr;
 	ChaoObject = nullptr;
 	chaoHint = nullptr;
-	ChaoTP = nullptr;
 
 	//Release the chao textures
 	FreeChaoTexlists();
@@ -138,15 +150,26 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 	case 1:
 		if (!flashScreenChao && EnableControl)
 			flashScreenChao = LoadObject(LoadObj_Data1, 1, FlashScreen);
-		chaoPB++;
-		EntityData1Ptrs[0]->Position.x += 2;
+
+		for (int i = 0; i < LengthOfArray(M3_PlayerEndPosition); i++)
+		{
+
+			if (CurrentLevel == ConvertLevelActsIDtoLevel(M3_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M3_PlayerEndPosition[i].LevelID)
+				&& CurrentStageVersion == M3_PlayerEndPosition[i].version) {
+
+				TeleportPlayerResultScreen(M3_PlayerEndPosition[i].Position, M3_PlayerEndPosition[i].YRot);
+				break;
+			}
+		}
 		data->Action = 2;
 		break;
 	case 2:
 		StopMusic();
 		PauseEnabled = 0;
-		if (++data->InvulnerableTime == 75)
+		if (++data->InvulnerableTime == 75) {
+			chaoPB++;
 			data->Action = 3;
+		}
 		break;
 	case 3:
 		LoadLevelResults_r();
@@ -189,7 +212,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 		a1->DisplaySub = a1->MainSub;
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
-		data->Action = 1; //Wait a frame before loading the chao
+		data->Action++; 
 	}
 	break;
 	case ChaoAction_LoadChao:
@@ -204,8 +227,10 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
 		CurrentChao = a1->Child;
 		a1->Child->Data1->Rotation.y = Yrot;
-		LoadChaoTPTrigger();
-		data->Action = 2;
+
+		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
+			LoadObject(LoadObj_Data1, 2, LoadChaoTPTrigger);
+		data->Action++;
 	}
 	break;
 	case ChaoAction_CheckHit:
@@ -266,7 +291,6 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	break;
 	}
 }
-
 
 
 void Chao_Gravity_r(ObjectMaster* obj);
@@ -356,11 +380,6 @@ void TriggerObj(ObjectMaster* obj) {
 }
 
 void ChaoCryHint() {
-	//LoadObject(Allocated Memory, Object List, Object Function)
-	//Memory: Data1 = EntityData1*; Data2 = EntityData2*, etc.
-	//List = ordre d'appel des objets (tous les objets 0 d'abord, puis les objets 1, etc.) 2 et 3 pour les objets de niveaux, 4 pour les enemies je crois.
-	//Function = chaque objet va appeler cette fonction, mais avec des données différentes.
-
 	if (!chaoHint && ChaoSpawn && CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 2)
 	{
 		chaoHint = LoadObject(LoadObj_Data1, 2, TriggerObj);
@@ -368,40 +387,6 @@ void ChaoCryHint() {
 		chaoHint->Data1->Scale.x = 50;
 	}
 }
-
-
-void ChaoTPTrigger(ObjectMaster* a1) {
-
-	short Size = 10;
-
-	if (CurrentCharacter >= Characters_Gamma)
-		Size = 15;
-
-	if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, Size))
-	{
-		ChaoObject->Data1->Action = ChaoAction_Hit;
-	}
-}
-
-
-SetLevelPosition PlayerAroundChaoPosition[15]{
-
-	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_WindyValley3, 3608.115, -4250.02, -2132.28, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_TwinklePark2, 330.48, 942.379, -133.624, 0x8000 },
-	{ BigVersion, LevelAndActIDs_TwinklePark2, 608.112, 499.01, -55.8172, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 3653.31, -127.07, 2924.58, 0x8000 },
-	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8019, -597, 8868, 0x8000 },
-	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
-	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
-	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
-	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1580, 1403 },
-	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2897.51, 5810.17, -1993.62},
-	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
-	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },
-	{ AmyVersion, LevelAndActIDs_HotShelter2, 1060.4085693, 750.8605957, -2952.347412 },
-	{ GammaVersion, LevelAndActIDs_HotShelter3, -1302.44, 3378.13, -3116.41 },
-};
 
 NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 
@@ -421,36 +406,6 @@ NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 	return { -1, -1, -1 };
 }
 
-
-SetLevelPosition ChaoLevelPosition[26]{
-
-	{ GammaVersion, LevelAndActIDs_EmeraldCoast1, 1599, 114.75, 840, 0x0 - 0x4000 },
-	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, 3857.76, 596.395, -2896.18, 0x8000 },
-	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 6103.9, 559.725, 630.345, 0xBDAC},
-	{ SonicVersion, LevelAndActIDs_WindyValley3, 3489.99, -4340.27, -2132.28, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
-	{ TailsVersion, LevelAndActIDs_Casinopolis2, -1565.96, -2205, 2654.24, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_IceCap2, 1480.62, 573.3, -256.67, 0x8000 },
-	{ BigVersion, LevelAndActIDs_IceCap4, 1790.85, 371.968811, 11.265, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_TwinklePark2, -89.1414, 830, -991.721, 0x8000 }, //Sonic Version
-	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
-	{ AmyVersion, LevelAndActIDs_TwinklePark3, -41.43054199, 50, 290.7596436, 0x0 - 0x4000  }, //Amy Version
-	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4455, -386.135, 2930.18, 4.479076996E-43 - 0x4000},
-	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8570.973, -950.125, 8984.435, 0x8000 + 0x4000 },
-	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
-	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
-	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
-	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1761.775, 71.5, -1862.41, 5.479076996E-43 + 0x4000 },
-	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
-	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
-	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2974.897, 5663.096, -1992.15, -1.681558157E-44 + 0x4000 },
-	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
-	{ SonicVersion, LevelAndActIDs_FinalEgg3, 2659.293457, -2888.063965, -946.1408081, 0x8000 }, //Sonic Version
-	{ BigVersion, LevelAndActIDs_HotShelter1, -157.615, 418.875, -271.49, 0x8000 }, //Big Version 
-	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, //Amy version SADX VANILLA
-	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
-};
 
 
 bool SetAndGetLostChaoPosition() {

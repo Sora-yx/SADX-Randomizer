@@ -140,9 +140,7 @@ extern "C" {
 	__declspec(dllexport) void __cdecl OnFrame()
 	{		
 		//Display Current Randomized Settings Information on Character Select Screen.
-		if (GameMode == GameModes_Menu && CharObj2Ptrs[0])
-			DisplayRandoInformation();
-		
+		DisplayRandoInformation();
 		Sounds_OnFrame();
 		LevelOnFrames();
 

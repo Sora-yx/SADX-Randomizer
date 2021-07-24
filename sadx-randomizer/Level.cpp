@@ -5,7 +5,6 @@ static Trampoline* MovePlayerToStartPoint_t = nullptr;
 static Trampoline* RunLevelDestructor_t = nullptr;
 static Trampoline* LoadLevelObject_t = nullptr;
 
-
 SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 
 	{ AmyVersion, LevelAndActIDs_HedgehogHammer, { -55, 0, -31 }, 0 },

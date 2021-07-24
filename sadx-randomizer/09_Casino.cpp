@@ -116,13 +116,6 @@ void FixCasinoSoundEffects() {
 
 void Casino_Layout() {
 
-	//CurrentStageVersion = KnucklesVersion;
-
-
-	if (CurrentMission == Mission3_LostChao || CurrentStageVersion == KnucklesVersion)
-	{
-		CurrentMission = SADX_Mission;
-	}
 
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
@@ -130,10 +123,13 @@ void Casino_Layout() {
 	if (CurrentAct == 1)
 		CurrentStageVersion = TailsVersion;
 
-
 	if (CurrentStageVersion == KnucklesVersion)
 		SetRNGKnuckles();
 
+	if (CurrentMission == Mission3_LostChao && CurrentStageVersion != TailsVersion || CurrentStageVersion == KnucklesVersion)
+	{
+		CurrentMission = SADX_Mission;
+	}
 
 	FixGoldenAndCoin();
 	return;

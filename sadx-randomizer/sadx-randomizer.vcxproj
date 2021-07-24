@@ -156,6 +156,7 @@
     <ClInclude Include="data\RM.h" />
     <ClInclude Include="data\SandHill.h" />
     <ClInclude Include="data\SD.h" />
+    <ClInclude Include="data\Utils.h" />
     <ClInclude Include="data\Zero.h" />
     <ClInclude Include="E101.h" />
     <ClInclude Include="data\level.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="data\SADXVariables.h" />
     <ClInclude Include="EC.h" />
     <ClInclude Include="FE.h" />
+    <ClInclude Include="hud.h" />
     <ClInclude Include="LW.h" />
     <ClInclude Include="SH.h" />
     <ClInclude Include="sound.h" />

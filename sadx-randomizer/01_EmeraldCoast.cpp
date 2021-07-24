@@ -13,7 +13,7 @@ void EC_Layout() {
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = BigVersion;
-	
+
 	return;
 }
 

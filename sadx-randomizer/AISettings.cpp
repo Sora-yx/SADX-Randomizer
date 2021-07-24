@@ -52,7 +52,6 @@ void ShowActionButton() {
 
 void Hud_ShowSwapButton() {
 
-	help.PushScaleUI(uiscale::Align_Center, false, 1.0f, 1.0f);
 
 	if (!IsGamePaused()) {
 		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
@@ -110,7 +109,6 @@ void Hud_ShowSwapButton() {
 	}
 
 
-	help.PopScaleUI();
 }
 
 
@@ -212,12 +210,12 @@ ObjectMaster* LoadCharObj(int i)
 	return CurAI;
 }
 
-int AI_BannedLevel[14]{
+int AI_BannedLevel[16]{
 
-	LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain, LevelIDs_SkyDeck, LevelIDs_LostWorld, 
-	LevelIDs_Casinopolis, LevelIDs_FinalEgg, LevelIDs_Chaos0, 
+	LevelIDs_EmeraldCoast, LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain, 
+	LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_Casinopolis, LevelIDs_FinalEgg, LevelIDs_Chaos0, 
 	LevelIDs_Chaos2, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, 
-	LevelIDs_EggViper, LevelIDs_SandHill
+	LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_E101R
 };
 
 int CheckTailsAI_R(void) { //restriction and bug fixes.
@@ -240,6 +238,10 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 		{
 			switch (CurrentLevel)
 			{
+			case LevelIDs_EmeraldCoast:
+				if (CurrentStageVersion == SonicVersion && CurrentCharacter == Characters_Tails)
+					return 0;
+				break;
 				case LevelIDs_SpeedHighway: //crash
 					if (CurrentAct == 1)
 						return 0;

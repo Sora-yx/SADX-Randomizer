@@ -16,7 +16,7 @@ void SuperAuraStuff() {
 }
 
 
-int SSLevel[9]{ LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
+int SSLevel[10]{ LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
 
 
@@ -30,19 +30,19 @@ int GetSSLevelBanned() {
 			switch (CurrentLevel)
 			{
 			case LevelIDs_TwinklePark:
-				if (CurrentAct == 1 && CurrentStageVersion != Characters_Amy || CurrentAct == 0)
+				if (CurrentAct == 1 && CurrentStageVersion != AmyVersion || CurrentAct == 0)
 					return true;
 				else
 					return false;
 				break;
 			case LevelIDs_SpeedHighway:
-				if (CurrentAct == 0 && CurrentStageVersion != Characters_Tails)
+				if (CurrentAct == 0 && CurrentStageVersion != TailsVersion)
 					return true;
 				else
 					return false;
 				break;
 			case LevelIDs_Casinopolis:
-				if (CurrentAct == 0 && CurrentStageVersion == 3)
+				if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
 					return false;
 				else
 					return true;

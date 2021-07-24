@@ -365,3 +365,18 @@ void DynCol_Delete(ObjectMaster* obj) {
 	}
 }
 
+
+void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
+
+	for (int j = 0; j < 8; j++) {
+		if (EntityData1Ptrs[j]) {
+
+			EntityData1Ptrs[j]->Position = pos;
+			EntityData1Ptrs[j]->Rotation.y = yRot;
+
+			if (j > 0) {
+				EntityData1Ptrs[j]->Position.x += 5;
+			}
+		}
+	}
+}

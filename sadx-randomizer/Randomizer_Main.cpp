@@ -17,13 +17,17 @@ int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Ch
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
 int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos, LevelIDs_Zero };
+int bannedLevelsBig[2] = { LevelIDs_EggViper, LevelIDs_E101R };
 
 //Initiliaze banned Vanilla stage (if option is enabled)
 int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
-RandomizerGenerator RandoStageArray[51]{
 
+int previousLevel = -1;
+int TCCount = 0;
+
+RandomizerGenerator RandoStageArray[52]{
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
 	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
 	{LevelAndActIDs_EmeraldCoast1, GammaVersion, Characters_Gamma },
@@ -68,7 +72,7 @@ RandomizerGenerator RandoStageArray[51]{
 	{LevelAndActIDs_EggViper, BossVersion, Characters_Sonic },
 	{LevelAndActIDs_Zero, BossVersion, Characters_Amy},
 	{LevelAndActIDs_E101, BossVersion, Characters_Gamma},
-	//{LevelAndActIDs_E101R, BossVersion, Characters_Gamma},
+	{LevelAndActIDs_E101R, BossVersion, Characters_Gamma},
 	{LevelAndActIDs_TwinkleCircuit1, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit2, NormalVersion},
 	{LevelAndActIDs_TwinkleCircuit3, NormalVersion},
@@ -78,8 +82,6 @@ RandomizerGenerator RandoStageArray[51]{
 	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
 };
 
-int previousLevel = -1;
-int TCCount = 0;
 void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 
 	RandomizerGenerator* generated;
@@ -111,12 +113,16 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 	if (curSingleLevel == LevelIDs_TwinkleCircuit && TCCount >= 2)
 		return true;
 
-	if (curSingleLevel == LevelIDs_EggViper && char_id == Characters_Big)
-		return true;
 
 	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
 	{
 		if (curSingleLevel == bannedLevelsGamma[i] && char_id == Characters_Gamma)
+			return true;
+	}
+
+	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsBig); i++)
+	{
+		if (curSingleLevel == bannedLevelsBig[i] && char_id == Characters_Big)
 			return true;
 	}
 
@@ -325,6 +331,10 @@ void GameOver_R() {
 }
 
 void DisplayRandoInformation() {
+
+	if (GameMode != GameModes_Menu || !CharObj2Ptrs[0])
+		return;
+
 
 	SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 	SetDebugFontColor(0x8e8e8e);

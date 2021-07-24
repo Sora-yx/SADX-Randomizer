@@ -28,15 +28,17 @@ void __cdecl Chaos6_Init(const HelperFunctions& helperFunctions)
 
 	//Chaos6_t = new Trampoline((int)Chaos6_Main, (int)Chaos6_Main + 0x8, Chaos6_Main_R);
 
-	//trick the game to make it think we are playing Sonic or Knuckles, Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
-	WriteCall((void*)0x55a17d, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x557a5f, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x557b32, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x5598e5, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x5592df, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x5594c8, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x55a580, Chaos6_ReturnCharacter);
-	WriteCall((void*)0x559d3a, Chaos6_ReturnCharacter);  //Display Chaos 6 life gauge while using anoter character than what the game expects, and fix camera issue.
+	if (!isKHMod) {
+		//trick the game to make it think we are playing Sonic or Knuckles, Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
+		WriteCall((void*)0x55a17d, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x557a5f, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x557b32, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x5598e5, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x5592df, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x5594c8, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x55a580, Chaos6_ReturnCharacter);
+		WriteCall((void*)0x559d3a, Chaos6_ReturnCharacter);  //Display Chaos 6 life gauge while using anoter character than what the game expects, and fix camera issue.
+	}
 	
 
 	for (int i = 0; i < 8; i++) {

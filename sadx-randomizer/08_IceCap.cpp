@@ -28,7 +28,6 @@ void IC_Layout() {
 	}
 
 
-	//CurrentStageVersion = TailsVersion;
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != BigVersion && CurrentAct < 2)
 		CurrentStageVersion = SonicVersion;
 
@@ -38,8 +37,6 @@ void IC_Layout() {
 	if (CurrentAct == 2)
 		CurrentMission = SADX_Mission;
 
-	if (CurrentStageVersion == TailsVersion && CurrentCharacter == Characters_Knuckles)
-		CurrentStageVersion = SonicVersion;
 
 	return;
 }

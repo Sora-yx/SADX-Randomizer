@@ -305,5 +305,11 @@
     <ClInclude Include="WV.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
+    <ClInclude Include="hud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

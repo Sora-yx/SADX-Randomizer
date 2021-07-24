@@ -8,3 +8,5 @@ void FreeMDL(ModelInfo* pointer);
 bool isValueInArray(int* array, int value, int size);
 short ConvertLevelActsIDtoLevel(short level);
 short ConvertLevelActsIDtoAct(short act);
+
+void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot);

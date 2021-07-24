@@ -308,21 +308,16 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			case 3:
 				if (++data->Index == 120) {
 					EnableControl();
-					if (CurrentMission == Mission3_LostChao) {
-						EnableControl();
-						data->Action = 4;
+					if (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma && CurrentAct == 0 && CurrentStageVersion == BigVersion) {
+
+						PositionPlayer(0, 640.168, 150.123, -435.403);
+						PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
+						data->Action = 1;
 					}
 					else {
-						if (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma && CurrentAct == 0 && CurrentStageVersion == BigVersion) {
-
-								PositionPlayer(0, 640.168, 150.123, -435.403);
-								PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
-								data->Action = 1;
-						}
-						else {
-							data->Action = 1;
-						}
-						
+			
+						EnableControl();
+						data->Action = 4;
 					}
 				}
 			break;
