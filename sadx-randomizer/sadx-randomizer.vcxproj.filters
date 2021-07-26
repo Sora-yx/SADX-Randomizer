@@ -290,32 +290,35 @@
     <ClInclude Include="data\SADXVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LW.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="FE.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="EC.h">
       <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="TP.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="SH.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="WV.h">
-      <Filter>Header Files\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="hud.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="objects.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\hud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\mission.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\FE.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\SH.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\WV.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\TP.h">
+      <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\LW.h">
+      <Filter>Header Files\Levels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

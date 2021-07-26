@@ -144,6 +144,8 @@ extern "C" {
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
 
+		CurrentMission = 3;
+
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 

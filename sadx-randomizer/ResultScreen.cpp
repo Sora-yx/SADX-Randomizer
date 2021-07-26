@@ -363,7 +363,7 @@ void ResetValueAndObjects() {
 		Chao_DeleteFiles();
 	}
 
-	DeleteMM_Models();
+	//DeleteMM_Models();
 	fixTCCart();
 	return;
 }

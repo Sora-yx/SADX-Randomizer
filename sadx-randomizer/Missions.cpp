@@ -10,6 +10,12 @@ static NJS_TEXLIST TitleCardTex = { arrayptrandlength(TitleCard) };
 
 static Trampoline* LoadTitleCardTexture_t = nullptr;
 
+
+const char* stageVersionString[8] = { "Sonic", "Eggman", "Tails", "Knuckles", "Tikal", "Amy", "Gamma", "Big" };
+const char* missionString[4] = { "M1 (Beat the Stage)", "M1 (Treasure Hunting", "M2 (100 Rings)", "M3 (Lost Chao)" };
+int characterColor[8] = { lightBlue, redColor, lightOrange,  redColor, redColor, pinkColor, greyColor, purpleColor };
+int missionColor[4] = { greyColor, lightGreen, lightOrange, lightBlue };
+
 bool isSA2Mission() {
 
 	if (SA2M2 || SA2M3)
@@ -64,19 +70,24 @@ void PauseMenuFix() {
 	//Display Current Mission Information
 	if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel < LevelIDs_Chaos0)
 	{
-		SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
+		SetDebugFontColor(greyColor);
+		SetDebugFontSize(14.0f * (float)VerticalResolution / 480.0f);
 
-		if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
-			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M1 (Treasure Hunting)");
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 6), "Mission:");
 
-		if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
-			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M1 (Beat the Stage)");
-
-		if (CurrentMission == Mission2_100Rings)
-			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M2 (100 Rings)");
-
-		if (CurrentMission == Mission3_LostChao)
-			DisplayDebugString(NJM_LOCATION(2, 6), "Current Mission: M3 (Lost Chao)");
+		if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings) {
+			SetDebugFontColor(missionColor[Mission1_Variation]);
+			DisplayDebugString(NJM_LOCATION(11, 6), missionString[Mission1_Variation]);
+		}
+		else {
+			SetDebugFontColor(missionColor[CurrentMission]);
+			DisplayDebugString(NJM_LOCATION(11, 6), missionString[CurrentMission]);
+		}
+		SetDebugFontColor(greyColor);
+		DisplayDebugStringFormatted(NJM_LOCATION(2, 8), "Stage Version:");
+		SetDebugFontColor(characterColor[CurrentStageVersion]);
+		DisplayDebugStringFormatted(NJM_LOCATION(17, 8), "%s", stageVersionString[CurrentStageVersion]);
+		SetDebugFontColor(greyColor);
 	}
 
 	//set gamemode to adventure when the player select quit option, so you will go back to the title screen properly.
@@ -355,9 +366,25 @@ void MissionResultCheck(ObjectMaster* obj) {
 	}
 }
 
+//Credits: PKR
+void ScaleDebugFont(int scale)
+{
+	float FontScale;
+
+	if ((float)HorizontalResolution / (float)VerticalResolution > 1.33f)
+		FontScale = floor((float)VerticalResolution / 480.0f);
+	else
+		FontScale = floor((float)HorizontalResolution / 640.0f);
+
+	SetDebugFontSize(FontScale * scale);
+	return;
+}
+
+
 void InitMissions() {
 
 	Race_Init();
 	Init_TreasureHunting();
+	ScaleDebugFont(16);
 	return;
 }

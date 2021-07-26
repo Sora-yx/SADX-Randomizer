@@ -23,7 +23,6 @@ int bannedLevelsBig[2] = { LevelIDs_EggViper, LevelIDs_E101R };
 int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[2] = { LevelIDs_E101, LevelIDs_E101R };
 
-
 int previousLevel = -1;
 int TCCount = 0;
 
@@ -150,7 +149,6 @@ bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
 
 	return false;
 }
-
 
 
 vector<RandomizerGenerator> DuplicateStages;
