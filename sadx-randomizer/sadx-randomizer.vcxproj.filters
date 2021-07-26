@@ -177,9 +177,6 @@
     <ClCompile Include="TreasureHunting.cpp">
       <Filter>Source Files\missions</Filter>
     </ClCompile>
-    <ClCompile Include="BackRing.cpp">
-      <Filter>Source Files\Result</Filter>
-    </ClCompile>
     <ClCompile Include="ResultScreen.cpp">
       <Filter>Source Files\Result</Filter>
     </ClCompile>
@@ -199,6 +196,12 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="cart.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="hud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BackRing.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

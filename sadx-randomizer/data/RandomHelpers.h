@@ -200,18 +200,13 @@ extern bool isZeroActive;
 
 __int16 CurCharacter();
 void Chao_OnFrame();
-
 void PauseMenuFix();
-
-
 void DisplayRandoInformation();
 
 //void randomstage(char stage, char act);
 void DisableTimeStuff();
 void PlayRandomVoice(int a1);
 void RandomMusic();
-void Stages_Management();
-
 
 void PlayMusic_Original(MusicIDs song);
 void PlayVoice_Original(int a1);
@@ -318,7 +313,6 @@ extern int SeedCopy;
 bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
-NJS_VECTOR UnitMatrix_GetPoint(NJS_VECTOR* orig, Rotation3* rot, float x, float y, float z);
 void CheckAndAddColLandTable();
 void IncreaseSpeedCharactersPerfectChaos();
 void MissionResultCheck(ObjectMaster* obj);

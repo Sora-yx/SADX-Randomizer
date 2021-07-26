@@ -130,11 +130,11 @@ extern "C" {
 		RandomizeStages_Init();
 		ObjectCommons_Init();
 		InitMissions();
+		initHud();
 
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
 	}
-
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{		

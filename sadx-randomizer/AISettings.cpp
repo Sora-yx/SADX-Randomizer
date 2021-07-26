@@ -8,179 +8,7 @@ int AISwap = 0;
 int CharaSwap = 0;
 extern int AISwapCount;
 int CurrentAI = -1;
-float xpos = 0;
-float ypos = 0;
-float vscale = 1.0f;
-float hzscale = 1.0f;
-float center_x = (float)HorizontalResolution / 2.0f;
-float center_y = (float)VerticalResolution / 2.0f;
-
-static float ActionButtonAlpha = 0;
-static bool ActionButtonActive = false;
-
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
-
-NJS_TEXNAME Hud_Rando_TEXNAMES[4];
-NJS_TEXLIST Hud_Rando_TEXLIST = { arrayptrandlength(Hud_Rando_TEXNAMES) };
-PVMEntry Hud_Rando = { "hud_rando", &Hud_Rando_TEXLIST };
-
-enum RandoHudTextures {
-	CmnHudTex_SA2ActionBody,
-	CmnHudTex_SA2ActionButton,
-	CmnHudTex_SA2Action,
-};
-
-enum RandoHudSprites {
-	CmnHudSprite_SA2ActionBody,
-	CmnHudSprite_SA2ActionButton,
-	CmnHudSprite_SA2Action,
-};
-
-NJS_TEXANIM	Hud_Rando_TEXANIM[]{
-	{ hzscale * 0x3F, vscale * 0x2F, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
-	{ hzscale * 0x3F, vscale * 0x2F, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
-	{ hzscale * 0x6F, vscale * 0x1F, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
-	{ hzscale * 0x6F, vscale * 0x1F, 0x35, 0x8, 0, 0, 0x100, 0x100, 3, 0x20 },
-};
-
-
-NJS_SPRITE HUD_Rando_SPRITE = { { 0, 0, 0 }, 1.0, 1.0, 0, &Hud_Rando_TEXLIST, Hud_Rando_TEXANIM };
-
-void ShowActionButton() {
-	ActionButtonActive = true;
-}
-
-void Hud_ShowSwapButton() {
-
-
-	if (!IsGamePaused()) {
-		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
-			ActionButtonActive = false;
-		}
-		else
-			ShowActionButton();
-
-		if (ActionButtonActive == true) {
-			ActionButtonActive = false;
-			if (ActionButtonAlpha < 1) ActionButtonAlpha += 0.1f;
-		}
-		else if (ActionButtonAlpha <= 0) {
-			return;
-		}
-		else {
-			if (ActionButtonAlpha > 0) ActionButtonAlpha -= 0.2f;
-		}
-	}
-	else {
-		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
-		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
-
-		if (ActionButtonActive == false && ActionButtonAlpha <= 0) {
-			return;
-		}
-	}
-
-
-	vscale = (float)VerticalResolution / 480.0f;
-	hzscale = (float)HorizontalResolution / 640.0f;
-	float size_x = 0;
-	float size_y = 0;
-	size_x = 255.0f * hzscale * 0.5f;
-	size_y = 67.0f * vscale * 0.5f;
-
-	xpos = center_x + size_x * vscale -20;
-	ypos = 67;
-	HUD_Rando_SPRITE.p.x = xpos;
-	HUD_Rando_SPRITE.p.y = ypos;
-	
-
-	HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
-	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
-	HUD_Rando_SPRITE.sx = 1;
-	HUD_Rando_SPRITE.p.x = xpos + ypos;
-	HUD_Rando_SPRITE.p.y = ypos + 5;
-
-	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
-	HUD_Rando_SPRITE.p.x = xpos - 5;
-
-
-	if (ActionButtonAlpha >= 1) {
-		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2Action, -1.501, NJD_SPRITE_ALPHA);
-	}
-
-
-}
-
-
-void Hud_ShowActionButton() {
-	if (!IsGamePaused()) {
-		if (ControllerPointers[0]->PressedButtons & Buttons_Y) {
-			ActionButtonActive = false;
-		}
-		else
-			ShowActionButton();
-
-		if (ActionButtonActive == true) {
-			ActionButtonActive = false;
-			if (ActionButtonAlpha < 1) ActionButtonAlpha += 0.1f;
-		}
-		else if (ActionButtonAlpha <= 0) {
-			return;
-		}
-		else {
-			if (ActionButtonAlpha > 0) ActionButtonAlpha -= 0.2f;
-		}
-	}
-	else {
-		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
-		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
-
-		if (ActionButtonActive == false && ActionButtonAlpha <= 0) {
-			return;
-		}
-	}
-
-
-	vscale = (float)VerticalResolution / 480.0f;
-	hzscale = (float)HorizontalResolution / 640.0f;
-	float size_x = 0;
-	float size_y = 0;
-	size_x = 255.0f * hzscale * 0.5f;
-	size_y = 67.0f * vscale * 0.5f;
-
-	xpos = center_x + size_x * vscale - 20;
-	ypos = 67;
-	HUD_Rando_SPRITE.p.x = xpos;
-	HUD_Rando_SPRITE.p.y = ypos;
-
-
-	HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
-	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
-	HUD_Rando_SPRITE.sx = 1;
-	HUD_Rando_SPRITE.p.x = xpos + ypos;
-	HUD_Rando_SPRITE.p.y = ypos + 5;
-
-	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
-	HUD_Rando_SPRITE.p.x = xpos - 5;
-
-
-	if (ActionButtonAlpha >= 1) {
-		njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, 3, -1.501, NJD_SPRITE_ALPHA);
-	}
-}
-
-
-void Hud_DisplayOnframe() {
-	if (!CharObj2Ptrs[0] || GameState != 15)
-		return;
-
-	if (isAIActive && isAIAllowed && SwapDelay > 149)
-	{
-		int action = EntityData1Ptrs[0]->Action;
-		if (action == 1 || action == 2)
-			Hud_ShowSwapButton();
-	}
-}
 
 
 //This is where all the AI is managed: loading and bug fixes. Using a part of Charsel code by MainMemory.
@@ -212,9 +40,9 @@ ObjectMaster* LoadCharObj(int i)
 
 int AI_BannedLevel[16]{
 
-	LevelIDs_EmeraldCoast, LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain, 
-	LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_Casinopolis, LevelIDs_FinalEgg, LevelIDs_Chaos0, 
-	LevelIDs_Chaos2, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker, 
+	LevelIDs_EmeraldCoast, LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain,
+	LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_Casinopolis, LevelIDs_FinalEgg, LevelIDs_Chaos0,
+	LevelIDs_Chaos2, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker,
 	LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_E101R
 };
 
@@ -242,53 +70,53 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 				if (CurrentStageVersion == SonicVersion && CurrentCharacter == Characters_Tails)
 					return 0;
 				break;
-				case LevelIDs_SpeedHighway: //crash
-					if (CurrentAct == 1)
-						return 0;
-					break;
-				case LevelIDs_FinalEgg: //cutscene issue
-					if (CurrentCharacter == Characters_Amy)
-						return 0;
-					break;
-				case LevelIDs_Casinopolis:
-					if (CurrentAct >= 1 || CurrentAct == 0 && CurrentMission < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
-						return 0;
-					break;
-				case LevelIDs_Chaos0:
-					if (CurrentCharacter == Characters_Sonic || CurrentAI == Characters_Sonic)
-						return 0;
-					break;
-				case LevelIDs_Chaos2: //Potential cutscene crash
-					if (CurrentCharacter == Characters_Knuckles)
-						return 0;
-					break;
-				case LevelIDs_Chaos6: //Potential cutscene crash
-					if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
-						return 0;
-					break;
-				case LevelIDs_TwinklePark:
-				{
-					if (CurrentStageVersion == SonicVersion)
-						return 0;
-				}
-				break;
-				case LevelIDs_LostWorld: //cutscene crash
-				{
-					if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
-						return 0;
-				}
-				break;
-				case LevelIDs_SkyDeck:  //cutscene crash
-				{
-					if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
-						return 0;
-
-					if (CurrentAct < 2 && CurrentStageVersion != KnucklesVersion && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy))
-						return 0;
-				}
-				break;
-				default:
+			case LevelIDs_SpeedHighway: //crash
+				if (CurrentAct == 1)
 					return 0;
+				break;
+			case LevelIDs_FinalEgg: //cutscene issue
+				if (CurrentCharacter == Characters_Amy)
+					return 0;
+				break;
+			case LevelIDs_Casinopolis:
+				if (CurrentAct >= 1 || CurrentAct == 0 && CurrentMission < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
+					return 0;
+				break;
+			case LevelIDs_Chaos0:
+				if (CurrentCharacter == Characters_Sonic || CurrentAI == Characters_Sonic)
+					return 0;
+				break;
+			case LevelIDs_Chaos2: //Potential cutscene crash
+				if (CurrentCharacter == Characters_Knuckles)
+					return 0;
+				break;
+			case LevelIDs_Chaos6: //Potential cutscene crash
+				if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Knuckles || CurrentCharacter == Characters_Sonic)
+					return 0;
+				break;
+			case LevelIDs_TwinklePark:
+			{
+				if (CurrentStageVersion == SonicVersion)
+					return 0;
+			}
+			break;
+			case LevelIDs_LostWorld: //cutscene crash
+			{
+				if (CurrentAct == 2 && CurrentCharacter == Characters_Sonic)
+					return 0;
+			}
+			break;
+			case LevelIDs_SkyDeck:  //cutscene crash
+			{
+				if (CurrentAct == 2 && CurrentCharacter == Characters_Knuckles)
+					return 0;
+
+				if (CurrentAct < 2 && CurrentStageVersion != KnucklesVersion && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy))
+					return 0;
+			}
+			break;
+			default:
+				return 0;
 			}
 		}
 	}
@@ -541,7 +369,7 @@ void FixAISFXAmy6() {
 	if (isAIActive && !Race)
 	{
 		if (CurCharacter() == Characters_Amy)
-				return;
+			return;
 	}
 
 	PlaySound(0x508, 0, 0, 0);
@@ -551,7 +379,7 @@ void FixAISFXAmy7() { //spin dash noise when you press B
 	if (isAIActive && !Race)
 	{
 		if (CurCharacter() == Characters_Amy)
-				return;
+			return;
 	}
 
 	if (Race && CurrentCharacter != Characters_Amy)
@@ -574,7 +402,7 @@ void FixAISFXAmy8() { //spin dash noise when you press B
 }
 
 
-void FixAISFXGamma() { 
+void FixAISFXGamma() {
 
 	if (Race && CurrentCharacter != Characters_Gamma || isZeroActive)
 		return;
@@ -584,7 +412,7 @@ void FixAISFXGamma() {
 	return;
 }
 
-void FixAISFXGamma2() { 
+void FixAISFXGamma2() {
 
 	if (Race && CurrentCharacter != Characters_Gamma || isZeroActive)
 		return;
@@ -648,10 +476,10 @@ void ResultVoiceFix() {
 				Load_DelayedSound_SFX(0x5a8);
 			break;
 		case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0)
-			Load_DelayedSound_Voice(1735);
-		else
-			Load_DelayedSound_Voice(1733);
+			if (CurrentLevel >= LevelIDs_Chaos0)
+				Load_DelayedSound_Voice(1735);
+			else
+				Load_DelayedSound_Voice(1733);
 			break;
 		case Characters_Big:
 			if (Race && CurrentLevel == LevelIDs_SpeedHighway || CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings || CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_EmeraldCoast && CurrentLevel != LevelIDs_HotShelter || CurrentStageVersion == KnucklesVersion)
@@ -736,7 +564,7 @@ void AISwitch() {
 			LoadSoundList(71);
 		break;
 	case Characters_Eggman:
-			PlayCustomSound(CommonSound_EggmanSwap);
+		PlayCustomSound(CommonSound_EggmanSwap);
 		break;
 	case Characters_Tails:
 		PlayCustomSound(CommonSound_TailsSwap);
@@ -773,7 +601,7 @@ void AISwitch() {
 	}
 	else
 		Collision_Free(obj);
-	
+
 	obj->MainSub(obj);
 	obj2 = ((EntityData2*)obj->Data2)->CharacterData;
 	obj2->Powerups = powerups;
@@ -816,11 +644,11 @@ void AISwitch() {
 		AI2->Speed = speed;
 		AI2->ObjectHeld = heldobj;
 
-		
+
 
 		SwapDelay = 0;
 	}
-	
+
 
 	return;
 }
@@ -1005,8 +833,6 @@ void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* conf
 		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 		WriteJump((void*)0x4961D4, SetSonicWinPose);
 		WriteJump((void*)0x476B59, SetKnucklesWinPose);
-
-		helperFunctions.RegisterCommonObjectPVM(Hud_Rando);
 	}
 
 }

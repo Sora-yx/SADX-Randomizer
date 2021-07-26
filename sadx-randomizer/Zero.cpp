@@ -8,8 +8,6 @@ void DisableTime_Zero() {
 	TimeThing = 0;
 }
 
-
-
 void Zero_r(ObjectMaster* obj) {
 
 	EntityData1* data1 = obj->Data1;

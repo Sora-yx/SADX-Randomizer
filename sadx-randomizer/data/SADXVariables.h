@@ -14,8 +14,6 @@ DataPointer(char, SomethingAboutHotShelterSwitch, 0x3c72a4c);
 DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
 
 DataPointer(char, FlagAutoPilotCart, 0x3D08E00);
-
-
 DataPointer(char, TitleCardStuff, 0x3c53abc);
 DataPointer(char, TitleCardStuff2, 0x3c53abd);
 DataPointer(char, GetLevelType, 0x3c53abf);

@@ -42,7 +42,7 @@ SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 	{ SonicVersion, LevelAndActIDs_IceCap1, { 1580, 84, 1074 }, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_IceCap2, { 1060, 336, 280 }, 0 },
 	{ SonicVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
-	{ TailsVersion, LevelAndActIDs_IceCap3, { 120, 375, -40 }, 0x8800 },
+	{ TailsVersion, LevelAndActIDs_IceCap3, { 478.602, 352.953, -193.202 }, 0x8800 },
 	{ BigVersion, LevelAndActIDs_IceCap4, { 1260, 224, -38 }, 0 },
 	{ SonicVersion, LevelAndActIDs_FinalEgg1, { 170, -165, 490 }, 0 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, { 170, -165, 490 }, 0xC000 },

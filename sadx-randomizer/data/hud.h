@@ -11,3 +11,5 @@ enum CurMission {
 
 	SADX_Mission, Mission1_Variation, Mission2_100Rings, Mission3_LostChao
 };
+
+void initHud();

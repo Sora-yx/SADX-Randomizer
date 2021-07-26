@@ -188,3 +188,4 @@ StartPosition IC4_StartPositions[]{
 };
 
 void DisableController_R();
+void LoadRemoveCartIceCap();

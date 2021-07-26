@@ -329,7 +329,6 @@ void DisplayRandoInformation() {
 	if (GameMode != GameModes_Menu || !CharObj2Ptrs[0])
 		return;
 
-
 	SetDebugFontSize(13.0f * (unsigned short)VerticalResolution / 480.0f);
 	SetDebugFontColor(0x8e8e8e);
 	DisplayDebugStringFormatted(NJM_LOCATION(2, 1), "Current Seed: %d", SeedCopy);
@@ -471,23 +470,25 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 }
 
 void RandomizeStages_Init() {
-	if (RNGStages == true) {
 
-		//Hack many functions which teleport the player to the next stage to make them random.
-		WriteCall((void*)0x41709d, GoToNextLevel_hook);
-		WriteCall((void*)0x417b47, GoToNextLevel_hook);
-		WriteCall((void*)0x41348f, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
-		WriteCall((void*)0x41342a, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
-		WriteCall((void*)0x4134a2, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
+	if (!RNGStages)
+		return;
 
-		//miscellaneous fixes because of the hack above.
-		WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data (fixes wrong warp)
-		WriteData<1>((void*)0x413502, 0x08);
-		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag, as it creates many issues with SET layout, we will manually set it.
-		WriteCall((void*)0x50659a, SetLevelAndAct_R);
+	//Hack many functions which teleport the player to the next stage to make them random.
+	WriteCall((void*)0x41709d, GoToNextLevel_hook);
+	WriteCall((void*)0x417b47, GoToNextLevel_hook);
+	WriteCall((void*)0x41348f, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
+	WriteCall((void*)0x41342a, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
+	WriteCall((void*)0x4134a2, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
 
-		//WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
-		WriteCall((void*)0x417bed, GameOver_R);
-		WriteCall((void*)0x41717d, GameOver_R);
-	}
+	//miscellaneous fixes because of the hack above.
+	WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data (fixes wrong warp)
+	WriteData<1>((void*)0x413502, 0x08);
+	WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag, as it creates many issues with SET layout, we will manually set it.
+	WriteCall((void*)0x50659a, SetLevelAndAct_R);
+
+	//WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+	WriteCall((void*)0x417bed, GameOver_R);
+	WriteCall((void*)0x41717d, GameOver_R);
+
 }

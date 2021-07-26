@@ -12,8 +12,8 @@ void CheckAndLoadTriggerObject() {
 	if (!CharObj2Ptrs[0])
 		return;
 
-	if (CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
-		LoadObject((LoadObj)2, 1, LoadRemoveCart);
+	if (CurrentLevel == LevelIDs_SandHill)
+		LoadObject((LoadObj)2, 2, LoadRemoveCart);
 
 	HotShelterSecretSwitch();
 }

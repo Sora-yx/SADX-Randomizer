@@ -114,6 +114,7 @@
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />
     <ClCompile Include="EggWalker.cpp" />
+    <ClCompile Include="hud.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Missions.cpp" />
     <ClCompile Include="mod.cpp" />

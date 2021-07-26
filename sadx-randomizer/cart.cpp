@@ -18,7 +18,7 @@ void Delete_Cart_r(ObjectMaster* obj)
 
 	if (obj->MainSub == Cart_Main && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_TwinkleCircuit) {
 
-		FlagAutoPilotCart = 1;
+		FlagAutoPilotCart = 0;
 
 		if (CurrentCart != nullptr)
 			UpdateSetDataAndDelete(CurrentCart);
@@ -37,14 +37,14 @@ VoidFunc(CameraReleasEvent, 0x436140);
 
 void DeleteCartAndExitPlayer() {
 
-	FlagAutoPilotCart = 1;
+	FlagAutoPilotCart = 0;
 	if (CurrentCart != nullptr)
 		UpdateSetDataAndDelete(CurrentCart);
 	else {
 		return;
 	}
 	CurrentCart = nullptr;
-	RemovePlayerFromObject(0, 0.0, 2.0, 2.0);
+	RemovePlayerFromObject(0, 0.0, 1.0, 0.0);
 	CameraReleasEvent();
 }
 
@@ -52,26 +52,38 @@ void LoadRemoveCart(ObjectMaster* obj) {
 
 	EntityData1* P1 = EntityData1Ptrs[0];
 	EntityData1* data = obj->Data1;
-	ObjectMaster* cart = nullptr;
 
 	if (!P1 || CurrentCharacter <= Characters_Tails)
 		return;
 
 	if (data->Action == 0) {
-		if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2) {
 
-			DeleteCartAndExitPlayer();
-			data->Action++;
-		}
 		if (CurrentLevel == LevelIDs_SandHill) {
 			if (P1->Position.z <= -15150) {
 				DeleteCartAndExitPlayer();
-				data->Action++;
+				CheckThingButThenDeleteObject(obj);
 			}
 		}
 	}
 }
 
+void LoadRemoveCartIceCap() {
+
+	EntityData1* P1 = EntityData1Ptrs[0];
+
+	if (!P1)
+		return;
+
+	if (P1->CharID == Characters_Sonic || P1->CharID == Characters_Tails) {
+		ForcePlayerAction(0, 0x18);
+		return;
+	}
+
+	if (P1->Position.y <= -23200) {
+		DeleteCartAndExitPlayer();
+		return;
+	}
+}
 
 
 void Load_Cart_R() {
@@ -83,21 +95,21 @@ void Load_Cart_R() {
 
 	if (CurrentLevel == LevelIDs_IceCap && CurrentAct == 2) {
 
-		if (CurrentCharacter <= Characters_Tails)
+		if (CurrentCharacter <= Characters_Tails) {
 			return;
+		}
 	}
-
 
 	if (!CurrentCart)
 	{
 		SwapDelay = 0;
-		FlagAutoPilotCart = 0; //fix that bullshit Twinkle Circuit thing.
 		CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
 	}
 
 	if (CurrentCart)
 	{
 		CurrentCart->Data1->Scale.y = 1; //Cart will spawn empty.
+		CurrentCart->Data1->Scale.z = 0;
 
 		switch (CurrentCharacter) //Set Color and Size depending on character
 		{
@@ -111,19 +123,15 @@ void Load_Cart_R() {
 			break;
 		case Characters_Tails:
 			CurrentCart->Data1->Scale.x = OrangeColor;
-			CurrentCart->Data1->Scale.z = 0;
 			break;
 		case Characters_Knuckles:
 			CurrentCart->Data1->Scale.x = RedColor;
-			CurrentCart->Data1->Scale.z = 0;
 			break;
 		case Characters_Amy:
 			CurrentCart->Data1->Scale.x = PurpleColor;
-			CurrentCart->Data1->Scale.z = 0;
 			break;
 		default:
 			CurrentCart->Data1->Scale.x = BlueColor;
-			CurrentCart->Data1->Scale.z = 0;
 			break;
 		}
 
