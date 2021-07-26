@@ -144,6 +144,11 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 	case 1:
 		if (!flashScreenChao && EnableControl)
 			flashScreenChao = LoadObject(LoadObj_Data1, 1, FlashScreen);
+		if (++data->field_A == 60) {
+			data->Action++;
+		}
+		break;
+	case 2:
 
 		for (int i = 0; i < LengthOfArray(M3_PlayerEndPosition); i++)
 		{
@@ -157,15 +162,16 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 		}
 		data->Action++;
 		break;
-	case 2:
+	case 3:
+
 		StopMusic();
 		PauseEnabled = 0;
-		if (++data->InvulnerableTime == 75) {
+		if (++data->InvulnerableTime == 15) {
 			chaoPB++;
 			data->Action++;
 		}
 		break;
-	case 3:
+	case 4:
 		LoadLevelResults_r();
 		CheckThingButThenDeleteObject(obj);
 		break;
@@ -200,13 +206,6 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	{
 		if (!CurrentLandTable)
 			return;
-
-		//Load the chao textures
-		if (CurrentMission != Mission3_LostChao) {
-			data->Action = 5;
-			SpawnItemBox(&data->Position, 6);
-			return;
-		}
 
 		Chao_LoadFiles();
 
@@ -263,13 +262,19 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	break;
 	case ChaoAction_Hit:
 	{
+		StopMusic();
 		Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
-		//a1->Child->Data1->Rotation.y = -P1->Rotation.y + 0x4000;
 		LoadObject(LoadObj_Data1, 1, MissionLostChaoResult);
 		a1->Data1->InvulnerableTime = 0;
-		data->Action = ChaoAction_Free;
+		data->Action++;
 	}
 	break;
+	case ChaoAction_Transition:
+		if (++data->field_A == 70) {
+			a1->Child->Data1->Rotation.y = P1->Rotation.y + 0x4000;
+			data->Action++;
+		}
+		break;
 	case ChaoAction_Free:
 	{
 		if (GameState == 15) {
@@ -279,11 +284,6 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 				a1->Data1->InvulnerableTime = 0;
 				return;
 			}
-		}
-		else
-		{
-			a1->Data1->Action = 4;
-			return;
 		}
 	}
 	break;

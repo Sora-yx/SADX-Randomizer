@@ -406,8 +406,6 @@ void getRandomCutscene(RandomizedEntry* entry) {
 }
 
 
-
-
 void Init_RandomCutscene() {
 	if (RNGStages) {
 

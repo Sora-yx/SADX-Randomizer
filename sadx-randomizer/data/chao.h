@@ -49,7 +49,7 @@ SetLevelPosition M3_PlayerEndPosition[26] {
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -232.625, 483.875, -2216, 2.0  },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
-	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1761.775, 71.5, -1862.41, 5.479076996E-43 + 0x4000 },
+	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1749.18, 72.0189, -1871.87, 5.479076996E-43 },
 	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
@@ -87,6 +87,7 @@ enum ChaoActions {
 	ChaoAction_LoadChao,
 	ChaoAction_CheckHit,
 	ChaoAction_Hit,
+	ChaoAction_Transition,
 	ChaoAction_Free,
 	Action_ItemBox,
 };
