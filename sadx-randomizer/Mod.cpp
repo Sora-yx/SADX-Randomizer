@@ -127,7 +127,6 @@ extern "C" {
 		Chao_Init();
 
 		Characters_Init();
-		Stages_Management();
 		RandomizeStages_Init();
 		ObjectCommons_Init();
 		InitMissions();
@@ -143,12 +142,14 @@ extern "C" {
 		DisplayRandoInformation();
 		Sounds_OnFrame();
 		LevelOnFrames();
+		Credits_StatsDelayOnFrames();
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
 		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
 			CustomFlagCheck(); //When loading, Check flag and credits*/
+
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

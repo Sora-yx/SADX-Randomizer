@@ -281,15 +281,13 @@ void RestoreRNGValueKnuckles();
 NJS_VECTOR SetPlayerAroundLostChaoPosition();
 
 void ICAct3Position();
-void LoadChaoTPTrigger();
 void HotShelterSecretSwitch();
 void ChaoTPTrigger(ObjectMaster* a1);
-void LoadRemoveCart();
+
+void LoadRemoveCart(ObjectMaster* obj);
 
 void SoftReset_R();
 void TrialModeQuit_R();
-void FixRestart_Stuff();
-void Delete_Cart();
 void ResetValueAndObjects();
 void Init_TreasureHunting();
 

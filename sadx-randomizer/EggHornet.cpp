@@ -26,7 +26,6 @@ void EggHornet_LoadWithTarget() {
 }
 
 
-
 void __cdecl EggHornet_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data

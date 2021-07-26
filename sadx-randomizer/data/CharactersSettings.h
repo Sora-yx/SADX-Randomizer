@@ -16,7 +16,6 @@ void ShowActionButton();
 
 void FixVictoryTailsVoice();
 void Characters_Init();
-int AmyCartImprovement();
 int KnuxRadarEmeraldCheck();
 void EmeraldRadar_R();
 void CheckAndLoadSuperSonic_Tex(int curChara);

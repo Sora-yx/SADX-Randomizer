@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 
-//Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts.
+//Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts for other characters.
 void SuperAuraStuff() {
 	TimeThing = 0;
 
@@ -15,10 +15,8 @@ void SuperAuraStuff() {
 	return;
 }
 
-
 int SSLevel[10]{ LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
-
 
 
 int GetSSLevelBanned() {
@@ -32,14 +30,10 @@ int GetSSLevelBanned() {
 			case LevelIDs_TwinklePark:
 				if (CurrentAct == 1 && CurrentStageVersion != AmyVersion || CurrentAct == 0)
 					return true;
-				else
-					return false;
 				break;
 			case LevelIDs_SpeedHighway:
 				if (CurrentAct == 0 && CurrentStageVersion != TailsVersion)
 					return true;
-				else
-					return false;
 				break;
 			case LevelIDs_Casinopolis:
 				if (CurrentAct == 0 && CurrentStageVersion == KnucklesVersion)
@@ -50,14 +44,10 @@ int GetSSLevelBanned() {
 			case LevelIDs_IceCap:
 				if (CurrentAct == 2)
 					return true;
-				else
-					return false;
 				break;
 			case LevelIDs_HotShelter:
 				if (CurrentAct < 2)
 					return true;
-				else
-					return false;
 				break;
 			default:
 				return true;
@@ -74,7 +64,7 @@ void CheckAndLoadSuperSonic_Tex(int curChara) {
 
 	SuperSonicFlag = 0;
 
-	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentCharacter != Characters_Sonic && CurrentLevel == LevelIDs_PerfectChaos)
+	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentLevel == LevelIDs_PerfectChaos)
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 
 	FunctionPointer(void, original, (int curChara), LoadCharTextures_T.Target());

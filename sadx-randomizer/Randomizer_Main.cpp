@@ -266,8 +266,6 @@ void SetRandomStageAct(char stage, char act) {
 	return SetLevelAndAct(Uint8(stage), (Uint8)(act));
 }
 
-
-
 void GoToNextLevel_hook(char stage, char act) {
 
 	if (isGameOver) //do not randomize stage / character
@@ -303,8 +301,6 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	return GoToNextLevel();
 }
-
-
 
 //Fix Trial Mode
 void SetLevelAndAct_R() {
@@ -491,9 +487,8 @@ void RandomizeStages_Init() {
 		WriteData<1>((void*)0x413502, 0x08);
 		WriteData<6>((void*)0x506512, 0x90); //remove Last Story Flag, as it creates many issues with SET layout, we will manually set it.
 		WriteCall((void*)0x50659a, SetLevelAndAct_R);
-		WriteData<1>((void*)0x4DB0B2, 0x05);
-		WriteData<5>((void*)0x4db051, 0x90);
-		WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
+
+		//WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 		WriteCall((void*)0x417bed, GameOver_R);
 		WriteCall((void*)0x41717d, GameOver_R);
 	}

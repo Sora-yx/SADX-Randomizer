@@ -275,11 +275,4 @@ void Characters_Init() {
 	WriteData<6>((void*)0x48ADA5, 0x90u); // prevent Amy from loading the bird (fix several Bird called, we will call the bird manually.)
 	WriteData<1>((void*)0x4c6875, 0x74); //Force Amy's bird to load at every stage. (from JNZ 75 to JZ 74)
 	WriteData<1>((void*)0x4c6851, 0x28); //Force Amy's bird to load during boss fight.
-
-
-
-
-	WriteCall((void*)0x79ab84, AmyCartImprovement);
-	WriteCall((void*)0x79aa78, AmyCartImprovement);
-	WriteCall((void*)0x7979b9, AmyCartImprovement);
 }

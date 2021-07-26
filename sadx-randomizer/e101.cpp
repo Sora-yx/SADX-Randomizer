@@ -49,10 +49,8 @@ void MK2_Main_R(ObjectMaster* obj) {
 }
 
 
-
 void __cdecl E101_Init(const HelperFunctions& helperFunctions)
 {
-	
 	WriteData<16>((int*)0x5672AE, 0x90); //fix AI breaking the fight
 
 	if (!isKHMod) {

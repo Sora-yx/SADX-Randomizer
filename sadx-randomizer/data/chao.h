@@ -88,6 +88,7 @@ enum ChaoActions {
 	ChaoAction_CheckHit,
 	ChaoAction_Hit,
 	ChaoAction_Free,
+	Action_ItemBox,
 };
 
 void ChaoObj_Delete(ObjectMaster* a1);

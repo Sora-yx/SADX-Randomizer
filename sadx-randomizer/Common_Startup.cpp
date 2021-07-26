@@ -18,6 +18,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	FinalEgg_Init(path, helperFunctions);
 	HotShelter_Init(path, helperFunctions);
 	SandHill_Init(path, helperFunctions);
+	TwinkleCircuit_Init();
 
 	//Boss
 	Chaos0_Init(helperFunctions);

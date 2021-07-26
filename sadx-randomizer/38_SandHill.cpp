@@ -21,26 +21,6 @@ void AddRingSandHill() {
 	return;
 }
 
-ObjectMaster* RemoveCart = nullptr;
-
-void TriggerRemoveCart(ObjectMaster* obj) {
-
-	if (IsPlayerInsideSphere(&obj->Data1->Position, 200))
-		Delete_Cart();
-}
-
-void LoadRemoveCart() {
-
-	if (!RemoveCart)
-	{
-		RemoveCart = LoadObject(LoadObj_Data1, 2, TriggerRemoveCart);
-		RemoveCart->Data1->Scale.x = 15;
-		RemoveCart->Data1->Position.x = 1264;
-		RemoveCart->Data1->Position.y = -7358;
-		RemoveCart->Data1->Position.z = -15302;
-	}
-	
-}
 
 PVMEntry SandHillObjectTextures[] = {
 	{ "OBJ_SANDBOARD", (TexList*)0x173FA94 },

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "objects.h"
 
 extern bool RandCongratsDone;
 
@@ -357,24 +357,18 @@ void ResetValueAndObjects() {
 
 	RestoreRNGValueKnuckles();
 	RestorePuzzleBoxVanillaThing();
-	Delete_ObjectsCommon();
 
 	if (CurrentLevel != 0)
 	{
-		Delete_Cart();
 		Chao_DeleteFiles();
 	}
 
+	DeleteMM_Models();
 	fixTCCart();
 	return;
 }
 
-void fixTCCart() {
-	WriteData<1>((void*)0x798306, 0x85); //Restore original Functions
-	WriteData<1>((void*)0x7983c4, 0x7C);
 
-	return;
-}
 
 void ResetStatsValues() {
 	LimitCustomFlag = false;
@@ -394,10 +388,6 @@ void ResetStatsValues() {
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
 	fixTCCart();
-
-	if (CurrentLevel != 0)
-		Delete_Cart();
-
 	RestoreRNGValueKnuckles();
 }
 

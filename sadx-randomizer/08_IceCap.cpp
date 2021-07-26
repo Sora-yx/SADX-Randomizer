@@ -9,8 +9,7 @@ void IC_Layout() {
 		if (CurrentCharacter > Characters_Tails)
 		{
 			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
-			WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
-			WriteCall((void*)0x4e95dc, Delete_Cart); //Fix Delete Cart at the end of Ice Cap
+			//WriteCall((void*)0x4e9415, Load_Cart_R); //Load Cart in act 3
 
 			WriteCall((void*)0x4e9de1, DisableController_R);
 			WriteData<1>((void*)0x4E9DE0, 0x08); //Cutscene skip

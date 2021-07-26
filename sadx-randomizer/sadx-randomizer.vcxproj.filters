@@ -63,9 +63,6 @@
     <ClCompile Include="AISettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StageSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Chao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -198,6 +195,12 @@
     <ClCompile Include="E100-series.cpp">
       <Filter>Source Files\Bosses</Filter>
     </ClCompile>
+    <ClCompile Include="mystic-melody.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cart.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\CharactersSettings.h">
@@ -309,6 +312,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

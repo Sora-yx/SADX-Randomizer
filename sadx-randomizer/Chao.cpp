@@ -40,14 +40,12 @@ void __cdecl ChaoGameplayCheck() {
 }
 
 //This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
-
 int GetCurrentChaoStage_r() {
 	if (ChaoObject)
 		return 5;
 	else
 		return CurrentChaoStage;
 }
-
 
 //Load Chao files
 void Chao_LoadFiles() {
@@ -66,8 +64,6 @@ void Chao_LoadFiles() {
 	LoadChaoTexlist("AL_MOUTH", &ChaoTexLists[5], 0);
 	LoadChaoTexlist("AL_TEX_COMMON", &ChaoTexLists[1], 1u);
 }
-
-
 
 void ChaoTPTrigger(ObjectMaster* a1) {
 
@@ -143,9 +139,7 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 		flashScreenChao = nullptr;
 		if (co2->Speed.x > 1.3)
 			CharObj2Ptrs[0]->Speed.x = 1.3;
-		EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-
-		data->Action = 1;
+		data->Action++;
 		break;
 	case 1:
 		if (!flashScreenChao && EnableControl)
@@ -161,14 +155,14 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 				break;
 			}
 		}
-		data->Action = 2;
+		data->Action++;
 		break;
 	case 2:
 		StopMusic();
 		PauseEnabled = 0;
 		if (++data->InvulnerableTime == 75) {
 			chaoPB++;
-			data->Action = 3;
+			data->Action++;
 		}
 		break;
 	case 3:
@@ -208,6 +202,12 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 			return;
 
 		//Load the chao textures
+		if (CurrentMission != Mission3_LostChao) {
+			data->Action = 5;
+			SpawnItemBox(&data->Position, 6);
+			return;
+		}
+
 		Chao_LoadFiles();
 
 		a1->DisplaySub = a1->MainSub;
@@ -218,8 +218,6 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	case ChaoAction_LoadChao:
 	{
 		ChaoData* chaodata = new ChaoData();
-
-		//Start position is behind the player
 		NJS_VECTOR v = a1->Data1->Position;
 
 		//Load the chao
@@ -266,7 +264,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	case ChaoAction_Hit:
 	{
 		Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
-		a1->Child->Data1->Rotation.y = -P1->Rotation.y + 0x4000;
+		//a1->Child->Data1->Rotation.y = -P1->Rotation.y + 0x4000;
 		LoadObject(LoadObj_Data1, 1, MissionLostChaoResult);
 		a1->Data1->InvulnerableTime = 0;
 		data->Action = ChaoAction_Free;
@@ -374,19 +372,6 @@ void Chao_CrySound() {
 	return;
 }
 
-void TriggerObj(ObjectMaster* obj) {
-	if (TimeThing != 0 && IsPlayerInsideSphere(&obj->Data1->Position, 50))
-		Chao_CrySound();
-}
-
-void ChaoCryHint() {
-	if (!chaoHint && ChaoSpawn && CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 2)
-	{
-		chaoHint = LoadObject(LoadObj_Data1, 2, TriggerObj);
-		chaoHint->Data1->Position = { 2708.575195, -622.6781616, -955.2252808 };
-		chaoHint->Data1->Scale.x = 50;
-	}
-}
 
 NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 
@@ -405,7 +390,6 @@ NJS_VECTOR SetPlayerAroundLostChaoPosition() {
 
 	return { -1, -1, -1 };
 }
-
 
 
 bool SetAndGetLostChaoPosition() {
@@ -452,7 +436,7 @@ void Chao_OnFrame() {
 	}
 	else
 	{
-		if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentMissionCard == 1 && CurrentLevel < 15) {
+		if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentLevel < 15) {
 			ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
 			ChaoObject->Data1->Position = pos;
 			ChaoObject->Data1->Rotation.y = Yrot;

@@ -55,4 +55,3 @@ void Race_Init();
 void LevelFeaturesInit();
 
 void Load_ObjectsCommon();
-void Delete_ObjectsCommon();

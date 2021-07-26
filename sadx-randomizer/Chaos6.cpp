@@ -28,6 +28,7 @@ void __cdecl Chaos6_Init(const HelperFunctions& helperFunctions)
 
 	//Chaos6_t = new Trampoline((int)Chaos6_Main, (int)Chaos6_Main + 0x8, Chaos6_Main_R);
 
+
 	if (!isKHMod) {
 		//trick the game to make it think we are playing Sonic or Knuckles, Fix Chaos 6 Behavior, make the bombs spawn When not Sonic / Knuckles.
 		WriteCall((void*)0x55a17d, Chaos6_ReturnCharacter);

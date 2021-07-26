@@ -10,3 +10,4 @@ extern NJS_MODEL_SADX model_0;
 extern NJS_OBJECT object_GoalRing;
 
 extern NJS_TEXLIST GoalRingTextures;
+void TwinkleCircuit_Init();

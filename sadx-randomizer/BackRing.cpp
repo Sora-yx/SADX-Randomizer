@@ -65,7 +65,6 @@ void BackRingObj_Main(ObjectMaster* obj) {
 			CharObj2Ptrs[0]->Speed.x = 1;
 			CharObj2Ptrs[0]->Speed.z = 1;
 			ResetGravity();
-			Delete_Cart();
 		}
 		
 		data->Rotation.y += 0x180;

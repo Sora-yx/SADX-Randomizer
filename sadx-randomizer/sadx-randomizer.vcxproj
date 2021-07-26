@@ -99,6 +99,7 @@
     <ClCompile Include="AdventureFlags.cpp" />
     <ClCompile Include="AISettings.cpp" />
     <ClCompile Include="BackRing.cpp" />
+    <ClCompile Include="cart.cpp" />
     <ClCompile Include="Chao.cpp" />
     <ClCompile Include="Chaos0.cpp" />
     <ClCompile Include="Chaos2.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Missions.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="Music.cpp" />
+    <ClCompile Include="mystic-melody.cpp" />
     <ClCompile Include="ObjectCommon.cpp" />
     <ClCompile Include="PerfectChaos.cpp" />
     <ClCompile Include="Race.cpp" />
@@ -125,7 +127,6 @@
     <ClCompile Include="38_SandHill.cpp" />
     <ClCompile Include="SetCamFiles.cpp" />
     <ClCompile Include="sound.cpp" />
-    <ClCompile Include="StageSettings.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -167,6 +168,7 @@
     <ClInclude Include="FE.h" />
     <ClInclude Include="hud.h" />
     <ClInclude Include="LW.h" />
+    <ClInclude Include="objects.h" />
     <ClInclude Include="SH.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="data\StageSettings.h" />
