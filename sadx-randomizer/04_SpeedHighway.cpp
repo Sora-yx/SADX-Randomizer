@@ -1,17 +1,6 @@
 #include "stdafx.h"
 #include "SH.h"
 
-void CheckAndAddColLandTable() {
-	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion == SonicVersion) {
-		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
-			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
-				CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
-			}
-		}
-	}
-	return;
-}
-
 void SpeedHighway_Layout() {
 
 	/*CurrentStageVersion = TailsVersion;

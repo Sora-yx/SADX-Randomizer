@@ -270,7 +270,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	}
 	break;
 	case ChaoAction_Transition:
-		if (++data->field_A == 70) {
+		if (++data->field_A == 90) {
 			a1->Child->Data1->Rotation.y = P1->Rotation.y + 0x4000;
 			data->Action++;
 		}

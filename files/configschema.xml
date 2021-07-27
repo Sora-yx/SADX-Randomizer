@@ -79,6 +79,7 @@
       </Property>
 	    </Group>
 		
+		
 			<Group name="RosterAI" display="5. AI Settings">
       <Property name="isAIAllowed" display="Allow Random AI" type="bool" defaultvalue="True">
         <HelpText>Allow a random AI to follow you. (note: AI won't spawn during few specific places.)</HelpText>

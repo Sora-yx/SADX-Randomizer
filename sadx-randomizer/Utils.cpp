@@ -380,3 +380,16 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 		}
 	}
 }
+
+
+void CheckAndAddColLandTable() {
+	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion == SonicVersion
+		|| CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2) {
+		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
+			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
+				CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
+			}
+		}
+	}
+	return;
+}

@@ -186,7 +186,6 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			NJS_VECTOR CurPos = SetPlayerAroundLostChaoPosition();
 			if (CurPos.x != -1 && CurPos.y != -1 && CurPos.z != -1)
 			{
-
 				MMPlatformEnabled = Check_ObjectMysticMelody(); //Does the player need platform after the teleportation?
 				if (++data->InvulnerableTime == 5)
 				{

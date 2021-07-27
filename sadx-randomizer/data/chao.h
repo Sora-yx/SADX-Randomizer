@@ -1,7 +1,7 @@
 #pragma once
 
 //Lost Chao Location //To do: add the last lost chao for: WV Gamma, HS Big, knux sky deck maybe? Also Casino except for tails
-SetLevelPosition ChaoLevelPosition[26]{
+SetLevelPosition ChaoLevelPosition[26] {
 
 	{ GammaVersion, LevelAndActIDs_EmeraldCoast1, 1599, 114.75, 840, 0x0 - 0x4000 },
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, 3857.76, 596.395, -2896.18, 0x8000 },
@@ -20,7 +20,8 @@ SetLevelPosition ChaoLevelPosition[26]{
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
 	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1761.775, 71.5, -1862.41, 5.479076996E-43 + 0x4000 },
-	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
+	//{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 779, 169, 322, 0x0 },
+	{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 291, -105, -587, 0x0 },
 	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2974.897, 5663.096, -1992.15, -1.681558157E-44 + 0x4000 },
@@ -50,7 +51,7 @@ SetLevelPosition M3_PlayerEndPosition[26] {
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3861.85, 883.96, -2974.81, 13754 - 0x3200 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -119.452, 1051.5, 3375.85, 40880},
 	{ KnucklesVersion, LevelAndActIDs_RedMountain3, -1749.18, 72.0189, -1871.87, 5.479076996E-43 },
-	{ SonicVersion, LevelAndActIDs_SkyDeck2, -316.7368469, 38.99000168, -687.1625977, 0x8000 },
+	{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 280, -104, -580, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_LostWorld2, 909.875, 164.625, 152.5, 0x0 + 0x4000 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7410, -1965, 1316, 0x8000 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2974.897, 5663.096, -1992.15, -1.681558157E-44 + 0x4000 },
@@ -62,7 +63,7 @@ SetLevelPosition M3_PlayerEndPosition[26] {
 };
 
 //Mysitc Melody teleport close to the Chao
-SetLevelPosition PlayerAroundChaoPosition[15]{
+SetLevelPosition PlayerAroundChaoPosition[16]{
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_WindyValley3, 3608.115, -4250.02, -2132.28, 0x8000 },
@@ -73,6 +74,8 @@ SetLevelPosition PlayerAroundChaoPosition[15]{
 	{ KnucklesVersion, LevelAndActIDs_SpeedHighway3, -230.366, 410.935, -1891.33, 324.125 },
 	{ SonicVersion, LevelAndActIDs_RedMountain1, -3855.28, 1000.21, -2946.56 },
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
+	//{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 774, 188, 184, 324.125 },
+	{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 60, -44, -420, 324.125 },
 	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1580, 1403 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2897.51, 5810.17, -1993.62},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},

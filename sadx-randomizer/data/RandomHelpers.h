@@ -313,7 +313,6 @@ extern int SeedCopy;
 bool isRandoLevel();
 void LayoutFunctionInit();
 void CheckAndDisplayWarningLayoutError();
-void CheckAndAddColLandTable();
 void IncreaseSpeedCharactersPerfectChaos();
 void MissionResultCheck(ObjectMaster* obj);
 void Result_Init();

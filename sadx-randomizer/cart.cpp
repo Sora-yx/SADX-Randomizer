@@ -10,7 +10,6 @@ int AmyCartImprovement() {
 		return CurrentCharacter;
 }
 
-
 void Delete_Cart_r(ObjectMaster* obj)
 {
 
@@ -30,10 +29,6 @@ void Delete_Cart_r(ObjectMaster* obj)
 
 	origin(obj);
 }
-
-
-FunctionPointer(void, RemovePlayerFromObject, (unsigned __int8 playerID, float speedX, float speedY, float speedZ), 0x441820);
-VoidFunc(CameraReleasEvent, 0x436140);
 
 void DeleteCartAndExitPlayer() {
 
@@ -79,10 +74,8 @@ void LoadRemoveCartIceCap() {
 		return;
 	}
 
-	if (P1->Position.y <= -23200) {
-		DeleteCartAndExitPlayer();
-		return;
-	}
+	DeleteCartAndExitPlayer();
+	return;
 }
 
 
