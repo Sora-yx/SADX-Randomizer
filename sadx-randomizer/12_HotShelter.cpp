@@ -13,7 +13,6 @@ void HotShelter_Layout() {
 		CurrentStageVersion = GammaVersion;
 
 	CheckAndSet_HotShelterLayoutFeatures();
-
 	return;
 }
 

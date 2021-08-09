@@ -9,7 +9,7 @@ SetLevelPosition ChaoLevelPosition[26] {
 	{ SonicVersion, LevelAndActIDs_WindyValley3, 3489.99, -4340.27, -2132.28, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
 	{ TailsVersion, LevelAndActIDs_Casinopolis2, -1565.96, -2205, 2654.24, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_IceCap2, 1480.62, 573.3, -256.67, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_IceCap1, -90.96932, 2620.706, -2577.356 },
 	{ BigVersion, LevelAndActIDs_IceCap4, 1790.85, 371.968811, 11.265, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, -89.1414, 830, -991.721, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
@@ -28,7 +28,7 @@ SetLevelPosition ChaoLevelPosition[26] {
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
 	{ SonicVersion, LevelAndActIDs_FinalEgg3, 2659.293457, -2888.063965, -946.1408081, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_HotShelter1, -157.615, 418.875, -271.49, 0x8000 }, //Big Version 
-	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, //Amy version SADX VANILLA
+	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, 0x16200 }, //Amy version SADX VANILLA
 	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
 };
 
@@ -40,7 +40,7 @@ SetLevelPosition M3_PlayerEndPosition[26] {
 	{ SonicVersion, LevelAndActIDs_WindyValley3, { 3496.49, -4340.27, -2138.91 }, 0x4000 },
 	{ SonicVersion, LevelAndActIDs_Casinopolis1, 361, 380, -40, 0x8000 },
 	{ TailsVersion, LevelAndActIDs_Casinopolis2, -1573.51, -2205, 2654.24, 0x8000 },
-	{ SonicVersion, LevelAndActIDs_IceCap2, 1480.62, 573.3, -256.67, 0x8000 },
+	{ SonicVersion, LevelAndActIDs_IceCap1, -84.1479, 2623.706, -2559.488, 0x4000 },
 	{ BigVersion, LevelAndActIDs_IceCap4, 1799.06, 371.969, 8.94554, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, -89.1414, 830, -991.721, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x8000 }, //Big Version
@@ -58,12 +58,12 @@ SetLevelPosition M3_PlayerEndPosition[26] {
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1939, -3174.049561, -128, 0x8000 }, //Gamma Version
 	{ SonicVersion, LevelAndActIDs_FinalEgg3, 2659.293457, -2888.063965, -946.1408081, 0x8000 }, //Sonic Version
 	{ BigVersion, LevelAndActIDs_HotShelter1, -157.615, 418.875, -271.49, 0x8000 }, //Big Version 
-	{ AmyVersion, LevelAndActIDs_HotShelter2, 716.4085693, 677.8605957, -2952.347412, -1.681558157E-44 + 0xC000 }, //Amy version SADX VANILLA
+	{ AmyVersion, LevelAndActIDs_HotShelter2, 736.793, 677.861, -2953.76, 0x0 }, //Amy version SADX VANILLA
 	{ GammaVersion, LevelAndActIDs_HotShelter3, 2.01, 3221, -3136, 0x8000 },
 };
 
 //Mysitc Melody teleport close to the Chao
-SetLevelPosition PlayerAroundChaoPosition[16]{
+SetLevelPosition PlayerAroundChaoPosition[17]{
 
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, 5901.4, 537.225, 568.47, 0x8000 },
 	{ SonicVersion, LevelAndActIDs_WindyValley3, 3608.115, -4250.02, -2132.28, 0x8000 },
@@ -76,7 +76,8 @@ SetLevelPosition PlayerAroundChaoPosition[16]{
 	{ GammaVersion, LevelAndActIDs_RedMountain2, -430, 1200, 3141 },
 	//{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 774, 188, 184, 324.125 },
 	{ KnucklesVersion, LevelAndActIDs_SkyDeck3, 60, -44, -420, 324.125 },
-	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1580, 1403 },
+	{ KnucklesVersion, LevelAndActIDs_LostWorld2, 7421, -1580, 1403 },	
+	{ SonicVersion, LevelAndActIDs_IceCap1, -83.74668, 2654.081, -2558.437 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, 2897.51, 5810.17, -1993.62},
 	{ GammaVersion, LevelAndActIDs_FinalEgg3, 1517.56, -3139.29, -274.385},
 	{ BigVersion, LevelAndActIDs_HotShelter1, -211.615, 418.875, -275.99 },

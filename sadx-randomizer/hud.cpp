@@ -63,6 +63,8 @@ void DrawButton(int button) {
 		button = CmnHudSprite_SA2Action;
 
 	help.PushScaleUI(uiscale::Align_Right, false, 1.0f, 1.0f);
+	njColorBlendingMode(NJD_SOURCE_COLOR, NJD_COLOR_BLENDING_SRCALPHA);
+	njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
 	SetMaterialAndSpriteColor_Float(1, 1, 1, 1);
 	vscale = (float)VerticalResolution / 480.0f;
 	hzscale = (float)HorizontalResolution / 640.0f;

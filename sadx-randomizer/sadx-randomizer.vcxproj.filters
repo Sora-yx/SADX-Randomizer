@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Result">
       <UniqueIdentifier>{6fb9e218-0af3-420f-8f19-337e1df8045c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\missions">
+      <UniqueIdentifier>{4f2056fb-7791-4b1d-8915-8a9acdc56ec5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mod.cpp">
@@ -61,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AISettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AdventureFlags.cpp">
@@ -204,15 +204,15 @@
     <ClCompile Include="BackRing.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Chao.cpp">
+      <Filter>Source Files\missions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\CharactersSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\RandomHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\chao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\Credits.h">
@@ -305,9 +305,6 @@
     <ClInclude Include="data\hud.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\mission.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\FE.h">
       <Filter>Header Files\Levels</Filter>
     </ClInclude>
@@ -322,6 +319,12 @@
     </ClInclude>
     <ClInclude Include="data\LW.h">
       <Filter>Header Files\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="data\chao.h">
+      <Filter>Header Files\missions</Filter>
+    </ClInclude>
+    <ClInclude Include="data\mission.h">
+      <Filter>Header Files\missions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

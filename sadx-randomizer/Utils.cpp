@@ -145,8 +145,16 @@ bool isHeroesMod() {
 }
 
 bool isSA2Mod() {
-	HMODULE HeroesMod = GetModuleHandle(L"sadx-sa2-mod");
-	if (HeroesMod)
+	HMODULE Mod = GetModuleHandle(L"sadx-sa2-mod");
+	if (Mod)
+		return true;
+
+	return false;
+}
+
+bool isDCMod() {
+	HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
+	if (DCMod)
 		return true;
 
 	return false;
@@ -368,9 +376,13 @@ void DynCol_Delete(ObjectMaster* obj) {
 
 void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 
+	if (CurrentLevel == LevelIDs_HotShelter && CurrentStageVersion == AmyVersion && isDCMod()) {
+		pos = { 734.767, 428.211, -2954.12 };
+		yRot = 0xC0;
+	}
+
 	for (int j = 0; j < 8; j++) {
 		if (EntityData1Ptrs[j]) {
-
 			EntityData1Ptrs[j]->Position = pos;
 			EntityData1Ptrs[j]->Rotation.y = yRot;
 
@@ -381,14 +393,32 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 	}
 }
 
+struct colLevelStruct {
+	int currentLevel;
+	int currentAct;
+};
+
+colLevelStruct levelCol[]{
+	{ LevelIDs_SpeedHighway, 0 },
+	{ LevelIDs_TwinklePark, 1 },
+	{ LevelIDs_SkyDeck, 2 },
+	{ LevelIDs_IceCap, 0 },
+};
+
+void AddColOnLand() {
+	for (int i = 0; i < CurrentLandTable->COLCount; i++) {
+		if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
+			CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
+		}
+	}
+}
 
 void CheckAndAddColLandTable() {
-	if (CurrentLevel == LevelIDs_SpeedHighway && CurrentAct == 0 || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion == SonicVersion
-		|| CurrentLevel == LevelIDs_SkyDeck && CurrentAct == 2) {
-		for (int i = 0; i < CurrentLandTable->COLCount; i++) {
-			if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
-				CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
-			}
+
+	for (int j = 0; j < LengthOfArray(levelCol); j++) {
+		if (CurrentLevel == levelCol[j].currentLevel && CurrentAct == levelCol[j].currentAct) {
+			AddColOnLand();
+			break;
 		}
 	}
 	return;

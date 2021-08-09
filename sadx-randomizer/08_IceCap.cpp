@@ -38,8 +38,6 @@ void IC_Layout() {
 		CurrentMission = SADX_Mission;
 		CurrentStageVersion = TailsVersion;
 	}
-
-
 	return;
 }
 
@@ -121,7 +119,8 @@ void FixTailsVictoryIC() {
 
 void __cdecl ICObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	ObjLists[LevelIDs_IceCap * 8 + 2] = &IceCapObjectList;
+	
+	ObjLists[LevelIDs_IceCap * 8 + 0] = &IceCapObjectList;
 	ObjLists[LevelIDs_IceCap * 8 + 3] = &IceCapObjectList;
 	TexLists_Obj[LevelIDs_IceCap] = IceCapObjectTextures;
 	return;
