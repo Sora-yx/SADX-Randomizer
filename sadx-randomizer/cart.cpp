@@ -15,14 +15,12 @@ void Delete_Cart_r(ObjectMaster* obj)
 
 	ObjectFunc(origin, LevelItem_Delete_t->Target());
 
-	if (obj->MainSub == Cart_Main && CurrentLevel != LevelIDs_TwinklePark && CurrentLevel != LevelIDs_TwinkleCircuit) {
+	if (obj->MainSub == Cart_Main) {
 
 		FlagAutoPilotCart = 0;
 
 		if (CurrentCart != nullptr)
 			UpdateSetDataAndDelete(CurrentCart);
-		else
-			return;
 
 		CurrentCart = nullptr;
 	}
@@ -96,7 +94,7 @@ void Load_Cart_R() {
 	if (!CurrentCart)
 	{
 		SwapDelay = 0;
-		CurrentCart = LoadObject((LoadObj)(15), 3, Cart_Main);
+		CurrentCart = LoadObject((LoadObj)15, 3, Cart_Main);
 	}
 
 	if (CurrentCart)

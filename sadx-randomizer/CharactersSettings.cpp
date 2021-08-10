@@ -112,8 +112,9 @@ void CallStuffWhenLevelStart() {
 	fixCharacterSoundAfterReset();
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
-		(CurChara > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2))
+		(CurChara > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)) {
 		Load_Cart_R();
+	}
 }
 
 void BigWeightHook() {

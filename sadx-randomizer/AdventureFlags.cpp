@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include <string>
-#include <fstream>
-#include <iostream>
 
 
 using namespace std;
@@ -85,6 +83,16 @@ void AddCustomFlag() {
 	return StartLevelCutscene(1);
 }
 
+enum SelectedChar {
+	CharSonic,
+	CharTails,
+	CharKnuckles,
+	CharAmy,
+	CharBig,
+	CharGamma,
+	CharSuperSonic
+};
+
 
 //SA2 Style
 void CustomFlagCheck() {
@@ -92,7 +100,7 @@ void CustomFlagCheck() {
 	if (GameMode == 9 || GameMode == 10)
 		return;
 
-	if (SelectedCharacter == 0) //Sonic
+	if (SelectedCharacter == CharSonic) 
 	{
 		switch (CustomFlag)
 		{
@@ -152,7 +160,7 @@ void CustomFlagCheck() {
 		}
 	}
 
-	if (SelectedCharacter == 1) //Tails
+	if (SelectedCharacter == CharTails) 
 	{
 		switch (CustomFlag)
 		{
@@ -203,7 +211,7 @@ void CustomFlagCheck() {
 
 	
 
-	if (SelectedCharacter == 2) //Knuckles
+	if (SelectedCharacter == CharKnuckles) //Knuckles
 	{
 		switch (CustomFlag)
 		{
@@ -245,7 +253,7 @@ void CustomFlagCheck() {
 			break;
 		}
 	}
-	if (SelectedCharacter == 3) //Amy
+	if (SelectedCharacter == CharAmy) //Amy
 	{
 		switch (CustomFlag)
 		{
@@ -279,7 +287,7 @@ void CustomFlagCheck() {
 		}
 	}
 
-	if (SelectedCharacter == 4) //Big
+	if (SelectedCharacter == CharBig) //Big
 	{
 		switch (CustomFlag)
 		{
@@ -315,7 +323,7 @@ void CustomFlagCheck() {
 		}
 	}
 
-	if (SelectedCharacter == 5) //Gamma
+	if (SelectedCharacter == CharGamma) //Gamma
 	{
 		switch (CustomFlag)
 		{
@@ -353,7 +361,7 @@ void CustomFlagCheck() {
 			break;
 		}
 	}
-	if (SelectedCharacter == 6)
+	if (SelectedCharacter == CharSuperSonic)
 	{
 		if (CustomFlag >= 1) {
 			CreditCheck = true;

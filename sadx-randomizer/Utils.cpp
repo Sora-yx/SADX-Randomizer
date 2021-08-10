@@ -174,46 +174,31 @@ bool isRandoLevel() {
 
 // Object model file functions
 
-inline ModelInfo* LoadMDL(const char* type, const char* name) {
-	std::string fullPath = "system\\";
-	fullPath = fullPath + type + "\\" + name + ".sa1mdl";
+ModelInfo* LoadBasicModel(const char* name) {
+	PrintDebug("[SADX Randomizer] Loading basic model: %s... ", name);
 
-	ModelInfo* temp = new ModelInfo(help.GetReplaceablePath(fullPath.c_str()));
+	std::string fullPath = "system\\models\\";
+	fullPath = fullPath + name + ".sa1mdl";
 
-	if (temp->getformat() == ModelFormat_Invalid) {
-		delete temp;
-		fullPath = "system\\";
-		fullPath = fullPath + type + "\\" + name + ".cnkmdl";
+	ModelInfo* mdl = new ModelInfo(help.GetReplaceablePath(fullPath.c_str()));
 
-		temp = new ModelInfo(help.GetReplaceablePath(fullPath.c_str()));
-
-		if (temp->getformat() == ModelFormat_Invalid) {
-			PrintDebug("Failed.\n");
-			delete temp;
-			return nullptr;
-		}
-		else {
-			PrintDebug("Done.\n");
-			return temp;
-		}
+	if (mdl->getformat() != ModelFormat_Basic) {
+		PrintDebug("Failed!\n");
+		delete mdl;
+		return nullptr;
 	}
-	else {
-		PrintDebug("Done.\n");
-		return temp;
-	}
-}
 
-ModelInfo* LoadObjectModel(const char* name) {
-	PrintDebug("[SHM] Loading object model: %s... ", name);
-	return LoadMDL("models", name);
+	PrintDebug("Done.\n");
+	return mdl;
 }
-
 
 void FreeMDL(ModelInfo* pointer) {
-	PrintDebug("[SHM] Freeing model: %s... \n", pointer->getdescription().c_str());
-	delete(pointer);
+	if (pointer) {
+		PrintDebug("[SHM] Freeing model: %s... \n", pointer->getdescription().c_str());
+		delete(pointer);
+		pointer = nullptr;
+	}
 }
-
 // Global display subs
 
 void displaySub_Global(ObjectMaster* obj) {

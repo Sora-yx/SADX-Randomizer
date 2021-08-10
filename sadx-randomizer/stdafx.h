@@ -21,6 +21,7 @@
 #include "startup.h"
 #include "RandomHelpers.h"
 #include "CharactersSettings.h"
+#include "objects.h"
 #include "Credits.h"
 #include "hud.h"
 #include "StageSettings.h"

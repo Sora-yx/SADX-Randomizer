@@ -215,18 +215,17 @@ void MysticMelody_Main(ObjectMaster* obj) {
 	}
 }
 
+void DeleteMM_Models() {
+	FreeMDL(MysticMelody);
+	FreeMDL(MMPlatform);
+}
+
 
 void LoadMysticMelody_Models() {
-	if (CurrentLevel > 0 && CurrentLevel < 15) {
-		MysticMelody = LoadObjectModel("MysticMelody");
-		MMPlatform = LoadObjectModel("MM-Platform");
-	}
-	else {
 
-		if (MysticMelody)
-			FreeMDL(MysticMelody);
-
-		if (MMPlatform)
-			FreeMDL(MMPlatform);
+	if (!MysticMelody && !MMPlatform) {
+		MysticMelody = LoadBasicModel("MysticMelody");
+		MMPlatform = LoadBasicModel("MM-Platform");
 	}
+
 }
