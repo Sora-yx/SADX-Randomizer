@@ -45,7 +45,6 @@ bool SA2Voices = false;
 
 int SeedCopy = 0;
 time_t t;
-extern int getCurVoice;
 
 extern "C" {
 

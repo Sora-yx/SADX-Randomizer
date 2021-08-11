@@ -23,7 +23,7 @@ void set_event_flags(long cutsceneID)
 {
 	SeqRun();
 
-	if (cutsceneID >= 240 && cutsceneID <= 255 || cutsceneID == 355) 
+	if (cutsceneID >= 240 && cutsceneID <= 255 || cutsceneID == 355)
 		LastStoryFlag = 1;
 
 
@@ -47,7 +47,7 @@ void set_event_flags(long cutsceneID)
 
 	switch (cutsceneID)  //Credits: PKR
 	{
-	case 110: 
+	case 110:
 		SetEventFlag((EventFlags)FLAG_AMY_MR_ENTRANCE_FINALEGG); //Open Final Egg for Amy
 		break;
 	case 114:
@@ -360,17 +360,24 @@ void CutsceneManager(ObjectMaster* obj) {
 		data->Action = 1;
 		break;
 	case 1:
-		if (!EV_MainThread_ptr) {
-			DisableController(0);
-			PauseEnabled = 0;
-			if (++data->Index == 40) {
-				CutsceneMode = 0;
-				LastStoryFlag = 0;
-				FreeLandTable(CurrentLevel, CurrentAct);
-				GameState = 0x9;
-				CheckThingButThenDeleteObject(obj);
-			}
+
+		if (EV_MainThread_ptr)
+			return;
+
+		DisableController(0);
+		PauseEnabled = 0;
+		if (++data->Index == 5) {
+			LastStoryFlag = 0;
+			j_SetNextLevelAndAct_CutsceneMode(1, 0);
+			CheckThingButThenDeleteObject(obj);
 		}
+		/**if (++data->Index == 40) {
+			CutsceneMode = 0;
+			LastStoryFlag = 0;
+			FreeLandTable(CurrentLevel, CurrentAct);
+			GameState = 0x9;
+			CheckThingButThenDeleteObject(obj);
+		}*/
 		break;
 	}
 }
@@ -406,24 +413,27 @@ void getRandomCutscene(RandomizedEntry* entry) {
 }
 
 
+
+
 void Init_RandomCutscene() {
-	if (RNGStages) {
 
-		WriteCall((void*)0x59a458, preventHotShelterCutscene);
-		WriteJump(StartLevelCutscene, preventLevelCutscene);
-		//WriteCall((void*)0x413c9c, preventLevelCutscene); //Prevent cutscene from playing after completing a stage (fix AI / Super Sonic crashes.)
-		WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
-		
-		if (RNGCutscene) {
-			LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r); //fix dumb crash
-			StartCutscene_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, StartCutscene_r);
+	if (!RNGStages)
+		return;
 
-			WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
-			WriteCall((void*)0x685392, EV2_r); //Knux outro		
-			WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
-			WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
-			WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
-			WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
-		}
+	WriteData<5>((int*)0x40C6EA, 0x90);  //remove Characters CGI cutscene as it creates issue with rando
+	WriteCall((void*)0x59a458, preventHotShelterCutscene);
+	WriteJump(StartLevelCutscene, preventLevelCutscene);
+	WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
+
+	if (RNGCutscene) {
+		LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r); //fix dumb crash
+		StartCutscene_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, StartCutscene_r);
+
+		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro
+		WriteCall((void*)0x685392, EV2_r); //Knux outro		
+		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
+		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
+		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
+		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
 	}
 }

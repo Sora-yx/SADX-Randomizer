@@ -59,5 +59,8 @@ FunctionPointer(void, E102Hit, (NJS_POINT3* a1, double a2), 0x49FB50);
 
 ObjectFunc(E103_Main, 0x4e7e90);
 ObjectFunc(E104_Main, 0x605A90);
+ObjectFunc(E105_Main, 0x5A4990);
 FunctionPointer(void, RemovePlayerFromObject, (unsigned __int8 playerID, float speedX, float speedY, float speedZ), 0x441820);
 VoidFunc(CameraReleasEvent, 0x436140);
+VoidFunc(ResetDynamite, 0x4CBED0);
+FunctionPointer(int, CheckDynamiteBroken, (int dynNumber), 0x4CBE60);

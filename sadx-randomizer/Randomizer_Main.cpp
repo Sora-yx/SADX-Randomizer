@@ -274,12 +274,6 @@ void GoToNextLevel_hook(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
-		//fix mission card display + load stage properly
-		if (RNGStages && (SelectedCharacter == 3 && EventFlagArray[EventFlags_Amy_TwinkleParkClear] == 0) || SelectedCharacter == 2 && EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] == 0)
-		{
-			CurrentVideo = 0;
-			CutsceneMode = 0;
-		}
 
 		if (isChaoGameplayAllowed && CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past && CustomFlag == 0) {
 			SetLevelAndAct(LevelIDs_SSGarden, 0);

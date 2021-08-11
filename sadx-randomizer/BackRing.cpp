@@ -38,6 +38,50 @@ enum BackRing_Actions {
 	BackRing_Setting
 };
 
+int __cdecl CheckDynamiteBroken_r(int DynNumber)
+{
+	int v1; // edi
+	EntityData1* data; // esi
+	int result; // eax
+	int v4; // [esp+10h] [ebp-4h]
+
+	v1 = 0;
+	v4 = 0;
+	if (!dynamite_num)
+	{
+		result = 0;
+		return result;
+	}
+	do
+	{
+		data = dynamiteArray[v1]->Data1;
+
+		if (!data) { //fix nonsense crash when using backring
+			break;
+		}
+
+		if (DynNumber == data->Scale.x)
+		{
+			if ((data->Status & 0x100) == 0)
+			{
+				result = 0;
+				return result;
+			}
+			++v4;
+		}
+		++v1;
+	} while (v1 < dynamite_num);
+	if (v4)
+	{
+		result = 1;
+	}
+	else
+	{
+		result = 0;
+	}
+	return result;
+}
+
 //ran every UNpaused frame
 void BackRingObj_Main(ObjectMaster* obj) {
 
@@ -96,11 +140,16 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 				SoundManager_Delete2();
 				ChaoSpawn = false;
+				ResetRestartData();
+
 				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
 					GameState = 0xc;
+
 				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 0 && CurrentStageVersion == GammaVersion)
 				{
-					GameState = 24; //fix gamma hot shelter crash
+
+					GameMode = GameModes_StartAdventure;
+
 				}
 				if (CurrentLevel == LevelIDs_RedMountain && CurrentStageVersion == GammaVersion)
 				{
@@ -150,8 +199,13 @@ void BackRingObj_Main(ObjectMaster* obj) {
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
-	if (CurrentLevel == LevelIDs_FinalEgg && CurrentAct == 2 && CurrentStageVersion == GammaVersion && CurrentStageVersion < Mission2_100Rings)
-		return;
+	if (CurrentStageVersion == GammaVersion && CurrentStageVersion < Mission2_100Rings)
+	{
+		if ( CurrentAct == 2 && (CurrentLevel == LevelIDs_FinalEgg)
+			|| CurrentLevel == LevelIDs_HotShelter) {
+			return;
+		}
+	}
 
 	if (CurrentMission < Mission2_100Rings && CurrentStageVersion != KnucklesVersion)
 	{
@@ -259,7 +313,7 @@ void Check_Display_Frog_Balloon(ObjectMaster* a1) {
 
 void Check_Display_BackRing_Common(ObjectMaster* a1) {
 
-	if (CurrentStageVersion == GammaVersion && (CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_WindyValley))
+	if (CurrentStageVersion == GammaVersion && (CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_WindyValley || CurrentLevel == LevelIDs_HotShelter))
 		a1->Data1->Position.y += 25;
 	else
 		a1->Data1->Position.y += 36;
@@ -492,4 +546,6 @@ void Set_BackRing() {
 	WriteData((ObjectFuncPtr*)0x4ECFE0, CheckLoadCapsule_r); // Chaos Emerald in Ice Cap
 	WriteData((ObjectFuncPtr*)0x7B0DD3, CheckLoadCapsule_r); // ending of Lost World
 	WriteData((ObjectFuncPtr*)0x5B2523, CheckLoadCapsule_r); // ending of Final Egg
+
+	WriteJump(CheckDynamiteBroken, CheckDynamiteBroken_r);
 }

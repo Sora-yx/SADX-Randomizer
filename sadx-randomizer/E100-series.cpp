@@ -24,6 +24,22 @@ void FixNonGammaSoftLock(ObjectMaster* obj) {
 	}
 }
 
+void E105Enemy_Main_R(ObjectMaster* obj);
+Trampoline E105_t((int)E105_Main, (int)E105_Main + 0x6, E105Enemy_Main_R);
+
+void E105Enemy_Main_R(ObjectMaster* obj) {
+
+
+	if (CurrentLevel == LevelIDs_HotShelter && CurrentMission > 0)
+	{
+		return;
+	}
+
+
+	ObjectFunc(origin, E105_t.Target());
+	origin(obj);
+}
+
 
 void E104Enemy_Main_R(ObjectMaster* obj) {
 
