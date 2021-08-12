@@ -44,7 +44,7 @@ void LoadCharacter_r() {
 		CheckLoadBird();
 
 	CheckAndSetUpgrades();
-	EmeraldRadar_R();
+
 	LoadCharacter();
 
 	return;

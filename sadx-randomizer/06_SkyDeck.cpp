@@ -8,24 +8,13 @@ void SkyDeck_Layout() {
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
-
+	else {
+		if (CurrentStageVersion != TailsVersion)
+			CurrentStageVersion = SonicVersion;
+	}
 
 	if (CurrentMission == Mission3_LostChao && CurrentStageVersion != KnucklesVersion)
 		CurrentMission = Mission2_100Rings;
-
-
-	switch (CurrentStageVersion)
-	{
-	case SonicVersion:
-	default:
-		if (CurrentStageVersion != TailsVersion)
-			CurrentStageVersion = SonicVersion;
-		break;
-	case KnucklesVersion:
-		if (CurrentMission < Mission2_100Rings)
-			SetRNGKnuckles();
-		break;
-	}
 
 	return;
 }
@@ -37,7 +26,7 @@ int Switch_Gravity() {
 		return (unsigned)Characters_Sonic; //Make the gravity work for Knuckles
 
 	if (CurrentStageVersion == KnucklesVersion)
-		return (unsigned)Characters_Knuckles; 
+		return (unsigned)Characters_Knuckles;
 
 	return GetCharacterID(0);
 }
@@ -52,7 +41,7 @@ void SkyDeckCannon_LoadWithTarget(ObjectMaster* SDCanonnObj) {
 		SDCannon(SDCanonnObj);
 	}
 	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
-	
+
 	obj->Data1->LoopData = (Loop*)SDCanonnObj;
 	obj->Data1->Scale.x = 20;
 
@@ -109,7 +98,7 @@ Trampoline Olever_t(0x5f1d20, 0x5f1d28, Olever_r);
 
 void Olever_r(ObjectMaster* obj) {
 
-	
+
 	int curAction = EntityData1Ptrs[0]->Action;
 
 	if (EntityData1Ptrs[0]->CharID == Characters_Big && curAction == 15 && CurrentLevel == LevelIDs_SkyDeck)

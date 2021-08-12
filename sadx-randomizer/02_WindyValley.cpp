@@ -1,6 +1,17 @@
 #include "stdafx.h"
 #include "WV.h"
 
+
+int getCharIDTornado() {
+	if (CurrentStageVersion == GammaVersion)
+		return Characters_Gamma;
+
+	if (CurrentStageVersion == SonicVersion)
+		return Characters_Sonic;
+
+	return CurrentCharacter;
+}
+
 void FixTailsVictoryWV() {
 
 	//Prevent AI to make Tails lose when hiting the capsule if we aren't racing.
@@ -38,11 +49,14 @@ void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunct
 
 void __cdecl WindyValley_Init(const char* path, const HelperFunctions& helperFunctions)
 {
+
+
 	//Initiliaze data
 	
 	WVObjects_Init(path, helperFunctions);
 	WriteCall((void*)0x422c27, WindyValley_Layout); //WV
 	WriteCall((void*)0x4df390, FixTailsVictoryWV);
+	WriteCall((void*)0x4DD71D, getCharIDTornado); //prevent the wind effect to display during gamma windy valley.
 
 	//Sonic
 	AddLevelLayout("Windy Valley\\", "WV0", helperFunctions);

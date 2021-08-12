@@ -11,8 +11,7 @@ enum CutsceneFlag {
 	KnuxOutro = 0x9F,
 	GammaIntro = 0x0B0,
 	BigIntro = 0x0D0,
-	BigOutri = 0x0E2
-
+	BigOutro = 0x0E2
 };
 
 struct AdventureData_

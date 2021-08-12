@@ -17,6 +17,7 @@ int EventEveningTime[4] = {
 };
 
 
+
 //Fix Event flag for cutscenes 
 
 void set_event_flags(long cutsceneID)

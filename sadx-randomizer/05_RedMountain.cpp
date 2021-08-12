@@ -21,8 +21,6 @@ void RedMountain_Layout() {
 	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
 	{
 		CurrentStageVersion = KnucklesVersion;
-		if (CurrentMission < Mission2_100Rings)
-			SetRNGKnuckles();
 	}
 
 	FixRMLava(); //Adjust Lava level depending on Sonic / Gamma Layout.

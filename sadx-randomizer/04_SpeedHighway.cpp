@@ -8,17 +8,9 @@ void SpeedHighway_Layout() {
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = KnucklesVersion;
-
-	switch (CurrentStageVersion)
-	{
-	case SonicVersion:
-	default:
+	else {
 		if (CurrentStageVersion != TailsVersion)
 			CurrentStageVersion = SonicVersion;
-		break;
-	case KnucklesVersion:
-		SetRNGKnuckles();
-		break;
 	}
 
 	return;
@@ -69,6 +61,10 @@ void __cdecl SpeedHighway_Init(const char* path, const HelperFunctions& helperFu
 	AddLevelLayout("Speed Highway\\", "SH2", helperFunctions);
 	AddLevelLayout("Speed Highway\\", "SHM", helperFunctions);
 	AddLevelLayout("Speed Highway\\", "SHK", helperFunctions);
+
+	//Allow characters to break box in Speed Highway
+	WriteData<1>((void*)0x61A5B8, 0x8);
+	WriteData<1>((void*)0x61a5b9, 0x74);
 
 	AddCam("C0400");
 	AddCam("C0401");

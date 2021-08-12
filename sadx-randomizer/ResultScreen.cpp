@@ -355,7 +355,6 @@ void ResetValueAndObjects() {
 	isPlayerInWaterSlide = false;
 	MMPlatformEnabled = false;
 
-	RestoreRNGValueKnuckles();
 	RestorePuzzleBoxVanillaThing();
 
 	if (CurrentLevel != 0)
@@ -388,7 +387,6 @@ void ResetStatsValues() {
 	RandCongratsDone = false;
 	isPlayerInWaterSlide = false;
 	fixTCCart();
-	RestoreRNGValueKnuckles();
 }
 
 //cancel the reset position at 0 after quitting a stage.

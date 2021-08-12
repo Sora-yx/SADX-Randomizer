@@ -270,8 +270,7 @@ void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
 
 
-void SetRNGKnuckles();
-void RestoreRNGValueKnuckles();
+void LoadTreasureHunting_Textures();
 
 NJS_VECTOR SetPlayerAroundLostChaoPosition();
 

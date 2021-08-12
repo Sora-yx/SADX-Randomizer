@@ -116,15 +116,11 @@ void FixCasinoSoundEffects() {
 
 void Casino_Layout() {
 
-
 	if (CurrentStageVersion != TailsVersion && CurrentStageVersion != KnucklesVersion)
 		CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct == 1)
 		CurrentStageVersion = TailsVersion;
-
-	if (CurrentStageVersion == KnucklesVersion)
-		SetRNGKnuckles();
 
 	if (CurrentMission == Mission3_LostChao && CurrentStageVersion != TailsVersion || CurrentStageVersion == KnucklesVersion)
 	{

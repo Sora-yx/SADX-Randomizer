@@ -1,57 +1,6 @@
 #include "stdafx.h"
 
 
-void EmeraldRadar_R() {
-
-	if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
-	{
-		LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
-
-		if (CurrentCharacter != Characters_Knuckles)
-		{
-			KnuxCheck2 = 0; //fix Trial Mode Crash
-
-			switch (CurrentLevel)
-			{
-			case LevelIDs_SpeedHighway:
-				if (CurrentCharacter == Characters_Gamma && KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
-				{
-					do {
-						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
-				}
-				break;
-			case LevelIDs_RedMountain:
-				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
-				{
-					do {
-						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
-				}
-				break;
-			case LevelIDs_LostWorld:
-				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
-				{
-					do {
-						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
-				}
-				break;
-			case LevelIDs_SkyDeck:
-				if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35) //If diggable emeralds, rand again.
-				{
-					do {
-						Knuckles_SetRNG();
-					} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
-				}
-				break;
-			}
-		}
-	}
-
-	return;
-}
-
 int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
 
 	if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
@@ -60,30 +9,67 @@ int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing 
 	return 8; //Doesn't exist so the game won't load anything
 }
 
-//Set Emerald RNG when not Knuckles
 
-void SetRNGKnuckles() {
+//we first set the rng, then we check if we got diggable piece, if so, we rand again.
+void TreasureHunting_SetRNG() {
 
-	if (CurrentMission < Mission2_100Rings && CurrentStageVersion == KnucklesVersion && CurrentCharacter != Characters_Knuckles)
+	Knuckles_SetRNG(); 
+
+	if (CurrentCharacter == Characters_Knuckles)
 	{
-		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
-		WriteData<1>((void*)0x416F06, 0x08);
-		WriteData<1>((void*)0x4153E1, 0x08);
-		WriteData<1>((void*)0x416f08, 0x74);
-		WriteData<1>((void*)0x4153e3, 0x74);
+		return;
 	}
+	
+	KnuxCheck2 = 0; //fix Trial Mode Crash
 
-	return;
+	switch (CurrentLevel)
+	{
+	case LevelIDs_SpeedHighway:
+		if (CurrentCharacter == Characters_Gamma && KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
+		{
+			do {
+				Knuckles_SetRNG();
+			} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
+		}
+		break;
+	case LevelIDs_RedMountain:
+		if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
+		{
+			do {
+				Knuckles_SetRNG();
+			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+		}
+		break;
+	case LevelIDs_LostWorld:
+		if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
+		{
+			do {
+				Knuckles_SetRNG();
+			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
+		}
+		break;
+	case LevelIDs_SkyDeck:
+		if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35) //If diggable emeralds, rand again.
+		{
+			do {
+				Knuckles_SetRNG();
+			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
+		}
+	default:
+		Knuckles_SetRNG();
+		break;
+	}
 }
 
-//restore original values
-void RestoreRNGValueKnuckles() {
-	WriteData<1>((void*)0x416F06, 0x03);
-	WriteData<1>((void*)0x4153E1, 0x03);
-	WriteData<1>((void*)0x416f08, 0x75);
-	WriteData<1>((void*)0x4153e3, 0x75);
+void CheckAndLoad_TreasureHunting() {
+	if (CurrentMission > SADX_Mission || CurrentStageVersion != KnucklesVersion || CurrentLevel >= LevelIDs_Chaos0)
+		return;
+	
+	if (CurrentCharacter == Characters_Knuckles)
+		return;
 
-	return;
+	LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
+	LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
 }
 
 Trampoline KnucklesHint_Main_t((int)KnucklesHint_Main, (int)KnucklesHint_Main + 0x7, KnucklesHintMain_r);
@@ -121,7 +107,6 @@ void FixEmeraldGetSFX() {
 }
 
 
-
 void FixTikalHintSFX() {
 
 	if (CurrentCharacter != Characters_Knuckles)
@@ -131,7 +116,6 @@ void FixTikalHintSFX() {
 
 	return;
 }
-
 
 Trampoline PlayKnuxVoice_EmeraldGet(0x474f50, 0x474f55, PlayCharaVoice_EmeraldGet);
 
@@ -185,7 +169,6 @@ void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
 	return;
 }
 
-
 void Init_TreasureHunting() {
 
 	WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
@@ -199,7 +182,11 @@ void Init_TreasureHunting() {
 	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
 
-	//Allow characters to break box in Speed Highway
-	WriteData<1>((void*)0x61A5B8, 0x8);
-	WriteData<1>((void*)0x61a5b9, 0x74);
+	//Force the game to load treasure hunting stuff for everyone
+	WriteData<1>((void*)0x416F06, 0x08);
+	WriteData<1>((void*)0x4153E1, 0x08);
+	WriteData<1>((void*)0x416f08, 0x74);
+	WriteData<1>((void*)0x4153e3, 0x74);
+	WriteCall((void*)0x416F0A, TreasureHunting_SetRNG);
+	WriteCall((void*)0x4153E5, TreasureHunting_SetRNG);
 }
