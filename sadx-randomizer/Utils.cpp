@@ -361,9 +361,11 @@ void DynCol_Delete(ObjectMaster* obj) {
 
 void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 
-	if (CurrentLevel == LevelIDs_HotShelter && CurrentStageVersion == AmyVersion && isDCMod()) {
-		pos = { 734.767, 428.211, -2954.12 };
-		yRot = 0xC0;
+	if (CurrentMission == Mission3_LostChao) {
+		if (CurrentLevel == LevelIDs_HotShelter && CurrentStageVersion == AmyVersion && isDCMod() && CurrentAct == 1) {
+			pos = { 734.767, 428.211, -2954.12 };
+			yRot = 0xC0;
+		}
 	}
 
 	for (int j = 0; j < 8; j++) {

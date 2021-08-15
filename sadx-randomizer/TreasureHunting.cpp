@@ -65,11 +65,11 @@ void CheckAndLoad_TreasureHunting() {
 	if (CurrentMission > SADX_Mission || CurrentStageVersion != KnucklesVersion || CurrentLevel >= LevelIDs_Chaos0)
 		return;
 	
-	if (CurrentCharacter == Characters_Knuckles)
-		return;
+	if (CurrentCharacter != Characters_Knuckles) {
+		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
+	}
 
-	LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
-	LoadObject((LoadObj)2, 6, EmeraldRadarHud_Load_Load);
+	LoadObject(LoadObj_Data1, 6, EmeraldRadarHud_Load_Load);
 }
 
 Trampoline KnucklesHint_Main_t((int)KnucklesHint_Main, (int)KnucklesHint_Main + 0x7, KnucklesHintMain_r);
@@ -171,9 +171,12 @@ void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
 
 void Init_TreasureHunting() {
 
+
 	WriteData<6>((void*)0x475E7C, 0x90u); // make radar work when not Knuckles
 	WriteData<6>((void*)0x4764CC, 0x90u); // make Tikal hints work when not Knuckles
 	WriteData<6>((void*)0x4a31f0, 0x90u); // Display the emerald grab thing when not Knuckles.
+
+
 	WriteCall((void*)0x4762a6, FixRadarSFX);
 	WriteCall((void*)0x477e14, FixEmeraldGetSFX);
 	WriteCall((void*)0x7a907f, FixTikalHintSFX);

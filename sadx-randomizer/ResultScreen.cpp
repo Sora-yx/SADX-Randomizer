@@ -24,19 +24,26 @@ void SetResultsCamera()
 }
 
 
-void SetAmyWinPose() {
+void CheckAndSet_AmyWinPose() {
 
-	if (EntityData1Ptrs[0]->CharID != Characters_Amy)
-		return;
+	for (int i = 0; i < 8; i++) {
 
-	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMissionCard <= 9 && CurrentMissionCard != 3 || CurrentMission >= 2) {
-		CharObj2Ptrs[0]->AnimationThing.Index = 42;
-		SetResultsCamera();
+		if (!EntityData1Ptrs[i])
+			return;
+
+		if (EntityData1Ptrs[i]->CharID != Characters_Amy)
+			continue;
+
+		if (CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_HotShelter || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings
+			|| CurrentStageVersion == BigVersion) {
+
+			CharObj2Ptrs[i]->AnimationThing.Index = 42;
+			SetResultsCamera();
+		}
+		else {
+			CharObj2Ptrs[i]->AnimationThing.Index = 32;
+		}
 	}
-	else {
-		CharObj2Ptrs[0]->AnimationThing.Index = 32;
-	}
-
 }
 
 
@@ -165,9 +172,6 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 		case Characters_Tails:
 			sub_461560();
 			break;
-		case Characters_Amy:
-			SetAmyWinPose();
-			break;
 		case Characters_Gamma:
 			if (GetCharacter0ID() == Characters_Gamma)
 			{
@@ -245,6 +249,7 @@ void __cdecl LoadLevelResults_r() {
 
 	DisableController(0);
 	PauseEnabled = 0;
+	CheckAndSet_AmyWinPose();
 
 	if (Race && RaceWinnerPlayer == 2 && GameMode < 9)
 	{
@@ -257,8 +262,10 @@ void __cdecl LoadLevelResults_r() {
 	}
 	if (GameMode == GameModes_Mission)
 		sub_5919E0();
+
 	if (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails)
 		SetTailsRaceVictory();
+
 	switch (GetCharacter0ID())
 	{
 	case Characters_Tails:
@@ -290,13 +297,13 @@ void __cdecl LoadLevelResults_r() {
 		Load_DelayedSound_BGM(MusicIDs_RoundClear);
 		break;
 	case Characters_Amy:
-		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill || CurrentMission >= 2) {
+		if (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill || CurrentMission >= 2 || CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_HotShelter
+			|| CurrentStageVersion == BigVersion) {
 			LoadObject((LoadObj)0, 3, sub_4141F0);
 		}
 		else
 		{
 			ForcePlayerAction(0, 19);
-			SetAmyWinPose();
 			sub_457D00();
 			LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
 			SoundManager_Delete2();

@@ -117,6 +117,7 @@ extern "C" {
 
 		modpath = path;
 
+
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
 		StartupMusic_Init(path, helperFunctions);
@@ -124,8 +125,7 @@ extern "C" {
 		StartupMiscellaneous_Init(path, helperFunctions);
 		
 		Chao_Init();
-
-		Characters_Init();
+		Characters_Init();	
 		RandomizeStages_Init();
 		ObjectCommons_Init();
 		InitMissions();
@@ -142,6 +142,8 @@ extern "C" {
 		Sounds_OnFrame();
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
+
+		CurrentMission = 3;
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

@@ -39,6 +39,24 @@ void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunct
 	return;
 }
 
+void RM_MovePlayerToEndPosition() {
+
+	if (CurrentLevel == LevelIDs_RedMountain && CurrentAct == 1 && CurrentStageVersion == GammaVersion) {
+
+		for (int i = 0; i < 8; i++) {
+
+			if (CurrentCharacter > Characters_Tails)
+				break;
+
+			if (EntityData1Ptrs[i]) {
+				PositionPlayer(i, -397.69, 1039.52, 3101.33);
+			}
+		}
+	}
+
+	LoadLevelResults();
+}
+
 void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
@@ -55,6 +73,7 @@ void __cdecl RedMountain_Init(const char* path, const HelperFunctions& helperFun
 	WriteData<5>((int*)0x6008b1, 0x90); //Fix Red Mountain Act 2 music as Tails.
 
 	WriteCall((void*)0x422d68, RedMountain_Layout); //RM random act
+	WriteCall((void*)0x6053B3, RM_MovePlayerToEndPosition);
 
 	RMObjects_Init(path, helperFunctions);
 

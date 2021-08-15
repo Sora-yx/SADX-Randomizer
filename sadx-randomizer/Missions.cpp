@@ -297,13 +297,27 @@ void TitleCard_Init() {
 }
 
 
+void CheckAndLoad_CartStopper() {
 
-ObjectMaster* MissionResultObj;
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
+		ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, OCartStopper);
+		if (toto) {
+			toto->Data1->Position = EntityData1Ptrs[0]->Position;
+		}
+	}
+}
+
+
 ObjectMaster* Flash = nullptr;
 
 void MissionResultCheck(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1;
+	CharObj2* co2 = CharObj2Ptrs[0];
+	EntityData1* p1 = EntityData1Ptrs[0];
+
+	if (!co2 || !p1)
+		return;
 
 	switch (data->Action)
 	{
@@ -315,18 +329,14 @@ void MissionResultCheck(ObjectMaster* obj) {
 
 			if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 			{
-				if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
-					ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, OCartStopper);
-					if (toto) {
-						toto->Data1->Position = EntityData1Ptrs[0]->Position;
-					}
-				}
+				CheckAndLoad_CartStopper();
 
 				Flash = nullptr;
 				ForcePlayerAction(0, 24);
-				CharObj2Ptrs[0]->Speed.x = 1.5;
-				EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-				data->Action = 1;
+				if (co2->Speed.x > 1.5f)
+					co2->Speed.x = 1.5;
+				p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				data->Action++;
 			}
 		}
 		break;
@@ -334,10 +344,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		if (!Flash && EnableControl)
 			Flash = LoadObject(LoadObj_Data1, 1, FlashScreen);
 
-		if ((CharObj2Ptrs[0]->Upgrades & Upgrades_SuperSonic) == 0)
-			EntityData1Ptrs[0]->Action = 1;
-
-		data->Action = 2;
+		data->Action++;
 		break;
 	case 2:
 		StopMusic();
@@ -347,24 +354,25 @@ void MissionResultCheck(ObjectMaster* obj) {
 		{
 			for (int i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
 			{
-				if ((CurrentStageVersion == KnucklesVersion && CurrentMission == SADX_Mission || CurrentMission == Mission2_100Rings)) 
-				{				
-					if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
-						&& CurrentStageVersion == M2_PlayerEndPosition[i].version) {
-						TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
-						break;
-					}
+				if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
+					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) {
+					TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
+					break;
 				}
 			}
 		}
-		if (++data->InvulnerableTime == 85)
-			data->Action = 3;
+		data->Action++;
 		break;
 	case 3:
+		if (++data->InvulnerableTime == 85)
+			data->Action++;
+		break;
+	case 4:
 		LoadLevelResults_r();
 		CheckThingButThenDeleteObject(obj);
 		break;
 	}
+
 }
 
 //Credits: PKR

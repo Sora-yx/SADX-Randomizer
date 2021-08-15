@@ -137,7 +137,7 @@ void __cdecl StartupVoices_Init(const char* path, const HelperFunctions& helperF
 	if (RNGVoices)
 	{
 		PlayVoice_t = new Trampoline((int)PlayVoice, (int)PlayVoice + 0x5, PlayRandomVoice);
-		SA2VoicesCheck();
+		//SA2VoicesCheck();
 	}
 
 	if (isAIAllowed)
