@@ -143,13 +143,13 @@ extern "C" {
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
 
-		CurrentMission = 3;
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
 		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
 			CustomFlagCheck(); //When loading, Check flag and credits*/
+
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

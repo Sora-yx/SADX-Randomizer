@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-void E104Enemy_Main_R(ObjectMaster* obj);
-Trampoline E104_t((int)E104_Main, (int)E104_Main + 0x7, E104Enemy_Main_R);
+Trampoline* E104_t;
+Trampoline* E103_t;
 
 void CheckAndHurtE100Bosses(ObjectMaster* obj) {
 	EntityData1* data1 = obj->Data1;
@@ -24,20 +24,15 @@ void FixNonGammaSoftLock(ObjectMaster* obj) {
 	}
 }
 
-void E105Enemy_Main_R(ObjectMaster* obj);
-Trampoline E105_t((int)E105_Main, (int)E105_Main + 0x6, E105Enemy_Main_R);
 
 void E105Enemy_Main_R(ObjectMaster* obj) {
 
-
-	if (CurrentLevel == LevelIDs_HotShelter && CurrentMission > 0)
-	{
+	if (CurrentMission >= Mission2_100Rings) {
+		CheckThingButThenDeleteObject(obj);
 		return;
 	}
 
-
-	ObjectFunc(origin, E105_t.Target());
-	origin(obj);
+	E105Enemy_Load(obj);
 }
 
 
@@ -53,13 +48,10 @@ void E104Enemy_Main_R(ObjectMaster* obj) {
 	FixNonGammaSoftLock(obj);
 	CheckAndHurtE100Bosses(obj);
 
-	ObjectFunc(origin, E104_t.Target());
+	ObjectFunc(origin, E104_t->Target());
 	origin(obj);
 }
 
-
-void E103Enemy_Main_R(ObjectMaster* obj);
-Trampoline E103_t((int)E103_Main, (int)E103_Main + 0x7, E103Enemy_Main_R);
 
 void E103Enemy_Main_R(ObjectMaster* obj) {
 
@@ -75,6 +67,12 @@ void E103Enemy_Main_R(ObjectMaster* obj) {
 	FixNonGammaSoftLock(obj);
 	CheckAndHurtE100Bosses(obj);
 
-	ObjectFunc(origin, E103_t.Target());
+	ObjectFunc(origin, E103_t->Target());
 	origin(obj);
+}
+
+
+void init_E100Series() {
+	E103_t = new Trampoline ((int)E103_Main, (int)E103_Main + 0x7, E103Enemy_Main_R);
+	E104_t = new Trampoline ((int)E104_Main, (int)E104_Main + 0x7, E104Enemy_Main_R);
 }

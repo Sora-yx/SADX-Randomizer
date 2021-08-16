@@ -31,6 +31,7 @@ void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperF
 	Zero_Init(helperFunctions);
 	PerfectChaos_Init();
 	E101_Init(helperFunctions);
+	init_E100Series();
 
 	LevelFeaturesInit();
 	LayoutFunctionInit(); //Set and Cam file

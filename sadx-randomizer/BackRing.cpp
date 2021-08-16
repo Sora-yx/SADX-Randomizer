@@ -199,7 +199,7 @@ void BackRingObj_Main(ObjectMaster* obj) {
 //Replace the capsule according to the character and the mission.
 void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
-	if (CurrentStageVersion == GammaVersion && CurrentStageVersion < Mission2_100Rings)
+	if (CurrentStageVersion == GammaVersion && CurrentMission < Mission2_100Rings)
 	{
 		if (CurrentAct == 2 && (CurrentLevel == LevelIDs_FinalEgg || CurrentLevel == LevelIDs_HotShelter)) {
 			return;
@@ -507,6 +507,7 @@ void __cdecl CheckFETrigger_r(ObjectMaster* a1) {
 
 
 void OTarget_R(ObjectMaster* obj) { //Sonic Doll Final Egg
+
 
 	if (CurrentMission < Mission2_100Rings) {
 		ObjectFunc(origin, OTarget_T->Target());

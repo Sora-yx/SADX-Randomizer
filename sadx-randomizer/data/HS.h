@@ -1,5 +1,6 @@
 #pragma once
 
+void E105Enemy_Main_R(ObjectMaster* obj);
 
 //Object
 
@@ -292,7 +293,7 @@ ObjectListEntry HotShelter3ObjectList_list[] = {
 	{ 2, 3, 1, 1000000, 0, (ObjectFuncPtr)0x59BB40, "O CONNECTION" } /* "O CONNECTION" */,
 	{ 6, 3, 0, 0, 0, (ObjectFuncPtr)0x5A4D70, "O CARGOSTART" } /* "O CARGOSTART" */,
 	{ 6, 3, 0, 0, 0, (ObjectFuncPtr)0x5A4D70, "O CARGOSTART" } /* "O CARGOSTART" */,
-	{ 2, 2, 0, 0, 0, (ObjectFuncPtr)0x5A4990, "E E105" } /* "E E105" */,
+	{ 2, 2, 0, 0, 0, E105Enemy_Main_R, "E E105" } /* "E E105" */,
 	{ 2, 3, 1, 160000, 0, (ObjectFuncPtr)0x4FA320, "O FROG " } /* "O FROG " */,
 	{ LoadObj_Data1, 3, 1, 1000000.0f, 0, MysticMelody_Main, "O KNUDAI" }, //Mystic Melody
 	{ LoadObj_Data1, 3, 0, 0, 0, PlatformMM_Main, "O KDASIBA" }

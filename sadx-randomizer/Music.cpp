@@ -215,8 +215,8 @@ void __cdecl StartupMusic_Init(const char* path, const HelperFunctions& helperFu
 		WriteCall((void*)0x51b94a, RandomMusic); //hook playmusic (Hub World part 1)
 		WriteCall((void*)0x62ec81, RandomMusic); //hook playmusic (Hub World, bosses part 2)
 
-		WriteCall((void*)0x441dd8, RandomMusic); //hook speed shoes sound
-		WriteCall((void*)0x4d6daf, RandomMusic); //hook invincibility music
+		/**WriteCall((void*)0x441dd8, RandomMusic); //hook speed shoes sound
+		WriteCall((void*)0x4d6daf, RandomMusic); //hook invincibility music*/
 
 		WriteCall((void*)0x59a4ba, RandomMusic); //hook hot shelter music.
 		WriteCall((void*)0x59a215, RandomMusic); //hook hot shelter music part 2.
