@@ -238,6 +238,8 @@ uint8_t getRandomCharacter() {
 
 void Characters_Init() {
 
+
+
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
@@ -251,13 +253,13 @@ void Characters_Init() {
 		PhysicsArray[Characters_Big].MaxAccel = 5;
 	}
 
-	//Hook several Knuckles killplane check (Hot Shelter, Red Mountain, Sky Deck...) This fix a weird black screen with Knuckles for some reason.
+	//Remove several Knuckles killplane check, This fix a weird black screen in some specific stages.
 	WriteData<5>((void*)0x478937, 0x90);
 	WriteData<5>((void*)0x478AFC, 0x90);
 	WriteData<5>((void*)0x47B395, 0x90);
 	WriteData<5>((void*)0x47B423, 0x90);
 
-	WriteData<7>((int*)0x4879c, 0x90);
+	WriteData<7>((int*)0x4879c7, 0x90); //remove amy victory pose animation, we will manually call it to fix wrong animation.
 
 
 	WriteCall((void*)0x470127, BigWeightHook); //force Big Weight Record to 2000g

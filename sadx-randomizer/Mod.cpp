@@ -137,6 +137,7 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{		
+
 		//Display Current Randomized Settings Information on Character Select Screen.
 		DisplayRandoInformation();
 		Sounds_OnFrame();
@@ -149,7 +150,6 @@ extern "C" {
 
 		if (RNGStages && (GameState == 21 || GameState == 24 || GameState == 17))
 			CustomFlagCheck(); //When loading, Check flag and credits*/
-
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
