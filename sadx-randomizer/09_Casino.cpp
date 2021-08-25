@@ -132,7 +132,7 @@ void Casino_Layout() {
 	if (CurrentAct == 1)
 		CurrentStageVersion = TailsVersion;
 
-	if (CurrentMission == Mission3_LostChao && CurrentStageVersion != TailsVersion || CurrentStageVersion == KnucklesVersion)
+	if (CurrentMission == Mission3_LostChao && CurrentStageVersion == SonicVersion)
 	{
 		CurrentMission = SADX_Mission;
 	}
@@ -193,6 +193,7 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x5dd08d, FixRaceResult);
 
 	WriteCall((void*)0x5C0812, Fix_PlayerPositionInPinball);
+	WriteCall((void*)0x5C0E77, Fix_PlayerPositionInPinball);
 
 	CasinoObjects_Init(path, helperFunctions);
 

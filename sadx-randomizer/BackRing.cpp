@@ -215,7 +215,6 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 			a1->MainSub = Balloon_Main;
 			Balloon_Main(a1);
 			return;
-			break;
 		case Characters_Big:
 			if (CurrentLevel != LevelIDs_SkyDeck)
 			{
