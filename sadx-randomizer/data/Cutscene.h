@@ -52,11 +52,12 @@ struct CutsceneLevelData
 	char scene_select;
 };
 
+
+void Init_RandomCutscene();
+extern uint8_t cutsceneAllowedCount;
+
 DataPointer(DemoData, FirstDemo, 0x913AE0);
-DataArray(DemoData, DemosArray, 0x913AE0, 6);
 DataArray(LandTable*, LandTableArray, 0x97DBE8, 193);
 DataPointer(AdventureData_*, CurrentAdventureData_, 0x3B0EF4C);
 DataPointer(SceneSelectData_*, CurrentSceneSelectData, 0x03B18A08);
 DataArray(AdventureData, Stories, 0x3B183A8, 8);
-void Init_RandomCutscene();
-extern bool isCutsceneAllowed;

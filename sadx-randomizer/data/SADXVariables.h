@@ -1,5 +1,6 @@
 #pragma once
 
+
 DataPointer(char, TCQuit, 0x3c5d518);
 
 DataPointer(char, KnuxCheck, 0x3c52c04);

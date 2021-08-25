@@ -25,7 +25,6 @@ ObjectFuncPtr charfuncs[] = {
 };
 
 
-
 ObjectMaster* LoadCharObj(int i)
 {
 	//setup AI correctly
@@ -246,6 +245,12 @@ void FixAISFXSonic3() {
 }
 
 void FixAISFXSonic4() {
+
+	if (EntityData1Ptrs[1]) {
+		if (EntityData1Ptrs[1]->CharID == Characters_Sonic)
+			return;
+	}
+
 	if (isAIActive && !Race)
 	{
 		if (CurCharacter() == Characters_Sonic && isAIActive)
@@ -503,9 +508,6 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 	sub_43FA90(a1, a2, a3);
 }
 
-CollisionInfo* oldcol = nullptr;
-CollisionInfo* oldcol2 = nullptr;
-
 extern ObjectMaster* CurrentCart;
 
 void Player_VoiceSwap() {
@@ -586,7 +588,7 @@ void AI_Manager(ObjectMaster* obj) {
 	ObjectMaster* player2 = GetCharacterObject(1);
 
 
-	if (P1Action > 21 || P1Action == 4)
+	if (P1Action > 21 || P1Action < 1 || P1Action == 3 || P1Action == 4)
 		return;
 
 	switch (data->Action) {
@@ -600,6 +602,9 @@ void AI_Manager(ObjectMaster* obj) {
 			CheckThingButThenDeleteObject(obj);
 			return;
 		}
+
+		if (co2->Upgrades & Upgrades_SuperSonic || P1Action > 21)
+			return;
 
 		if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150) {
 			AISwapCount++; //Credit stat
@@ -625,6 +630,7 @@ void AI_Manager(ObjectMaster* obj) {
 		P1Data->CharID = CharaSwap;
 		P1Data->Action = 0;
 		Collision_Free(player1);
+		P1Data->Status = 0;
 		player1->MainSub(player1);
 
 		CharObj2Ptrs[0]->Powerups = powerups;
@@ -646,6 +652,7 @@ void AI_Manager(ObjectMaster* obj) {
 			player2->MainSub = charfuncs[AISwap];
 			player2->Data1->CharID = (char)AISwap;
 			player2->Data1->Action = 0;
+			P2Data->Status = 0;
 			Collision_Free(player2);
 
 			player2->MainSub(player2);
@@ -658,7 +665,6 @@ void AI_Manager(ObjectMaster* obj) {
 		}
 		break;
 	}
-
 
 	return;
 }
@@ -724,41 +730,6 @@ void AI_ResetValue() {
 	return FUN_0042ce20();
 }
 
-void AI_FixesOnFrames() {
-
-	if (!IsGamePaused() && oldcol)
-	{
-		if (HIBYTE(oldcol->flag) & 0x80)
-		{
-			if (oldcol->CollisionArray)
-			{
-				FreeMemory(oldcol->CollisionArray);
-				oldcol->CollisionArray = nullptr;
-			}
-		}
-		FreeMemory(oldcol);
-		oldcol = nullptr;
-	}
-}
-
-int __cdecl SetSonicWinPose_i()
-{
-	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
-		return 75;
-	else
-		return 47;
-}
-
-const int loc_4961DD = 0x4961DD;
-__declspec(naked) void SetSonicWinPose()
-{
-	__asm
-	{
-		call SetSonicWinPose_i
-		mov word ptr[esi + 124h], ax
-		jmp loc_4961DD
-	}
-}
 
 int __cdecl SetKnucklesWinPose_i()
 {
@@ -785,7 +756,6 @@ void AISwapOnFrames() {
 	if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
 		SwapDelay++;
 }
-
 
 
 int prev_AI = -1;
@@ -835,7 +805,7 @@ void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* conf
 		WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
 		WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
 		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
-		WriteJump((void*)0x4961D4, SetSonicWinPose);
+		//WriteJump((void*)0x4961D4, SetSonicWinPose);
 		WriteJump((void*)0x476B59, SetKnucklesWinPose);
 	}
 

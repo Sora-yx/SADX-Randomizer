@@ -220,14 +220,11 @@ void SA2VoicesCheck();
 
 void LoadZero();
 void Set_ZeroChase();
-void AI_FixesOnFrames();
 void FixAISFXGamma();
 void FixAISFXGamma2();
 void FixAISFXGamma3();
 void FixAISFXGamma4();
 
-void FixGammaBounce();
-void FixGammaHitBounce();
 void TwinkleCircuitResult();
 void HedgehogHammerResult();
 

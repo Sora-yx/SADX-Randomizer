@@ -16,6 +16,8 @@ __int16 CurCharacter() {
 	ObjectMaster* P1 = GetCharacterObject(0);
 	if (P1 != nullptr)
 		return P1->Data1->CharID;
+
+	return 0;
 }
 
 
@@ -80,6 +82,12 @@ void ForcePlayerToWhistle() {
 	EntityData2* ed2 = EntityData2Ptrs[0];
 	CharObj2* co2 = CharObj2Ptrs[0];
 
+	if (!ed1)
+		return;
+
+	if (ed1->Action < 1)
+		return;
+
 	int curLevel = CurrentLevel;
 	CurrentLevel = LevelIDs_SSGarden;
 	PerformWhistle(ed1, ed2, co2, id);
@@ -134,14 +142,6 @@ void FlashScreen(ObjectMaster* obj) {
 
 		ScreenFade_DrawColor();
 	}
-}
-
-bool isHeroesMod() {
-	HMODULE HeroesMod = GetModuleHandle(L"sadx-heroes-mod");
-	if (HeroesMod)
-		return true;
-
-	return false;
 }
 
 bool isSA2Mod() {
@@ -375,6 +375,7 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 
 			if (j > 0) {
 				EntityData1Ptrs[j]->Position.x += 5;
+				EntityData1Ptrs[j]->Position.z += 5;
 			}
 		}
 	}

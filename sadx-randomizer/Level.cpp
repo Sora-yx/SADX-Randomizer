@@ -122,8 +122,6 @@ void LevelOnFrames() {
 	if (!CharObj2Ptrs[0])
 		return;
 
-	AI_FixesOnFrames();
-	//AISwapOnFrames();
 	Chao_OnFrame();
 	CheckAndDisplayWarningLayoutError();
 	Hud_DisplayOnframe();

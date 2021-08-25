@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-bool isCutsceneAllowed = false;
+uint8_t cutsceneAllowedCount = 0;
 Trampoline* LoadMRNPC_t = nullptr;
 Trampoline* StartCutscene_t;
 
@@ -15,7 +15,6 @@ int EventNightTime[6] = {
 int EventEveningTime[4] = {
 	17, 35, 64, 66
 };
-
 
 
 //Fix Event flag for cutscenes 
@@ -97,9 +96,11 @@ void set_event_flags(long cutsceneID)
 	}
 }
 
+
+
 //Event list Credits: PKR and ItsEasyActually
 
-CutsceneLevelData CutsceneList[130] = {
+CutsceneLevelData CutsceneList[] = {
 	//Sonic events
 	{ 0x001, 26, 3, 0, 0 }, //Sonic Intro
 	{ 0x003, 26, 4, 0, 1 }, //Sonic sees Tails crash
@@ -114,14 +115,12 @@ CutsceneLevelData CutsceneList[130] = {
 	{ 0x012, 26, 1, 0, 6 }, //Amy finds Sonic
 	{ 0x013, 26, 3, 0, 7 }, //Amy and Sonic go to Twinkle Park
 	{ 0x014, 26, 5, 0, 8 }, //Sonic goes looking for Amy
-	{ 0x015, 26, 1, 0, 9 }, //Sonic finds Zero and Amy
 	{ 0x016, 33, 0, 0, 9 }, //Zero transported to the Egg Carrier
 	{ 0x01A, 29, 2, 0, 10 }, //Eggman takes Birdie's Emerald
 	{ 0x01B, 29, 2, 0, 10 }, //Sonic goes to put Eggman out of commission
 	{ 0x01E, 33, 2, 0, 12 }, //Sonic prepares to enter Lost World
 	{ 0x022, 34, 2, 0, 13 }, //Sonic listens to Tikal in the Past
 	{ 0x023, 33, 2, 0, 14 }, //Sonic sees Eggman heading to his base
-	{ 0x026, 33, 0, 0, 1 }, //Sonic's Outro
 	{ 0x028, 33, 0, 0, 5 }, //Sonic vs. Knuckles
 	{ 0x029, 29, 0, 0, 10 }, //Tornado 2 lands on the Egg Carrier
 	{ 0x02A, 26, 1, 0, 4 }, //Sonic and Tails awaken after being gassed
@@ -146,7 +145,6 @@ CutsceneLevelData CutsceneList[130] = {
 	{ 0x04E, 26, 3, 2, 10 }, //Tails follows Eggman after the missile
 	{ 0x050, 26, 1, 2, 11 }, //Tails takes on the Egg Walker
 	{ 0x051, 26, 1, 2, 11 }, //Egg Walker defeated, Station Square saved
-	{ 0x052, 33, 0, 2, 0 }, //Tails Outro
 	{ 0x054, 29, 1, 2, 8 }, //Gonna land on the Egg Carrier
 	{ 0x056, 26, 1, 2, 3 }, //Tails and Sonic awake after being gassed
 	//Amy events
@@ -216,7 +214,6 @@ CutsceneLevelData CutsceneList[130] = {
 	{ 0x0DC, 34, 1, 7, 5 }, //Tikal talks to Big
 	{ 0x0DD, 32, 1, 7, 5 }, //Big returns and is ready to leave the Egg Carrier
 	{ 0x0E0, 29, 0, 7, 6 }, //Big finds the Tornado 2 and leaves
-	{ 0x0E2, 33, 2, 7, 7 }, //Big Outro
 	//Last Story
 	{ 0x0F2, 33, 2, 0, 1 }, //Eggman heading to the Mystic Ruins base
 	{ 0x0F3, 33, 1, 0, 1 }, //Knuckles at the Master Emerald
@@ -243,7 +240,6 @@ CutsceneLevelData CutsceneList[130] = {
 	//Additional Last Story events
 	{ 0x160, 34, 2, 0, 1 }, //The Echidna tribe faces Chaos
 };
-
 
 
 void EV_GetCharObj_r(int player) { //SADX Doesn't give you control back after outro cutscene, but we need it for rando progression.
@@ -295,7 +291,7 @@ int preventHotShelterCutscene(int a1) {
 
 void LoadMRNPC_r() {
 	if (RNGStages && RNGCutscene) {
-		if (isCutsceneAllowed || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
+		if (cutsceneAllowedCount >= 2 || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
 			return;
 	}
 
@@ -319,7 +315,7 @@ void StartCutscene_r(int flag) {
 
 
 bool CheckAndPlayRandomCutscene() {
-	if (isCutsceneAllowed && RNGCutscene)
+	if (cutsceneAllowedCount >= 2 && RNGCutscene)
 	{
 		MetalSonicFlag = 0;
 		SonicRand = 0;
@@ -357,7 +353,7 @@ void CutsceneManager(ObjectMaster* obj) {
 	{
 	case 0:
 		PlayRandomCutscene(randomizedSets[levelCount].cutsceneID);
-		isCutsceneAllowed = false;
+		cutsceneAllowedCount = 0;
 		data->Action = 1;
 		break;
 	case 1:
@@ -367,7 +363,7 @@ void CutsceneManager(ObjectMaster* obj) {
 
 		DisableController(0);
 		PauseEnabled = 0;
-		if (++data->Index == 5) {
+		if (++data->Index == 6) {
 			LastStoryFlag = 0;
 			j_SetNextLevelAndAct_CutsceneMode(1, 0);
 			CheckThingButThenDeleteObject(obj);
@@ -391,9 +387,9 @@ void PlayRandomCutscene_OnFrames() {
 		if (!IsIngame() || !RNGCutscene || !RNGStages)
 			return;
 
-		if (isCutsceneAllowed) {
+		if (cutsceneAllowedCount >= 2) {
 			ObjectMaster* cutscene = LoadObject((LoadObj)2, 1, CutsceneManager);
-			isCutsceneAllowed = false;
+			cutsceneAllowedCount = 0;
 		}
 	}
 
@@ -413,9 +409,6 @@ void getRandomCutscene(RandomizedEntry* entry) {
 	return;
 }
 
-
-
-
 void Init_RandomCutscene() {
 
 	if (!RNGStages)
@@ -434,7 +427,7 @@ void Init_RandomCutscene() {
 		WriteCall((void*)0x685392, EV2_r); //Knux outro		
 		WriteCall((void*)0x4315f7, EV_GetCharObj_r); //Knux outro
 		WriteCall((void*)0x697880, EV_GetCharObj_r); //Amy Outro				
-		WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
-		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro
+		/**WriteCall((void*)0x6ceef2, EV_GetCharObj_r); //Sonic Outro			
+		WriteCall((void*)0x6af9f0, EV_GetCharObj_r); //Tails Outro*/
 	}
 }

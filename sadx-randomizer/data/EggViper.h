@@ -6,7 +6,6 @@ StartPosition EV_StartPositions[]{
 
 DataPointer(char, EggViperHP, 0x3c6e164);
 VoidFunc(FUN057ef90, 0x57ef90);
-VoidFunc(EggViperBounceHit, 0x441280);
 
 ObjectFunc(EV_RegularLaser, 0x57f430);
 ObjectFunc(EV_Explosion, 0x583860);

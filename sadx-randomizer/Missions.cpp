@@ -329,6 +329,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 
 			if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 			{
+				TimeThing = 0;
 				CheckAndLoad_CartStopper();
 
 				Flash = nullptr;

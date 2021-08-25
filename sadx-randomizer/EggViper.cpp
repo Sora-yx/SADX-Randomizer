@@ -5,19 +5,13 @@ extern bool Viper;
 
 //fix infinite gamma bounce on Egg Viper.
 
-void FixGammaBounce() {
-	if (CurrentCharacter == Characters_Gamma)
+void FixGammaBounce(unsigned __int8 playerID, float speedX, float speedY, float speedZ) {
+	if (CurrentCharacter >= Characters_Gamma)
 		return;
 
-	EnemyBounceThing(0x0, 0x00, 3.50, 0x0);
+	return EnemyBounceThing(playerID, speedX, speedY, speedZ);
 }
 
-void FixGammaHitBounce() {
-	if (CurrentCharacter == Characters_Gamma)
-		return;
-
-	EggViperBounceHit();
-}
 
 void EggViperHPStuff() {
 
@@ -33,9 +27,9 @@ void __cdecl EggViper_Init(const HelperFunctions& helperFunctions)
 {
 
 	WriteCall((void*)0x584430, FixGammaBounce); //Fix infinite Gamma bounce on Egg Viper Fight.
-	WriteCall((void*)0x580bed, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight.
-	WriteCall((void*)0x580c7e, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 2 lol
-	WriteCall((void*)0x580d2c, FixGammaHitBounce); //Fix Gamma bounce on Egg Viper Fight, part 3 xd (final hit)
+	WriteCall((void*)0x580bed, FixGammaBounce); 
+	WriteCall((void*)0x580c7e, FixGammaBounce); 
+	WriteCall((void*)0x580d2c, FixGammaBounce); 
 
 	if (isKHMod)
 		WriteCall((void*)0x57d756, PlayVoice_Original);
@@ -51,7 +45,7 @@ void __cdecl EggViper_Init(const HelperFunctions& helperFunctions)
 
 
 void FixEggViperCutscene() {
-	if (CurrentCharacter == Characters_Gamma || CurrentCharacter == Characters_Big)
+	if (CurrentCharacter >= Characters_Gamma)
 	{
 		return;
 	}

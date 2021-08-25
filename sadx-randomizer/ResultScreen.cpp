@@ -35,7 +35,7 @@ void CheckAndSet_AmyWinPose() {
 			continue;
 
 		if (CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_HotShelter || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings
-			|| CurrentStageVersion == BigVersion || CurrentStageVersion == TailsVersion) {
+			|| CurrentStageVersion == BigVersion || CurrentStageVersion == TailsVersion && CurrentLevel == LevelIDs_SpeedHighway) {
 
 			CharObj2Ptrs[i]->AnimationThing.Index = 42;
 			SetResultsCamera();
@@ -55,8 +55,10 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
-	if (RNGCutscene && !IsAdventureComplete(SelectedCharacter))
-		isCutsceneAllowed = true;
+	if (RNGCutscene && !IsAdventureComplete(SelectedCharacter)) {
+		if (cutsceneAllowedCount < 2)
+			cutsceneAllowedCount++;
+	}
 
 	if (GameMode == GameModes_Adventure_ActionStg)
 		GameMode = GameModes_Adventure_Field;
@@ -233,6 +235,7 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 			ResultVoiceFix();
 			break;
 		}
+		CheckAndSet_AmyWinPose();
 		sub_457D00();
 		LoadObject(LoadObj_Data1, 5, j_ScoreDisplay_Main);
 		Load_DelayedSound_BGM(MusicIDs_RoundClear);
@@ -249,7 +252,6 @@ void __cdecl LoadLevelResults_r() {
 
 	DisableController(0);
 	PauseEnabled = 0;
-	CheckAndSet_AmyWinPose();
 
 	if (Race && RaceWinnerPlayer == 2 && GameMode < 9)
 	{
@@ -312,6 +314,7 @@ void __cdecl LoadLevelResults_r() {
 			else
 				ResultVoiceFix();
 			Load_DelayedSound_BGM(MusicIDs_RoundClear);
+			CheckAndSet_AmyWinPose();
 		}
 		break;
 	case Characters_Big:

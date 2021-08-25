@@ -243,7 +243,7 @@ void SetRandomStageAct(char stage, char act) {
 			return;
 		}
 
-		isCutsceneAllowed = true;
+		cutsceneAllowedCount = 2;
 	}
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)

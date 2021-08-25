@@ -248,6 +248,10 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, 200)) //Cry Hint
 			Chao_CrySound();
 
+		if (IsPlayerInsideSphere(&a1->Data1->Position, 80)) {
+			SwapDelay = 0;
+		}
+
 		int HitBox = 0;
 
 		if (GetCharacter0ID() >= Characters_Gamma)

@@ -129,6 +129,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		break;
 		case 2:
 		{
+			if (IsPlayerInsideSphere(&data->Position, 80)) {
+				SwapDelay = 0;
+			}
+
 			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_Unknown1))) {
 
 				SwapDelay = 0;
@@ -138,11 +142,13 @@ void MysticMelody_Main(ObjectMaster* obj) {
 
 				if (ControllerPointers[0]->PressedButtons & Buttons_Y)
 				{
+					SwapDelay = 0;
 					DisableControl();
 					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 
-					ForcePlayerToWhistle();
+					if (CharObj2Ptrs[0]->Upgrades & (Upgrades_SuperSonic == 0))
+						ForcePlayerToWhistle();
 
 					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
 					data->Action++;
