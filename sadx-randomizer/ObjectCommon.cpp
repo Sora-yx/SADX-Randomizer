@@ -83,7 +83,7 @@ void TargetableEntity(ObjectMaster* obj)
 }
 
 
-void ObjectCommons_Init() {
+void Objects_Common_Init() {
 
 	Set_BackRing();
 	Set_ZeroChase();

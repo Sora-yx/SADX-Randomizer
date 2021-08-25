@@ -104,6 +104,8 @@ void __cdecl LoadLevelObject_r() {
 	LoadPVM("BACKRING", &GoalRingTextures);
 	CheckAndLoad_TreasureHunting();
 
+	LoadObject(LoadObj_Data1, 0, AI_Manager);
+
 	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
 	original();
 }
@@ -121,7 +123,7 @@ void LevelOnFrames() {
 		return;
 
 	AI_FixesOnFrames();
-	AISwapOnFrames();
+	//AISwapOnFrames();
 	Chao_OnFrame();
 	CheckAndDisplayWarningLayoutError();
 	Hud_DisplayOnframe();

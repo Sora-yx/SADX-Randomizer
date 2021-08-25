@@ -36,7 +36,7 @@ void LoadCharacter_r() {
 	CheckAndLoadRaceOpponent();
 
 	if (isAIAllowed)
-		LoadTails_AI_R();
+		CheckLoadTails_AI_R();
 	else
 		LoadTails_AI_Original();
 

@@ -18,7 +18,8 @@ PVMEntry Hud_Rando = { "hud_rando", &Hud_Rando_TEXLIST };
 enum RandoHudTextures {
 	CmnHudTex_SA2ActionBody,
 	CmnHudTex_SA2ActionButton,
-	CmnHudTex_SA2Action,
+	CmnHudTex_SwapText,
+	CmnHudTex_WhistleText,
 };
 
 enum RandoHudSprites {
@@ -30,8 +31,8 @@ enum RandoHudSprites {
 NJS_TEXANIM	Hud_Rando_TEXANIM[]{
 	{ 40, 30, 0x24, 0xC, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionBody, 0x20 },
 	{ 40, 30, 0x10, 0x10, 0, 0, 0x100, 0x100, CmnHudTex_SA2ActionButton, 0x20 },
-	{ 90, 20, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SA2Action, 0x20 },
-	{ 85, 15, 0x35, 0x8, 0, 0, 0x100, 0x100, 3, 0x20 },
+	{ 90, 20, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_SwapText, 0x20 },
+	{ 90, 20, 0x35, 0x8, 0, 0, 0x100, 0x100, CmnHudTex_WhistleText, 0x20 },
 };
 
 
@@ -75,31 +76,19 @@ void DrawButton(int button) {
 	HUD_Rando_SPRITE.p.x = xpos;
 	HUD_Rando_SPRITE.p.y = ypos;
 
-
 	HUD_Rando_SPRITE.sx = 1 + ActionButtonAlpha;
 	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionBody, -1.501, NJD_SPRITE_ALPHA);
 	HUD_Rando_SPRITE.sx = 1;
 
-	if (button == 2) {
-		HUD_Rando_SPRITE.p.x = xpos + 20;
-		HUD_Rando_SPRITE.p.y = ypos + 5;
-	}
-	else {
-		HUD_Rando_SPRITE.p.x = xpos + ypos;
-		HUD_Rando_SPRITE.p.y = ypos + 5;
-	}
-	
+	HUD_Rando_SPRITE.p.x = xpos + 20;
+	HUD_Rando_SPRITE.p.y = ypos + 5;
+
 
 	njDrawSprite2D_ForcePriority(&HUD_Rando_SPRITE, CmnHudSprite_SA2ActionButton, -1.501, NJD_SPRITE_ALPHA);
 
+	HUD_Rando_SPRITE.p.x = xpos - 13;
+	HUD_Rando_SPRITE.p.y = ypos + 2;
 
-	if (button == 2) {
-		HUD_Rando_SPRITE.p.x = xpos - 13;
-		HUD_Rando_SPRITE.p.y = ypos + 2;
-	}
-	else {
-		HUD_Rando_SPRITE.p.x = xpos - 5;
-	}
 
 
 	if (ActionButtonAlpha >= 1) {
@@ -171,7 +160,7 @@ void Hud_DisplayOnframe() {
 	}
 }
 
-void initHud() {
+void RandoHud_Init() {
 
 	help.RegisterCommonObjectPVM(Hud_Rando);
 }

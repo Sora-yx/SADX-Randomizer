@@ -383,26 +383,14 @@ void Create_NewRNG() {
 }
 
 
-void Randomizer_GetNewRNG() {
-
-	TotalCount = 0;
-	levelCount = 0;
-	segmentCount = 0;
-	DuplicateStages.clear();
-
-	if (!StorySplits) {
-		segmentCount = 40;
-		Create_NewRNG();
-	}
-	else {
-		Split_Init();
-	}
-}
-
-
 
 void Split_Init() { //speedrunner split init. Used when you start the game.
-	std::ofstream myfile("SADX_Randomizer_Splits.lss");
+
+
+	if (!RNGStages)
+		return;
+
+	std::ofstream myfile("SADX_Rando_Splits.lss");
 	//Header
 	myfile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	myfile << "<Run version=\"1.7.0\">\n";
@@ -437,8 +425,6 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 
 	Create_NewRNG();
 
-	if (!RNGStages && StorySplits != 0)
-		return;
 
 	for (uint32_t i = 0; i < TotalCount; i++) { //continue to generate split until we have our specific number.
 
@@ -462,6 +448,24 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 
 	return;
 }
+
+
+void Randomizer_GetNewRNG() {
+
+	TotalCount = 0;
+	levelCount = 0;
+	segmentCount = 0;
+	DuplicateStages.clear();
+
+	if (!StorySplits) {
+		segmentCount = 40;
+		Create_NewRNG();
+	}
+	else {
+		Split_Init();
+	}
+}
+
 
 void RandomizeStages_Init() {
 

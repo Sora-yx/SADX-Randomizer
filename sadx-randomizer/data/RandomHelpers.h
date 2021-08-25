@@ -265,7 +265,6 @@ void __cdecl LoadLevelResults_r();
 void DeleteCreditStats();
 
 void DisableTime_Zero();
-void AISwitch();
 void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
 
@@ -290,6 +289,7 @@ void fixTCCart();
 void FlashScreen(ObjectMaster* obj);
 void Chao_DeleteFiles();
 void AISwapOnFrames();
+void AI_Manager(ObjectMaster* obj);
 void LevelOnFrames();
 
 
@@ -315,6 +315,6 @@ void CheckAndDisplayWarningLayoutError();
 void IncreaseSpeedCharactersPerfectChaos();
 void MissionResultCheck(ObjectMaster* obj);
 void Result_Init();
-void ObjectCommons_Init();
-void InitMissions();
+void Objects_Common_Init();
+void Missions_Init();
 

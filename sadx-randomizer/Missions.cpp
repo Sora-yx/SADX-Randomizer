@@ -390,7 +390,7 @@ void ScaleDebugFont(int scale)
 }
 
 
-void InitMissions() {
+void Missions_Init() {
 
 	Race_Init();
 	Init_TreasureHunting();

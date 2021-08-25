@@ -74,6 +74,7 @@ void ChaoTPTrigger(ObjectMaster* a1) {
 
 	if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, Size))
 	{
+		DisableControl();
 		ChaoObject->Data1->Action = ChaoAction_Hit;
 		a1->Data1->Action++;
 	}

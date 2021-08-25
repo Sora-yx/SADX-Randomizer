@@ -112,6 +112,16 @@ void FixCasinoSoundEffects() {
 	}
 }
 
+void Fix_PlayerPositionInPinball(Uint8 charIndex, float x, float y, float z) {
+
+	if (CurrentCharacter >= Characters_Gamma) {
+		x = 0;
+		y = 192.295;
+		z = 51.5;
+	}
+
+	return PositionPlayer(charIndex, x, y, z);
+}
 
 
 void Casino_Layout() {
@@ -181,6 +191,8 @@ void __cdecl Casino_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x5dd088, FixTailsVictoryCAS);
 
 	WriteCall((void*)0x5dd08d, FixRaceResult);
+
+	WriteCall((void*)0x5C0812, Fix_PlayerPositionInPinball);
 
 	CasinoObjects_Init(path, helperFunctions);
 

@@ -51,16 +51,13 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		//get current mod information
-		HMODULE KHMod = GetModuleHandle(L"sadx-kh-mod");
-
-		if (KHMod)
-			isKHMod = true;
-
-		if (helperFunctions.Version < 7)
+		isKHMod = GetModuleHandle(L"sadx-kh-mod") != NULL;
+	
+		if (helperFunctions.Version < 11)
 		{
 			MessageBox(WindowHandle,
-				L"Please update SADX Mod Loader. Randomizer mod requires API version 7 or newer.",
-				L"Randomizer Error", MB_OK | MB_ICONERROR);
+				L"Error, your version of the mod loader does not support API version 11. Some functionality will not be available.\nPlease exit the game and update the mod loader for the best experience.",
+				L"SADX Randomizer Error: Mod Loader out of date", MB_OK | MB_ICONERROR);
 		}
 
 		help = helperFunctions;
@@ -117,7 +114,6 @@ extern "C" {
 
 		modpath = path;
 
-
 		//Activate all the edited stages, including custom object, to make them beatable, add custom audio and other stuff.
 		StartupLevels_Init(path, helperFunctions);
 		StartupMusic_Init(path, helperFunctions);
@@ -127,9 +123,9 @@ extern "C" {
 		Chao_Init();
 		Characters_Init();	
 		RandomizeStages_Init();
-		ObjectCommons_Init();
-		InitMissions();
-		initHud();
+		Objects_Common_Init();
+		Missions_Init();
+		RandoHud_Init();
 
 		//RNG generator + Create splits.
 		Randomizer_GetNewRNG();
@@ -144,6 +140,7 @@ extern "C" {
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
 
+		//CurrentMission = 3;
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

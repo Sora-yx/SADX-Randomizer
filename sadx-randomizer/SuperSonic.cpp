@@ -58,7 +58,7 @@ int GetSSLevelBanned() {
 	return false;
 }
 
-Trampoline LoadCharTextures_T((int)LoadCharTextures, (int)LoadCharTextures + 0x6, CheckAndLoadSuperSonic_Tex);
+Trampoline* LoadCharTexture_T;
 
 void CheckAndLoadSuperSonic_Tex(int curChara) {
 
@@ -67,7 +67,7 @@ void CheckAndLoadSuperSonic_Tex(int curChara) {
 	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentLevel == LevelIDs_PerfectChaos)
 		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
 
-	FunctionPointer(void, original, (int curChara), LoadCharTextures_T.Target());
+	FunctionPointer(void, original, (int curChara), LoadCharTexture_T->Target());
 	return original(curChara);
 }
 
@@ -123,6 +123,8 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 }
 
 void initSuperSonicSettings() {
+
+	LoadCharTexture_T = new Trampoline((int)LoadCharTextures, (int)LoadCharTextures + 0x6, CheckAndLoadSuperSonic_Tex);
 	//Super Sonic Stuff
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
 

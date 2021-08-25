@@ -4,8 +4,8 @@
 bool isAIActive = false;
 uint8_t SwapDelay = 150;
 int FlagAI = 0;
-int AISwap = 0;
-int CharaSwap = 0;
+int AISwap = -1;
+int CharaSwap = -1;
 extern int AISwapCount;
 int CurrentAI = -1;
 int AIArray[4] = { -1, Characters_Sonic, Characters_Tails, Characters_Amy }; //Ai following you
@@ -24,17 +24,17 @@ ObjectFuncPtr charfuncs[] = {
 	Big_Main
 };
 
-ObjectMaster* CurAI = nullptr;
+
 
 ObjectMaster* LoadCharObj(int i)
 {
 	//setup AI correctly
-
+	ObjectMaster* CurAI = nullptr;
 	CurAI = LoadObject((LoadObj)(LoadObj_UnknownA | LoadObj_Data1 | LoadObj_Data2), 1, charfuncs[CurrentAI]);
 	CurAI->Data1->CharID = CurrentAI;
-	CurAI->Data1->CharIndex = (char)1;
-	EntityData1Ptrs[1] = (EntityData1*)CurAI->Data1;
-	EntityData2Ptrs[1] = (EntityData2*)CurAI->Data2;
+	CurAI->Data1->CharIndex = (char)i;
+	EntityData1Ptrs[i] = (EntityData1*)CurAI->Data1;
+	EntityData2Ptrs[i] = (EntityData2*)CurAI->Data2;
 	return CurAI;
 }
 
@@ -47,6 +47,7 @@ int AI_BannedLevel[16]{
 };
 
 int CheckTailsAI_R(void) { //restriction and bug fixes.
+
 
 	if (CurrentAI < 0 || CurrentCharacter >= Characters_Gamma || CurrentCharacter == Characters_Sonic && MetalSonicFlag != 0 || CurrentCharacter == Characters_Knuckles)
 	{
@@ -125,14 +126,14 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 	return 1;
 }
 
-ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
+void Load2PTails_r() //Custom AI
 {
 	FlagAI = CheckTailsAI_R();
 
 	if (FlagAI != 1)
 	{
 		isAIActive = false;
-		return (ObjectMaster*)0x0;
+		return;
 	}
 	else
 	{
@@ -153,12 +154,12 @@ ObjectMaster* Load2PTails_r(ObjectMaster* player1) //Custom AI
 			v3->Data1->Action = 0;
 			dword_3B2A304 = 0;
 
-			return v3;
+			return;
 		}
 	}
 
 	isAIActive = false;
-	return (ObjectMaster*)0x0;
+	return;
 }
 //}
 
@@ -507,47 +508,9 @@ CollisionInfo* oldcol2 = nullptr;
 
 extern ObjectMaster* CurrentCart;
 
-void AISwitch() {
-
-	//FailSafe to prevent funny crash
-	if (!isAIAllowed || CurrentAI == CurrentCharacter || !EntityData1Ptrs[1] || !isAIActive || SonicRand != 0 || CurrentCharacter > 5 && CurrentAI > 5)
-	{
-		isAIActive = false;
-		return;
-	}
-
-	if (CurrentCart || !CharObj2Ptrs[0] || Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
-		return;
-
-
-	//initialize swap, taking actual character and ai information
-
-	AISwap = GetCharacter0ID();
-	CharaSwap = GetCharacter1ID();
-
-	ObjectMaster* obj = GetCharacterObject(0);
-	char P1Action = obj->Data1->Action;
-	CharObj2* obj2 = ((EntityData2*)obj->Data2)->CharacterData;
-
-
-	if (P1Action > 21)
-		return;
-
-	short powerups = obj2->Powerups;
-	short jumptime = obj2->JumpTime;
-	short underwatertime = obj2->UnderwaterTime;
-	float loopdist = obj2->LoopDist;
-	NJS_VECTOR speed = obj2->Speed;
-	ObjectMaster* heldobj = obj2->ObjectHeld;
-
-	AISwapCount++; //Credit stat
-	//Display Character swap.
-	obj->DeleteSub(obj);
-	obj->MainSub = charfuncs[CharaSwap];
-	obj->Data1->CharID = (char)CharaSwap;
-
+void Player_VoiceSwap() {
 	//Play voice switch
-	switch (obj->Data1->CharID)
+	switch (EntityData1Ptrs[0]->CharID)
 	{
 	case Characters_Sonic:
 		if (MetalSonicFlag)
@@ -591,62 +554,109 @@ void AISwitch() {
 			LoadSoundList(63);
 		break;
 	}
+}
 
-	obj->Data1->Action = 0;
-	obj->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-	if (!oldcol)
+
+
+void AI_Manager(ObjectMaster* obj) {
+
+	//FailSafe to prevent funny crash
+	if (!isAIAllowed || !isAIActive || SonicRand != 0 || CurrentCharacter > 5 && CurrentAI > 5)
 	{
-		oldcol = obj->Data1->CollisionInfo;
-		obj->Data1->CollisionInfo = nullptr;
+		isAIActive = false;
+		return;
 	}
-	else
-		Collision_Free(obj);
 
-	obj->MainSub(obj);
-	obj2 = ((EntityData2*)obj->Data2)->CharacterData;
-	obj2->Powerups = powerups;
-	obj2->JumpTime = jumptime;
-	obj2->UnderwaterTime = underwatertime;
-	obj2->LoopDist = loopdist;
-	obj2->Speed = speed;
-	obj2->ObjectHeld = heldobj;
+	if (CurrentCart || !TimeThing || GameState != 15 || !CharObj2Ptrs[0] || Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+		return;
 
-	//initialize swap, taking AI information
-	ObjectMaster* AI = GetCharacterObject(1);
-	CharObj2* AI2 = ((EntityData2*)obj->Data2)->CharacterData;
+	AISwapOnFrames();
 
-	if (AI != nullptr && AI2 != nullptr)
-	{
-		short AIpowerups = AI2->Powerups;
-		short AIjumptime = AI2->JumpTime;
-		short AIunderwatertime = AI2->UnderwaterTime;
-		float AIloopdist = AI2->LoopDist;
-		NJS_VECTOR AIspeed = AI2->Speed;
-		ObjectMaster* AIheldobj = AI2->ObjectHeld;
-		//Display AI swap.
-		AI->MainSub = charfuncs[AISwap];
-		AI->Data1->CharID = (char)AISwap;
-		AI->Data1->Action = 0;
-		AI->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-		if (!oldcol2)
-		{
-			oldcol2 = AI->Data1->CollisionInfo;
-			AI->Data1->CollisionInfo = nullptr;
+	//initialize swap, taking actual character and ai information
+
+	CharaSwap = GetCharacter1ID();
+
+	char P1Action = EntityData1Ptrs[0]->Action;
+	CharObj2* co2 = CharObj2Ptrs[0];
+	CharObj2* co2P2 = CharObj2Ptrs[1];
+	EntityData1* P1Data = EntityData1Ptrs[0];
+	EntityData1* P2Data = EntityData1Ptrs[1];
+	EntityData1* data = obj->Data1;
+	ObjectMaster* player1 = GetCharacterObject(0);
+	ObjectMaster* player2 = GetCharacterObject(1);
+
+
+	if (P1Action > 21 || P1Action == 4)
+		return;
+
+	switch (data->Action) {
+	case 0:
+		data->InvulnerableTime = 0;
+		data->Index = 0;
+		data->Action++;
+		break;
+	case 1:
+		if (!player1 || !player2) {
+			CheckThingButThenDeleteObject(obj);
+			return;
 		}
-		else
-			Collision_Free(AI);
-		AI->MainSub(AI);
-		AI2 = ((EntityData2*)AI->Data2)->CharacterData;
-		AI2->Powerups = powerups;
-		AI2->JumpTime = jumptime;
-		AI2->UnderwaterTime = underwatertime;
-		AI2->LoopDist = loopdist;
-		AI2->Speed = speed;
-		AI2->ObjectHeld = heldobj;
 
+		if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150) {
+			AISwapCount++; //Credit stat
 
+			P1Data->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+			player2->Data1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 
+			AISwap = GetCharacter0ID();
+			data->Action++;
+		}
+		break;
+	case 2:
+	{
+		short powerups = co2->Powerups;
+		short jumptime = co2->JumpTime;
+		short underwatertime = co2->UnderwaterTime;
+		float loopdist = co2->LoopDist;
+		NJS_VECTOR speed = co2->Speed;
+
+		CheckThingButThenDeleteObject(player1);
+		player1->Data1->CollisionInfo = nullptr;
+		player1->MainSub = charfuncs[CharaSwap];
+		P1Data->CharID = CharaSwap;
+		P1Data->Action = 0;
+		Collision_Free(player1);
+		player1->MainSub(player1);
+
+		CharObj2Ptrs[0]->Powerups = powerups;
+		CharObj2Ptrs[0]->JumpTime = jumptime;
+		CharObj2Ptrs[0]->UnderwaterTime = underwatertime;
+		CharObj2Ptrs[0]->LoopDist = loopdist;
+		CharObj2Ptrs[0]->Speed = speed;
 		SwapDelay = 0;
+		data->Action++;
+	}
+		break;
+	case 3:
+		if (++data->Index == 5) {
+
+			Player_VoiceSwap();
+
+			CheckThingButThenDeleteObject(player2);
+			player2->Data1->CollisionInfo = nullptr;
+			player2->MainSub = charfuncs[AISwap];
+			player2->Data1->CharID = (char)AISwap;
+			player2->Data1->Action = 0;
+			Collision_Free(player2);
+
+			player2->MainSub(player2);
+			data->Action++;
+		}
+		break;
+	case 4:
+		if (++data->InvulnerableTime == 5) {
+			data->Action = 0;
+		}
+		break;
 	}
 
 
@@ -655,16 +665,12 @@ void AISwitch() {
 
 //Load AI
 
-void LoadTails_AI_R() {
+void CheckLoadTails_AI_R() {
 	if (CreditCheck != true)
 	{
 		if (!Race && CurrentStageVersion != TailsVersion && isAIAllowed)
 		{
-			ObjectMaster* obj;
-			obj = GetCharacterObject(0);
-			ObjectMaster* lastobj = obj;
-			ObjectMaster* o2 = nullptr;
-			o2 = Load2PTails_r(obj);
+			Load2PTails_r();		
 		}
 	}
 
@@ -713,7 +719,8 @@ void AIAudioFixes() {
 //Reset value when AI is deleted
 void AI_ResetValue() {
 	isAIActive = false;
-	DeleteObject_(CurAI);
+	AISwap = -1;
+	CharaSwap = -1;
 	return FUN_0042ce20();
 }
 
@@ -777,9 +784,6 @@ __declspec(naked) void SetKnucklesWinPose()
 void AISwapOnFrames() {
 	if (SwapDelay != 150 && TimeThing == 1 && ControlEnabled)
 		SwapDelay++;
-
-	if (TimeThing == 1 && ControllerPointers[0]->PressedButtons & Buttons_Y && ControlEnabled && SwapDelay >= 150)
-		AISwitch();
 }
 
 

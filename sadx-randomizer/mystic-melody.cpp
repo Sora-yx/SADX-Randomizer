@@ -48,24 +48,14 @@ bool Check_TikalMessageDisplay() {
 
 	switch (CurrentLevel)
 	{
-	case LevelIDs_SpeedHighway:
-		return true;
-		break;
-	case LevelIDs_FinalEgg:
-		if (CurrentAct == 2 && CurrentStageVersion == SonicVersion)
-			return true;
-		break;
-	case LevelIDs_HotShelter:
+	case LevelIDs_EmeraldCoast:
 		if (CurrentAct == 2)
-			return true;
-		break;
-	case LevelIDs_RedMountain:
-		return true;
+			return false;
 		break;
 	}
 
 
-	return false;
+	return true;
 }
 
 bool Check_ObjectMysticMelody() {
@@ -93,14 +83,6 @@ bool Check_ObjectMysticMelody() {
 	return false;
 }
 
-void MysticMelody_Delete(ObjectMaster* obj) {
-
-	DynCol_Delete(obj);
-
-	if (MysticMelody != nullptr)
-		MysticMelody = nullptr;
-
-}
 
 void MysticMelody_Display(ObjectMaster* obj) {
 	if (!MissedFrames) {
@@ -148,6 +130,8 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		case 2:
 		{
 			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_Unknown1))) {
+
+				SwapDelay = 0;
 
 				if (!isAIActive)
 					Hud_ShowActionButton();
@@ -227,5 +211,4 @@ void LoadMysticMelody_Models() {
 		MysticMelody = LoadBasicModel("MysticMelody");
 		MMPlatform = LoadBasicModel("MM-Platform");
 	}
-
 }
