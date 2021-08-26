@@ -641,7 +641,7 @@ void AI_Manager(ObjectMaster* obj) {
 		SwapDelay = 0;
 		data->Action++;
 	}
-		break;
+	break;
 	case 3:
 		if (++data->Index == 5) {
 
@@ -676,7 +676,7 @@ void CheckLoadTails_AI_R() {
 	{
 		if (!Race && CurrentStageVersion != TailsVersion && isAIAllowed)
 		{
-			Load2PTails_r();		
+			Load2PTails_r();
 		}
 	}
 
@@ -731,25 +731,6 @@ void AI_ResetValue() {
 }
 
 
-int __cdecl SetKnucklesWinPose_i()
-{
-	if (CurrentCharacter != Characters_Amy || (CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel != LevelIDs_SandHill))
-		return 39;
-	else
-		return 84;
-}
-
-const int loc_476B62 = 0x476B62;
-__declspec(naked) void SetKnucklesWinPose()
-{
-	__asm
-	{
-		call SetKnucklesWinPose_i
-		mov word ptr[edi + 124h], ax
-		jmp loc_476B62
-	}
-}
-
 
 //AI Swap
 void AISwapOnFrames() {
@@ -784,29 +765,26 @@ void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* conf
 
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 
-	if (isAIAllowed)
-	{
-		WriteCall((void*)0x47ed8e, CheckTailsAI_R);
-		WriteCall((void*)0x47e943, CheckTailsAI_R);
-		WriteCall((void*)0x47ea46, CheckTailsAI_R);
-		WriteCall((void*)0x47ec62, CheckTailsAI_R);
-		WriteJump((void*)0x47db1a, AI_ResetValue);
-		AIAudioFixes();
+	if (!isAIAllowed)
+		return;
 
-		//This stuff is needed to fix all the issues with Character and AI Swap 
-		WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
-		WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
-		WriteCall((void*)0x4D682F, GetCharacter0ID); // ''
-		WriteCall((void*)0x4D69AF, GetCharacter0ID); // ''
-		WriteCall((void*)0x425E62, GetCharacter0ID); // fix life icon
-		WriteCall((void*)0x4D677C, GetCharacter0ID); // fix item boxes for Gamma
-		WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
-		WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
-		WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
-		WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
-		WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
-		//WriteJump((void*)0x4961D4, SetSonicWinPose);
-		WriteJump((void*)0x476B59, SetKnucklesWinPose);
-	}
+	WriteCall((void*)0x47ed8e, CheckTailsAI_R);
+	WriteCall((void*)0x47e943, CheckTailsAI_R);
+	WriteCall((void*)0x47ea46, CheckTailsAI_R);
+	WriteCall((void*)0x47ec62, CheckTailsAI_R);
+	WriteJump((void*)0x47db1a, AI_ResetValue);
+	AIAudioFixes();
 
+	//This stuff is needed to fix all the issues with Character and AI Swap 
+	WriteCall((void*)0x4BFFEF, GetCharacter0ID); // fix 1up icon
+	WriteCall((void*)0x4C02F3, GetCharacter0ID); // ''
+	WriteCall((void*)0x4D682F, GetCharacter0ID); // ''
+	WriteCall((void*)0x4D69AF, GetCharacter0ID); // ''
+	WriteCall((void*)0x425E62, GetCharacter0ID); // fix life icon
+	WriteCall((void*)0x4D677C, GetCharacter0ID); // fix item boxes for Gamma
+	WriteCall((void*)0x4D6786, GetCharacter0ID); // fix item boxes for Big
+	WriteCall((void*)0x4D6790, GetCharacter0ID); // fix item boxes for Sonic
+	WriteCall((void*)0x4C06D9, GetCharacter0ID); // fix floating item boxes for Gamma
+	WriteCall((void*)0x4C06E3, GetCharacter0ID); // fix floating item boxes for Big
+	WriteCall((void*)0x4C06ED, GetCharacter0ID); // fix floating item boxes for Sonic
 }

@@ -337,6 +337,8 @@ void MissionResultCheck(ObjectMaster* obj) {
 				if (co2->Speed.x > 1.5f)
 					co2->Speed.x = 1.5;
 				p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+				co2->Powerups |= Powerups_Invincibility;
+				p1->CollisionInfo->colli_range /= 2;
 				data->Action++;
 			}
 		}

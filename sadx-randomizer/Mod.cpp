@@ -140,8 +140,6 @@ extern "C" {
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
 
-		CurrentAI = 0;
-
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

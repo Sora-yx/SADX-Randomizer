@@ -51,18 +51,11 @@ int GetCurrentChaoStage_r() {
 void Chao_LoadFiles() {
 	float height = -10000000;
 	WriteData((float*)0x73C24C, height);
+	WriteData<1>((int*)0x7206b5, ChaoType_Hero_Normal);
 
-	if (!pvploaded) {
-		al_confirmload_load();
-		pvploaded = LoadChaoPVPs();
-	}
-
+	ChaoMain_Constructor();
+	al_confirmload_load();
 	ChaoManager_Load();
-	LoadChaoTexlist("AL_BODY", &ChaoTexLists[0], 0);
-	LoadChaoTexlist("AL_ICON", &ChaoTexLists[3], 0);
-	LoadChaoTexlist("AL_EYE", &ChaoTexLists[2], 0);
-	LoadChaoTexlist("AL_MOUTH", &ChaoTexLists[5], 0);
-	LoadChaoTexlist("AL_TEX_COMMON", &ChaoTexLists[1], 1u);
 }
 
 void ChaoTPTrigger(ObjectMaster* a1) {
@@ -181,23 +174,28 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 }
 
 void ChaoObj_Delete(ObjectMaster* a1) {
-	if (a1->Child != nullptr)
-	{
-		if (a1->Child) {
-			CheckThingButThenDeleteObject(a1->Child);
-			a1->Child = nullptr;
-		}
 
-		if (a1->Data1->LoopData) {
-			delete a1->Data1->LoopData;
-			a1->Data1->LoopData = nullptr;
-		}
+	if (CurrentChao) {
+		CheckThingButThenDeleteObject(CurrentChao);
+		CurrentChao = nullptr;
 	}
+
+	if (a1->Data1->LoopData) {
+		delete a1->Data1->LoopData;
+		a1->Data1->LoopData = nullptr;
+	}
+
 
 	Chao_DeleteFiles();
 }
 
+void ChaoObj_display(ObjectMaster* a1) {
 
+}
+
+
+
+ObjectFunc(Chao_FaceInit, 0x737430);
 void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 	EntityData1* data = a1->Data1;
@@ -213,31 +211,36 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 		a1->DisplaySub = a1->MainSub;
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
-		data->Action++; 
+		data->Action++;
 	}
 	break;
 	case ChaoAction_LoadChao:
 	{
-		ChaoData* chaodata = new ChaoData();
-		NJS_VECTOR v = a1->Data1->Position;
 
-		//Load the chao
-		a1->Data1->LoopData = (Loop*)chaodata;
-		a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
-		CurrentChao = a1->Child;
-		a1->Child->Data1->Rotation.y = Yrot;
+		Sint8 randomModel = rand() % 26;
+		ChaoData* chaodata = new ChaoData();
+
+		if (randomModel < 2)
+			randomModel = 2;
+
+		CurrentChao = CreateChao(chaodata, 0, 0, &data->Position, 0);
+		CurrentChao->Data1->Rotation.y = Yrot;
+		data->LoopData = (Loop*)chaodata;
 
 		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
 			LoadObject(LoadObj_Data1, 2, LoadChaoTPTrigger);
+
+		ResetChao(CurrentChao, (ChaoType)randomModel);
+
 		data->Action++;
 	}
 	break;
 	case ChaoAction_CheckHit:
 	{
 		if (GameState == 15) {
-			if (++a1->Data1->InvulnerableTime == 80) {	//Loop Cry Animation
-				Chao_SetBehavior(a1->Child, (long*)Chao_Cry(a1->Child));
-				a1->Data1->InvulnerableTime = 0;
+			if (++data->InvulnerableTime == 80) {	//Loop Cry Animation
+				Chao_SetBehavior(CurrentChao, (long*)Chao_Cry(CurrentChao));
+				data->InvulnerableTime = 0;
 			}
 		}
 
@@ -255,9 +258,9 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		int HitBox = 0;
 
 		if (GetCharacter0ID() >= Characters_Gamma)
-			HitBox = 20;
+			HitBox = 22;
 		else
-			HitBox = 9;
+			HitBox = 11;
 
 		if (TimeThing != 0 && IsPlayerInsideSphere(&a1->Data1->Position, HitBox))
 		{
@@ -269,9 +272,9 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	case ChaoAction_Hit:
 	{
 		StopMusic();
-		Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
+		Chao_SetBehavior(CurrentChao, (long*)Chao_Pleasure(CurrentChao)); //Move to Happy animation
 		LoadObject(LoadObj_Data1, 1, MissionLostChaoResult);
-		a1->Data1->InvulnerableTime = 0;
+		data->InvulnerableTime = 0;
 		data->Action++;
 	}
 	break;
@@ -285,7 +288,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		if (GameState == 15) {
 
 			if (++a1->Data1->InvulnerableTime == 120) {
-				Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child));
+				Chao_SetBehavior(CurrentChao, (long*)Chao_Pleasure(CurrentChao));
 				a1->Data1->InvulnerableTime = 0;
 				return;
 			}
@@ -293,6 +296,9 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	}
 	break;
 	}
+
+
+	//RunObjectChildren(a1);
 }
 
 
