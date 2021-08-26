@@ -7,6 +7,9 @@ ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
 ObjectMaster* chaoHint;
 
+Trampoline* Chao_Gravity_t;
+Trampoline* Chao_Movements_t;
+
 short ChaoCryDelay = 0;
 static bool pvploaded = false;
 bool ChaoSpawn = false;
@@ -39,19 +42,11 @@ void __cdecl ChaoGameplayCheck() {
 	}
 }
 
-//This is where all the stuff to load "Lost Chao" mission is managed, Thanks to Kell for making a big part of the code here.
-int GetCurrentChaoStage_r() {
-	if (ChaoObject)
-		return 5;
-	else
-		return CurrentChaoStage;
-}
 
 //Load Chao files
 void Chao_LoadFiles() {
 	float height = -10000000;
 	WriteData((float*)0x73C24C, height);
-	WriteData<1>((int*)0x7206b5, ChaoType_Hero_Normal);
 
 	ChaoMain_Constructor();
 	al_confirmload_load();
@@ -185,17 +180,30 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 		a1->Data1->LoopData = nullptr;
 	}
 
-
 	Chao_DeleteFiles();
 }
 
-void ChaoObj_display(ObjectMaster* a1) {
+bool isLoaded = false;
+void RandomSpawnChao() {
 
+	if (!isLoaded) {
+		Chao_LoadFiles();
+		isLoaded = true;
+	}
+
+	ChaoData* chaodata = new ChaoData();
+	CurrentChao = CreateChao(chaodata, 0, 0, &EntityData1Ptrs[0]->Position, 0);
+	CurrentChao->Data1->Rotation.y = Yrot;
+
+	Sint8 randomModel = rand() % 26;
+
+	if (randomModel < 2)
+		randomModel = 2;
+
+	Change_ChaoType(CurrentChao, randomModel);
 }
 
 
-
-ObjectFunc(Chao_FaceInit, 0x737430);
 void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 	EntityData1* data = a1->Data1;
@@ -209,32 +217,41 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 		Chao_LoadFiles();
 
-		a1->DisplaySub = a1->MainSub;
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		data->Action++;
 	}
 	break;
 	case ChaoAction_LoadChao:
 	{
-
-		Sint8 randomModel = rand() % 26;
 		ChaoData* chaodata = new ChaoData();
-
-		if (randomModel < 2)
-			randomModel = 2;
-
 		CurrentChao = CreateChao(chaodata, 0, 0, &data->Position, 0);
 		CurrentChao->Data1->Rotation.y = Yrot;
-		data->LoopData = (Loop*)chaodata;
 
 		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
 			LoadObject(LoadObj_Data1, 2, LoadChaoTPTrigger);
 
-		ResetChao(CurrentChao, (ChaoType)randomModel);
-
 		data->Action++;
+
 	}
 	break;
+	case ChaoAction_RandomizeChao:
+		if (++data->Index == 100) {
+			uint8_t isCharChao = rand() % 2;
+			Sint8 randomModel = rand() % 26;
+
+			if (isCharChao) {
+				randomModel = 23 + rand() % 2;
+			}
+
+			if (randomModel < 2)
+				randomModel = 2;
+
+			Change_ChaoType(CurrentChao, randomModel);
+			data->LoopData = (Loop*)CurrentChao->Data1;
+			data->Action++;
+
+		}
+		break;
 	case ChaoAction_CheckHit:
 	{
 		if (GameState == 15) {
@@ -287,39 +304,17 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	{
 		if (GameState == 15) {
 
-			if (++a1->Data1->InvulnerableTime == 120) {
+			if (++data->InvulnerableTime == 120) {
 				Chao_SetBehavior(CurrentChao, (long*)Chao_Pleasure(CurrentChao));
-				a1->Data1->InvulnerableTime = 0;
+				data->InvulnerableTime = 0;
 				return;
 			}
 		}
 	}
 	break;
 	}
-
-
-	//RunObjectChildren(a1);
 }
 
-
-void Chao_Gravity_r(ObjectMaster* obj);
-Trampoline Chao_Gravity_t(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
-void Chao_Gravity_r(ObjectMaster* obj) {
-	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing && DoesChaoNeedGravity(CurrentLevel)) {
-		ObjectFunc(original, Chao_Gravity_t.Target());
-		original(obj);
-	}
-}
-
-
-void Chao_Movements_r(ObjectMaster* obj);
-Trampoline Chao_Movements_t(0x71EFB0, 0x71EFB9, Chao_Movements_r);
-void Chao_Movements_r(ObjectMaster* obj) {
-	if (CurrentLevel >= LevelIDs_SSGarden) {
-		ObjectFunc(original, Chao_Movements_t.Target());
-		original(obj);
-	}
-}
 
 bool DoesChaoNeedGravity(_int16 CurLevel) {
 
@@ -356,13 +351,23 @@ bool DoesChaoNeedGravity(_int16 CurLevel) {
 	return true;
 }
 
-void Chao_Init() {
-	ChaoGameplayCheck();
 
-	//Trick the game into thinking we're in a specific chao garden
-	//Needed to change the water height
-	WriteJump((void*)0x715140, GetCurrentChaoStage_r);
+void Chao_Gravity_r(ObjectMaster* obj) {
+	if (CurrentLevel >= LevelIDs_SSGarden || !TimeThing && DoesChaoNeedGravity(CurrentLevel)) {
+		ObjectFunc(original, Chao_Gravity_t->Target());
+		original(obj);
+	}
 }
+
+
+void Chao_Movements_r(ObjectMaster* obj) {
+	if (CurrentLevel >= LevelIDs_SSGarden) {
+		ObjectFunc(original, Chao_Movements_t->Target());
+		original(obj);
+	}
+}
+
+
 
 void Chao_CrySound() {
 	short cry = -1;
@@ -458,3 +463,11 @@ void Chao_OnFrame() {
 	return;
 }
 
+void Chao_Init() {
+
+	ChaoGameplayCheck();
+
+	Chao_Gravity_t = new Trampoline(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
+	Chao_Movements_t = new Trampoline(0x71EFB0, 0x71EFB9, Chao_Movements_r);
+	return;
+}

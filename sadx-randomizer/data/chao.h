@@ -91,6 +91,7 @@ SetLevelPosition PlayerAroundChaoPosition[]{
 enum ChaoActions {
 	ChaoAction_Init,
 	ChaoAction_LoadChao,
+	ChaoAction_RandomizeChao,
 	ChaoAction_CheckHit,
 	ChaoAction_Hit,
 	ChaoAction_Transition,
@@ -98,11 +99,11 @@ enum ChaoActions {
 	Action_ItemBox,
 };
 
+FunctionPointer(int, Change_ChaoType, (ObjectMaster* Chao, int type), 0x7420C0);
+
 void ChaoObj_Delete(ObjectMaster* a1);
 void __cdecl ChaoGameplayCheck();
 bool DoesChaoNeedGravity(_int16 CurLevel);
 void Chao_LoadFiles();
-
 extern bool TPAmyVersion;
-
 void Chao_LoadFiles();

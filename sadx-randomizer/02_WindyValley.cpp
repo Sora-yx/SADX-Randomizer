@@ -31,7 +31,10 @@ void WindyValley_Layout() {
 
 	if (CurrentMission == Mission3_LostChao && (CurrentStageVersion == TailsVersion || CurrentStageVersion == GammaVersion))
 	{
-		CurrentMission = Mission2_100Rings;
+		if (SA2M2)
+			CurrentMission = Mission2_100Rings;
+		else
+			CurrentMission = SADX_Mission;
 	}
 
 	if (CurrentStageVersion != GammaVersion && CurrentStageVersion != TailsVersion)

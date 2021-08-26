@@ -45,8 +45,11 @@ short randomSA2Mission(short stage_id) {
 		//SA2 missions 100 Rings, Lost Chao 
 		cur_mission = rand() % 4;
 
-	} while (prev_mission == cur_mission || cur_mission == 1 || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3);
+	} while (prev_mission == cur_mission || !SA2M2 && cur_mission == 2 || !SA2M3 && cur_mission == 3);
 
+	if (cur_mission == 1) {
+		cur_mission = SADX_Mission;
+	}
 	prev_mission = cur_mission;
 	return cur_mission;
 }
