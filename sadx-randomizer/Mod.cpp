@@ -140,6 +140,10 @@ extern "C" {
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
 
+		/*/if (Controllers[0].PressedButtons & Buttons_Y) {
+			PositionPlayer(0, -62.6514, 3221.24, -3117.87);
+		}*/
+
 
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();

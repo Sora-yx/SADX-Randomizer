@@ -170,14 +170,13 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 
 void ChaoObj_Delete(ObjectMaster* a1) {
 
-	if (CurrentChao) {
-		CheckThingButThenDeleteObject(CurrentChao);
-		CurrentChao = nullptr;
-	}
+	if (a1->Child != nullptr)
+	{
+		if (a1->Child) {
+			CheckThingButThenDeleteObject(a1->Child);
+			a1->Child = nullptr;
+		}
 
-	if (a1->Data1->LoopData) {
-		delete a1->Data1->LoopData;
-		a1->Data1->LoopData = nullptr;
 	}
 
 	Chao_DeleteFiles();
@@ -203,6 +202,13 @@ void RandomSpawnChao() {
 	Change_ChaoType(CurrentChao, randomModel);
 }
 
+void Load_ItemBoxOneLife(ObjectMaster* a1) {
+	SETObjData* life = new SETObjData();
+	a1->SETData.SETData = life;
+	a1->MainSub = ItemBox_Main;
+	a1->DisplaySub = ItemBox_Display;
+	a1->Data1->Scale.x = 6;
+}
 
 void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
@@ -215,8 +221,14 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		if (!CurrentLandTable)
 			return;
 
+		if (CurrentMission != Mission3_LostChao) {
+			Load_ItemBoxOneLife(a1);
+			return;
+		}
+
 		Chao_LoadFiles();
 
+		a1->DisplaySub = a1->MainSub;
 		a1->DeleteSub = ChaoObj_Delete; //When you quit a level
 		data->Action++;
 	}
@@ -224,11 +236,13 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	case ChaoAction_LoadChao:
 	{
 		ChaoData* chaodata = new ChaoData();
-		CurrentChao = CreateChao(chaodata, 0, 0, &data->Position, 0);
-		CurrentChao->Data1->Rotation.y = Yrot;
+		a1->Child = CreateChao(chaodata, 0, a1->Child, &a1->Data1->Position, 0);
+		CurrentChao = a1->Child;
+		a1->Child->Data1->Rotation.y = Yrot;
 
 		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 2)
 			LoadObject(LoadObj_Data1, 2, LoadChaoTPTrigger);
+
 
 		data->Action++;
 
@@ -246,8 +260,9 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 			if (randomModel < 2)
 				randomModel = 2;
 
-			Change_ChaoType(CurrentChao, randomModel);
-			data->LoopData = (Loop*)CurrentChao->Data1;
+
+			Change_ChaoType(a1->Child, randomModel);
+
 			data->Action++;
 
 		}
@@ -256,7 +271,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	{
 		if (GameState == 15) {
 			if (++data->InvulnerableTime == 80) {	//Loop Cry Animation
-				Chao_SetBehavior(CurrentChao, (long*)Chao_Cry(CurrentChao));
+				Chao_SetBehavior(a1->Child, (long*)Chao_Cry(a1->Child));
 				data->InvulnerableTime = 0;
 			}
 		}
@@ -289,7 +304,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 	case ChaoAction_Hit:
 	{
 		StopMusic();
-		Chao_SetBehavior(CurrentChao, (long*)Chao_Pleasure(CurrentChao)); //Move to Happy animation
+		Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child)); //Move to Happy animation
 		LoadObject(LoadObj_Data1, 1, MissionLostChaoResult);
 		data->InvulnerableTime = 0;
 		data->Action++;
@@ -305,7 +320,7 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		if (GameState == 15) {
 
 			if (++data->InvulnerableTime == 120) {
-				Chao_SetBehavior(CurrentChao, (long*)Chao_Pleasure(CurrentChao));
+				Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child));
 				data->InvulnerableTime = 0;
 				return;
 			}
@@ -438,7 +453,7 @@ bool SetAndGetLostChaoPosition() {
 
 void Chao_OnFrame() {
 
-	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission != Mission3_LostChao)
+	if (CurrentLevel >= LevelIDs_Chaos0)
 		return;
 
 	if (ChaoCryDelay > 0)
@@ -453,6 +468,7 @@ void Chao_OnFrame() {
 	else
 	{
 		if (ChaoSpawnAllowed && !ChaoObject && GameState == 15 && CurrentLevel < 15) {
+
 			ChaoObject = LoadObject((LoadObj)(LoadObj_Data1), 1, ChaoObj_Main);
 			ChaoObject->Data1->Position = pos;
 			ChaoObject->Data1->Rotation.y = Yrot;
