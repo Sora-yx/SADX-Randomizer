@@ -237,9 +237,6 @@ uint8_t getRandomCharacter() {
 }
 
 void Characters_Init() {
-
-
-
 	WriteCall((void*)0x415a25, LoadCharacter_r); //Hook Load Character
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.

@@ -337,8 +337,9 @@ void MissionResultCheck(ObjectMaster* obj) {
 
 				Flash = nullptr;
 				ForcePlayerAction(0, 24);
-				if (co2->Speed.x > 1.5f)
-					co2->Speed.x = 1.5;
+				if (co2->Speed.x >= 1.0f)
+					co2->Speed.x = 0.5f;
+				co2->Speed.y = 0.0f;
 				p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 				co2->Powerups |= Powerups_Invincibility;
 				p1->CollisionInfo->colli_range /= 2;
@@ -354,6 +355,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		break;
 	case 2:
 		StopMusic();
+		DisableControl();
 		DisableController(0);
 		PauseEnabled = 0;
 		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
