@@ -10,7 +10,9 @@ short ConvertLevelActsIDtoLevel(short level);
 short ConvertLevelActsIDtoAct(short act);
 void CheckAndAddColLandTable();
 void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot);
-
+void CutsceneAllowedCount_Check();
+void ChaoGardenWarp_Check();
+extern uint8_t chaoWarpAllowedCount;
 
 enum colorMSG {
 	redColor = 0xFFFF0000,

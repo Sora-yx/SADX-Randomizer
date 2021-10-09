@@ -3,10 +3,12 @@
 
 void EC_Layout() {
 
-	//CurrentStageVersion = GammaVersion;
+
 	//CurrentMission = 2;
 
 	//CurrentMission = 3;
+
+
 
 	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;

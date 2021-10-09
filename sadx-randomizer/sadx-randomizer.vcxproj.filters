@@ -40,9 +40,6 @@
     <Filter Include="Source Files\missions">
       <UniqueIdentifier>{81dff92d-3805-435f-a314-769f7efcf790}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Result">
-      <UniqueIdentifier>{6fb9e218-0af3-420f-8f19-337e1df8045c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\missions">
       <UniqueIdentifier>{4f2056fb-7791-4b1d-8915-8a9acdc56ec5}</UniqueIdentifier>
     </Filter>
@@ -177,9 +174,6 @@
     <ClCompile Include="TreasureHunting.cpp">
       <Filter>Source Files\missions</Filter>
     </ClCompile>
-    <ClCompile Include="ResultScreen.cpp">
-      <Filter>Source Files\Result</Filter>
-    </ClCompile>
     <ClCompile Include="Race.cpp">
       <Filter>Source Files\missions</Filter>
     </ClCompile>
@@ -206,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Chao.cpp">
       <Filter>Source Files\missions</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScreen.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

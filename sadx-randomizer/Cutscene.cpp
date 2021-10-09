@@ -16,6 +16,13 @@ int EventEveningTime[4] = {
 	17, 35, 64, 66
 };
 
+//play a random cutscene every 2 levels/bosses.
+void CutsceneAllowedCount_Check() {
+	if (RNGCutscene && !IsAdventureComplete(SelectedCharacter)) {
+		if (cutsceneAllowedCount < 2)
+			cutsceneAllowedCount++;
+	}
+}
 
 //Fix Event flag for cutscenes 
 

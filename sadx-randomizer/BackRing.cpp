@@ -201,7 +201,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 
 	if (CurrentStageVersion == GammaVersion && CurrentMission < Mission2_100Rings)
 	{
-		if (CurrentAct == 2 && (CurrentLevel == LevelIDs_FinalEgg || CurrentLevel == LevelIDs_HotShelter)) {
+		if (CurrentAct == 2 && (CurrentLevel == LevelIDs_FinalEgg || (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma))) {
 			return;
 		}
 	}

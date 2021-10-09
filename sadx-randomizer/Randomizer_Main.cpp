@@ -248,7 +248,12 @@ void SetRandomStageAct(char stage, char act) {
 
 	if (GameMode != 8 && GameMode != 10 && GameMode != 11 && GameMode < 21)
 	{
-
+		if (chaoWarpAllowedCount >= 2 && isChaoGameplayAllowed) {
+			SetLevelAndAct(LevelIDs_SSGarden, 0);
+			chaoWarpAllowedCount = 0;
+			return;
+		}
+		
 		bool isCutscene = CheckAndPlayRandomCutscene();
 		if (!isCutscene)
 			SetInfoNextRandomStage(stage, act);

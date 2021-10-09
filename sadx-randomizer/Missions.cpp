@@ -209,7 +209,7 @@ void LoadStageMissionImage_r() {
 		if (CurrentMission == Mission3_LostChao) //Lost Chao
 			CurrentMissionCard = LostChaoCard;
 
-
+		
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
 		LoadPVM("Missions", &StageMissionTexlist);

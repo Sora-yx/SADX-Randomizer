@@ -6,6 +6,7 @@
 ObjectMaster* ChaoObject;
 ObjectMaster* CurrentChao;
 ObjectMaster* chaoHint;
+uint8_t chaoWarpAllowedCount = 0;
 
 Trampoline* Chao_Gravity_t;
 Trampoline* Chao_Movements_t;
@@ -17,6 +18,7 @@ bool ChaoSpawn = false;
 NJS_VECTOR pos;
 float Yrot;
 bool ChaoSpawnAllowed = false;
+
 
 void __cdecl ChaoGameplayCheck() {
 
@@ -40,6 +42,16 @@ void __cdecl ChaoGameplayCheck() {
 	{
 		MessageBoxA(WindowHandle, "Couldn't find Chao Gameplay Mod, make sure the mod is checked and installed.", "SADX Randomizer Error", MB_ICONERROR);
 	}
+}
+
+//Teleport to chao garden every 3 levels/bosses.
+void ChaoGardenWarp_Check() {
+	if (!isChaoGameplayAllowed)
+		return;
+
+	if (chaoWarpAllowedCount < 3)
+		chaoWarpAllowedCount++;
+
 }
 
 

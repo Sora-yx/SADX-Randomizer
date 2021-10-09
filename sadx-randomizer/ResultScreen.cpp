@@ -55,10 +55,8 @@ void DisableTimeStuff() {
 
 	TimeThing = 0;
 
-	if (RNGCutscene && !IsAdventureComplete(SelectedCharacter)) {
-		if (cutsceneAllowedCount < 2)
-			cutsceneAllowedCount++;
-	}
+	CutsceneAllowedCount_Check();
+	ChaoGardenWarp_Check();
 
 	if (GameMode == GameModes_Adventure_ActionStg)
 		GameMode = GameModes_Adventure_Field;
