@@ -35,7 +35,7 @@ void CheckAndSet_AmyWinPose() {
 			continue;
 
 		if (CurrentStageVersion == GammaVersion && CurrentLevel != LevelIDs_HotShelter || CurrentLevel >= LevelIDs_Chaos0 || CurrentMission >= Mission2_100Rings
-			|| CurrentStageVersion == BigVersion || CurrentStageVersion == TailsVersion && CurrentLevel == LevelIDs_SpeedHighway) {
+			|| CurrentStageVersion == BigVersion || CurrentStageVersion == TailsVersion && CurrentLevel == LevelIDs_SpeedHighway || CurrentStageVersion == KnucklesVersion) {
 
 			CharObj2Ptrs[i]->AnimationThing.Index = 42;
 			SetResultsCamera();

@@ -60,7 +60,7 @@ int __cdecl CheckDynamiteBroken_r(int DynNumber)
 			break;
 		}
 
-		if (DynNumber == data->Scale.x)
+		if (DynNumber == (unsigned __int64)data->Scale.x)
 		{
 			if ((data->Status & 0x100) == 0)
 			{
@@ -70,7 +70,7 @@ int __cdecl CheckDynamiteBroken_r(int DynNumber)
 			++v4;
 		}
 		++v1;
-	} while (v1 < dynamite_num);
+	} while (v1 < (unsigned __int8)dynamite_num);
 	if (v4)
 	{
 		result = 1;

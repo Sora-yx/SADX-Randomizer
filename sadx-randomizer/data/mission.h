@@ -1,8 +1,9 @@
 #pragma once
 
 
-SetLevelPosition M2_PlayerEndPosition[51]{ //Used for M2 and Bosses
+SetLevelPosition M2_PlayerEndPosition[]{ //Used for M2 and Bosses
 
+	{ GammaVersion, LevelAndActIDs_EmeraldCoast1, { 3954.57, 9.5, 365.366 }, 0x6000},
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast1, { 3954.57, 9.5, 365.366 }, 0x6000},
 	{ SonicVersion, LevelAndActIDs_EmeraldCoast2, { 5825.86, 2, -2641.14 }, 0x4000 },
 	{ BigVersion, LevelAndActIDs_EmeraldCoast3, { 6119.79, 402, 921.151 }, 0 },

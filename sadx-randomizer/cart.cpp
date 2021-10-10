@@ -22,21 +22,21 @@ void Delete_Cart_r(ObjectMaster* obj)
 		FlagAutoPilotCart = 0;
 
 		if (cartSETEntry) {
-			FreeMemory(obj->SETData.SETData->SETEntry);
+			auto set = obj->SETData.SETData->SETEntry;
+			delete(set);
 			obj->SETData.SETData->SETEntry = nullptr;
 		}
 
 		cartSETEntry = nullptr;
 
 		if (cartSETData) {
-			FreeMemory(obj->SETData.SETData);
 			obj->SETData.SETData = nullptr;
 		}
 
 		cartSETData = nullptr;
 
 		if (CurrentCart != nullptr)
-			UpdateSetDataAndDelete(CurrentCart);
+			CheckThingButThenDeleteObject(CurrentCart);
 
 		CurrentCart = nullptr;
 	}
@@ -104,6 +104,9 @@ void Load_Cart_R() {
 
 		if (CurrentCharacter <= Characters_Tails) {
 			return;
+		}
+		else {
+			SetCameraMode_(0);
 		}
 	}
 

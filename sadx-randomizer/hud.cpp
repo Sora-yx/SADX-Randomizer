@@ -149,7 +149,7 @@ void Hud_ShowActionButton() {
 
 
 void Hud_DisplayOnframe() {
-	if (!CharObj2Ptrs[0] || GameState != 15)
+	if (!CharObj2Ptrs[0] || GameState != 15 || EV_MainThread_ptr)
 		return;
 
 	if (isAIActive && isAIAllowed && SwapDelay > 149)
