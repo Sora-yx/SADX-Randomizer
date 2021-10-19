@@ -19,27 +19,14 @@ void Chaos0_Main_R(ObjectMaster* obj) {
 			if (data1->Action == 0)
 			{
 				AllocateObjectData2(chaos, data1);
+				ObjectData2_SetStartPosition(obj->Data1, (ObjectData2*)obj->Data2);
 			}
 		}
-
 
 		if (cwk) {
 
 			if (cwk->bwk.action == 11)
 			{
-				task* tsk2 = GetE102BeamTaskPTR((task*)tsk->mwp[1].work.l);
-				if (tsk)
-				{
-					v15.x = tsk->twp->pos.x;
-					v15.y = tsk->twp->pos.y;
-					v15.z = tsk->twp->pos.z;
-				}
-				else
-				{
-					v15 = { 0.0, 0.0, 0.0 };
-				}
-				//dsPlay_oneshot(155, 0, 0, 0);
-				E102Hit(&v15, -15.0);
 				E102KillCursor((ObjectMaster*)obj);
 			}
 		}

@@ -465,7 +465,7 @@ bool SetAndGetLostChaoPosition() {
 
 void Chao_OnFrame() {
 
-	if (CurrentLevel >= LevelIDs_Chaos0)
+	if (CurrentLevel >= LevelIDs_Chaos0 || CurrentMission != Mission3_LostChao)
 		return;
 
 	if (ChaoCryDelay > 0)
