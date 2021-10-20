@@ -95,6 +95,7 @@ void MysticMelody_Display(ObjectMaster* obj) {
 	}
 }
 
+
 void MysticMelody_Main(ObjectMaster* obj) {
 	if (!ClipSetObject(obj)) {
 		EntityData1* data = obj->Data1;
@@ -119,10 +120,13 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			if (IsPlayerInsideSphere(&obj->Data1->Position, 160)) {
 				data->InvulnerableTime = 0;
 				data->Index = 0;
+
 				if (getChar >= Characters_Gamma)
 					size = 35;
+
 				if (Check_TikalMessageDisplay())
 					DisplayHintText(TikalLostChao_message, 110);
+
 				data->Action++;
 			}
 		}
@@ -151,6 +155,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 						ForcePlayerToWhistle();
 
 					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
+					data->Index = 0;
 					data->Action++;
 				}
 			}
@@ -163,7 +168,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 
 					PositionPlayer(0, 640.168, 150.123, -435.403);
 					PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
-					data->Action = 1;
+					data->Action = 2;
 				}
 				else {
 
@@ -188,7 +193,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			{
 				PlayDelayedCustomSound(CommonSound_MM_Platform, 1, 2);
 				MMPlatformEnabled = true;
-				data->Action = 1;
+				data->Action = 2;
 			}
 			break;
 		case 5:
