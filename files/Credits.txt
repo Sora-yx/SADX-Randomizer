@@ -3,7 +3,7 @@ Thanks to [for helping with]:
 
 Raytwo [Code, optimization]
 
-Kell [Code, SA2 missions and extra stuff]
+Kell [Code, SA2 missions and more]
 
 MainMemory [Code, AI swap and extra stuff]
 
