@@ -41,6 +41,8 @@ void __cdecl ChaoGameplayCheck() {
 	if (!ChaoGameplay && isChaoGameplayAllowed)
 	{
 		MessageBoxA(WindowHandle, "Couldn't find Chao Gameplay Mod, make sure the mod is checked and installed.", "SADX Randomizer Error", MB_ICONERROR);
+		isChaoGameplayAllowed = false;
+		return;
 	}
 }
 
