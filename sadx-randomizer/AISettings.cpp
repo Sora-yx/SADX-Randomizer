@@ -765,6 +765,13 @@ void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* conf
 
 	WriteData<5>((void*)0x415948, 0x90); //remove the original load2PTails in LoadCharacter as we use a custom one.
 
+	WriteData<1>((int*)0x7B52A0, 0x2); //remove Eggman debug mode		
+	WriteData<1>((int*)0x7b5290, 0x2); //remove Eggman debug mode	
+	WriteData<21>((int*)0x7b52a1, 0x90);
+
+	WriteData<1>((int*)0x7b43bc, 0x2); //remove Tikal debug mode
+
+
 	if (!isAIAllowed)
 		return;
 

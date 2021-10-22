@@ -147,20 +147,16 @@ void BackRingObj_Main(ObjectMaster* obj) {
 
 				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2 || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 0 && CurrentStageVersion == GammaVersion)
 				{
-
 					GameMode = GameModes_StartAdventure;
-
 				}
-				if (CurrentLevel == LevelIDs_RedMountain && CurrentStageVersion == GammaVersion)
+				else if (CurrentLevel == LevelIDs_RedMountain && CurrentStageVersion == GammaVersion)
 				{
-					InitializeSoundManager();
-					data->Action = 1;
-					EnablePause();
-					PlayMusic(MusicIDs_RedMountainRedHotSkull);
-					EntityData1Ptrs[0]->Position = { -78, 831, 1919 };
+					CurrentLevel = LevelCopy;
+					CurrentAct = ActCopy;
+					GameState = 21;
 				}
 				else
-				{
+				{		
 					GameMode = GameModes_Adventure_Field;
 					GameState = 0xB;
 				}

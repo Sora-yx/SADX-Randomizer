@@ -2,8 +2,6 @@
 
 ObjectMaster* CurrentCart = nullptr;
 Trampoline* LevelItem_Delete_t;
-SETObjData* cartSETData = nullptr;
-SETEntry* cartSETEntry = nullptr;
 
 int AmyCartImprovement() {
 	if (CurrentCharacter == Characters_Amy) //trick the game to make it think we are playing Sonic.
@@ -17,28 +15,25 @@ void Delete_Cart_r(ObjectMaster* obj)
 
 	ObjectFunc(origin, LevelItem_Delete_t->Target());
 
-	if (obj->MainSub == Cart_Main) {
+	if (CurrentCart) {
 
-		FlagAutoPilotCart = 0;
+		if (obj == CurrentCart) {
 
-		if (cartSETEntry) {
-			auto set = obj->SETData.SETData->SETEntry;
-			delete(set);
-			obj->SETData.SETData->SETEntry = nullptr;
+			FlagAutoPilotCart = 0;
+
+			if (obj->SETData.SETData) {
+
+				if (obj->SETData.SETData->SETEntry)
+					obj->SETData.SETData->SETEntry = nullptr;
+
+				obj->SETData.SETData->SETEntry = nullptr;
+			}
+
+			if (CurrentCart != nullptr)
+				CheckThingButThenDeleteObject(CurrentCart);
+
+			CurrentCart = nullptr;
 		}
-
-		cartSETEntry = nullptr;
-
-		if (cartSETData) {
-			obj->SETData.SETData = nullptr;
-		}
-
-		cartSETData = nullptr;
-
-		if (CurrentCart != nullptr)
-			CheckThingButThenDeleteObject(CurrentCart);
-
-		CurrentCart = nullptr;
 	}
 
 	origin(obj);
@@ -162,8 +157,8 @@ void Load_Cart_R() {
 
 		//SetData is not initialized even if it's in the list, so we need to manually assign the cart to it.
 
-		cartSETData = new SETObjData();
-		CurrentCart->SETData.SETData = cartSETData;
+		SETObjData* cartSETData = new SETObjData();
+		 CurrentCart->SETData.SETData = cartSETData;
 
 
 		//Set the data used in Twinkle Park/Twinkle Circuit (should fixes bug hopefully.)
@@ -173,7 +168,7 @@ void Load_Cart_R() {
 		CurrentCart->SETData.SETData->Distance = 4000100.00;
 
 
-		cartSETEntry = new SETEntry();
+		SETEntry* cartSETEntry = new SETEntry();
 		CurrentCart->SETData.SETData->SETEntry = cartSETEntry;
 
 		CurrentCart->SETData.SETData->SETEntry->ObjectType = 15;
