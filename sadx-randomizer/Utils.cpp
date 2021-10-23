@@ -411,3 +411,40 @@ void CheckAndAddColLandTable() {
 	}
 	return;
 }
+
+//Delete gamma shot on target
+void Remove_TargetCursor(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1;
+
+	if (data) {
+		if (data->Status & Status_Hurt) {
+			E102KillCursor((ObjectMaster*)obj);
+		}
+	}
+}
+
+//Allow gamma to target object
+void Check_AllocateObjectData2(ObjectMaster* obj, EntityData1* data1)
+{
+	if (!obj || !data1)
+		return;
+
+	//if one of the player is gamma, init the target thing
+	for (int i = 0; i < 8; i++) {
+
+		if (!EntityData1Ptrs[i])
+			continue;
+
+		if (EntityData1Ptrs[i]->CharID == Characters_Gamma)
+		{
+			if (!data1->Action)
+			{
+				AllocateObjectData2(obj, data1);
+				ObjectData2_SetStartPosition(obj->Data1, (ObjectData2*)obj->Data2);
+			}
+
+			Remove_TargetCursor(obj);
+		}
+	}
+}

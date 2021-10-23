@@ -16,7 +16,7 @@ int8_t CurrentStageVersion = 0;
 int character[6] = { Characters_Sonic, Characters_Tails, Characters_Knuckles, Characters_Amy, Characters_Gamma, Characters_Big };
 
 //Banned level list, there is few stage impossible to beat, depending on the character.
-int bannedLevelsGamma[7] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos2, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos, LevelIDs_Zero };
+int bannedLevelsGamma[6] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos4, LevelIDs_Chaos6, LevelIDs_EggWalker, LevelIDs_PerfectChaos, LevelIDs_Zero };
 int bannedLevelsBig[2] = { LevelIDs_EggViper, LevelIDs_E101R };
 
 //Initiliaze banned Vanilla stage (if option is enabled)

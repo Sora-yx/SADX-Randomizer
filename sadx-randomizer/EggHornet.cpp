@@ -1,38 +1,22 @@
 #include "stdafx.h"
 #include "data\EggHornet.h"
 
+Trampoline* EggHornet_t;
 
-void EggHornet_LoadWithTarget() {
+void EggHornet_Main_R(ObjectMaster* obj) {
 
-	ObjectMaster* egghornet;
+	EntityData1* data1 = obj->Data1;
+	Check_AllocateObjectData2(obj, data1);
 
-	ObjectMaster* obj = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 2, TargetableEntity);
-	egghornet = LoadObject((LoadObj)(LoadObj_Data1 | LoadObj_Data2), 1, EggHornet_Main);
-	obj->Data1->LoopData = (Loop*)egghornet;
-	obj->Data1->Scale.x = 20;
-
-	if (egghornet != (ObjectMaster*)0x0) {
-		FunctionPointer(void, sub_571B60, (ObjectMaster * obj), 0x571B60);
-		sub_571B60(egghornet);
-		egghornet->MainSub = EggHornet_Main;
-		egghornet->DisplaySub = (ObjectFuncPtr)0x571F20;
-		if (CurrentCharacter != Characters_Gamma) //make the game crash for Gamma lol
-		{
-			egghornet->DeleteSub = (ObjectFuncPtr)0x571fe0;
-		}
-	}
-
-	return;
+	ObjectFunc(origin, EggHornet_t->Target());
+	origin(obj);
 }
 
 
 void __cdecl EggHornet_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	WriteJump((void*)0x572230, EggHornet_LoadWithTarget);
-	WriteData<5>((void*)0x572836, 0x90);
-	WriteData<5>((void*)0x571ffa, 0x90);
-	WriteData<5>((void*)0x571fed, 0x90);
+	EggHornet_t = new Trampoline((int)EggHornet_Main, (int)EggHornet_Main + 0x7, EggHornet_Main_R);
 
 	for (int i = 0; i < 8; i++)
 		helperFunctions.RegisterStartPosition(i, EH_StartPositions[0]);

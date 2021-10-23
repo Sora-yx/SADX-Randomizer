@@ -19,8 +19,6 @@ void Delete_Cart_r(ObjectMaster* obj)
 
 		if (obj == CurrentCart) {
 
-			FlagAutoPilotCart = 0;
-
 			if (obj->SETData.SETData) {
 
 				if (obj->SETData.SETData->SETEntry)
@@ -29,13 +27,12 @@ void Delete_Cart_r(ObjectMaster* obj)
 				obj->SETData.SETData->SETEntry = nullptr;
 			}
 
-			if (CurrentCart != nullptr)
-				CheckThingButThenDeleteObject(CurrentCart);
-
+			CheckThingButThenDeleteObject(CurrentCart);
 			CurrentCart = nullptr;
 		}
 	}
 
+	FlagAutoPilotCart = 0;
 	origin(obj);
 }
 

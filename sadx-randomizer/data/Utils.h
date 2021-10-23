@@ -13,6 +13,7 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot);
 void CutsceneAllowedCount_Check();
 void ChaoGardenWarp_Check();
 extern uint8_t chaoWarpAllowedCount;
+void Check_AllocateObjectData2(ObjectMaster* obj, EntityData1* data1);
 
 enum colorMSG {
 	redColor = 0xFFFF0000,

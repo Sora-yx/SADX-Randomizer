@@ -166,7 +166,6 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3);
 int IsFastSonicAI_R();
 void CheckAndSet_HotShelterLayoutFeatures();
 void TargetableEntity(ObjectMaster* obj);
-void EggHornet_LoadWithTarget();
 
 bool isSA2Mission();
 
