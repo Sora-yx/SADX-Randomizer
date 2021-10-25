@@ -12,7 +12,11 @@ void TwinkleCircuitResult() {
 	else
 		LastStoryFlag = 0;
 
-	//CustomFlag++;
+	if (!IsAdventureComplete(SelectedCharacter))
+		CustomFlag++;
+
+	CustomFlagCheck();
+	Rando_SaveProgression();
 	Rings = 0;
 	GameMode = GameModes_Adventure_Field;
 	GameState = 0x5;

@@ -691,22 +691,20 @@ void CreditsNewList() {
 
 //Credits
 void credits() {
-	DisableControl();
+
 	CurrentMission = 0;
 	CurrentMissionCard = 0;
 	StatsTimer = 3000;
-	WriteSaveFile();
 
 	if (CreditCheck)
 	{
 		CustomFlag = 0;
-		GameMode = GameModes_StartCredits;
-		GameState = 21;
-		Credits_State = 1;
-		Load_SEGALOGO_E();
+		CreditCheck = false;
+		WriteSaveFile();
+		GameState = 14;
+		return;
 	}
 }
-
 
 
 VoidFunc(CreditManagement, 0x6408f0);
@@ -795,8 +793,14 @@ void FinalStatDisplay(ObjectMaster* obj) {
 	return;
 }
 
-void HookStats_Inits() {
 
+void CheckAndPlayCredits() {
+
+	if (!CreditCheck || !IsIngame() || EV_MainThread_ptr || CurrentLevel != LevelIDs_MysticRuins && CurrentAct != 0)
+		return;
+
+	credits();
+	return;
 }
 
 void __cdecl Credits_StartupInit(const char* path, const HelperFunctions& helperFunctions) {

@@ -46,3 +46,4 @@ DataPointer(NJS_VECTOR, stru_3B2C6D0, 0x3B2C6D0);
 DataPointer(char, byte_3B2A2F1, 0x3B2A2F1);
 DataPointer(int, dynamite_num, 0x3C5B4C8);
 DataArray(ObjectMaster*, dynamiteArray, 0x3C5B3B0, 70);
+DataPointer(int, CurrentSaveSlot, 0x3B290D8);

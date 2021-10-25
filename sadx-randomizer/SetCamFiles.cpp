@@ -60,7 +60,7 @@ StringLevelLayout SetCamFileArray[51]{
 
 void __cdecl RandoLoad_SetCamFiles() {
 
-	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++) //FailSafe, if layout doesn't exist, simply let SADX load the stage (vanilla).
+	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++) 
 	{
 		if (CurrentLevel == SetCamFileArray[i].LevelID && CurrentStageVersion == SetCamFileArray[i].version)
 		{

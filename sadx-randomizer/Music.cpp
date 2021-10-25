@@ -159,7 +159,7 @@ void RandomMusic() {
 
 		musicCount++;
 
-		if (musicCount == TotalCount)
+		if (musicCount >= TotalCount)
 		{
 			for (int i = 0; i < 40; i++) { //generate 40 musics.
 				randomizedSets[i].music = getRandomMusic();

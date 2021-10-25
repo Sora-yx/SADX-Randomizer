@@ -64,3 +64,5 @@ FunctionPointer(void, RemovePlayerFromObject, (unsigned __int8 playerID, float s
 VoidFunc(CameraReleasEvent, 0x436140);
 VoidFunc(ResetDynamite, 0x4CBED0);
 FunctionPointer(int, CheckDynamiteBroken, (int dynNumber), 0x4CBE60);
+VoidFunc(DeleteSave, 0x421EC0);
+VoidFunc(sub_40BF30, 0x40BF30);

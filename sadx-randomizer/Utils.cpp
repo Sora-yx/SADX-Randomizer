@@ -448,3 +448,17 @@ void Check_AllocateObjectData2(ObjectMaster* obj, EntityData1* data1)
 		}
 	}
 }
+int checkIfFileExists(const char* filename)
+{
+	FILE* file;
+	errno_t err;
+
+	if ((err = fopen_s(&file, filename, "r")) != 0)
+	{
+		return 0;
+	} 
+	else {
+		fclose(file);
+		return 1;
+	}
+}

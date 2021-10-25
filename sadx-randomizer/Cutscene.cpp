@@ -322,7 +322,7 @@ void StartCutscene_r(int flag) {
 
 
 bool CheckAndPlayRandomCutscene() {
-	if (cutsceneAllowedCount >= 2 && RNGCutscene)
+	if (cutsceneAllowedCount >= 2 && RNGCutscene && !CreditCheck)
 	{
 		MetalSonicFlag = 0;
 		SonicRand = 0;
@@ -351,7 +351,7 @@ void PlayRandomCutscene(long flag) {
 DataPointer(int, CutsceneID, 0x3B2C570);
 
 void CutsceneManager(ObjectMaster* obj) {
-	if (!IsIngame())
+	if (!IsIngame() || CreditCheck)
 		return;
 
 	EntityData1* data = obj->Data1;

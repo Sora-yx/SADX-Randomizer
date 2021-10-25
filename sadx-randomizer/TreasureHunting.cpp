@@ -55,6 +55,7 @@ void TreasureHunting_SetRNG() {
 				Knuckles_SetRNG();
 			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
 		}
+		break;
 	default:
 		Knuckles_SetRNG();
 		break;

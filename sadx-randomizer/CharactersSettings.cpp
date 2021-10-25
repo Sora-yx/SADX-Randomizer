@@ -94,9 +94,14 @@ void fixCharacterSoundAfterReset() {
 
 void CallStuffWhenLevelStart() {
 
+
+	TimeThing = 1; //activate the timer of the stage.
+
+	if (CurrentLevel > LevelIDs_E101R)
+		return;
+
 	ObjectMaster* P1 = GetCharacterObject(0);
 	char CurChara = P1->Data1->CharID;
-	TimeThing = 1; //activate the timer of the stage.
 
 	if (CurChara != Characters_Sonic)
 	{

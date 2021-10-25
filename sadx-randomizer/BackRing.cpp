@@ -236,7 +236,7 @@ void __cdecl CheckLoadCapsule_r(ObjectMaster* a1) {
 		RaceResultCheck(a1);
 
 	//call original function (Capsule.)
-	if (CurrentStageVersion != KnucklesVersion && CurrentMission < Mission2_100Rings) {
+	if (CurrentStageVersion != KnucklesVersion && CurrentMission < Mission2_100Rings || CurrentLevel == LevelIDs_LostWorld && CurrentAct == 2) {
 		ObjectFunc(origin, Capsule_Load_T->Target());
 		origin(a1);
 	}

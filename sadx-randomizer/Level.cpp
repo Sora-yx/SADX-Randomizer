@@ -56,7 +56,6 @@ SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 };
 
 
-
 void MovePlayerToStartPoint_r(EntityData1* data) {
 
 	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;
@@ -111,14 +110,16 @@ void __cdecl LoadLevelObject_r() {
 }
 
 void __cdecl RunLevelDestructor_r(int heap) {
-	if (heap == 0)
+	if (heap == 0) {
 		ResetValueAndObjects(); //Unload rando stuff*/
+	}
 
 	FunctionPointer(void, original, (int heap), RunLevelDestructor_t->Target());
 	return original(heap);
 }
 
 void LevelOnFrames() {
+
 	if (!CharObj2Ptrs[0])
 		return;
 
@@ -128,6 +129,8 @@ void LevelOnFrames() {
 	IncreaseSpeedCharactersPerfectChaos();
 	CheckAndLoadTriggerObject();
 	PlayRandomCutscene_OnFrames();
+	CheckAndPlayCredits();
+	
 }
 
 void LevelFeaturesInit() {

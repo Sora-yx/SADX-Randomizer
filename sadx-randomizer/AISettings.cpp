@@ -37,9 +37,9 @@ ObjectMaster* LoadCharObj(int i)
 	return CurAI;
 }
 
-int AI_BannedLevel[16]{
+int AI_BannedLevel[17]{
 
-	LevelIDs_EmeraldCoast, LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain,
+	LevelIDs_EmeraldCoast, LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_RedMountain, LevelIDs_IceCap,
 	LevelIDs_SkyDeck, LevelIDs_LostWorld, LevelIDs_Casinopolis, LevelIDs_FinalEgg, LevelIDs_Chaos0,
 	LevelIDs_Chaos2, LevelIDs_Chaos6, LevelIDs_PerfectChaos, LevelIDs_EggWalker,
 	LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_E101R
@@ -73,6 +73,12 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 			case LevelIDs_SpeedHighway: //crash
 				if (CurrentAct == 1)
 					return 0;
+				break;
+			case LevelIDs_IceCap:
+				if (CurrentStageVersion == SonicVersion)
+				{
+					return 0;
+				}
 				break;
 			case LevelIDs_FinalEgg: //cutscene issue
 				if (CurrentCharacter == Characters_Amy)

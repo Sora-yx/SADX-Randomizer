@@ -51,9 +51,8 @@ void __cdecl StartupMiscellaneous_Init(const char* path, const HelperFunctions& 
 	//Stats & Value Reset
 	WriteCall((void*)0x42ca4f, SoftReset_R); //Reset value and stuff properly when you Soft Reset and quit.
 	WriteCall((void*)0x416b7a, TrialModeQuit_R); //Reset value and stuff properly when you Quit Trial Mode
-	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
-	WriteCall((void*)0x42af3b, AddCustomFlag);
 
+	init_FlagsProgression();
 	Init_Subtitles();
 	Init_RandomCutscene();
 	Credits_StartupInit(path, helperFunctions);

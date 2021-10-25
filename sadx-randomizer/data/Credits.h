@@ -6,3 +6,4 @@ void FinalStatDisplay(ObjectMaster* obj);
 extern bool CreditCheck;
 extern int StatsTimer;
 void Credits_StatsDelayOnFrames();
+void CheckAndPlayCredits();

@@ -42,8 +42,7 @@ int GetSSLevelBanned() {
 					return true;
 				break;
 			case LevelIDs_IceCap:
-				if (CurrentAct == 2)
-					return true;
+				return true;
 				break;
 			case LevelIDs_HotShelter:
 				if (CurrentAct < 2)

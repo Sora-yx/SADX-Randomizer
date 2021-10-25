@@ -105,6 +105,10 @@ void TwinkleCircuitMusic();
 void RandomizeStages_Init();
 void AddCustomFlag();
 void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions);
+void Rando_SaveProgression();
+void Rando_LoadProgression();
+
+void init_FlagsProgression();
 
 extern bool RNGCharacters;
 extern bool RNGStages;
@@ -261,11 +265,8 @@ void __cdecl LoadLevelResults_r();
 void DeleteCreditStats();
 
 void DisableTime_Zero();
-void HookStats_Inits();
 void SetLevelAndAct_R(); //fix trial mod
 
-
-void LoadTreasureHunting_Textures();
 
 NJS_VECTOR SetPlayerAroundLostChaoPosition();
 

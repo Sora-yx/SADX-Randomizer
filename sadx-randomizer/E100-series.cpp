@@ -7,9 +7,11 @@ void CheckAndHurtE100Bosses(ObjectMaster* obj) {
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
-	if (GetCollidingEntityA(data1) && p1->Status & Status_Attack && p1->CharID != Characters_Gamma && data1->Action > 0)
-	{
-		data1->Status |= Status_Hurt;
+	if (data1->Action > 0 && p1->CharID != Characters_Gamma) {
+		if (GetCollidingEntityA(data1) && (p1->Status & Status_Attack || p1->CharID == Characters_Tails && p1->Action == 20))
+		{
+			data1->Status |= Status_Hurt;
+		}
 	}
 }
 

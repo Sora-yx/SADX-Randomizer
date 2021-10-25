@@ -114,6 +114,9 @@ void PauseMenuFix() {
 
 void LoadStageMissionImage_r() {
 
+	if (GetBackRing)
+		return;
+
 	if (GetLevelType == 0) { //Mission card check here
 
 		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= 42)
@@ -216,7 +219,7 @@ void LoadStageMissionImage_r() {
 		if (CurrentMission == Mission3_LostChao) //Lost Chao
 			CurrentMissionCard = LostChaoCard;
 
-		
+
 		StageMissionTexlist.textures = MissionsText;
 		StageMissionTexlist.nbTexture = LengthOfArray(MissionsText);
 		LoadPVM("Missions", &StageMissionTexlist);
@@ -254,11 +257,16 @@ void StageMissionImage_result() {
 
 int LoadTitleCardTexture_r(int minDispTime) {
 
+	if (CreditCheck || GetBackRing)
+		return 0;
+
 	if (!isRandoLevel() || CurrentLevel > 14) {
+
 		CurrentCardTexturePtr = &CurrentCardTexture;
 		FunctionPointer(int, original, (int minDispTime), LoadTitleCardTexture_t->Target());
 		return original(minDispTime);
 	}
+
 
 	SoundManager_Delete2();
 	dword_03b28114 = 0;
@@ -274,6 +282,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	GetLevelType = 0;
 
 	TitleCardDispTime = 90;
+
 	if (minDispTime)
 		TitleCardDispTime = minDispTime;
 
@@ -332,27 +341,26 @@ void MissionResultCheck(ObjectMaster* obj) {
 	switch (data->Action)
 	{
 	case 0:
-		if ((EntityData1Ptrs[0]->Status & Status_Ground | Status_Unknown1)) {
 
-			if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
-				return;
+		if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
+			return;
 
-			if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
-			{
-				TimeThing = 0;
-				CheckAndLoad_CartStopper();
+		if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+		{
+			TimeThing = 0;
+			CheckAndLoad_CartStopper();
 
-				Flash = nullptr;
-				ForcePlayerAction(0, 24);
-				if (co2->Speed.x >= 1.0f)
-					co2->Speed.x = 0.5f;
-				co2->Speed.y = 0.0f;
-				p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-				co2->Powerups |= Powerups_Invincibility;
-				p1->CollisionInfo->colli_range /= 2;
-				data->Action++;
-			}
+			Flash = nullptr;
+			ForcePlayerAction(0, 24);
+	
+			co2->Speed.x = 0.0f;
+			co2->Speed.y = 0.0f;
+			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+			co2->Powerups |= Powerups_Invincibility;
+			p1->CollisionInfo->colli_range /= 2;
+			data->Action++;
 		}
+
 		break;
 	case 1:
 		if (!Flash && EnableControl)

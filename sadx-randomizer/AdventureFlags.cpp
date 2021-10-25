@@ -1,13 +1,123 @@
 #include "stdafx.h"
 #include <string>
+#include "nlohmann/json.hpp"
+#include <fstream>
+#include <iostream>
 
 
+using json = nlohmann::json;
 using namespace std;
+
+Trampoline* DeleteSave_t;
 int CustomFlag = 0; //Used for progression story and credits
 bool CreditCheck = false;
 extern int musicCount;
 
+void Rando_SaveProgression() {
+
+	const char* saveOK = "Successfully Saved Rando progression on seed %d \n";
+	string savePath = modpath + "\\SAVEDATA\\";
+
+	json j;
+
+	j["levelCount"] = levelCount;
+	j["customFlag"] = CustomFlag;
+	j["cutsceneCount"] = cutsceneAllowedCount;
+	j["seed"] = SeedCopy;
+	j["saveFile"] = CurrentSaveSlot;
+
+	string saveNumber = to_string(CurrentSaveSlot);
+
+	std::ofstream file(savePath + "RandoSave" + saveNumber + ".json");
+	file << j;
+	file.close();
+	PrintDebug(saveOK, SeedCopy);
+	return;
+}
+
+DataPointer(ObjectMaster*, FileSelTp, 0x3C5E8C0);
+
+void Rando_LoadProgression() {
+
+	if (GameState != 21 && GameMode != 12 || !FileSelTp)
+		return;
+
+	const char* loadOK = "Successfully Loaded Rando Save on seed %d \n";
+	const char* loadFailed = "Save doesn't match the current seed, load progression cancelled. \n";
+	string savePath = modpath + "\\SAVEDATA\\";
+
+	string saveNumber = to_string(CurrentSaveSlot);
+	string saveFileFullPath = savePath + "RandoSave" + saveNumber + ".json";
+
+	json j;
+
+	if (checkIfFileExists(saveFileFullPath.c_str()))
+	{
+		std::ifstream file(saveFileFullPath);
+		file >> j;
+		file.close();
+
+		if (SeedCopy == (int64_t)j["seed"]) {
+
+			levelCount = (int64_t)j["levelCount"];
+			CustomFlag = (int64_t)j["customFlag"];
+			cutsceneAllowedCount = (int64_t)j["cutsceneCount"];
+			PrintDebug(loadOK, SeedCopy);
+		}
+		else {
+			PrintDebug(loadFailed, SeedCopy);
+		}
+	}
+	else {
+		levelCount = 0;
+		CustomFlag = 0;
+		cutsceneAllowedCount = 0;
+	}
+
+	return;
+}
+
+void LoadSave_r() {
+
+	j_LoadSave();
+	Rando_LoadProgression();
+}
+
+
+void Rando_DeleteProgression() {
+	if (GameState != 21 && GameMode != 12)
+		return;
+
+	const char* deleteMSG = "Deleted Rando progression. on save: %d \n";
+	string savePath = modpath + "\\SAVEDATA\\";
+
+	string saveNumber = to_string(CurrentSaveSlot);
+	string saveFileFullPath = savePath + "RandoSave" + saveNumber + ".json";
+	LPCSTR delSave = saveFileFullPath.c_str();
+
+	if (checkIfFileExists(saveFileFullPath.c_str()))
+	{
+		if (DeleteFileA(delSave))
+		{
+			CustomFlag = 0;
+			levelCount = 0;
+			PrintDebug(deleteMSG, CurrentSaveSlot);
+		}
+	}
+
+	return;
+}
+
+void DeleteSave_r() {
+
+	Rando_DeleteProgression();
+	auto original = reinterpret_cast<decltype(DeleteSave_r)*>(DeleteSave_t->Target());
+	original();
+}
+
+
 int GetCharaProgression() {
+
 
 	if (!CustomFlag)
 	{
@@ -74,11 +184,13 @@ void DeleteCustomFlag() {
 	return SomethingAboutFlag();
 }
 
-
 void AddCustomFlag() {
-	
+
 	if (!IsAdventureComplete(SelectedCharacter))
 		CustomFlag++;
+
+	CustomFlagCheck();
+	Rando_SaveProgression();
 
 	return StartLevelCutscene(1);
 }
@@ -100,7 +212,7 @@ void CustomFlagCheck() {
 	if (GameMode == 9 || GameMode == 10)
 		return;
 
-	if (SelectedCharacter == CharSonic) 
+	if (SelectedCharacter == CharSonic)
 	{
 		switch (CustomFlag)
 		{
@@ -154,13 +266,12 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
 				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
 				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 
-	if (SelectedCharacter == CharTails) 
+	if (SelectedCharacter == CharTails)
 	{
 		switch (CustomFlag)
 		{
@@ -194,7 +305,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
 			EventFlagArray[EventFlags_TailsAdventureComplete] = true;
 			EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-			credits();
 			break;
 		default:
 			if (CustomFlag >= 7) {
@@ -203,13 +313,12 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
 				EventFlagArray[EventFlags_TailsAdventureComplete] = true;
 				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 
-	
+
 
 	if (SelectedCharacter == CharKnuckles) //Knuckles
 	{
@@ -240,7 +349,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
 			EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-			credits();
 			break;
 		default:
 			if (CustomFlag >= 7) {
@@ -248,9 +356,8 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
 				EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
 				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 	if (SelectedCharacter == CharAmy) //Amy
@@ -273,7 +380,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Amy_ZeroClear] = true;
 			EventFlagArray[EventFlags_AmyAdventureComplete] = true;
 			EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-			credits();
 			break;
 		default:
 			if (CustomFlag >= 5) {
@@ -281,9 +387,8 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Amy_ZeroClear] = true;
 				EventFlagArray[EventFlags_AmyAdventureComplete] = true;
 				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 
@@ -309,7 +414,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
 			EventFlagArray[EventFlags_BigAdventureComplete] = true;
 			EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-			credits();
 			break;
 		default:
 			if (CustomFlag >= 6) {
@@ -317,9 +421,8 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
 				EventFlagArray[EventFlags_BigAdventureComplete] = true;
 				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 
@@ -348,7 +451,6 @@ void CustomFlagCheck() {
 			EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
 			EventFlagArray[EventFlags_GammaAdventureComplete] = true;
 			EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
-			credits();
 			break;
 		default:
 			if (CustomFlag >= 6) {
@@ -356,9 +458,8 @@ void CustomFlagCheck() {
 				EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
 				EventFlagArray[EventFlags_GammaAdventureComplete] = true;
 				EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
-				credits();
 			}
-			break;
+			return;
 		}
 	}
 	if (SelectedCharacter == CharSuperSonic)
@@ -366,9 +467,18 @@ void CustomFlagCheck() {
 		if (CustomFlag >= 1) {
 			CreditCheck = true;
 			EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
-			credits();
 		}
 	}
 
 	return;
+}
+
+void init_FlagsProgression() {
+	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
+	WriteCall((void*)0x42af3b, AddCustomFlag);
+
+	WriteCall((void*)0x503782, LoadSave_r);	
+	WriteCall((void*)0x5037fc, LoadSave_r);	
+	WriteJump((void*)0x5053DD, LoadSave_r);
+	DeleteSave_t = new Trampoline((int)DeleteSave, (int)DeleteSave + 0x6, DeleteSave_r);
 }
