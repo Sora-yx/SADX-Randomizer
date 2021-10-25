@@ -257,8 +257,6 @@ void StageMissionImage_result() {
 
 int LoadTitleCardTexture_r(int minDispTime) {
 
-	if (CreditCheck || GetBackRing)
-		return 0;
 
 	if (!isRandoLevel() || CurrentLevel > 14) {
 
@@ -293,6 +291,10 @@ int LoadTitleCardTexture_r(int minDispTime) {
 }
 
 void DisplayTitleCard_r() {
+
+	if (CreditCheck || GetBackRing) {
+		return;
+	}
 
 	if (!isRandoLevel()) {
 		return DisplayScreenTexture(0x4000000, HorizontalStretch * 320.00000000 + 32.00000000,

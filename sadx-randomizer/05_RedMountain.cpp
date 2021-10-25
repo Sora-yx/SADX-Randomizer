@@ -18,7 +18,7 @@ void RedMountain_Layout() {
 	if (CurrentAct == 1)
 		CurrentStageVersion = GammaVersion;
 
-	if (CurrentStageVersion == KnucklesVersion || CurrentAct == 2)
+	if (CurrentAct == 2)
 	{
 		CurrentStageVersion = KnucklesVersion;
 	}

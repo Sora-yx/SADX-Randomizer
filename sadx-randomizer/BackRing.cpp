@@ -145,11 +145,8 @@ void BackRingObj_Main(ObjectMaster* obj) {
 				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
 					GameState = 0xc;
 
-				if (CurrentLevel == LevelIDs_HotShelter && CurrentAct == 2)
-				{
-					GameMode = GameModes_StartAdventure;
-				}
-				else if (CurrentStageVersion == GammaVersion && (CurrentLevel == LevelIDs_RedMountain || CurrentLevel == LevelIDs_WindyValley && CurrentAct == 0))
+		
+				if (CurrentStageVersion == GammaVersion)
 				{
 					CurrentLevel = LevelCopy;
 					CurrentAct = ActCopy;

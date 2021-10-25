@@ -85,7 +85,7 @@ int CheckTailsAI_R(void) { //restriction and bug fixes.
 					return 0;
 				break;
 			case LevelIDs_Casinopolis:
-				if (CurrentAct >= 1 || CurrentAct == 0 && CurrentMission < 1 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
+				if (CurrentAct >= 1 || CurrentAct == 0 && (CurrentAI == Characters_Amy || CurrentCharacter == Characters_Amy)) //cutscene + pinball issue
 					return 0;
 				break;
 			case LevelIDs_Chaos0:

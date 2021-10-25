@@ -4,17 +4,7 @@ uint8_t cutsceneAllowedCount = 0;
 Trampoline* LoadMRNPC_t = nullptr;
 Trampoline* StartCutscene_t;
 
-int EventDayTime[8] = {
-	6, 11, 21, 57, 98, 157, 159, 249
-};
 
-int EventNightTime[6] = {
-	80, 81, 110, 197, 208, 75
-};
-
-int EventEveningTime[4] = {
-	17, 35, 64, 66
-};
 
 //play a random cutscene every 2 levels/bosses.
 void CutsceneAllowedCount_Check() {
@@ -30,27 +20,10 @@ void set_event_flags(long cutsceneID)
 {
 	SeqRun();
 
-	if (cutsceneID >= 240 && cutsceneID <= 255 || cutsceneID == 355)
-		LastStoryFlag = 1;
+	//randomize time of day
 
-
-	for (int i = 0; i < 7; i++) //fix time of day
-	{
-		if (EventDayTime[i] == cutsceneID) {
-			SetTimeOfDay_Day();
-			break;
-		}
-
-		if (EventNightTime[i] == cutsceneID) {
-			SetTimeOfDay_Night();
-			break;
-		}
-
-		if (EventEveningTime[i] == cutsceneID) {
-			SetTimeOfDay_Evening();
-			break;
-		}
-	}
+	uint8_t rng = rand() % 3;
+	SetTimeOfDay(rng);
 
 	switch (cutsceneID)  //Credits: PKR
 	{
