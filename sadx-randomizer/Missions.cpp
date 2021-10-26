@@ -257,6 +257,12 @@ void StageMissionImage_result() {
 
 int LoadTitleCardTexture_r(int minDispTime) {
 
+	if (CreditCheck)
+	{
+		GetLevelType = 0;
+		minDispTime = 0;
+		return 0;
+	}
 
 	if (!isRandoLevel() || CurrentLevel > 14) {
 

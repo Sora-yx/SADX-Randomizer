@@ -97,7 +97,7 @@ void CallStuffWhenLevelStart() {
 
 	TimeThing = 1; //activate the timer of the stage.
 
-	if (CurrentLevel > LevelIDs_E101R)
+	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past)
 		return;
 
 	ObjectMaster* P1 = GetCharacterObject(0);
