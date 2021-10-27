@@ -43,7 +43,7 @@ SetLevelPosition M3_PlayerEndPosition[] {
 	{ SonicVersion, LevelAndActIDs_IceCap1, -84.1479, 2623.706, -2559.488, 0x4000 },
 	{ BigVersion, LevelAndActIDs_IceCap4, 1799.06, 371.969, 8.94554, -0x4000 },
 	{ SonicVersion, LevelAndActIDs_TwinklePark2, -82.1414, 835, -991.721, -0x4000 }, //Sonic Version
-	{ BigVersion, LevelAndActIDs_TwinklePark2, 604, 338, 237, 0x4000 }, //Big Version
+	{ BigVersion, LevelAndActIDs_TwinklePark2, 600, 338, 235, -0x4000 }, //Big Version
 	{ AmyVersion, LevelAndActIDs_TwinklePark3, -115.549, 50, 290.141, -0x8000  }, //Amy Version
 	{ SonicVersion, LevelAndActIDs_SpeedHighway1, 4460, -386.135, 2925.18, -0x8000},
 	{ TailsVersion, LevelAndActIDs_SpeedHighway1, 8552.973, -950.125, 8969.435, -0x8000 },

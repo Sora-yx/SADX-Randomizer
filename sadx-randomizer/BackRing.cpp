@@ -142,15 +142,15 @@ void BackRingObj_Main(ObjectMaster* obj) {
 				ChaoSpawn = false;
 				ResetRestartData();
 
-				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion)
+				if (CurrentStageVersion == TailsVersion || CurrentStageVersion == AmyVersion) {
 					GameState = 0xc;
 
-		
-				if (CurrentStageVersion == GammaVersion)
+				}
+				else if (CurrentStageVersion == GammaVersion)
 				{
 					CurrentLevel = LevelCopy;
 					CurrentAct = ActCopy;
-					GameState = 21;
+					GameState = 7;
 				}
 				else
 				{		
