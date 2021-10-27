@@ -365,7 +365,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 			co2->Speed.y = 0.0f;
 			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 			co2->Powerups |= Powerups_Invincibility;
-			p1->CollisionInfo->colli_range /= 2;
+			p1->CollisionInfo->colli_range = 0.4f; //fix bullshit teleportation not working properly
 			data->Action++;
 		}
 

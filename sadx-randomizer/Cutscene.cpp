@@ -3,6 +3,7 @@
 uint8_t cutsceneAllowedCount = 0;
 Trampoline* LoadMRNPC_t = nullptr;
 Trampoline* StartCutscene_t;
+Trampoline* LoadMRNPCsMainChara;
 
 
 
@@ -269,17 +270,6 @@ int preventHotShelterCutscene(int a1) {
 	return (int)(char)CutsceneFlagArray[a1];
 }
 
-void LoadMRNPC_r() {
-	if (RNGStages && RNGCutscene) {
-		if (cutsceneAllowedCount >= 2 || EV_MainThread_ptr) //Fix funny random cutscene NPC crash
-			return;
-	}
-
-	auto original = reinterpret_cast<decltype(LoadMRNPC_r)*>(LoadMRNPC_t->Target());
-	original();
-}
-
-
 void StartCutscene_r(int flag) {
 
 	if (RNGCutscene && RNGStages) {
@@ -399,8 +389,16 @@ void Init_RandomCutscene() {
 	WriteJump(StartLevelCutscene, preventLevelCutscene);
 	WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
 
+	//Prevent NPCs Field to load since they can somehow make the game crash
+	WriteData<1>((int*)0x62F5D0, 0xC3);	
+	WriteData<1>((int*)0x51AE00, 0xC3);	
+	WriteData<1>((int*)0x525600, 0xC3);	
+	WriteData<1>((int*)0x52F140, 0xC3);	
+	WriteData<1>((int*)0x541890, 0xC3);
+
+
 	if (RNGCutscene) {
-		LoadMRNPC_t = new Trampoline((int)LoadMRNPCs, (int)LoadMRNPCs + 0x5, LoadMRNPC_r); //fix dumb crash
+
 		StartCutscene_t = new Trampoline((int)StartCutscene, (int)StartCutscene + 0x5, StartCutscene_r);
 
 		WriteCall((void*)0x6675b3, EV_GetCharObj_r); //Big outro

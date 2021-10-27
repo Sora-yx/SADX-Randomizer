@@ -263,7 +263,7 @@ void __cdecl LoadLevelResults_r() {
 	if (GameMode == GameModes_Mission)
 		sub_5919E0();
 
-	if (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails)
+	if ( (CurrentCharacter != Characters_Tails && GetCharacter0ID() == Characters_Tails) || CurrentStageVersion != TailsVersion && CurrentMission == 0 && GetCharacter1ID() == Characters_Tails)
 		SetTailsRaceVictory();
 
 	switch (GetCharacter0ID())

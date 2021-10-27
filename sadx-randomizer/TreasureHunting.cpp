@@ -129,6 +129,10 @@ void PlayCharaVoice_EmeraldGet(ObjectMaster* a1) {
 		switch (CurChar)
 		{
 		case Characters_Sonic:
+
+			if (MetalSonicFlag)
+				return;
+
 			if (EmeraldKnuxCheck == 1)
 				PlayVoice_Original(1826);
 			if (EmeraldKnuxCheck == 2)
