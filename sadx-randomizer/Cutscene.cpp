@@ -252,8 +252,11 @@ void preventLevelCutscene(__int16 a1) {
 		switch (CurrentLevel)
 		{
 		case LevelIDs_HotShelter:
-			if (CurrentCharacter == Characters_Amy && CurrentAct == 1)
+			if (CurrentCharacter == Characters_Amy && CurrentAct == 1) {
+				StartLevelCutscene(1);
 				return;
+
+			}
 			break;
 		}
 	}
