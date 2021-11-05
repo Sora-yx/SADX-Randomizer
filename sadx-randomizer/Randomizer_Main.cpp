@@ -492,9 +492,10 @@ void RandomizeStages_Init() {
 	//Hack many functions which teleport the player to the next stage to make them random.
 	WriteCall((void*)0x41709d, GoToNextLevel_hook);
 	WriteCall((void*)0x417b47, GoToNextLevel_hook);
+
 	WriteCall((void*)0x41348f, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data (used when savefile is complete.)
 	WriteCall((void*)0x41342a, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
-	WriteCall((void*)0x4134a2, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data
+	WriteCall((void*)0x4134a2, SetRandomStageAct); //hook SetLevelAndAct when loading adventure data*/
 
 	//miscellaneous fixes because of the hack above.
 	WriteData<5>((void*)0x4134f3, 0x90); //Remove SetLevelAndAct when loading adventure data (fixes wrong warp)

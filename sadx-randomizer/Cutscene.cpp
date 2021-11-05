@@ -4,7 +4,7 @@ uint8_t cutsceneAllowedCount = 0;
 Trampoline* LoadMRNPC_t = nullptr;
 Trampoline* StartCutscene_t;
 Trampoline* LoadMRNPCsMainChara;
-
+Trampoline* PlayLevelCutscene_t;
 
 
 //play a random cutscene every 2 levels/bosses.
@@ -246,24 +246,15 @@ void StartLevelCutscene_r(__int16 a1) {
 	}
 }
 
-void preventLevelCutscene(__int16 a1) {
 
-	if (RNGStages) {
-		switch (CurrentLevel)
-		{
-		case LevelIDs_HotShelter:
-			if (CurrentCharacter == Characters_Amy && CurrentAct == 1) {
-				StartLevelCutscene(1);
-				return;
+bool preventLevelCutscene_r() {
 
-			}
-			break;
-		}
-	}
+	if (RNGStages && (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_HotShelter || CurrentLevel == LevelIDs_SandHill))
+		return false;
 
-	return StartLevelCutscene_r(a1);
+	FunctionPointer(bool, original, (), PlayLevelCutscene_t->Target());
+	return original();
 }
-
 
 
 int preventHotShelterCutscene(int a1) {
@@ -389,7 +380,7 @@ void Init_RandomCutscene() {
 
 	WriteData<5>((int*)0x40C6EA, 0x90);  //remove Characters CGI cutscene as it creates issue with rando
 	WriteCall((void*)0x59a458, preventHotShelterCutscene);
-	WriteJump(StartLevelCutscene, preventLevelCutscene);
+
 	WriteData<5>((void*)0x4f6afa, 0x90); //prevent cutscene tails EC (fix crashes)
 
 	//Prevent NPCs Field to load since they can somehow make the game crash
@@ -398,6 +389,8 @@ void Init_RandomCutscene() {
 	WriteData<1>((int*)0x525600, 0xC3);	
 	WriteData<1>((int*)0x52F140, 0xC3);	
 	WriteData<1>((int*)0x541890, 0xC3);
+
+	PlayLevelCutscene_t = new Trampoline((int)PlayLevelCutscene, (int)PlayLevelCutscene + 0x7, preventLevelCutscene_r);
 
 
 	if (RNGCutscene) {

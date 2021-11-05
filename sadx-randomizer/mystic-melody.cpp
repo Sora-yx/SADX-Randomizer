@@ -173,7 +173,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				else {
 
 					EnableControl();
-					data->Action = 4;
+					if (CurrentMission == Mission3_LostChao)
+						data->Action = 4;
+					else
+						data->Action = 1;
 				}
 			}
 			break;
@@ -198,7 +201,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 		case 5:
 			if (EntityData1Ptrs[0]->CharID >= Characters_Knuckles)
-				EntityData1Ptrs[0]->CollisionInfo->colli_range /= 2; // fix that wrong teleportation position with that dumb collision push shit thing 
+				EntityData1Ptrs[0]->CollisionInfo->colli_range = 0.4f; //fix bullshit teleportation not working properly
 
 			data->Action = 1;
 			EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();

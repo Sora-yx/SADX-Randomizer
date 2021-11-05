@@ -9,6 +9,9 @@ using json = nlohmann::json;
 using namespace std;
 
 Trampoline* DeleteSave_t;
+Trampoline* SeqSetSection_t;
+Trampoline* seqCheckStage_t;
+
 int CustomFlag = 0; //Used for progression story and credits
 bool CreditCheck = false;
 extern int musicCount;
@@ -455,10 +458,47 @@ void CustomFlagCheck() {
 	}
 
 	return;
-
 }
 
+void __cdecl SetEventFlag_r(EventFlags a1)
+{
+	if (RNGStages)
+		return;
+
+	EventFlagArray[a1] = 1;
+}
+
+void __cdecl SeqSetSection_r()
+{
+	if (RNGStages) {
+		SetRandomStageAct(1, 0);
+		return;
+	}
+
+	auto original = reinterpret_cast<decltype(SeqSetSection_r)*>(SeqSetSection_t->Target());
+	original();
+}
+
+
+int __cdecl seqCheckStage_r(int stage, int act)
+{
+	if (RNGStages) {
+		return 0;
+	}
+
+	FunctionPointer(int, original, (int stage, int act), seqCheckStage_t->Target());
+	return original(stage, act);
+}
+
+
+FunctionPointer(int, seqCheckStage, (int stage, int act), 0x412D40);
+
+
 void init_FlagsProgression() {
+
+	if (!RNGStages)
+		return;
+
 	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
 	WriteCall((void*)0x42af3b, AddCustomFlag);
 
@@ -466,4 +506,17 @@ void init_FlagsProgression() {
 	WriteCall((void*)0x5037fc, LoadSave_r);
 	WriteJump((void*)0x5053DD, LoadSave_r);
 	DeleteSave_t = new Trampoline((int)DeleteSave, (int)DeleteSave + 0x6, DeleteSave_r);
+
+	//Prevent the game to set flag to make the story progress, we will do it our own way, this should avoid corrupted save and unexpected behavior.
+	WriteJump(SetEventFlag, SetEventFlag_r);
+	SeqSetSection_t = new Trampoline((int)SeqSetSection, (int)SeqSetSection + 0x5, SeqSetSection_r);
+	seqCheckStage_t = new Trampoline((int)seqCheckStage, (int)seqCheckStage + 0x8, seqCheckStage_r);
+
+	// just to be safe: 
+
+	WriteData<1>((int*)0x413690, 0xC3);	 //Prevent SedEndSection
+
+
+	WriteData<1>((int*)0x413870, 0XC3); //TEST: remove something which set flag
+	return;
 }

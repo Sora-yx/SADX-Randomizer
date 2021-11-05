@@ -10,6 +10,8 @@ uint8_t chaoWarpAllowedCount = 0;
 
 Trampoline* Chao_Gravity_t;
 Trampoline* Chao_Movements_t;
+Trampoline* al_confirmsave_t;
+Trampoline* al_confirmload_t;
 
 short ChaoCryDelay = 0;
 static bool pvploaded = false;
@@ -493,11 +495,36 @@ void Chao_OnFrame() {
 	return;
 }
 
+//Lost Chao Mission: fix a rare issue for some people where the game crashes when trying to save chao data if a save doesn't already exist.
+void al_confirmsave_r(ObjectMaster* obj)
+{
+	if (IsLevelChaoGarden()) {
+		ObjectFunc(original, al_confirmsave_t->Target());
+		original(obj);
+	}
+
+	return;
+}
+
+//see comment above
+void al_confirmload_r(ObjectMaster* obj)
+{
+	if (IsLevelChaoGarden()) {
+		ObjectFunc(original, al_confirmload_t->Target());
+		original(obj);
+	}
+
+	return;
+}
+
+
 void Chao_Init() {
 
 	ChaoGameplayCheck();
 
 	Chao_Gravity_t = new Trampoline(0x73FEF0, 0x73FEF8, Chao_Gravity_r);
 	Chao_Movements_t = new Trampoline(0x71EFB0, 0x71EFB9, Chao_Movements_r);
+	al_confirmsave_t = new Trampoline((int)al_confirmsave, (int)al_confirmsave + 0x7, al_confirmsave_r);
+	al_confirmload_t = new Trampoline((int)al_confirmload, (int)al_confirmload + 0x5, al_confirmload_r);
 	return;
 }

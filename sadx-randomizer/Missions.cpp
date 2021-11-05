@@ -336,12 +336,14 @@ void CheckAndLoad_CartStopper() {
 
 
 ObjectMaster* Flash = nullptr;
+NJS_VECTOR BackupPos;
 
 void MissionResultCheck(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1;
 	CharObj2* co2 = CharObj2Ptrs[0];
 	EntityData1* p1 = EntityData1Ptrs[0];
+
 
 	if (!co2 || !p1)
 		return;
@@ -365,6 +367,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 			co2->Speed.y = 0.0f;
 			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 			co2->Powerups |= Powerups_Invincibility;
+
 			p1->CollisionInfo->colli_range = 0.4f; //fix bullshit teleportation not working properly
 			data->Action++;
 		}
@@ -388,6 +391,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 				if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
 					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) {
 					TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
+					BackupPos = M2_PlayerEndPosition[i].Position;
 					break;
 				}
 			}
@@ -395,8 +399,12 @@ void MissionResultCheck(ObjectMaster* obj) {
 		data->Action++;
 		break;
 	case 3:
-		if (++data->InvulnerableTime == 85)
+		if (++data->InvulnerableTime == 85) {
+			if (p1->Position.x != BackupPos.x || p1->Position.y != BackupPos.y || p1->Position.z != BackupPos.z) {
+				p1->Position = BackupPos;
+			}
 			data->Action++;
+		}
 		break;
 	case 4:
 		LoadLevelResults_r();
