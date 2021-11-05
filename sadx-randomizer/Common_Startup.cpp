@@ -4,6 +4,9 @@
 
 void __cdecl StartupLevels_Init(const char* path, const HelperFunctions& helperFunctions)
 {
+	if (!RNGStages)
+		return;
+
 	//Initiliaze data
 	HedgehogHammer_Init(helperFunctions);
 	EmeraldCoast_Init(path, helperFunctions);

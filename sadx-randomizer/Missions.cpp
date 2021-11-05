@@ -313,10 +313,11 @@ void DisplayTitleCard_r() {
 
 void TitleCard_Init() {
 
-	if (RNGStages) {
-		LoadTitleCardTexture_t = new Trampoline((int)LoadTitleCardTexture, (int)LoadTitleCardTexture + 0x5, LoadTitleCardTexture_r);
-		WriteCall((void*)0x47e276, DisplayTitleCard_r);
-	}
+	if (!RNGStages)
+		return;
+
+	LoadTitleCardTexture_t = new Trampoline((int)LoadTitleCardTexture, (int)LoadTitleCardTexture + 0x5, LoadTitleCardTexture_r);
+	WriteCall((void*)0x47e276, DisplayTitleCard_r);
 
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
 	WriteCall((void*)0x4284ac, StageMissionImage_result);
@@ -362,7 +363,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 
 			Flash = nullptr;
 			ForcePlayerAction(0, 24);
-	
+
 			co2->Speed.x = 0.0f;
 			co2->Speed.y = 0.0f;
 			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
@@ -430,6 +431,9 @@ void ScaleDebugFont(int scale)
 
 
 void Missions_Init() {
+
+	if (!RNGStages)
+		return;
 
 	Race_Init();
 	Init_TreasureHunting();

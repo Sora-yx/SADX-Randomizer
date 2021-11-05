@@ -117,7 +117,7 @@ void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperF
 }
 
 void CheckAndDisplayWarningLayoutError() {
-	if (!CharObj2Ptrs[0] || isSetLoaded || !IsIngame())
+	if (!CharObj2Ptrs[0] || isSetLoaded  || !IsIngame() || !RNGStages)
 		return;
 
 	DisplayDebugStringFormatted(NJM_LOCATION(2, 6), "WARNING: The Set file from Level %d", CurrentLevel);
@@ -126,6 +126,10 @@ void CheckAndDisplayWarningLayoutError() {
 }
 
 void LayoutFunctionInit() {
+
+	if (!RNGStages)
+		return;
+
 	WriteData<5>((void*)0x4237b4, 0x90); //remove "SetCurrentCamData" from LoadLevelFiles, we will manually call it later.
 	WriteCall((void*)0x4237ba, LoadLevelFiles_r);
 }

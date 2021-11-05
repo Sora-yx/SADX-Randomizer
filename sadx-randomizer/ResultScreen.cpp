@@ -431,5 +431,8 @@ void TrialModeQuit_R() {
 
 void Result_Init() {
 
+	if (!RNGStages)
+		return;
+
 	WriteJump(LoadLevelResults, LoadLevelResults_r);
 }
