@@ -66,4 +66,4 @@ VoidFunc(ResetDynamite, 0x4CBED0);
 FunctionPointer(int, CheckDynamiteBroken, (int dynNumber), 0x4CBE60);
 VoidFunc(DeleteSave, 0x421EC0);
 VoidFunc(sub_40BF30, 0x40BF30);
-FunctionPointer(bool, PlayLevelCutscene, (), 0x413B20);
+FunctionPointer(int, PlayLevelCutscene, (), 0x413B20);

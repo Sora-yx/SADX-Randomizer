@@ -247,13 +247,8 @@ void StartLevelCutscene_r(__int16 a1) {
 }
 
 
-bool preventLevelCutscene_r() {
-
-	if (RNGStages && (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_HotShelter || CurrentLevel == LevelIDs_SandHill))
-		return false;
-
-	FunctionPointer(bool, original, (), PlayLevelCutscene_t->Target());
-	return original();
+int preventLevelCutscene_r() {
+	return 0;
 }
 
 
@@ -390,8 +385,7 @@ void Init_RandomCutscene() {
 	WriteData<1>((int*)0x52F140, 0xC3);	
 	WriteData<1>((int*)0x541890, 0xC3);
 
-	PlayLevelCutscene_t = new Trampoline((int)PlayLevelCutscene, (int)PlayLevelCutscene + 0x7, preventLevelCutscene_r);
-
+	WriteJump(PlayLevelCutscene, preventLevelCutscene_r);
 
 	if (RNGCutscene) {
 

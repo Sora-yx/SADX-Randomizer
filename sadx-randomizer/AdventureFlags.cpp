@@ -220,55 +220,55 @@ void CustomFlagCheck() {
 		switch (CustomFlag)
 		{
 		case 1:
-			EventFlagArray[EventFlags_Sonic_Chaos0Clear] = true;
-			EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] = true;
+			EventFlagArray[EventFlags_Sonic_Chaos0Clear] = 1;
+			EventFlagArray[EventFlags_Sonic_EmeraldCoastClear] = 1;
 			break;
 		case 2:
-			EventFlagArray[EventFlags_Sonic_EggHornetClear] = true;
-			EventFlagArray[EventFlags_Sonic_WindyValleyOpen] = true;
+			EventFlagArray[EventFlags_Sonic_EggHornetClear] = 1;
+			EventFlagArray[EventFlags_Sonic_WindyValleyOpen] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Sonic_WindyValleyClear] = true;
-			EventFlagArray[EventFlags_Sonic_CasinopolisOpen] = true;
+			EventFlagArray[EventFlags_Sonic_WindyValleyClear] = 1;
+			EventFlagArray[EventFlags_Sonic_CasinopolisOpen] = 1;
 			break;
 		case 4:
-			EventFlagArray[EventFlags_Sonic_CasinopolisClear] = true;
-			EventFlagArray[EventFlags_Sonic_IceCapOpen] = true;
-			EventFlagArray[EventFlags_Sonic_IceCapClear] = true;
+			EventFlagArray[EventFlags_Sonic_CasinopolisClear] = 1;
+			EventFlagArray[EventFlags_Sonic_IceCapOpen] = 1;
+			EventFlagArray[EventFlags_Sonic_IceCapClear] = 1;
 			break;
 		case 5:
-			EventFlagArray[EventFlags_Sonic_KnucklesDefeated] = true;
-			EventFlagArray[EventFlags_Sonic_Chaos4Clear] = true;
+			EventFlagArray[EventFlags_Sonic_KnucklesDefeated] = 1;
+			EventFlagArray[EventFlags_Sonic_Chaos4Clear] = 1;
 			break;
 		case 6:
-			EventFlagArray[EventFlags_Sonic_SkyChaseAct1Clear] = true;
-			EventFlagArray[EventFlags_Sonic_TwinkleParkOpen] = true;
-			EventFlagArray[EventFlags_Sonic_TwinkleParkClear] = true;
+			EventFlagArray[EventFlags_Sonic_SkyChaseAct1Clear] = 1;
+			EventFlagArray[EventFlags_Sonic_TwinkleParkOpen] = 1;
+			EventFlagArray[EventFlags_Sonic_TwinkleParkClear] = 1;
 			break;
 		case 7:
-			EventFlagArray[EventFlags_Sonic_SpeedHighwayOpen] = true;
-			EventFlagArray[EventFlags_Sonic_SpeedHighwayClear] = true;
-			EventFlagArray[EventFlags_Sonic_RedMountainOpen] = true;
-			EventFlagArray[EventFlags_Sonic_RedMountainClear] = true;
+			EventFlagArray[EventFlags_Sonic_SpeedHighwayOpen] = 1;
+			EventFlagArray[EventFlags_Sonic_SpeedHighwayClear] = 1;
+			EventFlagArray[EventFlags_Sonic_RedMountainOpen] = 1;
+			EventFlagArray[EventFlags_Sonic_RedMountainClear] = 1;
 			break;
 		case 8:
-			EventFlagArray[EventFlags_Sonic_SkyChaseAct2Clear] = true;
-			EventFlagArray[EventFlags_Sonic_SkyDeckClear] = true;
-			EventFlagArray[EventFlags_Sonic_Chaos6Clear] = true;
+			EventFlagArray[EventFlags_Sonic_SkyChaseAct2Clear] = 1;
+			EventFlagArray[EventFlags_Sonic_SkyDeckClear] = 1;
+			EventFlagArray[EventFlags_Sonic_Chaos6Clear] = 1;
 			break;
 		case 9:
-			EventFlagArray[EventFlags_Sonic_LostWorldOpen] = true;
-			EventFlagArray[EventFlags_Sonic_LostWorldClear] = true;
-			EventFlagArray[EventFlags_Sonic_FinalEggOpen] = true;
+			EventFlagArray[EventFlags_Sonic_LostWorldOpen] = 1;
+			EventFlagArray[EventFlags_Sonic_LostWorldClear] = 1;
+			EventFlagArray[EventFlags_Sonic_FinalEggOpen] = 1;
 			break;
 		case 10:
 		default:
 			if (CustomFlag >= 10) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Sonic_FinalEggClear] = true;
-				EventFlagArray[EventFlags_Sonic_EggViperClear] = true;
-				EventFlagArray[EventFlags_SonicAdventureComplete] = true;
-				EventFlagArray[EventFlags_TailsUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Sonic_FinalEggClear] = 1;
+				EventFlagArray[EventFlags_Sonic_EggViperClear] = 1;
+				EventFlagArray[EventFlags_SonicAdventureComplete] = 1;
+				EventFlagArray[EventFlags_TailsUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -281,36 +281,36 @@ void CustomFlagCheck() {
 		{
 		case 1:
 			CreditCheck = false;
-			EventFlagArray[EventFlags_Tails_EggHornetClear] = true;
-			EventFlagArray[EventFlags_Tails_WindyValleyOpen] = true;
+			EventFlagArray[EventFlags_Tails_EggHornetClear] = 1;
+			EventFlagArray[EventFlags_Tails_WindyValleyOpen] = 1;
 			break;
 		case 2:
 			CreditCheck = false;
-			EventFlagArray[EventFlags_Tails_WindyValleyClear] = true;
-			EventFlagArray[EventFlags_Tails_CasinopolisOpen] = true;
+			EventFlagArray[EventFlags_Tails_WindyValleyClear] = 1;
+			EventFlagArray[EventFlags_Tails_CasinopolisOpen] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Tails_CasinopolisClear] = true;
-			EventFlagArray[EventFlags_Tails_IceCapOpen] = true;
+			EventFlagArray[EventFlags_Tails_CasinopolisClear] = 1;
+			EventFlagArray[EventFlags_Tails_IceCapOpen] = 1;
 			break;
 		case 4:
-			EventFlagArray[EventFlags_Tails_IceCapClear] = true;
-			EventFlagArray[EventFlags_Tails_Chaos4Clear] = true;
-			EventFlagArray[EventFlags_Tails_SkyChaseAct1Clear] = true;
+			EventFlagArray[EventFlags_Tails_IceCapClear] = 1;
+			EventFlagArray[EventFlags_Tails_Chaos4Clear] = 1;
+			EventFlagArray[EventFlags_Tails_SkyChaseAct1Clear] = 1;
 			break;
 		case 5:
-			EventFlagArray[EventFlags_Tails_SandHillClear] = true;
-			EventFlagArray[EventFlags_Tails_SkyChaseAct2Clear] = true;
-			EventFlagArray[EventFlags_Tails_SkyDeckClear] = true;
+			EventFlagArray[EventFlags_Tails_SandHillClear] = 1;
+			EventFlagArray[EventFlags_Tails_SkyChaseAct2Clear] = 1;
+			EventFlagArray[EventFlags_Tails_SkyDeckClear] = 1;
 			break;
 		case 6:
 		default:
 			if (CustomFlag >= 6) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Tails_SpeedHighwayClear] = true;
-				EventFlagArray[EventFlags_Tails_EggWalkerClear] = true;
-				EventFlagArray[EventFlags_TailsAdventureComplete] = true;
-				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Tails_SpeedHighwayClear] = 1;
+				EventFlagArray[EventFlags_Tails_EggWalkerClear] = 1;
+				EventFlagArray[EventFlags_TailsAdventureComplete] = 1;
+				EventFlagArray[EventFlags_KnucklesUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -325,31 +325,31 @@ void CustomFlagCheck() {
 		{
 		case 1:
 			CreditCheck = false;
-			EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] = true;
-			EventFlagArray[EventFlags_Knuckles_CasinopolisOpen] = true;
+			EventFlagArray[EventFlags_Knuckles_SpeedHighwayClear] = 1;
+			EventFlagArray[EventFlags_Knuckles_CasinopolisOpen] = 1;
 			break;
 		case 2:
-			EventFlagArray[EventFlags_Knuckles_CasinopolisClear] = true;
+			EventFlagArray[EventFlags_Knuckles_CasinopolisClear] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Knuckles_Chaos2Clear] = true;
-			EventFlagArray[EventFlags_Knuckles_RedMountainClear] = true;
+			EventFlagArray[EventFlags_Knuckles_Chaos2Clear] = 1;
+			EventFlagArray[EventFlags_Knuckles_RedMountainClear] = 1;
 			break;
 		case 4:
-			EventFlagArray[EventFlags_Knuckles_Chaos4Clear] = true;
-			EventFlagArray[EventFlags_Knuckles_LostWorldClear] = true;
+			EventFlagArray[EventFlags_Knuckles_Chaos4Clear] = 1;
+			EventFlagArray[EventFlags_Knuckles_LostWorldClear] = 1;
 			break;
 		case 5:
-			EventFlagArray[EventFlags_Knuckles_EggCarrierSunk] = true;
-			EventFlagArray[EventFlags_Knuckles_SkyDeckClear] = true;
+			EventFlagArray[EventFlags_Knuckles_EggCarrierSunk] = 1;
+			EventFlagArray[EventFlags_Knuckles_SkyDeckClear] = 1;
 			break;
 		case 6:
 		default:
 			if (CustomFlag >= 6) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = true;
-				EventFlagArray[EventFlags_KnucklesAdventureComplete] = true;
-				EventFlagArray[EventFlags_AmyUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Knuckles_Chaos6Clear] = 1;
+				EventFlagArray[EventFlags_KnucklesAdventureComplete] = 1;
+				EventFlagArray[EventFlags_AmyUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -363,22 +363,22 @@ void CustomFlagCheck() {
 		{
 		case 1:
 			CreditCheck = false;
-			EventFlagArray[EventFlags_Amy_TwinkleParkClear] = true;
+			EventFlagArray[EventFlags_Amy_TwinkleParkClear] = 1;
 			break;
 		case 2:
-			EventFlagArray[EventFlags_Amy_HotShelterClear] = true;
+			EventFlagArray[EventFlags_Amy_HotShelterClear] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Amy_EggCarrierSunk] = true;
-			EventFlagArray[EventFlags_Amy_FinalEggClear] = true;
+			EventFlagArray[EventFlags_Amy_EggCarrierSunk] = 1;
+			EventFlagArray[EventFlags_Amy_FinalEggClear] = 1;
 			break;
 		case 4:
 		default:
 			if (CustomFlag >= 4) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Amy_ZeroClear] = true;
-				EventFlagArray[EventFlags_AmyAdventureComplete] = true;
-				EventFlagArray[EventFlags_BigUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Amy_ZeroClear] = 1;
+				EventFlagArray[EventFlags_AmyAdventureComplete] = 1;
+				EventFlagArray[EventFlags_BigUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -391,24 +391,24 @@ void CustomFlagCheck() {
 		{
 		case 1:
 			CreditCheck = false;
-			EventFlagArray[EventFlags_Big_TwinkleParkClear] = true;
+			EventFlagArray[EventFlags_Big_TwinkleParkClear] = 1;
 			break;
 		case 2:
-			EventFlagArray[EventFlags_Big_IceCapClear] = true;
+			EventFlagArray[EventFlags_Big_IceCapClear] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Big_EmeraldCoastClear] = true;
+			EventFlagArray[EventFlags_Big_EmeraldCoastClear] = 1;
 			break;
 		case 4:
-			EventFlagArray[EventFlags_Big_HotShelterClear] = true;
+			EventFlagArray[EventFlags_Big_HotShelterClear] = 1;
 			break;
 		case 5:
 		default:
 			if (CustomFlag >= 5) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Big_Chaos6Clear] = true;
-				EventFlagArray[EventFlags_BigAdventureComplete] = true;
-				EventFlagArray[EventFlags_GammaUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Big_Chaos6Clear] = 1;
+				EventFlagArray[EventFlags_BigAdventureComplete] = 1;
+				EventFlagArray[EventFlags_GammaUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -421,28 +421,28 @@ void CustomFlagCheck() {
 		switch (CustomFlag)
 		{
 		case 1:
-			EventFlagArray[EventFlags_Gamma_FinalEggClear] = true;
+			EventFlagArray[EventFlags_Gamma_FinalEggClear] = 1;
 			CreditCheck = false;
 			break;
 		case 2:
-			EventFlagArray[EventFlags_Gamma_E101Clear] = true;
-			EventFlagArray[EventFlags_Gamma_EmeraldCoastClear] = true;
-			EventFlagArray[EventFlags_Gamma_WindyValleyOpen] = true;
+			EventFlagArray[EventFlags_Gamma_E101Clear] = 1;
+			EventFlagArray[EventFlags_Gamma_EmeraldCoastClear] = 1;
+			EventFlagArray[EventFlags_Gamma_WindyValleyOpen] = 1;
 			break;
 		case 3:
-			EventFlagArray[EventFlags_Gamma_WindyValleyClear] = true;
-			EventFlagArray[EventFlags_Gamma_RedMountainClear] = true;
+			EventFlagArray[EventFlags_Gamma_WindyValleyClear] = 1;
+			EventFlagArray[EventFlags_Gamma_RedMountainClear] = 1;
 			break;
 		case 4:
-			EventFlagArray[EventFlags_Gamma_HotShelterClear] = true;
+			EventFlagArray[EventFlags_Gamma_HotShelterClear] = 1;
 			break;
 		case 5:
 		default:
 			if (CustomFlag >= 5) {
 				CreditCheck = true;
-				EventFlagArray[EventFlags_Gamma_E101mkIIClear] = true;
-				EventFlagArray[EventFlags_GammaAdventureComplete] = true;
-				EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = true;
+				EventFlagArray[EventFlags_Gamma_E101mkIIClear] = 1;
+				EventFlagArray[EventFlags_GammaAdventureComplete] = 1;
+				EventFlagArray[EventFlags_SuperSonicUnlockedAdventure] = 1;
 				CustomFlag = 0;
 			}
 			return;
@@ -453,7 +453,7 @@ void CustomFlagCheck() {
 	{
 		if (CustomFlag >= 1) {
 			CreditCheck = true;
-			EventFlagArray[EventFlags_SuperSonicAdventureComplete] = true;
+			EventFlagArray[EventFlags_SuperSonicAdventureComplete] = 1;
 		}
 	}
 
@@ -513,10 +513,9 @@ void init_FlagsProgression() {
 	seqCheckStage_t = new Trampoline((int)seqCheckStage, (int)seqCheckStage + 0x8, seqCheckStage_r);
 
 	// just to be safe: 
-
 	WriteData<1>((int*)0x413690, 0xC3);	 //Prevent SedEndSection
-
-
 	WriteData<1>((int*)0x413870, 0XC3); //TEST: remove something which set flag
+
+	WriteData<1>((int*)0x412E20, 0xC3); //remove flag level clear
 	return;
 }
