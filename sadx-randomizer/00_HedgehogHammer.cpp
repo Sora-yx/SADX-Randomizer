@@ -9,7 +9,8 @@ bool LimitCustomFlag = false;
 VoidFunc(sub_6265C0, 0x6265C0);
 void HedgehogHammerResult() {
 
-	if (GameMode != GameModes_Trial && RNGStages) {
+	if (GameMode != GameModes_Trial && RNGStages) 
+	{
 
 		if (SelectedCharacter == 6) //Fix Super Sonic Story giving sonic layout
 			LastStoryFlag = 1;
@@ -44,4 +45,6 @@ void __cdecl HedgehogHammer_Init(const HelperFunctions& helperFunctions)
 	WriteCall((void*)0x626B28, HedgehogHammerResult);
 
 	AddSet("SET0000S", "HH");
+
+	AddSet("SET0000S_DC", "HH");
 }
