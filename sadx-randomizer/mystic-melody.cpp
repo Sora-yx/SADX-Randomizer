@@ -84,7 +84,8 @@ bool Check_ObjectMysticMelody() {
 }
 
 
-void MysticMelody_Display(ObjectMaster* obj) {
+void MysticMelody_Display(ObjectMaster* obj)
+{
 	if (!MissedFrames) {
 		njSetTexture(&SA2_OBJ_TEXLIST);
 		njPushMatrix(0);
@@ -95,9 +96,28 @@ void MysticMelody_Display(ObjectMaster* obj) {
 	}
 }
 
+bool warped = false;
+static int timerWarp = 0;
+void warpedOnFrames()
+{
+	if (warped && playertwp[0] && IsIngame())
+	{
+		if (++timerWarp == 120)
+		{
+			CharColliOn(playertwp[0]);
+			warped = false;
+			timerWarp = 0;
+		}
+	}
+}
 
 void MysticMelody_Main(ObjectMaster* obj) {
-	if (!ClipSetObject(obj)) {
+	if (!ClipSetObject(obj)) 
+	{
+
+		if (!playertwp[0] || !playerpwp[0])
+			return;
+
 		EntityData1* data = obj->Data1;
 		EntityData1* player = EntityData1Ptrs[0];
 		int curAction = EntityData1Ptrs[0]->Action;
@@ -108,6 +128,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		{
 		case 0:
 		{
+			timerWarp = 0;
 			obj->DisplaySub = MysticMelody_Display;
 			obj->DeleteSub = DynCol_Delete;
 			data->Object = MysticMelody->getmodel();
@@ -148,10 +169,11 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				{
 					SwapDelay = 0;
 					DisableControl();
+					CharColliOff(playertwp[0]);
 					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 
-					if (CharObj2Ptrs[0]->Upgrades & (Upgrades_SuperSonic == 0))
+					if ( (CharObj2Ptrs[0]->Upgrades & Upgrades_SuperSonic) == 0)
 						ForcePlayerToWhistle();
 
 					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
@@ -162,17 +184,19 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		}
 		break;
 		case 3:
-			if (++data->Index == 120) {
+			if (++data->Index == 120) 
+			{
 				EnableControl();
 				if (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma && CurrentAct == 0 && CurrentStageVersion == BigVersion) {
-
+					warped = true;
+					CharColliOff(playertwp[0]);
 					PositionPlayer(0, 640.168, 150.123, -435.403);
 					PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
 					data->Action = 2;
 				}
-				else {
+				else 
+				{
 
-					EnableControl();
 					if (CurrentMission == Mission3_LostChao)
 						data->Action = 4;
 					else
@@ -200,11 +224,9 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			}
 			break;
 		case 5:
-			if (EntityData1Ptrs[0]->CharID >= Characters_Knuckles)
-				EntityData1Ptrs[0]->CollisionInfo->colli_range = 0.4f; //fix bullshit teleportation not working properly
-
 			data->Action = 1;
 			EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
+			warped = true;
 			break;
 		}
 

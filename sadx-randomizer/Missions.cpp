@@ -8,7 +8,7 @@ NJS_TEXNAME MissionsText[25];
 NJS_TEXNAME TitleCard[8];
 static NJS_TEXLIST TitleCardTex = { arrayptrandlength(TitleCard) };
 
-static Trampoline* LoadTitleCardTexture_t = nullptr;
+static FunctionHook<int, int> LoadTitleCardTexture_t(LoadTitleCardTexture); 
 
 
 const char* stageVersionString[8] = { "Sonic", "Eggman", "Tails", "Knuckles", "Tikal", "Amy", "Gamma", "Big" };
@@ -117,7 +117,8 @@ void LoadStageMissionImage_r() {
 	if (GetBackRing)
 		return;
 
-	if (GetLevelType == 0) { //Mission card check here
+	if (GetLevelType_ == 0) 
+	{ //Mission card check here
 
 		if (CurrentLevel == LevelIDs_HedgehogHammer || CurrentLevel >= LevelIDs_Chaos0 && CurrentLevel <= 42)
 			return;
@@ -235,7 +236,7 @@ void LoadStageMissionImage_r() {
 
 void StageMissionImage_result() {
 
-	if (GetLevelType == 0) { //do the mission check here
+	if (GetLevelType_ == 0) { //do the mission check here
 			//0 = capsule, 1 = Lost Chao, 2 = Emeralds Knux, 3 = Beat Sonic, 4 = Final Egg, 5 = Froggy, 6 = LW, 7 = missile, 8 = 100 rings, 9 = rescue tails, 10 = Zero, 11+ Race
 
 		if (CurrentLevel >= LevelIDs_Chaos0 || CurrentLevel == LevelIDs_HedgehogHammer)
@@ -267,8 +268,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	if (!isRandoLevel() || CurrentLevel > 14) {
 
 		CurrentCardTexturePtr = &CurrentCardTexture;
-		FunctionPointer(int, original, (int minDispTime), LoadTitleCardTexture_t->Target());
-		return original(minDispTime);
+		return LoadTitleCardTexture_t.Original(minDispTime);
 	}
 
 
@@ -316,7 +316,7 @@ void TitleCard_Init() {
 	if (!RNGStages)
 		return;
 
-	LoadTitleCardTexture_t = new Trampoline((int)LoadTitleCardTexture, (int)LoadTitleCardTexture + 0x5, LoadTitleCardTexture_r);
+	LoadTitleCardTexture_t.Hook(LoadTitleCardTexture_r);
 	WriteCall((void*)0x47e276, DisplayTitleCard_r);
 
 	WriteJump(LoadStageMissionImage, LoadStageMissionImage_r);
@@ -325,7 +325,8 @@ void TitleCard_Init() {
 }
 
 
-void CheckAndLoad_CartStopper() {
+void CheckAndLoad_CartStopper() 
+{
 
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
 		ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, OCartStopper);
@@ -358,6 +359,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 
 		if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		{
+
 			TimeThing = 0;
 			CheckAndLoad_CartStopper();
 
@@ -369,7 +371,6 @@ void MissionResultCheck(ObjectMaster* obj) {
 			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 			co2->Powerups |= Powerups_Invincibility;
 
-			p1->CollisionInfo->colli_range = 0.4f; //fix bullshit teleportation not working properly
 			data->Action++;
 		}
 
@@ -385,12 +386,15 @@ void MissionResultCheck(ObjectMaster* obj) {
 		DisableControl();
 		DisableController(0);
 		PauseEnabled = 0;
+		CharColliOff(playertwp[0]);
+		warped = true;
 		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
 		{
 			for (int i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
 			{
 				if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
-					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) {
+					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) 
+				{
 					TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
 					BackupPos = M2_PlayerEndPosition[i].Position;
 					break;

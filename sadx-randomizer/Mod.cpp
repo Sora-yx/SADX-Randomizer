@@ -139,6 +139,7 @@ extern "C" {
 		Sounds_OnFrame();
 		LevelOnFrames();
 		Credits_StatsDelayOnFrames();
+		warpedOnFrames();
 
 
 		if (GameState == 16)  //Pause Menu

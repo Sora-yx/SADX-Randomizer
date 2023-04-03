@@ -18,6 +18,7 @@
 
 #include "SADXFunctions.h"
 #include "SADXVariables.h"
+#include "FunctionHook.h"
 #include "startup.h"
 #include "RandomHelpers.h"
 #include "CharactersSettings.h"

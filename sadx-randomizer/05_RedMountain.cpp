@@ -48,7 +48,10 @@ void RM_MovePlayerToEndPosition() {
 			if (CurrentCharacter > Characters_Tails)
 				break;
 
-			if (EntityData1Ptrs[i]) {
+			if (playertwp[i]) 
+			{
+				warped = true;
+				CharColliOff(playertwp[i]);
 				PositionPlayer(i, -397.69, 1039.52, 3101.33);
 			}
 		}

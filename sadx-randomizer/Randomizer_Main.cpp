@@ -489,6 +489,7 @@ void RandomizeStages_Init() {
 	if (!RNGStages)
 		return;
 
+
 	//Hack many functions which teleport the player to the next stage to make them random.
 	WriteCall((void*)0x41709d, GoToNextLevel_hook);
 	WriteCall((void*)0x417b47, GoToNextLevel_hook);
@@ -506,5 +507,5 @@ void RandomizeStages_Init() {
 	//WriteCall((void*)0x416be2, CancelResetPosition); //hook "SetStartPos_ReturnToField" used to cancel the reset character position to 0 after quitting a stage.
 	WriteCall((void*)0x417bed, GameOver_R);
 	WriteCall((void*)0x41717d, GameOver_R);
-	return;
+
 }

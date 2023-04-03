@@ -245,8 +245,8 @@ void __cdecl sub_4141F0(ObjectMaster* obj)
 
 void __cdecl LoadLevelResults_r() {
 
-	NJS_VECTOR a1; // [sp+0h] [bp-18h]@12
-	NJS_VECTOR a2; // [sp+Ch] [bp-Ch]@12
+	NJS_VECTOR a1{0};
+	NJS_VECTOR a2{0}; 
 
 	DisableController(0);
 	PauseEnabled = 0;
@@ -349,7 +349,6 @@ void RestorePuzzleBoxVanillaThing() {
 	WriteData<1>((void*)0x44224C, 0x0);
 	WriteData<1>((void*)0x44224D, 0x0);
 	WriteData<1>((void*)0x44224E, 0x0);
-	return;
 }
 
 void ResetValueAndObjects() {
@@ -372,7 +371,6 @@ void ResetValueAndObjects() {
 
 	//DeleteMM_Models();
 	fixTCCart();
-	return;
 }
 
 

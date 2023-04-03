@@ -13,11 +13,18 @@ void SpeedHighway_Layout() {
 	return;
 }
 
-void SHAct2Position() {
+void SHAct2Position() 
+{
 	if (CurrentCharacter != Characters_Sonic)
+	{
+		warped = true;
+		CharColliOff(playertwp[0]);
 		return PositionPlayer(0, 10, -10000, 10);
+	}
 	else
+	{
 		return ForcePlayerAction(0, 0x2b);
+	}
 }
 
 void CheckEggmanRaceWinner() {

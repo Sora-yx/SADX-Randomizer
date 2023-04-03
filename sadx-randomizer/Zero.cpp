@@ -66,4 +66,5 @@ void __cdecl Zero_Init(const HelperFunctions& helperFunctions)
 	//Sonic
 
 	helperFunctions.ReplaceFile("system\\SETZEROS.bin", "system\\sets\\SETZEROS.bin");
+	helperFunctions.ReplaceFile("system\\SETZEROS_DC.bin", "system\\sets\\SETZEROS.bin");
 }

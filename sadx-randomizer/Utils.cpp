@@ -361,24 +361,32 @@ void DynCol_Delete(ObjectMaster* obj) {
 
 void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 
-	if (CurrentMission == Mission3_LostChao) {
-		if (CurrentLevel == LevelIDs_HotShelter && CurrentStageVersion == AmyVersion && isDCMod() && CurrentAct == 1) {
+	if (CurrentMission == Mission3_LostChao) 
+	{
+		if (CurrentLevel == LevelIDs_HotShelter && CurrentStageVersion == AmyVersion && isDCMod() && CurrentAct == 1) 
+		{
 			pos = { 734.767, 428.211, -2954.12 };
 			yRot = 0xC0;
 		}
 	}
 
-	for (int j = 0; j < 8; j++) {
-		if (EntityData1Ptrs[j]) {
-			EntityData1Ptrs[j]->Position = pos;
-			EntityData1Ptrs[j]->Rotation.y = yRot;
+	for (int j = 0; j < 8; j++) 
+	{
+		if (playertwp[j]) 
+		{
+			CharColliOff(playertwp[j]);
+
+			playertwp[j]->pos = pos;
+			playertwp[j]->ang.y = yRot;
 
 			if (j > 0) {
-				EntityData1Ptrs[j]->Position.x += 5;
-				EntityData1Ptrs[j]->Position.z += 5;
+				playertwp[j]->pos.x += 5;
+				playertwp[j]->pos.z += 5;
 			}
 		}
 	}
+
+	warped = true;
 }
 
 struct colLevelStruct {
@@ -448,6 +456,7 @@ void Check_AllocateObjectData2(ObjectMaster* obj, EntityData1* data1)
 		}
 	}
 }
+
 int checkIfFileExists(const char* filename)
 {
 	FILE* file;

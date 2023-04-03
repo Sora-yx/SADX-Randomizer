@@ -292,6 +292,8 @@ void LevelOnFrames();
 
 float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest);
 
+extern bool warped;
+
 extern int RageQuit;
 extern int JumpPB;
 extern int ringsPB;
@@ -314,3 +316,5 @@ void MissionResultCheck(ObjectMaster* obj);
 void Result_Init();
 void Objects_Common_Init();
 void Missions_Init();
+
+void warpedOnFrames();
