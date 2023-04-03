@@ -314,10 +314,3 @@ void MissionResultCheck(ObjectMaster* obj);
 void Result_Init();
 void Objects_Common_Init();
 void Missions_Init();
-
-
-struct SEQ_SECTION
-{
-	void(__cdecl* init)();
-	void(__cdecl* main)(int);
-};

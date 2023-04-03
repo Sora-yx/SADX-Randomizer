@@ -295,7 +295,7 @@ void PlayRandomCutscene(long flag) {
 	flt_3B18244 = 0;
 	EventCutscene_Load2(flag);
 	EventCutscene_Exec2();
-	LoadObject(LoadObj_Data1, 5, SeqTaskFadeIn);
+	CreateElementalTask(LoadObj_Data1, 5, SeqTaskFadeIn);
 	return;
 	//dword_3B28114 = 0;
 }

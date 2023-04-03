@@ -53,6 +53,6 @@ SetLevelPosition M2_PlayerEndPosition[]{ //Used for M2 and Bosses
 	{ AmyVersion, LevelAndActIDs_HotShelter2, { 800.025, 369.997, -3616.26}, 0x4000 },
 	{ GammaVersion, LevelAndActIDs_HotShelter3, { -841.37, 582.239, -2689.82 }, 0xC000 },
 	{ BossVersion, LevelAndActIDs_EggHornet, { 1016.954, 132.8002, 984.1979 }, 0xC000 },
-	{ SonicVersion, LevelAndActIDs_Chaos6, { 1.125, 750.75, -384.625 }, 0xC000 },
+	{ SonicVersion, LevelAndActIDs_Chaos6Sonic, { 1.125, 750.75, -384.625 }, 0xC000 },
 	{ BossVersion, LevelAndActIDs_Zero, { -131, 745, -385 }, 0xC000 },
 };

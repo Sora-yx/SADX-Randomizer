@@ -25,14 +25,14 @@ VoidFunc(Knuckles_SetRNG, 0x475840);
 VoidFunc(PauseQuitThing2, 0x413f70);
 
 //Cutscenes stuff
-FunctionPointer(void, EV_Wait, (int time), 0x4314d0);
 FunctionPointer(void, SeqRun, (), 0x412AC0);
-FunctionPointer(void, SeqSetPlayer, (__int16 character), 0x413380);
+
 FunctionPointer(void, SeqSetSection, (__int16 sequence), 0x4133E0);
-ObjectFunc(SeqTaskFadeIn, 0x412fe0);
+
 FunctionPointer(void, EventCutscene_Load2, (long flag), 0x42fa30);
 VoidFunc(EventCutscene_Exec2, 0x431430);
 FunctionPointer(bool, sub_413B20, (), 0x413B20);
+FunctionPointer(void, SetCameraMode_, (int a1), 0x4348A0);
 
 //Chao Stuff
 FunctionPointer(long, Chao_Cry, (ObjectMaster* Chao), 0x75b6c0);
@@ -48,7 +48,6 @@ FunctionPointer(void, sub_437D20, (void(__cdecl* a1)(int), char a2, char a3), 0x
 FunctionPointer(void, sub_464B00, (int), 0x464B00);
 FunctionPointer(void, sub_469300, (int*, char, int), 0x469300);
 VoidFunc(sub_457D00, 0x457D00);
-ObjectFunc(E102KillCursor, 0x4CEFE0);
 ObjectFunc(E102SetKillCursor, 0x4CF060);
 ObjectFunc(UpdateSetDataAndDelete, 0x46C150);
 ObjectFunc(sub_47D300, 0x47D300);

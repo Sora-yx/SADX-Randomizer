@@ -137,7 +137,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				SwapDelay = 0;
 			}
 
-			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_Unknown1))) {
+			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_OnColli))) {
 
 				SwapDelay = 0;
 

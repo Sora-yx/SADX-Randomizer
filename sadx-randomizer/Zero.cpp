@@ -43,7 +43,7 @@ void Zero_r(ObjectMaster* obj) {
 			}
 			//dsPlay_oneshot(155, 0, 0, 0);
 			E102Hit(&v15, -15.0);
-			E102KillCursor((ObjectMaster*)obj);
+			E102KillCursor((task*)obj);
 		}
 	}
 

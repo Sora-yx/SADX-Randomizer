@@ -13,7 +13,7 @@ void LoadZero() {
 	}
 
 	if (CurrentLevel == LevelIDs_TwinklePark)
-		SetCameraControlEnabled(1);
+		SetCameraMode_(1);
 
 	if (CurrentLevel == LevelIDs_FinalEgg && CurrentStageVersion != AmyVersion || CurrentLevel == LevelIDs_TwinklePark && CurrentStageVersion != AmyVersion) //don't load Zero if Sonic Layout
 		return;

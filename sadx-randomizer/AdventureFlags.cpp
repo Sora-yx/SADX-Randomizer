@@ -38,7 +38,6 @@ void Rando_SaveProgression() {
 	return;
 }
 
-DataPointer(ObjectMaster*, FileSelTp, 0x3C5E8C0);
 
 void Rando_LoadProgression() {
 

@@ -419,7 +419,7 @@ void Remove_TargetCursor(ObjectMaster* obj) {
 
 	if (data) {
 		if (data->Status & Status_Hurt) {
-			E102KillCursor((ObjectMaster*)obj);
+			E102KillCursor((task*)obj);
 		}
 	}
 }

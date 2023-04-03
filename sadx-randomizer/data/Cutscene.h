@@ -35,13 +35,6 @@ struct SceneSelectData_
 };
 
 
-struct DemoData
-{
-	__int16 level;
-	__int16 act;
-	__int16 character;
-	__int16 cutscene;
-};
 
 struct CutsceneLevelData
 {

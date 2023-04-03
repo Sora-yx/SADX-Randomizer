@@ -17,7 +17,7 @@ DataPointer(char, SecretWaterSwitch, 0x3C5B37E);
 DataPointer(char, FlagAutoPilotCart, 0x3D08E00);
 DataPointer(char, TitleCardStuff, 0x3c53abc);
 DataPointer(char, TitleCardStuff2, 0x3c53abd);
-DataPointer(char, GetLevelType, 0x3c53abf);
+DataPointer(int, GetLevelType_, 0x03C53ABF);
 DataPointer(char, dword_03b28114, 0x3b28114);
 DataPointer(char, TitleCardCounter, 0x3C53ABD);
 DataPointer(NJS_TEXLIST, CurrentCardTexture, 0x91C548);

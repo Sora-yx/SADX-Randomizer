@@ -259,7 +259,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 
 	if (CreditCheck)
 	{
-		GetLevelType = 0;
+		GetLevelType_ = 0;
 		minDispTime = 0;
 		return 0;
 	}
@@ -283,7 +283,7 @@ int LoadTitleCardTexture_r(int minDispTime) {
 	TitleCardStuff = 2;
 	TitleCardStuff2 = 0;
 
-	GetLevelType = 0;
+	GetLevelType_ = 0;
 
 	TitleCardDispTime = 90;
 
