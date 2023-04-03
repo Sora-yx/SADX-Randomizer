@@ -390,7 +390,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		warped = true;
 		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
 		{
-			for (int i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
+			for (uint8_t i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
 			{
 				if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
 					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) 

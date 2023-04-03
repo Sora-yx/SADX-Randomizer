@@ -371,7 +371,7 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 	}
 
 
-	for (int j = 0; j < 8; j++) 
+	for (uint8_t j = 0; j < 8; j++) 
 	{
 		if (playertwp[j]) 
 		{

@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "EC.h"
 
-void EC_Layout() {
+void EC_Layout() 
+{
 
 	if (CurrentAct != 2 && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
@@ -15,7 +16,7 @@ void EC_Layout() {
 void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 
-	for (int i = 0; i < 3; i++)
+	for (uint8_t i = 0; i < 3; i++)
 		ObjLists[LevelIDs_EmeraldCoast * 8 + i] = &EmeraldCoastObjectList;
 
 	return;

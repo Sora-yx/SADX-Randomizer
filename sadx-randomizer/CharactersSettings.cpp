@@ -212,7 +212,7 @@ void FixVictoryTailsVoice() {
 
 void RosterBanCheck() {
 	//ban roster check
-	for (int i = 0; i < LengthOfArray(banCharacter); i++)
+	for (uint8_t i = 0; i < LengthOfArray(banCharacter); i++)
 	{
 		if (banCharacter[i] == 1)
 			ban++;
