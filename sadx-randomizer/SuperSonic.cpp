@@ -1,8 +1,9 @@
 #include "stdafx.h"
 
-
+PVMEntry SSTex = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts for other characters.
-void SuperAuraStuff() {
+void SuperAuraStuff() 
+{
 	TimeThing = 0;
 
 	if (CurrentCharacter != Characters_Sonic)
@@ -12,16 +13,18 @@ void SuperAuraStuff() {
 		LoadObject((LoadObj)2, 2, Sonic_SuperAura_Load);
 		LoadObject((LoadObj)8, 2, Sonic_SuperPhysics_Load);
 	}
-	return;
+
 }
 
-int SSLevel[10]{ LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
-LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 };
+uint8_t SSLevel[] = { 
+	LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
+LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 
+};
 
 
 int GetSSLevelBanned() {
 
-	for (int i = 0; i < LengthOfArray(SSLevel); i++)
+	for (uint8_t i = 0; i < LengthOfArray(SSLevel); i++)
 	{
 		if (CurrentLevel == SSLevel[i])
 		{
@@ -57,23 +60,12 @@ int GetSSLevelBanned() {
 	return false;
 }
 
-Trampoline* LoadCharTexture_T;
-
-void CheckAndLoadSuperSonic_Tex(int curChara) {
-
-	SuperSonicFlag = 0;
-
-	if (CurrentCharacter == Characters_Sonic && !GetSSLevelBanned() || CurrentLevel == LevelIDs_PerfectChaos)
-		LoadPVM("SUPERSONIC", &SUPERSONIC_TEXLIST);
-
-	FunctionPointer(void, original, (int curChara), LoadCharTexture_T->Target());
-	return original(curChara);
-}
 
 
-void SuperSonic_TransformationCheck() {
+void SuperSonic_TransformationCheck() 
+{
 
-	bool isLevelBanned = GetSSLevelBanned();
+	const bool isLevelBanned = GetSSLevelBanned();
 
 	if (isLevelBanned || MetalSonicFlag == 1 || SonicRand != 2)
 	{
@@ -110,7 +102,8 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 
 	int8_t cur_Sanic = -1;
 
-	if (char_id == Characters_Sonic) {
+	if (char_id == Characters_Sonic) 
+	{
 		do {
 
 			cur_Sanic = rand() % 3;
@@ -121,9 +114,8 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 	return cur_Sanic;
 }
 
-void initSuperSonicSettings() {
-
-	LoadCharTexture_T = new Trampoline((int)LoadCharTextures, (int)LoadCharTextures + 0x6, CheckAndLoadSuperSonic_Tex);
+void initSuperSonicSettings() 
+{
 	//Super Sonic Stuff
 	WriteCall((void*)0x560388, SuperAuraStuff); //Initialize Super Sonic physic and aura when perfect chaos fight starts.
 
@@ -133,8 +125,8 @@ void initSuperSonicSettings() {
 	if (SSMod || SSMod2)
 		return;
 
+	help.RegisterCharacterPVM(Characters_Sonic, SSTex);
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 	WriteJump(reinterpret_cast<void*>(0x4879c7), (void*)0x4879CE); //Always initialize Super Sonic weld data.
-	return;
 }

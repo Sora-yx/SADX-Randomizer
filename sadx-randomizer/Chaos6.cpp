@@ -48,5 +48,7 @@ void __cdecl Chaos6_Init(const HelperFunctions& helperFunctions)
 	}
 	
 	helperFunctions.ReplaceFile("system\\SET1801S.bin", "system\\sets\\SET1801S.bin");
+	helperFunctions.ReplaceFile("system\\SET1801S_DC.bin", "system\\sets\\SET1801S_DC.bin");
+	helperFunctions.ReplaceFile("system\\SET1801K_DC.bin", "system\\sets\\SET1801K_DC.bin");
 
 }

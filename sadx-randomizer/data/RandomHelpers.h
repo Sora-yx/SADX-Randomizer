@@ -1,6 +1,7 @@
 #pragma once
 
-extern struct RandomizedEntry randomizedSets[40];
+#define TaskHook FunctionHook<void, task*>
+extern struct RandomizedEntry randomizedSets[];
 extern std::string modpath;
 
 struct RandomizedEntry

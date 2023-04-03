@@ -1,22 +1,22 @@
 #include "stdafx.h"
 #include "data\EggHornet.h"
 
-Trampoline* EggHornet_t;
+TaskHook EggHornet_t((intptr_t)EggHornet_Main);
 
-void EggHornet_Main_R(ObjectMaster* obj) {
+void EggHornet_Main_R(task* tp) {
 
+	ObjectMaster* obj = (ObjectMaster*)tp;
 	EntityData1* data1 = obj->Data1;
 	Check_AllocateObjectData2(obj, data1);
 
-	ObjectFunc(origin, EggHornet_t->Target());
-	origin(obj);
+	EggHornet_t.Original(tp);
 }
 
 
 void __cdecl EggHornet_Init(const HelperFunctions& helperFunctions)
 {
 	//Initiliaze data
-	EggHornet_t = new Trampoline((int)EggHornet_Main, (int)EggHornet_Main + 0x7, EggHornet_Main_R);
+	EggHornet_t.Hook(EggHornet_Main_R);
 
 	for (int i = 0; i < 8; i++)
 		helperFunctions.RegisterStartPosition(i, EH_StartPositions[0]);

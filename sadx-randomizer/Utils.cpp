@@ -426,7 +426,8 @@ void Remove_TargetCursor(ObjectMaster* obj) {
 	EntityData1* data = obj->Data1;
 
 	if (data) {
-		if (data->Status & Status_Hurt) {
+		if (data->Status & Status_Hurt) 
+		{
 			E102KillCursor((task*)obj);
 		}
 	}

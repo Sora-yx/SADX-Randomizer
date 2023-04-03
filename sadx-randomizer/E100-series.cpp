@@ -1,13 +1,15 @@
 #include "stdafx.h"
 
-Trampoline* E104_t;
-Trampoline* E103_t;
+TaskHook E103_t((intptr_t)E103_Main);
+TaskHook E104_t((intptr_t)E104_Main);
 
-void CheckAndHurtE100Bosses(ObjectMaster* obj) {
+void CheckAndHurtE100Bosses(ObjectMaster* obj) 
+{
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
-	if (data1->Action > 0 && p1->CharID != Characters_Gamma) {
+	if (data1->Action > 0 && p1->CharID != Characters_Gamma) 
+	{
 		if (GetCollidingEntityA(data1) && (p1->Status & Status_Attack || p1->CharID == Characters_Tails && p1->Action == 20))
 		{
 			data1->Status |= Status_Hurt;
@@ -15,7 +17,8 @@ void CheckAndHurtE100Bosses(ObjectMaster* obj) {
 	}
 }
 
-void FixNonGammaSoftLock(ObjectMaster* obj) {
+void FixNonGammaSoftLock(ObjectMaster* obj) 
+{
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
@@ -27,8 +30,8 @@ void FixNonGammaSoftLock(ObjectMaster* obj) {
 }
 
 
-void E105Enemy_Main_R(ObjectMaster* obj) {
-
+void E105Enemy_Main_R(ObjectMaster* obj) 
+{
 	if (CurrentMission >= Mission2_100Rings) {
 		CheckThingButThenDeleteObject(obj);
 		return;
@@ -38,8 +41,9 @@ void E105Enemy_Main_R(ObjectMaster* obj) {
 }
 
 
-void E104Enemy_Main_R(ObjectMaster* obj) {
-
+void E104Enemy_Main_R(task* tp) 
+{
+	ObjectMaster* obj = (ObjectMaster*)tp;
 
 	if (CurrentLevel == LevelIDs_RedMountain && CurrentMission > 0)
 	{
@@ -50,13 +54,14 @@ void E104Enemy_Main_R(ObjectMaster* obj) {
 	FixNonGammaSoftLock(obj);
 	CheckAndHurtE100Bosses(obj);
 
-	ObjectFunc(origin, E104_t->Target());
-	origin(obj);
+	E104_t.Original(tp);
 }
 
 
-void E103Enemy_Main_R(ObjectMaster* obj) {
+void E103Enemy_Main_R(task* tp) 
+{
 
+	ObjectMaster* obj = (ObjectMaster*)tp;
 	EntityData1* data1 = obj->Data1;
 	EntityData1* p1 = EntityData1Ptrs[0];
 
@@ -69,12 +74,11 @@ void E103Enemy_Main_R(ObjectMaster* obj) {
 	FixNonGammaSoftLock(obj);
 	CheckAndHurtE100Bosses(obj);
 
-	ObjectFunc(origin, E103_t->Target());
-	origin(obj);
+	E103_t.Original(tp);
 }
 
 
 void init_E100Series() {
-	E103_t = new Trampoline ((int)E103_Main, (int)E103_Main + 0x7, E103Enemy_Main_R);
-	E104_t = new Trampoline ((int)E104_Main, (int)E104_Main + 0x7, E104Enemy_Main_R);
+	E103_t.Hook(E103Enemy_Main_R);
+	E104_t.Hook(E104Enemy_Main_R);
 }
