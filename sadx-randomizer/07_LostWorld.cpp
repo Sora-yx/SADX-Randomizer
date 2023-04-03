@@ -7,10 +7,11 @@ void LW_Layout() {
 		CurrentStageVersion = SonicVersion;
 	else
 	{
-		CurrentStageVersion = KnucklesVersion;
+		CurrentStageVersion = SonicVersion;
 
 	}
 
+	CurrentMission = Mission3_LostChao;
 	return;
 }
 

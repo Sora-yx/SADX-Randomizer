@@ -370,12 +370,17 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 		}
 	}
 
+
 	for (int j = 0; j < 8; j++) 
 	{
 		if (playertwp[j]) 
 		{
-			CharColliOff(playertwp[j]);
-
+			if (CurrentMission != Mission3_LostChao)
+			{
+				CharColliOff(playertwp[j]);
+				warped = true;
+			}
+		
 			playertwp[j]->pos = pos;
 			playertwp[j]->ang.y = yRot;
 
@@ -385,11 +390,10 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 			}
 		}
 	}
-
-	warped = true;
 }
 
-struct colLevelStruct {
+struct colLevelStruct 
+{
 	int currentLevel;
 	int currentAct;
 };
@@ -402,7 +406,8 @@ colLevelStruct levelCol[]{
 };
 
 void AddColOnLand() {
-	for (int i = 0; i < CurrentLandTable->COLCount; i++) {
+	for (int i = 0; i < CurrentLandTable->COLCount; i++) 
+	{
 		if (CurrentLandTable->Col[i].Flags & ColFlags_Visible) {
 			CurrentLandTable->Col[i].Flags |= (int)(ColFlags_Solid);
 		}
@@ -411,7 +416,8 @@ void AddColOnLand() {
 
 void CheckAndAddColLandTable() {
 
-	for (int j = 0; j < LengthOfArray(levelCol); j++) {
+	for (int j = 0; j < LengthOfArray(levelCol); j++)
+	{
 		if (CurrentLevel == levelCol[j].currentLevel && CurrentAct == levelCol[j].currentAct) {
 			AddColOnLand();
 			break;

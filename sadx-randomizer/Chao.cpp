@@ -144,7 +144,7 @@ void MissionLostChaoResult(ObjectMaster* obj) {
 	case 0:
 		flashScreenChao = nullptr;
 		if (co2->Speed.x > 1.3)
-			CharObj2Ptrs[0]->Speed.x = 1.3;
+			CharObj2Ptrs[0]->Speed.x = 1.0f;
 		data->Action++;
 		break;
 	case 1:
@@ -333,7 +333,8 @@ void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 		break;
 	case ChaoAction_Free:
 	{
-		if (GameState == 15) {
+		if (GameState == 15) 
+		{
 
 			if (++data->InvulnerableTime == 120) {
 				Chao_SetBehavior(a1->Child, (long*)Chao_Pleasure(a1->Child));

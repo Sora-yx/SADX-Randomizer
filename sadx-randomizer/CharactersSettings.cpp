@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-FunctionHook<void> LoadCharacter_t(0x4157C0);
+FunctionHook<void> LoadCharacter_t((intptr_t)0x4157C0);
 //Manage characters stuff, improve and fixes some stuff
 char SonicRand = 0;
 extern bool Upgrade;
@@ -90,8 +90,8 @@ void fixCharacterSoundAfterReset() {
 
 //Call different stuff when a stage start, like Super Sonic Random transformation, or a custom cart. Also used to call some fixes.
 
-void CallStuffWhenLevelStart() {
-
+void CallStuffWhenLevelStart() 
+{
 
 	TimeThing = 1; //activate the timer of the stage.
 
@@ -106,7 +106,8 @@ void CallStuffWhenLevelStart() {
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
 	}
-	else {
+	else 
+	{
 		SuperSonic_TransformationCheck();
 	}
 

@@ -22,6 +22,7 @@ bool isChaoGameplayAllowed = false;
 bool DupliCheck = true;
 bool isChaoHintEnabled = true;
 bool RNGCutscene = true;
+bool isTCBanned = false;
 
 //Character settings
 bool AmySpeed = true;
@@ -69,6 +70,7 @@ extern "C" {
 		RNGStages = config->getBool("Randomizer", "RNGStages", true);
 		DupliCheck = config->getBool("Randomizer", "DupliCheck", true);
 		RNGCutscene = config->getBool("Randomizer", "RNGCutscene", true);
+		isTCBanned = config->getBool("Randomizer", "isTCBanned", false);
 		Upgrade = config->getBool("Randomizer", "Upgrade", true);
 		Seed = config->getInt("Randomizer", "Seed", 0);
 		Vanilla = config->getBool("Randomizer", "Vanilla", false);

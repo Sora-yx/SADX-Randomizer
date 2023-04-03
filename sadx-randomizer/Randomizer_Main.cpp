@@ -20,13 +20,14 @@ int bannedLevelsGamma[] = { LevelIDs_HedgehogHammer, LevelIDs_Chaos2, LevelIDs_C
 int bannedLevelsBig[] = { LevelIDs_EggViper, LevelIDs_E101R };
 
 //Initiliaze banned Vanilla stage (if option is enabled)
-int bannedRegularSonicAndTails[3] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
+int bannedRegularSonicAndTails[] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[] = { LevelIDs_E101, LevelIDs_E101R };
 
 int previousLevel = -1;
-int TCCount = 0;
+uint8_t TCCount = 0;
 
-RandomizerGenerator RandoStageArray[52]{
+RandomizerGenerator RandoStageArray[52]
+{
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
 	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
 	{LevelAndActIDs_EmeraldCoast1, GammaVersion, Characters_Gamma },
@@ -81,13 +82,25 @@ RandomizerGenerator RandoStageArray[52]{
 	{LevelAndActIDs_SandHill, TailsVersion, Characters_Tails},
 };
 
-void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
-
+uint16_t failSafeLvlCount = 0;
+void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) 
+{
 	RandomizerGenerator* generated;
 
 	do {
 
 		generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
+		failSafeLvlCount++;
+
+		if (failSafeLvlCount >= 300)
+		{
+			if (isStageBanned(generated, Char_id) || !Vanilla && isVanillaStage(generated, Char_id))
+			{
+				generated = &RandoStageArray[rand() % LengthOfArray(RandoStageArray)];
+			}
+
+			break;
+		}
 
 	} while (previousLevel == generated->levelAndActs >> 8 || isStageBanned(generated, Char_id)
 		|| !Vanilla && isVanillaStage(generated, Char_id) || DupliCheck && isDuplicateStage(generated)); //Order check here is really important, dupli check MUST be the last thing checked.
@@ -96,7 +109,7 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) {
 	entry->act = generated->levelAndActs & 0xf;
 	entry->Layout = generated->version;
 	previousLevel = entry->level;
-	return;
+	failSafeLvlCount = 0;
 }
 
 
@@ -108,9 +121,13 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 	uint8_t curBannedChar = generated->bannedChar;
 	short curChar = char_id;
 
-	if (curSingleLevel == LevelIDs_TwinkleCircuit && TCCount >= 2)
-		return true;
-
+	if (curSingleLevel == LevelIDs_TwinkleCircuit)
+	{
+		if (TCCount >= 2 || isTCBanned == true)
+			return true;
+		else
+			TCCount++;
+	} 		
 
 	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
 	{
@@ -159,7 +176,7 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 
 
 	short curLevelAndActID = generated->levelAndActs;
-	short curVersion = generated->version;
+	int8_t curVersion = generated->version;
 	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
 
 	if (ban >= 5)
@@ -184,11 +201,6 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 		}
 	}
 
-	if (TCCount >= 2 && curLevel == LevelIDs_TwinkleCircuit)
-		return true;
-	else if (curLevel == LevelIDs_TwinkleCircuit)
-		TCCount++;
-
 	if (oldStageVersion == curVersion && (oldStageVersion == TailsVersion || oldStageVersion == KnucklesVersion) && DuplicateStages.size() < 40) {
 		return true;
 	}
@@ -201,7 +213,7 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 }
 
 
-int levelCount;
+int levelCount = 0;
 
 void SetInfoNextRandomStage(char Stage, char Act) {
 

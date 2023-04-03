@@ -5,7 +5,6 @@ ModelInfo* MMPlatform;
 bool MMPlatformEnabled = false;
 
 
-
 void PlatformMM_Display(ObjectMaster* obj) {
 
 	if (!MissedFrames && (MMPlatformEnabled || obj->Data1->Scale.x == 15)) {
@@ -128,7 +127,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		{
 		case 0:
 		{
-			timerWarp = 0;
+
 			obj->DisplaySub = MysticMelody_Display;
 			obj->DeleteSub = DynCol_Delete;
 			data->Object = MysticMelody->getmodel();
@@ -169,7 +168,6 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				{
 					SwapDelay = 0;
 					DisableControl();
-					CharColliOff(playertwp[0]);
 					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
 
@@ -225,6 +223,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 		case 5:
 			data->Action = 1;
+			CharColliOff(playertwp[0]);
 			EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
 			warped = true;
 			break;

@@ -133,6 +133,7 @@ extern bool isChaoHintEnabled;
 extern bool AmySpeed;
 extern bool BigSpeed;
 extern bool isKHMod;
+extern bool isTCBanned;
 
 
 uint8_t getRandomCharacter();
