@@ -8,10 +8,8 @@ void LW_Layout() {
 	else
 	{
 		CurrentStageVersion = KnucklesVersion;
-
 	}
 
-	return;
 }
 
 bool isPlayerInWaterSlide = false;

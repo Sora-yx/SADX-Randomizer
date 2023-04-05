@@ -1,24 +1,21 @@
 #include "stdafx.h"
 #include "FE.h"
 
-void FinalEgg_Layout() {
+void FinalEgg_Layout() 
+{
 
 	if (CurrentStageVersion != AmyVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = SonicVersion;
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
-
-	return;
 }
 
 
 void __cdecl FinalEggObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-
 	ObjLists[LevelIDs_FinalEgg * 8 + 0] = &FinalEggObjectList;
 	ObjLists[LevelIDs_FinalEgg * 8 + 2] = &FinalEggObjectList;
-	return;
 }
 
 void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFunctions) {
@@ -38,5 +35,4 @@ void __cdecl FinalEgg_Init(const char* path, const HelperFunctions& helperFuncti
 	AddCam("C1002");
 	AddCam("C1003");
 	AddCam("C1004");
-	return;
 }

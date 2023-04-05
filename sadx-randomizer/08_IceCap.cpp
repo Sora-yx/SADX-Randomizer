@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "IceCap.h"
 
-void IC_Layout() {
-
+void IC_Layout() 
+{
 
 	if (CurrentStageVersion != BigVersion)
 	{

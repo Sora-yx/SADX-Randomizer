@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "HS.h"
 
-void HotShelter_Layout() {
-
-	if (CurrentMission == Mission3_LostChao && CurrentStageVersion == BigVersion) {
+void HotShelter_Layout() 
+{
+	if (CurrentMission == Mission3_LostChao && CurrentStageVersion == BigVersion) 
+	{
 
 		if (SA2M2)
 			CurrentMission = Mission2_100Rings;
 		else
 			CurrentMission = SADX_Mission;
 	}
-
 
 	if (CurrentStageVersion != BigVersion && CurrentStageVersion != GammaVersion)
 		CurrentStageVersion = AmyVersion;
@@ -19,7 +19,6 @@ void HotShelter_Layout() {
 		CurrentStageVersion = GammaVersion;
 
 	CheckAndSet_HotShelterLayoutFeatures();
-	return;
 }
 
 void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secret path.
@@ -30,7 +29,6 @@ void HotShelterSecretSwitch() { //used for Big Hot Shelter when not Big for secr
 	if (SecretWaterSwitch == 3 && FirstHotShelterSwitch == 1)
 		SomethingAboutHotShelterSwitch = 1;
 
-	return;
 }
 
 void CheckAndSet_HotShelterLayoutFeatures() {
@@ -53,8 +51,6 @@ void CheckAndSet_HotShelterLayoutFeatures() {
 		WriteData<1>((int*)0x59a126, 0x75);
 		WriteData<6>((int*)0x442249, 0x90); //Fix Puzzle Box drop
 	}
-
-	return;
 }
 
 
@@ -66,7 +62,6 @@ void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunct
 	ObjLists[LevelIDs_HotShelter * 8 + 2] = &HotShelter3ObjectList;
 
 	HotShelterDeathZones[2] = HotShelter3DeathZones;
-	return;
 }
 
 void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunctions)
@@ -95,5 +90,4 @@ void __cdecl HotShelter_Init(const char* path, const HelperFunctions& helperFunc
 	AddCam("C1201");
 	AddCam("C1202");
 	AddCam("C1203");
-	return;
 }
