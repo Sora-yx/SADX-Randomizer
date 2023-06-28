@@ -11,32 +11,47 @@ int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing 
 
 
 //we first set the rng, then we check if we got diggable piece, if so, we rand again.
-void TreasureHunting_SetRNG() {
+void TreasureHunting_SetRNG() 
+{
 
-	Knuckles_SetRNG(); 
+	Knuckles_SetRNG();
 
-	if (CurrentCharacter == Characters_Knuckles)
+	if (CurrentCharacter == Characters_Knuckles || CurrentStageVersion != KnucklesVersion)
 	{
 		return;
 	}
-	
+
 	KnuxCheck2 = 0; //fix Trial Mode Crash
+	int failsafe = 0;
 
 	switch (CurrentLevel)
 	{
 	case LevelIDs_SpeedHighway:
-		if (CurrentCharacter == Characters_Gamma && KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
+		if (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53) //Gamma cannot break the trash.
 		{
-			do {
-				Knuckles_SetRNG();
-			} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
+			if (CurrentCharacter == Characters_Gamma)
+			{
+				do {
+					Knuckles_SetRNG();
+					failsafe++;
+
+					if (failsafe == 100)
+						break;
+
+				} while (KnuxEmerald2 >= 48 && KnuxEmerald2 <= 53);
+			}
 		}
+
 		break;
 	case LevelIDs_RedMountain:
 		if (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37) //If diggable emeralds, rand again.
 		{
 			do {
 				Knuckles_SetRNG();
+				failsafe++;
+
+				if (failsafe == 100)
+					break;
 			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
 		}
 		break;
@@ -45,6 +60,10 @@ void TreasureHunting_SetRNG() {
 		{
 			do {
 				Knuckles_SetRNG();
+				failsafe++;
+
+				if (failsafe == 100)
+					break;
 			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 37);
 		}
 		break;
@@ -53,6 +72,10 @@ void TreasureHunting_SetRNG() {
 		{
 			do {
 				Knuckles_SetRNG();
+				failsafe++;
+
+				if (failsafe == 100)
+					break;
 			} while (KnuxEmerald2 >= 32 && KnuxEmerald2 <= 35);
 		}
 		break;
@@ -65,7 +88,7 @@ void TreasureHunting_SetRNG() {
 void CheckAndLoad_TreasureHunting() {
 	if (CurrentMission > SADX_Mission || CurrentStageVersion != KnucklesVersion || CurrentLevel >= LevelIDs_Chaos0)
 		return;
-	
+
 	if (CurrentCharacter != Characters_Knuckles) {
 		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
 	}
