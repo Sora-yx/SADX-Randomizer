@@ -43,7 +43,7 @@ SetLevelPosition M2_PlayerEndPosition[]{ //Used for M2 and Bosses
 	{ KnucklesVersion, LevelAndActIDs_Casinopolis1, 339.147, 230, -166.386 },
 	{ SonicVersion, LevelAndActIDs_Casinopolis2, { -1570.98, -2205, 2646.02 }, 0 },
 	{ TailsVersion, LevelAndActIDs_Casinopolis2, {-1570.98, -2205, 2646.02 }, 0 },
-	{ SonicVersion, LevelAndActIDs_FinalEgg1, { 2083.96, 197.99, -1398.53}, 0 },
+	{ SonicVersion, LevelAndActIDs_FinalEgg1, { 2083.96, 347.99, -1398.53}, 0 },
 	{ AmyVersion, LevelAndActIDs_FinalEgg1, { 1271.06, -232, -1513.3 }, 0xC000 },
 	{ SonicVersion, LevelAndActIDs_FinalEgg2, { 1058.81, -1614.85, -951.257 }, 0xC000 },
 	{ SonicVersion, LevelAndActIDs_FinalEgg3, { 1815.14, -3173.87, -274.59 }, 0x8000 },

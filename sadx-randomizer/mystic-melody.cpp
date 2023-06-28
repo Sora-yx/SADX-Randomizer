@@ -101,7 +101,7 @@ void warpedOnFrames()
 {
 	if (warped && playertwp[0] && IsIngame())
 	{
-		if (++timerWarp == 120)
+		if (++timerWarp == 80)
 		{
 			CharColliOn(playertwp[0]);
 			warped = false;

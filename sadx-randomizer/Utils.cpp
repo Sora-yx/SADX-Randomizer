@@ -383,7 +383,7 @@ void TeleportPlayerResultScreen(NJS_VECTOR pos, int yRot) {
 		
 			playertwp[j]->pos = pos;
 			playertwp[j]->ang.y = yRot;
-
+			playertwp[j]->pos.y += 15.0f;
 			if (j > 0) {
 				playertwp[j]->pos.x += 5;
 				playertwp[j]->pos.z += 5;
