@@ -50,13 +50,6 @@ int IC_ReturnCharacter() { //trick the game to make it think we are playing Soni
 		return (unsigned int)Characters_Sonic;
 }
 
-int IC_ReturnCharacter2() { //trick the game 
-	if (CurrentStageVersion == SonicVersion)
-		return (unsigned int)Characters_Big;
-
-	if (CurrentStageVersion == TailsVersion)
-		return (unsigned int)Characters_Tails;
-}
 
 //Prevent the game to disable control for cutscene skip Ice Cap act 3 (Cart thing.)
 
@@ -132,8 +125,6 @@ void __cdecl IceCap_Init(const char* path, const HelperFunctions& helperFunction
 	WriteCall((void*)0x4e92e7, IC_ReturnCharacter);
 	WriteCall((void*)0x4e9802, IC_ReturnCharacter);
 
-	WriteCall((void*)0x4e97a0, IC_ReturnCharacter2); //TEST ATM
-	WriteCall((void*)0x4e97a9, IC_ReturnCharacter2);
 	WriteCall((void*)0x4ec065, AddRingIceCap);
 	WriteCall((void*)0x4ecf8f, FixTailsVictoryIC);
 
