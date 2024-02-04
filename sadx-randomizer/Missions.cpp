@@ -381,7 +381,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
 			return;
 
-		if (Mission2Check() && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+		if (Mission2Check() && CurrentMission == Mission2_100Rings)
 		{
 
 			TimeThing = 0;
@@ -393,7 +393,6 @@ void MissionResultCheck(ObjectMaster* obj) {
 				if (playertwp[i])
 				{
 					ForcePlayerAction(i, 24);
-
 					auto co2 = CharObj2Ptrs[i];
 					auto p1 = playertwp[i];
 					co2->Speed.x = 0.0f;
@@ -401,10 +400,17 @@ void MissionResultCheck(ObjectMaster* obj) {
 					p1->flag &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
 					co2->Powerups |= Powerups_Invincibility;
 				}
-	
 			}
 	
 			data->Action++;
+		}
+		else if (CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+		{
+	
+			co2->Powerups |= Powerups_Invincibility;
+			KnuxCheck2 = 1;
+			CheckThingButThenDeleteObject(obj);
+			return;
 		}
 
 		break;

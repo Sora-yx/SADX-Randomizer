@@ -18,6 +18,7 @@ int checkIfFileExists(const char* filename);
 bool isMPMod();
 void DisablePlayersCol();
 bool isCharSelActive();
+void TeleportAllPlayersToP1();
 
 enum colorMSG {
 	redColor = 0xFFFF0000,

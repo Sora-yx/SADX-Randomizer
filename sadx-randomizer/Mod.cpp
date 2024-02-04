@@ -90,6 +90,11 @@ extern "C" {
 		if (GameState == 16)  //Pause Menu
 			PauseMenuFix();
 
+		if (IsIngame())
+		{
+			PrintDebug("CURRENT RESTART POS: %f, %f, %f\n", RestartLevel.Position.x, RestartLevel.Position.y, RestartLevel.Position.z);
+		}
+
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

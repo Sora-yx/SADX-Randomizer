@@ -423,6 +423,22 @@ void AddColOnLand() {
 	}
 }
 
+void TeleportAllPlayersToP1()
+{
+	DisablePlayersCol();
+	Float diff = 10.0f;
+
+	for (uint8_t i = 1; i < PMax; i++)
+	{
+		if (playertwp[i])
+		{
+			playertwp[i]->pos = playertwp[0]->pos;
+			playertwp[i]->pos.x += diff;
+			diff += 10.0f;
+		}
+	}
+}
+
 void CheckAndAddColLandTable() {
 
 	for (int j = 0; j < LengthOfArray(levelCol); j++)

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-
 int KnuxRadarEmeraldCheck() {  //trick the game to make it think we are playing Knuckles
 
 	if (CurrentStageVersion == KnucklesVersion && CurrentMission < Mission2_100Rings)
@@ -85,11 +84,13 @@ void TreasureHunting_SetRNG()
 	}
 }
 
-void CheckAndLoad_TreasureHunting() {
+void CheckAndLoad_TreasureHunting() 
+{
 	if (CurrentMission > SADX_Mission || CurrentStageVersion != KnucklesVersion || CurrentLevel >= LevelIDs_Chaos0)
 		return;
 
-	if (CurrentCharacter != Characters_Knuckles) {
+	if (CurrentCharacter != Characters_Knuckles) 
+	{
 		LoadPVM("KNU_EFF", &KNU_EFF_TEXLIST);
 	}
 
@@ -211,7 +212,8 @@ void Init_TreasureHunting() {
 	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
 	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
+	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece		
+	WriteCall((void*)0x4766D1, KnuxRadarEmeraldCheck); //Fix CP, restart and win POS
 
 	//Force the game to load treasure hunting stuff for everyone
 	WriteData<1>((void*)0x416F06, 0x08);
