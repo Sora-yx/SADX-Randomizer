@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "mission.h"
+#include "multiapi.h"
 
 // Mission Card settings, check, texture edit.
 short CurrentMission = 0;
@@ -325,17 +326,41 @@ void TitleCard_Init() {
 }
 
 
+bool Mission2Check()
+{
+	int total = 0;
+
+	if (isMPMod() && multi_is_active())
+	{
+		for (uint8_t i = 0; i < multi_get_player_count(); i++)
+		{
+			total += multi_rings_get(i);
+		}
+
+		return total >= (100u * multi_get_player_count());
+	}
+
+	return Rings >= 100;
+}
+
 void CheckAndLoad_CartStopper() 
 {
-
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) {
-		ObjectMaster* toto = LoadObject((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, OCartStopper);
-		if (toto) {
-			toto->Data1->Position = EntityData1Ptrs[0]->Position;
+	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) 
+	{
+		for (uint8_t i = 0; i < PMax; i++)
+		{
+			if (playertwp[i])
+			{
+				task* cartStop = CreateElementalTask((LoadObj)(LoadObj_Data2 | LoadObj_Data1 | LoadObj_UnknownA), 3, (TaskFuncPtr)OCartStopper);
+				if (cartStop)
+				{
+					cartStop->twp->pos = playertwp[i]->pos;
+				}
+			}
+		
 		}
 	}
 }
-
 
 ObjectMaster* Flash = nullptr;
 NJS_VECTOR BackupPos;
@@ -345,7 +370,6 @@ void MissionResultCheck(ObjectMaster* obj) {
 	EntityData1* data = obj->Data1;
 	CharObj2* co2 = CharObj2Ptrs[0];
 	EntityData1* p1 = EntityData1Ptrs[0];
-
 
 	if (!co2 || !p1)
 		return;
@@ -357,20 +381,29 @@ void MissionResultCheck(ObjectMaster* obj) {
 		if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
 			return;
 
-		if (Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+		if (Mission2Check() && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		{
 
 			TimeThing = 0;
 			CheckAndLoad_CartStopper();
 
 			Flash = nullptr;
-			ForcePlayerAction(0, 24);
+			for (uint8_t i = 0; i < PMax; i++)
+			{
+				if (playertwp[i])
+				{
+					ForcePlayerAction(i, 24);
 
-			co2->Speed.x = 0.0f;
-			co2->Speed.y = 0.0f;
-			p1->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-			co2->Powerups |= Powerups_Invincibility;
-
+					auto co2 = CharObj2Ptrs[i];
+					auto p1 = playertwp[i];
+					co2->Speed.x = 0.0f;
+					co2->Speed.y = 0.0f;
+					p1->flag &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+					co2->Powerups |= Powerups_Invincibility;
+				}
+	
+			}
+	
 			data->Action++;
 		}
 
@@ -386,7 +419,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		DisableControl();
 		DisableController(0);
 		PauseEnabled = 0;
-		CharColliOff(playertwp[0]);
+		DisablePlayersCol();
 		warped = true;
 		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
 		{

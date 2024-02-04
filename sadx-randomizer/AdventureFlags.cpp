@@ -59,11 +59,11 @@ void Rando_LoadProgression() {
 		file >> j;
 		file.close();
 
-		if (SeedCopy == (int64_t)j["seed"]) {
+		if (SeedCopy == (int)j["seed"]) {
 
-			levelCount = (int64_t)j["levelCount"];
-			CustomFlag = (int64_t)j["customFlag"];
-			cutsceneAllowedCount = (int64_t)j["cutsceneCount"];
+			levelCount = (int)j["levelCount"];
+			CustomFlag = (int)j["customFlag"];
+			cutsceneAllowedCount = (int)j["cutsceneCount"];
 			PrintDebug(loadOK, SeedCopy);
 		}
 		else {
@@ -164,26 +164,16 @@ int GetCharaProgression() {
 }
 
 
-void DeleteCustomFlag() {
+void DeleteCustomFlag(AdvaModeEnum a1)
+{
+	DeleteCreditStats();
+	ResetValueAndObjects();
+	levelCount = 0;
+	TotalCount = 0;
+	musicCount = 0;
+	Randomizer_GetNewRNG();
 
-	if (CurrentLevel == 0 && GameMode == 12 && !DemoPlaying)
-	{
-		DeleteCreditStats();
-		ResetValueAndObjects();
-		if (SeedCopy != 0 && (CustomFlag != 0 || levelCount != 0))
-		{
-			levelCount = 0;
-			TotalCount = 0;
-			musicCount = 0;
-		}
-
-		if (!SeedCopy && levelCount != 0)
-			Randomizer_GetNewRNG();
-
-		CustomFlag = 0;
-	}
-
-	return SomethingAboutFlag();
+	return CmnAdvaModeProcedure(a1);
 }
 
 void AddCustomFlag() {
@@ -498,7 +488,7 @@ void init_FlagsProgression() {
 	if (!RNGStages)
 		return;
 
-	WriteCall((void*)0x413368, DeleteCustomFlag); //Reset flags when you create a new savefile.
+	WriteCall((void*)0x50399F, DeleteCustomFlag); //Reset flags when you create a new savefile.
 	WriteCall((void*)0x42af3b, AddCustomFlag);
 
 	WriteCall((void*)0x503782, LoadSave_r);
@@ -516,5 +506,4 @@ void init_FlagsProgression() {
 	WriteData<1>((int*)0x413870, 0XC3); //TEST: remove something which set flag
 
 	WriteData<1>((int*)0x412E20, 0xC3); //remove flag level clear
-	return;
 }

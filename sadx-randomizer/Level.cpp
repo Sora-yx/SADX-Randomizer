@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "multiapi.h"
 
 extern uint32_t TotalCount;
 static Trampoline* MovePlayerToStartPoint_t = nullptr;
@@ -80,9 +81,15 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		{
 			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
 			{
-				
-				EntityData1Ptrs[0]->Position = PlayerStartPosition[i].Position;
-				EntityData1Ptrs[0]->Rotation.y = PlayerStartPosition[i].YRot;
+				for (uint8_t j = 0; j < PMax; j++)
+				{
+					if (playertwp[j])
+					{
+						EntityData1Ptrs[j]->Position = PlayerStartPosition[i].Position;
+						EntityData1Ptrs[j]->Rotation.y = PlayerStartPosition[i].YRot;
+					}
+				}
+			
 				return;
 			}
 		}
@@ -92,8 +99,10 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 	return original(data);
 }
 
-void __cdecl LoadLevelObject_r() {
-	if (isRandoLevel()) {
+void __cdecl LoadLevelObject_r() 
+{
+	if (isRandoLevel()) 
+	{
 		Load_ObjectsCommon();
 	}
 
@@ -103,7 +112,8 @@ void __cdecl LoadLevelObject_r() {
 	LoadPVM("BACKRING", &GoalRingTextures);
 	CheckAndLoad_TreasureHunting();
 
-	LoadObject(LoadObj_Data1, 0, AI_Manager);
+	if (!isMPMod())
+		LoadObject(LoadObj_Data1, 0, AI_Manager);
 
 	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
 	original();

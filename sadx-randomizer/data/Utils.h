@@ -3,7 +3,7 @@
 void DynCol_Add(ObjectMaster* a1, uint8_t col);
 void DynCol_Delete(ObjectMaster* a1);
 bool DynColRadius(ObjectMaster* a1, float radius, uint8_t col);
-ModelInfo* LoadBasicModel(const char* name);
+std::unique_ptr<ModelInfo> LoadBasicModel(const char* name);
 void FreeMDL(ModelInfo* pointer);
 bool isValueInArray(int* array, int value, int size);
 short ConvertLevelActsIDtoLevel(short level);
@@ -15,6 +15,9 @@ void ChaoGardenWarp_Check();
 extern uint8_t chaoWarpAllowedCount;
 void Check_AllocateObjectData2(ObjectMaster* obj, EntityData1* data1);
 int checkIfFileExists(const char* filename);
+bool isMPMod();
+void DisablePlayersCol();
+bool isCharSelActive();
 
 enum colorMSG {
 	redColor = 0xFFFF0000,
@@ -25,3 +28,4 @@ enum colorMSG {
 	greyColor = 0xFFBFBFBF,
 	purpleColor = 0xFFc61bde
 };
+

@@ -19,10 +19,11 @@ void FixLWWaterSlide() {
 	if (CurrentLevel == LevelIDs_LostWorld && CurrentAct == 1 && CurrentMissionCard == RingsCard)
 		isPlayerInWaterSlide = true;
 
-	if (EntityData1Ptrs[0]->CharID == Characters_Sonic)
-		return ForcePlayerAction(0, 0x17);
-
-	return;
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		if (playertwp[i] && EntityData1Ptrs[i]->CharID == Characters_Sonic)
+			ForcePlayerAction(i, 0x17);
+	}
 }
 
 void FixLWWaterSlide2() {

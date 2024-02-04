@@ -765,8 +765,8 @@ void FinalStatDisplay(ObjectMaster* obj) {
 			int size_x = 15;
 			int size_y = 0;
 
-			vscale = VerticalResolution / 480;
-			int hzscale = HorizontalResolution / 640;
+			vscale = VerticalResolution / 480.0f;
+			int hzscale = HorizontalResolution / 640.0f;
 
 
 			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-ModelInfo* MysticMelody;
-ModelInfo* MMPlatform;
+std::shared_ptr<ModelInfo> MysticMelody;
+std::shared_ptr<ModelInfo> MMPlatform;
 bool MMPlatformEnabled = false;
 
 
@@ -21,13 +21,15 @@ void PlatformMM_Main(ObjectMaster* obj) {
 	if (!ClipSetObject(obj)) {
 		EntityData1* data = obj->Data1;
 
-		if (data->Action == 0) {
+		if (data->Action == 0) 
+		{
 			obj->DisplaySub = PlatformMM_Display;
 			obj->DeleteSub = DynCol_Delete;
 			data->Object = MMPlatform->getmodel();
 		}
 
-		if (MMPlatformEnabled) {
+		if (MMPlatformEnabled) 
+		{
 			DynColRadius(obj, 100, 1);
 			obj->DisplaySub(obj);
 		}
@@ -99,19 +101,24 @@ bool warped = false;
 static int timerWarp = 0;
 void warpedOnFrames()
 {
-	if (warped && playertwp[0] && IsIngame())
+	if (warped && ++timerWarp == 80)
 	{
-		if (++timerWarp == 80)
+		for (uint8_t i = 0; i < PMax; i++)
 		{
-			CharColliOn(playertwp[0]);
+			if (playertwp[i] && IsIngame())
+			{
+				CharColliOn(playertwp[i]);
+			}
+
 			warped = false;
 			timerWarp = 0;
 		}
 	}
 }
 
-void MysticMelody_Main(ObjectMaster* obj) {
-	if (!ClipSetObject(obj)) 
+void MysticMelody_Main(ObjectMaster* obj) 
+{
+	if (!ClipSetObject(obj))
 	{
 
 		if (!playertwp[0] || !playerpwp[0])
@@ -122,6 +129,7 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		int curAction = EntityData1Ptrs[0]->Action;
 		unsigned char getChar = EntityData1Ptrs[0]->CharID;
 		int size = 25;
+		uint8_t pnum = 0;
 
 		switch (data->Action)
 		{
@@ -137,7 +145,10 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		break;
 		case 1:
 		{
-			if (IsPlayerInsideSphere(&obj->Data1->Position, 160)) {
+
+
+			if (IsPlayerInsideSphere(&obj->Data1->Position, 160)) 
+			{
 				data->InvulnerableTime = 0;
 				data->Index = 0;
 
@@ -157,21 +168,28 @@ void MysticMelody_Main(ObjectMaster* obj) {
 				SwapDelay = 0;
 			}
 
-			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (player->Status & (Status_Ground | Status_OnColli))) {
+			pnum = IsPlayerInsideSphere(&obj->Data1->Position, size) - 1;
+			if (IsPlayerInsideSphere(&obj->Data1->Position, size) && (EntityData1Ptrs[pnum]->Status & (Status_Ground | Status_OnColli))) {
 
 				SwapDelay = 0;
 
 				if (!isAIActive)
 					Hud_ShowActionButton();
 
-				if (ControllerPointers[0]->PressedButtons & Buttons_Y)
+				if (ControllerPointers[pnum]->PressedButtons & Buttons_Y)
 				{
 					SwapDelay = 0;
 					DisableControl();
-					EntityData1Ptrs[0]->Status &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
-					CharObj2Ptrs[0]->Speed = { 0, 0, 0 };
-
-					if ( (CharObj2Ptrs[0]->Upgrades & Upgrades_SuperSonic) == 0)
+					for (uint8_t i = 0; i < PMax; i++)
+					{
+						if (playertwp[i])
+						{
+							playertwp[i]->flag &= ~(Status_Attack | Status_Ball | Status_LightDash | Status_Unknown3);
+							playerpwp[i]->spd = { 0, 0, 0 };
+						}
+					}
+			
+					if ((CharObj2Ptrs[pnum]->Upgrades & Upgrades_SuperSonic) == 0)
 						ForcePlayerToWhistle();
 
 					PlayDelayedCustomSound(CommonSound_MysticMelody, 1, 2);
@@ -182,17 +200,22 @@ void MysticMelody_Main(ObjectMaster* obj) {
 		}
 		break;
 		case 3:
-			if (++data->Index == 120) 
+			if (++data->Index == 120)
 			{
 				EnableControl();
 				if (CurrentLevel == LevelIDs_HotShelter && CurrentCharacter == Characters_Gamma && CurrentAct == 0 && CurrentStageVersion == BigVersion) {
 					warped = true;
-					CharColliOff(playertwp[0]);
-					PositionPlayer(0, 640.168, 150.123, -435.403);
+					DisablePlayersCol();
+					for (uint8_t i = 0; i < PMax; i++)
+					{
+						if (playertwp[i])
+							PositionPlayer(i, 640.168, 150.123, -435.403 + i);
+					}
+					
 					PlayDelayedCustomSound(CommonSound_MM_Warp, 10, 1);
 					data->Action = 2;
 				}
-				else 
+				else
 				{
 
 					if (CurrentMission == Mission3_LostChao)
@@ -223,8 +246,17 @@ void MysticMelody_Main(ObjectMaster* obj) {
 			break;
 		case 5:
 			data->Action = 1;
-			CharColliOff(playertwp[0]);
-			EntityData1Ptrs[0]->Position = SetPlayerAroundLostChaoPosition();
+	
+			DisablePlayersCol();
+
+			for (uint8_t i = 0; i < PMax; i++)
+			{
+				if (playertwp[i])
+				{
+					playertwp[i]->pos = SetPlayerAroundLostChaoPosition();
+				}
+			}
+
 			warped = true;
 			break;
 		}
@@ -234,16 +266,8 @@ void MysticMelody_Main(ObjectMaster* obj) {
 	}
 }
 
-void DeleteMM_Models() {
-	FreeMDL(MysticMelody);
-	FreeMDL(MMPlatform);
-}
-
-
 void LoadMysticMelody_Models() {
 
-	if (!MysticMelody && !MMPlatform) {
-		MysticMelody = LoadBasicModel("MysticMelody");
-		MMPlatform = LoadBasicModel("MM-Platform");
-	}
+	MysticMelody = LoadBasicModel("MysticMelody");
+	MMPlatform = LoadBasicModel("MM-Platform");
 }

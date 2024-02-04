@@ -137,14 +137,20 @@ ObjectMaster* flashScreenChao = nullptr;
 void MissionLostChaoResult(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1;
-	CharObj2* co2 = CharObj2Ptrs[0];
 
 	switch (data->Action)
 	{
 	case 0:
 		flashScreenChao = nullptr;
-		if (co2->Speed.x > 1.3)
-			CharObj2Ptrs[0]->Speed.x = 1.0f;
+
+		for (uint8_t i = 0; i < PMax; i++)
+		{
+			if (playerpwp[i] && playerpwp[i]->spd.x > 1.3f)
+			{
+				playerpwp[i]->spd.x = 1.0f;
+			}
+		}
+
 		data->Action++;
 		break;
 	case 1:
@@ -198,26 +204,6 @@ void ChaoObj_Delete(ObjectMaster* a1) {
 	Chao_DeleteFiles();
 }
 
-bool isLoaded = false;
-void RandomSpawnChao() {
-
-	if (!isLoaded) {
-		Chao_LoadFiles();
-		isLoaded = true;
-	}
-
-	ChaoData* chaodata = new ChaoData();
-	CurrentChao = CreateChao(chaodata, 0, 0, &EntityData1Ptrs[0]->Position, 0);
-	CurrentChao->Data1->Rotation.y = Yrot;
-
-	Sint8 randomModel = rand() % 26;
-
-	if (randomModel < 2)
-		randomModel = 2;
-
-	Change_ChaoType(CurrentChao, randomModel);
-}
-
 void Load_ItemBoxOneLife(ObjectMaster* a1) {
 	SETObjData* life = new SETObjData();
 	a1->SETData.SETData = life;
@@ -229,9 +215,10 @@ void Load_ItemBoxOneLife(ObjectMaster* a1) {
 void __cdecl ChaoObj_Main(ObjectMaster* a1) {
 
 	EntityData1* data = a1->Data1;
-	EntityData1* P1 = EntityData1Ptrs[0];
 
-	switch (a1->Data1->Action) {
+
+	switch (data->Action) 
+	{
 	case ChaoAction_Init:
 	{
 		if (!CurrentLandTable)

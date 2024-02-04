@@ -48,6 +48,19 @@ void LoadCharacter_r()
 	CheckAndSetUpgrades();
 }
 
+//if CharSel since it WriteJump the thing
+void LoadCharacter_r2()
+{
+	LoadCharacter();
+
+	CheckAndLoadRaceOpponent();
+
+	if (CurrentCharacter == Characters_Amy)
+		CheckLoadBird();
+
+	CheckAndSetUpgrades();
+}
+
 
 void fixCharacterSoundAfterReset() {
 
@@ -240,21 +253,56 @@ uint8_t getRandomCharacter() {
 	return cur_char;
 }
 
+int8_t prev_charMulti = -1;
+uint8_t getRandomCharacterMulti(uint16_t i) 
+{
+	int8_t cur_char = -1;
+	int failSafe = 0;
+
+	do {
+
+		if (randomizedSets[i].character <= Characters_Amy)
+		{
+			cur_char = character[rand() % 4];
+		}			
+		else
+		{
+			cur_char = randomizedSets[i].character;
+			break;
+		}
+
+		failSafe++;
+
+		if (failSafe >= 100)
+		{
+			break;
+		}
+
+	} while (cur_char == prev_charMulti && ban < 5 || banCharacter[cur_char]);
+
+	prev_charMulti = cur_char;
+	return cur_char;
+}
+
 void Characters_Init() 
 {
-	LoadCharacter_t.Hook(LoadCharacter_r);
+	if (isCharSelActive())
+		WriteCall((void*)0x415A25, LoadCharacter_r2);
+	else
+		LoadCharacter_t.Hook(LoadCharacter_r);
 
 	WriteData<1>((int*)0x47ED60, 0xC3); //remove load Tails AI, we will manually do it
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar
 	WriteData<5>((void*)0x48adaf, 0x90); // prevent Amy to load Zero.
 
 
-	if (AmySpeed) {
-		PhysicsArray[Characters_Amy].MaxAccel = 5;
+	if (AmySpeed) 
+	{
+		PhysicsArray[Characters_Amy].MaxAccel = 5.0f;
 	}
 
 	if (BigSpeed) {
-		PhysicsArray[Characters_Big].MaxAccel = 5;
+		PhysicsArray[Characters_Big].MaxAccel = 5.0f;
 	}
 
 	//Remove several Knuckles killplane check, This fix a weird black screen in some specific stages.

@@ -18,10 +18,8 @@ void CheckAndLoadTriggerObject() {
 	HotShelterSecretSwitch();
 }
 
-void Load_ObjectsCommon() {
-
-	LoadMysticMelody_Models();
-
+void Load_ObjectsCommon() 
+{
 	if (CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && CurrentCharacter != Characters_Knuckles)
 		LoadObject((LoadObj)2, 1, MissionResultCheck);
 }
@@ -57,9 +55,18 @@ void TargetableEntity(ObjectMaster* obj)
 			return;
 		}
 
-		if (EntityData1Ptrs[0]->CharID != Characters_Gamma)
-			return;
 
+		for (uint8_t i = 0; i < PMax; i++)
+		{
+			if (playertwp[i] && EntityData1Ptrs[i]->CharID == Characters_Gamma)
+				break;
+
+			if (i >= PMax)
+			{
+				return;
+			}
+		}
+	
 		data->Position = boss->Data1->Position;
 		data->Position.y += 10;
 
@@ -83,8 +90,9 @@ void TargetableEntity(ObjectMaster* obj)
 }
 
 
-void Objects_Common_Init() {
-
+void Objects_Common_Init() 
+{
+	LoadMysticMelody_Models();
 	Set_BackRing();
 	Set_ZeroChase();
 	init_CartStuff();

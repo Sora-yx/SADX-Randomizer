@@ -78,19 +78,21 @@ void ForcePlayerToWhistle() {
 		break;
 	}
 
-	EntityData1* ed1 = EntityData1Ptrs[0];
-	EntityData2* ed2 = EntityData2Ptrs[0];
-	CharObj2* co2 = CharObj2Ptrs[0];
-
-	if (!ed1)
-		return;
-
-	if (ed1->Action < 1)
-		return;
-
 	int curLevel = CurrentLevel;
-	CurrentLevel = LevelIDs_SSGarden;
-	PerformWhistle(ed1, ed2, co2, id);
+
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		EntityData1* ed1 = EntityData1Ptrs[i];
+		EntityData2* ed2 = EntityData2Ptrs[i];
+		CharObj2* co2 = CharObj2Ptrs[i];
+
+		if (!ed1 || ed1->Action < 1)
+			continue;
+
+		CurrentLevel = LevelIDs_SSGarden;
+		PerformWhistle(ed1, ed2, co2, id);
+	}
+
 	CurrentLevel = curLevel;
 }
 
@@ -144,20 +146,25 @@ void FlashScreen(ObjectMaster* obj) {
 	}
 }
 
-bool isSA2Mod() {
-	HMODULE Mod = GetModuleHandle(L"sadx-sa2-mod");
-	if (Mod)
-		return true;
-
-	return false;
+bool isCharSelActive() 
+{
+	return GetModuleHandle(L"SADXCharSel") != NULL;
 }
 
-bool isDCMod() {
-	HMODULE DCMod = GetModuleHandle(L"DCMods_Main");
-	if (DCMod)
-		return true;
+bool isSA2Mod() 
+{
+	return GetModuleHandle(L"sadx-sa2-mod") != NULL;
+}
 
-	return false;
+bool isDCMod() 
+{
+	return GetModuleHandle(L"DCMods_Main") != NULL;
+}
+
+extern bool gMultiplayerModLoaded;
+bool isMPMod() 
+{
+	return gMultiplayerModLoaded;
 }
 
 bool isRandoLevel() {
@@ -174,21 +181,23 @@ bool isRandoLevel() {
 
 // Object model file functions
 
-ModelInfo* LoadBasicModel(const char* name) {
+std::unique_ptr<ModelInfo> LoadBasicModel(const char* name) 
+{
 	PrintDebug("[SADX Randomizer] Loading basic model: %s... ", name);
 
 	std::string fullPath = "system\\models\\";
 	fullPath = fullPath + name + ".sa1mdl";
 
-	ModelInfo* mdl = new ModelInfo(help.GetReplaceablePath(fullPath.c_str()));
+	// Use std::make_unique to create a std::unique_ptr
+	std::unique_ptr<ModelInfo> mdl = std::make_unique<ModelInfo>(help.GetReplaceablePath(fullPath.c_str()));
 
-	if (mdl->getformat() != ModelFormat_Basic) {
+	if (mdl->getformat() != ModelFormat_Basic)
+	{
 		PrintDebug("Failed!\n");
-		delete mdl;
+		// No need to delete the pointer explicitly; it will be automatically cleaned up when the std::unique_ptr goes out of scope.
 		return nullptr;
 	}
 
-	PrintDebug("Done.\n");
 	return mdl;
 }
 
@@ -426,6 +435,14 @@ void CheckAndAddColLandTable() {
 	return;
 }
 
+void DisablePlayersCol()
+{
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		if (playertwp[i])
+			CharColliOff(playertwp[i]);
+	}
+}
 //Delete gamma shot on target
 void Remove_TargetCursor(ObjectMaster* obj) {
 

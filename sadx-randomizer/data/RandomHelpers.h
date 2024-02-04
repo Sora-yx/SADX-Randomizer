@@ -1,8 +1,10 @@
 #pragma once
 
 #define TaskHook FunctionHook<void, task*>
-extern struct RandomizedEntry randomizedSets[];
+
 extern std::string modpath;
+#define PMax 8u
+
 
 struct RandomizedEntry
 {
@@ -20,6 +22,8 @@ struct RandomizedEntry
 	int8_t cutsceneChara;
 	int cutsceneLevel;
 	int cutsceneAct;
+	uint8_t enemy;
+	int8_t characterMulti[PMax - 1u];
 };
 
 struct StageVersion {
@@ -80,14 +84,13 @@ enum LevelAndActIDs_
 
 extern RandomizerGenerator RandoStageArray[52];
 
-
-
 enum CurSplits {
 
 	None, SonicStorySplit, AllStoriesSplit, AnyPourcent
 };
 
 
+extern RandomizedEntry randomizedSets[];
 
 bool isBossStage(short stage_id);
 bool isDuplicateMission(short curMission, short prevMission);
@@ -137,6 +140,7 @@ extern bool isTCBanned;
 
 
 uint8_t getRandomCharacter();
+uint8_t getRandomCharacterMulti(uint16_t i);
 bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id);
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id);
 bool isDuplicateStage(RandomizerGenerator* generated);
@@ -189,6 +193,7 @@ extern char act;
 extern char SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
 extern bool RNGVoices;
+extern bool RNGBosses;
 
 extern int character[6];
 extern int CharacterCopy;
@@ -218,7 +223,7 @@ void PlayVoice_Original(int a1);
 void Chao_CrySound();
 
 void CustomFlagCheck(); //sa2 style
-void DeleteCustomFlag();
+void DeleteCustomFlag(AdvaModeEnum a1);
 
 void CancelResetPosition();
 void SA2VoicesCheck();
@@ -309,6 +314,8 @@ extern int TotalHurtsPB;
 extern int AISwapCount;
 extern bool isGameOver;
 extern int SeedCopy;
+
+void ReadConfig(const char* path);
 
 bool isRandoLevel();
 void LayoutFunctionInit();

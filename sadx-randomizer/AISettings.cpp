@@ -680,7 +680,7 @@ void AI_Manager(ObjectMaster* obj) {
 void CheckLoadTails_AI_R() {
 	if (CreditCheck != true)
 	{
-		if (!Race && CurrentStageVersion != TailsVersion && isAIAllowed)
+		if (!Race && CurrentStageVersion != TailsVersion && isAIAllowed && !isMPMod())
 		{
 			Load2PTails_r();
 		}
@@ -778,7 +778,7 @@ void __cdecl AI_Init(const HelperFunctions& helperFunctions, const IniFile* conf
 	WriteData<1>((int*)0x7b43bc, 0x2); //remove Tikal debug mode
 
 
-	if (!isAIAllowed)
+	if (!isAIAllowed || isMPMod())
 		return;
 
 	WriteCall((void*)0x47ed8e, CheckTailsAI_R);

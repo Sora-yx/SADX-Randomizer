@@ -9,6 +9,8 @@ void FinalEgg_Layout()
 
 	if (CurrentAct == 2)
 		CurrentStageVersion = GammaVersion;
+
+	//CurrentMission = 2;
 }
 
 

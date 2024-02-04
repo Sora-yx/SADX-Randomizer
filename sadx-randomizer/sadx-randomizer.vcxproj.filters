@@ -204,6 +204,9 @@
     <ClCompile Include="ResultScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\CharactersSettings.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="data\mission.h">
       <Filter>Header Files\missions</Filter>
+    </ClInclude>
+    <ClInclude Include="multiapi.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

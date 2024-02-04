@@ -1,35 +1,57 @@
 #include "stdafx.h"
 
-void FixSuperFormDeath() {
-	if (CurrentCharacter == Characters_Sonic)
-		ForcePlayerAction(0, 0x2f); //unsuper
-	else
+void FixSuperFormDeath() 
+{
+	for (uint8_t i = 0; i < PMax; i++)
 	{
-		CharObj2Ptrs[0]->Powerups &= Powerups_Invincibility;
-		CharObj2Ptrs[0]->Upgrades &= ~Upgrades_SuperSonic;
+		if (playertwp[i])
+		{
+			if (playertwp[i]->counter.b[1] == Characters_Sonic)
+			{
+				ForcePlayerAction(i, 0x2f); //unsuper
+			}
+			else
+			{
+				CharObj2Ptrs[i]->Powerups &= Powerups_Invincibility;
+				CharObj2Ptrs[i]->Upgrades &= ~Upgrades_SuperSonic;
+			}
+		}
 	}
 }
 
-void FixPerfectChaosHit() {
-	if (CurrentCharacter <= Characters_Knuckles)
-		ForcePlayerAction(0, 0xd);
-	else
-		ForcePlayerAction(0, 9);
+void FixPerfectChaosHit() 
+{
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		if (playertwp[i])
+		{
+			if (playertwp[i]->counter.b[1] <= Characters_Knuckles)
+				ForcePlayerAction(i, 0xd);
+			else
+				ForcePlayerAction(i, 9);
+		}
+	}
 }
 
 
-void IncreaseSpeedCharactersPerfectChaos() {
+void IncreaseSpeedCharactersPerfectChaos() 
+{
+
 	if (CurrentLevel != LevelIDs_PerfectChaos)
 		return;
 
-	if (CurrentCharacter == Characters_Big || CurrentCharacter == Characters_Gamma) {
-
-		CharObj2* co2 = CharObj2Ptrs[0];
-		EntityData1* data = EntityData1Ptrs[0];
-		if (co2->Speed.x < 14.0 && GetAnalog(data, 0, 0) || data->Action == 3)
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		if (playertwp[i] && (playertwp[i]->counter.b[1] == Characters_Big || playertwp[i]->counter.b[1] == Characters_Gamma))
 		{
-			co2->PhysicsData.HSpeedCap = 14;
-			co2->Speed.x += 0.110;
+			CharObj2* co2 = CharObj2Ptrs[i];
+			EntityData1* data = EntityData1Ptrs[i];
+
+			if (co2->Speed.x < 14.0f && GetAnalog(data, 0, 0) || data->Action == 3)
+			{
+				co2->PhysicsData.HSpeedCap = 14;
+				co2->Speed.x += 0.110f;
+			}
 		}
 	}
 }

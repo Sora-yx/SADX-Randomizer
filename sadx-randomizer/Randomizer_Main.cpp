@@ -3,12 +3,13 @@
 #include <iostream>
 #include <vector> 
 #include "Cutscene.h"
+#include "multiapi.h"
 
 using std::string;
 using std::vector;
 
 //Contain randomly generated sets of character/level/act to work with (Main Part of the mod)
-struct RandomizedEntry randomizedSets[40];
+RandomizedEntry randomizedSets[40];
 short prev_stage = -1;
 bool isGameOver = false;
 int8_t CurrentStageVersion = 0;
@@ -26,7 +27,7 @@ int bannedRegularGamma[] = { LevelIDs_E101, LevelIDs_E101R };
 int previousLevel = -1;
 uint8_t TCCount = 0;
 
-RandomizerGenerator RandoStageArray[52]
+RandomizerGenerator RandoStageArray[]
 {
 	{LevelAndActIDs_HedgehogHammer, AmyVersion, Characters_Amy, },
 	{LevelAndActIDs_EmeraldCoast1, SonicVersion, Characters_Sonic },
@@ -85,7 +86,7 @@ RandomizerGenerator RandoStageArray[52]
 uint16_t failSafeLvlCount = 0;
 void getRandomStage(RandomizedEntry* entry, uint8_t Char_id) 
 {
-	RandomizerGenerator* generated;
+	RandomizerGenerator* generated = nullptr;
 
 	do {
 
@@ -115,11 +116,7 @@ void getRandomStage(RandomizedEntry* entry, uint8_t Char_id)
 
 bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 {
-	short curLevel = generated->levelAndActs;
-	short curSingleLevel = generated->levelAndActs >> 8;
-	short curAct = generated->levelAndActs & 0xF;
-	uint8_t curBannedChar = generated->bannedChar;
-	short curChar = char_id;
+	const short curSingleLevel = generated->levelAndActs >> 8;
 
 	if (curSingleLevel == LevelIDs_TwinkleCircuit)
 	{
@@ -127,7 +124,11 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 			return true;
 		else
 			TCCount++;
-	} 		
+	}
+	else if (isBossStage(curSingleLevel) && !RNGBosses)
+	{
+		return true;
+	}
 
 	for (uint8_t i = 0; i < LengthOfArray(bannedLevelsGamma); i++)
 	{
@@ -147,9 +148,8 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 
 bool isVanillaStage(RandomizerGenerator* generated, uint8_t char_id)
 {
-
-	short curSingleLevel = generated->levelAndActs >> 8;
-	uint8_t curBannedChar = generated->bannedChar;
+	const short curSingleLevel = generated->levelAndActs >> 8;
+	const uint8_t curBannedChar = generated->bannedChar;
 
 	if (curBannedChar == char_id)
 		return true;
@@ -174,9 +174,8 @@ RandomizerGenerator StructDupli;
 int oldStageVersion = -1;
 bool isDuplicateStage(RandomizerGenerator* generated) {
 
-
-	short curLevelAndActID = generated->levelAndActs;
-	int8_t curVersion = generated->version;
+	const short curLevelAndActID = generated->levelAndActs;
+	const int8_t curVersion = generated->version;
 	short curLevel = ConvertLevelActsIDtoLevel(curLevelAndActID);
 
 	if (ban >= 5)
@@ -215,20 +214,26 @@ bool isDuplicateStage(RandomizerGenerator* generated) {
 
 int levelCount = 0;
 
-void SetInfoNextRandomStage(char Stage, char Act) {
+void SetInfoNextRandomStage(char Stage, char Act) 
+{
 
 	if (RNGCharacters)
 	{
 		CurrentCharacter = randomizedSets[levelCount].character;
 		SonicRand = randomizedSets[levelCount].sonic_transfo;
+		MetalSonicFlag = (SonicRand == 1 && CurrentLevel != LevelIDs_PerfectChaos) ? TRUE : FALSE;
 
-		if (SonicRand == 1)
-			MetalSonicFlag = SonicRand;
-		else
-			MetalSonicFlag = 0;
+		if (isMPMod())
+		{
+			for (uint8_t i = 0; i < multi_get_player_count(); i++)
+			{
+				multi_set_charid(i + 1, (Characters)randomizedSets[levelCount].characterMulti[i]);
+			}
+		}
+
 	}
 
-	if (isAIAllowed)
+	if (isAIAllowed && !isMPMod())
 		CurrentAI = randomizedSets[levelCount].ai_mode;
 
 	LastLevel = CurrentLevel;
@@ -309,7 +314,7 @@ void GoToNextLevel_hook(char stage, char act) {
 			return;
 		}
 
-		bool isCutscene = CheckAndPlayRandomCutscene();
+		const bool isCutscene = CheckAndPlayRandomCutscene();
 
 		if (!isCutscene)
 			SetInfoNextRandomStage(stage, act);
@@ -324,7 +329,8 @@ void GoToNextLevel_hook(char stage, char act) {
 }
 
 //Fix Trial Mode
-void SetLevelAndAct_R() {
+void SetLevelAndAct_R() 
+{
 	if (EventFlagArray[EventFlags_SuperSonicAdventureComplete] == 1)
 	{
 		if (GameMode == GameModes_Menu)
@@ -340,7 +346,8 @@ void SetLevelAndAct_R() {
 }
 
 
-void GameOver_R() {
+void GameOver_R() 
+{
 
 	isGameOver = true;
 	InitializeSoundManager();
@@ -381,7 +388,8 @@ void DisplayRandoInformation() {
 }
 
 
-void Create_NewRNG() {
+void Create_NewRNG() 
+{
 
 	for (uint32_t i = 0; i < segmentCount; i++) { //generate 40 levels without any speedrunners splits.
 
@@ -389,6 +397,12 @@ void Create_NewRNG() {
 		{
 			randomizedSets[i].character = getRandomCharacter();
 			randomizedSets[i].sonic_transfo = GetRandomSonicTransfo(randomizedSets[i].character);
+
+			for (uint8_t j = 0; j < LengthOfArray(randomizedSets->characterMulti); j++)
+			{
+				randomizedSets[i].characterMulti[j] = getRandomCharacterMulti(i);
+			}
+			
 		}
 
 		if (RNGStages)
@@ -479,14 +493,15 @@ void Split_Init() { //speedrunner split init. Used when you start the game.
 }
 
 
-void Randomizer_GetNewRNG() {
-
+void Randomizer_GetNewRNG() 
+{
 	TotalCount = 0;
 	levelCount = 0;
 	segmentCount = 0;
 	DuplicateStages.clear();
 
-	if (!StorySplits) {
+	if (!StorySplits) 
+	{
 		segmentCount = 40;
 		Create_NewRNG();
 	}
@@ -496,7 +511,8 @@ void Randomizer_GetNewRNG() {
 }
 
 
-void RandomizeStages_Init() {
+void RandomizeStages_Init() 
+{
 
 	if (!RNGStages)
 		return;
