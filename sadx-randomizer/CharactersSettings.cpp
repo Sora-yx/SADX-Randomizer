@@ -45,6 +45,7 @@ void LoadCharacter_r()
 	if (CurrentCharacter == Characters_Amy)
 		CheckLoadBird();
 
+
 	CheckAndSetUpgrades();
 }
 
@@ -105,16 +106,14 @@ void fixCharacterSoundAfterReset() {
 
 void CallStuffWhenLevelStart() 
 {
-
 	TimeThing = 1; //activate the timer of the stage.
 
 	if (CurrentLevel >= LevelIDs_StationSquare && CurrentLevel <= LevelIDs_Past)
 		return;
 
-	ObjectMaster* P1 = GetCharacterObject(0);
-	char CurChara = P1->Data1->CharID;
+	bool isOneCharSonk = isOnePlayerThisCharacter(Characters_Sonic);
 
-	if (CurChara != Characters_Sonic)
+	if (!isOneCharSonk)
 	{
 		MetalSonicFlag = 0; //Fix Metal Sonic life icon with wrong characters.
 		SonicRand = 0;
@@ -124,13 +123,23 @@ void CallStuffWhenLevelStart()
 		SuperSonic_TransformationCheck();
 	}
 
-
 	ShowActionButton();
 	fixCharacterSoundAfterReset();
 
-	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurChara >= Characters_Gamma ||
-		(CurChara > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)) {
-		Load_Cart_R();
+	if (isMPMod() && MPPlayers > 1)
+	{
+		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && isOnePlayerThisCharacter(Characters_Gamma)
+			|| CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)
+		{
+			Load_Cart_R();
+		}
+	}
+	else
+	{
+		if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0 && CurrentCharacter >= Characters_Gamma ||
+			(CurrentCharacter > Characters_Tails && CurrentLevel == LevelIDs_SandHill || CurrentLevel == LevelIDs_IceCap && CurrentAct == 2)) {
+			Load_Cart_R();
+		}
 	}
 }
 
@@ -286,10 +295,13 @@ uint8_t getRandomCharacterMulti(uint16_t i)
 
 void Characters_Init() 
 {
-	if (isCharSelActive())
-		WriteCall((void*)0x415A25, LoadCharacter_r2);
-	else
-		LoadCharacter_t.Hook(LoadCharacter_r);
+	if (!isMPMod() || MPPlayers < 2)
+	{
+		if (isCharSelActive())
+			WriteCall((void*)0x415A25, LoadCharacter_r2);
+		else
+			LoadCharacter_t.Hook(LoadCharacter_r);
+	}
 
 	WriteData<1>((int*)0x47ED60, 0xC3); //remove load Tails AI, we will manually do it
 	WriteJump((void*)0x47A907, (void*)0x47A936); // prevent Knuckles from automatically loading Emerald radar

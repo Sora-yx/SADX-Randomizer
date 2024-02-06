@@ -53,10 +53,11 @@ void CheckAndSet_HotShelterLayoutFeatures() {
 	}
 }
 
-
 void __cdecl HSObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-
+	SetRandomEnemyObjList(HotShelter1ObjectList.List, HotShelter1ObjectList.Count);
+	SetRandomEnemyObjList(HotShelter2ObjectList.List, HotShelter2ObjectList.Count);
+	SetRandomEnemyObjList(HotShelter3ObjectList.List, HotShelter3ObjectList.Count);
 	ObjLists[LevelIDs_HotShelter * 8 + 0] = &HotShelter1ObjectList;
 	ObjLists[LevelIDs_HotShelter * 8 + 1] = &HotShelter2ObjectList;
 	ObjLists[LevelIDs_HotShelter * 8 + 2] = &HotShelter3ObjectList;

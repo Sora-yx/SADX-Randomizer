@@ -30,11 +30,13 @@ bool MetalSonic = false;
 bool SuperSonic = false;
 int ban = 0;
 bool banCharacter[8];
+uint8_t MPPlayers = 1;
 
 void ReadConfig(const char* path)
 {
 	const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 	StorySplits = config->getInt("Randomizer", "StorySplits", 0); //speedrunners splits
+	MPPlayers = config->getInt("Randomizer", "Multiplayer", 1);
 	RNGCharacters = config->getBool("Randomizer", "RNGCharacters", true);
 	RNGStages = config->getBool("Randomizer", "RNGStages", true);
 	DupliCheck = config->getBool("Randomizer", "DupliCheck", true);

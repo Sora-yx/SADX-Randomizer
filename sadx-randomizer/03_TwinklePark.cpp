@@ -38,7 +38,10 @@ void FixRCCharacterAction() {
 
 void __cdecl TPObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	SetRandomEnemyObjList(TwinkleParkObjectList.List, TwinkleParkObjectList.Count);
+	ObjLists[LevelIDs_TwinklePark * 8 + 0] = &TwinkleParkObjectList;
 	ObjLists[LevelIDs_TwinklePark * 8 + 1] = &TwinkleParkObjectList;
+	ObjLists[LevelIDs_TwinklePark * 8 + 2] = &TwinkleParkObjectList;
 	return;
 }
 

@@ -19,6 +19,7 @@ bool isMPMod();
 void DisablePlayersCol();
 bool isCharSelActive();
 void TeleportAllPlayersToP1();
+bool isOnePlayerThisCharacter(Characters selected);
 
 enum colorMSG {
 	redColor = 0xFFFF0000,

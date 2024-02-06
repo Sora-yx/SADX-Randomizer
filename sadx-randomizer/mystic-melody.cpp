@@ -5,7 +5,8 @@ std::shared_ptr<ModelInfo> MMPlatform;
 bool MMPlatformEnabled = false;
 
 
-void PlatformMM_Display(ObjectMaster* obj) {
+void PlatformMM_Display(ObjectMaster* obj) 
+{
 
 	if (!MissedFrames && (MMPlatformEnabled || obj->Data1->Scale.x == 15)) {
 		njSetTexture(&SA2_OBJ_TEXLIST);

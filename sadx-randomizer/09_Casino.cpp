@@ -162,6 +162,7 @@ PVMEntry CasinopolisObjectTextures[] = {
 
 void __cdecl CasinoObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	SetRandomEnemyObjList(CasinopolisObjectList.List, CasinopolisObjectList.Count);
 	ObjLists[LevelIDs_Casinopolis * 8 + 0] = &CasinopolisObjectList;
 	ObjLists[LevelIDs_Casinopolis * 8 + 1] = &CasinopolisObjectList;
 	TexLists_Obj[LevelIDs_Casinopolis] = CasinopolisObjectTextures;

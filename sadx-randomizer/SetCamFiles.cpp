@@ -2,7 +2,7 @@
 
 bool isSetLoaded = false;
 
-StringLevelLayout SetCamFileArray[51]{
+const StringLevelLayout SetCamFileArray[51]{
 
 	{ LevelIDs_EmeraldCoast, GammaVersion, 0, "ECE", "C0103" },
 	{ LevelIDs_EmeraldCoast, SonicVersion, 0, "EC0", "C0100", },
@@ -60,7 +60,7 @@ StringLevelLayout SetCamFileArray[51]{
 
 void __cdecl RandoLoad_SetCamFiles() {
 
-	for (int i = 0; i < LengthOfArray(SetCamFileArray); i++) 
+	for (uint16_t i = 0; i < LengthOfArray(SetCamFileArray); i++) 
 	{
 		if (CurrentLevel == SetCamFileArray[i].LevelID && CurrentStageVersion == SetCamFileArray[i].version)
 		{
@@ -106,7 +106,8 @@ void __cdecl LoadLevelFiles_r(unsigned int curLevel) {
 
 
 void AddLevelLayout(std::string FolderName, std::string LevelName, const HelperFunctions& helperFunctions) {
-	for (int i = 0; i < 8; i++) { //Add Custom Set File from Mod folder for each character, using different name than SADX vanilla to prevent mod order conflict and overwrite shit.
+	for (uint8_t i = 0; i < 8; i++) 
+	{ //Add Custom Set File from Mod folder for each character, using different name than SADX vanilla to prevent mod order conflict and overwrite shit.
 		std::string path = "system\\";
 		std::string path2 = "system\\sets\\" + FolderName;
 		std::string bin = LevelName + ".bin";

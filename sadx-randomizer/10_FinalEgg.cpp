@@ -16,7 +16,9 @@ void FinalEgg_Layout()
 
 void __cdecl FinalEggObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	SetRandomEnemyObjList(FinalEggObjectList.List, FinalEggObjectList.Count);
 	ObjLists[LevelIDs_FinalEgg * 8 + 0] = &FinalEggObjectList;
+	ObjLists[LevelIDs_FinalEgg * 8 + 1] = &FinalEggObjectList;
 	ObjLists[LevelIDs_FinalEgg * 8 + 2] = &FinalEggObjectList;
 }
 

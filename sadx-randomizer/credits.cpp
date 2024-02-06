@@ -1,8 +1,7 @@
 #include "stdafx.h"
-
-using namespace std;
 #include <string.h>
-#define ReplacePVM(C, D) helperFunctions.ReplaceFile("system\\" C ".pvm", "system\\Textures\\" D ".pvmx")
+using namespace std;
+
 
 NJS_TEXNAME Rank_Texnames[4];
 NJS_TEXLIST Rank_Texlist = { arrayptrandlength(Rank_Texnames) };
@@ -137,7 +136,7 @@ void CreditFlag() {
 
 
 CreditsEntry CreditsText_list[] = {
-{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER 3.0" },
+{ 0, 0, 0, 0, "SONIC ADVENTURE DX RANDOMIZER 4.0" },
 	{ 3, -1, 0, 0, "AUTHOR" },
 	{ 3, -1, 0, 0, "Sora" },
 	{ 2, -1, 0, 0, "HELP" },
@@ -771,7 +770,7 @@ void FinalStatDisplay(ObjectMaster* obj) {
 
 			SetDebugFontSize(13.0f * (float)VerticalResolution / 480.0f);
 
-			DisplayDebugStringFormatted(NJM_LOCATION(12 + hzscale, 11), "RANDOMIZER 3.0 - FINAL STATS");
+			DisplayDebugStringFormatted(NJM_LOCATION(12 + hzscale, 11), "RANDOMIZER 4.0 - FINAL STATS");
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 12), "Seed Used: %d", SeedCopy);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 13), "Rings Collected: %d", ringsPB);
 			DisplayDebugStringFormatted(NJM_LOCATION(12, 14), "Animals Collected: %d", animalPB);

@@ -48,6 +48,7 @@ void SHAct2Position()
 
 	void __cdecl SHObjects_Init(const char* path, const HelperFunctions & helperFunctions) {
 		//Change the objectlist
+		SetRandomEnemyObjList(SpeedHighwayObjectList.List, SpeedHighwayObjectList.Count);
 		ObjLists[LevelIDs_SpeedHighway * 8 + 0] = &SpeedHighwayObjectList;
 		ObjLists[LevelIDs_SpeedHighway * 8 + 2] = &SpeedHighwayObjectList;
 		return;

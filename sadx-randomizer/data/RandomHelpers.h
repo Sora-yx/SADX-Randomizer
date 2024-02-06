@@ -3,8 +3,13 @@
 #define TaskHook FunctionHook<void, task*>
 
 extern std::string modpath;
-#define PMax 8u
+constexpr uint8_t PMax = 8u;
 
+struct EnemyRando
+{
+	uint8_t enemyID;
+	uint8_t count;
+};
 
 struct RandomizedEntry
 {
@@ -22,8 +27,8 @@ struct RandomizedEntry
 	int8_t cutsceneChara;
 	int cutsceneLevel;
 	int cutsceneAct;
-	uint8_t enemy;
-	int8_t characterMulti[PMax - 1u];
+	EnemyRando enemy[30];
+	int8_t characterMulti[PMax - 1];
 };
 
 struct StageVersion {
@@ -116,6 +121,7 @@ void init_FlagsProgression();
 
 extern bool RNGCharacters;
 extern bool RNGStages;
+extern uint8_t MPPlayers;
 extern bool Vanilla;
 extern bool DupliCheck;
 extern int ban;
@@ -137,6 +143,7 @@ extern bool AmySpeed;
 extern bool BigSpeed;
 extern bool isKHMod;
 extern bool isTCBanned;
+
 
 
 uint8_t getRandomCharacter();
@@ -194,6 +201,7 @@ extern char SonicRand; //Super Sonic or Metal Sonic RNG
 extern bool RNGMusic;
 extern bool RNGVoices;
 extern bool RNGBosses;
+extern bool RNGEnemies;
 
 extern int character[6];
 extern int CharacterCopy;

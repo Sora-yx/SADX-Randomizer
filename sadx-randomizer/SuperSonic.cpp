@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 PVMEntry SSTex = { "SUPERSONIC", &SUPERSONIC_TEXLIST };
+FunctionHook<void, taskwk*, motionwk2*, playerwk*> PResetAngle_h(0x443AD0);
+
 //Initialize Super Sonic Physic and Aura when Perfect Chaos fight starts for other characters.
 void SuperAuraStuff() 
 {
@@ -16,7 +18,8 @@ void SuperAuraStuff()
 
 }
 
-uint8_t SSLevel[] = { 
+const uint8_t SSLevel[] = 
+{ 
 	LevelIDs_TwinklePark, LevelIDs_SpeedHighway, LevelIDs_TwinkleCircuit, LevelIDs_Casinopolis,
 LevelIDs_SkyDeck, LevelIDs_EggViper, LevelIDs_SandHill, LevelIDs_HotShelter, LevelIDs_IceCap, LevelIDs_Chaos6 
 };
@@ -64,7 +67,6 @@ int GetSSLevelBanned() {
 
 void SuperSonic_TransformationCheck() 
 {
-
 	const bool isLevelBanned = GetSSLevelBanned();
 
 	if (isLevelBanned || MetalSonicFlag == 1 || SonicRand != 2)
@@ -78,18 +80,25 @@ void SuperSonic_TransformationCheck()
 		if (!Rings)
 			Rings = 1;
 
-		EntityData1* data1 = EntityData1Ptrs[0];
-		CharObj2* data2 = CharObj2Ptrs[0];
-
-		bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
-
-		//Super Sonic Transformation (Credit: SonicFreak94).
-		if (!transformation)
+		for (uint8_t i = 0; i < PMax; i++)
 		{
-			data1->Status &= ~Status_LightDash;
-			ForcePlayerAction(0, 46);
-			PlayVoice(3001);
-			PlayMusic(MusicIDs_ThemeOfSuperSonic);
+			EntityData1* data1 = EntityData1Ptrs[i];
+
+			if (!data1 || data1->CharID != Characters_Sonic || i >= 1 && isAIActive)
+				continue;
+
+			CharObj2* data2 = CharObj2Ptrs[i];
+
+			bool transformation = (data2->Upgrades & Upgrades_SuperSonic) != 0;
+
+			//Super Sonic Transformation (Credit: SonicFreak94).
+			if (!transformation)
+			{
+				data1->Status &= ~Status_LightDash;
+				ForcePlayerAction(i, 46);
+				PlayVoice(3001);
+				PlayMusic(MusicIDs_ThemeOfSuperSonic);
+			}
 		}
 
 		SuperSonicFlag = 1;
@@ -98,7 +107,8 @@ void SuperSonic_TransformationCheck()
 }
 
 uint8_t prev_Sanic = -1;
-uint8_t GetRandomSonicTransfo(uint8_t char_id) {
+uint8_t GetRandomSonicTransfo(uint8_t char_id) 
+{
 
 	int8_t cur_Sanic = -1;
 
@@ -114,6 +124,20 @@ uint8_t GetRandomSonicTransfo(uint8_t char_id) {
 	return cur_Sanic;
 }
 
+static void __cdecl PResetAngle_r(taskwk* twp, motionwk2* mwp, playerwk* pwp)
+{
+	if (CurrentLevel != LevelIDs_PerfectChaos && (pwp->equipment & Upgrades_SuperSonic) != 0)
+	{
+		pwp->equipment &= ~Upgrades_SuperSonic;
+		PResetAngle_h.Original(twp, mwp, pwp);
+		pwp->equipment |= Upgrades_SuperSonic;
+	}
+	else
+	{
+		PResetAngle_h.Original(twp, mwp, pwp);
+	}
+}
+
 void initSuperSonicSettings() 
 {
 	//Super Sonic Stuff
@@ -126,6 +150,7 @@ void initSuperSonicSettings()
 		return;
 
 	help.RegisterCharacterPVM(Characters_Sonic, SSTex);
+	PResetAngle_h.Hook(PResetAngle_r);
 	WriteData<2>(reinterpret_cast<Uint8*>(0x0049AC6A), 0x90i8); //Always initialize Super Sonic weld data.
 	WriteData<7>(reinterpret_cast<Uint8*>(0x00494E13), 0x90i8); // Fix Super Sonic position when completing a stage.
 	WriteJump(reinterpret_cast<void*>(0x4879c7), (void*)0x4879CE); //Always initialize Super Sonic weld data.

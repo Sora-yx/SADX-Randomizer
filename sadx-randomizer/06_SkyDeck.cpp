@@ -126,6 +126,9 @@ void Olever_r(ObjectMaster* obj) {
 void __cdecl SDObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
 
+	SetRandomEnemyObjList(SkyDeckObjectList.List, SkyDeckObjectList.Count);
+	ObjLists[LevelIDs_SkyDeck * 8 + 0] = &SkyDeckObjectList;
+	ObjLists[LevelIDs_SkyDeck * 8 + 1] = &SkyDeckObjectList;
 	ObjLists[LevelIDs_SkyDeck * 8 + 2] = &SkyDeckObjectList;
 	SkyDeckDeathZones[0] = SkyDeck1DeathZones; //Sky Deck death zone redirection
 	SkyDeckDeathZones[1] = SkyDeck2DeathZones;

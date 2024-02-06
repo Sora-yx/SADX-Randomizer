@@ -44,6 +44,9 @@ int FixLWMusic() {
 
 void __cdecl LWObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+
+	SetRandomEnemyObjList(LostWorldObjectList.List, LostWorldObjectList.Count);
+	ObjLists[LevelIDs_LostWorld * 8 + 0] = &LostWorldObjectList;
 	ObjLists[LevelIDs_LostWorld * 8 + 1] = &LostWorldObjectList;
 	ObjLists[LevelIDs_LostWorld * 8 + 2] = &LostWorldObjectList;
 	return;

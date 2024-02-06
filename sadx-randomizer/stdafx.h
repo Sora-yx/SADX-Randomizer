@@ -29,5 +29,5 @@
 #include "utils.h"
 #include "Cutscene.h"
 #include "level.h"
-
+#include "enemy.h"
 #include "sound.h"

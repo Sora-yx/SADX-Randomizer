@@ -24,6 +24,8 @@ int bannedLevelsBig[] = { LevelIDs_EggViper, LevelIDs_E101R };
 int bannedRegularSonicAndTails[] = { LevelIDs_Chaos4, LevelIDs_EggHornet, LevelIDs_SandHill };
 int bannedRegularGamma[] = { LevelIDs_E101, LevelIDs_E101R };
 
+int bannedBossMP[] = { LevelIDs_EggViper, LevelIDs_PerfectChaos };
+
 int previousLevel = -1;
 uint8_t TCCount = 0;
 
@@ -142,6 +144,15 @@ bool isStageBanned(RandomizerGenerator* generated, uint8_t char_id)
 			return true;
 	}
 
+	if (isMPMod())
+	{
+		for (uint8_t i = 0; i < LengthOfArray(bannedBossMP); i++)
+		{
+			if (curSingleLevel == bannedBossMP[i])
+				return true;
+		}
+	}
+
 	return false;
 }
 
@@ -219,16 +230,27 @@ void SetInfoNextRandomStage(char Stage, char Act)
 
 	if (RNGCharacters)
 	{
-		CurrentCharacter = randomizedSets[levelCount].character;
+
 		SonicRand = randomizedSets[levelCount].sonic_transfo;
 		MetalSonicFlag = (SonicRand == 1 && CurrentLevel != LevelIDs_PerfectChaos) ? TRUE : FALSE;
 
 		if (isMPMod())
 		{
-			for (uint8_t i = 0; i < multi_get_player_count(); i++)
+			if (!multi_is_enabled())
 			{
-				multi_set_charid(i + 1, (Characters)randomizedSets[levelCount].characterMulti[i]);
+				multi_enable(MPPlayers, false);
 			}
+
+			multi_set_charid(0, (Characters)randomizedSets[levelCount].character);
+
+			for (uint8_t i = 1; i < MPPlayers; i++)
+			{
+				multi_set_charid(i, (Characters)randomizedSets[levelCount].characterMulti[i - 1]);
+			}
+		}
+		else
+		{
+			CurrentCharacter = randomizedSets[levelCount].character;
 		}
 
 	}
@@ -244,7 +266,8 @@ void SetInfoNextRandomStage(char Stage, char Act)
 	levelCount++;
 }
 
-void SetRandomStageAct(char stage, char act) {
+void SetRandomStageAct(char stage, char act) 
+{
 
 	if (isGameOver)
 	{
@@ -402,7 +425,6 @@ void Create_NewRNG()
 			{
 				randomizedSets[i].characterMulti[j] = getRandomCharacterMulti(i);
 			}
-			
 		}
 
 		if (RNGStages)
@@ -420,6 +442,9 @@ void Create_NewRNG()
 
 		if (RNGCutscene)
 			getRandomCutscene(&randomizedSets[i]);
+
+		if (RNGEnemies)
+			SetRandomEnemy(&randomizedSets[i]);
 
 		TotalCount++;
 	}

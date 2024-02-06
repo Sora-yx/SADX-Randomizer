@@ -514,7 +514,7 @@ void __cdecl CheckDeleteAnimThing(EntityData1* a1, CharObj2** a2, CharObj2* a3)
 	sub_43FA90(a1, a2, a3);
 }
 
-extern ObjectMaster* CurrentCart;
+extern task* CurrentCart[];
 
 void Player_VoiceSwap() {
 	//Play voice switch
@@ -575,7 +575,7 @@ void AI_Manager(ObjectMaster* obj) {
 		return;
 	}
 
-	if (CurrentCart || !TimeThing || GameState != 15 || !CharObj2Ptrs[0] || Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
+	if (CurrentCart[0] || !TimeThing || GameState != 15 || !CharObj2Ptrs[0] || Rings >= 100 && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		return;
 
 	AISwapOnFrames();

@@ -343,6 +343,8 @@ bool Mission2Check()
 	return Rings >= 100;
 }
 
+extern task* CurrentCart[];
+void DeleteCartAndExitPlayer();
 void CheckAndLoad_CartStopper() 
 {
 	if (CurrentLevel == LevelIDs_TwinklePark && CurrentAct == 0) 
@@ -359,6 +361,10 @@ void CheckAndLoad_CartStopper()
 			}
 		
 		}
+	}
+	else if (CurrentCart[0])
+	{
+		DeleteCartAndExitPlayer();
 	}
 }
 
@@ -381,7 +387,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 		if (CurrentLevel == LevelIDs_Casinopolis && CurrentAct > 1)
 			return;
 
-		if (Mission2Check() && CurrentMission == Mission2_100Rings)
+		if (Mission2Check() && CurrentMission == Mission2_100Rings || CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		{
 
 			TimeThing = 0;
@@ -404,14 +410,7 @@ void MissionResultCheck(ObjectMaster* obj) {
 	
 			data->Action++;
 		}
-		else if (CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
-		{
-	
-			co2->Powerups |= Powerups_Invincibility;
-			KnuxCheck2 = 1;
-			CheckThingButThenDeleteObject(obj);
-			return;
-		}
+
 
 		break;
 	case 1:
@@ -427,23 +426,33 @@ void MissionResultCheck(ObjectMaster* obj) {
 		PauseEnabled = 0;
 		DisablePlayersCol();
 		warped = true;
-		if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
+		if (CurrentStageVersion == KnucklesVersion && KnuxCheck >= 3)
 		{
-			for (uint8_t i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
+			obj->Data1->InvulnerableTime = 0;
+			obj->MainSub = KnuxResult;
+			return;
+		}
+		else
+		{
+			if (CurrentLevel >= LevelIDs_EmeraldCoast && CurrentLevel <= LevelIDs_Zero)
 			{
-				if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
-					&& CurrentStageVersion == M2_PlayerEndPosition[i].version) 
+				for (uint8_t i = 0; i < LengthOfArray(M2_PlayerEndPosition); i++)
 				{
-					TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
-					BackupPos = M2_PlayerEndPosition[i].Position;
-					break;
+					if (CurrentLevel == ConvertLevelActsIDtoLevel(M2_PlayerEndPosition[i].LevelID) && CurrentAct == ConvertLevelActsIDtoAct(M2_PlayerEndPosition[i].LevelID)
+						&& CurrentStageVersion == M2_PlayerEndPosition[i].version)
+					{
+						TeleportPlayerResultScreen(M2_PlayerEndPosition[i].Position, M2_PlayerEndPosition[i].YRot);
+						BackupPos = M2_PlayerEndPosition[i].Position;
+						break;
+					}
 				}
 			}
 		}
 		data->Action++;
 		break;
 	case 3:
-		if (++data->InvulnerableTime == 85) {
+		if (++data->InvulnerableTime == 85) 
+		{
 			if (p1->Position.x != BackupPos.x || p1->Position.y != BackupPos.y || p1->Position.z != BackupPos.z) {
 				p1->Position = BackupPos;
 			}

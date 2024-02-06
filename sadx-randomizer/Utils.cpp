@@ -118,18 +118,22 @@ void FlashScreen(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1;
 
-	if (++data->InvulnerableTime > 80) {
+	if (++data->InvulnerableTime > 60) 
+	{
 
 		int color = 0x00000000;
 		ScreenFade_Color = *(NJS_COLOR*)&color;
 		CheckThingButThenDeleteObject(obj);
 	}
-	else {
+	else 
+	{
 		int color = 0xFFFFFFFF;
 		ScreenFade_Color = *(NJS_COLOR*)&color;
 
-		if (data->InvulnerableTime < 120) {
-			if (data->InvulnerableTime < 60) {
+		if (data->InvulnerableTime < 100) 
+		{
+			if (data->InvulnerableTime < 40) 
+			{
 				data->CharID += 4;
 				ScreenFade_Color.argb.a = data->CharID;
 			}
@@ -137,7 +141,8 @@ void FlashScreen(ObjectMaster* obj) {
 				ScreenFade_Color.argb.a = 0xFF;
 			}
 		}
-		else {
+		else 
+		{
 			data->CharID -= 20;
 			ScreenFade_Color.argb.a = data->CharID;
 		}
@@ -164,7 +169,7 @@ bool isDCMod()
 extern bool gMultiplayerModLoaded;
 bool isMPMod() 
 {
-	return gMultiplayerModLoaded;
+	return gMultiplayerModLoaded && MPPlayers > 1;
 }
 
 bool isRandoLevel() {
@@ -510,4 +515,15 @@ int checkIfFileExists(const char* filename)
 		fclose(file);
 		return 1;
 	}
+}
+
+bool isOnePlayerThisCharacter(Characters selected)
+{
+	for (uint8_t i = 0; i < PMax; i++)
+	{
+		if (playertwp[i] && playertwp[i]->counter.b[1] == selected)
+			return true;
+	}
+
+	return false;
 }

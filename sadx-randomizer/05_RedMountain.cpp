@@ -30,7 +30,10 @@ void RedMountain_Layout() {
 
 void __cdecl RMObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist and fix killplane
-	for (uint8_t i = 0; i < 3; i++) {
+	SetRandomEnemyObjList(RedMountainObjectList.List, RedMountainObjectList.Count);
+
+	for (uint8_t i = 0; i < 3; i++) 
+	{
 		ObjLists[LevelIDs_RedMountain * 8 + i] = &RedMountainObjectList;
 	}
 

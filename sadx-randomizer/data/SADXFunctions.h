@@ -66,3 +66,8 @@ FunctionPointer(int, CheckDynamiteBroken, (int dynNumber), 0x4CBE60);
 VoidFunc(DeleteSave, 0x421EC0);
 VoidFunc(sub_40BF30, 0x40BF30);
 FunctionPointer(int, PlayLevelCutscene, (), 0x413B20);
+ObjectFunc(UnindusA_Exec, 0x4AF030);
+ObjectFunc(UnindusB_Exec, 0x4AF3D0);
+ObjectFunc(UnindusC_Exec, 0x4AF770);
+TaskFunc(ESman_Exec, 0x4C8DD0);
+ObjectFunc(KnuxResult, 0x475DE0);

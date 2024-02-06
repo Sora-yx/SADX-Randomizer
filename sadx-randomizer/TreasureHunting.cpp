@@ -212,7 +212,8 @@ void Init_TreasureHunting() {
 	WriteCall((void*)0x475852, KnuxRadarEmeraldCheck); //radar chara check
 	WriteCall((void*)0x4a306a, KnuxRadarEmeraldCheck); //display piece
 	WriteCall((void*)0x476661, KnuxRadarEmeraldCheck); //display piece
-	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece		
+	WriteCall((void*)0x477d96, KnuxRadarEmeraldCheck); //display piece	
+
 	WriteCall((void*)0x4766D1, KnuxRadarEmeraldCheck); //Fix CP, restart and win POS
 
 	//Force the game to load treasure hunting stuff for everyone

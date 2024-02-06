@@ -75,7 +75,8 @@ void CheckAndLoadRaceOpponent() {
 	}
 
 
-	if (CurrentStageVersion == TailsVersion && CurrentMission < 2) {
+	if (CurrentStageVersion == TailsVersion && CurrentMission < 2) 
+	{
 		Race = true;
 		isAIActive = false;
 	}
@@ -126,7 +127,11 @@ short getRandomRaceAI() {
 }
 
 
-void Race_Init() {
+void Race_Init() 
+{
+	if (isMPMod())
+		return;
+
 	//Sonic/Eggman Race Stuff
 	WriteData<1>((void*)0x47d947, 0x84); ///Load Race AI for any character
 	WriteData<1>((void*)0x47D945, 0x8); ///Load Race AI for any character 

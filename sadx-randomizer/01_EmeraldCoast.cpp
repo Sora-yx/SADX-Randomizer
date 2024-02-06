@@ -13,13 +13,13 @@ void EC_Layout()
 	return;
 }
 
-void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
-	//Change the objectlist
+void __cdecl ECObjects_Init(const char* path, const HelperFunctions& helperFunctions) 
+{		
+	SetRandomEnemyObjList(EmeraldCoastObjectList.List, EmeraldCoastObjectList.Count);
 
+	//Change the objectlist
 	for (uint8_t i = 0; i < 3; i++)
 		ObjLists[LevelIDs_EmeraldCoast * 8 + i] = &EmeraldCoastObjectList;
-
-	return;
 }
 
 

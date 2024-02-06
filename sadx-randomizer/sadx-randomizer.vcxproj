@@ -117,6 +117,7 @@
     <ClCompile Include="EggHornet.cpp" />
     <ClCompile Include="EggViper.cpp" />
     <ClCompile Include="EggWalker.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Missions.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="data\SADXFunctions.h" />
     <ClInclude Include="data\SADXVariables.h" />
     <ClInclude Include="EC.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="multiapi.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="sound.h" />

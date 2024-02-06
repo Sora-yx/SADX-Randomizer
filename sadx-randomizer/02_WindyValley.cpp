@@ -46,6 +46,7 @@ void WindyValley_Layout() {
 
 void __cdecl WVObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
+	SetRandomEnemyObjList(WindyValleyObjectList.List, WindyValleyObjectList.Count);
 	ObjLists[LevelIDs_WindyValley * 8 + 0] = &WindyValleyObjectList;
 	ObjLists[LevelIDs_WindyValley * 8 + 2] = &WindyValleyObjectList;
 }

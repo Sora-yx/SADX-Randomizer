@@ -6,7 +6,7 @@ void IC_Layout()
 
 	if (CurrentStageVersion != BigVersion)
 	{
-		if (CurrentCharacter > Characters_Tails)
+		if (CurrentCharacter > Characters_Tails || isMPMod())
 		{
 			WriteCall((void*)0x4eda00, ICAct3Position); //Skip snowboard cutscene when not sonic or tails.
 			WriteCall((void*)0x4e9415, Load_Cart_R); 
@@ -34,7 +34,8 @@ void IC_Layout()
 	if (CurrentAct == 3)
 		CurrentStageVersion = BigVersion;
 
-	if (CurrentAct == 2) {
+	if (CurrentAct == 2) 
+	{
 		CurrentMission = SADX_Mission;
 		CurrentStageVersion = TailsVersion;
 	}
@@ -112,8 +113,10 @@ void FixTailsVictoryIC() {
 
 void __cdecl ICObjects_Init(const char* path, const HelperFunctions& helperFunctions) {
 	//Change the objectlist
-	
+	SetRandomEnemyObjList(IceCapObjectList.List, IceCapObjectList.Count);
 	ObjLists[LevelIDs_IceCap * 8 + 0] = &IceCapObjectList;
+	ObjLists[LevelIDs_IceCap * 8 + 1] = &IceCapObjectList;
+	ObjLists[LevelIDs_IceCap * 8 + 2] = &IceCapObjectList;
 	ObjLists[LevelIDs_IceCap * 8 + 3] = &IceCapObjectList;
 	TexLists_Obj[LevelIDs_IceCap] = IceCapObjectTextures;
 	return;

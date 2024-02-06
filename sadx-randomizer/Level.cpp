@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "multiapi.h"
 
-extern uint32_t TotalCount;
-static Trampoline* MovePlayerToStartPoint_t = nullptr;
+static FunctionHook<void, taskwk*> MovePlayerToStartPoint_t((intptr_t)MovePlayerToStartPoint);
 static Trampoline* RunLevelDestructor_t = nullptr;
 static Trampoline* LoadLevelObject_t = nullptr;
 
@@ -56,9 +55,8 @@ SetLevelPosition PlayerStartPosition[52] { //Casino pos are hardcoded
 	{ GammaVersion, LevelAndActIDs_HotShelter3, { -20, 486, 73 }, 0xC000 },
 };
 
-
-void MovePlayerToStartPoint_r(EntityData1* data) {
-
+bool MovePlayerToStartPoint_(bool force = false)
+{
 	uint16_t levelact = (((short)CurrentLevel) << 8) | CurrentAct;
 
 	BackRing_CheckAndApply();
@@ -67,7 +65,7 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		GameMode = GameModes_Adventure_ActionStg; //force gamemode to 4 to fix the restart.
 
 	int GetCP = CheckRestartLevel();
-	if (!GetCP) //don't change player position if a CP has been grabbed.
+	if (!GetCP || force) //don't change player position if a CP has been grabbed.
 	{
 		if (!GetBackRing && ActCopy == CurrentAct && CurrentLevel != LevelIDs_Casinopolis)
 			ResetTime();
@@ -77,26 +75,37 @@ void MovePlayerToStartPoint_r(EntityData1* data) {
 		if (CurrentCharacter == Characters_Gamma)
 			SetTime(6, 0);
 
+		Float diff = 0.0f;
 		for (uint8_t i = 0; i < LengthOfArray(PlayerStartPosition); i++)
 		{
 			if (levelact == PlayerStartPosition[i].LevelID && CurrentStageVersion == PlayerStartPosition[i].version)
 			{
 				for (uint8_t j = 0; j < PMax; j++)
 				{
-					if (playertwp[j])
+					auto p = playertwp[j];
+					if (p)
 					{
-						EntityData1Ptrs[j]->Position = PlayerStartPosition[i].Position;
-						EntityData1Ptrs[j]->Rotation.y = PlayerStartPosition[i].YRot;
+						p->pos = PlayerStartPosition[i].Position;
+						p->ang.y = PlayerStartPosition[i].YRot;
+						p->pos.x += diff;
+						diff += 10.0f;
 					}
 				}
-			
-				return;
+
+				return true;
 			}
 		}
 	}
 
-	FunctionPointer(void, original, (EntityData1 * data), MovePlayerToStartPoint_t->Target());
-	return original(data);
+	return false;
+}
+
+void MovePlayerToStartPoint_r(taskwk* data) 
+{
+	if (MovePlayerToStartPoint_() == false)
+	{
+		MovePlayerToStartPoint_t.Original(data);
+	}
 }
 
 void __cdecl LoadLevelObject_r() 
@@ -111,16 +120,23 @@ void __cdecl LoadLevelObject_r()
 
 	LoadPVM("BACKRING", &GoalRingTextures);
 	CheckAndLoad_TreasureHunting();
+	LoadEnemyAndMiniMalTex();
 
 	if (!isMPMod())
 		LoadObject(LoadObj_Data1, 0, AI_Manager);
+	else
+	{	
+		CheckAndSetUpgrades();	
+	}
 
 	auto original = reinterpret_cast<decltype(LoadLevelObject_r)*>(LoadLevelObject_t->Target());
 	original();
 }
 
-void __cdecl RunLevelDestructor_r(int heap) {
-	if (heap == 0) {
+void __cdecl RunLevelDestructor_r(int heap) 
+{
+	if (heap == 0) 
+	{
 		ResetValueAndObjects(); //Unload rando stuff*/
 	}
 
@@ -128,7 +144,8 @@ void __cdecl RunLevelDestructor_r(int heap) {
 	return original(heap);
 }
 
-void LevelOnFrames() {
+void LevelOnFrames() 
+{
 
 	if (!CharObj2Ptrs[0])
 		return;
@@ -143,12 +160,50 @@ void LevelOnFrames() {
 	
 }
 
+void __cdecl MovePlayersMulti()
+{
+	ResetHomingAttackTargetsAndThings();
+
+	if (MPPlayers > 1)
+	{
+		if (CurrentStageVersion != Characters_Eggman && CurrentStageVersion != Characters_Tikal && CurrentStageVersion < Characters_MetalSonic)
+			CurrentCharacter = CurrentStageVersion;
+	}
+	MovePlayerToStartPoint_(true);
+}
+
+void __cdecl FreeEntityCollision_r(taskwk* a1)
+{
+	colliwk* v1; 
+
+	if (a1)
+	{
+		v1 = a1->cwp;
+		if (v1)
+		{
+			if ((v1->flag & 0x8000) != 0)
+			{
+				if (v1->info)
+				{
+					FreeMemory(v1->info);
+					v1->info = 0;
+				}
+			}
+			FreeMemory(v1);
+			a1->cwp = 0;
+		}
+	}
+}
+
 void LevelFeaturesInit() {
 
 	if (!RNGStages)
 		return;
 
-	MovePlayerToStartPoint_t = new Trampoline((int)MovePlayerToStartPoint, (int)MovePlayerToStartPoint + 0x6, MovePlayerToStartPoint_r);
+	MovePlayerToStartPoint_t.Hook(MovePlayerToStartPoint_r);
+
+	if (isMPMod())
+		WriteCall((void*)0x415A51, MovePlayersMulti);
 	RunLevelDestructor_t = new Trampoline((int)RunLevelDestructor, (int)RunLevelDestructor + 0x6, RunLevelDestructor_r);
 	LoadLevelObject_t = new Trampoline((int)LoadLevelObject, (int)LoadLevelObject + 0x7, LoadLevelObject_r);
 	return;
